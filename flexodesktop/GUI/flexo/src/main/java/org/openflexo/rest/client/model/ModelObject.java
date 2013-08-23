@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
     Slave.class,
     ProjectVersion.class,
     Session.class,
+    UserProject.class,
     Job.class,
     User.class
 })

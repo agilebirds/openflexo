@@ -39,6 +39,7 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.JobHistory;
 import org.openflexo.rest.client.model.User;
+import org.openflexo.rest.client.model.UserType;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoFrame;
@@ -84,7 +85,7 @@ public class ServerRestService {
 				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
 				try {
 					TypedQuery<WatchedRemoteJob> query;
-					if ("DNL".equals(currentUser.getUsertype())) {
+					if (currentUser.getUserType() == UserType.ADMIN) {
 						query = em.createNamedQuery(WatchedRemoteJob.FindByProjectURI.NAME, WatchedRemoteJob.class).setParameter(
 								WatchedRemoteJob.FindByProjectURI.PROJECT_URI_PARAM, project.getProjectURI());
 					} else {

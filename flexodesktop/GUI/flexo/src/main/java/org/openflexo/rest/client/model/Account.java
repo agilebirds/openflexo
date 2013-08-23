@@ -21,6 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="accountName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="accountRepositoryUuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="active" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="availableDocToken" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="availableProtoToken" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="availableServiceToken" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -35,7 +36,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="docIncidentUrgency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="docTargets" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="docTokenPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="isActive" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="lastTrimestrialIncrementDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="maxActiveProjectCount" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="maxActiveUserCount" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -65,6 +65,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlType(name = "Account", propOrder = {
     "accountName",
     "accountRepositoryUuid",
+    "active",
     "availableDocToken",
     "availableProtoToken",
     "availableServiceToken",
@@ -79,7 +80,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "docIncidentUrgency",
     "docTargets",
     "docTokenPrice",
-    "isActive",
     "lastTrimestrialIncrementDate",
     "maxActiveProjectCount",
     "maxActiveUserCount",
@@ -105,6 +105,7 @@ public class Account
 
     protected String accountName;
     protected String accountRepositoryUuid;
+    protected Boolean active;
     protected Integer availableDocToken;
     protected Integer availableProtoToken;
     protected Integer availableServiceToken;
@@ -122,7 +123,6 @@ public class Account
     protected String docIncidentUrgency;
     protected String docTargets;
     protected Double docTokenPrice;
-    protected Boolean isActive;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastTrimestrialIncrementDate;
     protected Integer maxActiveProjectCount;
@@ -188,6 +188,30 @@ public class Account
      */
     public void setAccountRepositoryUuid(String value) {
         this.accountRepositoryUuid = value;
+    }
+
+    /**
+     * Gets the value of the active property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets the value of the active property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setActive(Boolean value) {
+        this.active = value;
     }
 
     /**
@@ -524,30 +548,6 @@ public class Account
      */
     public void setDocTokenPrice(Double value) {
         this.docTokenPrice = value;
-    }
-
-    /**
-     * Gets the value of the isActive property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isIsActive() {
-        return isActive;
-    }
-
-    /**
-     * Sets the value of the isActive property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setIsActive(Boolean value) {
-        this.isActive = value;
     }
 
     /**

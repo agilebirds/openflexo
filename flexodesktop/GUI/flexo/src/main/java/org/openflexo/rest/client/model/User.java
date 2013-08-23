@@ -3,6 +3,7 @@ package org.openflexo.rest.client.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
@@ -20,6 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;extension base="{http://www.agilebirds.com/openflexo}ModelObject">
  *       &lt;sequence>
  *         &lt;element name="activationKey" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="active" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="almostExpiredNotified" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="avatarUuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="clientAccount" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -27,12 +29,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="firstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="hasRightToSpendToken" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="isActive" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="lastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="login" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="newPassword" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="usertype" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="userType" type="{http://www.agilebirds.com/openflexo}userType" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -43,6 +45,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "User", propOrder = {
     "activationKey",
+    "active",
     "almostExpiredNotified",
     "avatarUuid",
     "clientAccount",
@@ -50,11 +53,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "email",
     "firstName",
     "hasRightToSpendToken",
-    "isActive",
     "lastName",
     "login",
-    "phone",
-    "usertype"
+    "newPassword",
+    "phone"
 })
 @XmlRootElement(name = "User")
 public class User
@@ -62,6 +64,7 @@ public class User
 {
 
     protected String activationKey;
+    protected boolean active;
     protected Boolean almostExpiredNotified;
     protected String avatarUuid;
     protected Integer clientAccount;
@@ -70,11 +73,12 @@ public class User
     protected String email;
     protected String firstName;
     protected boolean hasRightToSpendToken;
-    protected boolean isActive;
     protected String lastName;
     protected String login;
+    protected String newPassword;
     protected String phone;
-    protected String usertype;
+    @XmlAttribute(name = "userType")
+    protected UserType userType;
 
     /**
      * Gets the value of the activationKey property.
@@ -98,6 +102,22 @@ public class User
      */
     public void setActivationKey(String value) {
         this.activationKey = value;
+    }
+
+    /**
+     * Gets the value of the active property.
+     * 
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets the value of the active property.
+     * 
+     */
+    public void setActive(boolean value) {
+        this.active = value;
     }
 
     /**
@@ -261,22 +281,6 @@ public class User
     }
 
     /**
-     * Gets the value of the isActive property.
-     * 
-     */
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    /**
-     * Sets the value of the isActive property.
-     * 
-     */
-    public void setIsActive(boolean value) {
-        this.isActive = value;
-    }
-
-    /**
      * Gets the value of the lastName property.
      * 
      * @return
@@ -325,6 +329,30 @@ public class User
     }
 
     /**
+     * Gets the value of the newPassword property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * Sets the value of the newPassword property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNewPassword(String value) {
+        this.newPassword = value;
+    }
+
+    /**
      * Gets the value of the phone property.
      * 
      * @return
@@ -349,27 +377,27 @@ public class User
     }
 
     /**
-     * Gets the value of the usertype property.
+     * Gets the value of the userType property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link UserType }
      *     
      */
-    public String getUsertype() {
-        return usertype;
+    public UserType getUserType() {
+        return userType;
     }
 
     /**
-     * Sets the value of the usertype property.
+     * Sets the value of the userType property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link UserType }
      *     
      */
-    public void setUsertype(String value) {
-        this.usertype = value;
+    public void setUserType(UserType value) {
+        this.userType = value;
     }
 
 }

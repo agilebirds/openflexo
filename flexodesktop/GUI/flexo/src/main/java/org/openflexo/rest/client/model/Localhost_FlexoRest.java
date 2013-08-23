@@ -15,7 +15,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 @Generated(value = {
     "wadl|http://localhost:9090/Flexo/rest/application.wadl",
     "customization|file:/D:/Work/Git/openflexo/flexodesktop/GUI/flexo/rest-client-bindings.xml"
-}, comments = "wadl2java, http://wadl.java.net", date = "2013-08-21T17:41:54.354+02:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2013-08-23T21:16:52.830+02:00")
 public class Localhost_FlexoRest {
 
     /**
@@ -55,8 +55,8 @@ public class Localhost_FlexoRest {
         BASE_URI = originalURI;
     }
 
-    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Users(client, baseURI);
+    public static Localhost_FlexoRest.Jobs jobs(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Jobs(client, baseURI);
     }
 
     /**
@@ -84,18 +84,6 @@ public class Localhost_FlexoRest {
         return createClientInstance(cc);
     }
 
-    public static Localhost_FlexoRest.Users users() {
-        return users(createClient(), BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client) {
-        return users(client, BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.Jobs jobs(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Jobs(client, baseURI);
-    }
-
     public static Localhost_FlexoRest.Jobs jobs() {
         return jobs(createClient(), BASE_URI);
     }
@@ -116,16 +104,28 @@ public class Localhost_FlexoRest {
         return projectsProjectIDVersions(client, BASE_URI, projectid);
     }
 
-    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, URI baseURI, Integer projectid) {
-        return new Localhost_FlexoRest.ProjectsProjectIDSessions(client, baseURI, projectid);
+    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Accounts(client, baseURI);
     }
 
-    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(Integer projectid) {
-        return projectsProjectIDSessions(createClient(), BASE_URI, projectid);
+    public static Localhost_FlexoRest.Accounts accounts() {
+        return accounts(createClient(), BASE_URI);
     }
 
-    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, Integer projectid) {
-        return projectsProjectIDSessions(client, BASE_URI, projectid);
+    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client) {
+        return accounts(client, BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Users(client, baseURI);
+    }
+
+    public static Localhost_FlexoRest.Users users() {
+        return users(createClient(), BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client) {
+        return users(client, BASE_URI);
     }
 
     public static Localhost_FlexoRest.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client, URI baseURI) {
@@ -140,28 +140,16 @@ public class Localhost_FlexoRest {
         return jobsHistory(client, BASE_URI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Accounts(client, baseURI);
+    public static Localhost_FlexoRest.UserProjects userProjects(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.UserProjects(client, baseURI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts() {
-        return accounts(createClient(), BASE_URI);
+    public static Localhost_FlexoRest.UserProjects userProjects() {
+        return userProjects(createClient(), BASE_URI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client) {
-        return accounts(client, BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Files(client, baseURI);
-    }
-
-    public static Localhost_FlexoRest.Files files() {
-        return files(createClient(), BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client) {
-        return files(client, BASE_URI);
+    public static Localhost_FlexoRest.UserProjects userProjects(com.sun.jersey.api.client.Client client) {
+        return userProjects(client, BASE_URI);
     }
 
     public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
@@ -174,6 +162,30 @@ public class Localhost_FlexoRest {
 
     public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client) {
         return projects(client, BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, URI baseURI, Integer projectid) {
+        return new Localhost_FlexoRest.ProjectsProjectIDSessions(client, baseURI, projectid);
+    }
+
+    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(Integer projectid) {
+        return projectsProjectIDSessions(createClient(), BASE_URI, projectid);
+    }
+
+    public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, Integer projectid) {
+        return projectsProjectIDSessions(client, BASE_URI, projectid);
+    }
+
+    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Files(client, baseURI);
+    }
+
+    public static Localhost_FlexoRest.Files files() {
+        return files(createClient(), BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client) {
+        return files(client, BASE_URI);
     }
 
     public static class Accounts {
@@ -4974,6 +4986,731 @@ public class Localhost_FlexoRest {
                 resourceBuilder = resourceBuilder.accept("text/plain");
                 com.sun.jersey.api.client.ClientResponse response;
                 response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+        }
+
+    }
+
+    public static class UserProjects {
+
+        private com.sun.jersey.api.client.Client _client;
+        private UriBuilder _uriBuilder;
+        private Map<String, Object> _templateAndMatrixParameterValues;
+
+        private UserProjects(com.sun.jersey.api.client.Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+            _client = client;
+            _uriBuilder = uriBuilder.clone();
+            _templateAndMatrixParameterValues = map;
+        }
+
+        /**
+         * Create new instance using existing Client instance, and a base URI and any parameters
+         * 
+         */
+        public UserProjects(com.sun.jersey.api.client.Client client, URI baseUri) {
+            _client = client;
+            _uriBuilder = UriBuilder.fromUri(baseUri);
+            _uriBuilder = _uriBuilder.path("/userProjects");
+            _templateAndMatrixParameterValues = new HashMap<String, Object>();
+        }
+
+        public UserProject getAsUserProjectXml() {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T getAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsXml(Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public UserProject getAsUserProjectXml(Integer start, Integer end, String sort) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T getAsXml(Integer start, Integer end, String sort, com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsXml(Integer start, Integer end, String sort, Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public UserProject getAsUserProjectJson() {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T getAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsJson(Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public UserProject getAsUserProjectJson(Integer start, Integer end, String sort) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T getAsJson(Integer start, Integer end, String sort, com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsJson(Integer start, Integer end, String sort, Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (start == null) {
+            }
+            if (start!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", start);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("start", ((Object[]) null));
+            }
+            if (end == null) {
+            }
+            if (end!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", end);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("end", ((Object[]) null));
+            }
+            if (sort == null) {
+            }
+            if (sort!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", sort);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("sort", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public UserProject postXmlAsUserProject(UserProject input) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            resourceBuilder = resourceBuilder.type("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            resourceBuilder = resourceBuilder.type("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T postXml(Object input, Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/xml");
+            resourceBuilder = resourceBuilder.type("application/xml");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public UserProject postJsonAsUserProject(UserProject input) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            resourceBuilder = resourceBuilder.type("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(UserProject.class);
+        }
+
+        public<T >T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            resourceBuilder = resourceBuilder.type("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T postJson(Object input, Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/json");
+            resourceBuilder = resourceBuilder.type("application/json");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public Localhost_FlexoRest.UserProjects.Id id(String id) {
+            return new Localhost_FlexoRest.UserProjects.Id(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), id);
+        }
+
+        public static class Id {
+
+            private com.sun.jersey.api.client.Client _client;
+            private UriBuilder _uriBuilder;
+            private Map<String, Object> _templateAndMatrixParameterValues;
+
+            private Id(com.sun.jersey.api.client.Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+                _client = client;
+                _uriBuilder = uriBuilder.clone();
+                _templateAndMatrixParameterValues = map;
+            }
+
+            /**
+             * Create new instance using existing Client instance, and a base URI and any parameters
+             * 
+             */
+            public Id(com.sun.jersey.api.client.Client client, URI baseUri, String id) {
+                _client = client;
+                _uriBuilder = UriBuilder.fromUri(baseUri);
+                _uriBuilder = _uriBuilder.path("{id}");
+                _templateAndMatrixParameterValues = new HashMap<String, Object>();
+                _templateAndMatrixParameterValues.put("id", id);
+            }
+
+            /**
+             * Create new instance using existing Client instance, and the URI from which the parameters will be extracted
+             * 
+             */
+            public Id(com.sun.jersey.api.client.Client client, URI uri) {
+                _client = client;
+                StringBuilder template = new StringBuilder(BASE_URI.toString());
+                if (template.charAt((template.length()- 1))!= '/') {
+                    template.append("/userProjects/{id}");
+                } else {
+                    template.append("userProjects/{id}");
+                }
+                _uriBuilder = UriBuilder.fromPath(template.toString());
+                _templateAndMatrixParameterValues = new HashMap<String, Object>();
+                UriTemplate uriTemplate = new UriTemplate(template.toString());
+                HashMap<String, String> parameters = new HashMap<String, String>();
+                uriTemplate.match(uri.toString(), parameters);
+                _templateAndMatrixParameterValues.putAll(parameters);
+            }
+
+            /**
+             * Get id
+             * 
+             */
+            public String getId() {
+                return ((String) _templateAndMatrixParameterValues.get("id"));
+            }
+
+            /**
+             * Duplicate state and set id
+             * 
+             */
+            public Localhost_FlexoRest.UserProjects.Id setId(String id) {
+                Map<String, Object> copyMap;
+                copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
+                UriBuilder copyUriBuilder = _uriBuilder.clone();
+                copyMap.put("id", id);
+                return new Localhost_FlexoRest.UserProjects.Id(_client, copyUriBuilder, copyMap);
+            }
+
+            public UserProject getAsUserProjectXml() {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(UserProject.class);
+            }
+
+            public<T >T getAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T getAsXml(Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+            public UserProject getAsUserProjectJson() {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(UserProject.class);
+            }
+
+            public<T >T getAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T getAsJson(Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+            public com.sun.jersey.api.client.ClientResponse deleteAsClientResponse() {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
+            }
+
+            public<T >T delete(com.sun.jersey.api.client.GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T delete(Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+            public UserProject putXmlAsUserProject(UserProject input) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(UserProject.class);
+            }
+
+            public<T >T putXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T putXml(Object input, Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/xml");
+                resourceBuilder = resourceBuilder.type("application/xml");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    if (response.getStatus()>= 400) {
+                        throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                    }
+                }
+                if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                    return response.getEntity(returnType);
+                } else {
+                    return returnType.cast(response);
+                }
+            }
+
+            public UserProject putJsonAsUserProject(UserProject input) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                resourceBuilder = resourceBuilder.type("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(UserProject.class);
+            }
+
+            public<T >T putJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                resourceBuilder = resourceBuilder.type("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+                return response.getEntity(returnType);
+            }
+
+            public<T >T putJson(Object input, Class<T> returnType) {
+                UriBuilder localUriBuilder = _uriBuilder.clone();
+                com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+                com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+                resourceBuilder = resourceBuilder.accept("application/json");
+                resourceBuilder = resourceBuilder.type("application/json");
+                com.sun.jersey.api.client.ClientResponse response;
+                response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
                 if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
                     if (response.getStatus()>= 400) {
                         throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());

@@ -35,6 +35,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
+import org.openflexo.rest.client.model.Account;
 import org.openflexo.rest.client.model.DocFormat;
 import org.openflexo.rest.client.model.Job;
 import org.openflexo.rest.client.model.JobType;
@@ -43,6 +44,7 @@ import org.openflexo.rest.client.model.ProjectVersion;
 import org.openflexo.rest.client.model.Session;
 import org.openflexo.rest.client.model.TocEntryDefinition;
 import org.openflexo.rest.client.model.User;
+import org.openflexo.rest.client.model.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
@@ -72,13 +74,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public class DocGenerationChoice implements HasPropertyChangeSupport {
+		private final ProjectVersion version;
 		private PropertyChangeSupport pcSupport;
 		private String docType;
 		private DocFormat docFormat;
 		private File folder;
 		private boolean automaticallyOpenFile = true;
 		private TocEntryDefinition tocEntry;
-		private final ProjectVersion version;
 
 		public DocGenerationChoice(ProjectVersion version) {
 			this.version = version;
@@ -154,6 +156,43 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
+	public class NewProjectParameter {
+		private Project project;
+		private PropertyChangeSupport pcSupport;
+		private String comment;
+
+		private List<Account> availableAccounts;
+
+		public NewProjectParameter() {
+			project = new Project();
+			pcSupport = new PropertyChangeSupport(this);
+			if (user.getClientAccount() != null) {
+				Account account = new Account();
+				account.setClientAccountId(user.getClientAccount());
+				project.setClientAccount(account);
+			}
+		}
+
+		public List<Account> getAvailableAccounts() {
+			if (user.getUserType() == UserType.ADMIN) {
+				if (availableAccounts == null) {
+					availableAccounts = loadAccounts();
+				}
+				return availableAccounts;
+			} else {
+				return Collections.emptyList();
+			}
+		}
+
+		public List<User> getAvailableUsers(Account account) {
+			ServerRestClient client = getServerRestClient(false);
+			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
+			return client.users(client.createClient(), builder.build()).getAsXml(new GenericType<List<User>>() {
+			});
+		}
+
+	}
+
 	private interface ServerRestClientOperation {
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException;
 
@@ -198,8 +237,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 					setServerProject(projects.get(0));
 				} else {
 					setServerProject(null);
-					FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
 					setVersions(Collections.<ProjectVersion> emptyList());
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
+						}
+					});
 				}
 			} finally {
 				if (getServerProject() == null) {
@@ -547,6 +591,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		return validationInProgressValue;
 	}
 
+	public List<Account> loadAccounts() {
+		ServerRestClient client = getServerRestClient(false);
+		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
+		return client.accounts(client.createClient(), builder.build()).getAsXml(new GenericType<List<Account>>() {
+		});
+	}
+
 	protected void setValidationInProgress(ProjectVersion version, Boolean value) {
 		Boolean oldValue = validationInProgress.put(version, value);
 		if (value != oldValue && oldValue != null) {
@@ -808,6 +859,10 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (session != null) {
 			performOperationsInSwingWorker(new CloseSession(session));
 		}
+	}
+
+	public void createProject() {
+
 	}
 
 	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)
