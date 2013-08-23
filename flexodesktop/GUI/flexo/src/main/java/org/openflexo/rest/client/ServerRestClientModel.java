@@ -1,5 +1,6 @@
 package org.openflexo.rest.client;
 
+import java.awt.Dialog.ModalityType;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
@@ -47,6 +49,7 @@ import org.openflexo.rest.client.model.User;
 import org.openflexo.rest.client.model.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.Holder;
 import org.openflexo.view.controller.FlexoController;
 
 import com.sun.jersey.api.client.Client;
@@ -58,6 +61,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public static final File FIB_FILE = new FileResource("Fib/ServerClientModelView.fib");
 	public static final File DOC_GENERATION_CHOOSER_FIB_FILE = new FileResource("Fib/DocGenerationChooser.fib");
+	public static final File NEW_SERVER_PROJECT_FIB_FILE = new FileResource("Fib/NewServerProject.fib");
 
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd/MM/yy hh:mm");
 
@@ -157,6 +161,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public class NewProjectParameter {
+		private static final String COMMENT = "comment";
+		private static final String PROJECT = "project";
 		private Project project;
 		private PropertyChangeSupport pcSupport;
 		private String comment;
@@ -184,20 +190,84 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			}
 		}
 
-		public List<User> getAvailableUsers(Account account) {
-			ServerRestClient client = getServerRestClient(false);
-			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
-			return client.users(client.createClient(), builder.build()).getAsXml(new GenericType<List<User>>() {
+		public List<User> getAvailableUsers(final Account account) {
+			final Holder<List<User>> result = new Holder<List<User>>();
+			performOperationsInSwingWorker(true, true, new ServerRestClientOperation() {
+
+				@Override
+				public int getSteps() {
+					return 0;
+				}
+
+				@Override
+				public String getLocalizedTitle() {
+					return FlexoLocalization.localizedForKey("retrieving_users_for_account");
+				}
+
+				@Override
+				public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+					UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true")
+							.queryParam("clientAccount", account.getClientAccountId());
+					result.set(client.users(client.createClient(), builder.build()).getAsXml(new GenericType<List<User>>() {
+					}));
+
+				}
 			});
+			return result.get();
+		}
+
+		public Project getProject() {
+			return project;
+		}
+
+		public void setProject(Project project) {
+			this.project = project;
+			pcSupport.firePropertyChange(PROJECT, null, project);
+		}
+
+		public String getComment() {
+			return comment;
+		}
+
+		public void setComment(String comment) {
+			this.comment = comment;
+			pcSupport.firePropertyChange(COMMENT, null, comment);
+		}
+
+		public ServerRestClientModel getServerRestClientModel() {
+			return ServerRestClientModel.this;
 		}
 
 	}
 
 	private interface ServerRestClientOperation {
+		/**
+		 * Performs the operation using the provided <code>client</code> and notifies the user through the provided <code>progress</code>.
+		 * 
+		 * @param client
+		 *            the REST client to use
+		 * @param progress
+		 *            the progress callback to notify of the operation progress
+		 * @throws IOException
+		 *             in case an IOException occurs (mainly SocketException, but could also be related to disk errors)
+		 * @throws WebApplicationException
+		 *             in case an error occurs during a remote operation.
+		 */
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException;
 
+		/**
+		 * The general title for this operation
+		 * 
+		 * @return the general title for this operation
+		 */
 		public String getLocalizedTitle();
 
+		/**
+		 * Number of steps required for this operation. It should match the number of times the method {@link Progress#increment(String)} is
+		 * called. If the value is negative or zero (preferably zero), the progress is indeterminate.
+		 * 
+		 * @return the number of steps required for this operation.
+		 */
 		public int getSteps();
 	}
 
@@ -591,6 +661,35 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		return validationInProgressValue;
 	}
 
+	public class CreateProjectAndUploadFirstVersion implements ServerRestClientOperation {
+
+		private NewProjectParameter newProjectParameter;
+
+		public CreateProjectAndUploadFirstVersion(NewProjectParameter newProjectParameter) {
+			super();
+			this.newProjectParameter = newProjectParameter;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			Project createdProject = client.projects().postXmlAsProject(newProjectParameter.getProject());
+			setServerProject(createdProject);
+			SendProjectToServer send = new SendProjectToServer(newProjectParameter.getComment());
+			send.doOperation(client, progress);
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("creating_project");
+		}
+
+		@Override
+		public int getSteps() {
+			return 2;
+		}
+
+	}
+
 	public List<Account> loadAccounts() {
 		ServerRestClient client = getServerRestClient(false);
 		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
@@ -601,7 +700,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	protected void setValidationInProgress(ProjectVersion version, Boolean value) {
 		Boolean oldValue = validationInProgress.put(version, value);
 		if (value != oldValue && oldValue != null) {
-			performOperationsInSwingWorker(false, new UpdateVersions());
+			performOperationsInSwingWorker(false, false, new UpdateVersions());
 		}
 		if (value && validationJobChecker == null) {
 			validationJobChecker = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable() {
@@ -698,13 +797,20 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
-	private void performOperationsInSwingWorker(final ServerRestClientOperation... operations) {
-		performOperationsInSwingWorker(true, operations);
+	private void performOperationsInSwingWorker(ServerRestClientOperation... operations) {
+		performOperationsInSwingWorker(true, false, operations);
 	}
 
-	private void performOperationsInSwingWorker(final boolean useProgressWindow, final ServerRestClientOperation... operations) {
+	private void performOperationsInSwingWorker(final boolean useProgressWindow, final boolean synchronous,
+			final ServerRestClientOperation... operations) {
 		if (useProgressWindow) {
 			ProgressWindow.makeProgressWindow("", operations.length);
+		}
+		final JDialog dialog = synchronous ? new JDialog(useProgressWindow ? ProgressWindow.instance() : controller.getFlexoFrame()) : null;
+		if (dialog != null) {
+			dialog.setUndecorated(true);
+			dialog.setSize(0, 0);
+			dialog.setModalityType(ModalityType.APPLICATION_MODAL);
 		}
 		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
 
@@ -714,8 +820,19 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				return null;
 			}
 
+			@Override
+			protected void done() {
+				super.done();
+				if (dialog != null) {
+					dialog.setVisible(false);
+					dialog.dispose();
+				}
+			}
 		};
 		worker.execute();
+		if (dialog != null) {
+			dialog.setVisible(true);
+		}
 	}
 
 	public void refresh() {
@@ -862,7 +979,21 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public void createProject() {
-
+		if (user == null) {
+			return;
+		}
+		if (serverProject != null) {
+			FlexoController.notify(FlexoLocalization.localizedForKey("project_already_exists_on_server"));
+			return;
+		}
+		NewProjectParameter data = new NewProjectParameter();
+		data.getProject().setName(flexoProject.getDisplayName());
+		data.setComment(FlexoLocalization.localizedForKey("first_import_of_project"));
+		FIBDialog<NewProjectParameter> dialog = FIBDialog.instanciateAndShowDialog(NEW_SERVER_PROJECT_FIB_FILE, data,
+				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
+		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
+			performOperationsInSwingWorker(new CreateProjectAndUploadFirstVersion(data));
+		}
 	}
 
 	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)

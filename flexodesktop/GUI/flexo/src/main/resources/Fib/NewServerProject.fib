@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel$NewProjectParameter">
+  <Panel layout="twocols" darkLevel="0" constraints="border(location=center)">
+    <Label label="name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+    <TextField data="data.project.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
+    <Label label="account" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+    <DropDown data="data.project.clientAccount" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="account" format="object.accountName" localize="true" list="data.availableAccounts" iteratorClassName="org.openflexo.rest.client.model.Account" autoSelectFirstRow="true" />
+    <Label label="project_manager" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+    <DropDown data="data.project.projectManager" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="dropdown" format="((((object.firstName + object.lastName) + &quot;(&quot;) + object.login) + &quot;)&quot;)" localize="true" staticList="" list="data.getAvailableUsers(account.selected)" iteratorClassName="org.openflexo.rest.client.model.User" autoSelectFirstRow="true" />
+  </Panel>
+  <Panel layout="buttons" hGap="5" vGap="5" darkLevel="0" constraints="border(location=south)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Ok" default="true" localize="true" enable="(data.project.clientAccount != null)" name="ok" index="0" constraints="flow(index=0)" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" localize="true" index="1" constraints="flow(index=1)" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Naam</Localized>
+    <Localized key="account" lang="English">Account</Localized>
+    <Localized key="account" lang="French">Compte</Localized>
+    <Localized key="account" lang="Dutch">Account</Localized>
+    <Localized key="project_manager" lang="English">Project manager</Localized>
+    <Localized key="project_manager" lang="French">Gestionnaire du projet</Localized>
+    <Localized key="project_manager" lang="Dutch">Project manager</Localized>
+    <Localized key="Ok" lang="English">Ok</Localized>
+    <Localized key="Ok" lang="French">Ok</Localized>
+    <Localized key="Ok" lang="Dutch">Ok</Localized>
+    <Localized key="Cancel" lang="English">Cancel</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="Cancel" lang="Dutch">Cancel</Localized>
+  </LocalizedDictionary>
+</Panel>
