@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.openflexo.toolbox.ToolBox;
 
 /**
  * this layout manager automatically displays a set of components on a row (typically JButton). All children components get the same size
@@ -64,7 +65,12 @@ public class ButtonLayout implements LayoutManager, SwingConstants {
 	@Override
 	public Dimension preferredLayoutSize(Container parent) {
 		Insets insets = parent.getInsets();
-		int ncomponents = parent.getComponentCount();
+		int ncomponents = 0;
+		for (Component c : parent.getComponents()) {
+			if (c.isVisible()) {
+				ncomponents++;
+			}
+		}
 		if (ncomponents == 0) {
 			return new Dimension();
 		}
@@ -86,7 +92,12 @@ public class ButtonLayout implements LayoutManager, SwingConstants {
 	@Override
 	public void layoutContainer(Container parent) {
 		Insets insets = parent.getInsets();
-		int ncomponents = parent.getComponentCount();
+		int ncomponents = 0;
+		for (Component c : parent.getComponents()) {
+			if (c.isVisible()) {
+				ncomponents++;
+			}
+		}
 		if (ncomponents == 0) {
 			return;
 		}
@@ -100,6 +111,9 @@ public class ButtonLayout implements LayoutManager, SwingConstants {
 		boolean direction = leftToRight != null && leftToRight || leftToRight == null && !SystemUtils.IS_OS_MAC;
 		int x;
 		int availableWidth = parent.getWidth();
+		if (alignment < 0) {
+			alignment = ToolBox.isMacOSLaf() ? RIGHT : CENTER;
+		}
 		switch (alignment) {
 		case SwingConstants.LEFT:
 			x = direction ? insets.left : requiredWidth - maxWidth - insets.right;
@@ -117,6 +131,9 @@ public class ButtonLayout implements LayoutManager, SwingConstants {
 		}
 		int y = insets.top;
 		for (Component c : parent.getComponents()) {
+			if (!c.isVisible()) {
+				continue;
+			}
 			c.setBounds(x, y, maxWidth, maxHeight);
 			if (direction) {
 				x += hgap + maxWidth;
