@@ -8,8 +8,8 @@
         <LabelColumn data="iterator.creationDate" format="data.formatDate(object)" title="creation_date" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creator" title="creator" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <IconColumn data="data.getConsistencyIcon(iterator)" title="Consistency" columnWidth="70" resizable="false" displayTitle="true" name="icon" />
-        <ButtonColumn action="data.generateDocumentation(iterator)" enabled="(iterator.tocEntries.size &gt; 0)" data="controller.getLocalizedForKey(&quot;generate_doc&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
-        <ButtonColumn action="data.generatePrototype(iterator)" enabled="iterator.isIsProtoValidationSuccessful" data="controller.getLocalizedForKey(&quot;generate_proto&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
+        <ButtonColumn action="data.generateDocumentation(iterator)" enabled="((iterator.tocEntries.size &gt; 0) &amp; (data.serverProject.availableDocToken &gt; 0))" data="controller.getLocalizedForKey(&quot;generate_doc&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
+        <ButtonColumn action="data.generatePrototype(iterator)" enabled="((iterator.isIsProtoValidationSuccessful &amp; ) &amp; (data.serverProject.availableProtoToken &gt; 0))" data="controller.getLocalizedForKey(&quot;generate_proto&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
       </Table>
     </Panel>
     <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
@@ -18,8 +18,8 @@
           <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=0;y=0)" />
           <Button action="data.createProject()" buttonType="Trigger" label="create_project" localize="true" enable="(data.serverProject = null)" constraints="buttons()" visible="(data.serverProject = null)" />
           <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject != null)" data="((data.serverProject != null) ? &quot;send_to_server&quot; : &quot;create_project&quot;)" constraints="grid(x=1;y=0)" visible="(data.serverProject != null)" />
-          <Button action="data.generateDocumentation(versionTable.selected)" buttonType="Trigger" label="generate_doc" localize="true" enable="((versionTable.selected != null) &amp; (versionTable.selected.tocEntries.size &gt; 0))" constraints="grid(x=2;y=0)" />
-          <Button action="data.generatePrototype(versionTable.selected)" buttonType="Trigger" label="generate_proto" localize="true" enable="((versionTable.selected != null) &amp; versionTable.selected.isIsProtoValidationSuccessful)" constraints="grid(x=3;y=0)" />
+          <Button action="data.generateDocumentation(versionTable.selected)" buttonType="Trigger" label="generate_doc" localize="true" enable="((((versionTable.selected &amp; ) != null) &amp; (versionTable.selected.tocEntries.size &gt; 0)) &amp; (data.serverProject.availableDocToken &gt; 0))" constraints="grid(x=2;y=0)" />
+          <Button action="data.generatePrototype(versionTable.selected)" buttonType="Trigger" label="generate_proto" localize="true" enable="(((versionTable.selected != null) &amp; versionTable.selected.isIsProtoValidationSuccessful) &amp; (data.serverProject.availableProtoToken &gt; 0))" constraints="grid(x=3;y=0)" />
         </Panel>
       </Panel>
       <Panel layout="border" darkLevel="0" constraints="border(location=east)" width="35" height="30">

@@ -27,6 +27,7 @@
 'view'_binding_is_not_valid='view' binding is not valid
 'view'_binding_is_not_valid_description='view' binding is not valid description
 <html>type_mismatch_on_operator_($0)<br>supplied_type_is_($1)<br>while_expected_types_are_($2)</html>=<html>Type mismatch on operator ($0)<br>Supplied type is ($1)<br>while expected types are\: ($2)</html>
+<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>=<html>Type mismatch op operator ($0)<br>Gegeven types zijn ($1) en ($2)<br>wanneer de verwachte ($3) zijn.</html>
 <unloaded>=<unloaded>
 AND=AND
 ARITHMETIC_FLOAT=[FLOAT]
