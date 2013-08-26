@@ -94,6 +94,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern) {
 		EditionPatternInstancePatternRole returned = makePatternRole(EditionPatternInstancePatternRole.class);
 		returned.setEditionPatternType(editionPattern);
+		returned.setModelSlot(this);
 		return returned;
 	}
 
