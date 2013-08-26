@@ -91,41 +91,45 @@ public class FlexoServerInstanceManager {
 
 	public FlexoServerAddressBook getAddressBook() {
 		if (addressBook == null) {
-			URL url = null;
-			try {
-				url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
-			} catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
-			File serverInstanceFile = getFlexoServerInstanceFile();
-			String fileContent = FileUtils.createOrUpdateFileFromURL(url, serverInstanceFile);
-			if (fileContent != null) {
-				try {
-					addressBook = (FlexoServerAddressBook) factory.deserialize(fileContent);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JDOMException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvalidDataException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ModelDefinitionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			synchronized (this) {
+				if (addressBook != null) {
+					URL url = null;
+					try {
+						url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
+					} catch (MalformedURLException e1) {
+						e1.printStackTrace();
+					}
+					File serverInstanceFile = getFlexoServerInstanceFile();
+					String fileContent = FileUtils.createOrUpdateFileFromURL(url, serverInstanceFile);
+					if (fileContent != null) {
+						try {
+							addressBook = (FlexoServerAddressBook) factory.deserialize(fileContent);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JDOMException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvalidDataException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ModelDefinitionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if (addressBook != null) {
+						FlexoServerInstance other = getOtherInstance();
+						addressBook.addToInstances(other);
+						filterAddressBook(addressBook);
+					} else {
+						FlexoServerAddressBook defaultAddressBook = getDefaultAddressBook();
+						FlexoServerInstance other = getOtherInstance();
+						defaultAddressBook.addToInstances(other);
+						filterAddressBook(defaultAddressBook);
+						return defaultAddressBook;
+					}
 				}
-			}
-			if (addressBook != null) {
-				FlexoServerInstance other = getOtherInstance();
-				addressBook.addToInstances(other);
-				filterAddressBook(addressBook);
-			} else {
-				FlexoServerAddressBook defaultAddressBook = getDefaultAddressBook();
-				FlexoServerInstance other = getOtherInstance();
-				defaultAddressBook.addToInstances(other);
-				filterAddressBook(defaultAddressBook);
-				return defaultAddressBook;
 			}
 		}
 		return addressBook;
