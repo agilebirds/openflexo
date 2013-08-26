@@ -21,7 +21,7 @@
       <LocalizedDictionary />
     </Label>
     <CheckBox selected="true" localize="true" name="checkbox" data="data.clientParameter.remember" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=4;gridX=1;index=10;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)" />
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=5;gridX=0;index=0;gridWidth=2;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.0)" opaque="false">
+    <Panel layout="buttons" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=5;gridX=0;index=0;gridWidth=2;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.0)" opaque="false">
       <Button buttonType="Trigger" label="OK" constraints="flow(index=0)" localize="true" clickAction="controller.validateAndDispose()">
         <LocalizedDictionary />
       </Button>
