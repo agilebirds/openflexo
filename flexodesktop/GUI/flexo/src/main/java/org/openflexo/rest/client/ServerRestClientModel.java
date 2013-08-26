@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -52,6 +54,9 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.Holder;
 import org.openflexo.view.controller.FlexoController;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.multipart.FormDataMultiPart;
@@ -167,10 +172,10 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private PropertyChangeSupport pcSupport;
 		private String comment;
 
-		private List<Account> availableAccounts;
-
 		public NewProjectParameter() {
 			project = new Project();
+			project.setAvailableProtoToken(5);
+			project.setAvailableDocToken(5);
 			pcSupport = new PropertyChangeSupport(this);
 			if (user.getClientAccount() != null) {
 				Account account = new Account();
@@ -181,39 +186,30 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		public List<Account> getAvailableAccounts() {
 			if (user.getUserType() == UserType.ADMIN) {
-				if (availableAccounts == null) {
-					availableAccounts = loadAccounts();
+				try {
+					return accountCache.get("");
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				return availableAccounts;
+				return Collections.emptyList();
 			} else {
 				return Collections.emptyList();
 			}
 		}
 
 		public List<User> getAvailableUsers(final Account account) {
-			final Holder<List<User>> result = new Holder<List<User>>();
-			performOperationsInSwingWorker(true, true, new ServerRestClientOperation() {
-
-				@Override
-				public int getSteps() {
-					return 0;
-				}
-
-				@Override
-				public String getLocalizedTitle() {
-					return FlexoLocalization.localizedForKey("retrieving_users_for_account");
-				}
-
-				@Override
-				public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-					UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true")
-							.queryParam("clientAccount", account.getClientAccountId());
-					result.set(client.users(client.createClient(), builder.build()).getAsXml(new GenericType<List<User>>() {
-					}));
-
-				}
-			});
-			return result.get();
+			try {
+				List<User> accountUsers = accountUserCache.get(account);
+				List<User> adminUsers = adminUserCache.get("");
+				List<User> all = new ArrayList<User>();
+				all.addAll(accountUsers);
+				all.addAll(adminUsers);
+				return all;
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+			return Collections.emptyList();
 		}
 
 		public Project getProject() {
@@ -371,7 +367,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				return;
 			}
 			validationInProgress.clear();
-			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", Boolean.TRUE);
+			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", Boolean.TRUE)
+					.queryParam("isIntermediate", Boolean.FALSE).queryParam("isIntermediate", "null");
 			Client restClient = client.createClient();
 			setVersions(client.projectsProjectIDVersions(restClient, builder.build(), serverProject.getProjectId()).getAsXml(
 					page * pageSize, (page + 1) * pageSize, "creationDate desc", new GenericType<List<ProjectVersion>>() {
@@ -693,8 +690,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	public List<Account> loadAccounts() {
 		ServerRestClient client = getServerRestClient(false);
 		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
-		return client.accounts(client.createClient(), builder.build()).getAsXml(new GenericType<List<Account>>() {
-		});
+		return client.accounts(client.createClient(), builder.build()).getAsXml(null, null, "accountName asc",
+				new GenericType<List<Account>>() {
+				});
 	}
 
 	protected void setValidationInProgress(ProjectVersion version, Boolean value) {
@@ -761,6 +759,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private int pageSize = 5;
 	private int page = 0;
 	private ScheduledFuture<?> validationJobChecker;
+	private LoadingCache<String, List<Account>> accountCache;
+	private LoadingCache<String, List<User>> adminUserCache;
+	private LoadingCache<Account, List<User>> accountUserCache;
 
 	public ServerRestClientModel(FlexoController controller, FlexoProject flexoProject) {
 		super();
@@ -768,6 +769,52 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		this.flexoProject = flexoProject;
 		this.validationInProgress = new Hashtable<ProjectVersion, Boolean>();
 		this.pcSupport = new PropertyChangeSupport(this);
+		this.accountCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<Account>>() {
+			@Override
+			public List<Account> load(String key) throws Exception {
+				return loadAccounts();
+			}
+		});
+		this.accountUserCache = CacheBuilder.newBuilder().build(new CacheLoader<Account, List<User>>() {
+			@Override
+			public List<User> load(final Account account) throws Exception {
+				final Holder<List<User>> result = new Holder<List<User>>();
+				performOperationsInSwingWorker(true, true, new ServerRestClientOperation() {
+
+					@Override
+					public int getSteps() {
+						return 0;
+					}
+
+					@Override
+					public String getLocalizedTitle() {
+						return FlexoLocalization.localizedForKey("retrieving_users_for_account");
+					}
+
+					@Override
+					public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+						UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true")
+								.queryParam("clientAccount", account.getClientAccountId());
+						result.set(client.users(client.createClient(), builder.build()).getAsXml(null, null, "login asc",
+								new GenericType<List<User>>() {
+								}));
+
+					}
+				});
+				return result.get();
+			}
+		});
+		this.adminUserCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<User>>() {
+			@Override
+			public List<User> load(String key) throws Exception {
+				ServerRestClient client = getServerRestClient(false);
+				UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true").queryParam("userType", "DNL");
+				return client.users(client.createClient(), builder.build()).getAsXml(null, null, "login asc",
+						new GenericType<List<User>>() {
+						});
+			}
+		});
+
 	}
 
 	private ServerRestClient getServerRestClient(boolean forceDialog) {
@@ -836,6 +883,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public void refresh() {
+		accountCache.invalidateAll();
+		accountUserCache.invalidateAll();
 		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateProjectEditionSession(),
 				new UpdateVersions());
 	}
@@ -1004,6 +1053,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				boolean done = false;
 				while (!done) {
 					ServerRestClient client = getServerRestClient(!firstAttempt);
+					if (client == null) {
+						return;
+					}
 					if (useProgressWindow) {
 						ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
 						int steps = operation.getSteps();
@@ -1018,6 +1070,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 								}
 							}
 						});
+						firstAttempt = true;
 						done = true;
 					} catch (WebApplicationException e) {
 						e.printStackTrace();
@@ -1048,4 +1101,5 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		return;
 	}
+
 }
