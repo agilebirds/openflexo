@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -48,6 +49,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.swing.ImageUtils;
+import org.openflexo.swing.ImageUtils.ImageType;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushEditonPatternToPalette<A, T1, T2>, T1 extends FlexoObject & GRTemplate, T2 extends FlexoObject>
@@ -272,8 +276,8 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 	}
 
 	public File saveScreenshot() {
-		/*File imageFile = new File(getFocusedObject().getViewPoint().getResource().getDirectory(), JavaUtils.getClassName(newElementName)
-				+ ".palette-element" + ".png");
+		File imageFile = new File(getFocusedObject().getDiagramSpecification().getResource().getDirectory(),
+				JavaUtils.getClassName(newElementName) + ".palette-element" + ".png");
 		logger.info("Saving " + imageFile);
 		try {
 			ImageUtils.saveImageToFile(getScreenshot().image, imageFile, ImageType.PNG);
@@ -282,9 +286,7 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 			e.printStackTrace();
 			logger.warning("Could not save " + imageFile.getAbsolutePath());
 			return null;
-		}*/
-		return null;
-
+		}
 	}
 
 	public DiagramSpecification getDiagramSpecification() {
