@@ -148,11 +148,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (getParentView() != null) {
 			return getParentView().getBindingEvaluationContext();
 		}
+		/*
 		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
 			if (getEmbeddingComponent() == null) {
 				System.out.println("for DropSchemePanel embedding component is " + getEmbeddingComponent());
 			}
-		}
+		}*/
 		/*if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemeWidget")) {
 			System.out.println("for DropSchemeWidget embedding component is " + getEmbeddingComponent());
 		}*/
@@ -477,9 +478,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public void setEmbeddingComponent(FIBReferencedComponentWidget embeddingComponent) {
-		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+		/* if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
 			System.out.println("Set emmbedding component for DropSchemePanel with " + embeddingComponent);
-		}
+		}*/
 		this.embeddingComponent = embeddingComponent;
 	}
 }

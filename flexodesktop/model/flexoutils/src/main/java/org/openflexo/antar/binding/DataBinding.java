@@ -316,6 +316,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return true;
 		}
 		
+		
 		if (getOwner() == null) {
 			invalidBindingReason = "null owner";
 			wasValid = false;

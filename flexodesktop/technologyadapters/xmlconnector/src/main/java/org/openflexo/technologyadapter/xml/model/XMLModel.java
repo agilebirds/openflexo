@@ -75,6 +75,14 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		this.technologyAdapter = (XMLTechnologyAdapter) technologyAdapter;
 	}
 	
+	public String getName(){
+		if (xmlResource != null){
+			return xmlResource.getName();
+		}
+		else 
+			return "";
+	}
+	
 	@Override
 	public void setNamespace(String uri, String prefix){
 		this.namespacePrefix = prefix;

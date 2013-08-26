@@ -27,6 +27,7 @@ import javax.swing.AbstractAction;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -50,7 +51,8 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (getColumnModel().getAction().isSet() && getColumnModel().getAction().isValid()) {
+				DataBinding<Object> action = getColumnModel().getAction();
+				if (action.isSet() && action.isValid()) {
 					iteratorObject = elementAt(buttonTableColumn.getClickedRow());
 					try {
 						getColumnModel().getAction().execute(ButtonColumn.this);

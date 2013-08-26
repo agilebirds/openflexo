@@ -54,7 +54,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
  * @param <MM>
  */
 public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		AssignableAction<M, MM, EditionPatternInstance> {
+AssignableAction<M, MM, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
 
@@ -375,7 +375,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
-			ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
+	ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
 		public AddEditionPatternInstanceMustAddressACreationScheme() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
@@ -397,7 +397,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	public static class AddEditionPatternInstanceParametersMustBeValid extends
-			ValidationRule<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>> {
+	ValidationRule<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>> {
 		public AddEditionPatternInstanceParametersMustBeValid() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_parameters_must_be_valid");
 		}
@@ -408,18 +408,20 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 			if (action.getCreationScheme() != null) {
 				Vector<ValidationIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>>> issues = new Vector<ValidationIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>>>();
 				for (AddEditionPatternInstanceParameter p : action.getParameters()) {
-					if (p.getParam().getIsRequired()) {
+
+					EditionSchemeParameter param = p.getParam();
+					if (param.getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
-							if (p.getParam() instanceof URIParameter && ((URIParameter) p.getParam()).getBaseURI().isSet()
-									&& ((URIParameter) p.getParam()).getBaseURI().isValid()) {
+							DataBinding<String> uri = ((URIParameter) param).getBaseURI();
+							if (param instanceof URIParameter && uri.isSet() && uri.isValid()) {
 								// Special case, we will find a way to manage this
 							} else {
-								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + p.getParam().getName()));
+								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + param.getName()));
 							}
 						} else if (!p.getValue().isValid()) {
 							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
 									+ p.action.getFullyQualifiedName() + ". Reason: " + p.getValue().invalidBindingReason());
-							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + p.getParam().getName()));
+							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + param.getName()));
 						}
 					}
 				}
@@ -437,7 +439,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	public static class VirtualModelInstanceBindingIsRequiredAndMustBeValid extends
-			BindingIsRequiredAndMustBeValid<AddEditionPatternInstance> {
+	BindingIsRequiredAndMustBeValid<AddEditionPatternInstance> {
 		public VirtualModelInstanceBindingIsRequiredAndMustBeValid() {
 			super("'virtual_model_instance'_binding_is_not_valid", AddEditionPatternInstance.class);
 		}

@@ -88,14 +88,14 @@
               </Panel>
             </SplitPanel>
           </Panel>
-          <FIBReferencedComponent componentFile="&quot;EditionSchemePanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" opaque="false" />
+          <FIBReferencedComponent componentFile="&quot;Fib/EditionSchemePanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" opaque="false" />
         </SplitPanel>
       </Tab>
       <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
-        <FIBReferencedComponent componentFile="&quot;EditionPatternInspectorPanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" opaque="false" />
+        <FIBReferencedComponent componentFile="&quot;Fib/EditionPatternInspectorPanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" opaque="false" />
       </Tab>
       <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
-        <FIBReferencedComponent componentFile="&quot;LocalizedDictionaryPanel.fib&quot;" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" opaque="false" />
+        <FIBReferencedComponent componentFile="&quot;Fib/LocalizedDictionaryPanel.fib&quot;" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" opaque="false" />
       </Tab>
     </TabPanel>
     <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="10" titleFont="SansSerif,0,12" darkLevel="0" index="1" constraints="split(splitIdentifier=preview)" />

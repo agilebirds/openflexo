@@ -321,12 +321,13 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 		@Override
 		public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
-			if (getBinding(object) == null || !getBinding(object).isSet()) {
+			DataBinding<?> b = getBinding(object);
+			if (b == null || !b.isSet()) {
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
-			} else if (!getBinding(object).isValid()) {
-				logger.info(getClass().getName() + ": Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName()
-						+ ". Reason: " + getBinding(object).invalidBindingReason());
+			} else if (!b.isValid()) {
+				logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getFullyQualifiedName()
+						+ ". Reason: " + b.invalidBindingReason());
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			}
