@@ -60,13 +60,16 @@ public class ServerRestService {
 
 	private boolean started = false;
 
+	private boolean forceDialog = true;
+
 	private class RemoteJobChecker implements Runnable {
 		@Override
 		public void run() {
 			ServerRestClient client = null;
 			boolean firstAttempt = true;
 			while (client == null) {
-				ServerRestClientParameter params = getServerRestClientParameter(!firstAttempt);
+				ServerRestClientParameter params = getServerRestClientParameter(!firstAttempt && forceDialog);
+				forceDialog = false;
 				if (params == null) {
 					return;
 				}
