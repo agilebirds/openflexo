@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" border="empty" protectContent="false" name="main" dataClassName="org.openflexo.fib.controller.FIBController">
-  <Label label="localized_editor" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=10;insetsBottom=10;weightY=0.0;weightX=1.0;fill=horizontal)" name="" readOnly="false" manageDynamicModel="false" />
-  <Table iteratorClassName="org.openflexo.fib.model.FIBLocalizedDictionary$DynamicEntry" visibleRowCount="30" rowHeight="16" autoSelectFirstRow="false" data="data.localizer.dynamicEntries" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;weightX=1.0;fill=both)" font="Lucida Grande,0,11" readOnly="false" manageDynamicModel="true">
-    <TextFieldColumn name="label" data="iterator.key" title="Key" columnWidth="200" resizable="true" displayTitle="true" />
-    <TextFieldColumn name="textfield" data="iterator.french" title="French" columnWidth="200" resizable="true" displayTitle="true" />
-    <TextFieldColumn name="textfield" data="iterator.english" title="English" columnWidth="200" resizable="true" displayTitle="true" />
-    <TextFieldColumn name="textfield" data="iterator.dutch" title="Dutch" columnWidth="200" resizable="true" displayTitle="true" />
-    <AddAction name="add" method="data.localizer.addEntry" />
-    <RemoveAction name="remove" method="data.localizer.deleteEntry(selected)" />
+<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.fib.controller.FIBController" name="main">
+  <Label label="localized_editor" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
+  <Table iteratorClassName="org.openflexo.fib.model.FIBLocalizedDictionary$DynamicEntry" visibleRowCount="30" rowHeight="16" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="1" data="data.localizer.dynamicEntries" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="Lucida Grande,0,11">
+    <TextFieldColumn data="iterator.key" title="Key" columnWidth="200" resizable="true" displayTitle="true" name="label" />
+    <TextFieldColumn data="iterator.french" title="French" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+    <TextFieldColumn data="iterator.english" title="English" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+    <TextFieldColumn data="iterator.dutch" title="Dutch" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+    <AddAction method="data.localizer.addEntry" name="add" />
+    <RemoveAction method="data.localizer.deleteEntry(selected)" name="remove" />
   </Table>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" border="empty" borderTitle="Panel" protectContent="false" name="" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=1.0;fill=horizontal)">
-    <Button action="data.searchNewLocalizationEntries()" buttonType="Trigger" label="search_new_entries" constraints="flow(index=0)" readOnly="false" manageDynamicModel="false" />
-    <Button action="data.refreshLocalized()" buttonType="Trigger" label="refresh" constraints="flow(index=0)" readOnly="false" manageDynamicModel="false" />
-    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="close" constraints="flow(index=1)" readOnly="false" manageDynamicModel="false" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="2" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="data.searchNewLocalizationEntries()" buttonType="Trigger" label="search_new_entries" localize="true" index="0" constraints="flow(index=0)" />
+    <Button action="data.refreshLocalized()" buttonType="Trigger" label="refresh" localize="true" index="0" constraints="flow(index=0)" />
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="close" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="English" lang="French">Anglais</Localized>
-    <Localized key="Dutch" lang="French">Neerlandais</Localized>
-    <Localized key="French" lang="French">Francais</Localized>
-    <Localized key="Key" lang="French">Clé</Localized>
+    <Localized key="Dutch" lang="French">Néérlandais</Localized>
+    <Localized key="French" lang="French">Français</Localized>
+    <Localized key="Key" lang="French">Clef</Localized>
     <Localized key="Dutch" lang="English">Dutch</Localized>
     <Localized key="English" lang="English">English</Localized>
     <Localized key="French" lang="English">French</Localized>
@@ -31,8 +31,22 @@
     <Localized key="search_new_entries" lang="English">Search new entries</Localized>
     <Localized key="refresh" lang="French">Rafraichir</Localized>
     <Localized key="refresh" lang="English">Refresh</Localized>
-    <Localized key="localized_editor" lang="French">Editeur de locales</Localized>
-    <Localized key="localized_editor" lang="English">Localized editor</Localized>
+    <Localized key="localized_editor" lang="French">Edition des traductions</Localized>
+    <Localized key="localized_editor" lang="English">Localization Editor</Localized>
+    <Localized key="add" lang="English">Add</Localized>
+    <Localized key="add" lang="French">Ajouter</Localized>
+    <Localized key="add" lang="Dutch">Voeg toe</Localized>
+    <Localized key="remove" lang="English">Remove</Localized>
+    <Localized key="remove" lang="French">Supprimer</Localized>
+    <Localized key="remove" lang="Dutch">Verwijderen</Localized>
+    <Localized key="localized_editor" lang="Dutch">Localization Editor</Localized>
+    <Localized key="Key" lang="Dutch">Sleutel</Localized>
+    <Localized key="French" lang="Dutch">French</Localized>
+    <Localized key="English" lang="Dutch">English</Localized>
+    <Localized key="Dutch" lang="Dutch">Dutch</Localized>
+    <Localized key="search_new_entries" lang="Dutch">Zoeken naar nieuwe inzendingen</Localized>
+    <Localized key="refresh" lang="Dutch">Herladen</Localized>
+    <Localized key="close" lang="Dutch">Sluiten</Localized>
+    <Localized key="save" lang="Dutch">Opslaan</Localized>
   </LocalizedDictionary>
 </Panel>
-
