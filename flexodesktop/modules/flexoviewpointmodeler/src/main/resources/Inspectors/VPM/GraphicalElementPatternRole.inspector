@@ -129,9 +129,9 @@
     <Localized key="top" lang="English">Top</Localized>
     <Localized key="top" lang="French">Haut</Localized>
     <Localized key="top" lang="Dutch">Top</Localized>
-    <Localized key="middle" lang="English">middle</Localized>
-    <Localized key="middle" lang="French">middle</Localized>
-    <Localized key="middle" lang="Dutch">middle</Localized>
+    <Localized key="middle" lang="English">Middle</Localized>
+    <Localized key="middle" lang="French">Middle</Localized>
+    <Localized key="middle" lang="Dutch">Middle</Localized>
     <Localized key="bottom" lang="English">Bottom</Localized>
     <Localized key="bottom" lang="French">Bas</Localized>
     <Localized key="bottom" lang="Dutch">Bottom</Localized>
@@ -141,9 +141,9 @@
     <Localized key="Bottom" lang="English">Bottom</Localized>
     <Localized key="Bottom" lang="French">Bottom</Localized>
     <Localized key="Bottom" lang="Dutch">Bottom</Localized>
-    <Localized key="justify" lang="English">justify</Localized>
-    <Localized key="justify" lang="French">justify</Localized>
-    <Localized key="justify" lang="Dutch">justify</Localized>
+    <Localized key="justify" lang="English">Justify</Localized>
+    <Localized key="justify" lang="French">Justify</Localized>
+    <Localized key="justify" lang="Dutch">Justify</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
     <Localized key="name" lang="Dutch">Name</Localized>
@@ -153,9 +153,9 @@
     <Localized key="clics" lang="English">clics</Localized>
     <Localized key="clics" lang="French">clics</Localized>
     <Localized key="clics" lang="Dutch">clics</Localized>
-    <Localized key="shift" lang="English">shift</Localized>
-    <Localized key="shift" lang="French">shift</Localized>
-    <Localized key="shift" lang="Dutch">shift</Localized>
+    <Localized key="shift" lang="English">Shift</Localized>
+    <Localized key="shift" lang="French">Shift</Localized>
+    <Localized key="shift" lang="Dutch">Shift</Localized>
     <Localized key="ctrl" lang="English">ctrl</Localized>
     <Localized key="ctrl" lang="French">ctrl</Localized>
     <Localized key="ctrl" lang="Dutch">ctrl</Localized>
@@ -165,9 +165,9 @@
     <Localized key="alt" lang="English">alt</Localized>
     <Localized key="alt" lang="French">alt</Localized>
     <Localized key="alt" lang="Dutch">alt</Localized>
-    <Localized key="action" lang="English">action</Localized>
-    <Localized key="action" lang="French">action</Localized>
-    <Localized key="action" lang="Dutch">actie</Localized>
+    <Localized key="action" lang="English">Action</Localized>
+    <Localized key="action" lang="French">Action</Localized>
+    <Localized key="action" lang="Dutch">Actie</Localized>
     <Localized key="new" lang="English">New</Localized>
     <Localized key="new" lang="French">Nouveau</Localized>
     <Localized key="new" lang="Dutch">New</Localized>
@@ -183,9 +183,9 @@
     <Localized key="value" lang="English">Value</Localized>
     <Localized key="value" lang="French">Valeur</Localized>
     <Localized key="value" lang="Dutch">Value</Localized>
-    <Localized key="string_variable" lang="English">string_variable</Localized>
-    <Localized key="string_variable" lang="French">string_variable</Localized>
-    <Localized key="string_variable" lang="Dutch">string_variable</Localized>
+    <Localized key="string_variable" lang="English">String variable</Localized>
+    <Localized key="string_variable" lang="French">String variable</Localized>
+    <Localized key="string_variable" lang="Dutch">String variable</Localized>
     <Localized key="integer_variable" lang="English">Integer variable</Localized>
     <Localized key="integer_variable" lang="French">Variable entière</Localized>
     <Localized key="integer_variable" lang="Dutch">Integer variable</Localized>

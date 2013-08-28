@@ -43,10 +43,10 @@
     <Number allowsNull="false" minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=7;insetsRight=2;insetsTop=0;location=center)" name="TransparencyLevel" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" valueChangedAction="controller.parameterChanged()" />
   </Panel>
   <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="controlPanel">
-    <Button action="controller.apply()" buttonType="Trigger" label="apply" index="0" constraints="flow(index=0)" localize="true">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" localize="true" index="0" constraints="flow(index=0)">
       <LocalizedDictionary />
     </Button>
-    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" index="1" constraints="flow(index=1)" localize="true">
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)">
       <LocalizedDictionary />
     </Button>
   </Panel>
@@ -117,5 +117,89 @@
     <Localized key="big_dashes" lang="Dutch">Big dashes</Localized>
     <Localized key="dots_dashes" lang="Dutch">Dots dashes</Localized>
     <Localized key="dot_lines_dashes" lang="Dutch">Dot lines dashes</Localized>
+    <Localized key="Plain stroke" lang="English">Plain stroke</Localized>
+    <Localized key="Plain stroke" lang="French">Plain stroke</Localized>
+    <Localized key="Plain stroke" lang="Dutch">Plain stroke</Localized>
+    <Localized key="Small dashes" lang="English">Small dashes</Localized>
+    <Localized key="Small dashes" lang="French">Small dashes</Localized>
+    <Localized key="Small dashes" lang="Dutch">Small dashes</Localized>
+    <Localized key="Medium dashes" lang="English">Medium dashes</Localized>
+    <Localized key="Medium dashes" lang="French">Medium dashes</Localized>
+    <Localized key="Medium dashes" lang="Dutch">Medium dashes</Localized>
+    <Localized key="Medium spaced dashes" lang="English">Medium spaced dashes</Localized>
+    <Localized key="Medium spaced dashes" lang="French">Medium spaced dashes</Localized>
+    <Localized key="Medium spaced dashes" lang="Dutch">Medium spaced dashes</Localized>
+    <Localized key="Big dashes" lang="English">Big dashes</Localized>
+    <Localized key="Big dashes" lang="French">Big dashes</Localized>
+    <Localized key="Big dashes" lang="Dutch">Big dashes</Localized>
+    <Localized key="Dots dashes" lang="English">Dots dashes</Localized>
+    <Localized key="Dots dashes" lang="French">Dots dashes</Localized>
+    <Localized key="Dots dashes" lang="Dutch">Dots dashes</Localized>
+    <Localized key="Dot lines dashes" lang="English">Dot lines dashes</Localized>
+    <Localized key="Dot lines dashes" lang="French">Dot lines dashes</Localized>
+    <Localized key="Dot lines dashes" lang="Dutch">Dot lines dashes</Localized>
+    <Localized key="Join miter" lang="English">Join miter</Localized>
+    <Localized key="Join miter" lang="French">Join miter</Localized>
+    <Localized key="Join miter" lang="Dutch">Join miter</Localized>
+    <Localized key="Join round" lang="English">Join round</Localized>
+    <Localized key="Join round" lang="French">Join round</Localized>
+    <Localized key="Join round" lang="Dutch">Join round</Localized>
+    <Localized key="Join bevel" lang="English">Join bevel</Localized>
+    <Localized key="Join bevel" lang="French">Join bevel</Localized>
+    <Localized key="Join bevel" lang="Dutch">Join bevel</Localized>
+    <Localized key="Cap butt" lang="English">Cap butt</Localized>
+    <Localized key="Cap butt" lang="French">Cap butt</Localized>
+    <Localized key="Cap butt" lang="Dutch">Cap butt</Localized>
+    <Localized key="Cap round" lang="English">Cap round</Localized>
+    <Localized key="Cap round" lang="French">Cap round</Localized>
+    <Localized key="Cap round" lang="Dutch">Cap round</Localized>
+    <Localized key="Cap square" lang="English">Cap square</Localized>
+    <Localized key="Cap square" lang="French">Cap square</Localized>
+    <Localized key="Cap square" lang="Dutch">Cap square</Localized>
+    <Localized key="transparency_level" lang="English">Transparency level</Localized>
+    <Localized key="transparency_level" lang="French">Degré de transparence</Localized>
+    <Localized key="transparency_level" lang="Dutch">Transparency level</Localized>
+    <Localized key="Transparency" lang="English">Transparency</Localized>
+    <Localized key="Transparency" lang="French">Transparency</Localized>
+    <Localized key="Transparency" lang="Dutch">Transparency</Localized>
+    <Localized key="Trait plein" lang="English">Trait plein</Localized>
+    <Localized key="Trait plein" lang="French">Trait plein</Localized>
+    <Localized key="Trait plein" lang="Dutch">Trait plein</Localized>
+    <Localized key="Ligne pointillée court" lang="English">Ligne pointillée court</Localized>
+    <Localized key="Ligne pointillée court" lang="French">Ligne pointillée court</Localized>
+    <Localized key="Ligne pointillée court" lang="Dutch">Ligne pointillée court</Localized>
+    <Localized key="Ligne pointillées moyen" lang="English">Ligne pointillées moyen</Localized>
+    <Localized key="Ligne pointillées moyen" lang="French">Ligne pointillées moyen</Localized>
+    <Localized key="Ligne pointillées moyen" lang="Dutch">Ligne pointillées moyen</Localized>
+    <Localized key="Tiret de tailles moyenne" lang="English">Tiret de tailles moyenne</Localized>
+    <Localized key="Tiret de tailles moyenne" lang="French">Tiret de tailles moyenne</Localized>
+    <Localized key="Tiret de tailles moyenne" lang="Dutch">Tiret de tailles moyenne</Localized>
+    <Localized key="Gros pointillés" lang="English">Gros pointillés</Localized>
+    <Localized key="Gros pointillés" lang="French">Gros pointillés</Localized>
+    <Localized key="Gros pointillés" lang="Dutch">Gros pointillés</Localized>
+    <Localized key="Ligne pointillée fine" lang="English">Ligne pointillée fine</Localized>
+    <Localized key="Ligne pointillée fine" lang="French">Ligne pointillée fine</Localized>
+    <Localized key="Ligne pointillée fine" lang="Dutch">Ligne pointillée fine</Localized>
+    <Localized key="Ligne pointillée alternée" lang="English">Ligne pointillée alternée</Localized>
+    <Localized key="Ligne pointillée alternée" lang="French">Ligne pointillée alternée</Localized>
+    <Localized key="Ligne pointillée alternée" lang="Dutch">Ligne pointillée alternée</Localized>
+    <Localized key="Raccord en onglet" lang="English">Raccord en onglet</Localized>
+    <Localized key="Raccord en onglet" lang="French">Raccord en onglet</Localized>
+    <Localized key="Raccord en onglet" lang="Dutch">Raccord en onglet</Localized>
+    <Localized key="Raccord arrondi" lang="English">Raccord arrondi</Localized>
+    <Localized key="Raccord arrondi" lang="French">Raccord arrondi</Localized>
+    <Localized key="Raccord arrondi" lang="Dutch">Raccord arrondi</Localized>
+    <Localized key="Raccord en biseau" lang="English">Raccord en biseau</Localized>
+    <Localized key="Raccord en biseau" lang="French">Raccord en biseau</Localized>
+    <Localized key="Raccord en biseau" lang="Dutch">Raccord en biseau</Localized>
+    <Localized key="Bout en bouchon" lang="English">Bout en bouchon</Localized>
+    <Localized key="Bout en bouchon" lang="French">Bout en bouchon</Localized>
+    <Localized key="Bout en bouchon" lang="Dutch">Bout en bouchon</Localized>
+    <Localized key="Bout arrondi" lang="English">Bout arrondi</Localized>
+    <Localized key="Bout arrondi" lang="French">Bout arrondi</Localized>
+    <Localized key="Bout arrondi" lang="Dutch">Bout arrondi</Localized>
+    <Localized key="Bout carré" lang="English">Bout carré</Localized>
+    <Localized key="Bout carré" lang="French">Bout carré</Localized>
+    <Localized key="Bout carré" lang="Dutch">Bout carré</Localized>
   </LocalizedDictionary>
 </Panel>
