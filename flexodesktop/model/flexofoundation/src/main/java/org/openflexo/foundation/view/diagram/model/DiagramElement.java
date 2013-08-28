@@ -63,8 +63,8 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements
-		GRTemplate, Bindable, PropertyChangeListener, Observer {
+public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements GRTemplate,
+		Bindable, PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());
 
@@ -327,6 +327,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 		update();
 	}
 
+	@Override
 	public DiagramElement<?> getParent() {
 		return parent;
 	}
@@ -662,6 +663,26 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+	}
+
+	private List<DiagramElement<?>> descendants;
+
+	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
+		descendants.add(current);
+		for (DiagramElement<?> child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
+	}
+
+	@Override
+	public List<DiagramElement<?>> getDescendants() {
+		if (descendants == null) {
+			descendants = new ArrayList<DiagramElement<?>>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
 	}
 
 }

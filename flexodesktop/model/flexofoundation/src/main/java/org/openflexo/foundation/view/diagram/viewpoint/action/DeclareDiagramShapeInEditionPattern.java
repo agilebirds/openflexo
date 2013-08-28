@@ -27,7 +27,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 
 /**
  * This class is an action that allows to create an edition pattern from a graphical representation which is a Diagram Shape
@@ -69,9 +68,6 @@ public class DeclareDiagramShapeInEditionPattern extends
 	static {
 		FlexoModelObject.addActionForClass(DeclareDiagramShapeInEditionPattern.actionType, DiagramShape.class);
 	}
-
-	public boolean isTopLevel = true;
-	public EditionPattern containerEditionPattern;
 
 	DeclareDiagramShapeInEditionPattern(DiagramShape focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
