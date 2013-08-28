@@ -24,15 +24,19 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.shema.VEShemaModuleView;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -80,6 +84,21 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 					}*/
 
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());
+				if (action.getPrimaryShape() != null) {
+					ModuleView<?> moduleView = getController().moduleViewForObject(
+							action.getPrimaryShape().getShema().getShemaDefinition(), false);
+					if (moduleView instanceof VEShemaModuleView) {
+						ShapeView<ViewShape> shape = ((VEShemaModuleView) moduleView).getController().getDrawingView()
+								.shapeViewForObject(action.getPrimaryShape().getGraphicalRepresentation());
+						if (shape != null) {
+							if (shape.getLabelView() != null) {
+								shape.getLabelView().startEdition();
+							}
+						}
+
+					}
+				}
+
 				return true;
 			}
 		};
