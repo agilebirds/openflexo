@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" border="empty" protectContent="false" dataClassName="org.openflexo.vpm.controller.VPMController" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false">
-  <Label label="save_modified_resources" align="center" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=0;gridWidth=0;insetsTop=20;insetsBottom=20;weightY=0.0;weightX=1.0;fill=horizontal)" font="Lucida Grande,1,15" readOnly="false" manageDynamicModel="false" />
-  <Label label="modified_resources_text" align="left" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=1;gridWidth=0;insetsTop=0;insetsBottom=15;weightY=0.0;fill=none;weightX=0.0)" font="Lucida Grande,2,11" readOnly="false" manageDynamicModel="false">
+<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.vpm.controller.VPMController" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false">
+  <Label label="save_modified_resources" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
+  <Label label="modified_resources_text" index="1" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="Lucida Grande,2,11" localize="true">
     <LocalizedDictionary />
   </Label>
-  <Table iteratorClassName="org.openflexo.vpm.controller.VPMController$ResourceSavingInfo" visibleRowCount="15" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" selectionMode="MultipleIntervalSelection" data="data.resourceSavingInfo" dataClassName="" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=1.0;fill=both;weightX=1.0)" readOnly="false" manageDynamicModel="true">
-    <CheckBoxColumn name="checkbox" data="iterator.saveThisResource" title="Save" columnWidth="50" resizable="false" displayTitle="true" />
-    <IconColumn name="icon" data="iterator.icon" title="icon" columnWidth="30" resizable="false" displayTitle="false" />
-    <LabelColumn name="label" data="iterator.name" title="name" columnWidth="300" resizable="true" displayTitle="true" />
-    <LabelColumn name="label" data="iterator.type" title="type" columnWidth="300" resizable="true" displayTitle="true" />
+  <Table iteratorClassName="org.openflexo.vpm.controller.VPMController$ResourceSavingInfo" visibleRowCount="15" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="2" data="data.resourceSavingInfo" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+    <CheckBoxColumn data="iterator.saveThisResource" title="Save" columnWidth="50" resizable="false" displayTitle="true" name="checkbox" />
+    <IconColumn data="iterator.icon" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+    <LabelColumn data="iterator.name" title="name" columnWidth="300" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.type" title="type" columnWidth="300" resizable="true" displayTitle="true" name="label" />
     <LocalizedDictionary />
   </Table>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" border="empty" borderTitle="Panel" protectContent="false" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=3;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;fill=both;weightX=1.0)" opaque="false">
-    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="save" constraints="flow(index=0)" readOnly="false" manageDynamicModel="false" />
-    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" readOnly="false" manageDynamicModel="false" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="save" localize="true" index="0" constraints="flow(index=0)" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
@@ -24,16 +24,21 @@
     <Localized key="type" lang="French">Type</Localized>
     <Localized key="save" lang="French">Sauver</Localized>
     <Localized key="cancel" lang="French">Annuler</Localized>
-    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="name" lang="Dutch">Naam</Localized>
     <Localized key="type" lang="Dutch">Type</Localized>
-    <Localized key="save" lang="Dutch">Save</Localized>
-    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="save" lang="Dutch">Opslaan</Localized>
+    <Localized key="cancel" lang="Dutch">Annuleren</Localized>
     <Localized key="modified" lang="French">Modifié</Localized>
     <Localized key="modified" lang="English">Modified</Localized>
-    <Localized key="modified_resources_text" lang="French">Les resources suivantes ont été gérées au cours de la session courante. Veuillez sélectionner les resources à sauver.</Localized>
-    <Localized key="modified_resources_text" lang="English">Following resources have been managed by current session. Please select which to save.</Localized>
-    <Localized key="save_modified_resources" lang="French">Sauver les resources modifiées</Localized>
+    <Localized key="modified_resources_text" lang="French">Texte des ressources modifié</Localized>
+    <Localized key="modified_resources_text" lang="English">Modified resources text</Localized>
+    <Localized key="save_modified_resources" lang="French">Sauver les ressources modifiées</Localized>
     <Localized key="save_modified_resources" lang="English">Save modified resources</Localized>
+    <Localized key="Save" lang="English">Save</Localized>
+    <Localized key="Save" lang="French">Sauver</Localized>
+    <Localized key="Save" lang="Dutch">Opslaan</Localized>
+    <Localized key="save_modified_resources" lang="Dutch">Gemodificeerde herstellen opslaan</Localized>
+    <Localized key="modified_resources_text" lang="Dutch">Gemodificeerde tekst herstellen</Localized>
+    <Localized key="modified" lang="Dutch">Gemodificeerd</Localized>
   </LocalizedDictionary>
 </Panel>
-
