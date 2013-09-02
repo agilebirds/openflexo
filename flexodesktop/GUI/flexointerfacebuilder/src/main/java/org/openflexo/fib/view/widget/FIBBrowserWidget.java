@@ -195,9 +195,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
 		try {
-			if (getComponent().getSelected().isValid()
-					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+			Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+			if ( newSelectedObject != null) {
 				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 					setSelectedObject(newSelectedObject);
 				}

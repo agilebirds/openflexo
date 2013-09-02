@@ -894,6 +894,9 @@ public class StringEncoder {
 		if (value == null) {
 			return null;
 		}
+		
+		// specific case for DataBinding<File> where a two steps convertion is needed to get the full path
+				
 		Converter<T> converter = _converterForClass(objectType);
 		if (converter != null) {
 			return converter.convertFromString(value);

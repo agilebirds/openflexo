@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -85,10 +86,10 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 			logger.fine("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
 			logger.fine("Data: " + getController().getDataObject());
 		}
-		Object data = getController().getDataObject();
-		if (getWidget().getAction().isValid()) {
+		 DataBinding<?> action = getWidget().getAction();
+		if (action.isValid()) {
 			try {
-				getWidget().getAction().execute(getBindingEvaluationContext());
+				action.execute(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

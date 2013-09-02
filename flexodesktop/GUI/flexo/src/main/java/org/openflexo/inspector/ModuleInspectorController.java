@@ -151,8 +151,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private void appendEditableCondition(FIBComponent component) {
 		if (component instanceof FIBWidget) {
 			FIBWidget widget = (FIBWidget) component;
-			if (widget.getEnable() != null && widget.getEnable().isValid()) {
-				DataBinding<Boolean> enable = widget.getEnable();
+			DataBinding<Boolean> enable = widget.getEnable();
+			if (enable != null && enable.isValid()) {
 				widget.setEnable(new DataBinding<Boolean>(enable.toString() + " & " + CONTROLLER_EDITABLE_BINDING));
 			} else {
 				widget.setEnable(new DataBinding<Boolean>(CONTROLLER_EDITABLE_BINDING));

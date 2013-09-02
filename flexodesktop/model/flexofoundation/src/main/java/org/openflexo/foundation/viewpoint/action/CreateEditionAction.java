@@ -107,6 +107,8 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 		builtInActions = new ArrayList<Class<? extends EditionAction>>();
 		builtInActions.add(org.openflexo.foundation.viewpoint.AssignationAction.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.AddToListAction.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.RemoveFromListAction.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.ExecutionAction.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPatternInstance.class);
@@ -230,6 +232,10 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 			}
 			if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(builtInActionClass)) {
 				return new org.openflexo.foundation.viewpoint.AssignationAction(null);
+			} else if (org.openflexo.foundation.viewpoint.AddToListAction.class.isAssignableFrom(builtInActionClass)) {
+				return new org.openflexo.foundation.viewpoint.AddToListAction(null);
+			} else if (org.openflexo.foundation.viewpoint.RemoveFromListAction.class.isAssignableFrom(builtInActionClass)) {
+				return new org.openflexo.foundation.viewpoint.RemoveFromListAction(null);
 			} else if (org.openflexo.foundation.viewpoint.ExecutionAction.class.isAssignableFrom(builtInActionClass)) {
 				return new org.openflexo.foundation.viewpoint.ExecutionAction(null);
 			} else if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {

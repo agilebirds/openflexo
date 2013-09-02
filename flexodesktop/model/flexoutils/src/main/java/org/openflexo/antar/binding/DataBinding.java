@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.StringConstant;
+import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
@@ -111,6 +113,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	private Type declaredType = null;
 	private DataBinding.BindingDefinitionType bdType = null;
 	private boolean mandatory = false;
+	// TODO : XtoF, first attempt to have better performances
+	private boolean wasValid = false;
+	private boolean cacheable = false;
+
 
 	private boolean needsParsing = false;
 	private String bindingName;
@@ -186,6 +192,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	public void setExpression(Expression value) {
 		// logger.info("setExpression() with " + value);
 		needsParsing = false;
+		wasValid = false;
 		Expression oldValue = this.expression;
 		if (oldValue == null) {
 			if (value == null) {
@@ -305,18 +312,27 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		invalidBindingReason = "unknown";
 
+		if (cacheable && wasValid) {
+			return true;
+		}
+		
+		
 		if (getOwner() == null) {
 			invalidBindingReason = "null owner";
-			return false;
+			wasValid = false;
+			return wasValid;
 		}
 
 		if (getOwner().getBindingModel() == null) {
 			invalidBindingReason = "owner has null BindingModel";
+			wasValid = false;
 			return false;
 		}
 
+		
 		if (getExpression() == null) {
 			invalidBindingReason = "null expression";
+			wasValid = false;
 			return false;
 		}
 
@@ -338,10 +354,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			} catch (InvalidBindingValue e) {
 				invalidBindingReason = "Invalid binding value: " + e.getBindingValue() + " reason: "
 						+ e.getBindingValue().invalidBindingReason();
+				wasValid = false;
 				return false;
 			} catch (VisitorException e) {
 				invalidBindingReason = "Unexpected visitor exception: " + e.getMessage();
 				logger.warning("TransformException while transforming " + expression);
+				wasValid = false;
 				return false;
 			}
 		}
@@ -351,6 +369,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Invalid binding because accessed type is null");
 			}
+			wasValid = false;
 			return false;
 		}
 
@@ -362,12 +381,14 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Invalid binding because binding definition declared as settable and definition cannot satisfy it (binding variable not settable)");
 				}
+				wasValid = false;
 				return false;
 			}
 		}
 
 		// NO need to check target type for EXECUTE bindings (we don't need return type nor value)
 		if (getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE) {
+			wasValid = true;
 			return true;
 		}
 
@@ -375,11 +396,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			// System.out.println("getBindingDefinition().getType()="+getBindingDefinition().getType());
 			// System.out.println("getAccessedType()="+getAccessedType());
 			invalidBindingReason = "valid binding";
+			wasValid = true;
 			return true;
 		}
 
 		if (isNull()) {
 			// A null expression is valid (otherwise return Object.class as analyzed type, and type checking will fail in next test
+			wasValid = true;
 			return true;
 		}
 
@@ -389,6 +412,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			logger.fine("Invalid binding " + this + " because types are not matching searched " + getDeclaredType() + " having "
 					+ getAnalyzedType());
 		}
+		wasValid = false;
 		return false;
 	}
 
@@ -551,6 +575,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	 * @throws NullReferenceException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
 			InvocationTargetException {
 
@@ -599,7 +624,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				Expression evaluatedExpression = resolvedExpression.evaluate();
 
 				if (evaluatedExpression instanceof CastExpression) {
-					if (((CastExpression) evaluatedExpression).getArgument() instanceof Constant) {
+					Expression argument = ((CastExpression) evaluatedExpression).getArgument();
+					if ( argument instanceof Constant) {
+						// Special case for Files to be converted from Strings
+						if (declaredType == File.class && argument.getEvaluationType() == EvaluationType.STRING) {
+							return (T) new File((String) ((Constant) argument).getValue());
+						}
 						return (T) ((Constant) ((CastExpression) evaluatedExpression).getArgument()).getValue();
 					}
 				}
@@ -746,5 +776,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public static DataBinding<Boolean> makeFalseBinding() {
 		return new DataBinding<Boolean>("false");
+	}
+
+	public boolean isCacheable() {
+		return cacheable;
+	}
+
+	public void setCacheable(boolean cacheable) {
+		this.cacheable = cacheable;
 	}
 }

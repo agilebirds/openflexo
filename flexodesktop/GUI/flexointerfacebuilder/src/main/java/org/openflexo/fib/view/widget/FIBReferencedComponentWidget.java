@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBReferencedComponentDynamicModel;
 import org.openflexo.fib.controller.FIBViewFactory;
@@ -43,6 +45,7 @@ import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.toolbox.FileResource;
 
 /**
  * Defines an abstract custom widget
@@ -51,7 +54,7 @@ import org.openflexo.fib.view.FIBWidgetView;
  * 
  */
 public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedComponent, JComponent, Object> implements
-		BindingEvaluationContext {
+BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponentWidget.class.getPackage().getName());
 
@@ -76,15 +79,20 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	private boolean isComponentLoading = false;
 
+
+
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
 			// System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
-			if (getWidget().getComponent() instanceof FIBWidget) {
-				referencedComponentView = factory.makeWidget((FIBWidget) getWidget().getComponent());
+
+			FIBComponent loaded = getWidget().loadReferencedComponent(this);
+
+			if (loaded instanceof FIBWidget) {
+				referencedComponentView = factory.makeWidget((FIBWidget) loaded);
 				referencedComponentView.setEmbeddingComponent(this);
-			} else if (getWidget().getComponent() instanceof FIBContainer) {
-				referencedComponentView = factory.makeContainer((FIBContainer) getWidget().getComponent());
+			} else if (loaded instanceof FIBContainer) {
+				referencedComponentView = factory.makeContainer((FIBContainer) loaded);
 				referencedComponentView.setEmbeddingComponent(this);
 			}
 			isComponentLoading = false;
@@ -130,7 +138,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			}
 		}
 	}
-
+	
+	
+	
 	@Override
 	public boolean updateWidgetFromModel() {
 		// We need here to "force" update while some assignments may be required
@@ -192,7 +202,12 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	@Override
 	public String toString() {
-		return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
-				+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
+		if (referencedComponentView != null){
+			return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
+					+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
+		}
+		else{
+			return super.toString();
+		}
 	}
 }
