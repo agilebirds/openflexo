@@ -20,7 +20,7 @@
 
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -75,7 +75,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private String individualPatternRoleName;
 	private String virtualModelPatternRoleName;
 	private EditionPattern newEditionPattern;
-	private Hashtable<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
+	private LinkedHashMap<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 	public DiagramPalette palette;
 
 	private boolean isTopLevel = true;
@@ -353,7 +353,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 
 					// Create graphical elements pattern role
 
-					newGraphicalElementPatternRoles = new Hashtable<DrawingObjectEntry, GraphicalElementPatternRole>();
+					newGraphicalElementPatternRoles = new LinkedHashMap<DrawingObjectEntry, GraphicalElementPatternRole>();
 
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (DrawingObjectEntry entry : drawingObjectEntries) {
@@ -541,6 +541,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					boolean mainPatternRole = true;
 					for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
+							ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
 							// Add shape action
 							AddShape newAddShape = new AddShape(builder);
 							newDropScheme.addToActions(newAddShape);
@@ -552,6 +553,9 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
 											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 								}
+							} else {
+								newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
+										.getPatternRoleName()));
 							}
 							mainPatternRole = false;
 						}

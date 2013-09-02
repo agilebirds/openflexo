@@ -50,14 +50,17 @@ public abstract class AddSchemaElementAction<T extends DiagramElement<?>> extend
 	}
 
 	protected String getGraphicalElementSpecificationFMLRepresentation(FMLRepresentationContext context) {
-		if (getPatternRole().getGrSpecifications().size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			for (GraphicalElementSpecification ges : getPatternRole().getGrSpecifications()) {
-				if (ges.getValue().isSet()) {
-					sb.append("  " + ges.getFeatureName() + " = " + ges.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+
+		if (getPatternRole() != null) {
+			if (getPatternRole().getGrSpecifications().size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				for (GraphicalElementSpecification ges : getPatternRole().getGrSpecifications()) {
+					if (ges.getValue().isSet()) {
+						sb.append("  " + ges.getFeatureName() + " = " + ges.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+					}
 				}
+				return sb.toString();
 			}
-			return sb.toString();
 		}
 		return null;
 	}
