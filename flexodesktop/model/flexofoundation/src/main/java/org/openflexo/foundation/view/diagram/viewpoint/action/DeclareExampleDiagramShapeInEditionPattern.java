@@ -27,7 +27,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 
 public class DeclareExampleDiagramShapeInEditionPattern extends
 		AbstractDeclareShapeInEditionPattern<ExampleDiagramShape, ExampleDiagramObject, DeclareExampleDiagramShapeInEditionPattern> {
@@ -61,9 +60,6 @@ public class DeclareExampleDiagramShapeInEditionPattern extends
 	static {
 		FlexoModelObject.addActionForClass(DeclareExampleDiagramShapeInEditionPattern.actionType, ExampleDiagramShape.class);
 	}
-
-	public boolean isTopLevel = true;
-	public EditionPattern containerEditionPattern;
 
 	DeclareExampleDiagramShapeInEditionPattern(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
 			FlexoEditor editor) {

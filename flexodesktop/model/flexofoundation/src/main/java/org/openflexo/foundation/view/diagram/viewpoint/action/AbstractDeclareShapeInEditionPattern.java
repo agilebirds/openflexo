@@ -80,7 +80,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 
 	private boolean isTopLevel = true;
 	public boolean isPushedToPalette = false;
-	public EditionPattern containerEditionPattern;
+	private EditionPattern containerEditionPattern;
 	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
 

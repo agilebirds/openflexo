@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -253,23 +251,4 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> i
 		return (ShapePatternRole) super.getPatternRole();
 	}
 
-	private List<DiagramElement<?>> descendants;
-
-	@Override
-	public List<DiagramElement<?>> getDescendants() {
-		if (descendants == null) {
-			descendants = new ArrayList<DiagramElement<?>>();
-			appendDescendants(this, descendants);
-		}
-		return descendants;
-	}
-
-	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
-		descendants.add(current);
-		for (DiagramElement<?> child : current.getChilds()) {
-			if (child != current) {
-				appendDescendants(child, descendants);
-			}
-		}
-	}
 }
