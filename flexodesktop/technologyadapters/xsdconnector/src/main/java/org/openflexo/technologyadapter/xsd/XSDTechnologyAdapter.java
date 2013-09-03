@@ -23,6 +23,7 @@ package org.openflexo.technologyadapter.xsd;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
@@ -182,29 +183,36 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 
 	protected XMLXSDFileResource tryToLookupModel(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
 		XSDTechnologyContextManager technologyContextManager = getTechnologyContextManager();
-		XSDMetaModelRepository mmRepository = resourceCenter.getRepository(XSDMetaModelRepository.class, this);
 		XMLModelRepository modelRepository = resourceCenter.getRepository(XMLModelRepository.class, this);
-		for (XSDMetaModelResource mmRes : mmRepository.getAllResources()) {
-			if (isValidModelFile(candidateFile, mmRes, technologyContextManager)) {
-				XMLXSDFileResource mRes = (XMLXSDFileResource) retrieveModelResource(candidateFile, mmRes);
-				if (mRes != null) {
-					RepositoryFolder<XMLXSDFileResource> folder;
-					try {
-						folder = modelRepository.getRepositoryFolder(candidateFile, true);
-						modelRepository.registerResource(mRes, folder);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					// Also register the resource in the ResourceCenter seen as a ResourceRepository
-					if (resourceCenter instanceof ResourceRepository) {
-						try {
-							((ResourceRepository) resourceCenter).registerResource(mmRes,
-									((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
-						} catch (IOException e) {
-							e.printStackTrace();
+		XSDMetaModelRepository mmRepository = null;
+
+		List<FlexoResourceCenter> rscCenters = technologyContextManager.getResourceCenterService().getResourceCenters();
+		for (FlexoResourceCenter<?> rscCenter : rscCenters){
+			mmRepository = (XSDMetaModelRepository) rscCenter.getRepository(XSDMetaModelRepository.class, this);
+			if (mmRepository != null){
+				for (XSDMetaModelResource mmRes : mmRepository.getAllResources()) {
+					if (isValidModelFile(candidateFile, mmRes, technologyContextManager)) {
+						XMLXSDFileResource mRes = (XMLXSDFileResource) retrieveModelResource(candidateFile, mmRes);
+						if (mRes != null) {
+							RepositoryFolder<XMLXSDFileResource> folder;
+							try {
+								folder = modelRepository.getRepositoryFolder(candidateFile, true);
+								modelRepository.registerResource(mRes, folder);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							// Also register the resource in the ResourceCenter seen as a ResourceRepository
+							if (resourceCenter instanceof ResourceRepository) {
+								try {
+									((ResourceRepository) resourceCenter).registerResource(mmRes,
+											((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+							return mRes;
 						}
 					}
-					return mRes;
 				}
 			}
 		}

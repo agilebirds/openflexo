@@ -31,6 +31,7 @@ import org.openflexo.Flexo;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObservable;
@@ -118,7 +119,11 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 			});
 			return;
 		}
-		getRootView().updateDataObject(getDataObject());
+
+		FIBView rv = getRootView();
+		if (rv != null){ 
+			rv.updateDataObject(getDataObject());
+		}
 	}
 
 	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter technologyAdapter) {

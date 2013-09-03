@@ -32,10 +32,11 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
-public class RemoveFromListAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, Object> {
+public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
 
 	private static final Logger logger = Logger.getLogger(RemoveFromListAction.class.getPackage().getName());
 
