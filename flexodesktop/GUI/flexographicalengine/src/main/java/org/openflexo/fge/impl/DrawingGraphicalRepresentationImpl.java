@@ -342,18 +342,8 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	}
 
 	@Override
-	public final boolean hasText() {
-		return false;
-	}
-
-	@Override
 	public final String getText() {
 		return null;
-	}
-
-	@Override
-	public boolean hasFloatingLabel() {
-		return false;
 	}
 
 	@Override

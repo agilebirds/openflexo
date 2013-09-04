@@ -642,10 +642,10 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
 	}*/
 
-	@Override
+	/*@Override
 	public boolean hasFloatingLabel() {
 		return hasText();
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {

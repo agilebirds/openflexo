@@ -14,6 +14,7 @@ import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -150,4 +151,28 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 		// No control areas are declared for the root node
 		return Collections.emptyList();
 	}
+
+	/**
+	 * Return flag indicating if this node should be displayed, relatively to the value returned by visible feature in
+	 * {@link GraphicalRepresentation}, and the structure of the tree (the parent should be visible too)<br>
+	 * Here, as a root node, no parent node is expected to be set and visible
+	 */
+	@Override
+	public boolean shouldBeDisplayed() {
+		if (!isValidated()) {
+			return false;
+		}
+		return getGraphicalRepresentation().getIsVisible();
+	}
+
+	@Override
+	public String toString() {
+		return "Root[" + getWidth() + "x" + getHeight() + "]:" + getDrawable();
+	}
+
+	@Override
+	public final boolean hasText() {
+		return false;
+	}
+
 }

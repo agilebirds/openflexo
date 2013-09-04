@@ -302,7 +302,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void paint(Graphics g) {
 		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
 				&& (getPaintManager().isTemporaryObject(node) || isEditing);
-		if (skipPaint || isDeleted() || !node.getGraphicalRepresentation().hasText()) {
+		if (skipPaint || isDeleted() || !node.hasText()) {
 			return;
 		}
 		super.paint(g);
@@ -332,7 +332,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
-				if (notification.getParameter() == GraphicalRepresentation.Parameters.text
+				if (notification.getParameter() == Parameters.text
 				// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
 				// properly use appropriate bindings
 						|| aNotification instanceof ShapeNeedsToBeRedrawn) {
@@ -543,8 +543,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			});
 			return;
 		}
-		if (node.getGraphicalRepresentation().hasText()) {
-			textComponent.setText(node.getGraphicalRepresentation().getText());
+		if (node.hasText()) {
+			textComponent.setText(node.getText());
 		} else {
 			textComponent.setText("");
 		}

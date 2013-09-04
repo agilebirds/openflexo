@@ -72,7 +72,7 @@ public class GraphDrawing2 extends DrawingImpl<Graph> {
 			}
 		});
 
-		nodeBinding.addDynamicPropertyValue(Parameters.text, "drawable.name");
+		nodeBinding.setDynamicPropertyValue(Parameters.text, "drawable.name");
 
 	}
 }

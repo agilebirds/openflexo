@@ -76,8 +76,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public static final String PARAGRAPH_ALIGNMENT = "paragraphAlignment";
 	public static final String IS_SELECTABLE = "isSelectable";
 	public static final String IS_FOCUSABLE = "isFocusable";
-	public static final String IS_SELECTED = "isSelected";
-	public static final String IS_FOCUSED = "isFocused";
+	// public static final String IS_SELECTED = "isSelected";
+	// public static final String IS_FOCUSED = "isFocused";
 	public static final String DRAW_CONTROL_POINTS_WHEN_FOCUSED = "drawControlPointsWhenFocused";
 	public static final String DRAW_CONTROL_POINTS_WHEN_SELECTED = "drawControlPointsWhenSelected";
 	public static final String IS_READ_ONLY = "isReadOnly";
@@ -102,28 +102,20 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	}
 
 	public static enum Parameters implements GRParameter {
-		identifier,
-		layer,
-		hasText,
-		text,
-		isMultilineAllowed,
-		lineWrap,
-		continuousTextEditing,
-		textStyle,
-		absoluteTextX,
-		absoluteTextY,
+		identifier, layer, hasText, text, isMultilineAllowed, lineWrap, continuousTextEditing, textStyle, absoluteTextX, // TODO: remove ?
+		absoluteTextY, // TODO: remove ?
 		horizontalTextAlignment,
 		verticalTextAlignment,
 		paragraphAlignment,
 		isSelectable,
 		isFocusable,
-		isSelected,
-		isFocused,
+		// isSelected,
+		// isFocused,
 		drawControlPointsWhenFocused,
 		drawControlPointsWhenSelected,
 		isReadOnly,
 		isLabelEditable,
-		isVisible,
+		isVisible, // TODO: remove ?
 		mouseClickControls,
 		mouseDragControls,
 		toolTipText,
@@ -267,7 +259,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	@Setter(value = IS_FOCUSABLE)
 	public void setIsFocusable(boolean isFocusable);
 
-	@Getter(value = IS_SELECTED, defaultValue = "false")
+	/*@Getter(value = IS_SELECTED, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsSelected();
 
@@ -279,7 +271,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public boolean getIsFocused();
 
 	@Setter(value = IS_FOCUSED)
-	public void setIsFocused(boolean aFlag);
+	public void setIsFocused(boolean aFlag);*/
 
 	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED, defaultValue = "true")
 	@XMLAttribute
@@ -386,7 +378,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	// * Graphical Utils
 	// *******************************************************************************
 
-	public boolean hasFloatingLabel();
+	// public boolean hasFloatingLabel();
 
 	// public boolean shouldBeDisplayed();
 
@@ -434,7 +426,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public ShapeGraphicalRepresentation shapeHiding(FGEPoint p);
 
-	public boolean hasText();
+	// public boolean hasText();
 
 	/*public int getViewX(double scale);
 

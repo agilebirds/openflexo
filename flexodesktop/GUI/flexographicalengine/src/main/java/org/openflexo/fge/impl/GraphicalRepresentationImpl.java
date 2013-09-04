@@ -64,8 +64,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	private boolean isSelectable = true;
 	private boolean isFocusable = true;
-	private boolean isSelected = false;
-	private boolean isFocused = false;
+	// private boolean isSelected = false;
+	// private boolean isFocused = false;
 	private boolean drawControlPointsWhenFocused = true;
 	private boolean drawControlPointsWhenSelected = true;
 
@@ -853,11 +853,13 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
+	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	@Override
 	public String getText() {
 		return text;
 	}
 
+	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	@Override
 	public void setText(String text) {
 		FGENotification notification = requireChange(Parameters.text, text);
@@ -867,6 +869,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
+	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	public void setTextNoNotification(String text) {
 		this.text = text;
 	}
@@ -940,10 +943,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
-	@Override
-	public abstract boolean hasFloatingLabel();
-
-	@Override
+	/*@Override
 	public boolean getIsFocused() {
 		return isFocused;
 	}
@@ -964,15 +964,15 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsSelected(boolean aFlag) {
-		/*if (getParentGraphicalRepresentation() != null && aFlag) {
-			getParentGraphicalRepresentation().moveToTop(this);
-		}*/
+		//if (getParentGraphicalRepresentation() != null && aFlag) {
+		//	getParentGraphicalRepresentation().moveToTop(this);
+		//}
 		FGENotification notification = requireChange(Parameters.isSelected, aFlag);
 		if (notification != null) {
 			isSelected = aFlag;
 			hasChanged(notification);
 		}
-	}
+	}*/
 
 	@Override
 	public boolean getIsReadOnly() {
@@ -1025,10 +1025,10 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean hasText() {
 		return getText() != null && !getText().trim().equals("");
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Methods *

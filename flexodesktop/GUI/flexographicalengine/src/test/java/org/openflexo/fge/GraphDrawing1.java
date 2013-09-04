@@ -1,7 +1,5 @@
 package org.openflexo.fge;
 
-import java.awt.Color;
-
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -9,6 +7,7 @@ import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
@@ -26,13 +25,13 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 	@Override
 	public void init() {
 		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation(this);
-		graphRepresentation.setBackgroundColor(Color.RED);
+		// graphRepresentation.setBackgroundColor(Color.RED);
 		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE, this);
 		// nodeRepresentation.setX(50);
 		// nodeRepresentation.setY(50);
 		nodeRepresentation.setWidth(20);
 		nodeRepresentation.setHeight(20);
-		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.CURVE, this);
+		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.LINE, this);
 
 		final DrawingGRBinding<Graph> graphBinding = bindDrawing(Graph.class, "graph", new DrawingGRProvider<Graph>() {
 			@Override
@@ -77,7 +76,9 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 			}
 		});
 
-		nodeBinding.addDynamicPropertyValue(Parameters.text, "drawable.name");
+		nodeBinding.setDynamicPropertyValue(Parameters.text, "drawable.name");
+		nodeBinding.setDynamicPropertyValue(ShapeParameters.x, "drawable.x");
+		nodeBinding.setDynamicPropertyValue(ShapeParameters.y, "drawable.y");
 
 	}
 }

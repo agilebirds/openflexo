@@ -460,7 +460,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public final void setX(double aValue) {
-		FGENotification notification = requireChange(ShapeParameters.x, aValue);
+		FGENotification notification = requireChange(null,/*ShapeParameters.x,*/aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			x = aValue;
@@ -496,7 +496,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public final void setY(double aValue) {
-		FGENotification notification = requireChange(ShapeParameters.y, aValue);
+		FGENotification notification = requireChange(null,/*ShapeParameters.y,*/aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			y = aValue;
@@ -2152,11 +2152,6 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 			this.isFloatingLabel = isFloatingLabel;
 			hasChanged(notification);
 		}
-	}
-
-	@Override
-	public boolean hasFloatingLabel() {
-		return hasText() && getIsFloatingLabel();
 	}
 
 	@Override

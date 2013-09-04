@@ -95,6 +95,10 @@ public interface Drawing<M> {
 	 */
 	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer, IObservable {
 
+		public static enum DrawingTreeNodeParameter implements GRParameter {
+			isSelected, isFocused;
+		}
+
 		/**
 		 * Return the drawing
 		 * 
@@ -298,6 +302,22 @@ public interface Drawing<M> {
 		public void notifyObjectHierarchyWillBeUpdated();
 
 		public void notifyObjectHierarchyHasBeenUpdated();
+
+		public boolean getIsSelected();
+
+		public void setIsSelected(boolean aFlag);
+
+		public boolean getIsFocused();
+
+		public void setIsFocused(boolean aFlag);
+
+		public boolean hasText();
+
+		public String getText();
+
+		public void setText(String text);
+
+		public boolean hasFloatingLabel();
 	}
 
 	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {
@@ -779,4 +799,5 @@ public interface Drawing<M> {
 		public boolean tryToResolve(Drawing<?> drawing);
 
 	}
+
 }

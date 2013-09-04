@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.inspector.InspectableModification;
 
@@ -77,7 +76,8 @@ public class FGENotification implements InspectableModification {
 		if (parameter == null) {
 			return false;
 		}
-		return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
-				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);
+		/*return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
+				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);*/
+		return true;
 	}
 }

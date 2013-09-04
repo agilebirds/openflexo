@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode.DrawingTreeNodeParameter;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -378,11 +379,11 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						getParentView().revalidate();
 						getPaintManager().repaint(this);
 					}*/
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+				} else if (notification.getParameter() == DrawingTreeNodeParameter.isFocused) {
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+				} else if (notification.getParameter() == DrawingTreeNodeParameter.isSelected) {
 					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
-					if (connectorNode.getGraphicalRepresentation().getIsSelected()) {
+					if (connectorNode.getIsSelected()) {
 						requestFocusInWindow();
 					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {

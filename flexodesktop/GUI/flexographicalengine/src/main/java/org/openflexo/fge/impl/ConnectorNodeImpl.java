@@ -498,4 +498,10 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		return connector.distanceToConnector(aPoint, scale);
 	}
 
+	@Override
+	public String toString() {
+		return "Connector-" + getIndex() + "[Shape-" + getStartNode().getIndex() + "][Shape-" + getEndNode().getIndex() + "]:"
+				+ getDrawable();
+	}
+
 }

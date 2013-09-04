@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode.DrawingTreeNodeParameter;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -258,7 +259,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("hop???");
 		if (isDeleted()) {
 			return;
 		}
@@ -339,7 +339,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				}
 			});
 		} else {
-			// logger.info("For " + getGraphicalRepresentation().getClass().getSimpleName() + " received: " + aNotification);
+			logger.info("update() in ShapeView for " + getNode() + " received: " + aNotification);
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
@@ -393,11 +393,11 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					}
 					getPaintManager().repaint(this);
 
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+				} else if (notification.getParameter() == DrawingTreeNodeParameter.isFocused) {
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
 					updateLabelView();
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+				} else if (notification.getParameter() == DrawingTreeNodeParameter.isSelected) {
 					if (getParent() != null) {
 						getParent().moveToFront(this);
 					}
@@ -405,7 +405,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getParent().moveToFront(getLabelView());
 					}
 					getPaintManager().repaint(this);
-					if (shapeNode.getGraphicalRepresentation().getIsSelected()) {
+					if (shapeNode.getIsSelected()) {
 						requestFocusInWindow();
 						// requestFocus();
 					}

@@ -187,11 +187,6 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// *******************************************************************************
 
 	@Override
-	public boolean hasFloatingLabel() {
-		return hasText();
-	}
-
-	@Override
 	public String getInspectorName() {
 		return "GeometricGraphicalRepresentation.inspector";
 	}

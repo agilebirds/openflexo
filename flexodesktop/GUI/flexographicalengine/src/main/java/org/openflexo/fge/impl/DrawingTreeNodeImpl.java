@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
+import org.openflexo.antar.expr.NotSettableContextException;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.ContainerNode;
@@ -63,6 +67,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private boolean validated = true;
 	protected LabelMetricsProvider labelMetricsProvider;
 
+	private boolean isSelected = false;
+	private boolean isFocused = false;
+
 	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		this.drawing = drawingImpl;
 		// logger.info("New DrawingTreeNode for "+aDrawable+" under "+aParentDrawable+" (is "+this+")");
@@ -78,6 +85,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		// parentNode.addChild(this);
 
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
+		graphicalRepresentation.addObserver(this);
 
 		// System.out.println("Hop");
 
@@ -213,6 +221,10 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		drawable = null;
 		parentNode = null;
+
+		if (graphicalRepresentation != null) {
+			graphicalRepresentation.deleteObserver(this);
+		}
 		graphicalRepresentation = null;
 
 		isDeleted = true;
@@ -391,6 +403,10 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			return getGraphicalRepresentation();
 		} else if (variable.getVariableName().equals("parent")) {
 			return getParentNode().getGraphicalRepresentation();
+		} else if (variable.getVariableName().equals("drawable")) {
+			return getDrawable();
+		} else if (variable.getVariableName().equals("gr")) {
+			return getGraphicalRepresentation();
 		} else {
 			DrawingImpl.logger.warning("Could not find variable named " + variable);
 			return null;
@@ -684,6 +700,87 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			ancestors.clear();
 		}
 		ancestors = null;*/
+	}
+
+	@Override
+	public boolean getIsFocused() {
+		return isFocused;
+	}
+
+	@Override
+	public void setIsFocused(boolean aFlag) {
+		if (aFlag != isFocused) {
+			isFocused = aFlag;
+			setChanged();
+			notifyObservers(new FGENotification(DrawingTreeNodeParameter.isFocused, !isFocused, isFocused));
+		}
+	}
+
+	@Override
+	public boolean getIsSelected() {
+		return isSelected;
+	}
+
+	@Override
+	public void setIsSelected(boolean aFlag) {
+		if (aFlag != isSelected) {
+			isSelected = aFlag;
+			setChanged();
+			notifyObservers(new FGENotification(DrawingTreeNodeParameter.isSelected, !isSelected, isSelected));
+		}
+	}
+
+	@Override
+	public String getText() {
+		if (getGRBinding().hasDynamicPropertyValue(Parameters.text)) {
+			try {
+				System.out.println("Returning " + getGRBinding().getDynamicPropertyValue(Parameters.text).getBindingValue(this));
+				return (String) getGRBinding().getDynamicPropertyValue(Parameters.text).getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return getGraphicalRepresentation().getText();
+	}
+
+	@Override
+	public void setText(String text) {
+		if (getGRBinding().hasDynamicPropertyValue(Parameters.text) && getGRBinding().getDynamicPropertyValue(Parameters.text).isSettable()) {
+			try {
+				getGRBinding().getDynamicPropertyValue(Parameters.text).setBindingValue(text, this);
+				return;
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotSettableContextException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		getGraphicalRepresentation().setText(text);
+	}
+
+	@Override
+	public boolean hasText() {
+		return getText() != null && !getText().trim().equals("");
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return hasText();
 	}
 
 }

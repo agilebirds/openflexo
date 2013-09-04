@@ -24,7 +24,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -64,6 +66,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
+import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.LabelView;
 import org.openflexo.fge.view.ShapeView;
 
@@ -119,10 +122,14 @@ public class DrawingController<M> extends Observable implements Observer {
 	 */
 	private FGEModelFactory factory;
 
+	private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
+
 	public DrawingController(Drawing<M> aDrawing, FGEModelFactory factory) {
 		super();
 
 		this.factory = factory;
+
+		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
 
 		setCurrentTool(EditorTool.SelectionTool);
 		currentForegroundStyle = factory.makeDefaultForegroundStyle();
@@ -161,6 +168,8 @@ public class DrawingController<M> extends Observable implements Observer {
 
 	private DrawingView<?> buildDrawingView() {
 		drawingView = makeDrawingView();
+		contents.put(drawing.getRoot(), drawingView);
+		logger.info("Controller " + this + " Register " + drawingView + " for " + drawing.getRoot());
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof ShapeNode) {
 				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
@@ -170,6 +179,7 @@ public class DrawingController<M> extends Observable implements Observer {
 				drawingView.add(v);
 			}
 		}
+		// drawingView.revalidate();
 		return drawingView;
 	}
 
@@ -208,6 +218,8 @@ public class DrawingController<M> extends Observable implements Observer {
 		System.out.println("> Make ShapeView with " + shapeNode);
 		ShapeView<O> returned = new ShapeView<O>(shapeNode, this);
 		System.out.println("bounds = " + returned.getBounds());
+		System.out.println("visible = " + returned.isVisible());
+		contents.put(shapeNode, returned);
 		return returned;
 	}
 
@@ -220,7 +232,48 @@ public class DrawingController<M> extends Observable implements Observer {
 	 */
 	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode) {
 		System.out.println("> Make ConnectorView with " + connectorNode);
-		return new ConnectorView<O>(connectorNode, this);
+		ConnectorView<O> returned = new ConnectorView<O>(connectorNode, this);
+		contents.put(connectorNode, returned);
+		return returned;
+	}
+
+	/**
+	 * Return a Map containing all the views declared for each DrawingTreeNode, where the key of the map are the {@link DrawingTreeNode}
+	 * 
+	 * @return
+	 */
+	public Map<DrawingTreeNode<?, ?>, FGEView<?>> getContents() {
+		return contents;
+	}
+
+	/**
+	 * Return view matching supplied node
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public <O> FGEView<?> viewForNode(DrawingTreeNode<?, ?> node) {
+		return contents.get(node);
+	}
+
+	/**
+	 * Return view matching supplied node, asserting supplied node is a {@link ShapeNode}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public ShapeView<?> shapeViewForNode(ShapeNode<?> node) {
+		return (ShapeView<?>) viewForNode(node);
+	}
+
+	/**
+	 * Return view matching supplied node, asserting supplied node is a {@link ConnectorNode}
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public ConnectorView<?> connectorViewForNode(ConnectorNode<?> node) {
+		return (ConnectorView<?>) viewForNode(node);
 	}
 
 	public DrawShapeToolController<?> getDrawShapeToolController() {
@@ -517,7 +570,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		}
 		if (!selectedObjects.contains(aNode)) {
 			selectedObjects.add(aNode);
-			aNode.getGraphicalRepresentation().setIsSelected(true);
+			aNode.setIsSelected(true);
 		}
 		getToolbox().update();
 	}
@@ -531,14 +584,14 @@ public class DrawingController<M> extends Observable implements Observer {
 		if (selectedObjects.contains(aNode)) {
 			selectedObjects.remove(aNode);
 		}
-		aNode.getGraphicalRepresentation().setIsSelected(false);
+		aNode.setIsSelected(false);
 		getToolbox().update();
 	}
 
 	public void toggleSelection(DrawingTreeNode<?, ?> aNode) {
 		// logger.info("BEGIN toggle selection with "+aGraphicalRepresentation+" with selection="+selectedObjects);
 		stopEditionOfEditedLabelIfAny();
-		if (aNode.getGraphicalRepresentation().getIsSelected()) {
+		if (aNode.getIsSelected()) {
 			removeFromSelectedObjects(aNode);
 		} else {
 			addToSelectedObjects(aNode);
@@ -550,7 +603,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
 		for (DrawingTreeNode<?, ?> s : selectedObjects) {
-			s.getGraphicalRepresentation().setIsSelected(false);
+			s.setIsSelected(false);
 		}
 		selectedObjects.clear();
 	}
@@ -589,7 +642,8 @@ public class DrawingController<M> extends Observable implements Observer {
 		}
 		if (!focusedObjects.contains(aNode)) {
 			focusedObjects.add(aNode);
-			aNode.getGraphicalRepresentation().setIsFocused(true);
+			aNode.setIsFocused(true);
+			System.out.println("Je mets le focus sur " + aNode);
 		}
 	}
 
@@ -601,11 +655,11 @@ public class DrawingController<M> extends Observable implements Observer {
 		if (focusedObjects.contains(aNode)) {
 			focusedObjects.remove(aNode);
 		}
-		aNode.getGraphicalRepresentation().setIsFocused(false);
+		aNode.setIsFocused(false);
 	}
 
 	public void toggleFocusSelection(DrawingTreeNode<?, ?> aNode) {
-		if (aNode.getGraphicalRepresentation().getIsFocused()) {
+		if (aNode.getIsFocused()) {
 			removeFromFocusedObjects(aNode);
 		} else {
 			addToFocusedObjects(aNode);
@@ -615,7 +669,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	public void clearFocusSelection() {
 		// stopEditionOfEditedLabelIfAny();
 		for (DrawingTreeNode<?, ?> node : focusedObjects) {
-			node.getGraphicalRepresentation().setIsFocused(false);
+			node.setIsFocused(false);
 		}
 		focusedObjects.clear();
 	}
