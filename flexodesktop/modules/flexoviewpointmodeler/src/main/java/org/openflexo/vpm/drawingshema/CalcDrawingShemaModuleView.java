@@ -34,62 +34,62 @@ import org.openflexo.vpm.controller.ViewPointPerspective;
 
 public class CalcDrawingShemaModuleView extends JPanel implements ModuleView<ExampleDrawingShema>, PropertyChangeListener {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(CalcDrawingShemaModuleView.class.getPackage().getName());
 
-	private CalcDrawingShemaController _controller;
+    private CalcDrawingShemaController _controller;
 
-	public CalcDrawingShemaModuleView(CalcDrawingShemaController controller) {
-		super();
-		setLayout(new BorderLayout());
-		_controller = controller;
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topPanel.add(_controller.getToolbox().getStyleToolBar());
-		add(topPanel, BorderLayout.NORTH);
-		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
-		validate();
-		controller.getCEDController().manageResource(controller.getShema());
-		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
-	}
+    public CalcDrawingShemaModuleView(CalcDrawingShemaController controller) {
+        super();
+        setLayout(new BorderLayout());
+        _controller = controller;
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(_controller.getToolbox().getStyleToolBar());
+        add(topPanel, BorderLayout.NORTH);
+        add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
+        revalidate();
+        controller.getCEDController().manageResource(controller.getShema());
+        getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+    }
 
-	public CalcDrawingShemaController getController() {
-		return _controller;
-	}
+    public CalcDrawingShemaController getController() {
+        return _controller;
+    }
 
-	@Override
-	public void deleteModuleView() {
-		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
-		getController().delete();
-	}
+    @Override
+    public void deleteModuleView() {
+        getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+        getController().delete();
+    }
 
-	@Override
-	public ViewPointPerspective getPerspective() {
-		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
-	}
+    @Override
+    public ViewPointPerspective getPerspective() {
+        return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
+    }
 
-	@Override
-	public ExampleDrawingShema getRepresentedObject() {
-		return _controller.getShema();
-	}
+    @Override
+    public ExampleDrawingShema getRepresentedObject() {
+        return _controller.getShema();
+    }
 
-	@Override
-	public boolean isAutoscrolled() {
-		return true;
-	}
+    @Override
+    public boolean isAutoscrolled() {
+        return true;
+    }
 
-	@Override
-	public void willHide() {
-	}
+    @Override
+    public void willHide() {
+    }
 
-	@Override
-	public void willShow() {
-		getPerspective().focusOnShema(getRepresentedObject());
-	}
+    @Override
+    public void willShow() {
+        getPerspective().focusOnShema(getRepresentedObject());
+    }
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
-			deleteModuleView();
-		}
-	}
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+            deleteModuleView();
+        }
+    }
 }
