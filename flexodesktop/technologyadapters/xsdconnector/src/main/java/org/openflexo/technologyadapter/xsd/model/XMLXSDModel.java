@@ -40,6 +40,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.xml.model.IXMLModel;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLAttribute;
@@ -54,7 +55,7 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, XSDMetaModel>, IXMLModel {
+public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, XSDMetaModel>, IXMLModel, TechnologyObject {
 
 	private XSDMetaModel metaModel= null;
 	private XSOntIndividual rootElem = null;

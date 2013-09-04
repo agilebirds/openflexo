@@ -32,6 +32,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.xml.model.IXMLMetaModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
@@ -42,7 +43,7 @@ import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
 
-public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel>,IXMLMetaModel {
+public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel>,IXMLMetaModel, TechnologyObject {
 
 
 

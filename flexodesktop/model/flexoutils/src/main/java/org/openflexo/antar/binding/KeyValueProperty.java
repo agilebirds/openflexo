@@ -228,6 +228,17 @@ public class KeyValueProperty extends Observable {
 				// we continue
 			}
 		}
+		
+		// manage static class methods
+				for (String trie : tries) {
+					try {
+						return ((Class) aDeclaringClass.getClass()).getMethod(trie, (Class<?>[]) null);
+					} catch (SecurityException err) {
+						// we continue
+					} catch (NoSuchMethodException err) {
+						// we continue
+					}
+				}
 
 		// If declaring class is interface, also lookup in Object class
 		if (returnedMethod == null && aDeclaringClass.isInterface()) {

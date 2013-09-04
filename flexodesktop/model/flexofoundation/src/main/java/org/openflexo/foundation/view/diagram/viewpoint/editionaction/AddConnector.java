@@ -308,19 +308,21 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 		@Override
 		public ValidationIssue<AddConnectorActionMustHaveAValidStartingShape, AddConnector> applyValidation(AddConnector action) {
-			if (action.getPatternRole() != null && action.getPatternRole().getStartShapeAsDefinedInAction()
-					&& !(action.getFromShape().isSet() && action.getFromShape().isValid())) {
+			ConnectorPatternRole pr = action.getPatternRole();
+			DataBinding<DiagramShape> db = action.getFromShape();
+			if ( pr != null && pr.getStartShapeAsDefinedInAction()
+					&& !(db.isSet() && db.isValid())) {
 				Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>>();
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
 					if (targetEditionPattern != null) {
-						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
-							v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, pr));
+						for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+							v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, spr));
 						}
 					}
 				}
-				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
-					v.add(new SetsStartingShapeToShape(pr));
+				for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsStartingShapeToShape(spr));
 				}
 				return new ValidationError<AddConnectorActionMustHaveAValidStartingShape, AddConnector>(this, action,
 						"add_connector_action_does_not_have_a_valid_starting_shape", v);
@@ -385,19 +387,21 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 		@Override
 		public ValidationIssue<AddConnectorActionMustHaveAValidEndingShape, AddConnector> applyValidation(AddConnector action) {
-			if (action.getPatternRole() != null && action.getPatternRole().getEndShapeAsDefinedInAction()
-					&& !(action.getToShape().isSet() && action.getToShape().isValid())) {
+			ConnectorPatternRole pr = action.getPatternRole();
+			DataBinding<DiagramShape> shape = action.getToShape();
+			if (pr != null && pr.getEndShapeAsDefinedInAction()
+					&& !(shape.isSet() && shape.isValid())) {
 				Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>>();
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();
 					if (targetEditionPattern != null) {
-						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
-							v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, pr));
+						for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+							v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, spr));
 						}
 					}
 				}
-				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
-					v.add(new SetsEndingShapeToShape(pr));
+				for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+					v.add(new SetsEndingShapeToShape(spr));
 				}
 				return new ValidationError<AddConnectorActionMustHaveAValidEndingShape, AddConnector>(this, action,
 						"add_connector_action_does_not_have_a_valid_ending_shape", v);

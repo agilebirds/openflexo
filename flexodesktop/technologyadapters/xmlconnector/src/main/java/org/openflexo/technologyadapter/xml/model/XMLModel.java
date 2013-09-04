@@ -37,6 +37,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.xml.XMLTechnologyAdapter;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.w3c.dom.Document;
@@ -47,7 +48,7 @@ import org.w3c.dom.Element;
  * @author xtof
  *
  */
-public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLModel>, FlexoMetaModel<XMLModel>, IXMLMetaModel, IXMLModel  {
+public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLModel>, FlexoMetaModel<XMLModel>, IXMLMetaModel, IXMLModel, TechnologyObject  {
 
 	// Constants
 	
@@ -73,6 +74,14 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		individuals = new HashMap<String, XMLIndividual>();
 		types = new HashMap<String, XMLType>();
 		this.technologyAdapter = (XMLTechnologyAdapter) technologyAdapter;
+	}
+	
+	public String getName(){
+		if (xmlResource != null){
+			return xmlResource.getName();
+		}
+		else 
+			return "";
 	}
 	
 	@Override

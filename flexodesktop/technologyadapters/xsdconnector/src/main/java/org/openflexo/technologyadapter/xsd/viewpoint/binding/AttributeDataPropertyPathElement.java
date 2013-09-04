@@ -62,8 +62,11 @@ public class AttributeDataPropertyPathElement extends SimplePathElement {
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		XSDataPropertyValue xsdAnswer = (XSDataPropertyValue) ((XSOntIndividual) target).getPropertyValue(getDataProperty());
-		// FIXME simple for now but...
-		return xsdAnswer.getValue();
+
+		if (xsdAnswer != null){
+			return xsdAnswer.getValue();
+		}
+		return null;
 	}
 
 	@Override

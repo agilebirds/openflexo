@@ -709,7 +709,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 			InvocationTargetTransformException {
 
 		// System.out.println("  > evaluate BindingValue " + this + " in context " + context);
-		if (isValid()) {
+		if (isValid() && context != null) {
 			Object current = context.getValue(getBindingVariable());
 			if (current == null) {
 				// If the binding variable is null, just return null

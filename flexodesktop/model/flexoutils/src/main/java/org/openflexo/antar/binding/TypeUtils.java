@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.io.File;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
@@ -223,6 +224,15 @@ public class TypeUtils {
 		return type.equals(Object.class);
 	}
 
+
+	public static boolean isFile(Type type) {
+		if (type == null) {
+			return false;
+		}
+		return type.equals(File.class);
+	}
+
+	
 	public static boolean isShort(Type type) {
 		if (type == null) {
 			return false;
@@ -330,7 +340,7 @@ public class TypeUtils {
 		if (isObject(aType)) {
 			return true;
 		}
-
+	
 		// Special case for Custom types
 		if (aType instanceof CustomType) {
 			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);

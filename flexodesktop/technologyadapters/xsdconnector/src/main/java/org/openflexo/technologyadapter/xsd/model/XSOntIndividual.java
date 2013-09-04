@@ -178,7 +178,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		XSOntProperty property = ((XSOntClass)this.getType()).getPropertyByName(attributeName);
 		if (property != null){
 			XSPropertyValue val= this.getPropertyValue(property);	
-			return val.getValues();
+			if (val != null) return val.getValues();
 		}
 		return null;
 	}
@@ -251,41 +251,36 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	 */
 	@Override
 	public XSPropertyValue addToPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
-		/*if (property.getURI().equals(XS_HASCHILD_PROPERTY_NAME)) {
-			// adds a child instead of a regular set
-			// TODO make sure that's the way to do it
-			if (newValue instanceof XSOntIndividual) {
-				addChild((XSOntIndividual) newValue);
+	
+		XSPropertyValue returned = values.get(property);
+
+		if (returned == null) {
+			if (property instanceof XSOntObjectProperty ) {
+				if (newValue == null) {
+					returned = new XSObjectPropertyValue((XSOntObjectProperty) property);
+				}
+				else if (newValue instanceof XSOntIndividual) {
+					returned = new XSObjectPropertyValue((XSOntObjectProperty) property, (XSOntIndividual) newValue);
+					this.addChild((XSOntIndividual) newValue);
+				} 
+				values.put((XSOntObjectProperty) property, returned);
+				return returned; 
 			}
-		} else if (property.getURI().equals(XS_HASPARENT_PROPERTY_NAME)) {
-			if (newValue instanceof XSOntIndividual) {
-				setParent((XSOntIndividual) newValue);
+			else if (property instanceof XSOntDataProperty) {
+				returned = new XSDataPropertyValue((XSOntDataProperty) property, newValue);
+				values.put((XSOntDataProperty) property, returned);
+				return returned;
 			}
 		} else {
-			values.put(property, newValue);
-		}*/
-		if (newValue != null) {
-			XSPropertyValue returned = values.get(property);
-			if (returned == null) {
-				if (property instanceof XSOntObjectProperty && newValue instanceof XSOntIndividual) {
-					returned = new XSObjectPropertyValue((XSOntObjectProperty) property, (XSOntIndividual) newValue);
-					values.put((XSOntObjectProperty) property, returned);
-					return returned;
-				} else if (property instanceof XSOntDataProperty) {
-					returned = new XSDataPropertyValue((XSOntDataProperty) property, newValue);
-					values.put((XSOntDataProperty) property, returned);
-					return returned;
-				}
-			} else {
-				if (returned instanceof XSObjectPropertyValue && newValue instanceof XSOntIndividual) {
-					((XSObjectPropertyValue) returned).addToValues((XSOntIndividual) newValue);
-					return returned;
-				} else if (property instanceof XSOntDataProperty) {
-					((XSDataPropertyValue) returned).addToValues(newValue);
-					return returned;
-				}
+			if (returned instanceof XSObjectPropertyValue && newValue instanceof XSOntIndividual) {
+				((XSObjectPropertyValue) returned).addToValues((XSOntIndividual) newValue);
+				return returned;
+			} else if (property instanceof XSOntDataProperty) {
+				((XSDataPropertyValue) returned).addToValues(newValue);
+				return returned;
 			}
 		}
+
 		return null;
 
 	}
