@@ -35,6 +35,7 @@ import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.localization.FlexoLocalization;
 
 /**
  * This class is used to perform synchronization of all resources of a Flexo project. Global consistant states of all the resources of a
@@ -250,9 +251,19 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenterService resourceCenter) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoResourceCenterService resourceCenter)
+			throws ProjectInitializerException {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
+		}
+		if (!aProjectDirectory.exists()) {
+			throw new ProjectInitializerException(FlexoLocalization.localizedForKey("could_not_create_project") + ": "
+					+ FlexoLocalization.localizedForKey("unable_to_create_directory") + " " + aProjectDirectory.getAbsolutePath(),
+					aProjectDirectory);
+		}
+		if (!aProjectDirectory.isDirectory()) {
+			throw new ProjectInitializerException(FlexoLocalization.localizedForKey("could_not_create_project_at") + ": "
+					+ aProjectDirectory.getAbsolutePath(), aProjectDirectory);
 		}
 		File rmFile = getExpectedResourceManagerFile(aProjectDirectory);
 		FlexoEditor returned = FlexoProject.newProject(rmFile, aProjectDirectory, editorFactory, progress, resourceCenter);
@@ -266,7 +277,7 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoResourceCenterService resourceCenter) {
+			FlexoResourceCenterService resourceCenter) throws ProjectInitializerException {
 		return initializeNewProject(aProjectDirectory, null, editorFactory, null, resourceCenter);
 	}
 

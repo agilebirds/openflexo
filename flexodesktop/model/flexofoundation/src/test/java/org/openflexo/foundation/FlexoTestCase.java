@@ -212,8 +212,15 @@ public abstract class FlexoTestCase extends TestCase {
 		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
 		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + _projectIdentifier);
-		FlexoEditor reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
-				getResourceCenterService(resourceCenterService));
+		FlexoEditor reply;
+		try {
+			reply = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY,
+					getResourceCenterService(resourceCenterService));
+		} catch (ProjectInitializerException e1) {
+			e1.printStackTrace();
+			fail(e1.getMessage());
+			return null;
+		}
 		if (createRootProcess) {
 			// Added this line to make all previous tests still work
 			createSubProcess(_projectIdentifier, null, reply);
