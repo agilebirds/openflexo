@@ -119,6 +119,13 @@
 		<property name="objectReference" xmlTag="objectReference"
 			attribute="YES" description="" />
 	</entity>
+	
+	<entity
+		name="org.openflexo.technologyadapter.excel.viewpoint.ExcelActorReference"
+		xmlTag="ExcelActorReference">
+		<property name="objectURI" xmlTag="objectURI"
+			attribute="YES" description="" />
+	</entity>
 
 </model>
 
