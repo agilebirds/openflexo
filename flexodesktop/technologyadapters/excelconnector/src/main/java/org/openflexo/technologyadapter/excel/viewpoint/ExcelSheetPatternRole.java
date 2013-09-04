@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -58,7 +58,7 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	@Override
 	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
-		return null;
+		return new ExcelActorReference(object, this, epi);
 	}
 
 	@Override

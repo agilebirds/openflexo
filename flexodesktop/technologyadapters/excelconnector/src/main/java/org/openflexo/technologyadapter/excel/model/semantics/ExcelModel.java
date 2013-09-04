@@ -19,10 +19,14 @@
  */
 package org.openflexo.technologyadapter.excel.model.semantics;
 
+import java.util.List;
+
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
+import org.openflexo.technologyadapter.excel.model.ExcelProperty;
+import org.openflexo.technologyadapter.excel.model.ExcelPropertyValue;
 import org.openflexo.technologyadapter.excel.rm.ExcelModelResource;
 
 public class ExcelModel extends ExcelObject implements FlexoModel<ExcelModel, ExcelMetaModel> {
@@ -69,6 +73,30 @@ public class ExcelModel extends ExcelObject implements FlexoModel<ExcelModel, Ex
 
 	@Override
 	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<? extends ExcelPropertyValue> getPropertyValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExcelPropertyValue getPropertyValue(ExcelProperty property) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExcelPropertyValue addToPropertyValue(ExcelProperty property, Object newValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExcelPropertyValue removeFromPropertyValue(ExcelProperty property, Object valueToRemove) {
 		// TODO Auto-generated method stub
 		return null;
 	}

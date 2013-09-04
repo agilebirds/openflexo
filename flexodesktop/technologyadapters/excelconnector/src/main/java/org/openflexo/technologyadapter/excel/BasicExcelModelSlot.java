@@ -41,6 +41,7 @@ import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
@@ -79,8 +80,12 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
 
+	private BasicExcelModelSlotURIProcessor uriProcessor;
+
 	public BasicExcelModelSlot(VirtualModel<?> virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
+		uriProcessor = new BasicExcelModelSlotURIProcessor();
+
 	}
 
 	public BasicExcelModelSlot(VirtualModelBuilder builder) {
@@ -173,14 +178,21 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	@Override
 	public String getURIForObject(FreeModelSlotInstance<ExcelWorkbook, ? extends FreeModelSlot<ExcelWorkbook>> msInstance, Object o) {
-		// TODO Auto-generated method stub
-		return null;
+		ExcelObject excelObject = (ExcelObject) o;
+		return uriProcessor.getURIForObject(msInstance, excelObject);
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(FreeModelSlotInstance<ExcelWorkbook, ? extends FreeModelSlot<ExcelWorkbook>> msInstance,
 			String objectURI) {
-		// TODO Auto-generated method stub
+
+		try {
+			return uriProcessor.retrieveObjectWithURI(msInstance, objectURI);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
