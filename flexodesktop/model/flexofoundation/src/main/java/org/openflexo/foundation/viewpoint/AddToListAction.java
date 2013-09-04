@@ -105,7 +105,50 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 
 	@Override
 	public Object performAction(EditionSchemeAction action) {
-		return getDeclaredObject(action);
+		logger.info("performing AddToListAction");
+
+		DataBinding<Object> assignation = getAssignation();
+		Object objToAdd = getDeclaredObject(action);
+
+		try {
+
+			if ( assignation != null){
+				Object assigObj =  assignation.getBindingValue(action);
+				if (assigObj instanceof List){
+					if (objToAdd != null){
+						((List) assigObj).add(objToAdd);
+					}
+					else {
+						logger.warning("Won't add null object to list");
+						
+					}
+				}
+				else {
+					if (assigObj == null){
+						logger.warning("Cannot add object to a null target : " + assignation.getUnparsedBinding() );
+					}
+					else {
+						logger.warning("Cannot add object to a non list target : " + assigObj.toString() );
+					}
+					return null;
+				}
+
+			}
+			else {
+				logger.warning("Cannot perform Assignation as assignation is null");
+			}
+		} catch (TypeMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return objToAdd;
 	}
 
 	@Override
@@ -120,7 +163,6 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		public ValueBindingIsRequiredAndMustBeValid() {
 			super("'value'_binding_is_not_valid", AddToListAction.class);
 		}
-
 		@Override
 		public DataBinding<Object> getBinding(AddToListAction object) {
 			return object.getValue();

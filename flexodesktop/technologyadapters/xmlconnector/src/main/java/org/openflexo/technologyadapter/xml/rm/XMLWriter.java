@@ -23,6 +23,7 @@ package org.openflexo.technologyadapter.xml.rm;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLOutputFactory;
@@ -69,9 +70,9 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 
 
 	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException, IOException {
-		
+
 		String NSPrefix = DEFAULT_NS;
-		
+
 		if (outputStr != null) {
 			xmlOutputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, false);
 			myWriter = xmlOutputFactory.createXMLStreamWriter(outputStr);
@@ -137,7 +138,7 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 
 	private void writeElement(Object o) throws XMLStreamException {
 		IXMLIndividual indiv = (IXMLIndividual) o;
-		
+
 		myWriter.writeStartElement(NSURI,indiv.getName());
 
 		// Attributes
@@ -161,7 +162,8 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 
 	private void writeAttributes(IXMLIndividual<?, ?> indiv) throws XMLStreamException {
 		// Simple Attributes First
-		String value = null;
+		String value = null;				
+
 		// FIXME : maybe better if we get attributeValues 
 		for (IXMLAttribute a : indiv.getAttributes()){
 			if (a.isSimpleAttribute()){
@@ -170,9 +172,16 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 					myWriter.writeAttribute(a.getName(), value);
 				}
 			}
+			else {
+				List<?> indivList = (List<?>) indiv.getAttributeValue(a.getName());
+				if (indivList != null) {
+					for (Object o : indivList) { 
+						this.writeElement(o);
+					}
+				}
+
+			}
 		}
-		// Object Attributes then
-		// TODO
 	}
 
 

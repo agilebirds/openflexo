@@ -37,6 +37,13 @@ public class XSObjectPropertyValue extends XSPropertyValue implements IFlexoOnto
 	private XSOntObjectProperty property;
 	private List<XSOntIndividual> values;
 
+
+	public XSObjectPropertyValue(XSOntObjectProperty property) {
+		super();
+		this.property = property;
+		this.values = new ArrayList<XSOntIndividual>();
+	}
+	
 	public XSObjectPropertyValue(XSOntObjectProperty property, XSOntIndividual value) {
 		super();
 		this.property = property;

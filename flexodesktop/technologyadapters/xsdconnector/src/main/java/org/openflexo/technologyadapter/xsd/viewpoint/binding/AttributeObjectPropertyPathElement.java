@@ -89,6 +89,10 @@ public class AttributeObjectPropertyPathElement extends SimplePathElement {
 		if (property != null){
 			XSObjectPropertyValue xsdAnswer = (XSObjectPropertyValue) ((XSOntIndividual) target).getPropertyValue(property);
 			// FIXME simple for now but...
+			if (xsdAnswer == null) {
+				// initialize the value to null to create the List
+				xsdAnswer = (XSObjectPropertyValue) ((XSOntIndividual) target).addToPropertyValue(property, null);
+			}
 			return xsdAnswer.getValues();
 		}
 		return null;
