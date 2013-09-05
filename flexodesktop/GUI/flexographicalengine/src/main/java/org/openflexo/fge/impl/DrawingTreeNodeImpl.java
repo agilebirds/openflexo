@@ -729,21 +729,79 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 	}
 
+	/**
+	 * Return a flag indicating if supplied parameter is declared to be dynamically managed
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	protected boolean hasDynamicPropertyValue(GRParameter<?> parameter) {
+		return getGRBinding().hasDynamicPropertyValue(parameter);
+	}
+
+	/**
+	 * Return a flag indicating if supplied parameter is declared to be dynamically managed, and if dynamic property (the binding) declared
+	 * for this property is settable
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	protected boolean hasDynamicSettablePropertyValue(GRParameter<?> parameter) {
+		return getGRBinding().hasDynamicPropertyValue(parameter) && getGRBinding().getDynamicPropertyValue(parameter).isSettable();
+	}
+
+	/**
+	 * Computes and return the value declared as dynamic property value for supplied parameter, asserting this property is declared as
+	 * dynamic
+	 * 
+	 * @param parameter
+	 * @return
+	 * @throws InvocationTargetException
+	 */
+	protected <T> T getDynamicPropertyValue(GRParameter<T> parameter) throws InvocationTargetException {
+		if (hasDynamicPropertyValue(parameter)) {
+			try {
+				return (T) getGRBinding().getDynamicPropertyValue(parameter).getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				throw new InvocationTargetException(e);
+			} catch (NullReferenceException e) {
+				throw new InvocationTargetException(e);
+			}
+		}
+		throw new InvocationTargetException(new IllegalArgumentException("Parameter " + parameter + " has no dynamic property value"));
+
+	}
+
+	/**
+	 * Sets the value of dynamic property value for supplied parameter, asserting this property is declared as dynamic and settable
+	 * 
+	 * @param parameter
+	 * @param value
+	 * @throws InvocationTargetException
+	 */
+	protected <T> void setDynamicPropertyValue(GRParameter<T> parameter, T value) throws InvocationTargetException {
+		if (hasDynamicSettablePropertyValue(parameter)) {
+			try {
+				getGRBinding().getDynamicPropertyValue(parameter).setBindingValue(value, this);
+				return;
+			} catch (TypeMismatchException e) {
+				throw new InvocationTargetException(e);
+			} catch (NullReferenceException e) {
+				throw new InvocationTargetException(e);
+			} catch (NotSettableContextException e) {
+				throw new InvocationTargetException(e);
+			}
+		}
+		throw new InvocationTargetException(new IllegalArgumentException("Parameter " + parameter + " has no dynamic property value"));
+
+	}
+
 	@Override
 	public String getText() {
-		if (getGRBinding().hasDynamicPropertyValue(GraphicalRepresentation.TEXT)) {
+		if (hasDynamicPropertyValue(GraphicalRepresentation.TEXT)) {
 			try {
-				System.out.println("Returning "
-						+ getGRBinding().getDynamicPropertyValue(GraphicalRepresentation.TEXT).getBindingValue(this));
-				return (String) getGRBinding().getDynamicPropertyValue(GraphicalRepresentation.TEXT).getBindingValue(this);
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return getDynamicPropertyValue(GraphicalRepresentation.TEXT);
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -752,22 +810,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	@Override
 	public void setText(String text) {
-		if (getGRBinding().hasDynamicPropertyValue(GraphicalRepresentation.TEXT)
-				&& getGRBinding().getDynamicPropertyValue(GraphicalRepresentation.TEXT).isSettable()) {
+		if (hasDynamicSettablePropertyValue(GraphicalRepresentation.TEXT)) {
 			try {
-				getGRBinding().getDynamicPropertyValue(GraphicalRepresentation.TEXT).setBindingValue(text, this);
+				setDynamicPropertyValue(GraphicalRepresentation.TEXT, text);
 				return;
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NotSettableContextException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

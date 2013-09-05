@@ -458,7 +458,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public final void setX(double aValue) {
-		FGENotification notification = requireChange(null,/*ShapeParameters.x,*/aValue);
+		FGENotification notification = requireChange(X, aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			x = aValue;
@@ -494,7 +494,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public final void setY(double aValue) {
-		FGENotification notification = requireChange(null,/*ShapeParameters.y,*/aValue);
+		FGENotification notification = requireChange(Y, aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			y = aValue;

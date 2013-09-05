@@ -62,7 +62,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	public void setStartNode(ShapeNodeImpl<?> startNode) {
-		this.startNode = startNode;
+		if (this.startNode != startNode) {
+			disableStartObjectObserving();
+			this.startNode = startNode;
+			enableStartObjectObserving(startNode);
+		}
 	}
 
 	@Override
@@ -71,7 +75,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	public void setEndNode(ShapeNodeImpl<?> endNode) {
-		this.endNode = endNode;
+		if (this.endNode != endNode) {
+			disableEndObjectObserving();
+			this.endNode = endNode;
+			enableEndObjectObserving(endNode);
+		}
 	}
 
 	@Override
@@ -119,6 +127,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		if (aStartNode != null /*&& !enabledStartObjectObserving*/) {
 			aStartNode.addObserver(this);
 			observedStartObjects.add(aStartNode);
+			System.out.println("Je suis " + this + " et j'observe " + aStartNode);
 			// if (!isDeserializing()) {
 			for (DrawingTreeNode<?, ?> node : aStartNode.getAncestors()) {
 				/*if (getGraphicalRepresentation(o) != null) {
@@ -192,6 +201,15 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	protected void observeRelevantObjects() {
 		enableStartObjectObserving(getStartNode());
 		enableEndObjectObserving(getEndNode());
+	}
+
+	protected void stopObserveRelevantObjects() {
+		if (getStartNode() != null) {
+			disableStartObjectObserving();
+		}
+		if (getEndNode() != null) {
+			disableEndObjectObserving();
+		}
 	}
 
 	@Override
@@ -403,7 +421,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 		super.update(observable, notification);
 
-		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
+		if (notification instanceof FGENotification) {
 			// Those notifications are forwarded by my graphical representation
 			FGENotification notif = (FGENotification) notification;
 
@@ -499,8 +517,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public String toString() {
-		return "Connector-" + getIndex() + "[Shape-" + getStartNode().getIndex() + "][Shape-" + getEndNode().getIndex() + "]:"
-				+ getDrawable();
+		return "Connector-" + getIndex() + (getStartNode() != null ? "[Shape-" + getStartNode().getIndex() + "]" : "[???]")
+				+ (getEndNode() != null ? "[Shape-" + getEndNode().getIndex() + "]" : "[???]") + ":" + getDrawable();
 	}
 
 }

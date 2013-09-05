@@ -339,7 +339,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				}
 			});
 		} else {
-			logger.info("update() in ShapeView for " + getNode() + " received: " + aNotification);
+			// logger.info("update() in ShapeView for " + getNode() + " received: " + aNotification);
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;

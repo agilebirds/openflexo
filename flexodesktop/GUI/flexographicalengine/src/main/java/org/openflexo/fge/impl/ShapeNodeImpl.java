@@ -22,7 +22,6 @@ import org.openflexo.fge.ContainerGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
@@ -67,8 +66,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	private static final Logger logger = Logger.getLogger(ShapeNodeImpl.class.getPackage().getName());
 
-	private double x = 0;
-	private double y = 0;
+	// private double x = 0;
+	// private double y = 0;
 	private double width = 0;
 	private double height = 0;
 
@@ -529,98 +528,179 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getX() {
-		if (getGRBinding().hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
+		if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
 			try {
-				return (Double) getGRBinding().getDynamicPropertyValue(ShapeGraphicalRepresentation.X).getBindingValue(this);
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return getDynamicPropertyValue(ShapeGraphicalRepresentation.X);
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		// SGU: in general case, this is NOT forbidden
-		if (!getGraphicalRepresentation().getAllowToLeaveBounds()) {
-			if (x < 0) {
-				return 0;
-			}
-			double maxX = 0;
-			if (getParentNode() instanceof RootNode) {
-				maxX = ((RootNode) getParentNode()).getWidth();
-			} else if (getParentNode() instanceof ShapeNode) {
-				maxX = ((ShapeNode) getParentNode()).getWidth();
-			}
-			if (maxX > 0 && x > maxX - getWidth()) {
-				// logger.info("Relocate x from "+x+" to "+(maxX-getWidth())+" maxX="+maxX+" width="+getWidth());
-				return maxX - getWidth();
-			}
-		}
-		return x;
+		return getGraphicalRepresentation().getX();
 	}
 
 	@Override
 	public final void setX(double aValue) {
-		if (aValue != x) {
-			FGEPoint oldLocation = getLocation();
-			setXNoNotification(aValue);
-			notifyObjectMoved(oldLocation);
+		if (aValue != getX()) {
+			/*FGEPoint oldLocation = getLocation();
+			if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
+				try {
+					setDynamicPropertyValue(ShapeGraphicalRepresentation.X, aValue);
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+					setXNoNotification(aValue);
+				}
+			} else {
+				setXNoNotification(aValue);
+			}
+			notifyObjectMoved(oldLocation);*/
+			FGEPoint newLocation = new FGEPoint(aValue, getY());
+			updateLocation(newLocation);
 		}
 	}
 
 	protected void setXNoNotification(double aValue) {
-		x = aValue;
+		if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
+			try {
+				setDynamicPropertyValue(ShapeGraphicalRepresentation.X, aValue);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		// getGraphicalRepresentation().setX(aValue);
 	}
 
 	@Override
 	public double getY() {
-		if (getGRBinding().hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
+		if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
 			try {
-				return (Double) getGRBinding().getDynamicPropertyValue(ShapeGraphicalRepresentation.Y).getBindingValue(this);
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return getDynamicPropertyValue(ShapeGraphicalRepresentation.Y);
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		// SGU: in general case, this is NOT forbidden
-		if (!getGraphicalRepresentation().getAllowToLeaveBounds()) {
-			if (y < 0) {
-				return 0;
-			}
-			double maxY = 0;
-			if (getParentNode() instanceof RootNode) {
-				maxY = ((RootNode) getParentNode()).getHeight();
-			} else if (getParentNode() instanceof ShapeNode) {
-				maxY = ((ShapeNode) getParentNode()).getHeight();
-			}
-			if (maxY > 0 && y > maxY - getHeight()) {
-				// logger.info("Relocate y from " + y + " to " + (maxY - getHeight()) + " maxY=" + maxY + " height=" + getHeight());
-				return maxY - getHeight();
-			}
-		}
-		return y;
+		return getGraphicalRepresentation().getY();
 	}
 
 	@Override
 	public final void setY(double aValue) {
-		if (aValue != y) {
-			FGEPoint oldLocation = getLocation();
+		if (aValue != getY()) {
+
+			FGEPoint newLocation = new FGEPoint(getX(), aValue);
+			updateLocation(newLocation);
+
+			/*FGEPoint oldLocation = getLocation();
 			setYNoNotification(aValue);
-			notifyObjectMoved(oldLocation);
+			notifyObjectMoved(oldLocation);*/
 		}
 	}
 
 	protected void setYNoNotification(double aValue) {
-		y = aValue;
+		if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.Y)) {
+			try {
+				setDynamicPropertyValue(ShapeGraphicalRepresentation.Y, aValue);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		// getGraphicalRepresentation().setY(aValue);
+	}
+
+	/**
+	 * General method called to update location of a ShapeNode
+	 * 
+	 * @param requestedLocation
+	 */
+	private void updateLocation(FGEPoint requestedLocation) {
+
+		// If no value supplied, just ignore
+		if (requestedLocation == null) {
+			return;
+		}
+
+		// If value is same, also ignore
+		if (requestedLocation.equals(getLocation())) {
+			return;
+		}
+
+		// Prelude of update, first select new location respecting contextual constraints
+		FGEPoint newLocation = getConstrainedLocation(requestedLocation);
+
+		FGEPoint oldLocation = getLocation();
+		if (!newLocation.equals(oldLocation)) {
+			double oldX = getX();
+			double oldY = getY();
+			if (isParentLayoutedAsContainer()) {
+				setLocationForContainerLayout(newLocation);
+			} else {
+				setXNoNotification(newLocation.x);
+				setYNoNotification(newLocation.y);
+			}
+			notifyObjectMoved(oldLocation);
+			notifyAttributeChanged(ShapeGraphicalRepresentation.X, oldX, getX());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.Y, oldY, getY());
+			if (!isFullyContainedInContainer()) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("setLocation() lead shape going outside it's parent view");
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Compute and return a constrained location, according to contextual constraints
+	 * 
+	 * @param requestedLocation
+	 * @return a new location respecting all contextual constraints
+	 */
+	private FGEPoint getConstrainedLocation(FGEPoint requestedLocation) {
+
+		if (isParentLayoutedAsContainer()) {
+			return requestedLocation;
+		}
+
+		if (!getGraphicalRepresentation().getAllowToLeaveBounds()) {
+			requestedLocation = requestedLocation.clone();
+			if (requestedLocation.x < 0) {
+				requestedLocation.setX(0);
+			}
+			double maxX = getParentNode().getWidth();
+			if (maxX > 0 && requestedLocation.x > maxX - getWidth()) {
+				// logger.info("Relocate x from "+x+" to "+(maxX-getWidth())+" maxX="+maxX+" width="+getWidth());
+				requestedLocation.setX(maxX - getWidth());
+			}
+			if (requestedLocation.y < 0) {
+				requestedLocation.setY(0);
+			}
+			double maxY = getParentNode().getHeight();
+			if (maxY > 0 && requestedLocation.y > maxY - getHeight()) {
+				// logger.info("Relocate x from "+x+" to "+(maxX-getWidth())+" maxX="+maxX+" width="+getWidth());
+				requestedLocation.setY(maxY - getHeight());
+			}
+		}
+
+		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.FREELY_MOVABLE) {
+			return requestedLocation.clone();
+		}
+		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.CONTAINED_IN_SHAPE) {
+			DrawingTreeNode<?, ?> parent = getParentNode();
+			if (parent instanceof ShapeNode) {
+				ShapeNode<?> container = (ShapeNode<?>) parent;
+				FGEPoint center = new FGEPoint(container.getWidth() / 2, container.getHeight() / 2);
+				double authorizedRatio = getMoveAuthorizedRatio(requestedLocation, center);
+				return new FGEPoint(center.x + (requestedLocation.x - center.x) * authorizedRatio, center.y
+						+ (requestedLocation.y - center.y) * authorizedRatio);
+			}
+		}
+		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.AREA_CONSTRAINED) {
+			if (getGraphicalRepresentation().getLocationConstrainedArea() == null) {
+				// logger.warning("No location constrained are defined");
+				return requestedLocation;
+			} else {
+				return getGraphicalRepresentation().getLocationConstrainedArea().getNearestPoint(requestedLocation);
+			}
+		}
+		return requestedLocation;
 	}
 
 	@Override
@@ -630,7 +710,10 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public void setLocation(FGEPoint newLocation) {
-		if (newLocation == null) {
+
+		updateLocation(newLocation);
+
+		/*if (newLocation == null) {
 			return;
 		}
 		newLocation = computeConstrainedLocation(newLocation);
@@ -652,7 +735,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 					logger.fine("setLocation() lead shape going outside it's parent view");
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -823,7 +906,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		}
 	}
 
-	protected FGEPoint computeConstrainedLocation(FGEPoint newLocation) {
+	/*protected FGEPoint computeConstrainedLocation(FGEPoint newLocation) {
 		if (isParentLayoutedAsContainer()) {
 			return newLocation;
 		}
@@ -849,7 +932,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}
 		return newLocation;
-	}
+	}*/
 
 	@Override
 	public boolean isFullyContainedInContainer() {
