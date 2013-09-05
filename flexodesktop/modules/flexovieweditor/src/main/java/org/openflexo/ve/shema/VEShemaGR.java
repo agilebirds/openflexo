@@ -57,7 +57,8 @@ public class VEShemaGR extends DrawingGraphicalRepresentation<View> implements G
 			aDrawing.getShema().setGraphicalRepresentation(this);
 			aDrawing.getShema().addObserver(this);
 		}
-
+		setIsResizable(true);
+		setDrawWorkingArea(true);
 	}
 
 	@Override
