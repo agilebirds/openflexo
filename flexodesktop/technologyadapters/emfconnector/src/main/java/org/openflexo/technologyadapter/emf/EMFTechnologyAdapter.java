@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -25,6 +26,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -60,8 +62,8 @@ import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
  * 
  */
 @DeclareModelSlots({ // ModelSlot(s) declaration
-@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
-		@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
+	@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
+	@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
 })
 @DeclareRepositoryType({ EMFMetaModelRepository.class, EMFModelRepository.class })
 public class EMFTechnologyAdapter extends TechnologyAdapter {
@@ -180,32 +182,44 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		}
 		return null;
 	}
+	
+	
 
 	protected EMFModelResource tryToLookupModel(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
 		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
 		EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
 		EMFModelRepository modelRepository = resourceCenter.getRepository(EMFModelRepository.class, this);
-		for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
-			if (isValidModelFile(candidateFile, mmRes)) {
-				EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes);
-				if (mRes != null) {
-					RepositoryFolder<EMFModelResource> folder;
-					try {
-						folder = modelRepository.getRepositoryFolder(candidateFile, true);
-						modelRepository.registerResource(mRes, folder);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					// Also register the resource in the ResourceCenter seen as a ResourceRepository
-					if (resourceCenter instanceof ResourceRepository) {
-						try {
-							((ResourceRepository) resourceCenter).registerResource(mmRes,
-									((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
-						} catch (IOException e) {
-							e.printStackTrace();
+
+		List<FlexoResourceCenter> rscCenters = technologyContextManager.getResourceCenterService().getResourceCenters();
+		
+		for (FlexoResourceCenter<?> rscCenter : rscCenters){
+			mmRepository = (EMFMetaModelRepository) rscCenter.getRepository(EMFMetaModelRepository.class, this);
+			if (mmRepository != null){
+
+
+				for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
+					if (isValidModelFile(candidateFile, mmRes)) {
+						EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes);
+						if (mRes != null) {
+							RepositoryFolder<EMFModelResource> folder;
+							try {
+								folder = modelRepository.getRepositoryFolder(candidateFile, true);
+								modelRepository.registerResource(mRes, folder);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							// Also register the resource in the ResourceCenter seen as a ResourceRepository
+							if (resourceCenter instanceof ResourceRepository) {
+								try {
+									((ResourceRepository) resourceCenter).registerResource(mmRes,
+											((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+							return mRes;
 						}
 					}
-					return mRes;
 				}
 			}
 		}
@@ -233,7 +247,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
 		if (contents instanceof File) {
 			System.out
-					.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
+			.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
 		}
 	}
 
@@ -367,6 +381,12 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		boolean valid = false;
 		if (aModelFile.exists()) {
 			// TODO syntaxic check and conformity to XMI
+			try {
+				logger.info ("EMF EMF : checking for extension [" +  metaModelResource.getModelFileExtension()+ "]  on file : " + aModelFile.getCanonicalPath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (aModelFile.getName().endsWith("." + metaModelResource.getModelFileExtension())) {
 				if (aModelFile.isFile()) {
 					valid = true;
