@@ -95,12 +95,6 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	}
 
 	@Override
-	public void setEditedObject(Shape object) {
-		System.err.println("Switching from " + getEditedObject() + " to " + object);
-		super.setEditedObject(object);
-	}
-
-	@Override
 	protected ResizablePanel createCustomPanel(Shape editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
 		return _selectorPanel;
