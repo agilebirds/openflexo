@@ -38,6 +38,7 @@ import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
@@ -249,6 +250,26 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public void setVirtualModel(VirtualModel<?> virtualModel) {
 		if (virtualModel != this.virtualModel) {
 			this.virtualModel = virtualModel;
+			modelSlotConfigurations.clear();
+			if (this.virtualModel != null) {
+				for (ModelSlot<?> ms : this.virtualModel.getModelSlots()) {
+					modelSlotConfigurations.put(ms, ms.createConfiguration(this));
+				}
+			}
+		}
+	}
+
+	public DiagramSpecification getDiagramSpecification() {
+		if (virtualModel instanceof DiagramSpecification) {
+			return (DiagramSpecification) virtualModel;
+		} else {
+			return null;
+		}
+	}
+
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+		if (diagramSpecification != this.virtualModel) {
+			this.virtualModel = diagramSpecification;
 			modelSlotConfigurations.clear();
 			if (this.virtualModel != null) {
 				for (ModelSlot<?> ms : this.virtualModel.getModelSlots()) {
