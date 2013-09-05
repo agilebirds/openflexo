@@ -72,7 +72,8 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
-			returned.setURI(modelURI);
+			// TODO: URI should be defined by the parameter,because its not manageable (FOR NOW)
+			returned.setURI(modelFile.toURI().toString());
 			returned.setMetaModelResource(emfMetaModelResource);
 			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			technologyContextManager.registerModel(returned);
@@ -87,6 +88,15 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 		return null;
 	}
 
+	/**
+	 * URI here is the full path to the file
+	 */
+	@Override
+	public String getURI() {
+		return this.getFile().toURI().toString();
+	}
+
+	
 	/**
 	 * Instanciates a new {@link OWLOntologyResource} asserting we are about to built a resource matching an existing file in the file
 	 * system<br>
