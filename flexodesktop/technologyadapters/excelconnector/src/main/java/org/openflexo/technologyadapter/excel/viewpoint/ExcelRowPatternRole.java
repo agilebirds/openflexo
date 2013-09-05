@@ -55,7 +55,7 @@ public class ExcelRowPatternRole extends PatternRole<ExcelRow> {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -65,11 +65,8 @@ public class ExcelRowPatternRole extends PatternRole<ExcelRow> {
 	}
 
 	@Override
-	public ActorReference<ExcelRow> makeActorReference(ExcelRow object,
-			EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
+	public ActorReference<ExcelRow> makeActorReference(ExcelRow object, EditionPatternInstance epi) {
+		return new ExcelActorReference(object, this, epi);
 	}
-
 
 }

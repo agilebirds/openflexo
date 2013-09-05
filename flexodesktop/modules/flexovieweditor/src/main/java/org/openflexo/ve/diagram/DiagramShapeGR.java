@@ -220,6 +220,11 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 		if (controlAreas == null) {
 			controlAreas = new ConcatenedList<ControlArea<?>>();
 			controlAreas.addElementList(super.getControlAreas());
+
+			// Vincent
+			/*controlAreas.addElement(new CircularFloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+					SimplifiedCardinalDirection.WEST));*/
+
 			if (getDiagramShape().providesSupportAsPrimaryRole() && getDiagramShape().getAvailableLinkSchemeFromThisShape() != null
 					&& getDiagramShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
 				boolean northDirectionSupported = false;

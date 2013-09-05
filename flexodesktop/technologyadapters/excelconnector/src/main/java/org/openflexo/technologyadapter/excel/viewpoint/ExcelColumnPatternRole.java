@@ -66,8 +66,7 @@ public class ExcelColumnPatternRole extends PatternRole<ExcelColumn> {
 
 	@Override
 	public ActorReference<ExcelColumn> makeActorReference(ExcelColumn object, EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ExcelActorReference(object, this, epi);
 	}
 
 }
