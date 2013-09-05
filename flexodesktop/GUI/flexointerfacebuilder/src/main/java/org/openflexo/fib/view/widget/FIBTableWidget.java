@@ -42,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -201,7 +202,14 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 				else if (getComponent().getAutoSelectFirstRow()) {
 					if (getTableModel().getValues() != null && getTableModel().getValues().size() > 0) {
 						returned = true;
-						getListSelectionModel().addSelectionInterval(0, 0);
+						// Take care to this option as it may cause many issues
+						// A better solution is to remove this option and let the selection manager manage such feature
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								getListSelectionModel().addSelectionInterval(0, 0);
+							}
+						});
 						// addToSelection(getTableModel().getValues().get(0));
 					}
 				}
@@ -290,7 +298,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public FIBTableDynamicModel createDynamicModel() {
-		return new FIBTableDynamicModel(null);
+		return new FIBTableDynamicModel(null, getComponent());
 	}
 
 	@Override
@@ -511,8 +519,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			}
 		}
 
-		getDynamicModel().selected = selectedObject;
-		getDynamicModel().selection = selection;
+		getDynamicModel().setSelected(selectedObject);
+		getDynamicModel().setSelection(selection);
 		notifyDynamicModelChanged();
 		footer.handleSelectionChanged();
 		if (getComponent().getSelected().isValid()) {

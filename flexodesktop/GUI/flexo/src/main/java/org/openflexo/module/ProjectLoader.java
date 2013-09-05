@@ -191,8 +191,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 			}
 			if (editor == null) {
 				editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
-						applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
-						applicationContext);
+						applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext);
 				newEditor(editor);
 			}
 			if (!asImportedProject) {

@@ -412,6 +412,57 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	}
 
 	/**
+	 * Return all object property statements
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Vector<ObjectPropertyStatement> getAllObjectPropertyStatements() {
+		Vector<ObjectPropertyStatement> returned = new Vector<ObjectPropertyStatement>();
+		for (OWLStatement statement : getStatements()) {
+			if (statement instanceof ObjectPropertyStatement) {
+				ObjectPropertyStatement s = (ObjectPropertyStatement) statement;
+				returned.add(s);
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all data property statements
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Vector<DataPropertyStatement> getAllDataPropertyStatements() {
+		Vector<DataPropertyStatement> returned = new Vector<DataPropertyStatement>();
+		for (OWLStatement statement : getStatements()) {
+			if (statement instanceof DataPropertyStatement) {
+				DataPropertyStatement s = (DataPropertyStatement) statement;
+				returned.add(s);
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all data property statements
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public Vector<PropertyStatement> getAllPropertyStatements() {
+		Vector<PropertyStatement> returned = new Vector<PropertyStatement>();
+		for (OWLStatement statement : getStatements()) {
+			if (statement instanceof PropertyStatement) {
+				PropertyStatement s = (PropertyStatement) statement;
+				returned.add(s);
+			}
+		}
+		return returned;
+	}
+
+	/**
 	 * Return first found statement related to supplied property
 	 * 
 	 * @param property

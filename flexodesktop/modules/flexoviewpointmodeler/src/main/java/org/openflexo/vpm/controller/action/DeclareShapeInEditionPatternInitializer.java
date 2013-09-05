@@ -24,24 +24,24 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareShapeInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareShapeInEditionPatternInitializer extends
-		ActionInitializer<DeclareShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject> {
+		ActionInitializer<DeclareExampleDiagramShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	DeclareShapeInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeclareShapeInEditionPattern.actionType, actionInitializer);
+		super(DeclareExampleDiagramShapeInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
@@ -55,21 +55,21 @@ public class DeclareShapeInEditionPatternInitializer extends
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareShapeInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareShapeInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareExampleDiagramShapeInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareExampleDiagramShapeInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramShapeInEditionPattern action) {
 
-				return instanciateAndShowDialog(action, VPMCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
+				return instanciateAndShowDialog(action, FlexoCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareShapeInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareShapeInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareExampleDiagramShapeInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareExampleDiagramShapeInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramShapeInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getEditionPattern().getPrimaryRepresentationRole());
 				return true;

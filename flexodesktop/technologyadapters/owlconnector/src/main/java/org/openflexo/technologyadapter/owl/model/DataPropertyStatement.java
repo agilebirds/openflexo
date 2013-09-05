@@ -19,14 +19,17 @@
  */
 package org.openflexo.technologyadapter.owl.model;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public class DataPropertyStatement extends PropertyStatement {
+public class DataPropertyStatement extends PropertyStatement implements IFlexoOntologyDataPropertyValue {
 
 	private static final Logger logger = Logger.getLogger(DataPropertyStatement.class.getPackage().getName());
 
@@ -98,4 +101,13 @@ public class DataPropertyStatement extends PropertyStatement {
 		getSubject().updateOntologyStatements();
 	}
 
+	@Override
+	public OWLDataProperty getDataProperty() {
+		return getProperty();
+	}
+
+	@Override
+	public List<Object> getValues() {
+		return Collections.singletonList(getValue());
+	}
 }

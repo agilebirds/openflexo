@@ -134,7 +134,9 @@ public final class OWLBindingFactory extends TechnologyAdapterBindingFactory {
 		}
 
 		for (final OWLProperty property : array) {
-			returned.add(property);
+			if (!returned.contains(property)) {
+				returned.add(property);
+			}
 		}
 
 		return returned;

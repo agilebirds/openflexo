@@ -19,7 +19,11 @@ public class TestVEFIB extends FIBTestCase {
 	}
 
 	public void testConfigureModelSlotInstanceDialog() {
-		validateFIB(VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+		validateFIB(VECst.CONFIGURE_TYPESAFE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+	}
+
+	public void testConfigureFreeModelSlotInstanceDialog() {
+		validateFIB(VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
 	}
 
 	public void testCreateDiagramDialogDialog() {

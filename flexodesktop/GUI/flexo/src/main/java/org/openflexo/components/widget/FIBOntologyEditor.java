@@ -46,6 +46,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.SelectionSynchronizedFIBView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -55,6 +56,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 
@@ -87,6 +89,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		super(null, controller, FIB_FILE);
 		matchingValues = new ArrayList<IFlexoOntologyConcept>();
 		setOntology(ontology);
+		setTechnologyAdapter(ontology.getTechnologyAdapter());
 		setDataObject(this);
 	}
 
@@ -224,30 +227,33 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+						.makeOntologyBrowserModel(getOntology());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getOntology());
+		}
+		return returned;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			if (getTechnologyAdapter() != null) {
-				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
-						.getServiceManager().getService(TechnologyAdapterControllerService.class)
-						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getOntology());
-			} else { // Use default
-				model = new OntologyBrowserModel(getOntology());
-			}
-			model.addObserver(new Observer() {
-				@Override
-				public void update(Observable o, Object arg) {
-					if (arg instanceof OntologyBrowserModelRecomputed) {
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-							}
-						});
-					}
-				}
-			});
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
@@ -258,6 +264,14 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -267,10 +281,22 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.delete();
 			model = null;
 			setDataObject(this);
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}
@@ -351,13 +377,14 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		if (browserWidget == null) {
 			return null;
 		}
-		Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+		Iterator<Object> it = browserWidget.getBrowserModel().recursivelyExploreModelToRetrieveContents();
 		while (it.hasNext()) {
 			Object o = it.next();
 			if (o instanceof IFlexoOntologyConcept) {
 				returned.add((IFlexoOntologyConcept) o);
 			}
 		}
+		// System.out.println("Returned: (" + returned.size() + ") " + returned);
 		return returned;
 	}
 

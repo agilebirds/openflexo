@@ -16,6 +16,7 @@ import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Constant.StringConstant;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
@@ -30,6 +31,7 @@ import org.openflexo.foundation.viewpoint.EditionSchemeType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	static final Logger logger = Logger.getLogger(EditionPatternBindingFactory.class.getPackage().getName());
@@ -63,6 +65,9 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		if (object instanceof PatternRole) {
 			return new EditionPatternPatternRolePathElement<PatternRole<?>>(parent, (PatternRole<?>) object);
 		}
+		if (object instanceof ModelSlot) {
+			return new VirtualModelModelSlotPathElement<ModelSlot>(parent, (ModelSlot) object);
+		}
 		if (object instanceof EditionSchemeParameter) {
 			if (parent.getType() instanceof EditionSchemeParametersType) {
 				return new EditionSchemeParameterDefinitionPathElement(parent, (EditionSchemeParameter) object);
@@ -79,7 +84,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 		if (parent.getType() instanceof TechnologySpecificCustomType) {
 			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) parent.getType();
-			TechnologyAdapter<?, ?> ta = parentType.getTechnologyAdapter();
+			TechnologyAdapter ta = parentType.getTechnologyAdapter();
 			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
 				List<? extends SimplePathElement> returned = ta.getTechnologyAdapterBindingFactory()
 						.getAccessibleSimplePathElements(parent);
@@ -139,6 +144,12 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			} */else if (parent.getType() instanceof EditionPatternInstanceType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = ((EditionPatternInstanceType) parent.getType()).getEditionPattern();
+			if (ep instanceof VirtualModel) {
+				VirtualModel<?> vm = (VirtualModel<?>) ep;
+				for (ModelSlot ms : vm.getModelSlots()) {
+					returned.add(getSimplePathElement(ms, parent));
+				}
+			}
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}

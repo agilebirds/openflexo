@@ -176,7 +176,7 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		logger.fine("dataModification=" + dataModification);
-		if (observable == getExampleDiagram().getVirtualModel()) {
+		if (observable == getExampleDiagram().getVirtualModel() && paletteView != null) {
 			if (dataModification instanceof DiagramPaletteInserted) {
 				DiagramPalette palette = ((DiagramPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);

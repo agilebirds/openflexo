@@ -20,23 +20,33 @@
 package org.openflexo.foundation.view;
 
 import java.io.File;
+import java.util.logging.Level;
 
+import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.logging.FlexoLoggingManager;
 
 public class TestCityMappingView extends FlexoTestCase {
 
@@ -45,6 +55,55 @@ public class TestCityMappingView extends FlexoTestCase {
 	private static ViewPoint cityMappingVP;
 	private static RepositoryFolder<ViewResource> viewFolder;
 	private static View view;
+
+	public static void main(String[] args) {
+
+		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
+
+		serviceManager = new DefaultFlexoServiceManager();
+		FlexoResourceCenterService rcService = serviceManager.getResourceCenterService();
+		FlexoResourceCenter resourceCenter = new DirectoryResourceCenter(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
+		rcService.addToResourceCenters(resourceCenter);
+
+		// Access to CityMapping ViewPoint
+		ViewPointResource cityMappingVPRes = resourceCenter.getViewPointRepository().getResource(
+				"http://www.thalesgroup.com/openflexo/emf/CityMapping");
+		ViewPoint cityMappingVP = cityMappingVPRes.getViewPoint();
+
+		// First define an editor factory: here instantiate the default flexo editor
+		FlexoEditorFactory editorFactory = new FlexoEditorFactory() {
+			@Override
+			public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new DefaultFlexoEditor(project);
+			}
+		};
+
+		// Then define where to create the project
+		File projectDirectory = new File("/Users/sylvain/tmp/TestProject.prj");
+
+		// Instantiate an editor using provided directory, factory and service manager
+		FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, editorFactory, serviceManager);
+
+		// You might now access to your newly created project
+		FlexoProject project = editor.getProject();
+		System.out.println("Created project " + project);
+
+		// Programmmatically add a repository folder using FlexoAction API
+		AddRepositoryFolder addRepositoryFolder = AddRepositoryFolder.actionType.makeNewAction(project.getViewLibrary().getRootFolder(),
+				null, editor);
+		addRepositoryFolder.setNewFolderName("NewViewFolder");
+		addRepositoryFolder.doAction();
+		RepositoryFolder<ViewResource> viewFolder = addRepositoryFolder.getNewFolder();
+
+		// Programmmatically create a new view conform to CityMapping viewpoint using FlexoAction API
+		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
+		addView.newViewName = "TestNewView";
+		addView.newViewTitle = "A nice title for a new view";
+		addView.viewpointResource = cityMappingVP.getResource();
+		addView.doAction();
+		View newView = addView.getNewView();
+		System.out.println("New view " + newView + " created in " + newView.getResource().getFile());
+	}
 
 	/**
 	 * Instantiate test resource center
@@ -85,7 +144,7 @@ public class TestCityMappingView extends FlexoTestCase {
 	}
 
 	public void test2LoadCityMappingViewPoint() {
-		cityMappingVP = loadViewPoint("http://www.openflexo.org/ViewPoints/Tests/CityMapping");
+		cityMappingVP = loadViewPoint("http://www.thalesgroup.com/openflexo/emf/CityMapping");
 		assertNotNull(cityMappingVP);
 		System.out.println("Found view point in " + cityMappingVP.getResource().getFile());
 	}
@@ -141,33 +200,38 @@ public class TestCityMappingView extends FlexoTestCase {
 		createVirtualModelInstance.setNewVirtualModelInstanceName("TestNewVirtualModel");
 		createVirtualModelInstance.setNewVirtualModelInstanceTitle("A nice title for a new virtual model instance");
 
-		VirtualModel<?> conceptualModel = cityMappingVP.getVirtualModelNamed("ConceptualModel");
-		assertNotNull(conceptualModel);
+		VirtualModel<?> cityMappingVM = cityMappingVP.getVirtualModelNamed("CityMapping");
+		assertNotNull(cityMappingVM);
 
-		createVirtualModelInstance.setVirtualModel(conceptualModel);
+		createVirtualModelInstance.setVirtualModel(cityMappingVM);
 
-		ModelSlot<?, ?> emfModelSlot = conceptualModel.getModelSlots().get(0);
-		FlexoOntologyModelSlotInstanceConfiguration emfModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
-				.getModelSlotInstanceConfiguration(emfModelSlot);
-		emfModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
-		File modelFile = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city1/my.city1");
-		System.out.println("Searching " + modelFile.getAbsolutePath());
-		assertTrue(modelFile.exists());
-		System.out.println("Searching " + modelFile.toURI().toString());
-		FlexoModelResource<?, ?> modelResource = project.getServiceManager().getInformationSpace()
-				.getModelWithURI(modelFile.toURI().toString());
-		assertNotNull(modelResource);
-		emfModelSlotConfiguration.setModelResource(modelResource);
-		assertTrue(emfModelSlotConfiguration.isValidConfiguration());
+		ModelSlot emfModelSlot1 = cityMappingVM.getModelSlots().get(0);
+		TypeSafeModelSlotInstanceConfiguration emfModelSlotConfiguration1 = (TypeSafeModelSlotInstanceConfiguration) createVirtualModelInstance
+				.getModelSlotInstanceConfiguration(emfModelSlot1);
+		emfModelSlotConfiguration1.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
+		File modelFile1 = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city1/my.city1");
+		System.out.println("Searching " + modelFile1.getAbsolutePath());
+		assertTrue(modelFile1.exists());
+		System.out.println("Searching " + modelFile1.toURI().toString());
+		FlexoModelResource<?, ?> modelResource1 = project.getServiceManager().getInformationSpace()
+				.getModelWithURI(modelFile1.toURI().toString());
+		assertNotNull(modelResource1);
+		emfModelSlotConfiguration1.setModelResource(modelResource1);
+		assertTrue(emfModelSlotConfiguration1.isValidConfiguration());
 
-		ModelSlot<?, ?> ontologySlot = conceptualModel.getModelSlots().get(1);
-		FlexoOntologyModelSlotInstanceConfiguration ontologyModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
-				.getModelSlotInstanceConfiguration(ontologySlot);
-		ontologyModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		ontologyModelSlotConfiguration.setModelUri("http://MyCityOntology");
-		ontologyModelSlotConfiguration.setRelativePath("");
-		ontologyModelSlotConfiguration.setFilename("MyCityOntology.owl");
-		assertTrue(ontologyModelSlotConfiguration.isValidConfiguration());
+		ModelSlot emfModelSlot2 = cityMappingVM.getModelSlots().get(1);
+		TypeSafeModelSlotInstanceConfiguration emfModelSlotConfiguration2 = (TypeSafeModelSlotInstanceConfiguration) createVirtualModelInstance
+				.getModelSlotInstanceConfiguration(emfModelSlot2);
+		emfModelSlotConfiguration2.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
+		File modelFile2 = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city2/first.city2");
+		System.out.println("Searching " + modelFile2.getAbsolutePath());
+		assertTrue(modelFile2.exists());
+		System.out.println("Searching " + modelFile2.toURI().toString());
+		FlexoModelResource<?, ?> modelResource2 = project.getServiceManager().getInformationSpace()
+				.getModelWithURI(modelFile2.toURI().toString());
+		assertNotNull(modelResource2);
+		emfModelSlotConfiguration2.setModelResource(modelResource2);
+		assertTrue(emfModelSlotConfiguration2.isValidConfiguration());
 
 		createVirtualModelInstance.doAction();
 		System.out.println("exception thrown=" + createVirtualModelInstance.getThrownException());
@@ -178,9 +242,27 @@ public class TestCityMappingView extends FlexoTestCase {
 		assertNotNull(newVirtualModelInstance);
 		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceName(), newVirtualModelInstance.getName());
 		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceTitle(), newVirtualModelInstance.getTitle());
-		assertEquals(createVirtualModelInstance.getVirtualModel(), cityMappingVP.getVirtualModelNamed("ConceptualModel"));
+		assertEquals(createVirtualModelInstance.getVirtualModel(), cityMappingVM);
 		assertTrue(newVirtualModelInstance.getResource().getFile().exists());
 		assertEquals(project, newVirtualModelInstance.getResource().getProject());
 		assertEquals(project, newVirtualModelInstance.getProject());
+
+		EditionPattern cityEP = cityMappingVM.getEditionPattern("City");
+		EditionPattern houseEP = cityMappingVM.getEditionPattern("House");
+		EditionPattern appartmentEP = cityMappingVM.getEditionPattern("Appartment");
+		EditionPattern mansionEP = cityMappingVM.getEditionPattern("Mansion");
+		EditionPattern residentEP = cityMappingVM.getEditionPattern("Resident");
+
+		assertNotNull(cityEP);
+		assertNotNull(houseEP);
+		assertNotNull(appartmentEP);
+		assertNotNull(mansionEP);
+		assertNotNull(residentEP);
+
+		assertEquals(5, newVirtualModelInstance.getEPInstances(cityEP).size());
+		assertEquals(3, newVirtualModelInstance.getEPInstances(houseEP).size());
+		assertEquals(2, newVirtualModelInstance.getEPInstances(appartmentEP).size());
+		assertEquals(1, newVirtualModelInstance.getEPInstances(mansionEP).size());
+		assertEquals(3, newVirtualModelInstance.getEPInstances(residentEP).size());
 	}
 }

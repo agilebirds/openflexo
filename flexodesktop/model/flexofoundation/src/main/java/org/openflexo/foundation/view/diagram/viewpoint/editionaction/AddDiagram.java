@@ -33,7 +33,9 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.toolbox.StringUtils;
 
 public class AddDiagram extends DiagramAction<Diagram> {
 
@@ -46,6 +48,21 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddDiagram;
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + " conformTo " + getDiagramSpecification().getURI() + " from " + getModelSlot().getName()
+				+ " {" + StringUtils.LINE_SEPARATOR, context);
+		out.append("}", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
 	@Override

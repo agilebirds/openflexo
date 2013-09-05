@@ -19,14 +19,17 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRConnectorTemplate;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
-public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> {
+public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> implements GRConnectorTemplate {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
@@ -98,7 +101,7 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	}
 
 	/* @Override
-	 public AddShemaElementAction getEditionAction() 
+	 public AddSchemaElementAction getEditionAction() 
 	 {
 	 	return getAddConnectorAction();
 	 }
@@ -160,6 +163,26 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	@Override
 	public ConnectorPatternRole getPatternRole() {
 		return (ConnectorPatternRole) super.getPatternRole();
+	}
+
+	private List<DiagramElement<?>> descendants;
+
+	@Override
+	public List<DiagramElement<?>> getDescendants() {
+		if (descendants == null) {
+			descendants = new ArrayList<DiagramElement<?>>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
+	}
+
+	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
+		descendants.add(current);
+		for (DiagramElement<?> child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
 	}
 
 }

@@ -22,6 +22,7 @@ package org.openflexo.foundation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -69,7 +70,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -190,11 +190,6 @@ public abstract class FlexoTestCase extends TestCase {
 		serviceManager = new DefaultFlexoServiceManager() {
 
 			@Override
-			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-				return null;
-			}
-
-			@Override
 			protected FlexoEditor createApplicationEditor() {
 				return new FlexoTestEditor(null);
 			}
@@ -230,7 +225,8 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {
 		try {
-			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"));
+			return DefaultResourceCenterService.getNewInstance(Collections.singletonList(FileUtils.createTempDirectory(name,
+					"ResourceCenter")));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
@@ -289,14 +285,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor reloadProject(File prjDir) {
-		return reloadProject(prjDir, serviceManager.getProjectReferenceLoader());
-	}
-
-	protected FlexoEditor reloadProject(File prjDir, FlexoProjectReferenceLoader projectReferenceLoader) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
-					new DefaultProjectLoadingHandler(), projectReferenceLoader, serviceManager));
+					new DefaultProjectLoadingHandler(), serviceManager));
 			// The next line is really a trouble maker and eventually causes more problems than solutions. FlexoProject can't be renamed on
 			// the fly
 			// without having a severe impact on many resources and importer projects. I therefore now comment this line which made me lost

@@ -17,7 +17,19 @@ public interface ExampleDiagramResource extends FlexoXMLFileResource<ExampleDiag
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 
+	/**
+	 * Return example diagram stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	public ExampleDiagram getExampleDiagram();
+
+	/**
+	 * Return example diagram stored by this resource<br>
+	 * Do not force load the resource data
+	 * 
+	 * @return
+	 */
+	public ExampleDiagram getLoadedExampleDiagram();
 
 	@Getter(value = VIEW_POINT_LIBRARY, ignoreType = true)
 	public ViewPointLibrary getViewPointLibrary();

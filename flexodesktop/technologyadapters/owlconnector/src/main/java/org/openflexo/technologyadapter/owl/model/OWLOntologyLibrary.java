@@ -34,10 +34,10 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -61,7 +61,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author sylvain
  * 
  */
-public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OWLOntology> implements ModelMaker {
+public class OWLOntologyLibrary extends TechnologyContextManager implements ModelMaker {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
 
@@ -74,7 +74,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	private SimpleGraphMaker graphMaker;
 
-	private Map<String, FlexoResource<OWLOntology>> ontologies;
+	private Map<String, TechnologyAdapterResource<OWLOntology>> ontologies;
 	private final Map<String, OWLDataType> dataTypes;
 
 	private OntologyObjectConverter ontologyObjectConverter;
@@ -97,7 +97,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
 
-		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
+		ontologies = new HashMap<String, TechnologyAdapterResource<OWLOntology>>();
 		dataTypes = new HashMap<String, OWLDataType>();
 
 		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
@@ -167,7 +167,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		return ontologyObjectConverter;
 	}
 
-	public void registerOntology(FlexoResource<OWLOntology> ontologyResource) {
+	public void registerOntology(OWLOntologyResource ontologyResource) {
 		ontologies.put(ontologyResource.getURI(), ontologyResource);
 	}
 
@@ -380,15 +380,16 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	}
 
 	@Override
-	public void registerMetaModel(FlexoMetaModelResource<OWLOntology, OWLOntology> ontologyResource) {
-		super.registerMetaModel(ontologyResource);
-		registerOntology(ontologyResource);
+	public void registerResource(TechnologyAdapterResource<?> resource) {
+		super.registerResource(resource);
+		if (resource instanceof OWLOntologyResource) {
+			registerOntology((OWLOntologyResource) resource);
+		}
 	}
 
 	@Override
-	public void registerModel(FlexoModelResource<OWLOntology, OWLOntology> ontologyResource) {
-		super.registerModel(ontologyResource);
-		registerOntology(ontologyResource);
+	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+		return ontologies.get(uri);
 	}
 
 }

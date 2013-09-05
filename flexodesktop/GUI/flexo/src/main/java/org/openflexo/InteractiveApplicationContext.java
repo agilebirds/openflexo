@@ -44,7 +44,7 @@ public class InteractiveApplicationContext extends ApplicationContext {
 
 	@Override
 	protected FlexoResourceCenterService createResourceCenterService() {
-		return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getLocalResourceCenterDirectory());
+		return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getDirectoryResourceCenterList());
 	}
 
 	@Override

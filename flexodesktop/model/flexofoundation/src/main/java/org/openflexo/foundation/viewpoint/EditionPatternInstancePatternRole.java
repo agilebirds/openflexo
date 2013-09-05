@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 public class EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance> {
 
@@ -26,6 +27,13 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		super.finalizeDeserialization(builder);
 		logger.severe("############# Finalized EditionPatternInstancePatternRole " + Integer.toHexString(hashCode()) + toString());
 	}*/
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as EditionPatternInstance conformTo " + getPreciseType() + ";", context);
+		return out.toString();
+	}
 
 	@Override
 	public Type getType() {
@@ -138,8 +146,8 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	}
 
 	@Override
-	public VirtualModelModelSlot<?, ?> getModelSlot() {
-		VirtualModelModelSlot<?, ?> returned = (VirtualModelModelSlot<?, ?>) super.getModelSlot();
+	public VirtualModelModelSlot getModelSlot() {
+		VirtualModelModelSlot returned = (VirtualModelModelSlot) super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
@@ -148,11 +156,11 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		return returned;
 	}
 
-	public VirtualModelModelSlot<?, ?> getVirtualModelModelSlot() {
+	public VirtualModelModelSlot getVirtualModelModelSlot() {
 		return getModelSlot();
 	}
 
-	public void setVirtualModelModelSlot(VirtualModelModelSlot<?, ?> modelSlot) {
+	public void setVirtualModelModelSlot(VirtualModelModelSlot modelSlot) {
 		setModelSlot(modelSlot);
 	}
 

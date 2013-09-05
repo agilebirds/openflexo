@@ -159,6 +159,9 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 	}
 
 	public Vector<GraphicalElementAction> getActions() {
+		if (actions == null) {
+			actions = new Vector<GraphicalElementAction>();
+		}
 		return actions;
 	}
 

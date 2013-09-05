@@ -31,6 +31,7 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -165,7 +166,7 @@ public class VPMIconLibrary extends IconLibrary {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
 			try {
 				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
@@ -188,7 +189,7 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((PatternRole) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
+				return tac.getIconForPatternRole((Class<? extends PatternRole<?>>) object.getClass());
 			}
 		}
 		if (object instanceof ViewPoint) {
@@ -219,14 +220,14 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null && ((DataPropertyAssertion) object).getOntologyProperty() != null) {
-				return tac.getIconForOntologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
+				return tac.getIconForTechnologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ObjectPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ObjectPropertyAssertion) object).getAction()
 					.getModelSlot().getTechnologyAdapter());
 			if (tac != null && ((ObjectPropertyAssertion) object).getOntologyProperty() != null) {
-				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
+				return tac.getIconForTechnologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ExampleDiagramConnector) {
@@ -277,7 +278,7 @@ public class VPMIconLibrary extends IconLibrary {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
 						.getTechnologyAdapter());
 				if (tac != null) {
-					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction<?, ?>>) object.getClass());
 					if (returned != null) {
 						return returned;
 					} else {
@@ -347,7 +348,7 @@ public class VPMIconLibrary extends IconLibrary {
 			if (tac != null) {
 				Type accessedType = ((OntologicObjectPatternRole<?>) object).getType();
 				Class accessedTypeBaseClass = TypeUtils.getBaseClass(accessedType);
-				return tac.getIconForOntologyObject(accessedTypeBaseClass);
+				return tac.getIconForTechnologyObject(accessedTypeBaseClass);
 			}
 		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
@@ -363,6 +364,12 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof TextFieldInspectorEntry) {
 				return TEXT_FIELD_ICON;
 			}
+		} else if (object instanceof TechnologyObject) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyObject) object).getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForTechnologyObject(((TechnologyObject) object).getClass());
+			}
+			return null;
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;

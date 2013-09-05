@@ -50,7 +50,6 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -310,20 +309,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	// test purposes
 	public static FlexoEditor loadProject(File prjDir) {
 		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
-		FlexoServiceManager sm = new DefaultFlexoServiceManager() {
-
-			@Override
-			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			protected FlexoEditor createApplicationEditor() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
+		FlexoServiceManager sm = new DefaultFlexoServiceManager();
 		sm.registerService(resourceCenter);
 		FlexoEditor editor = null;
 		try {

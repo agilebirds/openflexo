@@ -16,6 +16,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.rm.FlexoFileNotFoundException;
 import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.LoadXMLResourceException;
@@ -576,6 +577,18 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}, clearIsModified);
 	}
 
+	public static class WillWriteFileOnDiskNotification implements ServiceNotification {
+		private File file;
+
+		public WillWriteFileOnDiskNotification(File file) {
+			this.file = file;
+		}
+
+		public File getFile() {
+			return file;
+		}
+	}
+
 	private void _saveResourceData(FlexoVersion version, SerializationHandler handler, boolean clearIsModified)
 			throws SaveXMLResourceException {
 		File temporaryFile = null;
@@ -588,8 +601,10 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		try {
 			File dir = getFile().getParentFile();
 			if (!dir.exists()) {
+				getServiceManager().notify(null, new WillWriteFileOnDiskNotification(dir));
 				dir.mkdirs();
 			}
+			getServiceManager().notify(null, new WillWriteFileOnDiskNotification(getFile()));
 			// Make local copy
 			makeLocalCopy();
 			// Using temporary file
@@ -750,6 +765,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		return STRING_ENCODER;
 	}
 
+	@Override
 	public FlexoVersion latestVersion() {
 		if (getXMLSerializationService() != null) {
 			return getXMLSerializationService().getLatestVersionForClass(getResourceDataClass());

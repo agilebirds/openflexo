@@ -9,18 +9,18 @@ import org.openflexo.toolbox.StringUtils;
 public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	private PatternRole<T> patternRole;
 	private String patternRoleName;
-	private ModelSlot<?, ?> modelSlot;
+	private ModelSlot modelSlot;
 	private EditionPatternInstance epi;
 
 	protected ActorReference(FlexoProject project) {
 		super(project);
 	}
 
-	public ModelSlot<?, ?> getModelSlot() {
+	public ModelSlot getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 

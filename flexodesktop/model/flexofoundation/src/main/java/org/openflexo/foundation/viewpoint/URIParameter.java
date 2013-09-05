@@ -28,16 +28,32 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class URIParameter extends EditionSchemeParameter {
+public class URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
 	private DataBinding<String> baseURI;
 
 	public URIParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
+		if (returned != null) {
+			return returned;
+		} else {
+			if (getEditionScheme() != null && getEditionScheme().getVirtualModel() != null) {
+				if (getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getEditionScheme().getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
+				}
+			}
+		}
+		return null;
 	}
 
 	public DataBinding<String> getBaseURI() {
@@ -123,7 +139,12 @@ public class URIParameter extends EditionSchemeParameter {
 			if (baseProposal == null) {
 				return null;
 			}
-			baseProposal = JavaUtils.getClassName(baseProposal);
+			TypeAwareModelSlot modelSlot = getModelSlot();
+
+			return modelSlot.generateUniqueURIName(
+					(TypeSafeModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
+
+			/*baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;
 			Integer i = null;
 			while (proposalIsNotUnique(action, proposal)) {
@@ -135,7 +156,7 @@ public class URIParameter extends EditionSchemeParameter {
 				proposal = baseProposal + i;
 			}
 			System.out.println("Generate URI " + proposal);
-			return proposal;
+			return proposal;*/
 		}
 		return null;
 	}

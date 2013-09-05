@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:Library xmlns:p="http://www.example.org/Library">
+  <p:name>A Library</p:name>
+  <p:books>
+   <p:title encoding="truc" >toto</p:title>
+   <p:pages>35</p:pages>
+   <p:category>Mystery</p:category>
+   <p:author>Le Lapin</p:author>
+  </p:books>
+</p:Library>

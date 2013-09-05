@@ -3,6 +3,7 @@ package org.openflexo.foundation.view.diagram.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -87,6 +88,10 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 		return DiagramPalette.class;
 	}
 
+	/**
+	 * Return diagram palette stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	@Override
 	public DiagramPalette getDiagramPalette() {
 		try {
@@ -99,6 +104,20 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Return diagram palette stored by this resource<br>
+	 * Do not force load the resource data
+	 * 
+	 * @return
+	 */
+	@Override
+	public DiagramPalette getLoadedDiagramPalette() {
+		if (isLoaded()) {
+			return getDiagramPalette();
 		}
 		return null;
 	}
@@ -119,8 +138,11 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 
 		DiagramPalette returned = super.loadResourceData(progress);
 		returned.init(getContainer().getDiagramSpecification(), getFile().getName().substring(0, getFile().getName().length() - 8));
-		System.out.println("DiagramPalette = " + returned);
 		getContainer().getDiagramSpecification().addToPalettes(returned);
+		setChanged();
+		notifyObservers(new DataModification("diagramPalette", null, returned));
+		setChanged();
+		notifyObservers(new DataModification("loadedDiagramPalette", null, returned));
 		returned.clearIsModified();
 		return returned;
 	}

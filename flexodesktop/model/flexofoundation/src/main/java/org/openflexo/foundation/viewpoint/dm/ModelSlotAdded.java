@@ -33,12 +33,12 @@ public class ModelSlotAdded extends ViewPointDataModification {
 
 	private ViewPoint viewPoint;
 
-	public ModelSlotAdded(ModelSlot<?, ?> modelSlot, ViewPoint viewPoint) {
+	public ModelSlotAdded(ModelSlot modelSlot, ViewPoint viewPoint) {
 		super("modelSlots", null, modelSlot);
 		this.viewPoint = viewPoint;
 	}
 
-	public ModelSlotAdded(ModelSlot<?, ?> modelSlot, VirtualModel virtualModel) {
+	public ModelSlotAdded(ModelSlot modelSlot, VirtualModel virtualModel) {
 		super("modelSlots", null, modelSlot);
 		this.viewPoint = viewPoint;
 	}

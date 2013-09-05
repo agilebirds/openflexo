@@ -91,15 +91,18 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			if (StringUtils.isNotEmpty(vpi.version)) {
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
-			boolean hasBeenConverted = false;
+			/*boolean hasBeenConverted = false;
 			if (StringUtils.isEmpty(vpi.modelVersion)) {
 				// This is the old model, convert to new model
-				restructureViewPointFrom0_1(viewPointDirectory, xmlFile);
+				convertViewPoint(viewPointDirectory, xmlFile);
 				hasBeenConverted = true;
-			}
+			}*/
 
-			returned.setModelVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? new FlexoVersion(vpi.modelVersion) : returned
-					.latestVersion());
+			if (StringUtils.isEmpty(vpi.modelVersion)) {
+				returned.setModelVersion(new FlexoVersion("0.1"));
+			} else {
+				returned.setModelVersion(new FlexoVersion(vpi.modelVersion));
+			}
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 
@@ -108,32 +111,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			logger.fine("ViewPointResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
 			// Now look for virtual models
-			if (viewPointDirectory.exists() && viewPointDirectory.isDirectory()) {
-				for (File f : viewPointDirectory.listFiles()) {
-					if (f.isDirectory()) {
-						File virtualModelFile = new File(f, f.getName() + ".xml");
-						if (virtualModelFile.exists()) {
-							// TODO: we must find something more efficient
-							try {
-								Document d = FlexoXMLFileResourceImpl.readXMLFile(virtualModelFile);
-								if (d.getRootElement().getName().equals("VirtualModel")) {
-									VirtualModelResource virtualModelResource = VirtualModelResourceImpl.retrieveVirtualModelResource(f,
-											virtualModelFile, returned, viewPointLibrary);
-									returned.addToContents(virtualModelResource);
-								} else if (d.getRootElement().getName().equals("DiagramSpecification")) {
-									DiagramSpecificationResource diagramSpecificationResource = DiagramSpecificationResourceImpl
-											.retrieveDiagramSpecificationResource(f, virtualModelFile, returned, viewPointLibrary);
-									returned.addToContents(diagramSpecificationResource);
-								}
-							} catch (JDOMException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			}
+			returned.exploreVirtualModels();
 
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 
@@ -142,6 +120,35 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void exploreVirtualModels() {
+		if (getDirectory().exists() && getDirectory().isDirectory()) {
+			for (File f : getDirectory().listFiles()) {
+				if (f.isDirectory()) {
+					File virtualModelFile = new File(f, f.getName() + ".xml");
+					if (virtualModelFile.exists()) {
+						// TODO: we must find something more efficient
+						try {
+							Document d = FlexoXMLFileResourceImpl.readXMLFile(virtualModelFile);
+							if (d.getRootElement().getName().equals("VirtualModel")) {
+								VirtualModelResource virtualModelResource = VirtualModelResourceImpl.retrieveVirtualModelResource(f,
+										virtualModelFile, this, getViewPointLibrary());
+								addToContents(virtualModelResource);
+							} else if (d.getRootElement().getName().equals("DiagramSpecification")) {
+								DiagramSpecificationResource diagramSpecificationResource = DiagramSpecificationResourceImpl
+										.retrieveDiagramSpecificationResource(f, virtualModelFile, this, getViewPointLibrary());
+								addToContents(diagramSpecificationResource);
+							}
+						} catch (JDOMException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -217,6 +224,22 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		return true;
 	}
 
+	/**
+	 * Return flag indicating if this resource is loadable<br>
+	 * By default, such resource is loadable if based on 1.6 architecture (model version greater or equals to 1.0)
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isLoadable() {
+		return !isDeprecatedVersion();
+	}
+
+	@Override
+	public boolean isDeprecatedVersion() {
+		return getModelVersion().isLesserThan(new FlexoVersion("1.0"));
+	}
+
 	private static class ViewPointInfo {
 		public String uri;
 		public String version;
@@ -281,7 +304,10 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		return null;
 	}
 
-	private static void restructureViewPointFrom0_1(File viewPointDirectory, File xmlFile) {
+	public static void convertViewPoint(ViewPointResource viewPointResource) {
+
+		File viewPointDirectory = viewPointResource.getDirectory();
+		File xmlFile = viewPointResource.getFile();
 
 		logger.info("Converting " + viewPointDirectory.getAbsolutePath());
 
@@ -335,6 +361,9 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+
+		((ViewPointResourceImpl) viewPointResource).exploreVirtualModels();
+
 	}
 
 	@Override

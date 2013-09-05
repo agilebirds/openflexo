@@ -2,7 +2,7 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">
+      <TabPanel name="GRTab" data="($org.openflexo.fge.GraphicalRepresentation)data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandHorizontally=true;expandVertically=true)">
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
           <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
           <TextField columns="10" passwd="false" localize="true" name="Text" data="GRTab.data.text" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" visible="(GRTab.data.isMultilineAllowed = false)" />

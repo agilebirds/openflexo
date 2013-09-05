@@ -246,6 +246,17 @@ public abstract class KeyValueProperty {
 				// we continue
 			}
 		}
+		
+		// manage static class methods
+		for (String trie : tries) {
+			try {
+				return ((Class) lastClass.getClass()).getMethod(trie, (Class<?>[]) null);
+			} catch (SecurityException err) {
+				// we continue
+			} catch (NoSuchMethodException err) {
+				// we continue
+			}
+		}
 
 		// Debugging.debug ("No method matching "
 		// +propertyName+"() or "

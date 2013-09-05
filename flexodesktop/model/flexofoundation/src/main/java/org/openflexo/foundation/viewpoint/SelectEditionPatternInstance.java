@@ -26,6 +26,7 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -39,8 +40,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
-public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
-		FetchRequest<VMI, VM, EditionPatternInstance> {
+public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectEditionPatternInstance.class.getPackage().getName());
 
@@ -49,6 +49,21 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 
 	public SelectEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ") + " as "
+				+ getEditionPatternType().getName() + (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""),
+				context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
 	@Override
@@ -122,12 +137,12 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 
 	@Override
 	public List<EditionPatternInstance> performAction(EditionSchemeAction action) {
-		VirtualModelInstance<VMI, VM> vmi = null;
+		VirtualModelInstance vmi = null;
 		if (getModelSlot() instanceof VirtualModelModelSlot) {
 			ModelSlotInstance modelSlotInstance = action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 			if (modelSlotInstance != null) {
-				System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
-				vmi = (VirtualModelInstance<VMI, VM>) modelSlotInstance.getModel();
+				// System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
+				vmi = (VirtualModelInstance) modelSlotInstance.getResourceData();
 			} else {
 				logger.warning("Cannot find ModelSlotInstance for " + getModelSlot());
 			}

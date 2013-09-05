@@ -19,11 +19,7 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.resource.FileResourceRepository;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceRepository;
 
@@ -36,34 +32,13 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <R>
  * @param <TA>
  */
-public abstract class ModelRepository<R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>>
-		extends FileResourceRepository<R> {
+public abstract class ModelRepository<R extends FlexoModelResource<M, MM> & FlexoFileResource<M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
+		extends TechnologyAdapterFileResourceRepository<R, TA, M> {
 
-	private static final Logger logger = Logger.getLogger(ModelRepository.class.getPackage().getName());
-
-	private TA technologyAdapter;
-	private FlexoResourceCenter resourceCenter;
-
-	public ModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
-		super(resourceCenter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
-				.getRootDirectory() : null);
-		this.technologyAdapter = technologyAdapter;
-		this.resourceCenter = resourceCenter;
-		getRootFolder().setName(resourceCenter.getName());
+	public ModelRepository(TA technologyAdapter, FlexoResourceCenter<?> resourceCenter) {
+		super(technologyAdapter, resourceCenter);
 		getRootFolder().setDescription(
 				"ModelRepository for technology " + technologyAdapter.getName() + " resource center: " + resourceCenter);
-	}
-
-	public TA getTechnologyAdapter() {
-		return technologyAdapter;
-	}
-
-	public FlexoResourceCenter getResourceCenter() {
-		return resourceCenter;
-	}
-
-	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		this.resourceCenter = resourceCenter;
 	}
 
 }

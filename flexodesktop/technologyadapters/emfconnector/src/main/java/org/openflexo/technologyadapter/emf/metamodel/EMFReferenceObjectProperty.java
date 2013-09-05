@@ -303,7 +303,7 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
 	}
 

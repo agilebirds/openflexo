@@ -27,11 +27,11 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.toolbox.StringUtils;
 
-public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
+public class FetchRequestIterationAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(FetchRequestIterationAction.class.getPackage().getName());
 
@@ -41,6 +41,22 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 
 	public FetchRequestIterationAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("for (" + getIteratorName() + " in (", context);
+		out.append(getFetchRequest().getFMLRepresentation(), context);
+		out.append(")) {", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		for (EditionAction action : getActions()) {
+			out.append(action.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}
+
+		out.append("}", context);
+		return out.toString();
 	}
 
 	@Override
@@ -57,11 +73,11 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 		rebuildInferedBindingModel();
 	}
 
-	public FetchRequest<?, ?, ?> getFetchRequest() {
+	public FetchRequest<?, ?> getFetchRequest() {
 		return fetchRequest;
 	}
 
-	public void setFetchRequest(FetchRequest<?, ?, ?> fetchRequest) {
+	public void setFetchRequest(FetchRequest<?, ?> fetchRequest) {
 		fetchRequest.setActionContainer(this);
 		fetchRequest.setEmbeddingIteration(this);
 		this.fetchRequest = fetchRequest;
@@ -121,7 +137,7 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 	}
 
 	@Override
-	public void addToActions(EditionAction<?, ?, ?> action) {
+	public void addToActions(EditionAction<?, ?> action) {
 		// Big hack to prevent XMLCoDe to also append FetchRequest to the list of embedded actions
 		// Should be removed either by the fixing of XMLCoDe or by the switch to PAMELA
 		if (getFetchRequest() != action) {

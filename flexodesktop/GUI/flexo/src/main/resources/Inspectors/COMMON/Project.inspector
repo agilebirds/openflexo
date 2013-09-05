@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.rm.FlexoProject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="BasicTab" opaque="false">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" opaque="false" name="BasicTab">
       <Label label="name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectNameLabel" localize="true" />
       <TextField data="data.displayName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="ProjectName" readOnly="true" localize="true" />
       <Label label="location" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectDirectoryLabel" localize="true" />
@@ -33,15 +33,15 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="AdvancedTab" opaque="false">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" opaque="false" name="AdvancedTab">
       <Label label="uri" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="URILabel" localize="true" />
       <TextField data="data.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="URI" readOnly="true" localize="true" />
       <Label label="version" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
-      <TextField data="data.version" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" />
+      <TextField data="data.version.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" />
       <Label label="revision" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
-      <TextField data="data.revision" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" />
+      <TextField data="data.revision.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" />
     </Tab>
-    <Tab title="ImportedProjects" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="ImportedProjectsTab" opaque="false">
+    <Tab title="ImportedProjects" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" opaque="false" name="ImportedProjectsTab">
       <Table iteratorClassName="org.openflexo.foundation.rm.FlexoProjectReference" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ImportedProject" data="data.projectData.importedProjects" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
         <IconColumn data="controller.flexoController.iconForObject(iterator)" title="" columnWidth="20" resizable="false" displayTitle="true" name="icon" />
         <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.name" name="label" />
@@ -54,7 +54,7 @@
         <RemoveAction method="controller.unimportProject(data,ImportedProject.selection)" isAvailable="(ImportedProject.selection.size &gt; 0)" name="remove_imported_project" />
       </Table>
     </Tab>
-    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="StatsTab" opaque="false">
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" opaque="false" name="StatsTab">
       <Label align="center" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
       <Label label="include_begin_end" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
       <CheckBox selected="false" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />

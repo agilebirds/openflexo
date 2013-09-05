@@ -48,4 +48,5 @@ public interface FlexoXMLFileResource<RD extends ResourceData<RD>> extends Flexo
 
 	public XMLSerializationService getXMLSerializationService();
 
+	public FlexoVersion latestVersion();
 }

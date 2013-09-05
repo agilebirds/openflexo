@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -19,33 +20,41 @@
  */
 package org.openflexo.technologyadapter.xsd;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
+import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
+import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
+import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumentRoot;
 
 /**
  * Implementation of the ModelSlot class for the XSD/XML technology adapter
@@ -53,38 +62,60 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
  * @author Luka Le Roux, Sylvain Guerin, Christophe Guychard
  * 
  */
-@DeclarePatternRoles({ 
-	    @DeclarePatternRole(XSIndividualPatternRole.class), // Instances
-		@DeclarePatternRole(XSClassPatternRole.class) // Classes
-		})
-		
-@DeclareEditionActions({ 
-		@DeclareEditionAction(AddXSIndividual.class), // Add instance
-		@DeclareEditionAction(AddXSClass.class) // Add class
+
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+	@DeclarePatternRole(FML = "XSIndividual", patternRoleClass = XSIndividualPatternRole.class),
+	@DeclarePatternRole(FML = "XSClass", patternRoleClass = XSClassPatternRole.class), })
+@DeclareEditionActions({ // All edition actions available through this model slot
+	@DeclareEditionAction(FML = "AddXSIndividual", editionActionClass = AddXSIndividual.class),
+	@DeclareEditionAction(FML = "SetXMLDocumentRoot", editionActionClass = SetXMLDocumentRoot.class), // Sets the root instance of XML Document
+	@DeclareEditionAction(FML = "AddXSClass", editionActionClass = AddXSClass.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
 })
-public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel> {
 
-	private static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
+public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> {
+	static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
-	public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
+	/* Used to process URIs for XML Objects */
+	private Hashtable<String, XSURIProcessor> uriProcessors;
+
+	/*public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+		if (uriProcessors == null)
+			uriProcessors = new Hashtable<String, XSURIProcessor>();
+	}*/
 
 	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
+		if (uriProcessors == null) {
+			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
 	public XSDModelSlot(VirtualModelBuilder builder) {
 		super(builder);
+		if (uriProcessors == null) {
+			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
-	public XSDModelSlot(ViewPointBuilder builder) {
+	/*public XSDModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+		if (uriProcessors == null)
+			uriProcessors = new Hashtable<String, XSURIProcessor>();
+	}*/
 
 	@Override
 	public Class<XSDTechnologyAdapter> getTechnologyAdapterClass() {
 		return XSDTechnologyAdapter.class;
+	}
+
+	/**
+	 * Instanciate a new model slot instance configuration for this model slot
+	 */
+	@Override
+	public XSDModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+		return new XSDModelSlotInstanceConfiguration(this, action);
 	}
 
 	/**
@@ -125,25 +156,143 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	 * @return
 	 */
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddXSIndividual(null);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddXSClass(null);
-		} else {
-		return null;
-		 }
+		} else if (SetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new SetXMLDocumentRoot(null);
+		}else {
+			return null;
+		}
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
 	}
 
+	/*=====================================================================================
+	 * URI Accessors
+	 */
+	// TODO Manage the fact that URI May Change
+
+
 	@Override
-	@Deprecated
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+	public String getURIForObject(
+			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, Object o) {
+		XSOntIndividual xsO = (XSOntIndividual) o;
+
+		String ltypeURI = ((XSOntClass) xsO.getType()).getURI();
+		XSURIProcessor mapParams = uriProcessors.get(ltypeURI);
+
+		if (mapParams != null){
+			return mapParams.getURIForObject((TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
+		}
+		else {
+			logger.warning("XSDModelSlot: unable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
+			return null;
+		}
+
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
+
+		XSURIProcessor mapParams = uriProcessors.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
+		if (mapParams != null){
+			try {
+				return mapParams.retrieveObjectWithURI(msInstance, objectURI);
+			} catch (DuplicateURIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		return null;
+	}
+
+	// ==========================================================================
+	// ============================== uriProcessors Map ===================
+	// ==========================================================================
+
+	public void setUriProcessors(Hashtable<String, XSURIProcessor> uriProcessingParameters) {
+		this.uriProcessors = uriProcessingParameters;
+	}
+
+	public Hashtable<String, XSURIProcessor> getUriProcessors() {
+		return uriProcessors;
+	}
+
+	public XSURIProcessor createURIProcessor(){
+		XSURIProcessor xsuriProc = new XSURIProcessor();
+		// TODO remplacer le hash par une liste + table de hash pour cacher les URI....
+		// add
+		return xsuriProc;
+	}
+	
+	public void addToUriProcessors(XSURIProcessor xsuriProc) {
+		xsuriProc.setModelSlot(this);
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.put(xsuriProc._getTypeURI().toString(), xsuriProc);
+	}
+
+	public void removeFromUriProcessors(XSURIProcessor xsuriProc) {
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.remove(xsuriProc._getTypeURI().toString());
+		xsuriProc.reset();
+	}
+
+	// Do not use this since not efficient, used in deserialization only
+	public List<XSURIProcessor> getUriProcessorsList() {
+		List<XSURIProcessor> returned = new ArrayList<XSURIProcessor>();
+		for (XSURIProcessor xsuriProc : uriProcessors.values()) {
+			returned.add(xsuriProc);
+		}
+		return returned;
+	}
+
+	public void setUriProcessorsList(List<XSURIProcessor> uriProcList) {
+		for (XSURIProcessor xsuriProc : uriProcList) {
+			addToUriProcessorsList(xsuriProc);
+		}
+	}
+
+	public void addToUriProcessorsList(XSURIProcessor xsuriProc) {
+		addToUriProcessors(xsuriProc);
+	}
+
+	public void removeFromUriProcessorsList(XSURIProcessor xsuriProc) {
+		removeFromUriProcessors(xsuriProc);
+	}
+
+	@Override
+	public Type getType() {
+		return XMLXSDModel.class;
+	}
+
+	@Override
+	public XSDTechnologyAdapter getTechnologyAdapter() {
+		return (XSDTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
+	@Override
+	public XMLXSDFileResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
+		return getTechnologyAdapter().createNewXMLFile(view.getProject(), filename, modelUri, metaModelResource);
+	}
+
+	@Override
+	public XMLXSDFileResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
+		return (XMLXSDFileResource) getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+				(XSDMetaModelResource) metaModelResource);
+	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
 	}
 
 }

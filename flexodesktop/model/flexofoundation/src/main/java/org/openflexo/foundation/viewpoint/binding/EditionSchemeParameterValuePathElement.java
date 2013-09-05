@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.view.action.EditionSchemeAction.ParameterValues;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
 public class EditionSchemeParameterValuePathElement extends SimplePathElement {
@@ -45,9 +46,10 @@ public class EditionSchemeParameterValuePathElement extends SimplePathElement {
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		if (target instanceof Hashtable) {
-			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
-			System.out.println("Setting value " + value + " for " + parameter);
+		if (target instanceof ParameterValues) {
+			ParameterValues allParameters = (ParameterValues) target;
+			// System.out.println("Setting value " + value + " for " + parameter);
+			// System.out.println("Parent=" + getParent() + " of " + getParent().getClass());
 			if (value != null) {
 				allParameters.put(parameter, value);
 			} else {

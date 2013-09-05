@@ -29,13 +29,14 @@
 package org.openflexo.foundation.ontology;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 
 /**
  * Flexo Ontology Object.
  * 
  * @author gbesancon
  */
-public interface IFlexoOntologyObject {
+public interface IFlexoOntologyObject extends TechnologyObject {
 
 	/**
 	 * Name of Object.
@@ -71,6 +72,7 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	@Override
+	public TechnologyAdapter getTechnologyAdapter();
 
 }

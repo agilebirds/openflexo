@@ -19,12 +19,14 @@
  */
 package org.openflexo.fib.controller;
 
+import org.openflexo.fib.model.FIBMultipleValues;
+
 public class FIBMultipleValuesDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
 	private O selected;
 	private int selectedIndex;
 
-	public FIBMultipleValuesDynamicModel(T data) {
-		super(data);
+	public FIBMultipleValuesDynamicModel(T data, FIBMultipleValues component) {
+		super(data, component);
 	}
 
 	public O getSelected() {

@@ -305,7 +305,7 @@ public class FIBInspector extends FIBPanel {
 	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab) {
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
-			tf.setValidateOnReturn(true); // Avoid to many ontologies manipulations
+			tf.setValidateOnReturn(true); // Avoid too many ontologies manipulations
 			newTab.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 			return tf;
 		} else if (entry instanceof TextAreaInspectorEntry) {

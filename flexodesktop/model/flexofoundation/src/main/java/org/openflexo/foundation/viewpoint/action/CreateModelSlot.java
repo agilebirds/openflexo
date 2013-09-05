@@ -23,6 +23,7 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -30,10 +31,12 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.VirtualModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
@@ -41,49 +44,50 @@ import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObject, ViewPointObject> {
+public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateModelSlot.class.getPackage().getName());
 
-	public static FlexoActionType<CreateModelSlot, ViewPointObject, ViewPointObject> actionType = new FlexoActionType<CreateModelSlot, ViewPointObject, ViewPointObject>(
+	public static FlexoActionType<CreateModelSlot, VirtualModel, ViewPointObject> actionType = new FlexoActionType<CreateModelSlot, VirtualModel, ViewPointObject>(
 			"create_model_slot", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateModelSlot makeNewAction(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public CreateModelSlot makeNewAction(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new CreateModelSlot(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPointObject object, Vector<ViewPointObject> globalSelection) {
-			return object instanceof VirtualModel || object instanceof ViewPoint;
+		public boolean isVisibleForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
+			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPointObject object, Vector<ViewPointObject> globalSelection) {
-			return object instanceof VirtualModel || object instanceof ViewPoint;
+		public boolean isEnabledForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
+			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateModelSlot.actionType, ViewPoint.class);
+		// FlexoModelObject.addActionForClass(CreateModelSlot.actionType, ViewPoint.class);
 		FlexoModelObject.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
 	}
 
 	public String modelSlotName;
 	public String description;
-	public TechnologyAdapter<?, ?> technologyAdapter;
+	public TechnologyAdapter technologyAdapter;
 	public FlexoMetaModelResource<?, ?> mmRes;
 	public VirtualModelResource vmRes;
 	public boolean required = true;
 	public boolean readOnly = false;
+	private Class<? extends ModelSlot<?>> modelSlotClass;
 
 	private ModelSlot newModelSlot;
 
-	CreateModelSlot(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	CreateModelSlot(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -91,31 +95,42 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add model slot");
 
-		if (technologyAdapter != null) {
-			if (getFocusedObject() instanceof VirtualModel) {
-				newModelSlot = technologyAdapter.createNewModelSlot((VirtualModel) getFocusedObject());
-			} else if (getFocusedObject() instanceof ViewPoint) {
-				newModelSlot = technologyAdapter.createNewModelSlot((ViewPoint) getFocusedObject());
-			}
+		if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			VirtualModelTechnologyAdapter virtualModelTechnologyAdapter = (VirtualModelTechnologyAdapter) technologyAdapter;
+			newModelSlot = virtualModelTechnologyAdapter.makeModelSlot(VirtualModelModelSlot.class, getFocusedObject());
 			newModelSlot.setName(modelSlotName);
-			if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
-				((VirtualModelModelSlot) newModelSlot).setVirtualModelResource(vmRes);
-			} else {
-				newModelSlot.setMetaModelResource(mmRes);
+			((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+			newModelSlot.setIsRequired(required);
+			newModelSlot.setIsReadOnly(readOnly);
+			newModelSlot.setDescription(description);
+			getFocusedObject().addToModelSlots(newModelSlot);
+		}
+
+		if (technologyAdapter != null && getModelSlotClass() != null) {
+			// if (getFocusedObject() instanceof VirtualModel) {
+			newModelSlot = technologyAdapter.makeModelSlot(getModelSlotClass(), getFocusedObject());
+			/*} else if (getFocusedObject() instanceof ViewPoint) {
+				newModelSlot = technologyAdapter.createNewModelSlot((ViewPoint) getFocusedObject());
+			}*/
+			newModelSlot.setName(modelSlotName);
+			if (newModelSlot instanceof VirtualModelModelSlot) {
+				((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+			} else if (newModelSlot instanceof TypeAwareModelSlot) {
+				((TypeAwareModelSlot) newModelSlot).setMetaModelResource(mmRes);
 			}
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);
 			newModelSlot.setDescription(description);
-			if (getFocusedObject() instanceof VirtualModel) {
-				((VirtualModel) getFocusedObject()).addToModelSlots(newModelSlot);
-			} else if (getFocusedObject() instanceof ViewPoint) {
+			// if (getFocusedObject() instanceof VirtualModel) {
+			getFocusedObject().addToModelSlots(newModelSlot);
+			/*} else if (getFocusedObject() instanceof ViewPoint) {
 				((ViewPoint) getFocusedObject()).addToModelSlots(newModelSlot);
-			}
+			}*/
 		}
 
 	}
 
-	public ModelSlot<?, ?> getNewModelSlot() {
+	public ModelSlot getNewModelSlot() {
 		return newModelSlot;
 	}
 
@@ -124,6 +139,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 	private static final String DUPLICATED_NAME = FlexoLocalization.localizedForKey("this_name_is_already_used_please_choose_an_other_one");
 	private static final String EMPTY_NAME = FlexoLocalization.localizedForKey("model_slot_must_have_an_non_empty_and_unique_name");
 	private static final String NO_TECHNOLOGY_ADAPTER = FlexoLocalization.localizedForKey("please_choose_a_technology_adapter");
+	private static final String NO_MODEL_SLOT_TYPE = FlexoLocalization.localizedForKey("please_choose_a_model_slot_type");
 	private static final String NO_META_MODEL = FlexoLocalization.localizedForKey("please_choose_a_valid_metamodel");
 
 	public String getValidityMessage() {
@@ -135,21 +151,77 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 		if (StringUtils.isEmpty(modelSlotName)) {
 			validityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject() instanceof VirtualModel && ((VirtualModel) getFocusedObject()).getModelSlot(modelSlotName) != null) {
+		} else if (getFocusedObject() instanceof VirtualModel && getFocusedObject().getModelSlot(modelSlotName) != null) {
 			validityMessage = DUPLICATED_NAME;
 			return false;
-		} else if (getFocusedObject() instanceof ViewPoint && ((ViewPoint) getFocusedObject()).getModelSlot(modelSlotName) != null) {
+		} /*else if (getFocusedObject() instanceof ViewPoint && ((ViewPoint) getFocusedObject()).getModelSlot(modelSlotName) != null) {
 			validityMessage = DUPLICATED_NAME;
 			return false;
-		} else if (technologyAdapter == null) {
+			}*/else if (technologyAdapter == null) {
 			validityMessage = NO_TECHNOLOGY_ADAPTER;
 			return false;
-		} else if (mmRes == null) {
-			validityMessage = NO_META_MODEL;
-			return true;
-		} else {
-			validityMessage = "";
-			return true;
+		} else if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			if (vmRes == null) {
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
+		} else if (!(technologyAdapter instanceof VirtualModelTechnologyAdapter)) {
+			if (getModelSlotClass() == null) {
+				validityMessage = NO_MODEL_SLOT_TYPE;
+				return false;
+			}
+			if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+				validityMessage = NO_META_MODEL;
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
 		}
+		return false;
 	}
+
+	public Class<? extends ModelSlot<?>> getModelSlotClass() {
+		if (modelSlotClass == null && technologyAdapter != null && technologyAdapter.getAvailableModelSlotTypes().size() > 0) {
+			return technologyAdapter.getAvailableModelSlotTypes().get(0);
+		}
+		return modelSlotClass;
+	}
+
+	public void setModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
+		this.modelSlotClass = modelSlotClass;
+	}
+
+	public boolean isTypeAwareModelSlot() {
+		return getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass());
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoModel<?, ?>> getModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoModel<?, ?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[0]);
+		}
+		return null;
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoMetaModel<?>> getMetaModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoMetaModel<?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[1]);
+		}
+		return null;
+	}
+
 }

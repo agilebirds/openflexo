@@ -492,4 +492,9 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 		return restrictions;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + getURI();
+	}
+
 }

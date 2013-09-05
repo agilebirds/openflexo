@@ -19,27 +19,35 @@
  */
 package org.openflexo.fib.model;
 
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.toolbox.FileResource;
 
-public class FIBReferencedComponent extends FIBWidget {
+public class FIBReferencedComponent extends FIBWidget  {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponent.class.getPackage().getName());
+
+	// This is the Fib File Name used for the referencedComponent
+	private DataBinding<String> componentFile;
+
 
 	public static enum Parameters implements FIBModelAttribute {
 		componentFile, assignments
 	}
 
-	private File componentFile;
-	private FIBComponent component;
+	private FIBComponent referencedComponent;
 	private Vector<FIBReferenceAssignment> assignments;
 
 	public FIBReferencedComponent() {
@@ -53,38 +61,90 @@ public class FIBReferencedComponent extends FIBWidget {
 
 	@Override
 	public Type getDefaultDataClass() {
-		if (getComponent() != null) {
-			return getComponent().getDataType();
+		if (referencedComponent != null) {
+			return referencedComponent.getDataType();
 		}
 		return Object.class;
 	}
 
-	public File getComponentFile() {
+	public DataBinding<String>  getComponentFile() {
+
+		if (componentFile == null) {
+			componentFile = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			componentFile.setBindingName("componentFile");
+			componentFile.setCacheable(true);
+		}
 		return componentFile;
 	}
 
-	public void setComponentFile(File componentFile) {
-		FIBAttributeNotification<File> notification = requireChange(Parameters.componentFile, componentFile);
+	public void setComponentFile(DataBinding<String>  componentFile) {
+
+		FIBAttributeNotification<DataBinding<String>> notification = requireChange(Parameters.componentFile, componentFile);
+
 		if (notification != null) {
+
+			if (componentFile != null) {
+				componentFile.setOwner(this);
+				componentFile.setDeclaredType(String.class);
+				componentFile.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				componentFile.setBindingName("componentFile");
+				componentFile.setCacheable(true);
+			}
+
 			this.componentFile = componentFile;
-			component = null;
+
+			referencedComponent = null;
 			notify(notification);
 		}
+
 	}
 
-	@Override
-	public FIBComponent getComponent() {
-		if (component == null && getComponentFile() != null && getComponentFile().exists()) {
-			component = FIBLibrary.instance().retrieveFIBComponent(getComponentFile());
+	public Type getDataType() {
+		if (referencedComponent != null){
+				return referencedComponent.getDataType();
 		}
-		return component;
+		return super.getDataType();
+	}
+
+
+	// TODO A deplacer cote widget plutot (conseil de Guillaume)
+
+	public FIBComponent loadReferencedComponent(BindingEvaluationContext context) {
+		if (referencedComponent == null && getComponentFile() != null) {
+
+			try {
+
+				String fibFileName = getComponentFile().getBindingValue(context);
+				if (fibFileName != null) {
+					FileResource fibFile = new FileResource(fibFileName);
+
+					referencedComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+				}
+				else {
+					if(deserializationPerformed){
+						logger.warning("Cannot find related Fib File for current FIBReferencedComponent " + this.getName());
+						}
+					referencedComponent = null;
+				}
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return referencedComponent;
 	}
 
 	public boolean hasAssignment(String variableName) {
-		return getAssignent(variableName) != null;
+		return getAssignment(variableName) != null;
 	}
 
-	public FIBReferenceAssignment getAssignent(String variableName) {
+	public FIBReferenceAssignment getAssignment(String variableName) {
 		for (FIBReferenceAssignment a : assignments) {
 			if (variableName != null && variableName.equals(a.getVariable().toString())) {
 				return a;
@@ -102,8 +162,8 @@ public class FIBReferencedComponent extends FIBWidget {
 	}
 
 	public void addToAssignments(FIBReferenceAssignment a) {
-		if (getAssignent(a.getVariable().toString()) != null) {
-			removeFromAssignments(getAssignent(a.getVariable().toString()));
+		if (getAssignment(a.getVariable().toString()) != null) {
+			removeFromAssignments(getAssignment(a.getVariable().toString()));
 		}
 		a.setReferencedComponent(this);
 		assignments.add(a);
@@ -125,11 +185,13 @@ public class FIBReferencedComponent extends FIBWidget {
 			assign.finalizeDeserialization();
 		}
 	}
-
+	/*
 	@Override
 	public Boolean getManageDynamicModel() {
 		return true;
 	}
+	 */
+
 
 	public FIBReferenceAssignment createAssignment() {
 		logger.info("Called createAssignment()");
@@ -254,6 +316,9 @@ public class FIBReferencedComponent extends FIBWidget {
 			}
 		}
 
+		// TODO: mettre un cache avec le Binding Model du fils peut-être?
+		// + gérer l'agrégation avec le père?
+
 		@Override
 		public BindingModel getBindingModel() {
 			if (getReferencedComponent() != null) {
@@ -268,5 +333,21 @@ public class FIBReferencedComponent extends FIBWidget {
 		}
 
 	}
+
+	public static class componentFileBindingMustBeValid extends BindingMustBeValid<FIBReferencedComponent> {
+		public componentFileBindingMustBeValid() {
+			super("'componentFile'_binding_is_not_valid", FIBReferencedComponent.class);
+		}
+
+		@Override
+		public DataBinding<String> getBinding(FIBReferencedComponent object) {
+			return object.getComponentFile();
+		}
+
+	}
+	
+	
+
+
 
 }

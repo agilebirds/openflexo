@@ -35,7 +35,6 @@
 	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
 		<property name="isRequired" xmlTag="isRequired" attribute="YES" />
 		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
-		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.DiagramModelSlot" xmlTag="DiagramModelSlot">
@@ -382,7 +381,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShemaElementAction"
+		name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddSchemaElementAction"
 		abstract="yes">
 	</entity>
 

@@ -32,10 +32,14 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -189,7 +193,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 
 	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setDomain(IFlexoOntologyClass domain) {
-		System.out.println("INGORED !!!!! PropertySelector, setDomain() with " + domain);
+		// System.out.println("INGORED !!!!! PropertySelector, setDomain() with " + domain);
 		this.domain = domain;
 	}
 
@@ -312,30 +316,58 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	private ModelSlot modelSlot;
+
+	public ModelSlot getModelSlot() {
+		return modelSlot;
+	}
+
+	public void setModelSlot(ModelSlot modelSlot) {
+		this.modelSlot = modelSlot;
+	}
+
+	/**
+	 * Return a metamodel adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public FlexoMetaModel getAdressedFlexoMetaModel() {
+		if (modelSlot instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot typeAwareModelSlot = (TypeAwareModelSlot) modelSlot;
+			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
+		}
+		return null;
+	}
+
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController).makeOntologyBrowserModel(getContext());
+			}
+		}
+		if (returned == null) {
+			if (getAdressedFlexoMetaModel() != null && getContext() == null) {
+				setContext((IFlexoOntology) getAdressedFlexoMetaModel());
+			}
+			// Use default
+			returned = new OntologyBrowserModel(getContext());
+		}
+		return returned;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			if (getTechnologyAdapter() != null) {
-				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
-						.getServiceManager().getService(TechnologyAdapterControllerService.class)
-						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getContext());
-			} else { // Use default
-				model = new OntologyBrowserModel(getContext());
-			}
-			model.addObserver(new Observer() {
-				@Override
-				public void update(Observable o, Object arg) {
-					if (arg instanceof OntologyBrowserModelRecomputed) {
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-							}
-						});
-					}
-				}
-			});
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
@@ -347,21 +379,15 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 			model.setShowIndividuals(false);
 			model.setShowObjectProperties(getSelectObjectProperties());
 			model.setShowDataProperties(getSelectDataProperties());
-			model.setShowAnnotationProperties(getSelectAnnotationProperties());
-			/*System.out.println("Recomputing...");
-			System.out.println("context=" + getContext());
-			System.out.println("getStrictMode()=" + getStrictMode());
-			System.out.println("getHierarchicalMode()=" + getHierarchicalMode());
-			System.out.println("getDisplayPropertiesInClasses()=" + getDisplayPropertiesInClasses());
-			System.out.println("getRootClass()=" + getRootClass());
-			System.out.println("getDomain()=" + getDomain());
-			System.out.println("getRange()=" + getRange());
-			System.out.println("getDataType()=" + getDataType());
-			System.out.println("getSelectObjectProperties()=" + getSelectObjectProperties());
-			System.out.println("getSelectDataProperties()=" + getSelectDataProperties());
-			System.out.println("getSelectAnnotationProperties()=" + getSelectAnnotationProperties());
-			System.out.println("getShowOWLAndRDFConcepts()=" + getShowOWLAndRDFConcepts());
-			model.recomputeStructure();*/
+			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -370,12 +396,22 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		if (model != null) {
 			model.delete();
 			model = null;
-			// setEditedObject(this);
-			fireEditedObjectChanged();
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}

@@ -34,4 +34,5 @@ public interface DiagramEditionScheme {
 	public static final String TARGET = "target";
 	public static final String FROM_TARGET = "fromTarget";
 	public static final String TO_TARGET = "toTarget";
+	public static final String DIAGRAM = "diagram";
 }

@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -62,13 +63,14 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof DiagramElement<?>;
+			return object instanceof Diagram || object instanceof DiagramElement<?>;
 		}
 
 	};
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
+		FlexoModelObject.addActionForClass(actionType, Diagram.class);
 	}
 
 	private DiagramShape _fromShape;
@@ -97,6 +99,7 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Link palette connector");
 
+		System.out.println("Ici6 on fait l'action");
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());

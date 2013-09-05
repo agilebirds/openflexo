@@ -1,45 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.action.CreateModelSlot" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="title">
-    <Image imageFile="../../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" index="0" data="controller.getTechnologyAdapterController(data.technologyAdapter).technologyBigIcon.image" constraints="flow(index=0;location=west)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-    <Label label="creates_model_slot" align="center" index="1" data="" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,1,15" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.CreateModelSlot" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="title">
+    <Image imageFile="../../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" index="0" data="controller.getTechnologyAdapterController(data.technologyAdapter).technologyBigIcon.image" constraints="flow(index=0;location=west)" localize="true">
+      <Dependancy componentName="TechnologyAdapterDD" />
+    </Image>
+    <Label label="creates_model_slot" align="center" index="1" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
   </Panel>
-  <Label label="name" align="right" index="1" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <TextField index="2" data="data.modelSlotName" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ModelSlotName" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="20" text="TextField" editable="">
+  <Label label="name" align="right" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="2" data="data.modelSlotName" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="ModelSlotName" localize="true" columns="20" text="TextField">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="technology_adapter" index="3" data="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <DropDown index="4" data="data.technologyAdapter" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="TechnologyAdapterDD" format="object.name" icon="controller.getTechnologyAdapterController(object).technologyIcon" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.focusedObject.viewPointLibrary.serviceManager.technologyAdapterService.technologyAdapters" array="" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" autoSelectFirstRow="true" />
-  <Label label="virtual_model" index="4" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)" name="VirtualModelLabel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="VirtualModelSelector" index="4" data="data.vmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)">
+  <Label label="technology_adapter" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <DropDown index="4" data="data.technologyAdapter" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="TechnologyAdapterDD" format="object.name" icon="controller.getTechnologyAdapterController(object).technologyIcon" localize="true" list="data.focusedObject.viewPointLibrary.serviceManager.technologyAdapterService.technologyAdapters" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" autoSelectFirstRow="true" />
+  <Label label="model_slot_type" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;)" localize="true" />
+  <DropDown index="4" data="data.modelSlotClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;)" name="modelSlotTypeDD" format="object.simpleName" localize="true" list="data.technologyAdapter.availableModelSlotTypes" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
+    <Dependancy componentName="TechnologyAdapterDD" />
+  </DropDown>
+  <Label label="metamodel" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot" localize="true">
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Label>
+  <Custom componentClassName="org.openflexo.components.widget.FIBResourceSelector" localize="true" manageDynamicModel="true" name="MMSelector" index="4" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot">
+    <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
+    <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
+    <Assignment variable="component.resourceDataClass" value="data.metaModelClass" />
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Custom>
+  <Label label="virtual_model" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)" name="VirtualModelLabel" localize="true" />
+  <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" localize="true" manageDynamicModel="true" name="VirtualModelSelector" index="4" data="data.vmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)">
     <Assignment variable="component.viewPoint" value="data.focusedObject.viewPoint.resource" />
-   </Custom>
-  <Label label="metamodel" index="5" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;) &amp; (TechnologyAdapterDD.data.class.simpleName != &quot;DiagramTechnologyAdapter&quot;))" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="MetaModelSelector" index="6" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;) &amp; (TechnologyAdapterDD.data.class.simpleName != &quot;DiagramTechnologyAdapter&quot;))">
+  </Custom>
+  <Label label="metamodel" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false" localize="true">
+    <Dependancy componentName="modelSlotTypeDD" />
+    <Dependancy componentName="TechnologyAdapterDD" />
+  </Label>
+  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="6" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false">
     <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
     <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
     <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
   </Custom>
-  <CheckBox selected="true" index="7" data="data.required" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="requiredCB" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <Label label="required" index="8" data="" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <CheckBox selected="true" index="9" data="data.readOnly" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="readOnlyCB" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <Label label="read_only" index="10" data="" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <Label label="description" align="right" index="11" data="" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
-  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" data="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=13;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" />
-  <Label label="label" index="14" data="data.validityMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+  <CheckBox selected="true" index="7" data="data.required" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="requiredCB" localize="true" />
+  <Label label="required" index="8" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <CheckBox selected="true" index="9" data="data.readOnly" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="readOnlyCB" localize="true" />
+  <Label label="read_only" index="10" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <Label label="description" align="right" index="11" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=13;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="Lucida Grande,2,11" />
+  <Label label="label" index="14" data="data.validityMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,11" localize="true">
     <Dependancy componentName="ModelSlotName" />
     <Dependancy componentName="TechnologyAdapterDD" />
     <Dependancy componentName="MetaModelSelector" />
     <LocalizedDictionary />
   </Label>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=15;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
-    <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="validate" format="" icon="" tooltip="" localize="true" enable="data.isValid" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=15;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" enable="data.isValid" index="0" constraints="flow(index=0)">
       <Dependancy componentName="ModelSlotName" />
       <Dependancy componentName="TechnologyAdapterDD" />
       <Dependancy componentName="MetaModelSelector" />
+      <Dependancy componentName="MMSelector" />
     </Button>
-    <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="description" lang="English">Description</Localized>
@@ -52,9 +74,9 @@
     <Localized key="validate" lang="Dutch">Validate</Localized>
     <Localized key="cancel" lang="Dutch">Cancel</Localized>
     <Localized key="shema_name" lang="English">Shema name</Localized>
-    <Localized key="shema_name" lang="French">Nom du schéma</Localized>
+    <Localized key="shema_name" lang="French">Nom du schÃ©ma</Localized>
     <Localized key="creates_model_slot" lang="English">Creates Model Slot</Localized>
-    <Localized key="creates_model_slot" lang="French">Créer un ModelSlot</Localized>
+    <Localized key="creates_model_slot" lang="French">CrÃ©er un ModelSlot</Localized>
     <Localized key="creates_model_slot" lang="Dutch">creates_model_slot</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
@@ -75,7 +97,7 @@
     <Localized key="XSD/XML technology adapter" lang="French">XSD/XML technology adapter</Localized>
     <Localized key="XSD/XML technology adapter" lang="Dutch">XSD/XML technology adapter</Localized>
     <Localized key="metamodel" lang="English">Metamodel</Localized>
-    <Localized key="metamodel" lang="French">Métamodèle</Localized>
+    <Localized key="metamodel" lang="French">MÃ©tamodÃ¨le</Localized>
     <Localized key="metamodel" lang="Dutch">metamodel</Localized>
     <Localized key="label" lang="English">Label</Localized>
     <Localized key="label" lang="French">Label</Localized>
@@ -87,7 +109,7 @@
     <Localized key="read_only" lang="French">Lecture seule</Localized>
     <Localized key="read_only" lang="Dutch">Read only</Localized>
     <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="English">This name is already used. Please choose an other one</Localized>
-    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="French">Ce nom est déjà utilisé</Localized>
+    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="French">Ce nom est dÃ©jÃ  utilisÃ©</Localized>
     <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="Dutch">this_name_is_already_used_please_choose_an_other_one</Localized>
     <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="English">ModelSlots must have a non-empty and unique name</Localized>
     <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="French">Le ModelSlot doit avoir un nom unique et non nul</Localized>
@@ -96,7 +118,7 @@
     <Localized key="please_choose_a_technology_adapter" lang="French">Veuillez choisir un connecteur technologique</Localized>
     <Localized key="please_choose_a_technology_adapter" lang="Dutch">please_choose_a_technology_adapter</Localized>
     <Localized key="please_choose_a_valid_metamodel" lang="English">Please choose a valid metamodel</Localized>
-    <Localized key="please_choose_a_valid_metamodel" lang="French">Veuillez choisir un métamodèle valide</Localized>
+    <Localized key="please_choose_a_valid_metamodel" lang="French">Veuillez choisir un mÃ©tamodÃ¨le valide</Localized>
     <Localized key="please_choose_a_valid_metamodel" lang="Dutch">please_choose_a_valid_metamodel</Localized>
     <Localized key="virtual_model" lang="English">Virtual model</Localized>
     <Localized key="virtual_model" lang="French">Virtual model</Localized>
@@ -104,5 +126,17 @@
     <Localized key="Openflexo built-in virtual model technology adapter" lang="English">Openflexo built-in virtual model technology adapter</Localized>
     <Localized key="Openflexo built-in virtual model technology adapter" lang="French">Openflexo built-in virtual model technology adapter</Localized>
     <Localized key="Openflexo built-in virtual model technology adapter" lang="Dutch">Openflexo built-in virtual model technology adapter</Localized>
+    <Localized key="Excel technology adapter" lang="English">Excel technology adapter</Localized>
+    <Localized key="Excel technology adapter" lang="French">Excel technology adapter</Localized>
+    <Localized key="Excel technology adapter" lang="Dutch">Excel technology adapter</Localized>
+    <Localized key="Openflexo diagram" lang="English">Openflexo diagram</Localized>
+    <Localized key="Openflexo diagram" lang="French">Openflexo diagram</Localized>
+    <Localized key="Openflexo diagram" lang="Dutch">Openflexo diagram</Localized>
+    <Localized key="Openflexo virtual model" lang="English">Openflexo virtual model</Localized>
+    <Localized key="Openflexo virtual model" lang="French">Openflexo virtual model</Localized>
+    <Localized key="Openflexo virtual model" lang="Dutch">Openflexo virtual model</Localized>
+    <Localized key="model_slot_type" lang="English">Model slot type</Localized>
+    <Localized key="model_slot_type" lang="French">Type de model slot</Localized>
+    <Localized key="model_slot_type" lang="Dutch">model_slot_type</Localized>
   </LocalizedDictionary>
 </Panel>

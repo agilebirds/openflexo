@@ -51,6 +51,11 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.InstallDefaultPackagedResourceCenterDirectory;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.utils.OperationCancelledException;
@@ -192,8 +197,8 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
-		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		remapStandardOuputs(isDev);
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
 		SplashWindow splashWindow = null;
@@ -288,6 +293,17 @@ public class Flexo {
 		initUILAF(AdvancedPrefs.getLookAndFeelString());
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
+		}
+
+		if (applicationContext.defaultPackagedResourceCenterIsToBeInstalled()) {
+			FIBComponent askRCDirectoryComponent = FIBLibrary.instance().retrieveFIBComponent(
+					InstallDefaultPackagedResourceCenterDirectory.FIB_FILE);
+			InstallDefaultPackagedResourceCenterDirectory installRC = new InstallDefaultPackagedResourceCenterDirectory();
+			FIBDialog dialog = FIBDialog.instanciateAndShowDialog(askRCDirectoryComponent, installRC, null, true,
+					FlexoLocalization.getMainLocalizer());
+			if (dialog.getStatus() == Status.VALIDATED) {
+				installRC.installDefaultPackagedResourceCenter(applicationContext.getResourceCenterService());
+			}
 		}
 
 		if (fileNameToOpen == null) {

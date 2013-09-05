@@ -35,6 +35,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.ViewPointResource;
@@ -302,6 +303,12 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 				FlexoResourceCenter newRC = ((ResourceCenterAdded) notification).getAddedResourceCenter();
 				// A new resource center has just been referenced, initialize it related to viewpoint exploring
 				newRC.initialize(this);
+			}
+			if (notification instanceof ResourceCenterRemoved) {
+				FlexoResourceCenter newRC = ((ResourceCenterRemoved) notification).getRemovedResourceCenter();
+				// A new resource center has just been dereferenced
+				// TODO implement this
+				logger.warning("TODO: Please implement resource center dereferencing in ViewPointLibrary");
 			}
 		}
 	}

@@ -57,7 +57,12 @@ public class KeyValueDecoder {
 	 */
 	protected static KeyValueProperty getKeyValuePropertyFromName(Object object, String propertyName)
 			throws InvalidObjectSpecificationException {
-		return KeyValueCoder.getKeyValuePropertyFromName(object.getClass(), propertyName, false);
+		// If it's a Class, get static properties
+		if (object instanceof Class){
+			return KeyValueCoder.getKeyValuePropertyFromName((Class)object, propertyName, false);
+		}else {
+			return KeyValueCoder.getKeyValuePropertyFromName(object.getClass(), propertyName, false);
+		}
 	}
 
 	/**
@@ -710,6 +715,10 @@ public class KeyValueDecoder {
 	 */
 	public static Object objectForKey(Object object, KeyValueProperty keyValueProperty) throws InvalidObjectSpecificationException,
 			AccessorInvocationException {
+
+		if (keyValueProperty == null) {
+			return null;
+		}
 
 		try {
 			return keyValueProperty.getObjectValue(object);

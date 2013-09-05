@@ -27,17 +27,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.components.widget.FIBDiagramPaletteBrowser;
-import org.openflexo.components.widget.FIBExampleDiagramBrowser;
-import org.openflexo.components.widget.FIBViewPointBrowser;
 import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
-import org.openflexo.components.widget.FIBVirtualModelBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -70,10 +64,11 @@ public class ViewPointPerspective extends FlexoPerspective {
 	private final JPanel EMPTY_RIGHT_VIEW = new JPanel();
 
 	private FIBViewPointLibraryBrowser viewPointLibraryBrowser = null;
-	private FIBViewPointBrowser viewPointBrowser = null;
+
+	/*private FIBViewPointBrowser viewPointBrowser = null;
 	private FIBVirtualModelBrowser virtualModelBrowser = null;
 	private FIBExampleDiagramBrowser exampleDiagramBrowser = null;
-	private FIBDiagramPaletteBrowser diagramPaletteBrowser = null;
+	private FIBDiagramPaletteBrowser diagramPaletteBrowser = null;*/
 
 	/**
 	 * Default constructor taking controller as argument
@@ -84,10 +79,10 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 		viewPointLibraryBrowser = new FIBViewPointLibraryBrowser(controller.getViewPointLibrary(), controller);
 
-		viewPointBrowser = new FIBViewPointBrowser(null, controller);
+		/*viewPointBrowser = new FIBViewPointBrowser(null, controller);
 		virtualModelBrowser = new FIBVirtualModelBrowser(null, controller);
 		exampleDiagramBrowser = new FIBExampleDiagramBrowser(null, controller);
-		diagramPaletteBrowser = new FIBDiagramPaletteBrowser(null, controller);
+		diagramPaletteBrowser = new FIBDiagramPaletteBrowser(null, controller);*/
 
 		setTopLeftView(viewPointLibraryBrowser);
 
@@ -103,35 +98,27 @@ public class ViewPointPerspective extends FlexoPerspective {
 	public void focusOnViewPoint(ViewPoint viewPoint) {
 		logger.info("focusOnViewPoint " + viewPoint);
 
-		viewPointBrowser.setRootObject(viewPoint);
-		setBottomLeftView(viewPointBrowser);
+		// viewPointBrowser.setRootObject(viewPoint);
+		// setBottomLeftView(viewPointBrowser);
 	}
 
 	public void focusOnVirtualModel(VirtualModel<?> virtualModel) {
 		logger.info("focusOnVirtualModel " + virtualModel);
 
-		virtualModelBrowser.setRootObject(virtualModel);
-		setBottomLeftView(virtualModelBrowser);
+		// virtualModelBrowser.setRootObject(virtualModel);
+		// setBottomLeftView(virtualModelBrowser);
 	}
 
 	public void focusOnPalette(DiagramPalette palette) {
 		logger.info("focusOnPalette " + palette);
-		diagramPaletteBrowser.setRootObject(palette);
-		setBottomLeftView(diagramPaletteBrowser);
-		/*System.out.println("Current module view = " + getCurrentModuleView());
-		if (getCurrentModuleView() instanceof DiagramPaletteModuleView) {
-			setTopRightView(((DiagramPaletteModuleView) getCurrentModuleView()).getController().getPaletteView());
-		}*/
+		// diagramPaletteBrowser.setRootObject(palette);
+		// setBottomLeftView(diagramPaletteBrowser);
 	}
 
 	public void focusOnExampleDiagram(ExampleDiagram exampleDiagram) {
 		logger.info("focusOnExampleDiagram " + exampleDiagram);
-		exampleDiagramBrowser.setRootObject(exampleDiagram);
-		setBottomLeftView(exampleDiagramBrowser);
-		/*System.out.println("Current module view = " + getCurrentModuleView());
-		if (getCurrentModuleView() instanceof ExampleDiagramModuleView) {
-			setTopRightView(((ExampleDiagramModuleView) getCurrentModuleView()).getController().getPaletteView());
-		}*/
+		// exampleDiagramBrowser.setRootObject(exampleDiagram);
+		// setBottomLeftView(exampleDiagramBrowser);
 	}
 
 	public void hideBottomBrowser() {
@@ -145,7 +132,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
-		return VPMIconLibrary.VPM_VPE_ACTIVE_ICON;
+		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
 	@Override
@@ -244,7 +231,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return;
 		}
 
-		if (getBottomLeftView() == viewPointBrowser) {
+		/*if (getBottomLeftView() == viewPointBrowser) {
 			if (!(object instanceof ViewPointObject) || (object instanceof DiagramPaletteObject)
 					|| (object instanceof ExampleDiagramObject)) {
 				setBottomLeftView(null);
@@ -300,7 +287,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 					setBottomLeftView(viewPointBrowser);
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -311,6 +298,9 @@ public class ViewPointPerspective extends FlexoPerspective {
 	@Override
 	public void objectWasDoubleClicked(Object object) {
 		// logger.info("ViewPointPerspective: object was double-clicked: " + object);
+		if (object instanceof EditionPatternObject) {
+			_controller.selectAndFocusObject((EditionPatternObject) object);
+		}
 	}
 
 }

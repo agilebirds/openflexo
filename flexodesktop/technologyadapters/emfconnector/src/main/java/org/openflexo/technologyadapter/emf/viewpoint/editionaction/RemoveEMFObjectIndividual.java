@@ -30,19 +30,19 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.EMFModelSlot;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 /**
  * Remove an EMF Object Individual from model.
  * 
  * @author gbesancon
  */
-public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaModel> {
+public class RemoveEMFObjectIndividual extends DeleteAction<EMFModelSlot, EMFObjectIndividual> {
 
 	private static final Logger logger = Logger.getLogger(RemoveEMFObjectIndividual.class.getPackage().getName());
 
@@ -61,7 +61,7 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 * @see org.openflexo.foundation.viewpoint.DeleteAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
 	 */
 	@Override
-	public FlexoModelObject performAction(EditionSchemeAction action) {
+	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
 		// EObject object = objectIndividual.getObject();
 		// EObject container = object.eContainer();
@@ -88,6 +88,6 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 *      org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
 	}
 }

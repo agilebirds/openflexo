@@ -1,5 +1,7 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
  *
  * This file is part of OpenFlexo.
  *
@@ -19,6 +21,7 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -27,6 +30,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
@@ -34,9 +39,12 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -60,12 +68,12 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
+FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
 	protected Hashtable<String, Object> variables;
-	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
+	protected ParameterValues parameterValues;
 	protected Hashtable<ListParameter, List> parameterListValues;
 
 	public boolean escapeParameterRetrievingWhenValid = true;
@@ -74,7 +82,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		variables = new Hashtable<String, Object>();
-		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
+		parameterValues = new ParameterValues();
 		parameterListValues = new Hashtable<ListParameter, List>();
 	}
 
@@ -299,6 +307,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			return getEditionPatternInstance();
 		} else if (variable.getVariableName().equals(EditionScheme.VIRTUAL_MODEL_INSTANCE)) {
 			return getVirtualModelInstance();
+		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
+			return getVirtualModelInstance();
 		}
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
@@ -333,7 +343,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		return null;
 	}
 
-	public Hashtable<EditionSchemeParameter, Object> getParametersValues() {
+	public ParameterValues getParametersValues() {
 		return parameterValues;
 	}
 
@@ -344,4 +354,50 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	}
 
 	public static final String PARAMETER_VALUE_CHANGED = "parameterValueChanged";
+
+	public class ParameterValues extends Hashtable<EditionSchemeParameter, Object> {
+
+		@Override
+		public synchronized Object put(EditionSchemeParameter parameter, Object value) {
+			Object returned = super.put(parameter, value);
+			for (EditionSchemeParameter p : parameter.getEditionScheme().getParameters()) {
+				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof TypeAwareModelSlot) {
+					URIParameter uriParam = (URIParameter) p;
+					TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
+					String newURI;
+					try {
+						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
+
+						newURI = modelSlot.generateUniqueURIName((TypeSafeModelSlotInstance) getVirtualModelInstance()
+								.getModelSlotInstance(modelSlot), newURI);
+						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
+						super.put(uriParam, newURI);
+					} catch (TypeMismatchException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			parameterValueChanged();
+			return returned;
+		}
+	}
+
+	public String retrieveFullURI(EditionSchemeParameter parameter) {
+		if (parameter instanceof URIParameter) {
+			URIParameter uriParam = (URIParameter) parameter;
+			if (uriParam.getModelSlot() instanceof TypeAwareModelSlot) {
+				TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
+				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
+						(String) getParameterValue(parameter));
+			}
+		}
+		return "Invalid URI";
+	}
 }

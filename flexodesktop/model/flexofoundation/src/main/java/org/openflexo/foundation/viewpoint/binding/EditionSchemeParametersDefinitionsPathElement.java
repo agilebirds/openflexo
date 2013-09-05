@@ -8,6 +8,7 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParametersType;
 
@@ -39,6 +40,9 @@ public class EditionSchemeParametersDefinitionsPathElement extends SimplePathEle
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (target instanceof EditionScheme) {
 			return ((EditionScheme) target).getParameters();
+		}
+		if (target instanceof EditionSchemeAction) {
+			return ((EditionSchemeAction) target).getEditionScheme().getParameters();
 		}
 		logger.warning("Please implement me, target=" + target + " of " + target.getClass() + " context=" + context);
 		return null;

@@ -26,17 +26,14 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyClass> extends
-		AddConcept<M, MM, T> {
+public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
 
@@ -175,7 +172,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 			@Override
 			protected void fixAction() {
-				AddClass<?, ?, ?> action = getObject();
+				AddClass<?, ?> action = getObject();
 				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 

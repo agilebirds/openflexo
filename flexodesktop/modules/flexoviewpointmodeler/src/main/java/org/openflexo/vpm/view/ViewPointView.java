@@ -58,8 +58,9 @@ public class ViewPointView extends FIBModuleView<ViewPoint> implements FIBMouseC
 
 	@Override
 	public void mouseClicked(FIBComponentDynamicModel data, int clickCount) {
-		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).selected instanceof FlexoModelObject && clickCount == 2) {
-			FlexoObject o = (FlexoObject) ((FIBTableDynamicModel) data).selected;
+		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).getSelected() instanceof FlexoModelObject
+				&& clickCount == 2) {
+			FlexoObject o = (FlexoObject) ((FIBTableDynamicModel) data).getSelected();
 			if (o instanceof ViewPoint || o instanceof EditionPattern || o instanceof ExampleDiagram || o instanceof DiagramPalette) {
 				getFlexoController().selectAndFocusObject(o);
 			}

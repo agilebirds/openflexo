@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.util.HashMap;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -165,19 +166,21 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 	public abstract ViewPoint getViewPoint();
 
-	public abstract String getLanguageRepresentation(LanguageRepresentationContext context);
+	// Voir du cote de GeneratorFormatter pour formatter tout ca
+	public abstract String getFMLRepresentation(FMLRepresentationContext context);
 
-	public final String getLanguageRepresentation() {
-		return getLanguageRepresentation(new LanguageRepresentationContext());
+	public final String getFMLRepresentation() {
+		return getFMLRepresentation(new FMLRepresentationContext());
 	}
 
-	public static class LanguageRepresentationContext {
+	public static class FMLRepresentationContext {
 
-		private int indentation = 0;
+		private static int INDENTATION = 2;
+		// private int currentIndentation = 0;
 		private HashMap<String, NamedViewPointObject> nameSpaces;
 
-		public LanguageRepresentationContext() {
-			indentation = 0;
+		public FMLRepresentationContext() {
+			// currentIndentation = 0;
 			nameSpaces = new HashMap<String, NamedViewPointObject>();
 		}
 
@@ -185,37 +188,79 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 			nameSpaces.put(object.getURI(), object);
 		}
 
-		public LanguageRepresentationContext makeSubContext() {
-			LanguageRepresentationContext returned = new LanguageRepresentationContext();
+		/*public int getCurrentIndentation() {
+			return currentIndentation;
+		}*/
+
+		public FMLRepresentationContext makeSubContext() {
+			FMLRepresentationContext returned = new FMLRepresentationContext();
 			for (String uri : nameSpaces.keySet()) {
 				returned.nameSpaces.put(uri, nameSpaces.get(uri));
 			}
-			returned.indentation = indentation + 1;
+			// returned.currentIndentation = currentIndentation + 1;
 			return returned;
 		}
 
-		public static class LanguageRepresentationOutput {
+		public static class FMLRepresentationOutput {
 
 			StringBuffer sb;
-			LanguageRepresentationContext context;
 
-			public LanguageRepresentationOutput(LanguageRepresentationContext aContext) {
+			public FMLRepresentationOutput(FMLRepresentationContext aContext) {
 				sb = new StringBuffer();
-				context = aContext;
 			}
 
-			public void append(String s) {
-				sb.append(StringUtils.buildWhiteSpaceIndentation(context.indentation * 2) + s);
+			public void append(String s, FMLRepresentationContext context) {
+				append(s, context, 0);
 			}
 
-			public void append(ViewPointObject o) {
-				LanguageRepresentationContext subContext = context.makeSubContext();
-				String lr = o.getLanguageRepresentation(subContext);
+			public void appendnl() {
+				sb.append(StringUtils.LINE_SEPARATOR);
+			}
+
+			public void append(String s, FMLRepresentationContext context, int indentation) {
+				if (s == null) {
+					return;
+				}
+				StringTokenizer st = new StringTokenizer(s, StringUtils.LINE_SEPARATOR, true);
+				while (st.hasMoreTokens()) {
+					String l = st.nextToken();
+					sb.append(StringUtils.buildWhiteSpaceIndentation((indentation) * INDENTATION) + l);
+				}
+
+				/*if (s.equals(StringUtils.LINE_SEPARATOR)) {
+					appendnl();
+					return;
+				}
+
+				BufferedReader rdr = new BufferedReader(new StringReader(s));
+				boolean isFirst = true;
+				for (;;) {
+					String line = null;
+					try {
+						line = rdr.readLine();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					if (line == null) {
+						break;
+					}
+					if (!isFirst) {
+						sb.append(StringUtils.LINE_SEPARATOR);
+					}
+					sb.append(StringUtils.buildWhiteSpaceIndentation((indentation) * INDENTATION) + line);
+					isFirst = false;
+				}*/
+
+			}
+
+			/*public void append(ViewPointObject o) {
+				FMLRepresentationContext subContext = context.makeSubContext();
+				String lr = o.getFMLRepresentation(subContext);
 				for (int i = 0; i < StringUtils.linesNb(lr); i++) {
 					String l = StringUtils.extractStringFromLine(lr, i);
-					sb.append(StringUtils.buildWhiteSpaceIndentation(context.indentation * 2) + l);
+					sb.append(StringUtils.buildWhiteSpaceIndentation(subContext.indentation * 2 + 2) + l);
 				}
-			}
+			}*/
 
 			@Override
 			public String toString() {
@@ -276,12 +321,13 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 		@Override
 		public ValidationIssue<BindingIsRequiredAndMustBeValid<C>, C> applyValidation(C object) {
-			if (getBinding(object) == null || !getBinding(object).isSet()) {
+			DataBinding<?> b = getBinding(object);
+			if (b == null || !b.isSet()) {
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
-			} else if (!getBinding(object).isValid()) {
-				logger.info(getClass().getName() + ": Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName()
-						+ ". Reason: " + getBinding(object).invalidBindingReason());
+			} else if (!b.isValid()) {
+				logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getFullyQualifiedName()
+						+ ". Reason: " + b.invalidBindingReason());
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			}

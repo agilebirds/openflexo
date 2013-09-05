@@ -20,14 +20,11 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,7 +35,6 @@ import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -48,16 +44,11 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
-import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
 import org.openflexo.toolbox.ChainedCollection;
@@ -104,7 +95,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
-	private List<ModelSlot<?, ?>> modelSlots;
+	// private List<ModelSlot> modelSlots;
 	private List<VirtualModel<?>> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
@@ -148,7 +139,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			builder.setViewPoint(this);
 			resource = builder.resource;
 		}
-		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		// modelSlots = new ArrayList<ModelSlot>();
 		virtualModels = new ArrayList<VirtualModel<?>>();
 	}
 
@@ -426,72 +417,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return null;
 	}
 
-	@Deprecated
-	private void convertTo_1_0(ViewPointLibrary viewPointLibrary) {
-		logger.info("Converting viewpoint from Openflexo 1.4.5 version");
-		// For all "old" viewpoints, we consider a OWL model slot
-		try {
-			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
-					.getTechnologyAdapter(owlTechnologyAdapterClass);
-
-			String importedOntology = null;
-			for (File owlFile : getResource().getDirectory().listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".owl");
-				}
-			})) {
-				if (owlFile.exists()) {
-					importedOntology = findOntologyImports(owlFile);
-				}
-			}
-
-			if (importedOntology == null) {
-				File dsDir = new File(getResource().getDirectory(), "DiagramSpecification");
-				if (dsDir.exists()) {
-					for (File owlFile : dsDir.listFiles(new FilenameFilter() {
-						@Override
-						public boolean accept(File dir, String name) {
-							return name.endsWith(".owl");
-						}
-					})) {
-						if (owlFile.exists()) {
-							importedOntology = findOntologyImports(owlFile);
-						}
-					}
-				}
-			}
-
-			FlexoMetaModelResource r = OWL.getMetaModelResource(importedOntology);
-			if (r == null) {
-				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
-			}
-			if (r != null) {
-				logger.info("************************ For ViewPoint " + getURI() + " declaring OWL model slot targetting meta-model "
-						+ r.getURI());
-			}
-
-			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
-			ms.setName("owl");
-			ms.setMetaModelResource(r);
-			addToModelSlots(ms);
-
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof ViewPointBuilder && ((ViewPointBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
-			// There were no model slots before 1.0, please add them
-			convertTo_1_0(((ViewPointBuilder) builder).getViewPointLibrary());
-		}
-		super.finalizeDeserialization(builder);
-	}
-
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModel == null) {
@@ -527,31 +452,31 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot<?, ?>> modelSlots) {
+	/*public void setModelSlots(List<ModelSlot> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot<?, ?>> getModelSlots() {
+	public List<ModelSlot> getModelSlots() {
 		return modelSlots;
 	}
 
-	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void addToModelSlots(ModelSlot modelSlot) {
 		modelSlots.add(modelSlot);
 		modelSlot.setViewPoint(this);
 		setChanged();
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
-	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void removeFromModelSlots(ModelSlot modelSlot) {
 		modelSlots.remove(modelSlot);
 		modelSlot.setViewPoint(null);
 		setChanged();
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
-	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
+	public <MS extends ModelSlot> List<MS> getModelSlots(Class<MS> msType) {
 		List<MS> returned = new ArrayList<MS>();
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (TypeUtils.isTypeAssignableFrom(msType, ms.getClass())) {
 				returned.add((MS) ms);
 			}
@@ -559,8 +484,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return returned;
 	}
 
-	public ModelSlot<?, ?> getModelSlot(String modelSlotName) {
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+	public ModelSlot getModelSlot(String modelSlotName) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (ms.getName().equals(modelSlotName)) {
 				return ms;
 			}
@@ -568,60 +493,60 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return null;
 	}
 
-	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
-		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+	public List<ModelSlot> getRequiredModelSlots() {
+		List<ModelSlot> requiredModelSlots = new ArrayList<ModelSlot>();
+		for (ModelSlot modelSlot : getModelSlots()) {
 			if (modelSlot.getIsRequired()) {
 				requiredModelSlots.add(modelSlot);
 			}
 		}
 		return modelSlots;
-	}
+	}*/
 
+	/*@Deprecated
 	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
 		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				allMetaModels.add(modelSlot.getMetaModelResource());
+		for (ModelSlot modelSlot : getModelSlots()) {
+			if (modelSlot instanceof TypeSafeModelSlot) {
+				if (((TypeSafeModelSlot) modelSlot).getMetaModelResource() != null) {
+					allMetaModels.add(((TypeSafeModelSlot) modelSlot).getMetaModelResource());
+				}
 			}
 		}
 		return allMetaModels;
-	}
+	}*/
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 
-		for (FlexoMetaModelResource<?, ?> mm : getAllMetaModels()) {
-			out.append("import " + mm.getURI() + ";");
-			out.append(StringUtils.LINE_SEPARATOR);
-		}
+		/*for (FlexoMetaModelResource<?, ?> mm : getAllMetaModels()) {
+			out.append("import " + mm.getURI() + ";", context);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}*/
 
-		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
-		out.append(" {" + StringUtils.LINE_SEPARATOR);
+		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"", context);
+		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
 
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				out.append(modelSlot);
-			}
-		}
+		/*for (ModelSlot modelSlot : getModelSlots()) {
+			// if (modelSlot.getMetaModelResource() != null) {
+			out.append(modelSlot.getFMLRepresentation(context), context);
+			// }
+		}*/
 
-		out.append(StringUtils.LINE_SEPARATOR);
+		out.append(StringUtils.LINE_SEPARATOR, context);
 		for (VirtualModel<?> vm : getVirtualModels()) {
-			out.append(vm);
-			out.append(StringUtils.LINE_SEPARATOR);
+			out.append(vm.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context, 1);
 		}
-		out.append("}" + StringUtils.LINE_SEPARATOR);
+		out.append("}" + StringUtils.LINE_SEPARATOR, context);
 		return out.toString();
 	}
 
 	@Override
-	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
-		if (validableObjects == null) {
-			validableObjects = new ChainedCollection<ViewPointObject>(getVirtualModels(), getModelSlots());
-		}
-		return validableObjects;
+	public Collection<VirtualModel<?>> getEmbeddedValidableObjects() {
+		return getVirtualModels();
 	}
 
 	// Implementation of XMLStorageResourceData

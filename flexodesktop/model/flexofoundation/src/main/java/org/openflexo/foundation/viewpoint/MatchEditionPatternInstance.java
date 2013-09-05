@@ -31,20 +31,18 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 /**
  * This action is used to perform synchronization regarding an {@link EditionPatternInstance} in a given {@link VirtualModelInstance}.<br>
@@ -57,8 +55,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
  * @param <M>
  * @param <MM>
  */
-public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		AssignableAction<M, MM, EditionPatternInstance> {
+public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
 
@@ -70,6 +67,52 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 
 	public MatchEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + " as " + getEditionPatternType().getName() + " "
+				+ getMatchingCriteriasFMLRepresentation(context) + " using " + getCreationScheme().getEditionPattern().getName() + ":"
+				+ getCreationScheme().getName() + "(" + getCreationSchemeParametersFMLRepresentation(context) + ")", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
+	}
+
+	protected String getMatchingCriteriasFMLRepresentation(FMLRepresentationContext context) {
+		if (matchingCriterias.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("match ");
+			if (matchingCriterias.size() > 1) {
+				sb.append("(");
+			}
+			for (MatchingCriteria mc : matchingCriterias) {
+				sb.append(mc.getPatternRole().getName() + "=" + mc.getValue().toString() + ";");
+			}
+			if (matchingCriterias.size() > 1) {
+				sb.append(")");
+			}
+			return sb.toString();
+		}
+		return null;
+	}
+
+	protected String getCreationSchemeParametersFMLRepresentation(FMLRepresentationContext context) {
+		if (getParameters().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			for (CreateEditionPatternInstanceParameter p : getParameters()) {
+				sb.append((isFirst ? "" : ",") + p.getValue().toString());
+				isFirst = false;
+			}
+			return sb.toString();
+		}
+		return null;
 	}
 
 	@Override
@@ -608,16 +651,16 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 	}
 
 	public static class MatchEditionPatternInstanceParametersMustBeValid extends
-			ValidationRule<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>> {
+			ValidationRule<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance> {
 		public MatchEditionPatternInstanceParametersMustBeValid() {
 			super(MatchEditionPatternInstance.class, "match_edition_pattern_parameters_must_be_valid");
 		}
 
 		@Override
-		public ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>> applyValidation(
-				MatchEditionPatternInstance<?, ?> action) {
+		public ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance> applyValidation(
+				MatchEditionPatternInstance action) {
 			if (action.getCreationScheme() != null) {
-				Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>> issues = new Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>>();
+				Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>> issues = new Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>>();
 				for (CreateEditionPatternInstanceParameter p : action.getParameters()) {
 					if (p.getParam().getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
@@ -639,7 +682,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<MatchEditionPatternInstance.MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>(
+					return new CompoundIssue<MatchEditionPatternInstance.MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>(
 							action, issues);
 				}
 			}
@@ -654,7 +697,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 		}
 
 		@Override
-		public DataBinding<View> getBinding(MatchEditionPatternInstance object) {
+		public DataBinding<VirtualModelInstance> getBinding(MatchEditionPatternInstance object) {
 			return object.getVirtualModelInstance();
 		}
 

@@ -30,7 +30,7 @@
     </Tab>
 
     <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
-      <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandVertically=true;expandHorizontally=true)">
+      <TabPanel name="GRTab" data="($org.openflexo.fge.GraphicalRepresentation)data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(location=center;index=4;expandVertically=true;expandHorizontally=true)">
         <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
           <Label label="text" localize="true" name="TextLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" visible="(GRTab.data.isMultilineAllowed = false)" />
           <TextField columns="10" passwd="false" localize="true" name="Text" data="GRTab.data.text" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=true)" visible="(GRTab.data.isMultilineAllowed = false)" />

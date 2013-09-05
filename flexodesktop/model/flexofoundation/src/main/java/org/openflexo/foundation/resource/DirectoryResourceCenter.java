@@ -21,13 +21,9 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
@@ -37,12 +33,9 @@ import org.openflexo.toolbox.IProgress;
  * @author sylvain
  * 
  */
-public class DirectoryResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public class DirectoryResourceCenter extends FileSystemBasedResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(DirectoryResourceCenter.class.getPackage().getName());
-
-	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
-	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 
 	// private File newViewPointSandboxDirectory;
 
@@ -63,18 +56,8 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 	}
 
 	@Override
-	public List<FlexoResource<?>> getAllResources(IProgress progress) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public <T extends ResourceData<T>> List<FlexoResource<T>> retrieveResource(String uri, Class<T> type, IProgress progress) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, FlexoVersion version, Class<T> type, IProgress progress) {
-		return null;
+	public Collection<FlexoFileResource<?>> getAllResources(IProgress progress) {
+		return getAllResources();
 	}
 
 	@Override
@@ -84,35 +67,6 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 
 	@Override
 	public void update() throws IOException {
-		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
-		copyOntologies(ONTOLOGIES_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
-	}
-
-	@Deprecated
-	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
-
-		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-
-		try {
-			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Deprecated
-	private static void copyOntologies(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
-
-		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-		try {
-			FileUtils.copyDirToDir(initialDirectory, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

@@ -111,7 +111,6 @@ import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -134,6 +133,8 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
@@ -1815,7 +1816,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		// logger.info("Object was double-clicked: " + object);
 		if (object instanceof FlexoResource<?>) {
 			FlexoObject resourceData = null;
-			if (!((FlexoResource<?>) object).isLoaded()) {
+			if (((FlexoResource<?>) object).isLoadable() && !((FlexoResource<?>) object).isLoaded()) {
 				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
 				try {
 					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);
@@ -1993,7 +1994,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
 			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
 			if (sm != null) {
@@ -2048,6 +2049,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			} catch (FlexoException e) {
 				e.printStackTrace();
 			}
+		} else if (object instanceof TechnologyAdapterResource<?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyAdapterResource<?>) object)
+					.getTechnologyAdapter());
+			// TODO: vincent
+			if (tac != null && TechnologyObject.class.isAssignableFrom(((TechnologyAdapterResource<?>) object).getResourceDataClass())) {
+				return tac.getIconForTechnologyObject((Class<? extends TechnologyObject>) ((TechnologyAdapterResource<?>) object)
+						.getResourceDataClass());
+			}
 		} else if (object instanceof InformationSpace) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
 		} else if (object instanceof FlexoFacet) {
@@ -2097,8 +2106,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				return statelessIconForObject(((RepositoryFolder) object).getResourceRepository().getOwner());
 			}
 			return IconLibrary.FOLDER_ICON;
-		} else if (object instanceof TechnologyAdapter<?, ?>) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter<?, ?>) object);
+		} else if (object instanceof TechnologyAdapter) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter) object);
 			if (tac != null) {
 				return tac.getTechnologyIcon();
 			}
@@ -2123,10 +2132,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (tac != null) {
 				return tac.getMetaModelIcon();
 			}
-		} else if (object instanceof IFlexoOntologyObject) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyObject) object).getTechnologyAdapter());
+		} else if (object instanceof TechnologyObject) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyObject) object).getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForOntologyObject(((IFlexoOntologyObject) object).getClass());
+				return tac.getIconForTechnologyObject(((TechnologyObject) object).getClass());
 			}
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);

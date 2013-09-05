@@ -163,6 +163,14 @@ public class FIBBrowser extends FIBWidget {
 		}
 	}
 
+	@Override
+	public void updateBindingModel() {
+		super.updateBindingModel();
+		for (FIBBrowserElement e : getElements()) {
+			e.updateBindingModel();
+		}
+	}
+
 	public Class getIteratorClass() {
 		if (iteratorClass == null) {
 			iteratorClass = Object.class;

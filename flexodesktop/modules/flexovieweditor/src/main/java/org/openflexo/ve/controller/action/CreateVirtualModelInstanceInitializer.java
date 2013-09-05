@@ -19,6 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
+import java.io.File;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
@@ -32,10 +33,13 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance.CreateConcreteVirtualModelInstance;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -75,9 +79,9 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 						if (step == 0) {
 							result = instanciateShowDialogAndReturnStatus(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
 						} else {
-							ModelSlot<?, ?> configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
+							ModelSlot configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
 							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
-									VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+									getModelSlotInstanceConfigurationFIB(configuredModelSlot.getClass()));
 						}
 						if (result == Status.CANCELED) {
 							return false;
@@ -132,4 +136,21 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 		return VEIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
 	}
 
+	/**
+	 * @author Vincent This method has to be removed as soon as we will have a real Wizard Management. Its purpose is to handle the
+	 *         separation of FIBs for Model Slot Configurations.
+	 * @return File that correspond to the FIB
+	 */
+	private File getModelSlotInstanceConfigurationFIB(Class modelSlotClass) {
+		if (TypeAwareModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return VECst.CONFIGURE_TYPESAFE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+		}
+		if (FreeModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+		}
+		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return VECst.CONFIGURE_VIRTUAL_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+		}
+		return null;
+	}
 }

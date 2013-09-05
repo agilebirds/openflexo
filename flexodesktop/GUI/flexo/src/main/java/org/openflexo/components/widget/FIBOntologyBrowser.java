@@ -44,6 +44,7 @@ import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -259,30 +260,33 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+						.makeOntologyBrowserModel(getOntology());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getOntology());
+		}
+		return returned;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			if (getTechnologyAdapter() != null) {
-				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
-						.getServiceManager().getService(TechnologyAdapterControllerService.class)
-						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getOntology());
-			} else { // Use default
-				model = new OntologyBrowserModel(getOntology());
-			}
-			model.addObserver(new Observer() {
-				@Override
-				public void update(Observable o, Object arg) {
-					if (arg instanceof OntologyBrowserModelRecomputed) {
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-							}
-						});
-					}
-				}
-			});
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
@@ -296,6 +300,14 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.setRange(getRange());
 			model.setDataType(getDataType());
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -305,10 +317,22 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 			model.delete();
 			model = null;
 			setEditedObject(this);
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}
@@ -394,7 +418,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		if (browserWidget == null) {
 			return null;
 		}
-		Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+		Iterator<Object> it = browserWidget.getBrowserModel().recursivelyExploreModelToRetrieveContents();
 		while (it.hasNext()) {
 			Object o = it.next();
 			if (o instanceof IFlexoOntologyConcept) {

@@ -45,7 +45,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * This edition primitive addresses the creation of a new shape in a diagram
@@ -53,7 +55,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  * @author sylvain
  * 
  */
-public class AddShape extends AddShemaElementAction<DiagramShape> {
+public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
@@ -66,6 +68,22 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddShape;
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + " conformTo Shape from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
+				context);
+		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
+		out.append("}", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
 	public DiagramElement<?> getContainer(EditionSchemeAction action) {

@@ -114,9 +114,25 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 		return DiagramSpecification.class;
 	}
 
+	/**
+	 * Return virtual model stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	@Override
 	public DiagramSpecification getDiagramSpecification() {
 		return getVirtualModel();
+	}
+
+	/**
+	 * Return virtual model stored by this resource when loaded<br>
+	 * Do not force the resource data to be loaded
+	 */
+	@Override
+	public DiagramSpecification getLoadedDiagramSpecification() {
+		if (isLoaded()) {
+			return getDiagramSpecification();
+		}
+		return null;
 	}
 
 	private static class DiagramSpecificationInfo {

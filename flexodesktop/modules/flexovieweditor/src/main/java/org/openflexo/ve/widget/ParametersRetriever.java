@@ -68,6 +68,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -120,7 +121,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		public FIBTextField tf;
 		public FIBLabel uriLabel;
 
-		public URIPanel(final EditionSchemeParameter parameter) {
+		public URIPanel(final URIParameter parameter) {
 			super();
 			setName(parameter.getName() + "URIPanel");
 			setLayout(Layout.gridbag);
@@ -129,21 +130,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			Font f = uriLabel.retrieveValidFont();
 			if (f != null) {
 				uriLabel.setFont(f.deriveFont(10f));
+			} else {
+				uriLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
 			}
-			/*uriLabel.setData(new DataBinding('"' + action.getProject().getProjectOntology().getURI() + "#" + '"' + "+parameters."
-					+ parameter.getName()) {
-				@Override
-				public BindingFactory getBindingFactory() {
-					return parameter.getBindingFactory();
-				}
-			});*/
-			/*uriLabel.setData(new DataBinding("data.parameters." + parameter.getName() + "+'a'") {
-				@Override
-				public BindingFactory getBindingFactory() {
-					return parameter.getBindingFactory();
-				}
-			});*/
-			uriLabel.setData(new DataBinding<Object>("data.project.projectOntology.URI" + "+'#'"));
+			uriLabel.setData(new DataBinding<Object>("data.retrieveFullURI" + "(data.parametersDefinitions" + "." + parameter.getName()
+					+ ")"));
 			addToSubComponents(tf, new GridBagLayoutConstraints(GridBagConstraints.RELATIVE, GridBagConstraints.RELATIVE,
 					GridBagConstraints.REMAINDER, 1, 1.0, 0, AnchorType.west, FillType.horizontal, 0, 0, 0, 0, 0, 0));
 			addToSubComponents(uriLabel, new GridBagLayoutConstraints(GridBagConstraints.RELATIVE, GridBagConstraints.RELATIVE,
@@ -158,7 +149,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			tf.setName(parameter.getName() + "TextField");
 			return registerWidget(tf, parameter, panel, index);
 		} else if (parameter instanceof URIParameter) {
-			URIPanel uriPanel = new URIPanel(parameter);
+			URIPanel uriPanel = new URIPanel((URIParameter) parameter);
 			return registerWidget(uriPanel, parameter, panel, index);
 		} else if (parameter instanceof TextAreaParameter) {
 			FIBTextArea ta = new FIBTextArea();
@@ -284,9 +275,10 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance != null && msInstance.getModel() != null) {
+				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
 					individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding(
-							"component.contextOntologyURI"), new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance)
+							.getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
 				}
@@ -321,9 +313,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance != null && msInstance.getModel() != null) {
+				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
 					classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
-							new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+							new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance).getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
 				}
@@ -362,9 +354,10 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance != null && msInstance.getModel() != null) {
+				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
 					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
-							"component.contextOntologyURI"), new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance)
+							.getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
 				}

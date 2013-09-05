@@ -31,7 +31,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
@@ -79,7 +81,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	private String patternRoleName;
 	public String description;
-	public ModelSlot<?, ?> modelSlot;
+	public ModelSlot<?> modelSlot;
 	public Class<? extends PatternRole> patternRoleClass;
 	public IFlexoOntologyClass individualType;
 	public EditionPattern editionPatternInstanceType;
@@ -109,7 +111,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		this.patternRoleName = patternRoleName;
 	}
 
-	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+	public List<Class<? extends PatternRole<?>>> getAvailablePatternRoleTypes() {
 		if (modelSlot != null) {
 			return modelSlot.getAvailablePatternRoleTypes();
 		}
@@ -183,16 +185,32 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	public VirtualModel<?> getModelSlotVirtualModel() {
 		if (modelSlot instanceof VirtualModelModelSlot) {
-			return ((VirtualModelModelSlot) modelSlot).getVirtualModelResource().getVirtualModel();
+			if (((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource() != null) {
+				return ((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource().getVirtualModel();
+			}
 		}
 		return null;
 	}
 
-	public List<ModelSlot> getAvailableModelSlots() {
+	public List<ModelSlot<?>> getAvailableModelSlots() {
 		if (getFocusedObject() instanceof VirtualModel) {
 			return ((VirtualModel) getFocusedObject()).getModelSlots();
 		} else {
 			return getFocusedObject().getVirtualModel().getModelSlots();
 		}
 	}
+
+	/**
+	 * Return a metamodel adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public FlexoMetaModel getAdressedFlexoMetaModel() {
+		if (modelSlot instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot typeAwareModelSlot = (TypeAwareModelSlot) modelSlot;
+			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
+		}
+		return null;
+	}
+
 }

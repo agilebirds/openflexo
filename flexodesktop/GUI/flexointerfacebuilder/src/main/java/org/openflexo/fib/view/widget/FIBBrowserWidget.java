@@ -36,12 +36,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -159,6 +162,12 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
+		if (returned)
+			try {
+				_tree.fireTreeWillExpand(new TreePath(_tree.getModel().getRoot()));
+			} catch (ExpandVetoException e1) {
+				e1.printStackTrace();
+			}
 		/*if (!getBrowser().getRootVisible() && ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
 			// Only one cell and roots are hidden, expand this first cell
 			SwingUtilities.invokeLater(new Runnable() {
@@ -186,9 +195,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
 		try {
-			if (getComponent().getSelected().isValid()
-					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+			Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+			if ( newSelectedObject != null) {
 				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 					setSelectedObject(newSelectedObject);
 				}
@@ -267,7 +275,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	@Override
 	public FIBBrowserDynamicModel createDynamicModel() {
-		return new FIBBrowserDynamicModel(null);
+		return new FIBBrowserDynamicModel(null, getComponent());
 	}
 
 	@Override
@@ -338,6 +346,23 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 				}
 			}
 		};
+		_tree.addTreeWillExpandListener(new TreeWillExpandListener() {
+
+			@Override
+			public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
+				TreePath path = event.getPath();
+				if (path.getLastPathComponent() instanceof BrowserCell) {
+					BrowserCell node = (BrowserCell) path.getLastPathComponent();
+					node.loadChildren(getBrowserModel(), null);
+				}
+			}
+
+			@Override
+			public void treeWillCollapse(TreeExpansionEvent event) throws ExpandVetoException {
+
+			}
+		});
+
 		if (ToolBox.isMacOS()) {
 			_tree.setSelectionModel(new DefaultTreeSelectionModel() {
 				@Override
@@ -550,23 +575,27 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		System.out.println("Old LEAD="
 				+ (e.getOldLeadSelectionPath() != null ? e.getOldLeadSelectionPath().getLastPathComponent() : "null")); */
 
-		if (e.getNewLeadSelectionPath() == null || (BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent() == null) {
+		if (e.getNewLeadSelectionPath() == null || e.getNewLeadSelectionPath().getLastPathComponent() == null) {
 			selectedObject = null;
-		} else {
+		} else if (e.getNewLeadSelectionPath().getLastPathComponent() instanceof BrowserCell) {
 			selectedObject = ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
-		}
-		for (TreePath tp : e.getPaths()) {
-			Object obj = ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
-			if (obj != null
-					&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
-				if (e.isAddedPath(tp)) {
-					if (!selection.contains(obj)) {
-						selection.add(obj);
+			for (TreePath tp : e.getPaths()) {
+				if (tp.getLastPathComponent() instanceof BrowserCell) {
+					Object obj = ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
+					if (obj != null
+							&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
+						if (e.isAddedPath(tp)) {
+							if (!selection.contains(obj)) {
+								selection.add(obj);
+							}
+						} else {
+							selection.remove(obj);
+						}
 					}
-				} else {
-					selection.remove(obj);
 				}
 			}
+		} else {
+			selectedObject = null;
 		}
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);

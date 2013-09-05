@@ -22,7 +22,6 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -45,6 +44,9 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 
 	@Override
 	public Type getType() {
+		if (getFlexoObjectType() == null) {
+			return FlexoModelObject.class;
+		}
 		switch (getFlexoObjectType()) {
 		case Process:
 			return FlexoProcess.class;

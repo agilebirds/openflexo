@@ -27,11 +27,12 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRShapeTemplate;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
-public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
+public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> implements GRShapeTemplate {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
@@ -249,4 +250,5 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 	public ShapePatternRole getPatternRole() {
 		return (ShapePatternRole) super.getPatternRole();
 	}
+
 }

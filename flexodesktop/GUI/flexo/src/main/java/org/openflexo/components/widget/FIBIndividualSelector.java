@@ -48,6 +48,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -345,30 +346,32 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController).makeOntologyBrowserModel(getContext());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getContext());
+		}
+		return returned;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			if (getTechnologyAdapter() != null) {
-				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
-						.getServiceManager().getService(TechnologyAdapterControllerService.class)
-						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getContext());
-			} else { // Use default
-				model = new OntologyBrowserModel(getContext());
-			}
-			model.addObserver(new Observer() {
-				@Override
-				public void update(Observable o, Object arg) {
-					if (arg instanceof OntologyBrowserModelRecomputed) {
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-							}
-						});
-					}
-				}
-			});
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(false);
@@ -379,6 +382,14 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 			model.setShowDataProperties(false);
 			model.setShowAnnotationProperties(false);
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -387,12 +398,22 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 		if (model != null) {
 			model.delete();
 			model = null;
-			// setEditedObject(this);
-			fireEditedObjectChanged();
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}

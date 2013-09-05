@@ -25,6 +25,7 @@ import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.action.CreateModelSlot;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.VPMCst;
@@ -38,7 +39,8 @@ public class CreateModelSlotDialogEDITOR extends FIBAbstractEditor {
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
 		ViewPoint vp = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		CreateModelSlot action = CreateModelSlot.actionType.makeNewAction(vp, null, null);
+		VirtualModel vm = vp.getVirtualModels().get(0);
+		CreateModelSlot action = CreateModelSlot.actionType.makeNewAction(vm, null, null);
 		return makeArray(action);
 	}
 

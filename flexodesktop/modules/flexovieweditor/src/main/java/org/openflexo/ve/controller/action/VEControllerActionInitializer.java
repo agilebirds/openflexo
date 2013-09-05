@@ -80,6 +80,9 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new SynchronizationSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
 		new ResetGraphicalRepresentationInitializer(this);
+		new DeclareShapeInEditionPatternInitializer(this);
+		new DeclareConnectorInEditionPatternInitializer(this);
+		new PushToPaletteInitializer(this);
 
 	}
 

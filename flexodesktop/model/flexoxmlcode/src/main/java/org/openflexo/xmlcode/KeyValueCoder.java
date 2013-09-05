@@ -63,6 +63,11 @@ public class KeyValueCoder {
 	 */
 	protected static KeyValueProperty getKeyValuePropertyFromName(Class<?> clazz, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidObjectSpecificationException {
+
+		if (propertyName == null) {
+			return null;
+		}
+
 		int modifiers = clazz.getModifiers();
 		// System.out.println("Class "+clazz.getName()+" public="+Modifier.isPublic(modifiers));
 

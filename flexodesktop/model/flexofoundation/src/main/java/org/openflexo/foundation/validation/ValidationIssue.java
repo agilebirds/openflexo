@@ -24,10 +24,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.utils.FlexoListModel;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -96,9 +98,10 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 		return _object;
 	}
 
-	public FlexoModelObject getSelectableObject() {
-		if (_object instanceof FlexoModelObject) {
-			return (FlexoModelObject) _object;
+	// TODO : Check if this is ok => generalized to fix a bug in selection of ViewPointObjects in Viewpoint validation tool
+	public FlexoObject getSelectableObject() {
+		if (_object instanceof FlexoModelObject || _object instanceof ViewPointObject) {
+			return (FlexoObject) _object;
 		}
 		return null;
 	}

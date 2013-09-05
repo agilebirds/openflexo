@@ -29,12 +29,12 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
@@ -59,7 +59,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private String name;
 	private String label;
 	private String description;
-	private Vector<EditionAction<?, ?, ?>> actions;
+	private Vector<EditionAction<?, ?>> actions;
 	private Vector<EditionSchemeParameter> parameters;
 	private boolean skipConfirmationPanel = false;
 
@@ -83,7 +83,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	public EditionScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction<?, ?, ?>>();
+		actions = new Vector<EditionAction<?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
 		editionSchemeParameters = new EditionSchemeParameters(this);
 	}
@@ -119,6 +119,33 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public String getFullyQualifiedName() {
 		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(getClass().getSimpleName() + " " + getName() + "(" + getParametersFMLRepresentation(context) + ") {", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		for (EditionAction action : getActions()) {
+			out.append(action.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}
+		out.append("}", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		return out.toString();
+	}
+
+	protected String getParametersFMLRepresentation(FMLRepresentationContext context) {
+		if (getParameters().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			for (EditionSchemeParameter p : getParameters()) {
+				sb.append((isFirst ? "" : ", ") + TypeUtils.simpleRepresentation(p.getType()) + " " + p.getName());
+				isFirst = false;
+			}
+			return sb.toString();
+		}
+		return "";
 	}
 
 	/**
@@ -161,19 +188,19 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public Vector<EditionAction<?, ?, ?>> getActions() {
+	public Vector<EditionAction<?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction<?, ?, ?>> actions) {
+	public void setActions(Vector<EditionAction<?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction<?, ?, ?> action) {
+	public void addToActions(EditionAction<?, ?> action) {
 		// action.setScheme(this);
 		action.setActionContainer(this);
 		actions.add(action);
@@ -183,7 +210,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public void removeFromActions(EditionAction<?, ?, ?> action) {
+	public void removeFromActions(EditionAction<?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
@@ -212,7 +239,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override
@@ -222,7 +249,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -233,7 +260,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -242,7 +269,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	public Vector<EditionSchemeParameter> getParameters() {
@@ -270,37 +297,41 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public void parameterFirst(EditionSchemeParameter p) {
+		System.out.println("parameterFirst()");
 		parameters.remove(p);
 		parameters.insertElementAt(p, 0);
 		setChanged();
-		notifyObservers();
+		notifyObservers(new DataModification("parameters", null, parameters));
 	}
 
 	public void parameterUp(EditionSchemeParameter p) {
+		System.out.println("parameterUp()");
 		int index = parameters.indexOf(p);
 		if (index > 0) {
 			parameters.remove(p);
 			parameters.insertElementAt(p, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyObservers(new DataModification("parameters", null, parameters));
 		}
 	}
 
 	public void parameterDown(EditionSchemeParameter p) {
+		System.out.println("parameterDown()");
 		int index = parameters.indexOf(p);
 		if (index > -1) {
 			parameters.remove(p);
 			parameters.insertElementAt(p, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyObservers(new DataModification("parameters", null, parameters));
 		}
 	}
 
 	public void parameterLast(EditionSchemeParameter p) {
+		System.out.println("parameterLast()");
 		parameters.remove(p);
 		parameters.add(p);
 		setChanged();
-		notifyObservers();
+		notifyObservers(new DataModification("parameters", null, parameters));
 	}
 
 	public EditionSchemeParameter getParameter(String name) {
@@ -469,8 +500,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;
@@ -574,6 +604,14 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	public EditionSchemeParameter createFlexoObjectParameter() {
 		EditionSchemeParameter newParameter = new FlexoObjectParameter(null);
 		newParameter.setName("flexoObject");
+		// newParameter.setLabel("label");
+		addToParameters(newParameter);
+		return newParameter;
+	}
+
+	public EditionSchemeParameter createTechnologyObjectParameter() {
+		EditionSchemeParameter newParameter = new TechnologyObjectParameter(null);
+		newParameter.setName("technologyObject");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
@@ -695,7 +733,10 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		if (getEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
 					.getEditionPatternInstanceType(getEditionPattern())));
-			if (getEditionPattern().getVirtualModel() != null) {
+			if (getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DIAGRAM, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
+			} else {
 				bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 			}

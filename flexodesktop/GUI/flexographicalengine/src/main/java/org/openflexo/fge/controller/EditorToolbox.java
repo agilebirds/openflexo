@@ -19,26 +19,16 @@
  */
 package org.openflexo.fge.controller;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
@@ -52,13 +42,14 @@ public class EditorToolbox {
 	private ToolPanel toolPanel;
 
 	private JToolBar stylesToolBar;
+	private LayoutToolBar layoutToolBar;
 	private FIBForegroundStyleSelector foregroundSelector;
 	private FIBBackgroundStyleSelector backgroundSelector;
 	private FIBTextStyleSelector textStyleSelector;
 	private FIBShadowStyleSelector shadowStyleSelector;
 	private FIBShapeSelector shapeSelector;
 
-	private DrawingController<?> controller;
+	DrawingController<?> controller;
 
 	public EditorToolbox(DrawingController controller) {
 		super();
@@ -93,79 +84,9 @@ public class EditorToolbox {
 		controller = null;// Don't delete, we did not create it
 	}
 
-	public class ToolPanel extends JPanel {
-		private ToolButton selectionToolButton;
-		private ToolButton drawShapeToolButton;
-		private ToolButton drawConnectorToolButton;
-		private ToolButton drawTextToolButton;
-
-		public ToolPanel() {
-			super(new FlowLayout(FlowLayout.LEADING, 0, 0));
-			selectionToolButton = new ToolButton(EditorTool.SelectionTool, FGEIconLibrary.SELECTION_TOOL_ICON,
-					FGEIconLibrary.SELECTION_TOOL_SELECTED_ICON);
-			drawShapeToolButton = new ToolButton(EditorTool.DrawShapeTool, FGEIconLibrary.DRAW_SHAPE_TOOL_ICON,
-					FGEIconLibrary.DRAW_SHAPE_TOOL_SELECTED_ICON);
-			drawConnectorToolButton = new ToolButton(EditorTool.DrawConnectorTool, FGEIconLibrary.DRAW_CONNECTOR_TOOL_ICON,
-					FGEIconLibrary.DRAW_CONNECTOR_TOOL_SELECTED_ICON);
-			drawTextToolButton = new ToolButton(EditorTool.DrawTextTool, FGEIconLibrary.DRAW_TEXT_TOOL_ICON,
-					FGEIconLibrary.DRAW_TEXT_TOOL_SELECTED_ICON);
-			add(new JLabel(FGEIconLibrary.TOOLBAR_LEFT_ICON));
-			add(selectionToolButton);
-			add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-			add(drawShapeToolButton);
-			add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-			add(drawConnectorToolButton);
-			add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-			add(drawTextToolButton);
-			add(new JLabel(FGEIconLibrary.TOOLBAR_RIGHT_ICON));
-			updateButtons();
-		}
-
-		private void selectTool(EditorTool tool) {
-			controller.setCurrentTool(tool);
-			updateButtons();
-		}
-
-		public void updateButtons() {
-			selectionToolButton.setSelected(controller.getCurrentTool() == EditorTool.SelectionTool);
-			drawShapeToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawShapeTool);
-			drawConnectorToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawConnectorTool);
-			drawTextToolButton.setSelected(controller.getCurrentTool() == EditorTool.DrawTextTool);
-		}
-
-		public class ToolButton extends JToggleButton {
-			private final EditorTool tool;
-
-			public ToolButton(final EditorTool tool, Icon icon, Icon selectedIcon) {
-				super();
-				this.tool = tool;
-				setIcon(icon);
-				setPressedIcon(selectedIcon);
-				setSelectedIcon(selectedIcon);
-				setBorder(BorderFactory.createEmptyBorder());
-				addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (isSelected()) {
-							selectTool(tool);
-						}
-					}
-				});
-			}
-
-			@Override
-			public void setSelected(boolean b) {
-				if (isSelected() != b) {
-					super.setSelected(b);
-				}
-			}
-		}
-	}
-
 	public ToolPanel getToolPanel() {
 		if (toolPanel == null) {
-			toolPanel = new ToolPanel();
+			toolPanel = new ToolPanel(this);
 		}
 		return toolPanel;
 	}
@@ -256,6 +177,13 @@ public class EditorToolbox {
 		return stylesToolBar;
 	}
 
+	public JToolBar getLayoutToolBar() {
+		if (layoutToolBar == null) {
+			layoutToolBar = new LayoutToolBar(this);
+		}
+		return layoutToolBar;
+	}
+
 	private List<ShapeGraphicalRepresentation> selectedShapes = new ArrayList<ShapeGraphicalRepresentation>();
 	private List<ConnectorGraphicalRepresentation> selectedConnectors = new ArrayList<ConnectorGraphicalRepresentation>();
 	private List<GraphicalRepresentation> selectedGR = new ArrayList<GraphicalRepresentation>();
@@ -297,5 +225,13 @@ public class EditorToolbox {
 			backgroundSelector.setEditedObject(controller.getCurrentBackgroundStyle());
 			shadowStyleSelector.setEditedObject(controller.getCurrentShadowStyle());
 		}
+	}
+
+	public List<ShapeGraphicalRepresentation> getSelectedShapes() {
+		return selectedShapes;
+	}
+
+	public List<GraphicalRepresentation> getSelectedGR() {
+		return selectedGR;
 	}
 }

@@ -36,18 +36,15 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.Test;
-import org.openflexo.ApplicationContext;
-import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
@@ -72,22 +69,21 @@ public class TestEMFModelEdition {
 	@Test
 	public void test() {
 		try {
-			ApplicationContext applicationContext = new TestApplicationContext(new FileResource(
+			TestFlexoServiceManager applicationContext = new TestFlexoServiceManager(new FileResource(
 					new File("src/test/resources").getAbsolutePath()));
 			EMFTechnologyAdapter technologicalAdapter = applicationContext.getTechnologyAdapterService().getTechnologyAdapter(
 					EMFTechnologyAdapter.class);
 
-			FlexoResourceCenter resourceCenter = applicationContext.getResourceCenterService().getResourceCenters().get(2);
+			FlexoResourceCenter<?> resourceCenter = applicationContext.getResourceCenterService().getResourceCenters().get(2);
 
-			MetaModelRepository<EMFMetaModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> metaModelRepository = resourceCenter
-					.getMetaModelRepository(technologicalAdapter);
+			EMFMetaModelRepository emfMetaModelRepository = resourceCenter
+					.getRepository(EMFMetaModelRepository.class, technologicalAdapter);
 
-			EMFMetaModelRepository emfMetaModelRepository = (EMFMetaModelRepository) metaModelRepository;
 			EMFMetaModelResource emfMetaModelResource = emfMetaModelRepository.getResource("http://www.thalesgroup.com/parameters/1.0");
 			EMFModelResource emfModelResource = null;
 			try {
-				emfModelResource = technologicalAdapter.createEmptyModel(File.createTempFile("coucou", ".emf"), "myURI",
-						emfMetaModelResource, technologicalAdapter.getTechnologyContextManager());
+				emfModelResource = technologicalAdapter.createNewEMFModel(File.createTempFile("coucou", ".emf"), "myURI",
+						emfMetaModelResource);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -189,12 +185,11 @@ public class TestEMFModelEdition {
 		return result;
 	}
 
-	protected <T> EMFObjectIndividualAttributeObjectPropertyValue removeEMFObjectIndividualAttributeObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+	protected EMFObjectIndividualAttributeObjectPropertyValue removeEMFObjectIndividualAttributeObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
 			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 		EMFObjectIndividualAttributeObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualAttributeObjectPropertyValue<T> addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue<T>(
-				null);
+		RemoveEMFObjectIndividualAttributeObjectPropertyValue addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue(null);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
 		// propertyURI));
@@ -204,11 +199,11 @@ public class TestEMFModelEdition {
 		return result;
 	}
 
-	protected <T> EMFObjectIndividualReferenceObjectPropertyValue addEMFObjectIndividualReferenceObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+	protected EMFObjectIndividualReferenceObjectPropertyValue addEMFObjectIndividualReferenceObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
 			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		AddEMFObjectIndividualReferenceObjectPropertyValue<T> addName = new AddEMFObjectIndividualReferenceObjectPropertyValue<T>(null);
+		AddEMFObjectIndividualReferenceObjectPropertyValue addName = new AddEMFObjectIndividualReferenceObjectPropertyValue(null);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));
@@ -218,12 +213,11 @@ public class TestEMFModelEdition {
 		return result;
 	}
 
-	protected <T> EMFObjectIndividualReferenceObjectPropertyValue removeEMFObjectIndividualReferenceObjectPropertyValue(
-			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, T value)
+	protected EMFObjectIndividualReferenceObjectPropertyValue removeEMFObjectIndividualReferenceObjectPropertyValue(
+			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
 			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue<T>(
-				null);
+		RemoveEMFObjectIndividualReferenceObjectPropertyValue addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue(null);
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));

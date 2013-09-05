@@ -24,24 +24,24 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareConnectorInEditionPatternInitializer extends
-		ActionInitializer<DeclareConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> {
+		ActionInitializer<DeclareExampleDiagramConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	DeclareConnectorInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
+		super(DeclareExampleDiagramConnectorInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
@@ -55,21 +55,21 @@ public class DeclareConnectorInEditionPatternInitializer extends
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareConnectorInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
 
-				return instanciateAndShowDialog(action, VPMCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+				return instanciateAndShowDialog(action, FlexoCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareConnectorInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareConnectorInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
+			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;

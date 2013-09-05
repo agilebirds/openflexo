@@ -21,6 +21,7 @@ package org.openflexo.vpm.view;
 
 import java.io.File;
 
+import org.openflexo.fib.view.container.FIBPanelView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
@@ -63,7 +64,7 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 		FIBTableWidget patternRoleTable = (FIBTableWidget) getFIBView("PatternRoleTable");
 		FIBTabPanelView mainTabPanel = (FIBTabPanelView) getFIBView("MainTabPanel");
 		FIBTableWidget editionSchemeTable = (FIBTableWidget) getFIBView("EditionSchemeTable");
-		FIBTabPanelView editionSchemePanel = (FIBTabPanelView) getFIBView("EditionSchemePanel");
+		FIBPanelView editionSchemePanel = (FIBPanelView) getFIBView("EditionSchemePanel");
 		FIBTableWidget parametersTable = (FIBTableWidget) getFIBView("ParametersTable");
 		FIBBrowserWidget editionActionBrowser = (FIBBrowserWidget) getFIBView("EditionActionBrowser");
 		FIBTableWidget inspectorPropertyTable = (FIBTableWidget) getFIBView("InspectorPropertyTable");
@@ -77,12 +78,14 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 		} else if (object instanceof EditionSchemeParameter) {
 			mainTabPanel.setSelectedIndex(0);
 			editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(0);
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(0);
 			parametersTable.setSelectedObject(object);
 		} else if (object instanceof EditionAction) {
 			mainTabPanel.setSelectedIndex(0);
 			editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(1);
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(1);
 			editionActionBrowser.setSelectedObject(object);
 		} else if (object instanceof EditionPatternInspector) {
 			mainTabPanel.setSelectedIndex(1);

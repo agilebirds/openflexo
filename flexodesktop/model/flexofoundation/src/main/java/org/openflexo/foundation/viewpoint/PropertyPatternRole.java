@@ -5,10 +5,11 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProperty> extends OntologicObjectPatternRole<T> {
 
@@ -17,6 +18,13 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 
 	public PropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as Property " + " from " + getModelSlot().getMetaModelURI() + " ;", context);
+		return out.toString();
 	}
 
 	@Override
@@ -81,11 +89,11 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	}
 
 	@Override
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		FlexoOntologyModelSlot<?, ?> returned = super.getModelSlot();
+	public TypeAwareModelSlot getModelSlot() {
+		TypeAwareModelSlot returned = super.getModelSlot();
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
 			}
 		}
 		return returned;

@@ -27,6 +27,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 
 public abstract class AbstractXSOntConcept extends AbstractXSOntObject implements IFlexoOntologyConcept {
 

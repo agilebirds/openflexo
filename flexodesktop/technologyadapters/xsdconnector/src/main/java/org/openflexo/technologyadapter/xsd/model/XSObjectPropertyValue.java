@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 
 /**
  * Implementation of an Object Property values in XSD/XML technology.<br>
@@ -35,6 +37,13 @@ public class XSObjectPropertyValue extends XSPropertyValue implements IFlexoOnto
 	private XSOntObjectProperty property;
 	private List<XSOntIndividual> values;
 
+
+	public XSObjectPropertyValue(XSOntObjectProperty property) {
+		super();
+		this.property = property;
+		this.values = new ArrayList<XSOntIndividual>();
+	}
+	
 	public XSObjectPropertyValue(XSOntObjectProperty property, XSOntIndividual value) {
 		super();
 		this.property = property;

@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
@@ -45,6 +47,8 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
@@ -170,8 +174,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	@Override
 	public void delete() {
 
-		logger.info("//////////// DELETE " + this);
-
 		if (getParent() != null) {
 			getParent().removeFromSubComponents(this);
 		}
@@ -249,7 +251,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 			}
 		}
 	}
-	*/
+	 */
 
 	private ComponentConstraints constraints;
 
@@ -478,9 +480,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	public void updateBindingModel() {
 		if (deserializationPerformed) {
 			logger.fine("updateBindingModel()");
-			if (getRootComponent() != null) {
-				getRootComponent()._bindingModel = null;
-				getRootComponent().createBindingModel();
+			FIBComponent root = getRootComponent();
+			if (root != null ) {
+				root._bindingModel = null;
+				root.createBindingModel();
 			}
 		}
 	}
@@ -498,12 +501,14 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	protected void createBindingModel(BindingModel baseBindingModel) {
-		if (baseBindingModel == null) {
-			_bindingModel = new BindingModel();
-		} else {
-			_bindingModel = new BindingModel(baseBindingModel);
-		}
-		/*Class dataClass = null;
+		if (_bindingModel == null){
+			if (baseBindingModel == null) {
+				_bindingModel = new BindingModel();
+			} else {
+				_bindingModel = new BindingModel(baseBindingModel);
+			}
+
+			/*Class dataClass = null;
 		try {
 			if (dataClassName != null) {
 				dataClass = Class.forName(dataClassName);
@@ -512,35 +517,36 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 		} catch (ClassNotFoundException e) {
 			logger.warning("Not found: "+dataClassName);
 		}*/
-		// if (dataClass == null) dataClass = Object.class;
+			// if (dataClass == null) dataClass = Object.class;
 
-		createDataBindingVariable();
+			createDataBindingVariable();
 
-		if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
-			_bindingModel.addToBindingVariables(new BindingVariable(getName(), getDynamicAccessType()));
-		}
-
-		Iterator<FIBComponent> it = subComponentIterator();
-		while (it.hasNext()) {
-			FIBComponent subComponent = it.next();
-			if (StringUtils.isNotEmpty(subComponent.getName()) && subComponent.getDynamicAccessType() != null) {
-				_bindingModel.addToBindingVariables(new BindingVariable(subComponent.getName(), subComponent.getDynamicAccessType()));
+			if (StringUtils.isNotEmpty(getName()) && getDynamicAccessType() != null) {
+				_bindingModel.addToBindingVariables(new BindingVariable(getName(), getDynamicAccessType()));
 			}
+
+			Iterator<FIBComponent> it = subComponentIterator();
+			while (it.hasNext()) {
+				FIBComponent subComponent = it.next();
+				if (StringUtils.isNotEmpty(subComponent.getName()) && subComponent.getDynamicAccessType() != null) {
+					_bindingModel.addToBindingVariables(new BindingVariable(subComponent.getName(), subComponent.getDynamicAccessType()));
+				}
+			}
+
+			Class myControllerClass = getControllerClass();
+			if (myControllerClass == null) {
+				myControllerClass = FIBController.class;
+			}
+
+			_bindingModel.addToBindingVariables(new BindingVariable("controller", myControllerClass));
+
+			it = subComponentIterator();
+			while (it.hasNext()) {
+				FIBComponent subComponent = it.next();
+				subComponent.notifiedBindingModelRecreated();
+			}
+
 		}
-
-		Class myControllerClass = getControllerClass();
-		if (myControllerClass == null) {
-			myControllerClass = FIBController.class;
-		}
-
-		_bindingModel.addToBindingVariables(new BindingVariable("controller", myControllerClass));
-
-		it = subComponentIterator();
-		while (it.hasNext()) {
-			FIBComponent subComponent = it.next();
-			subComponent.notifiedBindingModelRecreated();
-		}
-
 		// logger.info("Created binding model at root component level:\n"+_bindingModel);
 	}
 
@@ -570,10 +576,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 		super.finalizeDeserialization();
 		deserializationPerformed = true;
 
-		if (getRootComponent().getBindingModel() == null) {
-			getRootComponent().createBindingModel();
-		}
-
 		if (isRootComponent()) {
 			updateBindingModel();
 		}
@@ -581,6 +583,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 		if (data != null) {
 			data.decode();
 		}
+
 		if (visible != null) {
 			visible.decode();
 		}
@@ -598,6 +601,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	public FIBComponent getComponentNamed(String name) {
+		if (StringUtils.isNotEmpty(this.getName()) && this.getName().equals(name)) {
+			return this;
+		}
 		for (FIBComponent c : retrieveAllSubComponents()) {
 			if (StringUtils.isNotEmpty(c.getName()) && c.getName().equals(name)) {
 				return c;
@@ -620,6 +626,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 			returned.add(c2);
 			if (c2 instanceof FIBContainer) {
 				addAllSubComponents((FIBContainer) c2, returned);
+			}	
+			else if (c2 instanceof FIBReferencedComponent){
+				FIBComponent referenced =((FIBReferencedComponent) c2).getComponent();
+				if (referenced instanceof FIBContainer){
+					returned.add((FIBContainer) referenced);
+					addAllSubComponents((FIBContainer) referenced, returned);
+				}
 			}
 		}
 	}
@@ -737,6 +750,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 					return getDataType();
 				}
 			};
+			data.setBindingName("data");
 		}
 		return data;
 	}
@@ -749,6 +763,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 					return getDataType();
 				}
 			};
+			data.setBindingName("data");
 		} else {
 			this.data = null;
 		}
@@ -1308,7 +1323,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	public static class NonRootComponentShouldNotHaveLocalizedDictionary extends
-			ValidationRule<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+	ValidationRule<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
 		public NonRootComponentShouldNotHaveLocalizedDictionary() {
 			super(FIBModelObject.class, "non_root_component_should_not_have_localized_dictionary");
 		}
@@ -1326,7 +1341,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	protected static class RemoveExtraLocalizedDictionary extends
-			FixProposal<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
+	FixProposal<NonRootComponentShouldNotHaveLocalizedDictionary, FIBComponent> {
 
 		public RemoveExtraLocalizedDictionary() {
 			super("remove_extra_dictionary");
@@ -1340,7 +1355,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	public static class RootComponentShouldHaveMaximumOneDefaultButton extends
-			ValidationRule<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> {
+	ValidationRule<RootComponentShouldHaveMaximumOneDefaultButton, FIBComponent> {
 		public RootComponentShouldHaveMaximumOneDefaultButton() {
 			super(FIBModelObject.class, "root_component_should_have_maximum_one_default_button");
 		}
@@ -1383,6 +1398,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 
 	}
 
+
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> binding) {
 		if (binding == null) {
@@ -1399,7 +1415,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 						// System.out.println("Component " + toString() + " depends of " + c.toString());
 						declareDependantOf(c);
 					} else {
-						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName());
+						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName() +" in " + this.getName());
 					}
 				}
 			}
@@ -1421,5 +1437,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	public void setBindingFactory(BindingFactory bindingFactory) {
 		this.bindingFactory = bindingFactory;
 	}
-
 }
+
+

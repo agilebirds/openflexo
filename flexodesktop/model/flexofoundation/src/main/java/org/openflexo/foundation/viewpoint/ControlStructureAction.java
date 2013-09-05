@@ -26,21 +26,18 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		EditionAction<M, MM, Object> implements ActionContainer {
+public abstract class ControlStructureAction extends EditionAction<ModelSlot<?>, Object> implements ActionContainer {
 
 	private static final Logger logger = Logger.getLogger(ControlStructureAction.class.getPackage().getName());
 
-	private Vector<EditionAction<?, ?, ?>> actions;
+	private Vector<EditionAction<?, ?>> actions;
 
 	public ControlStructureAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-		actions = new Vector<EditionAction<?, ?, ?>>();
+		actions = new Vector<EditionAction<?, ?>>();
 	}
 
 	/*@Override
@@ -51,7 +48,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	@Override
 	protected void rebuildInferedBindingModel() {
 		super.rebuildInferedBindingModel();
-		for (EditionAction<?, ?, ?> action : getActions()) {
+		for (EditionAction<?, ?> action : getActions()) {
 			action.rebuildInferedBindingModel();
 		}
 
@@ -60,7 +57,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	@Override
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned = super.buildInferedBindingModel();
-		for (final EditionAction a : getActions()) {
+		for (final EditionAction<?, ?> a : getActions()) {
 			if (a instanceof AssignableAction && ((AssignableAction) a).getIsVariableDeclaration()) {
 				returned.addToBindingVariables(new BindingVariable(((AssignableAction) a).getVariableName(), ((AssignableAction) a)
 						.getAssignableType(), true) {
@@ -80,19 +77,19 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public Vector<EditionAction<?, ?, ?>> getActions() {
+	public Vector<EditionAction<?, ?>> getActions() {
 		return actions;
 	}
 
 	@Override
-	public void setActions(Vector<EditionAction<?, ?, ?>> actions) {
+	public void setActions(Vector<EditionAction<?, ?>> actions) {
 		this.actions = actions;
 		setChanged();
 		notifyObservers();
 	}
 
 	@Override
-	public void addToActions(EditionAction<?, ?, ?> action) {
+	public void addToActions(EditionAction<?, ?> action) {
 		// action.setScheme(getEditionScheme());
 		action.setActionContainer(this);
 		actions.add(action);
@@ -102,7 +99,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public void removeFromActions(EditionAction<?, ?, ?> action) {
+	public void removeFromActions(EditionAction<?, ?> action) {
 		// action.setScheme(null);
 		action.setActionContainer(null);
 		actions.remove(action);
@@ -112,12 +109,12 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public int getIndex(EditionAction<?, ?, ?> action) {
+	public int getIndex(EditionAction<?, ?> action) {
 		return actions.indexOf(action);
 	}
 
 	@Override
-	public void insertActionAtIndex(EditionAction<?, ?, ?> action, int index) {
+	public void insertActionAtIndex(EditionAction<?, ?> action, int index) {
 		// action.setScheme(getEditionScheme());
 		action.setActionContainer(this);
 		actions.insertElementAt(action, index);
@@ -127,7 +124,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public void actionFirst(EditionAction<?, ?, ?> a) {
+	public void actionFirst(EditionAction<?, ?> a) {
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
 		setChanged();
@@ -135,33 +132,33 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public void actionUp(EditionAction<?, ?, ?> a) {
+	public void actionUp(EditionAction<?, ?> a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
 			actions.remove(a);
 			actions.insertElementAt(a, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
 	@Override
-	public void actionDown(EditionAction<?, ?, ?> a) {
+	public void actionDown(EditionAction<?, ?> a) {
 		int index = actions.indexOf(a);
 		if (index > 0) {
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
 	@Override
-	public void actionLast(EditionAction<?, ?, ?> a) {
+	public void actionLast(EditionAction<?, ?> a) {
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	/*	@Override
@@ -310,15 +307,14 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
-	public EditionAction<?, ?, ?> deleteAction(EditionAction<?, ?, ?> anAction) {
+	public EditionAction<?, ?> deleteAction(EditionAction<?, ?> anAction) {
 		removeFromActions(anAction);
 		anAction.delete();
 		return anAction;
@@ -330,7 +326,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 	};
 
 	@Override
-	public Collection<EditionAction<?, ?, ?>> getEmbeddedValidableObjects() {
+	public Collection<EditionAction<?, ?>> getEmbeddedValidableObjects() {
 		return actions;
 	}
 

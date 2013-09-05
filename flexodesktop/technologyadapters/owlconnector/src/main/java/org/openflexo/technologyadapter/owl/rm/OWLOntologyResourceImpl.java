@@ -73,9 +73,8 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			returned.setName(owlFile.getName());
 			returned.setFile(owlFile);
 			returned.setURI(ontologyURI);
-			// Register the ontology as model and metamodel as it can be both
-			ontologyLibrary.registerModel(returned);
-			ontologyLibrary.registerMetaModel(returned);
+			// Register the ontology
+			ontologyLibrary.registerResource(returned);
 
 			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 
@@ -108,9 +107,8 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			returned.setFile(owlFile);
 			returned.setURI(OWLOntology.findOntologyURI(owlFile));
 			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-			// Register the ontology as model and metamodel as it can be both
-			ontologyLibrary.registerModel(returned);
-			ontologyLibrary.registerMetaModel(returned);
+			// Register the ontology
+			ontologyLibrary.registerOntology(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();

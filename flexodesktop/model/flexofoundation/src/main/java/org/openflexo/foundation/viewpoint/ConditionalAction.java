@@ -25,11 +25,11 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.toolbox.StringUtils;
 
-public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ControlStructureAction<M, MM> {
+public class ConditionalAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
 
@@ -37,6 +37,21 @@ public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	public ConditionalAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("if " + getCondition().toString() + "", context);
+		out.append(" {", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		for (EditionAction action : getActions()) {
+			out.append(action.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}
+
+		out.append("}", context);
+		return out.toString();
 	}
 
 	@Override

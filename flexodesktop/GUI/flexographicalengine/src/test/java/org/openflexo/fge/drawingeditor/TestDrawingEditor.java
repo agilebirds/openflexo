@@ -222,7 +222,9 @@ public class TestDrawingEditor {
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
 		topPanel2.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);*/
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolPanel());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getLayoutToolBar());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -317,6 +319,14 @@ public class TestDrawingEditor {
 			}
 		});
 
+		JMenuItem paletteItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "show_palette"));
+		paletteItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				paletteDialog.setVisible(true);
+			}
+		});
+
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
 			@Override
@@ -334,6 +344,7 @@ public class TestDrawingEditor {
 		});
 
 		toolsMenu.add(inspectItem);
+		toolsMenu.add(paletteItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
 

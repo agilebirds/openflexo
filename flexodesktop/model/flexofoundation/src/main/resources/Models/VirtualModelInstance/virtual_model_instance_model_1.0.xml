@@ -36,10 +36,21 @@
 		<property name="editionPatternInstancesList" type="vector" contains="org.openflexo.foundation.view.EditionPatternInstance" primary="yes"/>
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.ModelSlotInstance" xmlTag="ModelSlotInstance">
-		<description>Binds a model slot to a model within a given virtual model instance</description>
+	<entity name="org.openflexo.foundation.view.ModelSlotInstance" abstract="yes">
+		<description>Binds a model slot to a model within a given view </description>
 		<property name="modelSlotName" xmlTag="modelSlotName" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.view.TypeSafeModelSlotInstance" xmlTag="TypeSafeModelSlotInstance">
 		<property name="modelURI" xmlTag="modelURI" attribute="YES" />
+	</entity>
+	
+	<entity name="org.openflexo.foundation.view.FreeModelSlotInstance" xmlTag="FreeModelSlotInstance">
+		<property name="resourceURI" xmlTag="resourceURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.view.VirtualModelModelSlotInstance" xmlTag="VirtualModelModelSlotInstance">
+		<property name="virtualModelInstanceURI" xmlTag="virtualModelInstanceURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.EditionPatternInstance" xmlTag="EditionPatternInstance">
@@ -106,6 +117,13 @@
 		name="org.openflexo.foundation.view.ModelObjectActorReference"
 		xmlTag="ModelObjectActorReference">
 		<property name="objectReference" xmlTag="objectReference"
+			attribute="YES" description="" />
+	</entity>
+	
+	<entity
+		name="org.openflexo.technologyadapter.excel.viewpoint.ExcelActorReference"
+		xmlTag="ExcelActorReference">
+		<property name="objectURI" xmlTag="objectURI"
 			attribute="YES" description="" />
 	</entity>
 

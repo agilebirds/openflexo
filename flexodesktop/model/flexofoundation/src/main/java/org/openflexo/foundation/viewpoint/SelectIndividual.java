@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -24,8 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -39,8 +40,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
-public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyIndividual>
-		extends FetchRequest<M, MM, T> {
+public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectIndividual.class.getPackage().getName());
 
@@ -48,6 +48,21 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 
 	public SelectIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ")
+				+ (getType() != null ? " as " + getType().getName() : "")
+				+ (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""), context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
 	@Override

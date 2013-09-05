@@ -25,14 +25,16 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
+import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 
-public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
+public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 
 	private static final Logger logger = Logger.getLogger(AddXSClass.class.getPackage().getName());
 
@@ -68,12 +70,19 @@ public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 		XSOntClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getModel().createOntologyClass(newClassName, father);
+			// FIXME : Something wrong here!
+			// newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
+			newClass = ((XMLXSDModel) getModelSlotInstance(action).getResourceData()).getMetaModel().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();
 		}
 		return newClass;
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

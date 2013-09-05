@@ -40,10 +40,11 @@ import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -57,7 +58,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author gbesancon
  * 
  */
-public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
+public class AddEMFObjectIndividualReferenceObjectPropertyValue extends
 		SetEMFPropertyValue<EMFObjectIndividualReferenceObjectPropertyValue> implements SetObjectPropertyValueAction {
 
 	private String objectPropertyURI = null;
@@ -197,10 +198,10 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	@Override
 	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getModel();
+		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
+		EMFModel model = modelSlotInstance.getResourceData();
 		// Add Reference in EMF
-		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action));
+		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action).getObject());
 		// if (referenceObjectProperty.getObject().getUpperBound() != 1) {
 		// List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
 		// values.add(value);

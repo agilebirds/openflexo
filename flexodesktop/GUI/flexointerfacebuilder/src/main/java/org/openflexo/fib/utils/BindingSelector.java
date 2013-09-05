@@ -595,8 +595,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 	}
 
 	public boolean areStaticValuesAllowed() {
-		if (getEditedObject() != null
-				&& (getEditedObject().isSettable() /*|| getEditedObject().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE*/)) {
+		if (getEditedObject() != null && getEditedObject().isSettable()) {
 			return false;
 		}
 		return _allowsStaticValues;
@@ -637,7 +636,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				showAgain = true;
 				closePopup(false);
 			}
-			if (getEditedObject() != null && !(getEditedObject().isBindingValue())) {
+			if (getEditedObject() != null && !getEditedObject().isBindingValue()) {
 				_editedObject.setExpression(makeBinding()); // I dont want to notify it !!!
 				fireEditedObjectChanged();
 			}
@@ -1111,7 +1110,11 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void cancel() {
-		setEditedObject(_revertBindingValue);
+		if (_revertBindingValue != null) {
+			if (_revertBindingValue.getOwner() != null && _revertBindingValue.isValid()) {
+				setEditedObject(_revertBindingValue);
+			}
+		}
 		closePopup();
 		super.cancel();
 	}
@@ -1147,12 +1150,12 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 		boolean bindingRecreated = false;
 
-		if (!(binding.isBindingValue())) {
+		if (!binding.isBindingValue()) {
 
 			editionMode = EditionMode.NORMAL_BINDING;
 			binding.setExpression(makeBinding()); // Should create a BindingValue instance !!!
 			bindingRecreated = true;
-			if (!(binding.isBindingValue())) {
+			if (!binding.isBindingValue()) {
 				logger.severe("Should never happen: valueSelected() called for a non-BindingValue instance !");
 				return;
 			}
@@ -1194,8 +1197,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 				// if (currentElement != null) {
 				if (currentElement == null
 						|| !(currentElement instanceof FunctionPathElement)
-						|| (((FunctionPathElement) currentElement).getFunction() == null || !((FunctionPathElement) currentElement)
-								.getFunction().equals(((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+						|| ((FunctionPathElement) currentElement).getFunction() == null
+						|| !((FunctionPathElement) currentElement).getFunction().equals(
+								((FunctionPathElement) selectedValue.getElement()).getFunction())) {
 					disconnect();
 					Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
 					logger.info("Selecting function " + function);

@@ -9,14 +9,15 @@
     <Table iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" visibleRowCount="5" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ModelSlotTable" index="0" data="data.modelSlots" constraints="split(index=0;location=north;splitIdentifier=top)" opaque="false">
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
       <TextFieldColumn data="iterator.name" title="model_slot" columnWidth="80" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.class.simpleName" title="type" columnWidth="100" resizable="true" displayTitle="true" name="label" />
       <LabelColumn data="iterator.technologyAdapter.name" title="technology" columnWidth="200" resizable="true" displayTitle="true" name="label" />
-      <LabelColumn data="iterator.metaModelURI" title="meta_model" columnWidth="500" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.modelSlotDescription" title="description" columnWidth="500" resizable="true" displayTitle="true" name="label" />
       <RemoveAction method="data.deleteModelSlot(selected)" name="delete" />
       <AddAction method="controller.createModelSlot(data)" name="createModelSlot" />
     </Table>
     <TabPanel name="MainTabPanel" index="1" constraints="split(index=1;location=center;splitIdentifier=bottom)">
       <Tab title="structural" layout="border" titleFont="SansSerif,0,12" darkLevel="0" index="0" name="StructuralTab">
-        <FIBReferencedComponent componentFile="VirtualModelStructuralPanel.fib" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" opaque="false" />
+        <FIBReferencedComponent componentFile="&quot;VirtualModelStructuralPanel.fib&quot;" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" opaque="false" />
       </Tab>
       <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" constraints="border(index=1;location=center)" name="BehaviouralTab">
         <SplitPanel index="0" constraints="border(index=0;location=center)">
@@ -45,13 +46,12 @@
                 <AddAction method="data.createCloningScheme" name="new_cloning_scheme" />
               </Table>
               <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" opaque="false">
-                <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" enable="(EditionSchemeTable.selected != null)" manageDynamicModel="true" name="ParametersTable" index="0" data="EditionSchemeTable.selected.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" font="SansSerif.plain,0,12" opaque="false">
+                <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" enable="(EditionSchemeTable.selected != null)" manageDynamicModel="true" name="ParametersTable" index="0" data="EditionSchemeTable.selected.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" font="SansSerif.plain,0,12">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
                   <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                   <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" />
                   <DropDownColumn data="iterator.widget" title="widget" columnWidth="80" resizable="true" displayTitle="true" name="dropdown" />
                   <AddAction method="EditionSchemeTable.selected.createTextFieldParameter" name="add_textfield_parameter" />
-                  <AddAction method="EditionSchemeTable.selected.createLocalizedTextFieldParameter" name="add_localized_textfield_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" name="add_textarea_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createIntegerParameter" name="add_integer_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createCheckBoxParameter" name="add_checkbox_parameter" />
@@ -64,20 +64,25 @@
                   <AddAction method="EditionSchemeTable.selected.createObjectPropertyParameter" name="add_object_property_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createDataPropertyParameter" name="add_data_property_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createListParameter" name="add_list_parameter" />
-                  <AddAction method="EditionSchemeTable.selected.createEditionPatternParameter" name="add_edition_pattern_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createEditionPatternInstanceParameter" name="add_edition_pattern_instance_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createPropertyParameter" name="add_property_parameter" />
+        		  <AddAction method="EditionSchemeTable.selected.createTechnologyObjectParameter" name="add_technology_object" />
                 </Table>
                 <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" opaque="false" name="ParametersOrderingPanel">
-                  <Button action="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" opaque="false">
+                  <Button action="EditionSchemeTable.selected.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterUp(ParametersTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" opaque="false">
+                  <Button action="EditionSchemeTable.selected.parameterUp(ParametersTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterDown(ParametersTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" opaque="false">
+                  <Button action="EditionSchemeTable.selected.parameterDown(ParametersTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemeTable.selected.parameters.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterLast(ParametersTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" opaque="false">
+                  <Button action="EditionSchemeTable.selected.parameterLast(ParametersTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemeTable.selected.parameters.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
                   <LocalizedDictionary />
@@ -85,14 +90,14 @@
               </Panel>
             </SplitPanel>
           </Panel>
-          <FIBReferencedComponent componentFile="EditionSchemePanel.fib" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" opaque="false" />
+          <FIBReferencedComponent componentFile="&quot;EditionSchemePanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" opaque="false" />
         </SplitPanel>
       </Tab>
       <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
-        <FIBReferencedComponent componentFile="EditionPatternInspectorPanel.fib" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" opaque="false" />
+        <FIBReferencedComponent componentFile="&quot;EditionPatternInspectorPanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" opaque="false" />
       </Tab>
       <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
-        <FIBReferencedComponent componentFile="LocalizedDictionaryPanel.fib" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" opaque="false" />
+        <FIBReferencedComponent componentFile="&quot;LocalizedDictionaryPanel.fib&quot;" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" opaque="false" />
       </Tab>
     </TabPanel>
   </SplitPanel>
@@ -141,7 +146,7 @@
     <Localized key="widget" lang="Dutch">widget</Localized>
     <Localized key="add_textfield_parameter" lang="English">Add a Textfield parameter</Localized>
     <Localized key="add_textfield_parameter" lang="French">Ajouter un paramètre TextField</Localized>
-    <Localized key="add_textfield_parameter" lang="Dutch">Add ta Textfield parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="Dutch">Add a Textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="English">Add a localized textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="French">Ajouter un paramètre textfield localisé</Localized>
     <Localized key="add_localized_textfield_parameter" lang="Dutch">Add a localized textfield parameter</Localized>

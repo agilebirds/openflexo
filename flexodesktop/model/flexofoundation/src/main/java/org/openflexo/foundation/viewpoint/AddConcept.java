@@ -24,14 +24,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, T> {
+public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
@@ -75,15 +73,21 @@ public abstract class AddConcept<M extends FlexoModel<M, MM>, MM extends FlexoMe
 	 * Overrides parent method by returning default model slot if model slot is not defined for this action
 	 */
 	@Override
-	public ModelSlot<M, MM> getModelSlot() {
-		ModelSlot<M, MM> returned = super.getModelSlot();
+	public MS getModelSlot() {
+		MS returned = super.getModelSlot();
 		if (returned == null && getVirtualModel() != null) {
-			List<FlexoOntologyModelSlot> msList = getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class);
+			@SuppressWarnings("rawtypes")
+			List<TypeAwareModelSlot> msList = getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
 			if (msList.size() > 0) {
-				return msList.get(0);
+				return (MS) msList.get(0);
 			}
 		}
 		return returned;
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
 	}
 
 }

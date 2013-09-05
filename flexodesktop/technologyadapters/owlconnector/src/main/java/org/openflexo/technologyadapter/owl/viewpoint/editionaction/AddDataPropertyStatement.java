@@ -39,6 +39,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -61,6 +62,13 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddDataPropertyStatement;
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(getSubject().toString() + "." + getDataProperty().getName() + " = " + getValue().toString() + ";", context);
+		return out.toString();
 	}
 
 	@Override

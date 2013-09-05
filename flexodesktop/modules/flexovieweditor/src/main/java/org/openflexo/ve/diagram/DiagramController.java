@@ -19,12 +19,14 @@
  */
 package org.openflexo.ve.diagram;
 
+import java.awt.Component;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -32,19 +34,24 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
 import org.openflexo.ve.controller.VEController;
 
-public class DiagramController extends SelectionManagingDrawingController<DiagramRepresentation> {
+public class DiagramController extends SelectionManagingDrawingController<DiagramRepresentation> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DiagramController.class.getPackage().getName());
 
@@ -207,6 +214,58 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 			return false;
 		} else {
 			return true;
+		}
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		logger.fine("dataModification=" + dataModification);
+		if (observable == getDrawing().getDiagram().getVirtualModel() && paletteView != null) {
+			if (dataModification instanceof DiagramPaletteInserted) {
+				DiagramPalette palette = ((DiagramPaletteInserted) dataModification).newValue();
+				ContextualPalette newContextualPalette = new ContextualPalette(palette);
+				_contextualPalettes.put(palette, newContextualPalette);
+				registerPalette(newContextualPalette);
+				activatePalette(newContextualPalette);
+				paletteView.add(palette.getName(), newContextualPalette.getPaletteView());
+				paletteView.revalidate();
+				paletteView.repaint();
+			} else if (dataModification instanceof DiagramPaletteRemoved) {
+				DiagramPalette palette = ((DiagramPaletteRemoved) dataModification).oldValue();
+				ContextualPalette removedPalette = _contextualPalettes.get(palette);
+				unregisterPalette(removedPalette);
+				_contextualPalettes.remove(palette);
+				paletteView.remove(removedPalette.getPaletteView());
+				paletteView.revalidate();
+				paletteView.repaint();
+			}
+		}
+	}
+
+	protected void updatePalette(DiagramPalette palette, DrawingView<?> oldPaletteView) {
+		if (getPaletteView() != null) {
+			// System.out.println("update palette with " + oldPaletteView);
+			int index = -1;
+			for (int i = 0; i < getPaletteView().getComponentCount(); i++) {
+				// System.out.println("> " + paletteView.getComponentAt(i));
+				Component c = getPaletteView().getComponentAt(i);
+				if (SwingUtilities.isDescendingFrom(oldPaletteView, c)) {
+					index = i;
+					System.out.println("Found index " + index);
+				}
+			}
+			if (index > -1) {
+				getPaletteView().remove(getPaletteView().getComponentAt(index));
+				ContextualPalette cp = _contextualPalettes.get(palette);
+				cp.updatePalette();
+				getPaletteView().insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
+				getPaletteView().setComponentAt(index, cp.getPaletteView());
+			}
+
+			getPaletteView().revalidate();
+			getPaletteView().repaint();
+		} else {
+			logger.warning("updatePalette() called with null value for paletteView");
 		}
 	}
 }

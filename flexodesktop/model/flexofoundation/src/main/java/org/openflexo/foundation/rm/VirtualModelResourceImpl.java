@@ -106,6 +106,10 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 		return true;
 	}
 
+	/**
+	 * Return virtual model stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	@Override
 	public VM getVirtualModel() {
 		try {
@@ -118,6 +122,18 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Return virtual model stored by this resource when loaded<br>
+	 * Do not force the resource data to be loaded
+	 */
+	@Override
+	public VM getLoadedVirtualModel() {
+		if (isLoaded()) {
+			return getVirtualModel();
 		}
 		return null;
 	}

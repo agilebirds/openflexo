@@ -21,8 +21,12 @@ package org.openflexo;
 
 import java.awt.Rectangle;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +35,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
@@ -43,6 +48,7 @@ import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.RectangleConverter;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Please comment this class
@@ -109,6 +115,8 @@ public final class GeneralPreferences extends ContextPreferences {
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
+
+	private static final String DIRECTORY_RESOURCE_CENTER_LIST = "directoryResourceCenterList";
 
 	private static final FlexoObserver observer = new FlexoObserver() {
 
@@ -552,7 +560,8 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().setIntegerProperty(SPLIT_DIVIDER_LOCATION + id, value);
 	}
 
-	public static File getLocalResourceCenterDirectory() {
+	@Deprecated
+	private static File getLocalResourceCenterDirectory() {
 		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
 		if (file == null) {
 			file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY);
@@ -563,8 +572,61 @@ public final class GeneralPreferences extends ContextPreferences {
 		return file;
 	}
 
-	public static void setLocalResourceCenterDirectory(File directory) {
+	@Deprecated
+	private static void setLocalResourceCenterDirectory(File directory) {
 		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
+	}
+
+	/**
+	 * Return the list all all {@link DirectoryResourceCenter} registered for the session
+	 * 
+	 * @return
+	 */
+	public static List<File> getDirectoryResourceCenterList() {
+		String directoriesAsString = getPreferences().getProperty(DIRECTORY_RESOURCE_CENTER_LIST);
+		if (StringUtils.isEmpty(directoriesAsString)) {
+			File defaultRC = getLocalResourceCenterDirectory();
+			if (defaultRC != null && defaultRC.exists()) {
+				return Collections.singletonList(defaultRC);
+			}
+			return Collections.emptyList();
+		} else {
+			List<File> returned = new ArrayList<File>();
+			StringTokenizer st = new StringTokenizer(directoriesAsString, ",");
+			while (st.hasMoreTokens()) {
+				String next = st.nextToken();
+				File f = new File(next);
+				if (f.exists()) {
+					returned.add(f);
+				}
+			}
+			return returned;
+		}
+	}
+
+	public static void assertDirectoryResourceCenterRegistered(File dirRC) {
+		List<File> alreadyRegistered = getDirectoryResourceCenterList();
+		if (alreadyRegistered.contains(dirRC)) {
+			return;
+		}
+		if (alreadyRegistered.size() == 0) {
+			getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, dirRC.getAbsolutePath());
+		} else {
+			String directoriesAsString = getPreferences().getProperty(DIRECTORY_RESOURCE_CENTER_LIST);
+			getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, directoriesAsString + "," + dirRC.getAbsolutePath());
+		}
+	}
+
+	public static void saveDirectoryResourceCenterList(List<File> rcList) {
+		boolean isFirst = true;
+		StringBuffer s = new StringBuffer();
+		for (File f : rcList) {
+			s.append((isFirst ? "" : ",") + f.getAbsolutePath());
+			isFirst = false;
+		}
+		System.out.println("Sets " + s.toString() + " for " + DIRECTORY_RESOURCE_CENTER_LIST);
+		getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, s.toString());
+		save();
 	}
 
 	public static File getLocationForResource(String uri) {

@@ -21,11 +21,13 @@ package org.openflexo.fib.controller;
 
 import java.util.List;
 
+import org.openflexo.fib.model.FIBBrowser;
+
 public class FIBBrowserDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
 	public O selected;
 	public List<O> selection;
 
-	public FIBBrowserDynamicModel(T data) {
-		super(data);
+	public FIBBrowserDynamicModel(T data, FIBBrowser component) {
+		super(data, component);
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -53,7 +54,7 @@ public abstract class AbstractTestExternalBuilders<M extends FlexoExternalMain> 
 			}
 		}
 		main = mainClass.newInstance();
-		impl = DefaultResourceCenterService.getNewInstance(new File(workingDir, "ResourceCenter"));
+		impl = DefaultResourceCenterService.getNewInstance(Collections.singletonList(new File(workingDir, "ResourceCenter")));
 		main.setResourceCenterService(impl);
 	}
 

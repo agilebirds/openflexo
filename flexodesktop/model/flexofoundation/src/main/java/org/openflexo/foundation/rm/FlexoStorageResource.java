@@ -337,7 +337,8 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	protected abstract SRD performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException;
 
-	protected boolean isLoadable() {
+	@Override
+	public boolean isLoadable() {
 		return getFile() != null && getFile().exists();
 	}
 

@@ -175,7 +175,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			try {
 				return browserElementDefinition.getLabel().getBindingValue(this);
 			} catch (TypeMismatchException e) {
-				//System.out.println("While evaluating " + browserElementDefinition.getLabel());
+				// System.out.println("While evaluating " + browserElementDefinition.getLabel());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
@@ -393,6 +393,23 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
 			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
+				List returned = list;
+				// Remove all occurences of null (caused by cast)
+				/*while (list.contains(null)) {
+					list.remove(null);
+				}*/
+				if (list.contains(null)) {
+					// The list contains null
+					// We have to consider only non-null instances of elements, but we must avoid to destroy initial list:
+					// This is the reason for what we have to clone the list while avoiding null elements
+					returned = new ArrayList<Object>();
+					for (Object o : list) {
+						if (o != null) {
+							returned.add(o);
+						}
+					}
+				}
+				return returned;
 			}
 			return list;
 		} else {

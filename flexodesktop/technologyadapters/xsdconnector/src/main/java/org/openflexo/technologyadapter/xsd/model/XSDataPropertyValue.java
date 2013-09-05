@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 
 /**
  * Implementation of an Data Property values in XSD/XML technology.<br>
@@ -31,7 +33,9 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataPropertyValue;
  */
 public class XSDataPropertyValue extends XSPropertyValue implements IFlexoOntologyDataPropertyValue {
 
+
 	private XSOntDataProperty property;
+	// FIXME in XML Data Property can have a single Value
 	private List<Object> values;
 
 	public XSDataPropertyValue(XSOntDataProperty property, Object value) {
@@ -52,6 +56,15 @@ public class XSDataPropertyValue extends XSPropertyValue implements IFlexoOntolo
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		// One Single Value per DataProperty in XML
+		if (values.size()>0) {
+			return values.get(0).equals(obj);
+		}
+		return false;
+	}
+
+	@Override
 	public List<Object> getValues() {
 		return values;
 	}
@@ -63,4 +76,27 @@ public class XSDataPropertyValue extends XSPropertyValue implements IFlexoOntolo
 	public void removeFromValues(Object value) {
 		values.remove(value);
 	}
+
+	@Override
+	public String toString() {
+		String result = new String();
+
+		// TODO Work in progress
+
+		for (Object o : values){
+			if (o instanceof String) {
+				result = result.concat((String) o);
+			}
+		}
+		return result;
+	}
+	
+	// FIXME : XML Attributes have a single value, multiplicity is not needed
+	public Object getValue() {
+		if (values.size() > 0){
+			return values.get(0);
+		}
+		else return null;
+	}
+
 }

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.FlexoCst;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.graphics.ShadowStyle;
@@ -38,7 +39,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
@@ -80,7 +80,7 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				return instanciateAndShowDialog(action, VPMCst.PUSH_TO_PALETTE_DIALOG_FIB);
+				return instanciateAndShowDialog(action, FlexoCst.PUSH_TO_PALETTE_DIALOG_FIB);
 			}
 		};
 	}

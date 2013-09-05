@@ -146,6 +146,7 @@ public class VPMController extends FlexoController {
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoObject object) {
+		if (object != null) {
 		logger.info("selectAndFocusObject " + object + "of " + object.getClass().getSimpleName());
 		if (object instanceof EditionPatternObject) {
 			setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
@@ -186,6 +187,10 @@ public class VPMController extends FlexoController {
 			}
 		}
 		getSelectionManager().setSelectedObject(object);
+		}
+		else {
+			logger.warning("Cannot set focus on a NULL object");
+		}
 	}
 
 	// ================================================

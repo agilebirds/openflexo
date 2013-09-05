@@ -74,4 +74,10 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 		return "diagram_root_pane";
 	}
 
+	/*@Override
+	public List<? extends GRTemplate> getDescendants() {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
 }
