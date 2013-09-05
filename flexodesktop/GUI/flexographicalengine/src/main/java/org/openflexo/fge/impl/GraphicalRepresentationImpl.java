@@ -841,11 +841,13 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
+	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	@Override
 	public String getText() {
 		return text;
 	}
 
+	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	@Override
 	public void setText(String text) {
 		FGENotification notification = requireChange(TEXT, text);

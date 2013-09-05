@@ -105,6 +105,10 @@ public interface Drawing<M> {
 		@PropertyIdentifier(type = Boolean.class)
 		public static final String IS_FOCUSED_KEY = "isFocused";
 
+		/*public static enum DrawingTreeNodeParameter implements GRParameter {
+			isSelected, isFocused;
+		}*/
+
 		/**
 		 * Return the drawing
 		 * 
