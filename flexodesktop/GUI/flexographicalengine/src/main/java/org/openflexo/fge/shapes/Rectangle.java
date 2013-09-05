@@ -19,11 +19,12 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.shapes.impl.RectangleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -42,12 +43,17 @@ public interface Rectangle extends ShapeSpecification {
 
 	// Property keys
 
-	public static final String IS_ROUNDED = "isRounded";
-	public static final String ARC_SIZE = "arcSize";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_ROUNDED_KEY = "isRounded";
+	@PropertyIdentifier(type = Double.class)
+	public static final String ARC_SIZE_KEY = "arcSize";
 
-	public static enum RectangleParameters implements GRParameter {
+	public static GRParameter<Boolean> IS_ROUNDED = GRParameter.getGRParameter(Rectangle.class, IS_ROUNDED_KEY, Boolean.class);
+	public static GRParameter<Double> ARC_SIZE = GRParameter.getGRParameter(Rectangle.class, ARC_SIZE_KEY, Double.class);
+
+	/*public static enum RectangleParameters implements GRParameter {
 		isRounded, arcSize;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
@@ -58,7 +64,7 @@ public interface Rectangle extends ShapeSpecification {
 	 * 
 	 * @return
 	 */
-	@Getter(value = ARC_SIZE, defaultValue = "30")
+	@Getter(value = ARC_SIZE_KEY, defaultValue = "30")
 	@XMLAttribute
 	public double getArcSize();
 
@@ -67,14 +73,14 @@ public interface Rectangle extends ShapeSpecification {
 	 * 
 	 * @param anArcSize
 	 */
-	@Setter(value = ARC_SIZE)
+	@Setter(value = ARC_SIZE_KEY)
 	public void setArcSize(double anArcSize);
 
-	@Getter(value = IS_ROUNDED, defaultValue = "false")
+	@Getter(value = IS_ROUNDED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsRounded();
 
-	@Setter(value = IS_ROUNDED)
+	@Setter(value = IS_ROUNDED_KEY)
 	public void setIsRounded(boolean aFlag);
 
 }

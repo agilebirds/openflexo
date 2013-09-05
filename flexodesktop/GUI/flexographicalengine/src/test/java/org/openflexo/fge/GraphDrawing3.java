@@ -6,7 +6,6 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
@@ -72,7 +71,7 @@ public class GraphDrawing3 extends DrawingImpl<Graph> {
 			}
 		});
 
-		nodeBinding.addDynamicPropertyValue(Parameters.text, "drawable.name");
+		nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, "drawable.name");
 
 	}
 }

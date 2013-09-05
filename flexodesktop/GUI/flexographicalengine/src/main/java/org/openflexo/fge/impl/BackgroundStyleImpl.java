@@ -2,6 +2,7 @@ package org.openflexo.fge.impl;
 
 import java.awt.Paint;
 import java.io.File;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -10,7 +11,7 @@ import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 
@@ -18,10 +19,18 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 
 	static final Logger logger = Logger.getLogger(BackgroundStyle.class.getPackage().getName());
 
-	private transient GraphicalRepresentation graphicalRepresentation;
+	// private transient GraphicalRepresentation graphicalRepresentation;
 
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
+
+	public static GRParameter<?> getParameter(String parameterName) {
+		return GRParameter.getGRParameter(BackgroundStyle.class, parameterName);
+	}
+
+	public static Collection<GRParameter<?>> getAllParameters() {
+		return GRParameter.getGRParameters(BackgroundStyle.class);
+	}
 
 	@Deprecated
 	public static BackgroundStyle makeEmptyBackground() {
@@ -103,7 +112,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			float oldValue = transparencyLevel;
 			this.transparencyLevel = aLevel;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.transparencyLevel, oldValue, aLevel));
+			notifyObservers(new FGENotification(TRANSPARENCY_LEVEL, oldValue, aLevel));
 		}
 	}
 
@@ -118,7 +127,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			boolean oldValue = useTransparency;
 			this.useTransparency = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.useTransparency, oldValue, aFlag));
+			notifyObservers(new FGENotification(USE_TRANSPARENCY, oldValue, aFlag));
 		}
 	}
 
@@ -126,7 +135,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	public BackgroundStyle clone() {
 		try {
 			BackgroundStyle returned = (BackgroundStyle) super.clone();
-			((BackgroundStyleImpl) returned).graphicalRepresentation = null;
+			// ((BackgroundStyleImpl) returned).graphicalRepresentation = null;
 			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable

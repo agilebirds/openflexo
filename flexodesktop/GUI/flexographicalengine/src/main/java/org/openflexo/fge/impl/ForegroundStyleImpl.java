@@ -94,12 +94,12 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 
 	@Override
 	public void setCapStyle(CapStyle aCapStyle) {
-		if (requireChange(this.color, aCapStyle)) {
+		if (requireChange(this.capStyle, aCapStyle)) {
 			CapStyle oldCapStyle = capStyle;
 			this.capStyle = aCapStyle;
 			stroke = null;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.capStyle, oldCapStyle, aCapStyle));
+			notifyObservers(new FGENotification(CAP_STYLE, oldCapStyle, aCapStyle));
 		}
 	}
 
@@ -114,7 +114,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			java.awt.Color oldColor = color;
 			this.color = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR, oldColor, aColor));
 		}
 	}
 
@@ -135,7 +135,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			this.dashStyle = aDashStyle;
 			stroke = null;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.dashStyle, oldDashStyle, dashStyle));
+			notifyObservers(new FGENotification(DASH_STYLE, oldDashStyle, dashStyle));
 		}
 	}
 
@@ -151,7 +151,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			this.joinStyle = aJoinStyle;
 			stroke = null;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.joinStyle, oldJoinStyle, aJoinStyle));
+			notifyObservers(new FGENotification(JOIN_STYLE, oldJoinStyle, aJoinStyle));
 		}
 	}
 
@@ -167,7 +167,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			lineWidth = aLineWidth;
 			stroke = null;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.lineWidth, oldLineWidth, aLineWidth));
+			notifyObservers(new FGENotification(LINE_WIDTH, oldLineWidth, aLineWidth));
 		}
 	}
 
@@ -182,7 +182,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			boolean oldValue = noStroke;
 			this.noStroke = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.noStroke, oldValue, aFlag));
+			notifyObservers(new FGENotification(NO_STROKE, oldValue, aFlag));
 		}
 	}
 
@@ -216,7 +216,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			float oldValue = transparencyLevel;
 			this.transparencyLevel = aLevel;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.transparencyLevel, oldValue, aLevel));
+			notifyObservers(new FGENotification(TRANSPARENCY_LEVEL, oldValue, aLevel));
 		}
 	}
 
@@ -231,7 +231,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			boolean oldValue = useTransparency;
 			this.useTransparency = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.useTransparency, oldValue, aFlag));
+			notifyObservers(new FGENotification(USE_TRANSPARENCY, oldValue, aFlag));
 		}
 	}
 

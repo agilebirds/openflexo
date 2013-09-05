@@ -2,8 +2,8 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 
 /**
  * This class represent a graphical feature that is to be associated on a DiagramElement

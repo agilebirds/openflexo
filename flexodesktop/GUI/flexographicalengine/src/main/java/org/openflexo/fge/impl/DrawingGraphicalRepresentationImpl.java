@@ -1,14 +1,11 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -35,26 +32,6 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	private boolean drawWorkingArea = false;
 	private boolean isResizable = false;
 	protected DrawingDecorationPainter decorationPainter;
-
-	// *******************************************************************************
-	// * Inner classes *
-	// *******************************************************************************
-
-	// *******************************************************************************
-	// * Fields *
-	// *******************************************************************************
-
-	// protected FGEDrawingGraphics graphics;
-	// private FGEDrawingDecorationGraphics decorationGraphics;
-	// private BackgroundStyle bgStyle;
-
-	// *******************************************************************************
-	// * Methods *
-	// *******************************************************************************
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
@@ -97,7 +74,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		decorationPainter = null;
 	}
 
-	@Override
+	/*@Override
 	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = super.getAllParameters();
 		Parameters[] allParams = Parameters.values();
@@ -105,7 +82,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 			returned.add(allParams[i]);
 		}
 		return returned;
-	}
+	}*/
 
 	/**
 	 * Override parent behaviour by always returning true<br>
@@ -120,7 +97,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	// * Cloning *
 	// ***************************************************************************
 
-	@Override
+	/*@Override
 	public final void setsWith(GraphicalRepresentation gr) {
 		super.setsWith(gr);
 		if (gr instanceof DrawingGraphicalRepresentation) {
@@ -128,9 +105,9 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 				_setParameterValueWith(p, gr);
 			}
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public final void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters) {
 		super.setsWith(gr, exceptedParameters);
 		if (gr instanceof ConnectorGraphicalRepresentation) {
@@ -146,7 +123,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 				}
 			}
 		}
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Accessors *
@@ -171,7 +148,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	public void setBackgroundColor(Color backgroundColor) {
 		// logger.info("For "+this+" Set bg color to "+backgroundColor);
 
-		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
+		FGENotification notification = requireChange(BACKGROUND_COLOR, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
 			// bgStyle = getFactory().makeColoredBackground(backgroundColor);
@@ -214,7 +191,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 
 	@Override
 	public void setFocusColor(Color focusColor) {
-		FGENotification notification = requireChange(DrawingParameters.focusColor, focusColor);
+		FGENotification notification = requireChange(FOCUS_COLOR, focusColor);
 		if (notification != null) {
 			this.focusColor = focusColor;
 			hasChanged(notification);
@@ -228,7 +205,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 
 	@Override
 	public void setSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(DrawingParameters.selectionColor, selectionColor);
+		FGENotification notification = requireChange(SELECTION_COLOR, selectionColor);
 		if (notification != null) {
 			this.selectionColor = selectionColor;
 			hasChanged(notification);
@@ -242,7 +219,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 
 	@Override
 	public void setRectangleSelectingSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(DrawingParameters.rectangleSelectingSelectionColor, selectionColor);
+		FGENotification notification = requireChange(RECTANGLE_SELECTING_SELECTION_COLOR, selectionColor);
 		if (notification != null) {
 			this.rectangleSelectingSelectionColor = selectionColor;
 			hasChanged(notification);
@@ -342,18 +319,8 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	}
 
 	@Override
-	public final boolean hasText() {
-		return false;
-	}
-
-	@Override
 	public final String getText() {
 		return null;
-	}
-
-	@Override
-	public boolean hasFloatingLabel() {
-		return false;
 	}
 
 	@Override
@@ -417,7 +384,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	public void setDrawWorkingArea(boolean drawWorkingArea) {
 		// logger.info("setDrawWorkingArea with "+drawWorkingArea);
 
-		FGENotification notification = requireChange(DrawingParameters.drawWorkingArea, drawWorkingArea);
+		FGENotification notification = requireChange(DRAW_WORKING_AREA, drawWorkingArea);
 		if (notification != null) {
 			this.drawWorkingArea = drawWorkingArea;
 			hasChanged(notification);
@@ -431,7 +398,7 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 
 	@Override
 	public void setIsResizable(boolean isResizable) {
-		FGENotification notification = requireChange(DrawingParameters.isResizable, isResizable);
+		FGENotification notification = requireChange(IS_RESIZABLE, isResizable);
 		if (notification != null) {
 			this.isResizable = isResizable;
 			hasChanged(notification);

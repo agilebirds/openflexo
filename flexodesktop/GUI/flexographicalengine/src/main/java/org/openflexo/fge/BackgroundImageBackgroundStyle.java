@@ -1,5 +1,6 @@
 package org.openflexo.fge;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 
@@ -7,6 +8,7 @@ import org.openflexo.fge.impl.BackgroundImageBackgroundStyleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -22,14 +24,35 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement(xmlTag = "ImageBackgroundStyle")
 public interface BackgroundImageBackgroundStyle extends BackgroundStyle {
 
-	public static final String IMAGE_FILE = "imageFile";
-	public static final String SCALE_X = "scaleX";
-	public static final String SCALE_Y = "scaleY";
-	public static final String DELTA_X = "deltaX";
-	public static final String DELTA_Y = "deltaY";
-	public static final String FIT_TO_SHAPE = "fitToShape";
-	public static final String IMAGE_BACKGROUND_TYPE = "imageBackgroundType";
-	public static final String IMAGE_BACKGROUND_COLOR = "imageBackgroundColor";
+	@PropertyIdentifier(type = File.class)
+	public static final String IMAGE_FILE_KEY = "imageFile";
+	@PropertyIdentifier(type = Double.class)
+	public static final String SCALE_X_KEY = "scaleX";
+	@PropertyIdentifier(type = Double.class)
+	public static final String SCALE_Y_KEY = "scaleY";
+	@PropertyIdentifier(type = Double.class)
+	public static final String DELTA_X_KEY = "deltaX";
+	@PropertyIdentifier(type = Double.class)
+	public static final String DELTA_Y_KEY = "deltaY";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String FIT_TO_SHAPE_KEY = "fitToShape";
+	@PropertyIdentifier(type = ImageBackgroundType.class)
+	public static final String IMAGE_BACKGROUND_TYPE_KEY = "imageBackgroundType";
+	@PropertyIdentifier(type = Color.class)
+	public static final String IMAGE_BACKGROUND_COLOR_KEY = "imageBackgroundColor";
+
+	public static GRParameter<File> IMAGE_FILE = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, IMAGE_FILE_KEY,
+			File.class);
+	public static GRParameter<Double> SCALE_X = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, SCALE_X_KEY, Double.class);
+	public static GRParameter<Double> SCALE_Y = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, SCALE_Y_KEY, Double.class);
+	public static GRParameter<Double> DELTA_X = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, DELTA_X_KEY, Double.class);
+	public static GRParameter<Double> DELTA_Y = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, DELTA_Y_KEY, Double.class);
+	public static GRParameter<Boolean> FIT_TO_SHAPE = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class, FIT_TO_SHAPE_KEY,
+			Boolean.class);
+	public static GRParameter<ImageBackgroundType> IMAGE_BACKGROUND_TYPE = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class,
+			IMAGE_BACKGROUND_TYPE_KEY, ImageBackgroundType.class);
+	public static GRParameter<Color> IMAGE_BACKGROUND_COLOR = GRParameter.getGRParameter(BackgroundImageBackgroundStyle.class,
+			IMAGE_BACKGROUND_COLOR_KEY, Color.class);
 
 	public static enum ImageBackgroundType {
 		OPAQUE, TRANSPARENT
@@ -38,60 +61,60 @@ public interface BackgroundImageBackgroundStyle extends BackgroundStyle {
 	@Override
 	public BackgroundStyleType getBackgroundStyleType();
 
-	@Getter(value = IMAGE_FILE)
+	@Getter(value = IMAGE_FILE_KEY)
 	@XMLAttribute
 	public File getImageFile();
 
-	@Setter(value = IMAGE_FILE)
+	@Setter(value = IMAGE_FILE_KEY)
 	public void setImageFile(File anImageFile);
 
-	@Getter(value = IMAGE_BACKGROUND_COLOR)
+	@Getter(value = IMAGE_BACKGROUND_COLOR_KEY)
 	@XMLAttribute
 	public java.awt.Color getImageBackgroundColor();
 
-	@Setter(value = IMAGE_BACKGROUND_COLOR)
+	@Setter(value = IMAGE_BACKGROUND_COLOR_KEY)
 	public void setImageBackgroundColor(java.awt.Color aColor);
 
-	@Getter(value = DELTA_X, defaultValue = "0.0")
+	@Getter(value = DELTA_X_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getDeltaX();
 
-	@Setter(value = DELTA_X)
+	@Setter(value = DELTA_X_KEY)
 	public void setDeltaX(double aDeltaX);
 
-	@Getter(value = DELTA_Y, defaultValue = "0.0")
+	@Getter(value = DELTA_Y_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getDeltaY();
 
-	@Setter(value = DELTA_Y)
+	@Setter(value = DELTA_Y_KEY)
 	public void setDeltaY(double aDeltaY);
 
-	@Getter(value = IMAGE_BACKGROUND_TYPE)
+	@Getter(value = IMAGE_BACKGROUND_TYPE_KEY)
 	@XMLAttribute
 	public ImageBackgroundType getImageBackgroundType();
 
-	@Setter(value = IMAGE_BACKGROUND_TYPE)
+	@Setter(value = IMAGE_BACKGROUND_TYPE_KEY)
 	public void setImageBackgroundType(ImageBackgroundType anImageBackgroundType);
 
-	@Getter(value = SCALE_X, defaultValue = "1.0")
+	@Getter(value = SCALE_X_KEY, defaultValue = "1.0")
 	@XMLAttribute
 	public double getScaleX();
 
-	@Setter(value = SCALE_X)
+	@Setter(value = SCALE_X_KEY)
 	public void setScaleX(double aScaleX);
 
-	@Getter(value = SCALE_Y, defaultValue = "1.0")
+	@Getter(value = SCALE_Y_KEY, defaultValue = "1.0")
 	@XMLAttribute
 	public double getScaleY();
 
-	@Setter(value = SCALE_Y)
+	@Setter(value = SCALE_Y_KEY)
 	public void setScaleY(double aScaleY);
 
-	@Getter(value = FIT_TO_SHAPE, defaultValue = "false")
+	@Getter(value = FIT_TO_SHAPE_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getFitToShape();
 
-	@Setter(value = FIT_TO_SHAPE)
+	@Setter(value = FIT_TO_SHAPE_KEY)
 	public void setFitToShape(boolean aFlag);
 
 	public Image getImage();

@@ -71,7 +71,7 @@ public class StarImpl extends ShapeSpecificationImpl implements Star {
 
 	@Override
 	public void setNPoints(int pointsNb) {
-		FGENotification notification = requireChange(StarParameters.nPoints, pointsNb);
+		FGENotification notification = requireChange(N_POINTS, pointsNb);
 		if (notification != null) {
 			npoints = pointsNb;
 			hasChanged(notification);
@@ -85,7 +85,7 @@ public class StarImpl extends ShapeSpecificationImpl implements Star {
 
 	@Override
 	public void setStartAngle(int anAngle) {
-		FGENotification notification = requireChange(StarParameters.startAngle, anAngle);
+		FGENotification notification = requireChange(START_ANGLE, anAngle);
 		if (notification != null) {
 			startAngle = anAngle;
 			hasChanged(notification);
@@ -100,7 +100,7 @@ public class StarImpl extends ShapeSpecificationImpl implements Star {
 	@Override
 	public void setRatio(double aRatio) {
 		if (aRatio > 0 && aRatio < 1.0) {
-			FGENotification notification = requireChange(StarParameters.ratio, aRatio);
+			FGENotification notification = requireChange(RATIO, aRatio);
 			if (notification != null) {
 				ratio = aRatio;
 				hasChanged(notification);

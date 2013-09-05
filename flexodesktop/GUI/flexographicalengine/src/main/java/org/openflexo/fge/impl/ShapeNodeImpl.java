@@ -18,7 +18,7 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.ContainerGraphicalRepresentation.ContainerParameters;
+import org.openflexo.fge.ContainerGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
@@ -28,12 +28,11 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -262,12 +261,12 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public int getViewX(double scale) {
-		return (int) (getGraphicalRepresentation().getX() * scale/*-(border!=null?border.left:0)*/);
+		return (int) (getX() * scale/*-(border!=null?border.left:0)*/);
 	}
 
 	@Override
 	public int getViewY(double scale) {
-		return (int) (getGraphicalRepresentation().getY() * scale/*-(border!=null?border.top:0)*/);
+		return (int) (getY() * scale/*-(border!=null?border.top:0)*/);
 	}
 
 	@Override
@@ -301,7 +300,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public void update(Observable observable, Object notification) {
-		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
+		System.out.println("update() in ShapeNodeImpl, received " + notification + " from " + observable);
 
 		super.update(observable, notification);
 
@@ -309,33 +308,37 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			// Those notifications are forwarded by my graphical representation
 			FGENotification notif = (FGENotification) notification;
 
-			if (notif.getParameter() == Parameters.text) {
+			if (notif.getParameter() == GraphicalRepresentation.TEXT) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == Parameters.textStyle) {
+			} else if (notif.getParameter() == GraphicalRepresentation.TEXT_STYLE) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == ShapeParameters.adjustMaximalWidthToLabelWidth
-					|| notif.getParameter() == ShapeParameters.adjustMinimalWidthToLabelWidth
-					|| notif.getParameter() == ShapeParameters.adjustMaximalHeightToLabelHeight
-					|| notif.getParameter() == ShapeParameters.adjustMinimalHeightToLabelHeight) {
+			} else if (notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT
+					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH
+					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT
+					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == ContainerParameters.width || notif.getParameter() == ContainerParameters.height
-					|| notif.getParameter() == ShapeParameters.minimalWidth || notif.getParameter() == ShapeParameters.minimalHeight
-					|| notif.getParameter() == ShapeParameters.maximalWidth || notif.getParameter() == ShapeParameters.maximalHeight) {
+			} else if (notif.getParameter() == ContainerGraphicalRepresentation.WIDTH
+					|| notif.getParameter() == ContainerGraphicalRepresentation.HEIGHT
+					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_HEIGHT
+					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_WIDTH
+					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_HEIGHT
+					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_WIDTH) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == Parameters.horizontalTextAlignment
-					|| notif.getParameter() == Parameters.verticalTextAlignment) {
+			} else if (notif.getParameter() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT
+					|| notif.getParameter() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == ShapeParameters.locationConstraints
-					|| notif.getParameter() == ShapeParameters.locationConstrainedArea
-					|| notif.getParameter() == ShapeParameters.dimensionConstraintStep
-					|| notif.getParameter() == ShapeParameters.dimensionConstraints) {
+			} else if (notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINTS
+					|| notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINED_AREA
+					|| notif.getParameter() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINT_STEP
+					|| notif.getParameter() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINTS) {
 				checkAndUpdateLocationIfRequired();
 				getShape().updateControlPoints();
-			} else if (notif.getParameter() == ShapeParameters.adaptBoundsToContents) {
+			} else if (notif.getParameter() == ShapeGraphicalRepresentation.ADAPT_BOUNDS_TO_CONTENTS) {
 				extendBoundsToHostContents();
-			} else if (notif.getParameter() == ShapeParameters.border) {
+			} else if (notif.getParameter() == ShapeGraphicalRepresentation.BORDER) {
 				notifyObjectResized();
-			} else if (notif.getParameter() == ShapeParameters.shape || notif.getParameter() == ShapeParameters.shapeType) {
+			} else if (notif.getParameter() == ShapeGraphicalRepresentation.SHAPE
+					|| notif.getParameter() == ShapeGraphicalRepresentation.SHAPE_TYPE) {
 				getShape().updateShape();
 				notifyShapeChanged();
 			}
@@ -365,13 +368,13 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		}
 
 		if (observable instanceof BackgroundStyle) {
-			notifyAttributeChanged(ShapeParameters.background, null, getGraphicalRepresentation().getBackground());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.BACKGROUND, null, getGraphicalRepresentation().getBackground());
 		}
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChanged(ShapeParameters.foreground, null, getGraphicalRepresentation().getForeground());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 		if (observable instanceof ShadowStyle) {
-			notifyAttributeChanged(ShapeParameters.shadowStyle, null, getGraphicalRepresentation().getShadowStyle());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.SHADOW_STYLE, null, getGraphicalRepresentation().getShadowStyle());
 		}
 	}
 
@@ -526,6 +529,20 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getX() {
+		if (getGRBinding().hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
+			try {
+				return (Double) getGRBinding().getDynamicPropertyValue(ShapeGraphicalRepresentation.X).getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// SGU: in general case, this is NOT forbidden
 		if (!getGraphicalRepresentation().getAllowToLeaveBounds()) {
 			if (x < 0) {
@@ -560,6 +577,20 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getY() {
+		if (getGRBinding().hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
+			try {
+				return (Double) getGRBinding().getDynamicPropertyValue(ShapeGraphicalRepresentation.Y).getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// SGU: in general case, this is NOT forbidden
 		if (!getGraphicalRepresentation().getAllowToLeaveBounds()) {
 			if (y < 0) {
@@ -614,8 +645,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				setYNoNotification(newLocation.y);
 			}
 			notifyObjectMoved(oldLocation);
-			notifyAttributeChanged(ShapeParameters.x, oldX, getX());
-			notifyAttributeChanged(ShapeParameters.y, oldY, getY());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.X, oldX, getX());
+			notifyAttributeChanged(ShapeGraphicalRepresentation.Y, oldY, getY());
 			if (!isFullyContainedInContainer()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("setLocation() lead shape going outside it's parent view");
@@ -695,7 +726,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			if (gr instanceof ShapeNode) {
 				ShapeNodeImpl<?> shapeGR = (ShapeNodeImpl<?>) gr;
 				FGERectangle bounds = shapeGR.getBoundsNoBorder();
-				if (shapeGR.getGraphicalRepresentation().hasText()) {
+				if (shapeGR.hasText()) {
 					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
 					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
 					bounds = bounds.rectangleUnion(labelBounds2);
@@ -740,7 +771,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 					bounds.x = newChildLocation.x;
 					bounds.y = newChildLocation.y;
 				}
-				if (shapeGR.getGraphicalRepresentation().hasText()) {
+				if (shapeGR.hasText()) {
 					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
 					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
 					bounds = bounds.rectangleUnion(labelBounds2);
@@ -986,7 +1017,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			double oldHeight = getHeight();
 			setWidthNoNotification(newSize.width);
 			setHeightNoNotification(newSize.height);
-			if (getGraphicalRepresentation().hasFloatingLabel()) {
+			if (hasFloatingLabel()) {
 				if (getGraphicalRepresentation().getAbsoluteTextX() >= 0) {
 					if (getGraphicalRepresentation().getAbsoluteTextX() < getWidth()) {
 						getGraphicalRepresentation().setAbsoluteTextX(
@@ -1011,8 +1042,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				((ShapeNodeImpl<?>) getParentNode()).checkAndUpdateDimensionIfRequired();
 			}
 			notifyObjectResized(oldSize);
-			notifyAttributeChanged(ContainerParameters.width, oldWidth, getWidth());
-			notifyAttributeChanged(ContainerParameters.height, oldHeight, getHeight());
+			notifyAttributeChanged(ContainerGraphicalRepresentation.WIDTH, oldWidth, getWidth());
+			notifyAttributeChanged(ContainerGraphicalRepresentation.HEIGHT, oldHeight, getHeight());
 			// getGraphicalRepresentation().getShape().notifyObjectResized();
 		}
 	}
@@ -1091,7 +1122,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			double minHeight = getGraphicalRepresentation().getMinimalHeight();
 			double maxWidth = getGraphicalRepresentation().getMaximalWidth();
 			double maxHeight = getGraphicalRepresentation().getMaximalHeight();
-			if (getGraphicalRepresentation().hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
+			if (hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
 				Dimension normalizedLabelSize = getNormalizedLabelSize();
 				int labelWidth = normalizedLabelSize.width;
 				int labelHeight = normalizedLabelSize.height;
@@ -1236,7 +1267,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 			boolean useStepDimensionConstraints = getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED
 					&& getGraphicalRepresentation().getDimensionConstraintStep() != null;
-			if (useStepDimensionConstraints && getGraphicalRepresentation().hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
+			if (useStepDimensionConstraints && hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
 				if (getGraphicalRepresentation().getAdjustMinimalWidthToLabelWidth()
 						&& getGraphicalRepresentation().getAdjustMaximalWidthToLabelWidth()) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -1329,17 +1360,17 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	protected void computeNewConstraint(ConstraintDependency dependancy) {
-		if (dependancy.requiringParameter == ShapeParameters.xConstraints && getGraphicalRepresentation().getXConstraints() != null
-				&& getGraphicalRepresentation().getXConstraints().isValid()) {
+		if (dependancy.requiringParameter == ShapeGraphicalRepresentation.X_CONSTRAINTS
+				&& getGraphicalRepresentation().getXConstraints() != null && getGraphicalRepresentation().getXConstraints().isValid()) {
 			updateXPosition();
-		} else if (dependancy.requiringParameter == ShapeParameters.yConstraints && getGraphicalRepresentation().getYConstraints() != null
-				&& getGraphicalRepresentation().getYConstraints().isValid()) {
+		} else if (dependancy.requiringParameter == ShapeGraphicalRepresentation.Y_CONSTRAINTS
+				&& getGraphicalRepresentation().getYConstraints() != null && getGraphicalRepresentation().getYConstraints().isValid()) {
 			updateYPosition();
-		} else if (dependancy.requiringParameter == ShapeParameters.widthConstraints
+		} else if (dependancy.requiringParameter == ShapeGraphicalRepresentation.WIDTH_CONSTRAINTS
 				&& getGraphicalRepresentation().getWidthConstraints() != null
 				&& getGraphicalRepresentation().getWidthConstraints().isValid()) {
 			updateWidthPosition();
-		} else if (dependancy.requiringParameter == ShapeParameters.heightConstraints
+		} else if (dependancy.requiringParameter == ShapeGraphicalRepresentation.HEIGHT_CONSTRAINTS
 				&& getGraphicalRepresentation().getHeightConstraints() != null
 				&& getGraphicalRepresentation().getHeightConstraints().isValid()) {
 			updateHeightPosition();
@@ -1789,6 +1820,17 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorNode<?> connector, FGEArea area, SimplifiedCardinalDirection direction) {
 		return area;
+	}
+
+	@Override
+	public String toString() {
+		return "Shape-" + getIndex() + "[" + getX() + ";" + getY() + "][" + getWidth() + "x" + getHeight() + "][" + getFGEShape() + "]:"
+				+ getDrawable();
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return hasText() && getGraphicalRepresentation().getIsFloatingLabel();
 	}
 
 }

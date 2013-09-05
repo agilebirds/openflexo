@@ -55,7 +55,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 				image = null;
 			}
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.imageFile, oldFile, anImageFile));
+			notifyObservers(new FGENotification(IMAGE_FILE, oldFile, anImageFile));
 		}
 	}
 
@@ -88,7 +88,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			java.awt.Color oldColor = imageBackgroundColor;
 			this.imageBackgroundColor = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.imageBackgroundColor, oldColor, aColor));
+			notifyObservers(new FGENotification(IMAGE_BACKGROUND_COLOR, oldColor, aColor));
 		}
 	}
 
@@ -103,7 +103,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			double oldDeltaX = this.deltaX;
 			this.deltaX = aDeltaX;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.deltaX, oldDeltaX, deltaX));
+			notifyObservers(new FGENotification(DELTA_X, oldDeltaX, deltaX));
 		}
 	}
 
@@ -118,7 +118,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			double oldDeltaY = this.deltaY;
 			this.deltaY = aDeltaY;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.deltaY, oldDeltaY, deltaY));
+			notifyObservers(new FGENotification(DELTA_Y, oldDeltaY, deltaY));
 		}
 	}
 
@@ -133,7 +133,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			BackgroundImageBackgroundStyle.ImageBackgroundType oldImageBackgroundType = this.imageBackgroundType;
 			this.imageBackgroundType = anImageBackgroundType;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.imageBackgroundType, oldImageBackgroundType, anImageBackgroundType));
+			notifyObservers(new FGENotification(IMAGE_BACKGROUND_TYPE, oldImageBackgroundType, anImageBackgroundType));
 		}
 	}
 
@@ -149,7 +149,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			// logger.info(toString()+": Sets scaleX from "+oldScaleX+" to "+aScaleX);
 			this.scaleX = aScaleX;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.scaleX, oldScaleX, scaleX));
+			notifyObservers(new FGENotification(SCALE_X, oldScaleX, scaleX));
 		}
 	}
 
@@ -172,7 +172,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			// logger.info(toString()+": Sets scaleY from "+oldScaleY+" to "+aScaleY);
 			this.scaleY = aScaleY;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.scaleY, oldScaleY, scaleY));
+			notifyObservers(new FGENotification(SCALE_Y, oldScaleY, scaleY));
 		}
 	}
 
@@ -194,7 +194,7 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 			boolean oldValue = fitToShape;
 			this.fitToShape = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.fitToShape, oldValue, aFlag));
+			notifyObservers(new FGENotification(FIT_TO_SHAPE, oldValue, aFlag));
 		}
 	}
 

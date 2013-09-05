@@ -33,6 +33,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -51,51 +52,93 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	// Property keys
 
-	public static final String X = "x";
-	public static final String Y = "y";
-	public static final String MINIMAL_WIDTH = "minimalWidth";
-	public static final String MINIMAL_HEIGHT = "minimalHeight";
-	public static final String MAXIMAL_WIDTH = "maximalWidth";
-	public static final String MAXIMAL_HEIGHT = "maximalHeight";
-	public static final String DIMENSION_CONSTRAINT_STEP = "dimensionConstraintStep";
-	public static final String LOCATION_CONSTRAINTS = "locationConstraints";
-	public static final String LOCATION_CONSTRAINED_AREA = "locationConstrainedArea";
-	public static final String DIMENSION_CONSTRAINTS = "dimensionConstraints";
-	public static final String ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH = "adjustMinimalWidthToLabelWidth";
-	public static final String ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT = "adjustMinimalHeightToLabelHeight";
-	public static final String ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH = "adjustMaximalWidthToLabelWidth";
-	public static final String ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT = "adjustMaximalHeightToLabelHeight";
-	public static final String FOREGROUND = "foreground";
-	public static final String BACKGROUND = "background";
-	public static final String SELECTED_FOREGROUND = "selectedForeground";
-	public static final String SELECTED_BACKGROUND = "selectedBackground";
-	public static final String FOCUSED_FOREGROUND = "focusedForeground";
-	public static final String FOCUSED_BACKGROUND = "focusedBackground";
-	public static final String HAS_SELECTED_FOREGROUND = "hasSelectedForeground";
-	public static final String HAS_SELECTED_BACKGROUND = "hasSelectedBackground";
-	public static final String HAS_FOCUSED_FOREGROUND = "hasFocusedForeground";
-	public static final String HAS_FOCUSED_BACKGROUND = "hasFocusedBackground";
-	public static final String BORDER = "border";
-	public static final String SHAPE_TYPE = "shapeType";
-	public static final String SHAPE = "shape";
-	public static final String SHADOW_STYLE = "shadowStyle";
-	public static final String IS_FLOATING_LABEL = "isFloatingLabel";
-	public static final String RELATIVE_TEXT_X = "relativeTextX";
-	public static final String RELATIVE_TEXT_Y = "relativeTextY";
-	public static final String DECORATION_PAINTER = "decorationPainter";
-	public static final String SHAPE_PAINTER = "shapePainter";
-	public static final String ALLOW_TO_LEAVE_BOUNDS = "allowToLeaveBounds";
-	public static final String ADAPT_BOUNDS_TO_CONTENTS = "adaptBoundsToContents";
+	@PropertyIdentifier(type = Double.class)
+	public static final String X_KEY = "x";
+	@PropertyIdentifier(type = Double.class)
+	public static final String Y_KEY = "y";
+	@PropertyIdentifier(type = Double.class)
+	public static final String MINIMAL_WIDTH_KEY = "minimalWidth";
+	@PropertyIdentifier(type = Double.class)
+	public static final String MINIMAL_HEIGHT_KEY = "minimalHeight";
+	@PropertyIdentifier(type = Double.class)
+	public static final String MAXIMAL_WIDTH_KEY = "maximalWidth";
+	@PropertyIdentifier(type = Double.class)
+	public static final String MAXIMAL_HEIGHT_KEY = "maximalHeight";
+	@PropertyIdentifier(type = FGESteppedDimensionConstraint.class)
+	public static final String DIMENSION_CONSTRAINT_STEP_KEY = "dimensionConstraintStep";
+	@PropertyIdentifier(type = LocationConstraints.class)
+	public static final String LOCATION_CONSTRAINTS_KEY = "locationConstraints";
+	@PropertyIdentifier(type = FGEArea.class)
+	public static final String LOCATION_CONSTRAINED_AREA_KEY = "locationConstrainedArea";
+	@PropertyIdentifier(type = DimensionConstraints.class)
+	public static final String DIMENSION_CONSTRAINTS_KEY = "dimensionConstraints";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY = "adjustMinimalWidthToLabelWidth";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY = "adjustMinimalHeightToLabelHeight";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY = "adjustMaximalWidthToLabelWidth";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY = "adjustMaximalHeightToLabelHeight";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String FOREGROUND_KEY = "foreground";
+	@PropertyIdentifier(type = BackgroundStyle.class)
+	public static final String BACKGROUND_KEY = "background";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String SELECTED_FOREGROUND_KEY = "selectedForeground";
+	@PropertyIdentifier(type = BackgroundStyle.class)
+	public static final String SELECTED_BACKGROUND_KEY = "selectedBackground";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String FOCUSED_FOREGROUND_KEY = "focusedForeground";
+	@PropertyIdentifier(type = BackgroundStyle.class)
+	public static final String FOCUSED_BACKGROUND_KEY = "focusedBackground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_SELECTED_FOREGROUND_KEY = "hasSelectedForeground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_SELECTED_BACKGROUND_KEY = "hasSelectedBackground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_FOCUSED_FOREGROUND_KEY = "hasFocusedForeground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_FOCUSED_BACKGROUND_KEY = "hasFocusedBackground";
+	@PropertyIdentifier(type = ShapeBorder.class)
+	public static final String BORDER_KEY = "border";
+	@PropertyIdentifier(type = ShapeType.class)
+	public static final String SHAPE_TYPE_KEY = "shapeType";
+	@PropertyIdentifier(type = ShapeSpecification.class)
+	public static final String SHAPE_KEY = "shape";
+	@PropertyIdentifier(type = ShadowStyle.class)
+	public static final String SHADOW_STYLE_KEY = "shadowStyle";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_FLOATING_LABEL_KEY = "isFloatingLabel";
+	@PropertyIdentifier(type = Double.class)
+	public static final String RELATIVE_TEXT_X_KEY = "relativeTextX";
+	@PropertyIdentifier(type = Double.class)
+	public static final String RELATIVE_TEXT_Y_KEY = "relativeTextY";
+	// @PropertyIdentifier(type = Double.class)
+	// public static final String DECORATION_PAINTER = "decorationPainter";
+	// public static final String SHAPE_PAINTER = "shapePainter";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ALLOW_TO_LEAVE_BOUNDS_KEY = "allowToLeaveBounds";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String ADAPT_BOUNDS_TO_CONTENTS_KEY = "adaptBoundsToContents";
+	@Deprecated
+	@PropertyIdentifier(type = DataBinding.class)
 	public static final String X_CONSTRAINTS_KEY = "xConstraints";
+	@Deprecated
+	@PropertyIdentifier(type = DataBinding.class)
 	public static final String Y_CONSTRAINTS_KEY = "yConstraints";
+	@Deprecated
+	@PropertyIdentifier(type = DataBinding.class)
 	public static final String WIDTH_CONSTRAINTS_KEY = "widthConstraints";
+	@Deprecated
+	@PropertyIdentifier(type = DataBinding.class)
 	public static final String HEIGHT_CONSTRAINTS_KEY = "heightConstraints";
 
 	// *******************************************************************************
 	// * Inner concepts
 	// *******************************************************************************
 
-	public static enum ShapeParameters implements GRParameter {
+	/*public static enum ShapeParameters implements GRParameter {
 		x, y,
 		// width,
 		// height,
@@ -137,7 +180,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 		yConstraints,
 		widthConstraints,
 		heightConstraints;
-	}
+	}*/
 
 	public static enum DimensionConstraints {
 		FREELY_RESIZABLE, UNRESIZABLE, CONSTRAINED_DIMENSIONS, STEP_CONSTRAINED, WIDTH_FIXED, HEIGHT_FIXED, CONTAINER
@@ -201,6 +244,71 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	}
 
+	public static GRParameter<Double> X = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, X_KEY, Double.class);
+	public static GRParameter<Double> Y = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, Y_KEY, Double.class);
+	public static GRParameter<BackgroundStyle> BACKGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, BACKGROUND_KEY,
+			BackgroundStyle.class);
+	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, FOREGROUND_KEY,
+			ForegroundStyle.class);
+	public static GRParameter<ForegroundStyle> FOCUSED_FOREGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			FOCUSED_FOREGROUND_KEY, ForegroundStyle.class);
+	public static GRParameter<BackgroundStyle> FOCUSED_BACKGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			FOCUSED_BACKGROUND_KEY, BackgroundStyle.class);
+	public static GRParameter<ForegroundStyle> SELECTED_FOREGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			SELECTED_FOREGROUND_KEY, ForegroundStyle.class);
+	public static GRParameter<BackgroundStyle> SELECTED_BACKGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			SELECTED_BACKGROUND_KEY, BackgroundStyle.class);
+	public static GRParameter<ShadowStyle> SHADOW_STYLE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHADOW_STYLE_KEY,
+			ShadowStyle.class);
+	public static GRParameter<Boolean> ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT = GRParameter.getGRParameter(
+			ShapeGraphicalRepresentation.class, ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, Boolean.class);
+	public static GRParameter<Boolean> ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY, Boolean.class);
+	public static GRParameter<Boolean> ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT = GRParameter.getGRParameter(
+			ShapeGraphicalRepresentation.class, ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, Boolean.class);
+	public static GRParameter<Boolean> ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY, Boolean.class);
+	public static GRParameter<Double> MINIMAL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MINIMAL_WIDTH_KEY,
+			Double.class);
+	public static GRParameter<Double> MINIMAL_HEIGHT = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MINIMAL_HEIGHT_KEY,
+			Double.class);
+	public static GRParameter<Double> MAXIMAL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MAXIMAL_WIDTH_KEY,
+			Double.class);
+	public static GRParameter<Double> MAXIMAL_HEIGHT = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MAXIMAL_HEIGHT_KEY,
+			Double.class);
+	public static GRParameter<LocationConstraints> LOCATION_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			LOCATION_CONSTRAINTS_KEY, LocationConstraints.class);
+	public static GRParameter<FGEArea> LOCATION_CONSTRAINED_AREA = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			LOCATION_CONSTRAINED_AREA_KEY, FGEArea.class);
+	public static GRParameter<DimensionConstraints> DIMENSION_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			DIMENSION_CONSTRAINTS_KEY, DimensionConstraints.class);
+	public static GRParameter<FGESteppedDimensionConstraint> DIMENSION_CONSTRAINT_STEP = GRParameter.getGRParameter(
+			ShapeGraphicalRepresentation.class, DIMENSION_CONSTRAINT_STEP_KEY, FGESteppedDimensionConstraint.class);
+	public static GRParameter<Boolean> IS_FLOATING_LABEL = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			IS_FLOATING_LABEL_KEY, Boolean.class);
+	public static GRParameter<Boolean> ADAPT_BOUNDS_TO_CONTENTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			ADAPT_BOUNDS_TO_CONTENTS_KEY, Boolean.class);
+	public static GRParameter<Boolean> ALLOW_TO_LEAVE_BOUNDS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			ALLOW_TO_LEAVE_BOUNDS_KEY, Boolean.class);
+	public static GRParameter<Double> RELATIVE_TEXT_X = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, RELATIVE_TEXT_X_KEY,
+			Double.class);
+	public static GRParameter<Double> RELATIVE_TEXT_Y = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, RELATIVE_TEXT_Y_KEY,
+			Double.class);
+	public static GRParameter<ShapeBorder> BORDER = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, BORDER_KEY,
+			ShapeBorder.class);
+	public static GRParameter<ShapeSpecification> SHAPE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHAPE_KEY,
+			ShapeSpecification.class);
+	public static GRParameter<ShapeType> SHAPE_TYPE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHAPE_TYPE_KEY,
+			ShapeType.class);
+	public static GRParameter<DataBinding> X_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			X_CONSTRAINTS_KEY, DataBinding.class);
+	public static GRParameter<DataBinding> Y_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			Y_CONSTRAINTS_KEY, DataBinding.class);
+	public static GRParameter<DataBinding> WIDTH_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			WIDTH_CONSTRAINTS_KEY, DataBinding.class);
+	public static GRParameter<DataBinding> HEIGHT_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			HEIGHT_CONSTRAINTS_KEY, DataBinding.class);
+
 	// *******************************************************************************
 	// * Model
 	// *******************************************************************************
@@ -209,264 +317,272 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = X, defaultValue = "0.0")
+	@Getter(value = X_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getX();
 
-	@Setter(value = X)
+	@Setter(value = X_KEY)
 	public void setX(double aValue);
 
-	@Getter(value = Y, defaultValue = "0.0")
+	@Getter(value = Y_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getY();
 
-	@Setter(value = Y)
+	@Setter(value = Y_KEY)
 	public void setY(double aValue);
 
-	@Override
-	@Getter(value = WIDTH, defaultValue = "60.0")
+	/*@Override
+	@Getter(value = WIDTH_KEY, defaultValue = "60.0")
 	@XMLAttribute
 	public double getWidth();
 
 	@Override
-	@Getter(value = HEIGHT, defaultValue = "20.0")
+	@Getter(value = HEIGHT_KEY, defaultValue = "20.0")
 	@XMLAttribute
 	public double getHeight();
-
-	@Getter(value = MINIMAL_WIDTH, defaultValue = "0.0")
+	*/
+	@Getter(value = MINIMAL_WIDTH_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getMinimalWidth();
 
-	@Setter(value = MINIMAL_WIDTH)
+	@Setter(value = MINIMAL_WIDTH_KEY)
 	public void setMinimalWidth(double minimalWidth);
 
-	@Getter(value = MINIMAL_HEIGHT, defaultValue = "0.0")
+	@Getter(value = MINIMAL_HEIGHT_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getMinimalHeight();
 
-	@Setter(value = MINIMAL_HEIGHT)
+	@Setter(value = MINIMAL_HEIGHT_KEY)
 	public void setMinimalHeight(double minimalHeight);
 
-	@Getter(value = MAXIMAL_HEIGHT, defaultValue = "POSITIVE_INFINITY")
+	@Getter(value = MAXIMAL_HEIGHT_KEY, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
 	public double getMaximalHeight();
 
-	@Setter(value = MAXIMAL_HEIGHT)
+	@Setter(value = MAXIMAL_HEIGHT_KEY)
 	public void setMaximalHeight(double maximalHeight);
 
-	@Getter(value = MAXIMAL_WIDTH, defaultValue = "POSITIVE_INFINITY")
+	@Getter(value = MAXIMAL_WIDTH_KEY, defaultValue = "POSITIVE_INFINITY")
 	@XMLAttribute
 	public double getMaximalWidth();
 
-	@Setter(value = MAXIMAL_WIDTH)
+	@Setter(value = MAXIMAL_WIDTH_KEY)
 	public void setMaximalWidth(double maximalWidth);
 
-	@Getter(value = DIMENSION_CONSTRAINT_STEP, isStringConvertable = true)
+	@Getter(value = DIMENSION_CONSTRAINT_STEP_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public FGESteppedDimensionConstraint getDimensionConstraintStep();
 
-	@Setter(value = DIMENSION_CONSTRAINT_STEP)
+	@Setter(value = DIMENSION_CONSTRAINT_STEP_KEY)
 	public void setDimensionConstraintStep(FGESteppedDimensionConstraint dimensionConstraintStep);
 
-	@Getter(value = LOCATION_CONSTRAINTS)
+	@Getter(value = LOCATION_CONSTRAINTS_KEY)
 	@XMLAttribute
 	public LocationConstraints getLocationConstraints();
 
-	@Setter(value = LOCATION_CONSTRAINTS)
+	@Setter(value = LOCATION_CONSTRAINTS_KEY)
 	public void setLocationConstraints(LocationConstraints locationConstraints);
 
-	@Getter(value = LOCATION_CONSTRAINED_AREA, ignoreType = true)
+	@Getter(value = LOCATION_CONSTRAINED_AREA_KEY, ignoreType = true)
 	public FGEArea getLocationConstrainedArea();
 
-	@Setter(value = LOCATION_CONSTRAINED_AREA)
+	@Setter(value = LOCATION_CONSTRAINED_AREA_KEY)
 	public void setLocationConstrainedArea(FGEArea locationConstrainedArea);
 
-	@Getter(value = DIMENSION_CONSTRAINTS)
+	@Getter(value = DIMENSION_CONSTRAINTS_KEY)
 	@XMLAttribute
 	public DimensionConstraints getDimensionConstraints();
 
-	@Setter(value = DIMENSION_CONSTRAINTS)
+	@Setter(value = DIMENSION_CONSTRAINTS_KEY)
 	public void setDimensionConstraints(DimensionConstraints dimensionConstraints);
 
-	@Getter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH, defaultValue = "true")
+	@Getter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getAdjustMinimalWidthToLabelWidth();
 
-	@Setter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH)
+	@Setter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY)
 	public void setAdjustMinimalWidthToLabelWidth(boolean adjustMinimalWidthToLabelWidth);
 
-	@Getter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT, defaultValue = "true")
+	@Getter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getAdjustMinimalHeightToLabelHeight();
 
-	@Setter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT)
+	@Setter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY)
 	public void setAdjustMinimalHeightToLabelHeight(boolean adjustMinimalHeightToLabelHeight);
 
-	@Getter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH, defaultValue = "false")
+	@Getter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getAdjustMaximalWidthToLabelWidth();
 
-	@Setter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH)
+	@Setter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY)
 	public void setAdjustMaximalWidthToLabelWidth(boolean adjustMaximalWidthToLabelWidth);
 
-	@Getter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT, defaultValue = "false")
+	@Getter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getAdjustMaximalHeightToLabelHeight();
 
-	@Setter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT)
+	@Setter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY)
 	public void setAdjustMaximalHeightToLabelHeight(boolean adjustMaximalHeightToLabelHeight);
 
-	@Getter(value = FOREGROUND)
+	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
 	public ForegroundStyle getForeground();
 
-	@Setter(value = FOREGROUND)
+	@Setter(value = FOREGROUND_KEY)
 	public void setForeground(ForegroundStyle aForeground);
 
-	@Getter(value = SELECTED_FOREGROUND)
+	@Getter(value = SELECTED_FOREGROUND_KEY)
 	@XMLElement(context = "Selected")
 	public ForegroundStyle getSelectedForeground();
 
-	@Setter(value = SELECTED_FOREGROUND)
+	@Setter(value = SELECTED_FOREGROUND_KEY)
 	public void setSelectedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_SELECTED_FOREGROUND, defaultValue = "false")
+	@Getter(value = HAS_SELECTED_FOREGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasSelectedForeground();
 
-	@Setter(value = HAS_SELECTED_FOREGROUND)
+	@Setter(value = HAS_SELECTED_FOREGROUND_KEY)
 	public void setHasSelectedForeground(boolean aFlag);
 
-	@Getter(value = FOCUSED_FOREGROUND)
+	@Getter(value = FOCUSED_FOREGROUND_KEY)
 	@XMLElement(context = "Focused")
 	public ForegroundStyle getFocusedForeground();
 
-	@Setter(value = FOCUSED_FOREGROUND)
+	@Setter(value = FOCUSED_FOREGROUND_KEY)
 	public void setFocusedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_FOCUSED_FOREGROUND, defaultValue = "false")
+	@Getter(value = HAS_FOCUSED_FOREGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasFocusedForeground();
 
-	@Setter(value = HAS_FOCUSED_FOREGROUND)
+	@Setter(value = HAS_FOCUSED_FOREGROUND_KEY)
 	public void setHasFocusedForeground(boolean aFlag);
 
-	@Getter(value = BACKGROUND)
+	@Getter(value = BACKGROUND_KEY)
 	@XMLElement
 	public BackgroundStyle getBackground();
 
-	@Setter(value = BACKGROUND)
+	@Setter(value = BACKGROUND_KEY)
 	public void setBackground(BackgroundStyle aBackground);
 
-	@Getter(value = SELECTED_BACKGROUND)
+	@Getter(value = SELECTED_BACKGROUND_KEY)
 	@XMLElement(context = "Selected")
 	public BackgroundStyle getSelectedBackground();
 
-	@Setter(value = SELECTED_BACKGROUND)
+	@Setter(value = SELECTED_BACKGROUND_KEY)
 	public void setSelectedBackground(BackgroundStyle aBackground);
 
-	@Getter(value = HAS_SELECTED_BACKGROUND, defaultValue = "false")
+	@Getter(value = HAS_SELECTED_BACKGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasSelectedBackground();
 
-	@Setter(value = HAS_SELECTED_BACKGROUND)
+	@Setter(value = HAS_SELECTED_BACKGROUND_KEY)
 	public void setHasSelectedBackground(boolean aFlag);
 
-	@Getter(value = FOCUSED_BACKGROUND)
+	@Getter(value = FOCUSED_BACKGROUND_KEY)
 	@XMLElement(context = "Focused")
 	public BackgroundStyle getFocusedBackground();
 
-	@Setter(value = FOCUSED_BACKGROUND)
+	@Setter(value = FOCUSED_BACKGROUND_KEY)
 	public void setFocusedBackground(BackgroundStyle aBackground);
 
-	@Getter(value = HAS_FOCUSED_BACKGROUND, defaultValue = "false")
+	@Getter(value = HAS_FOCUSED_BACKGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasFocusedBackground();
 
-	@Setter(value = HAS_FOCUSED_BACKGROUND)
+	@Setter(value = HAS_FOCUSED_BACKGROUND_KEY)
 	public void setHasFocusedBackground(boolean aFlag);
 
-	@Getter(value = BORDER)
+	@Getter(value = BORDER_KEY)
 	@XMLElement
 	public ShapeBorder getBorder();
 
-	@Setter(value = BORDER)
+	@Setter(value = BORDER_KEY)
 	public void setBorder(ShapeBorder border);
 
-	@Getter(value = SHAPE)
+	@Getter(value = SHAPE_KEY)
 	@XMLElement
 	public ShapeSpecification getShape();
 
-	@Setter(value = SHAPE)
+	@Setter(value = SHAPE_KEY)
 	public void setShape(ShapeSpecification aShape);
 
-	@Getter(value = SHADOW_STYLE)
+	@Getter(value = SHADOW_STYLE_KEY)
 	@XMLElement
 	public ShadowStyle getShadowStyle();
 
-	@Setter(value = SHADOW_STYLE)
+	@Setter(value = SHADOW_STYLE_KEY)
 	public void setShadowStyle(ShadowStyle aShadowStyle);
 
-	@Getter(value = IS_FLOATING_LABEL, defaultValue = "true")
+	@Getter(value = IS_FLOATING_LABEL_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsFloatingLabel();
 
-	@Setter(value = IS_FLOATING_LABEL)
+	@Setter(value = IS_FLOATING_LABEL_KEY)
 	public void setIsFloatingLabel(boolean isFloatingLabel);
 
-	@Getter(value = RELATIVE_TEXT_X, defaultValue = "0.0")
+	@Getter(value = RELATIVE_TEXT_X_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getRelativeTextX();
 
-	@Setter(value = RELATIVE_TEXT_X)
+	@Setter(value = RELATIVE_TEXT_X_KEY)
 	public void setRelativeTextX(double textX);
 
-	@Getter(value = RELATIVE_TEXT_Y, defaultValue = "0.0")
+	@Getter(value = RELATIVE_TEXT_Y_KEY, defaultValue = "0.0")
 	@XMLAttribute
 	public double getRelativeTextY();
 
-	@Setter(value = RELATIVE_TEXT_Y)
+	@Setter(value = RELATIVE_TEXT_Y_KEY)
 	public void setRelativeTextY(double textY);
 
-	@Getter(value = ALLOW_TO_LEAVE_BOUNDS, defaultValue = "true")
+	@Getter(value = ALLOW_TO_LEAVE_BOUNDS_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getAllowToLeaveBounds();
 
-	@Setter(value = ALLOW_TO_LEAVE_BOUNDS)
+	@Setter(value = ALLOW_TO_LEAVE_BOUNDS_KEY)
 	public void setAllowToLeaveBounds(boolean allowToLeaveBounds);
 
-	@Getter(value = ADAPT_BOUNDS_TO_CONTENTS, defaultValue = "true")
+	@Getter(value = ADAPT_BOUNDS_TO_CONTENTS_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getAdaptBoundsToContents();
 
-	@Setter(value = ADAPT_BOUNDS_TO_CONTENTS)
+	@Setter(value = ADAPT_BOUNDS_TO_CONTENTS_KEY)
 	public void setAdaptBoundsToContents(boolean adaptBoundsToContents);
 
+	@Deprecated
 	@Getter(value = X_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getXConstraints();
 
+	@Deprecated
 	@Setter(value = X_CONSTRAINTS_KEY)
 	public void setXConstraints(DataBinding<Double> xConstraints);
 
+	@Deprecated
 	@Getter(value = Y_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getYConstraints();
 
+	@Deprecated
 	@Setter(value = Y_CONSTRAINTS_KEY)
 	public void setYConstraints(DataBinding<Double> yConstraints);
 
+	@Deprecated
 	@Getter(value = WIDTH_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getWidthConstraints();
 
+	@Deprecated
 	@Setter(value = WIDTH_CONSTRAINTS_KEY)
 	public void setWidthConstraints(DataBinding<Double> widthConstraints);
 
+	@Deprecated
 	@Getter(value = HEIGHT_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getHeightConstraints();
 
+	@Deprecated
 	@Setter(value = HEIGHT_CONSTRAINTS_KEY)
 	public void setHeightConstraints(DataBinding<Double> heightConstraints);
 

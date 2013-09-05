@@ -52,7 +52,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Color oldColor = color;
 			this.color = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR, oldColor, aColor));
 		}
 	}
 
@@ -67,7 +67,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Font oldFont = this.font;
 			this.font = aFont;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.font, oldFont, aFont));
+			notifyObservers(new FGENotification(FONT, oldFont, aFont));
 		}
 	}
 
@@ -82,7 +82,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			int oldOrientation = this.orientation;
 			orientation = anOrientation;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.orientation, oldOrientation, anOrientation));
+			notifyObservers(new FGENotification(ORIENTATION, oldOrientation, anOrientation));
 		}
 	}
 
@@ -97,7 +97,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Color oldColor = backgroundColor;
 			this.backgroundColor = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.backgroundColor, oldColor, aColor));
+			notifyObservers(new FGENotification(BACKGROUND_COLOR, oldColor, aColor));
 		}
 	}
 
@@ -112,7 +112,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			boolean oldValue = backgroundColored;
 			this.backgroundColored = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.backgroundColored, oldValue, aFlag));
+			notifyObservers(new FGENotification(IS_BACKGROUND_COLORED, oldValue, aFlag));
 		}
 	}
 

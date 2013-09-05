@@ -40,9 +40,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +60,6 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.DrawingGraphicalRepresentation.DrawingParameters;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
@@ -84,7 +81,8 @@ import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.swing.MouseResizer;
 
 /**
- * The DrawingView is the SWING implementation of the root pane of a FGE graphical editor
+ * The DrawingView is the SWING implementation of the root pane of a FGE graphical editor<br>
+ * The managing of the DrawingView is performed by the {@link DrawingController}.
  * 
  * @author sylvain
  * 
@@ -97,7 +95,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
 	private Drawing<M> drawing;
-	private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
+	// private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
 	private DrawingController<?> _controller;
 	private FocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
@@ -131,7 +129,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		_controller = controller;
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
-		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
+		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
 		graphics = new FGEDrawingGraphics(drawing.getRoot());
 		_focusRetriever = new FocusRetriever(this);
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
@@ -255,8 +253,10 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	@Override
 	public void rescale() {
-		for (FGEView<?> v : contents.values()) {
-			v.rescale();
+		for (FGEView<?> v : _controller.getContents().values()) {
+			if (!(v instanceof DrawingView)) {
+				v.rescale();
+			}
 			if (v.getLabelView() != null) {
 				v.getLabelView().rescale();
 			}
@@ -374,23 +374,23 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 					rescale();
 					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingParameters.backgroundColor) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.BACKGROUND_COLOR) {
 					getPaintManager().invalidate(getDrawing().getRoot());
 					updateBackground();
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingParameters.drawWorkingArea) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DRAW_WORKING_AREA) {
 					getPaintManager().invalidate(getDrawing().getRoot());
 					updateBackground();
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingParameters.width) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.WIDTH) {
 					rescale();
 					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingParameters.height) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.HEIGHT) {
 					rescale();
 					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingParameters.isResizable) {
+				} else if (notif.getParameter() == DrawingGraphicalRepresentation.IS_RESIZABLE) {
 					if (getDrawing().getRoot().getGraphicalRepresentation().isResizable()) {
 						removeMouseListener(mouseListener); // We remove the mouse
 															// listener, so that the
@@ -626,9 +626,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	private void paintFocusedFloatingLabel(DrawingTreeNode<?, ?> focusedFloatingLabel, Graphics g) {
 		Color color = Color.BLACK;
-		if (focusedFloatingLabel.getGraphicalRepresentation().getIsSelected()) {
+		if (focusedFloatingLabel.getIsSelected()) {
 			color = getGraphicalRepresentation().getSelectionColor();
-		} else if (focusedFloatingLabel.getGraphicalRepresentation().getIsFocused()) {
+		} else if (focusedFloatingLabel.getIsFocused()) {
 			color = getGraphicalRepresentation().getFocusColor();
 		} else {
 			return;
@@ -704,7 +704,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			}
 		}
 
-		if (selected.getGraphicalRepresentation().hasFloatingLabel()) {
+		if (selected.hasFloatingLabel()) {
 			paintFocusedFloatingLabel(selected, graphics.getGraphics());
 		}
 
@@ -777,7 +777,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 				}
 			}
 		}
-		if (focused.getGraphicalRepresentation().hasFloatingLabel()) {
+		if (focused.hasFloatingLabel()) {
 			paintFocusedFloatingLabel(focused, graphics.getGraphics());
 		}
 		/*
@@ -818,15 +818,12 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	 * FGEConstants.CONTROL_POINT_SIZE*2); } }
 	 */
 
-	public Map<DrawingTreeNode<?, ?>, FGEView<?>> getContents() {
+	/*public Map<DrawingTreeNode<?, ?>, FGEView<?>> getContents() {
 		return contents;
-	}
+	}*/
 
 	public <O> FGEView<?> viewForNode(DrawingTreeNode<?, ?> node) {
-		if (node == drawing.getRoot()) {
-			return this;
-		}
-		return contents.get(node);
+		return _controller.viewForNode(node);
 	}
 
 	public ShapeView<?> shapeViewForNode(ShapeNode<?> node) {
@@ -853,7 +850,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		logger.fine("Registering drop target");
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
 		activePalette = aPalette;
-		for (FGEView<?> v : contents.values()) {
+		for (FGEView<?> v : _controller.getContents().values()) {
 			v.registerPalette(aPalette);
 		}
 	}
@@ -892,13 +889,13 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
 
-		List<FGEView<?>> views = new ArrayList<FGEView<?>>(contents.values());
+		List<FGEView<?>> views = new ArrayList<FGEView<?>>(_controller.getContents().values());
 
 		for (FGEView<?> v : views) {
 			v.delete();
 			// logger.info("Deleted view "+v);
 		}
-		contents.clear();
+		// contents.clear();
 		getGraphicalRepresentation().deleteObserver(this);
 
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {

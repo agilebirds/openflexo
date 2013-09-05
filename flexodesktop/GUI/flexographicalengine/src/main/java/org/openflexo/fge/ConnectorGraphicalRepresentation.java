@@ -28,6 +28,7 @@ import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -48,24 +49,70 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	// public static final String START_OBJECT = "startObject";
 	// public static final String END_OBJECT = "endObject";
-	public static final String CONNECTOR = "connector";
+	@PropertyIdentifier(type = ConnectorSpecification.class)
+	public static final String CONNECTOR_KEY = "connector";
 
-	public static final String FOREGROUND = "foreground";
-	public static final String SELECTED_FOREGROUND = "selectedForeground";
-	public static final String FOCUSED_FOREGROUND = "focusedForeground";
-	public static final String HAS_SELECTED_FOREGROUND = "hasSelectedForeground";
-	public static final String HAS_FOCUSED_FOREGROUND = "hasFocusedForeground";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String FOREGROUND_KEY = "foreground";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String SELECTED_FOREGROUND_KEY = "selectedForeground";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String FOCUSED_FOREGROUND_KEY = "focusedForeground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_SELECTED_FOREGROUND_KEY = "hasSelectedForeground";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String HAS_FOCUSED_FOREGROUND_KEY = "hasFocusedForeground";
 
-	public static final String START_SYMBOL = "startSymbol";
-	public static final String END_SYMBOL = "endSymbol";
-	public static final String MIDDLE_SYMBOL = "middleSymbol";
-	public static final String START_SYMBOL_SIZE = "startSymbolSize";
-	public static final String END_SYMBOL_SIZE = "endSymbolSize";
-	public static final String MIDDLE_SYMBOL_SIZE = "middleSymbolSize";
-	public static final String RELATIVE_MIDDLE_SYMBOL_LOCATION = "relativeMiddleSymbolLocation";
-	public static final String APPLY_FOREGROUND_TO_SYMBOLS = "applyForegroundToSymbols";
+	@PropertyIdentifier(type = StartSymbolType.class)
+	public static final String START_SYMBOL_KEY = "startSymbol";
+	@PropertyIdentifier(type = EndSymbolType.class)
+	public static final String END_SYMBOL_KEY = "endSymbol";
+	@PropertyIdentifier(type = MiddleSymbolType.class)
+	public static final String MIDDLE_SYMBOL_KEY = "middleSymbol";
+	@PropertyIdentifier(type = Double.class)
+	public static final String START_SYMBOL_SIZE_KEY = "startSymbolSize";
+	@PropertyIdentifier(type = Double.class)
+	public static final String END_SYMBOL_SIZE_KEY = "endSymbolSize";
+	@PropertyIdentifier(type = Double.class)
+	public static final String MIDDLE_SYMBOL_SIZE_KEY = "middleSymbolSize";
+	@PropertyIdentifier(type = Double.class)
+	public static final String RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY = "relativeMiddleSymbolLocation";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String APPLY_FOREGROUND_TO_SYMBOLS_KEY = "applyForegroundToSymbols";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DEBUG_COVERING_AREA_KEY = "debugCoveringArea";
 
-	public static enum ConnectorParameters implements GRParameter {
+	public static GRParameter<ConnectorSpecification> CONNECTOR = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.CONNECTOR_KEY, ConnectorSpecification.class);
+
+	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.FOREGROUND_KEY, ForegroundStyle.class);
+	public static GRParameter<ForegroundStyle> SELECTED_FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.SELECTED_FOREGROUND_KEY, ForegroundStyle.class);
+	public static GRParameter<ForegroundStyle> FOCUSED_FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.FOCUSED_FOREGROUND_KEY, ForegroundStyle.class);
+
+	public static GRParameter<StartSymbolType> START_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.START_SYMBOL_KEY, StartSymbolType.class);
+	public static GRParameter<Double> START_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.START_SYMBOL_SIZE_KEY, Double.class);
+	public static GRParameter<MiddleSymbolType> MIDDLE_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.MIDDLE_SYMBOL_KEY, MiddleSymbolType.class);
+	public static GRParameter<Double> MIDDLE_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.MIDDLE_SYMBOL_SIZE_KEY, Double.class);
+	public static GRParameter<EndSymbolType> END_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.END_SYMBOL_KEY, EndSymbolType.class);
+	public static GRParameter<Double> END_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.END_SYMBOL_SIZE_KEY, Double.class);
+
+	public static GRParameter<Double> RELATIVE_MIDDLE_SYMBOL_LOCATION = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY, Double.class);
+	public static GRParameter<Boolean> APPLY_FOREGROUND_TO_SYMBOLS = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.APPLY_FOREGROUND_TO_SYMBOLS_KEY, Boolean.class);
+	public static GRParameter<Boolean> DEBUG_COVERING_AREA = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			ConnectorGraphicalRepresentation.DEBUG_COVERING_AREA_KEY, Boolean.class);
+
+	/*public static enum ConnectorParameters implements GRParameter {
 		connector,
 		foreground,
 		selectedForeground,
@@ -81,7 +128,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 		relativeMiddleSymbolLocation,
 		applyForegroundToSymbols,
 		debugCoveringArea
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
@@ -101,102 +148,102 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	@Setter(value = END_OBJECT)
 	public void setEndObject(ShapeGraphicalRepresentation anEndObject);*/
 
-	@Getter(value = CONNECTOR)
+	@Getter(value = CONNECTOR_KEY)
 	@XMLElement
 	public ConnectorSpecification getConnector();
 
-	@Setter(value = CONNECTOR)
+	@Setter(value = CONNECTOR_KEY)
 	public void setConnector(ConnectorSpecification aConnector);
 
-	@Getter(value = FOREGROUND)
+	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
 	public ForegroundStyle getForeground();
 
-	@Setter(value = FOREGROUND)
+	@Setter(value = FOREGROUND_KEY)
 	public void setForeground(ForegroundStyle aForeground);
 
-	@Getter(value = SELECTED_FOREGROUND)
+	@Getter(value = SELECTED_FOREGROUND_KEY)
 	@XMLElement(context = "Selected")
 	public ForegroundStyle getSelectedForeground();
 
-	@Setter(value = SELECTED_FOREGROUND)
+	@Setter(value = SELECTED_FOREGROUND_KEY)
 	public void setSelectedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_SELECTED_FOREGROUND, defaultValue = "false")
+	@Getter(value = HAS_SELECTED_FOREGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasSelectedForeground();
 
-	@Setter(value = HAS_SELECTED_FOREGROUND)
+	@Setter(value = HAS_SELECTED_FOREGROUND_KEY)
 	public void setHasSelectedForeground(boolean aFlag);
 
-	@Getter(value = FOCUSED_FOREGROUND)
+	@Getter(value = FOCUSED_FOREGROUND_KEY)
 	@XMLElement(context = "Focused")
 	public ForegroundStyle getFocusedForeground();
 
-	@Setter(value = FOCUSED_FOREGROUND)
+	@Setter(value = FOCUSED_FOREGROUND_KEY)
 	public void setFocusedForeground(ForegroundStyle aForeground);
 
-	@Getter(value = HAS_FOCUSED_FOREGROUND, defaultValue = "false")
+	@Getter(value = HAS_FOCUSED_FOREGROUND_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getHasFocusedForeground();
 
-	@Setter(value = HAS_FOCUSED_FOREGROUND)
+	@Setter(value = HAS_FOCUSED_FOREGROUND_KEY)
 	public void setHasFocusedForeground(boolean aFlag);
 
-	@Getter(value = START_SYMBOL)
+	@Getter(value = START_SYMBOL_KEY)
 	@XMLAttribute
 	public StartSymbolType getStartSymbol();
 
-	@Setter(value = START_SYMBOL)
+	@Setter(value = START_SYMBOL_KEY)
 	public void setStartSymbol(StartSymbolType startSymbol);
 
-	@Getter(value = END_SYMBOL)
+	@Getter(value = END_SYMBOL_KEY)
 	@XMLAttribute
 	public EndSymbolType getEndSymbol();
 
-	@Setter(value = END_SYMBOL)
+	@Setter(value = END_SYMBOL_KEY)
 	public void setEndSymbol(EndSymbolType endSymbol);
 
-	@Getter(value = MIDDLE_SYMBOL)
+	@Getter(value = MIDDLE_SYMBOL_KEY)
 	@XMLAttribute
 	public MiddleSymbolType getMiddleSymbol();
 
-	@Setter(value = MIDDLE_SYMBOL)
+	@Setter(value = MIDDLE_SYMBOL_KEY)
 	public void setMiddleSymbol(MiddleSymbolType middleSymbol);
 
-	@Getter(value = START_SYMBOL_SIZE, defaultValue = "10.0")
+	@Getter(value = START_SYMBOL_SIZE_KEY, defaultValue = "10.0")
 	@XMLAttribute
 	public double getStartSymbolSize();
 
-	@Setter(value = START_SYMBOL_SIZE)
+	@Setter(value = START_SYMBOL_SIZE_KEY)
 	public void setStartSymbolSize(double startSymbolSize);
 
-	@Getter(value = END_SYMBOL_SIZE, defaultValue = "10.0")
+	@Getter(value = END_SYMBOL_SIZE_KEY, defaultValue = "10.0")
 	@XMLAttribute
 	public double getEndSymbolSize();
 
-	@Setter(value = END_SYMBOL_SIZE)
+	@Setter(value = END_SYMBOL_SIZE_KEY)
 	public void setEndSymbolSize(double endSymbolSize);
 
-	@Getter(value = MIDDLE_SYMBOL_SIZE, defaultValue = "10.0")
+	@Getter(value = MIDDLE_SYMBOL_SIZE_KEY, defaultValue = "10.0")
 	@XMLAttribute
 	public double getMiddleSymbolSize();
 
-	@Setter(value = MIDDLE_SYMBOL_SIZE)
+	@Setter(value = MIDDLE_SYMBOL_SIZE_KEY)
 	public void setMiddleSymbolSize(double middleSymbolSize);
 
-	@Getter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION, defaultValue = "0.5")
+	@Getter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY, defaultValue = "0.5")
 	@XMLAttribute
 	public double getRelativeMiddleSymbolLocation();
 
-	@Setter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION)
+	@Setter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY)
 	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation);
 
-	@Getter(value = APPLY_FOREGROUND_TO_SYMBOLS, defaultValue = "true")
+	@Getter(value = APPLY_FOREGROUND_TO_SYMBOLS_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getApplyForegroundToSymbols();
 
-	@Setter(value = APPLY_FOREGROUND_TO_SYMBOLS)
+	@Setter(value = APPLY_FOREGROUND_TO_SYMBOLS_KEY)
 	public void setApplyForegroundToSymbols(boolean applyForegroundToSymbols);
 
 	// *******************************************************************************

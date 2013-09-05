@@ -19,12 +19,13 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.geom.FGEArc.ArcType;
 import org.openflexo.fge.shapes.impl.ArcImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -43,37 +44,44 @@ public interface Arc extends ShapeSpecification {
 
 	// Property keys
 
-	public static final String ANGLE_EXTENT = "angleExtent";
-	public static final String ANGLE_START = "angleStart";
-	public static final String ARC_TYPE = "arcType";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ANGLE_EXTENT_KEY = "angleExtent";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ANGLE_START_KEY = "angleStart";
+	@PropertyIdentifier(type = ArcType.class)
+	public static final String ARC_TYPE_KEY = "arcType";
 
-	public static enum ArcParameters implements GRParameter {
+	public static GRParameter<Integer> ANGLE_EXTENT = GRParameter.getGRParameter(Arc.class, ANGLE_EXTENT_KEY, Integer.class);
+	public static GRParameter<Integer> ANGLE_START = GRParameter.getGRParameter(Arc.class, ANGLE_START_KEY, Integer.class);
+	public static GRParameter<ArcType> ARC_TYPE = GRParameter.getGRParameter(Arc.class, ARC_TYPE_KEY, ArcType.class);
+
+	/*public static enum ArcParameters implements GRParameter {
 		angleExtent, angleStart, arcType;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = ANGLE_START, defaultValue = "0")
+	@Getter(value = ANGLE_START_KEY, defaultValue = "0")
 	@XMLAttribute
 	public int getAngleStart();
 
-	@Setter(value = ANGLE_START)
+	@Setter(value = ANGLE_START_KEY)
 	public void setAngleStart(int anAngle);
 
-	@Getter(value = ANGLE_EXTENT, defaultValue = "90")
+	@Getter(value = ANGLE_EXTENT_KEY, defaultValue = "90")
 	@XMLAttribute
 	public int getAngleExtent();
 
-	@Setter(value = ANGLE_EXTENT)
+	@Setter(value = ANGLE_EXTENT_KEY)
 	public void setAngleExtent(int anAngle);
 
-	@Getter(value = ARC_TYPE)
+	@Getter(value = ARC_TYPE_KEY)
 	@XMLAttribute
 	public ArcType getArcType();
 
-	@Setter(value = ARC_TYPE)
+	@Setter(value = ARC_TYPE_KEY)
 	public void setArcType(ArcType anArcType);
 
 }

@@ -37,7 +37,6 @@ import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.GeometricGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.Connector;
@@ -61,6 +60,7 @@ import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.DrawingTreeNodeImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.impl.Shape;
+import org.openflexo.model.annotations.PropertyIdentifier;
 
 /**
  * This interface is implemented by all objects representing a graphical drawing<br>
@@ -94,6 +94,16 @@ public interface Drawing<M> {
 	 *            Type of GraphicalRepresentation represented by this node
 	 */
 	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer, IObservable {
+
+		public static GRParameter<Boolean> IS_FOCUSED = GRParameter.getGRParameter(DrawingTreeNode.class, DrawingTreeNode.IS_FOCUSED_KEY,
+				Boolean.class);
+		public static GRParameter<Boolean> IS_SELECTED = GRParameter.getGRParameter(DrawingTreeNode.class, DrawingTreeNode.IS_FOCUSED_KEY,
+				Boolean.class);
+
+		@PropertyIdentifier(type = Boolean.class)
+		public static final String IS_SELECTED_KEY = "isSelected";
+		@PropertyIdentifier(type = Boolean.class)
+		public static final String IS_FOCUSED_KEY = "isFocused";
 
 		/**
 		 * Return the drawing
@@ -298,6 +308,22 @@ public interface Drawing<M> {
 		public void notifyObjectHierarchyWillBeUpdated();
 
 		public void notifyObjectHierarchyHasBeenUpdated();
+
+		public boolean getIsSelected();
+
+		public void setIsSelected(boolean aFlag);
+
+		public boolean getIsFocused();
+
+		public void setIsFocused(boolean aFlag);
+
+		public boolean hasText();
+
+		public String getText();
+
+		public void setText(String text);
+
+		public boolean hasFloatingLabel();
 	}
 
 	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {
@@ -779,4 +805,5 @@ public interface Drawing<M> {
 		public boolean tryToResolve(Drawing<?> drawing);
 
 	}
+
 }

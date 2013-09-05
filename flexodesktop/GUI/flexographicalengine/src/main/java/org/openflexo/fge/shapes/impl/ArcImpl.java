@@ -58,7 +58,7 @@ public class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setAngleStart(int anAngle) {
-		FGENotification notification = requireChange(ArcParameters.angleStart, anAngle);
+		FGENotification notification = requireChange(ANGLE_START, anAngle);
 		if (notification != null) {
 			angleStart = anAngle;
 			hasChanged(notification);
@@ -72,7 +72,7 @@ public class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setAngleExtent(int anAngle) {
-		FGENotification notification = requireChange(ArcParameters.angleExtent, anAngle);
+		FGENotification notification = requireChange(ANGLE_EXTENT, anAngle);
 		if (notification != null) {
 			angleExtent = anAngle;
 			hasChanged(notification);
@@ -86,7 +86,7 @@ public class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setArcType(ArcType anArcType) {
-		FGENotification notification = requireChange(ArcParameters.arcType, anArcType);
+		FGENotification notification = requireChange(ARC_TYPE, anArcType);
 		if (notification != null) {
 			arcType = anArcType;
 			hasChanged(notification);

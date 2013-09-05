@@ -326,7 +326,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				}
 			}
 			getController().stopEditionOfEditedLabelIfAny();
-			if (focusedObject.getGraphicalRepresentation().hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
+			if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
 				currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
 						e.getPoint(), view.getDrawingView()));
 				e.consume();

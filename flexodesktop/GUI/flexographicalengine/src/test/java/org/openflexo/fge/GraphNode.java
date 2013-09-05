@@ -10,12 +10,15 @@ public class GraphNode extends Observable {
 	private Graph graph;
 	private List<Edge> inputEdges;
 	private List<Edge> outputEdges;
+	private double x, y;
 
 	public GraphNode(String name, Graph graph) {
 		inputEdges = new ArrayList<Edge>();
 		outputEdges = new ArrayList<Edge>();
 		this.name = name;
 		this.graph = graph;
+		x = Math.random() * 500;
+		y = Math.random() * 500;
 		graph.addToNodes(this);
 	}
 
@@ -81,4 +84,24 @@ public class GraphNode extends Observable {
 		toNode.addToInputEdges(newEdge);
 	}
 
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	@Override
+	public String toString() {
+		return "GraphNode[" + name + "](" + x + "," + y + ")";
+	}
 }

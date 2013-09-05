@@ -19,11 +19,11 @@
  */
 package org.openflexo.fge;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.ShadowStyleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -42,41 +42,50 @@ public interface ShadowStyle extends FGEStyle {
 	public static final String NONE_CONFIGURATION = "none";
 	public static final String DEFAULT_CONFIGURATION = "default";
 
-	public static final String DRAW_SHADOW = "drawShadow";
-	public static final String SHADOW_DARKNESS = "shadowDarkness";
-	public static final String SHADOW_DEPTH = "shadowDepth";
-	public static final String SHADOW_BLUR = "shadowBlur";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DRAW_SHADOW_KEY = "drawShadow";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String SHADOW_DARKNESS_KEY = "shadowDarkness";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String SHADOW_DEPTH_KEY = "shadowDepth";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String SHADOW_BLUR_KEY = "shadowBlur";
 
-	public static enum Parameters implements GRParameter {
+	public static GRParameter<Boolean> DRAW_SHADOW = GRParameter.getGRParameter(ShadowStyle.class, DRAW_SHADOW_KEY, Boolean.class);
+	public static GRParameter<Integer> SHADOW_DARKNESS = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DARKNESS_KEY, Integer.class);
+	public static GRParameter<Integer> SHADOW_DEPTH = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DEPTH_KEY, Integer.class);
+	public static GRParameter<Integer> SHADOW_BLUR = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_BLUR_KEY, Integer.class);
+
+	/*public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur
-	}
+	}*/
 
-	@Getter(value = DRAW_SHADOW, defaultValue = "true")
+	@Getter(value = DRAW_SHADOW_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getDrawShadow();
 
-	@Setter(value = DRAW_SHADOW)
+	@Setter(value = DRAW_SHADOW_KEY)
 	public void setDrawShadow(boolean aFlag);
 
-	@Getter(value = SHADOW_DARKNESS, defaultValue = "150")
+	@Getter(value = SHADOW_DARKNESS_KEY, defaultValue = "150")
 	@XMLAttribute
 	public int getShadowDarkness();
 
-	@Setter(value = SHADOW_DARKNESS)
+	@Setter(value = SHADOW_DARKNESS_KEY)
 	public void setShadowDarkness(int aValue);
 
-	@Getter(value = SHADOW_DEPTH, defaultValue = "2")
+	@Getter(value = SHADOW_DEPTH_KEY, defaultValue = "2")
 	@XMLAttribute
 	public int getShadowDepth();
 
-	@Setter(value = SHADOW_DEPTH)
+	@Setter(value = SHADOW_DEPTH_KEY)
 	public void setShadowDepth(int aValue);
 
-	@Getter(value = SHADOW_BLUR, defaultValue = "4")
+	@Getter(value = SHADOW_BLUR_KEY, defaultValue = "4")
 	@XMLAttribute
 	public int getShadowBlur();
 
-	@Setter(value = SHADOW_BLUR)
+	@Setter(value = SHADOW_BLUR_KEY)
 	public void setShadowBlur(int aValue);
 
 	public ShadowStyle clone();

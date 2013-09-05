@@ -129,52 +129,52 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	@Override
 	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name, DrawingGRProvider<M> grProvider) {
-		return drawingBinding = new DrawingGRBinding<M>(name, grProvider);
+		return drawingBinding = new DrawingGRBinding<M>(name, drawingClass, grProvider);
 	}
 
 	@Override
 	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRProvider<R> grProvider) {
-		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, grProvider);
+		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, shapeObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
 			ShapeGRProvider<R> grProvider) {
-		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, grProvider);
+		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, shapeObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, GeometricGRProvider<R> grProvider) {
-		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, grProvider);
+		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, geometricObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
 			GeometricGRProvider<R> grProvider) {
-		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, grProvider);
+		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, geometricObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ConnectorGRProvider<R> grProvider) {
-		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, connectorObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ConnectorGRProvider<R> grProvider) {
-		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, connectorObjectClass, grProvider);
 		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider) {
-		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, connectorObjectClass, grProvider);
 		return returned;
 	}
 
@@ -402,8 +402,8 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	private void _printGraphicalObjectHierarchy(DrawingTreeNodeImpl<?, ?> dtn, int level) {
-		String nodePrettyPrint = "???";
-		if (dtn instanceof RootNode) {
+		String nodePrettyPrint = dtn.toString();
+		/*if (dtn instanceof RootNode) {
 			nodePrettyPrint = "Root[" + ((RootNode<?>) dtn).getWidth() + "x" + ((RootNode<?>) dtn).getHeight() + "]:" + dtn.getDrawable();
 		} else if (dtn instanceof ShapeNode) {
 			nodePrettyPrint = "Shape-" + dtn.getIndex() + "[" + ((ShapeNode<?>) dtn).getX() + ";" + ((ShapeNode<?>) dtn).getY() + "]["
@@ -412,7 +412,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		} else if (dtn instanceof ConnectorNode) {
 			nodePrettyPrint = "Connector-" + dtn.getIndex() + "[Shape-" + ((ConnectorNode<?>) dtn).getStartNode().getIndex() + "][Shape-"
 					+ ((ConnectorNode<?>) dtn).getEndNode().getIndex() + "]:" + dtn.getDrawable();
-		}
+		}*/
 		logger.info(buildWhiteSpaceIndentation(level * 5) + " > " + nodePrettyPrint);
 		if (dtn instanceof ContainerNode) {
 			if (((ContainerNode<?, ?>) dtn).getChildNodes() != null) {

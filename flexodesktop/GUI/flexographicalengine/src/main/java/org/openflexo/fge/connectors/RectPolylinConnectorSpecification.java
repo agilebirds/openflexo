@@ -20,7 +20,7 @@
 package org.openflexo.fge.connectors;
 
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -28,6 +28,7 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -70,24 +71,73 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 
 	// Property keys
 
-	public static final String RECT_POLYLIN_CONSTRAINTS = "rectPolylinConstraints";
-	public static final String STRAIGHT_LINE_WHEN_POSSIBLE = "straightLineWhenPossible";
-	public static final String ADJUSTABILITY = "adjustability";
-	public static final String START_ORIENTATION = "startOrientation";
-	public static final String END_ORIENTATION = "endOrientation";
-	public static final String IS_ROUNDED = "isRounded";
-	public static final String ARC_SIZE = "arcSize";
-	public static final String IS_STARTING_LOCATION_FIXED = "isStartingLocationFixed";
-	public static final String IS_ENDING_LOCATION_FIXED = "isEndingLocationFixed";
-	public static final String IS_STARTING_LOCATION_DRAGGABLE = "isStartingLocationDraggable";
-	public static final String IS_ENDING_LOCATION_DRAGGABLE = "isEndingLocationDraggable";
-	public static final String CROSSED_CONTROL_POINT = "crossedControlPoint";
-	public static final String FIXED_START_LOCATION = "fixedStartLocation";
-	public static final String FIXED_END_LOCATION = "fixedEndLocation";
-	public static final String POLYLIN = "polylin";
-	public static final String PIXEL_OVERLAP = "pixelOverlap";
+	@PropertyIdentifier(type = RectPolylinConstraints.class)
+	public static final String RECT_POLYLIN_CONSTRAINTS_KEY = "rectPolylinConstraints";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String STRAIGHT_LINE_WHEN_POSSIBLE_KEY = "straightLineWhenPossible";
+	@PropertyIdentifier(type = RectPolylinAdjustability.class)
+	public static final String ADJUSTABILITY_KEY = "adjustability";
+	@PropertyIdentifier(type = SimplifiedCardinalDirection.class)
+	public static final String START_ORIENTATION_KEY = "startOrientation";
+	@PropertyIdentifier(type = SimplifiedCardinalDirection.class)
+	public static final String END_ORIENTATION_KEY = "endOrientation";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_ROUNDED_KEY = "isRounded";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ARC_SIZE_KEY = "arcSize";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_STARTING_LOCATION_FIXED_KEY = "isStartingLocationFixed";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_ENDING_LOCATION_FIXED_KEY = "isEndingLocationFixed";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_STARTING_LOCATION_DRAGGABLE_KEY = "isStartingLocationDraggable";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_ENDING_LOCATION_DRAGGABLE_KEY = "isEndingLocationDraggable";
+	@PropertyIdentifier(type = FGEPoint.class)
+	public static final String CROSSED_CONTROL_POINT_KEY = "crossedControlPoint";
+	@PropertyIdentifier(type = FGEPoint.class)
+	public static final String FIXED_START_LOCATION_KEY = "fixedStartLocation";
+	@PropertyIdentifier(type = FGEPoint.class)
+	public static final String FIXED_END_LOCATION_KEY = "fixedEndLocation";
+	@PropertyIdentifier(type = FGERectPolylin.class)
+	public static final String POLYLIN_KEY = "polylin";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String PIXEL_OVERLAP_KEY = "pixelOverlap";
 
-	public static enum RectPolylinConnectorParameters implements GRParameter {
+	public static GRParameter<RectPolylinConstraints> RECT_POLYLIN_CONSTRAINTS = GRParameter.getGRParameter(
+			RectPolylinConnectorSpecification.class, RECT_POLYLIN_CONSTRAINTS_KEY, RectPolylinConstraints.class);
+	public static GRParameter<Boolean> STRAIGHT_LINE_WHEN_POSSIBLE = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			STRAIGHT_LINE_WHEN_POSSIBLE_KEY, Boolean.class);
+	public static GRParameter<RectPolylinAdjustability> ADJUSTABILITY = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			ADJUSTABILITY_KEY, RectPolylinAdjustability.class);
+	public static GRParameter<SimplifiedCardinalDirection> START_ORIENTATION = GRParameter.getGRParameter(
+			RectPolylinConnectorSpecification.class, START_ORIENTATION_KEY, SimplifiedCardinalDirection.class);
+	public static GRParameter<SimplifiedCardinalDirection> END_ORIENTATION = GRParameter.getGRParameter(
+			RectPolylinConnectorSpecification.class, END_ORIENTATION_KEY, SimplifiedCardinalDirection.class);
+	public static GRParameter<Boolean> IS_ROUNDED = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class, IS_ROUNDED_KEY,
+			Boolean.class);
+	public static GRParameter<Integer> ARC_SIZE = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class, ARC_SIZE_KEY,
+			Integer.class);
+	public static GRParameter<Boolean> IS_STARTING_LOCATION_FIXED = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			IS_STARTING_LOCATION_FIXED_KEY, Boolean.class);
+	public static GRParameter<Boolean> IS_ENDING_LOCATION_FIXED = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			IS_ENDING_LOCATION_FIXED_KEY, Boolean.class);
+	public static GRParameter<Boolean> IS_STARTING_LOCATION_DRAGGABLE = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			IS_STARTING_LOCATION_DRAGGABLE_KEY, Boolean.class);
+	public static GRParameter<Boolean> IS_ENDING_LOCATION_DRAGGABLE = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			IS_ENDING_LOCATION_DRAGGABLE_KEY, Boolean.class);
+	public static GRParameter<FGEPoint> CROSSED_CONTROL_POINT = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			CROSSED_CONTROL_POINT_KEY, FGEPoint.class);
+	public static GRParameter<FGEPoint> FIXED_START_LOCATION = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			FIXED_START_LOCATION_KEY, FGEPoint.class);
+	public static GRParameter<FGEPoint> FIXED_END_LOCATION = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			FIXED_END_LOCATION_KEY, FGEPoint.class);
+	public static GRParameter<FGERectPolylin> POLYLIN = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class, POLYLIN_KEY,
+			FGERectPolylin.class);
+	public static GRParameter<Integer> PIXEL_OVERLAP = GRParameter.getGRParameter(RectPolylinConnectorSpecification.class,
+			PIXEL_OVERLAP_KEY, Integer.class);
+
+	/*public static enum RectPolylinConnectorParameters implements GRParameter {
 		rectPolylinConstraints,
 		straightLineWhenPossible,
 		adjustability,
@@ -104,7 +154,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 		fixedEndLocation,
 		polylin,
 		pixelOverlap
-	}
+	}*/
 
 	public static enum RectPolylinAdjustability {
 		AUTO_LAYOUT, BASICALLY_ADJUSTABLE, FULLY_ADJUSTABLE
@@ -127,91 +177,91 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = RECT_POLYLIN_CONSTRAINTS)
+	@Getter(value = RECT_POLYLIN_CONSTRAINTS_KEY)
 	@XMLAttribute
 	public RectPolylinConstraints getRectPolylinConstraints();
 
-	@Setter(value = RECT_POLYLIN_CONSTRAINTS)
+	@Setter(value = RECT_POLYLIN_CONSTRAINTS_KEY)
 	public void setRectPolylinConstraints(RectPolylinConstraints aRectPolylinConstraints);
 
 	public void setRectPolylinConstraints(RectPolylinConstraints someRectPolylinConstraints, SimplifiedCardinalDirection aStartOrientation,
 			SimplifiedCardinalDirection aEndOrientation);
 
-	@Getter(value = STRAIGHT_LINE_WHEN_POSSIBLE, defaultValue = "true")
+	@Getter(value = STRAIGHT_LINE_WHEN_POSSIBLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getStraightLineWhenPossible();
 
-	@Setter(value = STRAIGHT_LINE_WHEN_POSSIBLE)
+	@Setter(value = STRAIGHT_LINE_WHEN_POSSIBLE_KEY)
 	public void setStraightLineWhenPossible(boolean aFlag);
 
-	@Getter(value = ADJUSTABILITY)
+	@Getter(value = ADJUSTABILITY_KEY)
 	@XMLAttribute
 	public RectPolylinAdjustability getAdjustability();
 
-	@Setter(value = ADJUSTABILITY)
+	@Setter(value = ADJUSTABILITY_KEY)
 	public void setAdjustability(RectPolylinAdjustability anAdjustability);
 
-	@Getter(value = END_ORIENTATION)
+	@Getter(value = END_ORIENTATION_KEY)
 	@XMLAttribute
 	public SimplifiedCardinalDirection getEndOrientation();
 
-	@Setter(value = END_ORIENTATION)
+	@Setter(value = END_ORIENTATION_KEY)
 	public void setEndOrientation(SimplifiedCardinalDirection anOrientation);
 
-	@Getter(value = START_ORIENTATION)
+	@Getter(value = START_ORIENTATION_KEY)
 	@XMLAttribute
 	public SimplifiedCardinalDirection getStartOrientation();
 
-	@Setter(value = START_ORIENTATION)
+	@Setter(value = START_ORIENTATION_KEY)
 	public void setStartOrientation(SimplifiedCardinalDirection anOrientation);
 
-	@Getter(value = IS_ROUNDED, defaultValue = "true")
+	@Getter(value = IS_ROUNDED_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsRounded();
 
-	@Setter(value = IS_ROUNDED)
+	@Setter(value = IS_ROUNDED_KEY)
 	public void setIsRounded(boolean aFlag);
 
-	@Getter(value = ARC_SIZE, defaultValue = "10")
+	@Getter(value = ARC_SIZE_KEY, defaultValue = "10")
 	@XMLAttribute
 	public int getArcSize();
 
-	@Setter(value = ARC_SIZE)
+	@Setter(value = ARC_SIZE_KEY)
 	public void setArcSize(int anArcSize);
 
-	@Getter(value = IS_STARTING_LOCATION_FIXED, defaultValue = "false")
+	@Getter(value = IS_STARTING_LOCATION_FIXED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsStartingLocationFixed();
 
-	@Setter(value = IS_STARTING_LOCATION_FIXED)
+	@Setter(value = IS_STARTING_LOCATION_FIXED_KEY)
 	public void setIsStartingLocationFixed(boolean aFlag);
 
-	@Getter(value = IS_STARTING_LOCATION_DRAGGABLE, defaultValue = "false")
+	@Getter(value = IS_STARTING_LOCATION_DRAGGABLE_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsStartingLocationDraggable();
 
-	@Setter(value = IS_STARTING_LOCATION_DRAGGABLE)
+	@Setter(value = IS_STARTING_LOCATION_DRAGGABLE_KEY)
 	public void setIsStartingLocationDraggable(boolean aFlag);
 
-	@Getter(value = IS_ENDING_LOCATION_FIXED, defaultValue = "false")
+	@Getter(value = IS_ENDING_LOCATION_FIXED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsEndingLocationFixed();
 
-	@Setter(value = IS_ENDING_LOCATION_FIXED)
+	@Setter(value = IS_ENDING_LOCATION_FIXED_KEY)
 	public void setIsEndingLocationFixed(boolean aFlag);
 
-	@Getter(value = IS_ENDING_LOCATION_DRAGGABLE, defaultValue = "false")
+	@Getter(value = IS_ENDING_LOCATION_DRAGGABLE_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsEndingLocationDraggable();
 
-	@Setter(value = IS_ENDING_LOCATION_DRAGGABLE)
+	@Setter(value = IS_ENDING_LOCATION_DRAGGABLE_KEY)
 	public void setIsEndingLocationDraggable(boolean aFlag);
 
-	@Getter(value = CROSSED_CONTROL_POINT, isStringConvertable = true)
+	@Getter(value = CROSSED_CONTROL_POINT_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getCrossedControlPoint();
 
-	@Setter(value = CROSSED_CONTROL_POINT)
+	@Setter(value = CROSSED_CONTROL_POINT_KEY)
 	public void setCrossedControlPoint(FGEPoint aPoint);
 
 	/**
@@ -220,7 +270,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return
 	 */
-	@Getter(value = FIXED_START_LOCATION, isStringConvertable = true)
+	@Getter(value = FIXED_START_LOCATION_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getFixedStartLocation();
 
@@ -231,7 +281,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * @param aPoint
 	 *            : relative to start object
 	 */
-	@Setter(value = FIXED_START_LOCATION)
+	@Setter(value = FIXED_START_LOCATION_KEY)
 	public void setFixedStartLocation(FGEPoint aPoint);
 
 	/**
@@ -239,7 +289,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return
 	 */
-	@Getter(value = FIXED_END_LOCATION, isStringConvertable = true)
+	@Getter(value = FIXED_END_LOCATION_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getFixedEndLocation();
 
@@ -249,20 +299,20 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * @param aPoint
 	 *            , relative to end object
 	 */
-	@Setter(value = FIXED_END_LOCATION)
+	@Setter(value = FIXED_END_LOCATION_KEY)
 	public void setFixedEndLocation(FGEPoint aPoint);
 
-	@Getter(value = PIXEL_OVERLAP, defaultValue = "" + FGEConstants.DEFAULT_RECT_POLYLIN_PIXEL_OVERLAP)
+	@Getter(value = PIXEL_OVERLAP_KEY, defaultValue = "" + FGEConstants.DEFAULT_RECT_POLYLIN_PIXEL_OVERLAP)
 	@XMLAttribute
 	public int getPixelOverlap();
 
-	@Setter(value = PIXEL_OVERLAP)
+	@Setter(value = PIXEL_OVERLAP_KEY)
 	public void setPixelOverlap(int aPixelOverlap);
 
-	@Getter(value = POLYLIN, ignoreType = true)
+	@Getter(value = POLYLIN_KEY, ignoreType = true)
 	public FGERectPolylin getPolylin();
 
-	@Setter(value = POLYLIN)
+	@Setter(value = POLYLIN_KEY)
 	public void setPolylin(FGERectPolylin aPolylin);
 
 	// *******************************************************************************

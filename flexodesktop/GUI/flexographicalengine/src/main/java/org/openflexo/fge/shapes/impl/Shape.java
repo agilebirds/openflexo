@@ -288,7 +288,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	public void setPaintAttributes(FGEShapeGraphics g) {
 
 		// Background
-		if (shapeNode.getGraphicalRepresentation().getIsSelected()) {
+		if (shapeNode.getIsSelected()) {
 			if (shapeNode.getGraphicalRepresentation().getHasSelectedBackground()) {
 				g.setDefaultBackground(shapeNode.getGraphicalRepresentation().getSelectedBackground());
 			} else if (shapeNode.getGraphicalRepresentation().getHasFocusedBackground()) {
@@ -296,15 +296,14 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 			} else {
 				g.setDefaultBackground(shapeNode.getGraphicalRepresentation().getBackground());
 			}
-		} else if (shapeNode.getGraphicalRepresentation().getIsFocused()
-				&& shapeNode.getGraphicalRepresentation().getHasFocusedBackground()) {
+		} else if (shapeNode.getIsFocused() && shapeNode.getGraphicalRepresentation().getHasFocusedBackground()) {
 			g.setDefaultBackground(shapeNode.getGraphicalRepresentation().getFocusedBackground());
 		} else {
 			g.setDefaultBackground(shapeNode.getGraphicalRepresentation().getBackground());
 		}
 
 		// Foreground
-		if (shapeNode.getGraphicalRepresentation().getIsSelected()) {
+		if (shapeNode.getIsSelected()) {
 			if (shapeNode.getGraphicalRepresentation().getHasSelectedForeground()) {
 				g.setDefaultForeground(shapeNode.getGraphicalRepresentation().getSelectedForeground());
 			} else if (shapeNode.getGraphicalRepresentation().getHasFocusedForeground()) {
@@ -312,8 +311,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 			} else {
 				g.setDefaultForeground(shapeNode.getGraphicalRepresentation().getForeground());
 			}
-		} else if (shapeNode.getGraphicalRepresentation().getIsFocused()
-				&& shapeNode.getGraphicalRepresentation().getHasFocusedForeground()) {
+		} else if (shapeNode.getIsFocused() && shapeNode.getGraphicalRepresentation().getHasFocusedForeground()) {
 			g.setDefaultForeground(shapeNode.getGraphicalRepresentation().getFocusedForeground());
 		} else {
 			if (shapeNode.getGraphicalRepresentation().getForeground() == null) {

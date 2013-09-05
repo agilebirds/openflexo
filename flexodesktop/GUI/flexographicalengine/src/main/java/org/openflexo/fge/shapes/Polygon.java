@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes;
 
 import java.util.List;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.impl.PolygonImpl;
 import org.openflexo.model.annotations.Adder;
@@ -32,6 +32,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
@@ -50,29 +51,32 @@ public interface Polygon extends ShapeSpecification {
 
 	// Property keys
 
-	public static final String POINTS = "points";
+	@PropertyIdentifier(type = FGEPoint.class, cardinality = Cardinality.LIST)
+	public static final String POINTS_KEY = "points";
 
-	public static enum PolygonParameters implements GRParameter {
+	public static GRParameter<List> POINTS = GRParameter.getGRParameter(Polygon.class, POINTS_KEY, List.class);
+
+	/*public static enum PolygonParameters implements GRParameter {
 		points;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = POINTS, cardinality = Cardinality.LIST, isStringConvertable = true)
+	@Getter(value = POINTS_KEY, cardinality = Cardinality.LIST, isStringConvertable = true)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
 	public List<FGEPoint> getPoints();
 
-	@Setter(POINTS)
+	@Setter(POINTS_KEY)
 	public void setPoints(List<FGEPoint> points);
 
-	@Adder(POINTS)
+	@Adder(POINTS_KEY)
 	public void addToPoints(FGEPoint aPoint);
 
-	@Remover(POINTS)
+	@Remover(POINTS_KEY)
 	public void removeFromPoints(FGEPoint aPoint);
 
 }

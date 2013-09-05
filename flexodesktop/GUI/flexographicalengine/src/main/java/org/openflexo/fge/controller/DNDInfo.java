@@ -142,8 +142,8 @@ public class DNDInfo {
 		}
 		dropTargets = new Hashtable<FGEView<?>, DropTarget>();
 
-		for (DrawingTreeNode<?, ?> node : _controller.getDrawingView().getContents().keySet()) {
-			FGEView<?> view = _controller.getDrawingView().getContents().get(node);
+		for (DrawingTreeNode<?, ?> node : _controller.getContents().keySet()) {
+			FGEView<?> view = _controller.getContents().get(node);
 			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
 			}

@@ -1,5 +1,7 @@
 package org.openflexo.fge;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.impl.TextureBackgroundStyleImpl;
@@ -7,6 +9,7 @@ import org.openflexo.inspector.HasIcon;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -23,9 +26,17 @@ import org.openflexo.toolbox.ImageIconResource;
 @XMLElement(xmlTag = "TexturedBackgroundStyle")
 public interface TextureBackgroundStyle extends BackgroundStyle {
 
-	public static final String COLOR1 = "color1";
-	public static final String COLOR2 = "color2";
-	public static final String TEXTURE_TYPE = "textureType";
+	@PropertyIdentifier(type = Color.class)
+	public static final String COLOR1_KEY = "color1";
+	@PropertyIdentifier(type = Color.class)
+	public static final String COLOR2_KEY = "color2";
+	@PropertyIdentifier(type = TextureType.class)
+	public static final String TEXTURE_TYPE_KEY = "textureType";
+
+	public static GRParameter<Color> COLOR1 = GRParameter.getGRParameter(TextureBackgroundStyle.class, COLOR1_KEY, Color.class);
+	public static GRParameter<Color> COLOR2 = GRParameter.getGRParameter(TextureBackgroundStyle.class, COLOR2_KEY, Color.class);
+	public static GRParameter<TextureType> TEXTURE_TYPE = GRParameter.getGRParameter(TextureBackgroundStyle.class, TEXTURE_TYPE_KEY,
+			TextureType.class);
 
 	public static enum TextureType implements HasIcon {
 		TEXTURE1,
@@ -55,25 +66,25 @@ public interface TextureBackgroundStyle extends BackgroundStyle {
 		}
 	}
 
-	@Getter(value = TEXTURE_TYPE)
+	@Getter(value = TEXTURE_TYPE_KEY)
 	@XMLAttribute
 	public TextureType getTextureType();
 
-	@Setter(value = TEXTURE_TYPE)
+	@Setter(value = TEXTURE_TYPE_KEY)
 	public void setTextureType(TextureType aTextureType);
 
-	@Getter(value = COLOR1)
+	@Getter(value = COLOR1_KEY)
 	@XMLAttribute
 	public java.awt.Color getColor1();
 
-	@Setter(value = COLOR1)
+	@Setter(value = COLOR1_KEY)
 	public void setColor1(java.awt.Color aColor);
 
-	@Getter(value = COLOR2)
+	@Getter(value = COLOR2_KEY)
 	@XMLAttribute
 	public java.awt.Color getColor2();
 
-	@Setter(value = COLOR2)
+	@Setter(value = COLOR2_KEY)
 	public void setColor2(java.awt.Color aColor);
 
 }

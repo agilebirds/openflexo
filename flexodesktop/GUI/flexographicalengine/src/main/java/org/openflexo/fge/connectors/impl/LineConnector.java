@@ -15,7 +15,6 @@ import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
-import org.openflexo.fge.connectors.LineConnectorSpecification.LineConnectorParameters;
 import org.openflexo.fge.connectors.LineConnectorSpecification.LineConnectorType;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ConnectorControlPoint;
@@ -524,7 +523,7 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 			// Those notifications are forwarded by the connector specification
 			FGENotification notif = (FGENotification) notification;
 
-			if (notif.getParameter() == LineConnectorParameters.lineConnectorType) {
+			if (notif.getParameter() == LineConnectorSpecification.LINE_CONNECTOR_TYPE) {
 				refreshConnector(true);
 			}
 		}

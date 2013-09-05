@@ -2,7 +2,6 @@ package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -11,7 +10,6 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -75,7 +73,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 	}
 
-	@Override
+	/*@Override
 	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = super.getAllParameters();
 		GeometricParameters[] allParams = GeometricParameters.values();
@@ -83,7 +81,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 			returned.add(allParams[i]);
 		}
 		return returned;
-	}
+	}*/
 
 	// ***************************************************************************
 	// * Deletion *
@@ -111,7 +109,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(ShapeParameters.foreground, aForeground, false);
+		FGENotification notification = requireChange(FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -141,7 +139,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(ShapeParameters.background, aBackground, false);
+		FGENotification notification = requireChange(BACKGROUND, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
@@ -168,7 +166,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 	}
 
-	@Override
+	/*@Override
 	public int getLayer() {
 		return layer;
 	}
@@ -180,16 +178,11 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 			this.layer = layer;
 			hasChanged(notification);
 		}
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Methods *
 	// *******************************************************************************
-
-	@Override
-	public boolean hasFloatingLabel() {
-		return hasText();
-	}
 
 	@Override
 	public String getInspectorName() {
@@ -201,10 +194,10 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 		super.update(observable, notification);
 
 		if (observable instanceof BackgroundStyle) {
-			notifyAttributeChange(GeometricParameters.background);
+			notifyAttributeChange(BACKGROUND);
 		}
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(GeometricParameters.foreground);
+			notifyAttributeChange(FOREGROUND);
 		}
 	}
 
@@ -215,7 +208,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setGeometricObject(FGEArea geometricObject) {
-		FGENotification notification = requireChange(GeometricParameters.geometricObject, geometricObject);
+		FGENotification notification = requireChange(GEOMETRIC_OBJECT, geometricObject);
 		if (notification != null) {
 			this.geometricObject = geometricObject;
 			hasChanged(notification);

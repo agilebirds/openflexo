@@ -24,12 +24,12 @@ import java.awt.Stroke;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -47,18 +47,37 @@ public interface ForegroundStyle extends FGEStyle {
 
 	// Property keys
 
-	public static final String COLOR = "color";
-	public static final String LINE_WIDTH = "lineWidth";
-	public static final String CAP_STYLE = "capStyle";
-	public static final String JOIN_STYLE = "joinStyle";
-	public static final String DASH_STYLE = "dashStyle";
-	public static final String NO_STROKE = "noStroke";
-	public static final String USE_TRANSPARENCY = "useTransparency";
-	public static final String TRANSPARENCY_LEVEL = "transparencyLevel";
+	@PropertyIdentifier(type = Color.class)
+	public static final String COLOR_KEY = "color";
+	@PropertyIdentifier(type = Double.class)
+	public static final String LINE_WIDTH_KEY = "lineWidth";
+	@PropertyIdentifier(type = CapStyle.class)
+	public static final String CAP_STYLE_KEY = "capStyle";
+	@PropertyIdentifier(type = JoinStyle.class)
+	public static final String JOIN_STYLE_KEY = "joinStyle";
+	@PropertyIdentifier(type = DashStyle.class)
+	public static final String DASH_STYLE_KEY = "dashStyle";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String NO_STROKE_KEY = "noStroke";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String USE_TRANSPARENCY_KEY = "useTransparency";
+	@PropertyIdentifier(type = Float.class)
+	public static final String TRANSPARENCY_LEVEL_KEY = "transparencyLevel";
 
-	public static enum Parameters implements GRParameter {
+	public static GRParameter<Color> COLOR = GRParameter.getGRParameter(ForegroundStyle.class, COLOR_KEY, Color.class);
+	public static GRParameter<Double> LINE_WIDTH = GRParameter.getGRParameter(ForegroundStyle.class, LINE_WIDTH_KEY, Double.class);
+	public static GRParameter<CapStyle> CAP_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, CAP_STYLE_KEY, CapStyle.class);
+	public static GRParameter<JoinStyle> JOIN_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, JOIN_STYLE_KEY, JoinStyle.class);
+	public static GRParameter<DashStyle> DASH_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, DASH_STYLE_KEY, DashStyle.class);
+	public static GRParameter<Boolean> NO_STROKE = GRParameter.getGRParameter(ForegroundStyle.class, NO_STROKE_KEY, Boolean.class);
+	public static GRParameter<Boolean> USE_TRANSPARENCY = GRParameter.getGRParameter(ForegroundStyle.class, USE_TRANSPARENCY_KEY,
+			Boolean.class);
+	public static GRParameter<Float> TRANSPARENCY_LEVEL = GRParameter.getGRParameter(ForegroundStyle.class, TRANSPARENCY_LEVEL_KEY,
+			Float.class);
+
+	/*public static enum Parameters implements GRParameter {
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
-	}
+	}*/
 
 	public static enum JoinStyle implements HasIcon {
 		/**
@@ -145,9 +164,10 @@ public interface ForegroundStyle extends FGEStyle {
 
 		/**
 		 * Returns the array representing the lengths of the dash segments. Alternate entries in the array represent the user space lengths
-		 * of the opaque and transparent segments of the dashes. As the pen moves along the outline of the <code>ShapeSpecification</code> to be stroked,
-		 * the user space distance that the pen travels is accumulated. The distance value is used to index into the dash array. The pen is
-		 * opaque when its current cumulative distance maps to an even element of the dash array and transparent otherwise.
+		 * of the opaque and transparent segments of the dashes. As the pen moves along the outline of the <code>ShapeSpecification</code>
+		 * to be stroked, the user space distance that the pen travels is accumulated. The distance value is used to index into the dash
+		 * array. The pen is opaque when its current cumulative distance maps to an even element of the dash array and transparent
+		 * otherwise.
 		 * 
 		 * @return the dash array.
 		 */
@@ -207,60 +227,60 @@ public interface ForegroundStyle extends FGEStyle {
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = COLOR)
+	@Getter(value = COLOR_KEY)
 	@XMLAttribute
 	public Color getColor();
 
-	@Setter(value = COLOR)
+	@Setter(value = COLOR_KEY)
 	public void setColor(Color aColor);
 
-	@Getter(value = LINE_WIDTH, defaultValue = "1.0")
+	@Getter(value = LINE_WIDTH_KEY, defaultValue = "1.0")
 	@XMLAttribute
 	public double getLineWidth();
 
-	@Setter(value = LINE_WIDTH)
+	@Setter(value = LINE_WIDTH_KEY)
 	public void setLineWidth(double aLineWidth);
 
-	@Getter(value = CAP_STYLE)
+	@Getter(value = CAP_STYLE_KEY)
 	@XMLAttribute
 	public CapStyle getCapStyle();
 
-	@Setter(value = CAP_STYLE)
+	@Setter(value = CAP_STYLE_KEY)
 	public void setCapStyle(CapStyle aCapStyle);
 
-	@Getter(value = JOIN_STYLE)
+	@Getter(value = JOIN_STYLE_KEY)
 	@XMLAttribute
 	public JoinStyle getJoinStyle();
 
-	@Setter(value = JOIN_STYLE)
+	@Setter(value = JOIN_STYLE_KEY)
 	public void setJoinStyle(JoinStyle aJoinStyle);
 
-	@Getter(value = DASH_STYLE)
+	@Getter(value = DASH_STYLE_KEY)
 	@XMLAttribute
 	public DashStyle getDashStyle();
 
-	@Setter(value = DASH_STYLE)
+	@Setter(value = DASH_STYLE_KEY)
 	public void setDashStyle(DashStyle aDashStyle);
 
-	@Getter(value = NO_STROKE, defaultValue = "false")
+	@Getter(value = NO_STROKE_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getNoStroke();
 
-	@Setter(value = NO_STROKE)
+	@Setter(value = NO_STROKE_KEY)
 	public void setNoStroke(boolean aFlag);
 
-	@Getter(value = TRANSPARENCY_LEVEL, defaultValue = "0.5")
+	@Getter(value = TRANSPARENCY_LEVEL_KEY, defaultValue = "0.5")
 	@XMLAttribute
 	public float getTransparencyLevel();
 
-	@Setter(value = TRANSPARENCY_LEVEL)
+	@Setter(value = TRANSPARENCY_LEVEL_KEY)
 	public void setTransparencyLevel(float aLevel);
 
-	@Getter(value = USE_TRANSPARENCY, defaultValue = "false")
+	@Getter(value = USE_TRANSPARENCY_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getUseTransparency();
 
-	@Setter(value = USE_TRANSPARENCY)
+	@Setter(value = USE_TRANSPARENCY_KEY)
 	public void setUseTransparency(boolean aFlag);
 
 	// *******************************************************************************

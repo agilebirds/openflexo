@@ -29,7 +29,7 @@ public abstract class ContainerGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setWidth(double aValue) {
-		FGENotification notification = requireChange(ContainerParameters.width, aValue);
+		FGENotification notification = requireChange(WIDTH, aValue);
 		if (notification != null) {
 			// FGEDimension oldSize = getSize();
 			width = aValue;
@@ -46,7 +46,7 @@ public abstract class ContainerGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setHeight(double aValue) {
-		FGENotification notification = requireChange(ContainerParameters.height, aValue);
+		FGENotification notification = requireChange(HEIGHT, aValue);
 		if (notification != null) {
 			// FGEDimension oldSize = getSize();
 			height = aValue;

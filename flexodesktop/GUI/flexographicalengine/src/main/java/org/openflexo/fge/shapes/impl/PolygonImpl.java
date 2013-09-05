@@ -105,21 +105,21 @@ public class PolygonImpl extends ShapeSpecificationImpl implements Polygon {
 			this.points = null;
 		}
 		setChanged();
-		notifyChange(PolygonParameters.points);
+		notifyChange(POINTS);
 	}
 
 	@Override
 	public void addToPoints(FGEPoint aPoint) {
 		points.add(aPoint);
 		setChanged();
-		notifyChange(PolygonParameters.points);
+		notifyChange(POINTS);
 	}
 
 	@Override
 	public void removeFromPoints(FGEPoint aPoint) {
 		points.remove(aPoint);
 		setChanged();
-		notifyChange(PolygonParameters.points);
+		notifyChange(POINTS);
 	}
 
 	@Override

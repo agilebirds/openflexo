@@ -39,6 +39,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
@@ -59,34 +60,56 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// Property keys
 
-	public static final String DRAWABLE = "drawable";
-	public static final String DRAWING = "drawing";
-	public static final String IDENTIFIER = "identifier";
-	public static final String LAYER = "layer";
-	public static final String HAS_TEXT = "hasText";
-	public static final String TEXT = "text";
-	public static final String IS_MULTILINE_ALLOWED = "isMultilineAllowed";
-	public static final String LINE_WRAP = "lineWrap";
-	public static final String CONTINUOUS_TEXT_EDITING = "continuousTextEditing";
-	public static final String TEXT_STYLE = "textStyle";
-	public static final String ABSOLUTE_TEXT_X = "absoluteTextX";
-	public static final String ABSOLUTE_TEXT_Y = "absoluteTextY";
-	public static final String HORIZONTAL_TEXT_ALIGNEMENT = "horizontalTextAlignment";
-	public static final String VERTICAL_TEXT_ALIGNEMENT = "verticalTextAlignment";
-	public static final String PARAGRAPH_ALIGNMENT = "paragraphAlignment";
-	public static final String IS_SELECTABLE = "isSelectable";
-	public static final String IS_FOCUSABLE = "isFocusable";
-	public static final String IS_SELECTED = "isSelected";
-	public static final String IS_FOCUSED = "isFocused";
-	public static final String DRAW_CONTROL_POINTS_WHEN_FOCUSED = "drawControlPointsWhenFocused";
-	public static final String DRAW_CONTROL_POINTS_WHEN_SELECTED = "drawControlPointsWhenSelected";
-	public static final String IS_READ_ONLY = "isReadOnly";
-	public static final String IS_LABEL_EDITABLE = "isLabelEditable";
-	public static final String IS_VISIBLE = "isVisible";
-	public static final String MOUSE_CLICK_CONTROLS = "mouseClickControls";
-	public static final String MOUSE_DRAG_CONTROLS = "mouseDragControls";
-	public static final String TOOLTIP_TEXT = "toolTipText";
-	public static final String VARIABLES = "variables";
+	public static final String DRAWABLE_KEY = "drawable";
+	public static final String DRAWING_KEY = "drawing";
+
+	@PropertyIdentifier(type = String.class)
+	public static final String IDENTIFIER_KEY = "identifier";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String LAYER_KEY = "layer";
+	// public static final String HAS_TEXT = "hasText";
+	@PropertyIdentifier(type = String.class)
+	public static final String TEXT_KEY = "text";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_MULTILINE_ALLOWED_KEY = "isMultilineAllowed";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String LINE_WRAP_KEY = "lineWrap";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String CONTINUOUS_TEXT_EDITING_KEY = "continuousTextEditing";
+	@PropertyIdentifier(type = TextStyle.class)
+	public static final String TEXT_STYLE_KEY = "textStyle";
+	@PropertyIdentifier(type = Double.class)
+	public static final String ABSOLUTE_TEXT_X_KEY = "absoluteTextX";
+	@PropertyIdentifier(type = Double.class)
+	public static final String ABSOLUTE_TEXT_Y_KEY = "absoluteTextY";
+	@PropertyIdentifier(type = HorizontalTextAlignment.class)
+	public static final String HORIZONTAL_TEXT_ALIGNEMENT_KEY = "horizontalTextAlignment";
+	@PropertyIdentifier(type = VerticalTextAlignment.class)
+	public static final String VERTICAL_TEXT_ALIGNEMENT_KEY = "verticalTextAlignment";
+	@PropertyIdentifier(type = ParagraphAlignment.class)
+	public static final String PARAGRAPH_ALIGNMENT_KEY = "paragraphAlignment";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_SELECTABLE_KEY = "isSelectable";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_FOCUSABLE_KEY = "isFocusable";
+	// public static final String IS_SELECTED = "isSelected";
+	// public static final String IS_FOCUSED = "isFocused";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DRAW_CONTROL_POINTS_WHEN_FOCUSED_KEY = "drawControlPointsWhenFocused";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DRAW_CONTROL_POINTS_WHEN_SELECTED_KEY = "drawControlPointsWhenSelected";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_READ_ONLY_KEY = "isReadOnly";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_LABEL_EDITABLE_KEY = "isLabelEditable";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_VISIBLE_KEY = "isVisible";
+	public static final String MOUSE_CLICK_CONTROLS_KEY = "mouseClickControls";
+	public static final String MOUSE_DRAG_CONTROLS_KEY = "mouseDragControls";
+	@PropertyIdentifier(type = String.class)
+	public static final String TOOLTIP_TEXT_KEY = "toolTipText";
+
+	// public static final String VARIABLES = "variables";
 
 	// *******************************************************************************
 	// * Inner concepts
@@ -97,39 +120,31 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	}
 
-	public static interface GRParameter {
+	/*public static interface GRParameter {
 		public String name();
 	}
 
 	public static enum Parameters implements GRParameter {
-		identifier,
-		layer,
-		hasText,
-		text,
-		isMultilineAllowed,
-		lineWrap,
-		continuousTextEditing,
-		textStyle,
-		absoluteTextX,
-		absoluteTextY,
+		identifier, layer, hasText, text, isMultilineAllowed, lineWrap, continuousTextEditing, textStyle, absoluteTextX, // TODO: remove ?
+		absoluteTextY, // TODO: remove ?
 		horizontalTextAlignment,
 		verticalTextAlignment,
 		paragraphAlignment,
 		isSelectable,
 		isFocusable,
-		isSelected,
-		isFocused,
+		// isSelected,
+		// isFocused,
 		drawControlPointsWhenFocused,
 		drawControlPointsWhenSelected,
 		isReadOnly,
 		isLabelEditable,
-		isVisible,
+		isVisible, // TODO: remove ?
 		mouseClickControls,
 		mouseDragControls,
 		toolTipText,
 		variables;
 
-	}
+	}*/
 
 	public static enum ParagraphAlignment {
 		LEFT, CENTER, RIGHT, JUSTIFY;
@@ -143,131 +158,173 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 		TOP, MIDDLE, BOTTOM;
 	}
 
+	public static GRParameter<String> IDENTIFIER = GRParameter.getGRParameter(GraphicalRepresentation.class, IDENTIFIER_KEY, String.class);
+	public static GRParameter<Integer> LAYER = GRParameter.getGRParameter(GraphicalRepresentation.class, LAYER_KEY, Integer.class);
+	public static GRParameter<String> TEXT = GRParameter.getGRParameter(GraphicalRepresentation.class, TEXT_KEY, String.class);
+	public static GRParameter<TextStyle> TEXT_STYLE = GRParameter.getGRParameter(GraphicalRepresentation.class, TEXT_STYLE_KEY,
+			TextStyle.class);
+	public static GRParameter<HorizontalTextAlignment> HORIZONTAL_TEXT_ALIGNEMENT = GRParameter.getGRParameter(
+			GraphicalRepresentation.class, HORIZONTAL_TEXT_ALIGNEMENT_KEY, HorizontalTextAlignment.class);
+	public static GRParameter<VerticalTextAlignment> VERTICAL_TEXT_ALIGNEMENT = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			VERTICAL_TEXT_ALIGNEMENT_KEY, VerticalTextAlignment.class);
+	public static GRParameter<Double> ABSOLUTE_TEXT_X = GRParameter.getGRParameter(GraphicalRepresentation.class, ABSOLUTE_TEXT_X_KEY,
+			Double.class);
+	public static GRParameter<Double> ABSOLUTE_TEXT_Y = GRParameter.getGRParameter(GraphicalRepresentation.class, ABSOLUTE_TEXT_Y_KEY,
+			Double.class);
+	public static GRParameter<Boolean> IS_MULTILINE_ALLOWED = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			IS_MULTILINE_ALLOWED_KEY, Boolean.class);
+	public static GRParameter<Boolean> LINE_WRAP = GRParameter.getGRParameter(GraphicalRepresentation.class, LINE_WRAP_KEY, Boolean.class);
+	public static GRParameter<Boolean> CONTINUOUS_TEXT_EDITING = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			CONTINUOUS_TEXT_EDITING_KEY, Boolean.class);
+
+	public static GRParameter<ParagraphAlignment> PARAGRAPH_ALIGNEMENT = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			PARAGRAPH_ALIGNMENT_KEY, ParagraphAlignment.class);
+	public static GRParameter<Boolean> IS_SELECTABLE = GRParameter.getGRParameter(GraphicalRepresentation.class, IS_SELECTABLE_KEY,
+			Boolean.class);
+	public static GRParameter<Boolean> IS_FOCUSABLE = GRParameter.getGRParameter(GraphicalRepresentation.class, IS_FOCUSABLE_KEY,
+			Boolean.class);
+	public static GRParameter<Boolean> DRAW_CONTROL_POINTS_WHEN_FOCUSED = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			DRAW_CONTROL_POINTS_WHEN_FOCUSED_KEY, Boolean.class);
+	public static GRParameter<Boolean> DRAW_CONTROL_POINTS_WHEN_SELECTED = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			DRAW_CONTROL_POINTS_WHEN_SELECTED_KEY, Boolean.class);
+	public static GRParameter<Boolean> IS_READ_ONLY = GRParameter.getGRParameter(GraphicalRepresentation.class, IS_READ_ONLY_KEY,
+			Boolean.class);
+	public static GRParameter<Boolean> IS_LABEL_EDITABLE = GRParameter.getGRParameter(GraphicalRepresentation.class, IS_LABEL_EDITABLE_KEY,
+			Boolean.class);
+	public static GRParameter<Boolean> IS_VISIBLE = GRParameter
+			.getGRParameter(GraphicalRepresentation.class, IS_VISIBLE_KEY, Boolean.class);
+	public static GRParameter<Vector> MOUSE_CLICK_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			MOUSE_CLICK_CONTROLS_KEY, Vector.class);
+	public static GRParameter<Vector> MOUSE_DRAG_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			MOUSE_DRAG_CONTROLS_KEY, Vector.class);
+	public static GRParameter<String> TOOLTIP_TEXT = GRParameter.getGRParameter(GraphicalRepresentation.class, TOOLTIP_TEXT_KEY,
+			String.class);
+
 	// *******************************************************************************
 	// * Model
 	// *******************************************************************************
 
-	@Getter(value = DRAWING, ignoreType = true)
+	@Getter(value = DRAWING_KEY, ignoreType = true)
 	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
 	public Drawing<?> getDrawing();
 
-	@Setter(value = DRAWING)
+	@Setter(value = DRAWING_KEY)
 	public void setDrawing(Drawing<?> drawing);
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = IDENTIFIER)
+	@Getter(value = IDENTIFIER_KEY)
 	@XMLAttribute
 	public String getIdentifier();
 
-	@Setter(value = IDENTIFIER)
+	@Setter(value = IDENTIFIER_KEY)
 	public void setIdentifier(String identifier);
 
-	@Getter(value = LAYER, defaultValue = "0")
+	@Getter(value = LAYER_KEY, defaultValue = "0")
 	@XMLAttribute
 	public int getLayer();
 
-	@Setter(value = LAYER)
+	@Setter(value = LAYER_KEY)
 	public void setLayer(int layer);
 
-	@Getter(value = HAS_TEXT, defaultValue = "true")
+	/*@Getter(value = HAS_TEXT, defaultValue = "true")
 	@XMLAttribute
 	public boolean getHasText();
 
 	@Setter(value = HAS_TEXT)
-	public void setHasText(boolean hasText);
+	public void setHasText(boolean hasText);*/
 
-	@Getter(value = TEXT)
+	@Getter(value = TEXT_KEY)
 	@XMLAttribute
 	public String getText();
 
-	@Setter(value = TEXT)
+	@Setter(value = TEXT_KEY)
 	public void setText(String text);
 
 	public String getMultilineText();
 
 	public void setMultilineText(String text);
 
-	@Getter(value = IS_MULTILINE_ALLOWED, defaultValue = "false")
+	@Getter(value = IS_MULTILINE_ALLOWED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsMultilineAllowed();
 
-	@Setter(value = IS_MULTILINE_ALLOWED)
+	@Setter(value = IS_MULTILINE_ALLOWED_KEY)
 	public void setIsMultilineAllowed(boolean multilineAllowed);
 
-	@Getter(value = LINE_WRAP, defaultValue = "false")
+	@Getter(value = LINE_WRAP_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getLineWrap();
 
-	@Setter(value = LINE_WRAP)
+	@Setter(value = LINE_WRAP_KEY)
 	public void setLineWrap(boolean lineWrap);
 
-	@Getter(value = CONTINUOUS_TEXT_EDITING, defaultValue = "true")
+	@Getter(value = CONTINUOUS_TEXT_EDITING_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getContinuousTextEditing();
 
-	@Setter(value = CONTINUOUS_TEXT_EDITING)
+	@Setter(value = CONTINUOUS_TEXT_EDITING_KEY)
 	public void setContinuousTextEditing(boolean continuousTextEditing);
 
-	@Getter(value = TEXT_STYLE)
+	@Getter(value = TEXT_STYLE_KEY)
 	@XMLElement
 	public TextStyle getTextStyle();
 
-	@Setter(value = TEXT_STYLE)
+	@Setter(value = TEXT_STYLE_KEY)
 	public void setTextStyle(TextStyle aTextStyle);
 
-	@Getter(value = ABSOLUTE_TEXT_X, defaultValue = "0")
+	@Getter(value = ABSOLUTE_TEXT_X_KEY, defaultValue = "0")
 	@XMLAttribute
 	public double getAbsoluteTextX();
 
-	@Setter(value = ABSOLUTE_TEXT_X)
+	@Setter(value = ABSOLUTE_TEXT_X_KEY)
 	public void setAbsoluteTextX(double absoluteTextX);
 
-	@Getter(value = ABSOLUTE_TEXT_Y, defaultValue = "0")
+	@Getter(value = ABSOLUTE_TEXT_Y_KEY, defaultValue = "0")
 	@XMLAttribute
 	public double getAbsoluteTextY();
 
-	@Setter(value = ABSOLUTE_TEXT_Y)
+	@Setter(value = ABSOLUTE_TEXT_Y_KEY)
 	public void setAbsoluteTextY(double absoluteTextY);
 
-	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT, defaultValue = "CENTER")
+	@Getter(value = HORIZONTAL_TEXT_ALIGNEMENT_KEY, defaultValue = "CENTER")
 	@XMLAttribute
 	public HorizontalTextAlignment getHorizontalTextAlignment();
 
-	@Setter(value = HORIZONTAL_TEXT_ALIGNEMENT)
+	@Setter(value = HORIZONTAL_TEXT_ALIGNEMENT_KEY)
 	public void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment);
 
-	@Getter(value = VERTICAL_TEXT_ALIGNEMENT, defaultValue = "MIDDLE")
+	@Getter(value = VERTICAL_TEXT_ALIGNEMENT_KEY, defaultValue = "MIDDLE")
 	@XMLAttribute
 	public VerticalTextAlignment getVerticalTextAlignment();
 
-	@Setter(value = VERTICAL_TEXT_ALIGNEMENT)
+	@Setter(value = VERTICAL_TEXT_ALIGNEMENT_KEY)
 	public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment);
 
-	@Getter(value = PARAGRAPH_ALIGNMENT, defaultValue = "CENTER")
+	@Getter(value = PARAGRAPH_ALIGNMENT_KEY, defaultValue = "CENTER")
 	@XMLAttribute
 	public ParagraphAlignment getParagraphAlignment();
 
-	@Setter(value = PARAGRAPH_ALIGNMENT)
+	@Setter(value = PARAGRAPH_ALIGNMENT_KEY)
 	public void setParagraphAlignment(ParagraphAlignment paragraphAlignment);
 
-	@Getter(value = IS_SELECTABLE, defaultValue = "true")
+	@Getter(value = IS_SELECTABLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsSelectable();
 
-	@Setter(value = IS_SELECTABLE)
+	@Setter(value = IS_SELECTABLE_KEY)
 	public void setIsSelectable(boolean isSelectable);
 
-	@Getter(value = IS_FOCUSABLE, defaultValue = "true")
+	@Getter(value = IS_FOCUSABLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsFocusable();
 
-	@Setter(value = IS_FOCUSABLE)
+	@Setter(value = IS_FOCUSABLE_KEY)
 	public void setIsFocusable(boolean isFocusable);
 
-	@Getter(value = IS_SELECTED, defaultValue = "false")
+	/*@Getter(value = IS_SELECTED, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsSelected();
 
@@ -279,102 +336,102 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public boolean getIsFocused();
 
 	@Setter(value = IS_FOCUSED)
-	public void setIsFocused(boolean aFlag);
+	public void setIsFocused(boolean aFlag);*/
 
-	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED, defaultValue = "true")
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getDrawControlPointsWhenFocused();
 
-	@Setter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED)
+	@Setter(value = DRAW_CONTROL_POINTS_WHEN_FOCUSED_KEY)
 	public void setDrawControlPointsWhenFocused(boolean aFlag);
 
-	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED, defaultValue = "true")
+	@Getter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getDrawControlPointsWhenSelected();
 
-	@Setter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED)
+	@Setter(value = DRAW_CONTROL_POINTS_WHEN_SELECTED_KEY)
 	public void setDrawControlPointsWhenSelected(boolean aFlag);
 
-	@Getter(value = IS_READ_ONLY, defaultValue = "false")
+	@Getter(value = IS_READ_ONLY_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsReadOnly();
 
-	@Setter(value = IS_READ_ONLY)
+	@Setter(value = IS_READ_ONLY_KEY)
 	public void setIsReadOnly(boolean readOnly);
 
-	@Getter(value = IS_LABEL_EDITABLE, defaultValue = "true")
+	@Getter(value = IS_LABEL_EDITABLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsLabelEditable();
 
-	@Setter(value = IS_LABEL_EDITABLE)
+	@Setter(value = IS_LABEL_EDITABLE_KEY)
 	public void setIsLabelEditable(boolean labelEditable);
 
-	@Getter(value = IS_VISIBLE, defaultValue = "true")
+	@Getter(value = IS_VISIBLE_KEY, defaultValue = "true")
 	@XMLAttribute
 	public boolean getIsVisible();
 
-	@Setter(value = IS_VISIBLE)
+	@Setter(value = IS_VISIBLE_KEY)
 	public void setIsVisible(boolean isVisible);
 
-	@Getter(value = MOUSE_CLICK_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
+	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
 	public Vector<MouseClickControl> getMouseClickControls();
 
-	@Setter(value = MOUSE_CLICK_CONTROLS)
+	@Setter(value = MOUSE_CLICK_CONTROLS_KEY)
 	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
-	@Adder(value = MOUSE_CLICK_CONTROLS)
+	@Adder(value = MOUSE_CLICK_CONTROLS_KEY)
 	public void addToMouseClickControls(MouseClickControl mouseClickControl);
 
 	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
-	@Remover(value = MOUSE_CLICK_CONTROLS)
+	@Remover(value = MOUSE_CLICK_CONTROLS_KEY)
 	public void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
-	@Getter(value = MOUSE_DRAG_CONTROLS, cardinality = Cardinality.LIST, ignoreType = true)
+	@Getter(value = MOUSE_DRAG_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
 	public Vector<MouseDragControl> getMouseDragControls();
 
-	@Setter(value = MOUSE_DRAG_CONTROLS)
+	@Setter(value = MOUSE_DRAG_CONTROLS_KEY)
 	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
-	@Adder(value = MOUSE_DRAG_CONTROLS)
+	@Adder(value = MOUSE_DRAG_CONTROLS_KEY)
 	public void addToMouseDragControls(MouseDragControl mouseDragControl);
 
 	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
-	@Remover(value = MOUSE_DRAG_CONTROLS)
+	@Remover(value = MOUSE_DRAG_CONTROLS_KEY)
 	public void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
-	@Getter(value = TOOLTIP_TEXT)
+	@Getter(value = TOOLTIP_TEXT_KEY)
 	@XMLAttribute
 	public String getToolTipText();
 
-	@Setter(value = TOOLTIP_TEXT)
+	@Setter(value = TOOLTIP_TEXT_KEY)
 	public void setToolTipText(String tooltipText);
 
 	// @Getter(value = VARIABLES, cardinality = Cardinality.LIST)
 	// @XMLElement
-	public Vector<GRVariable> getVariables();
+	// public Vector<GRVariable> getVariables();
 
 	// @Setter(value = VARIABLES)
-	public void setVariables(Vector<GRVariable> variables);
+	// public void setVariables(Vector<GRVariable> variables);
 
 	// @Adder(value = VARIABLES)
-	public void addToVariables(GRVariable v);
+	// public void addToVariables(GRVariable v);
 
 	// @Remover(value = VARIABLES)
-	public void removeFromVariables(GRVariable v);
+	// public void removeFromVariables(GRVariable v);
 
 	// *******************************************************************************
 	// * Utils
 	// *******************************************************************************
 
-	public GRParameter parameterWithName(String parameterName);
+	// public GRParameter<?> parameterWithName(String parameterName);
 
-	public Vector<GRParameter> getAllParameters();
+	// public Collection<GRParameter<?>> getAllParameters();
 
 	public void setsWith(GraphicalRepresentation gr);
 
-	public void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters);
+	public void setsWith(GraphicalRepresentation gr, GRParameter<?>... exceptedParameters);
 
 	public void initializeDeserialization();
 
@@ -386,7 +443,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	// * Graphical Utils
 	// *******************************************************************************
 
-	public boolean hasFloatingLabel();
+	// public boolean hasFloatingLabel();
 
 	// public boolean shouldBeDisplayed();
 
@@ -434,7 +491,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public ShapeGraphicalRepresentation shapeHiding(FGEPoint p);
 
-	public boolean hasText();
+	// public boolean hasText();
 
 	/*public int getViewX(double scale);
 
@@ -582,11 +639,11 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException;
 	*/
-	public GRVariable createStringVariable();
+	// public GRVariable createStringVariable();
 
-	public GRVariable createIntegerVariable();
+	// public GRVariable createIntegerVariable();
 
-	public void deleteVariable(GRVariable v);
+	// public void deleteVariable(GRVariable v);
 
 	@Override
 	public PropertyChangeSupport getPropertyChangeSupport();

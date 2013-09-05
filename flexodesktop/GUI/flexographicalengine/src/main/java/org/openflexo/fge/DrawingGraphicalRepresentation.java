@@ -28,6 +28,7 @@ import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -46,71 +47,90 @@ public interface DrawingGraphicalRepresentation extends ContainerGraphicalRepres
 
 	// Property keys
 
-	public static final String BACKGROUND_COLOR = "backgroundColor";
-	public static final String RECTANGLE_SELECTING_SELECTION_COLOR = "rectangleSelectingSelectionColor";
-	public static final String FOCUS_COLOR = "focusColor";
-	public static final String SELECTION_COLOR = "selectionColor";
-	public static final String DRAW_WORKING_AREA = "drawWorkingArea";
-	public static final String IS_RESIZABLE = "isResizable";
+	@PropertyIdentifier(type = Color.class)
+	public static final String BACKGROUND_COLOR_KEY = "backgroundColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String RECTANGLE_SELECTING_SELECTION_COLOR_KEY = "rectangleSelectingSelectionColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String FOCUS_COLOR_KEY = "focusColor";
+	@PropertyIdentifier(type = Color.class)
+	public static final String SELECTION_COLOR_KEY = "selectionColor";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String DRAW_WORKING_AREA_KEY = "drawWorkingArea";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_RESIZABLE_KEY = "isResizable";
 
-	public static enum DrawingParameters implements GRParameter {
+	public static GRParameter<Color> BACKGROUND_COLOR = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
+			BACKGROUND_COLOR_KEY, Color.class);
+	public static GRParameter<Color> RECTANGLE_SELECTING_SELECTION_COLOR = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
+			RECTANGLE_SELECTING_SELECTION_COLOR_KEY, Color.class);
+	public static GRParameter<Color> FOCUS_COLOR = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class, FOCUS_COLOR_KEY,
+			Color.class);
+	public static GRParameter<Color> SELECTION_COLOR = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
+			SELECTION_COLOR_KEY, Color.class);
+	public static GRParameter<Boolean> DRAW_WORKING_AREA = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
+			DRAW_WORKING_AREA_KEY, Boolean.class);
+	public static GRParameter<Boolean> IS_RESIZABLE = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class, IS_RESIZABLE_KEY,
+			Boolean.class);
+
+	/*public static enum DrawingParameters implements GRParameter {
 		backgroundColor, width, height, rectangleSelectingSelectionColor, focusColor, selectionColor, drawWorkingArea, isResizable;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = BACKGROUND_COLOR)
+	@Getter(value = BACKGROUND_COLOR_KEY)
 	@XMLAttribute
 	public abstract Color getBackgroundColor();
 
-	@Setter(value = BACKGROUND_COLOR)
+	@Setter(value = BACKGROUND_COLOR_KEY)
 	public abstract void setBackgroundColor(Color backgroundColor);
 
 	@Override
-	@Getter(value = WIDTH, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_WIDTH)
+	@Getter(value = WIDTH_KEY, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_WIDTH)
 	@XMLAttribute
 	public abstract double getWidth();
 
 	@Override
-	@Getter(value = HEIGHT, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_HEIGHT)
+	@Getter(value = HEIGHT_KEY, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_HEIGHT)
 	@XMLAttribute
 	public abstract double getHeight();
 
-	@Getter(value = FOCUS_COLOR)
+	@Getter(value = FOCUS_COLOR_KEY)
 	@XMLAttribute
 	public abstract Color getFocusColor();
 
-	@Setter(value = FOCUS_COLOR)
+	@Setter(value = FOCUS_COLOR_KEY)
 	public abstract void setFocusColor(Color focusColor);
 
-	@Getter(value = SELECTION_COLOR)
+	@Getter(value = SELECTION_COLOR_KEY)
 	@XMLAttribute
 	public abstract Color getSelectionColor();
 
-	@Setter(value = SELECTION_COLOR)
+	@Setter(value = SELECTION_COLOR_KEY)
 	public abstract void setSelectionColor(Color selectionColor);
 
-	@Getter(value = RECTANGLE_SELECTING_SELECTION_COLOR)
+	@Getter(value = RECTANGLE_SELECTING_SELECTION_COLOR_KEY)
 	@XMLAttribute
 	public abstract Color getRectangleSelectingSelectionColor();
 
-	@Setter(value = RECTANGLE_SELECTING_SELECTION_COLOR)
+	@Setter(value = RECTANGLE_SELECTING_SELECTION_COLOR_KEY)
 	public abstract void setRectangleSelectingSelectionColor(Color selectionColor);
 
-	@Getter(value = DRAW_WORKING_AREA, defaultValue = "true")
+	@Getter(value = DRAW_WORKING_AREA_KEY, defaultValue = "true")
 	@XMLAttribute
 	public abstract boolean getDrawWorkingArea();
 
-	@Setter(DRAW_WORKING_AREA)
+	@Setter(DRAW_WORKING_AREA_KEY)
 	public abstract void setDrawWorkingArea(boolean drawWorkingArea);
 
-	@Getter(value = IS_RESIZABLE, defaultValue = "false")
+	@Getter(value = IS_RESIZABLE_KEY, defaultValue = "false")
 	@XMLAttribute
 	public abstract boolean isResizable();
 
-	@Setter(IS_RESIZABLE)
+	@Setter(IS_RESIZABLE_KEY)
 	public abstract void setIsResizable(boolean isResizable);
 
 	public abstract FGERectangle getWorkingArea();

@@ -19,11 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class ShapeChanged extends FGENotification {
 
 	public ShapeChanged() {
-		super(ShapeParameters.shapeType, null, null);
+		super(ShapeGraphicalRepresentation.SHAPE, null, null);
 	}
 }

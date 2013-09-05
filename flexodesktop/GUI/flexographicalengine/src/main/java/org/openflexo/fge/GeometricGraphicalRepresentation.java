@@ -25,6 +25,7 @@ import org.openflexo.fge.impl.GeometricGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
@@ -43,37 +44,47 @@ public interface GeometricGraphicalRepresentation extends GraphicalRepresentatio
 
 	// Property keys
 
-	public static final String FOREGROUND = "foreground";
-	public static final String BACKGROUND = "background";
-	public static final String GEOMETRIC_OBJECT = "geometricObject";
+	@PropertyIdentifier(type = ForegroundStyle.class)
+	public static final String FOREGROUND_KEY = "foreground";
+	@PropertyIdentifier(type = BackgroundStyle.class)
+	public static final String BACKGROUND_KEY = "background";
+	@PropertyIdentifier(type = FGEArea.class)
+	public static final String GEOMETRIC_OBJECT_KEY = "geometricObject";
 
-	public static enum GeometricParameters implements GRParameter {
+	public static GRParameter<BackgroundStyle> BACKGROUND = GRParameter.getGRParameter(GeometricGraphicalRepresentation.class,
+			GeometricGraphicalRepresentation.BACKGROUND_KEY, BackgroundStyle.class);
+	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(GeometricGraphicalRepresentation.class,
+			GeometricGraphicalRepresentation.FOREGROUND_KEY, ForegroundStyle.class);
+	public static GRParameter<FGEArea> GEOMETRIC_OBJECT = GRParameter.getGRParameter(GeometricGraphicalRepresentation.class,
+			GeometricGraphicalRepresentation.GEOMETRIC_OBJECT_KEY, FGEArea.class);
+
+	/*public static enum GeometricParameters implements GRParameter {
 		foreground, background, geometricObject
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = FOREGROUND)
+	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
 	public ForegroundStyle getForeground();
 
-	@Setter(value = FOREGROUND)
+	@Setter(value = FOREGROUND_KEY)
 	public void setForeground(ForegroundStyle aForeground);
 
-	@Getter(value = BACKGROUND)
+	@Getter(value = BACKGROUND_KEY)
 	@XMLElement
 	public BackgroundStyle getBackground();
 
-	@Setter(value = BACKGROUND)
+	@Setter(value = BACKGROUND_KEY)
 	public void setBackground(BackgroundStyle aBackground);
 
-	@Getter(value = GEOMETRIC_OBJECT, isStringConvertable = true)
+	@Getter(value = GEOMETRIC_OBJECT_KEY, isStringConvertable = true)
 	@XMLElement
 	public FGEArea getGeometricObject();
 
-	@Setter(value = GEOMETRIC_OBJECT)
+	@Setter(value = GEOMETRIC_OBJECT_KEY)
 	public void setGeometricObject(FGEArea geometricObject);
 
 	// *******************************************************************************

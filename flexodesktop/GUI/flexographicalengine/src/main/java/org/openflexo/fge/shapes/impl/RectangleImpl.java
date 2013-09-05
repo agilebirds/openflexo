@@ -88,7 +88,7 @@ public class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
 	 */
 	@Override
 	public void setArcSize(double anArcSize) {
-		FGENotification notification = requireChange(RectangleParameters.arcSize, anArcSize);
+		FGENotification notification = requireChange(ARC_SIZE, anArcSize);
 		if (notification != null) {
 			arcSize = anArcSize;
 			hasChanged(notification);
@@ -102,7 +102,7 @@ public class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
 
 	@Override
 	public void setIsRounded(boolean aFlag) {
-		FGENotification notification = requireChange(RectangleParameters.isRounded, aFlag);
+		FGENotification notification = requireChange(IS_ROUNDED, aFlag);
 		if (notification != null) {
 			isRounded = aFlag;
 			hasChanged(notification);

@@ -39,7 +39,7 @@ public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements Col
 			java.awt.Color oldColor = color;
 			this.color = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR, oldColor, aColor));
 		}
 	}
 

@@ -23,7 +23,6 @@ import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConnectorParameters;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
 import org.openflexo.fge.connectors.rpc.AdjustableEndControlPoint;
 import org.openflexo.fge.connectors.rpc.AdjustableFirstControlPoint;
@@ -2151,28 +2150,28 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 			// Those notifications are forwarded by the connector specification
 			FGENotification notif = (FGENotification) notification;
 
-			if (notif.getParameter() == RectPolylinConnectorParameters.rectPolylinConstraints) {
+			if (notif.getParameter() == RectPolylinConnectorSpecification.RECT_POLYLIN_CONSTRAINTS) {
 				p_start = null;
 				p_end = null;
 				updateLayout();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorParameters.straightLineWhenPossible
-					|| notif.getParameter() == RectPolylinConnectorParameters.startOrientation
-					|| notif.getParameter() == RectPolylinConnectorParameters.endOrientation
-					|| notif.getParameter() == RectPolylinConnectorParameters.pixelOverlap
-					|| notif.getParameter() == RectPolylinConnectorParameters.isRounded
-					|| notif.getParameter() == RectPolylinConnectorParameters.arcSize) {
+			} else if (notif.getParameter() == RectPolylinConnectorSpecification.STRAIGHT_LINE_WHEN_POSSIBLE
+					|| notif.getParameter() == RectPolylinConnectorSpecification.START_ORIENTATION
+					|| notif.getParameter() == RectPolylinConnectorSpecification.END_ORIENTATION
+					|| notif.getParameter() == RectPolylinConnectorSpecification.PIXEL_OVERLAP
+					|| notif.getParameter() == RectPolylinConnectorSpecification.IS_ROUNDED
+					|| notif.getParameter() == RectPolylinConnectorSpecification.ARC_SIZE) {
 				updateLayout();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorParameters.isStartingLocationDraggable
-					|| notif.getParameter() == RectPolylinConnectorParameters.isEndingLocationDraggable
-					|| notif.getParameter() == RectPolylinConnectorParameters.fixedStartLocation
-					|| notif.getParameter() == RectPolylinConnectorParameters.fixedEndLocation) {
+			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_DRAGGABLE
+					|| notif.getParameter() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_DRAGGABLE
+					|| notif.getParameter() == RectPolylinConnectorSpecification.FIXED_START_LOCATION
+					|| notif.getParameter() == RectPolylinConnectorSpecification.FIXED_END_LOCATION) {
 				updateLayout();
 				// Force control points to be rebuild in order to get draggable feature
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorParameters.isStartingLocationFixed) {
+			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_FIXED) {
 				if (getConnectorSpecification().getIsStartingLocationFixed() && fixedStartLocationRelativeToStartObject == null
 						&& p_start != null) {
 					// In this case, we can initialize fixed start location to its current value
@@ -2182,7 +2181,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 				updateLayout();
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorParameters.isEndingLocationFixed) {
+			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_FIXED) {
 				if (getConnectorSpecification().getIsEndingLocationFixed() && fixedEndLocationRelativeToEndObject == null && p_end != null) {
 					// In this case, we can initialize fixed start location to its current value
 					fixedEndLocationRelativeToEndObject = FGEUtils.convertNormalizedPoint(connectorNode, p_end.getPoint(), getEndNode());
@@ -2190,7 +2189,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 				updateLayout();
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorParameters.adjustability) {
+			} else if (notif.getParameter() == RectPolylinConnectorSpecification.ADJUSTABILITY) {
 				if (polylin != null) {
 					updateWithNewPolylin(polylin);
 				}

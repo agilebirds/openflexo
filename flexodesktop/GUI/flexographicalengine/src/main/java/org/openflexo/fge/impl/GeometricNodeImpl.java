@@ -16,7 +16,6 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.GeometricGraphicalRepresentation.GeometricParameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
@@ -172,11 +171,11 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		graphics.setDefaultForeground(getGraphicalRepresentation().getForeground());
 		graphics.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 
-		if (getGraphicalRepresentation().getIsSelected() || getGraphicalRepresentation().getIsFocused()) {
+		if (getIsSelected() || getIsFocused()) {
 			ForegroundStyle style = getGraphicalRepresentation().getForeground().clone();
-			if (getGraphicalRepresentation().getIsSelected()) {
+			if (getIsSelected()) {
 				style.setColorNoNotification(getDrawing().getRoot().getGraphicalRepresentation().getSelectionColor());
-			} else if (getGraphicalRepresentation().getIsFocused()) {
+			} else if (getIsFocused()) {
 				style.setColorNoNotification(getDrawing().getRoot().getGraphicalRepresentation().getFocusColor());
 			}
 			graphics.setDefaultForeground(style);
@@ -184,11 +183,11 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 		paintGeometricObject(graphics);
 
-		if (getGraphicalRepresentation().getIsSelected() || getGraphicalRepresentation().getIsFocused()) {
+		if (getIsSelected() || getIsFocused()) {
 			Color color = null;
-			if (getGraphicalRepresentation().getIsSelected()) {
+			if (getIsSelected()) {
 				color = getDrawing().getRoot().getGraphicalRepresentation().getSelectionColor();
-			} else if (getGraphicalRepresentation().getIsFocused()) {
+			} else if (getIsFocused()) {
 				color = getDrawing().getRoot().getGraphicalRepresentation().getFocusColor();
 			}
 			for (ControlPoint cp : getControlPoints()) {
@@ -196,7 +195,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			}
 		}
 
-		if (getGraphicalRepresentation().hasFloatingLabel()) {
+		if (hasFloatingLabel()) {
 			graphics.useTextStyle(getGraphicalRepresentation().getTextStyle());
 			graphics.drawString(getGraphicalRepresentation().getText(), new FGEPoint(getLabelRelativePosition().x
 					+ getGraphicalRepresentation().getAbsoluteTextX(), getLabelRelativePosition().y
@@ -814,18 +813,23 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			// Those notifications are forwarded by my graphical representation
 			FGENotification notif = (FGENotification) notification;
 
-			if (notif.getParameter() == GeometricParameters.geometricObject) {
+			if (notif.getParameter() == GeometricGraphicalRepresentation.GEOMETRIC_OBJECT) {
 				notifyGeometryChanged();
 			}
 		}
 
 		if (observable instanceof BackgroundStyle) {
-			notifyAttributeChanged(GeometricParameters.background, null, getGraphicalRepresentation().getBackground());
+			notifyAttributeChanged(GeometricGraphicalRepresentation.BACKGROUND, null, getGraphicalRepresentation().getBackground());
 		}
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChanged(GeometricParameters.foreground, null, getGraphicalRepresentation().getForeground());
+			notifyAttributeChanged(GeometricGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return hasText();
 	}
 
 }

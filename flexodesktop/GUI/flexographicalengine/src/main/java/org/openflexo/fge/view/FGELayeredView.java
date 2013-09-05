@@ -105,9 +105,9 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			add(view.getLabelView(), view.getLayer(), -1);
 		}
 		add(view, view.getLayer(), -1);
-		if (getDrawingView() != null) {
+		/*if (getDrawingView() != null) {
 			getDrawingView().getContents().put(view.getNode(), view);
-		}
+		}*/
 	}
 
 	public void remove(ShapeView<?> view) {
@@ -115,9 +115,9 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			remove(view.getLabelView());
 		}
 		remove((Component) view);
-		if (getDrawingView() != null) {
+		/*if (getDrawingView() != null) {
 			getDrawingView().getContents().remove(view.getNode());
-		}
+		}*/
 	}
 
 	public void add(ConnectorView<O> view) {
@@ -126,9 +126,9 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			add(view.getLabelView(), view.getLayer(), -1);
 		}
 		add(view, view.getLayer(), -1);
-		if (getDrawingView() != null) {
+		/*if (getDrawingView() != null) {
 			getDrawingView().getContents().put(view.getNode(), view);
-		}
+		}*/
 	}
 
 	public void remove(ConnectorView<O> view) {
@@ -136,9 +136,9 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			remove(view.getLabelView());
 		}
 		remove((Component) view);
-		if (getDrawingView() != null) {
+		/*if (getDrawingView() != null) {
 			getDrawingView().getContents().remove(view.getNode());
-		}
+		}*/
 	}
 
 	protected void handleNodeAdded(NodeAdded notification) {

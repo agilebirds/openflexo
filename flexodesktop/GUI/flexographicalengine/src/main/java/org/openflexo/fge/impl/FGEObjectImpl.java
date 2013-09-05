@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEObject;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.inspector.DefaultInspectableObject;
 
@@ -93,7 +93,7 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	// *******************************************************************************
 
 	@Override
-	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue) {
+	public <T> void notifyChange(GRParameter<T> parameter, T oldValue, T newValue) {
 		// Never notify unchanged values
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
@@ -105,12 +105,12 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	}
 
 	@Override
-	public void notifyChange(GRParameter parameter) {
+	public <T> void notifyChange(GRParameter<T> parameter) {
 		notifyChange(parameter, null, valueForParameter(parameter));
 	}
 
 	@Override
-	public void notifyAttributeChange(GRParameter parameter) {
+	public <T> void notifyAttributeChange(GRParameter<T> parameter) {
 		notifyChange(parameter);
 	}
 
@@ -123,7 +123,7 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	 * @param useEquals
 	 * @return
 	 */
-	protected FGENotification requireChange(GRParameter parameter, Object value) {
+	protected <T> FGENotification requireChange(GRParameter<T> parameter, T value) {
 		return requireChange(parameter, value, true);
 	}
 
@@ -141,8 +141,8 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	 * @param useEquals
 	 * @return
 	 */
-	protected FGENotification requireChange(GRParameter parameter, Object value, boolean useEquals) {
-		Object oldValue = valueForParameter(parameter);
+	protected <T> FGENotification requireChange(GRParameter<T> parameter, T value, boolean useEquals) {
+		T oldValue = valueForParameter(parameter);
 		if (value == oldValue && value != null && !value.getClass().isEnum()) {
 			// logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
 		}
@@ -176,36 +176,36 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	 * @param parameter
 	 * @return
 	 */
-	protected Object valueForParameter(GRParameter parameter) {
-		Class<?> type = getTypeForKey(parameter.name());
-		Object returned = null;
+	protected <T> T valueForParameter(GRParameter<T> parameter) {
+		Class<?> type = getTypeForKey(parameter.getName());
+		T returned = null;
 		if (type.isPrimitive()) {
 			if (type == Boolean.TYPE) {
-				returned = booleanValueForKey(parameter.name());
+				returned = (T) (Boolean) booleanValueForKey(parameter.getName());
 			}
 			if (type == Integer.TYPE) {
-				returned = integerValueForKey(parameter.name());
+				returned = (T) (Integer) integerValueForKey(parameter.getName());
 			}
 			if (type == Short.TYPE) {
-				returned = shortValueForKey(parameter.name());
+				returned = (T) (Short) shortValueForKey(parameter.getName());
 			}
 			if (type == Long.TYPE) {
-				returned = longValueForKey(parameter.name());
+				returned = (T) (Long) longValueForKey(parameter.getName());
 			}
 			if (type == Float.TYPE) {
-				returned = floatValueForKey(parameter.name());
+				returned = (T) (Float) floatValueForKey(parameter.getName());
 			}
 			if (type == Double.TYPE) {
-				returned = doubleValueForKey(parameter.name());
+				returned = (T) (Double) doubleValueForKey(parameter.getName());
 			}
 			if (type == Byte.TYPE) {
-				returned = byteValueForKey(parameter.name());
+				returned = (T) (Byte) byteValueForKey(parameter.getName());
 			}
 			if (type == Character.TYPE) {
-				returned = characterForKey(parameter.name());
+				returned = (T) (Character) characterForKey(parameter.getName());
 			}
 		} else {
-			returned = objectForKey(parameter.name());
+			returned = (T) objectForKey(parameter.getName());
 		}
 		return returned;
 	}

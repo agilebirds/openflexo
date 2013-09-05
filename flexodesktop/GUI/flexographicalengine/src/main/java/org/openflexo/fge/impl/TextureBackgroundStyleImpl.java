@@ -153,7 +153,7 @@ public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements T
 			this.textureType = aTextureType;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.textureType, oldTexture, aTextureType));
+			notifyObservers(new FGENotification(TEXTURE_TYPE, oldTexture, aTextureType));
 		}
 	}
 
@@ -169,7 +169,7 @@ public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements T
 			this.color1 = aColor;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color1, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR1, oldColor, aColor));
 		}
 	}
 
@@ -185,7 +185,7 @@ public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements T
 			this.color2 = aColor;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color2, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR2, oldColor, aColor));
 		}
 	}
 

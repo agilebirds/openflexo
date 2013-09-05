@@ -28,7 +28,7 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 
 	@Override
 	public void setLineConnectorType(LineConnectorType aLineConnectorType) {
-		FGENotification notification = requireChange(LineConnectorParameters.lineConnectorType, aLineConnectorType);
+		FGENotification notification = requireChange(LINE_CONNECTOR_TYPE, aLineConnectorType);
 		if (notification != null) {
 			lineConnectorType = aLineConnectorType;
 			hasChanged(notification);
@@ -42,7 +42,7 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 
 	@Override
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(LineConnectorParameters.cp1RelativeToStartObject, cp1RelativeToStartObject);
+		FGENotification notification = requireChange(CP1_RELATIVE_TO_START_OBJECT, cp1RelativeToStartObject);
 		if (notification != null) {
 			this.cp1RelativeToStartObject = aPoint;
 			hasChanged(notification);
@@ -56,7 +56,7 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 
 	@Override
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(LineConnectorParameters.cp2RelativeToEndObject, cp2RelativeToEndObject);
+		FGENotification notification = requireChange(CP2_RELATIVE_TO_END_OBJECT, cp2RelativeToEndObject);
 		if (notification != null) {
 			this.cp2RelativeToEndObject = aPoint;
 			hasChanged(notification);

@@ -225,7 +225,7 @@ public class FGEPaintManager {
 		}
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
-		if (view.getNode().getGraphicalRepresentation().hasFloatingLabel()) {
+		if (view.getNode().hasFloatingLabel()) {
 			LabelView<?> label = view.getLabelView();
 			if (label != null) {
 				label.repaint();

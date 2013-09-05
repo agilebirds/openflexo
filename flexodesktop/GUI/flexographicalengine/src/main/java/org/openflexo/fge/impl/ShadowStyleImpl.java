@@ -41,7 +41,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 			boolean oldValue = drawShadow;
 			this.drawShadow = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.drawShadow, oldValue, aFlag));
+			notifyObservers(new FGENotification(DRAW_SHADOW, oldValue, aFlag));
 		}
 	}
 
@@ -56,7 +56,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 			int oldShadowDarkness = shadowDarkness;
 			shadowDarkness = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowDarkness, oldShadowDarkness, aValue));
+			notifyObservers(new FGENotification(SHADOW_DARKNESS, oldShadowDarkness, aValue));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 			int oldShadowDeep = shadowDepth;
 			shadowDepth = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowDepth, oldShadowDeep, aValue));
+			notifyObservers(new FGENotification(SHADOW_DEPTH, oldShadowDeep, aValue));
 		}
 	}
 
@@ -91,7 +91,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 			int oldShadowBlur = shadowBlur;
 			shadowBlur = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowBlur, oldShadowBlur, aValue));
+			notifyObservers(new FGENotification(SHADOW_BLUR, oldShadowBlur, aValue));
 		}
 	}
 

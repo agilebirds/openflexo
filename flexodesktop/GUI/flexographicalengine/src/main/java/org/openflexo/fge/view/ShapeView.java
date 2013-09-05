@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -241,10 +242,10 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	private void updateLabelView() {
-		if (!shapeNode.getGraphicalRepresentation().getHasText() && labelView != null) {
+		if (!shapeNode.hasText() && labelView != null) {
 			labelView.delete();
 			labelView = null;
-		} else if (shapeNode.getGraphicalRepresentation().getHasText() && labelView == null) {
+		} else if (shapeNode.hasText() && labelView == null) {
 			labelView = new LabelView<O>(shapeNode, getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView(), getLayer(), -1);
@@ -258,7 +259,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("hop???");
 		if (isDeleted()) {
 			return;
 		}
@@ -339,7 +339,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				}
 			});
 		} else {
-			// logger.info("For " + getGraphicalRepresentation().getClass().getSimpleName() + " received: " + aNotification);
+			logger.info("update() in ShapeView for " + getNode() + " received: " + aNotification);
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
@@ -386,18 +386,18 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
 					getPaintManager().invalidate(shapeNode);
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
+				} else if (notification.getParameter() == GraphicalRepresentation.LAYER) {
 					updateLayer();
 					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
 						getPaintManager().invalidate(shapeNode);
 					}
 					getPaintManager().repaint(this);
 
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+				} else if (notification.getParameter() == DrawingTreeNode.IS_FOCUSED) {
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
+				} else if (notification.getParameter() == GraphicalRepresentation.TEXT) {
 					updateLabelView();
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+				} else if (notification.getParameter() == DrawingTreeNode.IS_SELECTED) {
 					if (getParent() != null) {
 						getParent().moveToFront(this);
 					}
@@ -405,11 +405,11 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getParent().moveToFront(getLabelView());
 					}
 					getPaintManager().repaint(this);
-					if (shapeNode.getGraphicalRepresentation().getIsSelected()) {
+					if (shapeNode.getIsSelected()) {
 						requestFocusInWindow();
 						// requestFocus();
 					}
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
+				} else if (notification.getParameter() == GraphicalRepresentation.IS_VISIBLE) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {
 						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {

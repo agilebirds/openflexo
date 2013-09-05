@@ -22,11 +22,11 @@ package org.openflexo.fge;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -44,53 +44,65 @@ public interface TextStyle extends FGEStyle {
 
 	// Property keys
 
-	public static final String COLOR = "color";
-	public static final String BACKGROUND_COLOR = "backgroundColor";
-	public static final String FONT = "font";
-	public static final String ORIENTATION = "orientation";
-	public static final String IS_BACKGROUND_COLORED = "isBackgroundColored";
+	@PropertyIdentifier(type = Color.class)
+	public static final String COLOR_KEY = "color";
+	@PropertyIdentifier(type = Color.class)
+	public static final String BACKGROUND_COLOR_KEY = "backgroundColor";
+	@PropertyIdentifier(type = Font.class)
+	public static final String FONT_KEY = "font";
+	@PropertyIdentifier(type = Integer.class)
+	public static final String ORIENTATION_KEY = "orientation";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String IS_BACKGROUND_COLORED_KEY = "isBackgroundColored";
 
-	public static enum Parameters implements GRParameter {
+	public static GRParameter<Color> COLOR = GRParameter.getGRParameter(TextStyle.class, COLOR_KEY, Color.class);
+	public static GRParameter<Color> BACKGROUND_COLOR = GRParameter.getGRParameter(TextStyle.class, BACKGROUND_COLOR_KEY, Color.class);
+	public static GRParameter<Font> FONT = GRParameter.getGRParameter(TextStyle.class, FONT_KEY, Font.class);
+	public static GRParameter<Integer> ORIENTATION = GRParameter.getGRParameter(TextStyle.class, ORIENTATION_KEY, Integer.class);
+	public static GRParameter<Boolean> IS_BACKGROUND_COLORED = GRParameter.getGRParameter(TextStyle.class, IS_BACKGROUND_COLORED_KEY,
+			Boolean.class);
+
+	/*public static enum Parameters implements GRParameter {
 		color, backgroundColor, font, orientation, backgroundColored
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = COLOR)
+	@Getter(value = COLOR_KEY)
 	@XMLAttribute
 	public Color getColor();
 
-	@Setter(value = COLOR)
+	@Setter(value = COLOR_KEY)
 	public void setColor(Color aColor);
 
-	@Getter(value = BACKGROUND_COLOR)
+	@Getter(value = BACKGROUND_COLOR_KEY)
 	@XMLAttribute
 	public Color getBackgroundColor();
 
-	@Setter(value = BACKGROUND_COLOR)
+	@Setter(value = BACKGROUND_COLOR_KEY)
 	public void setBackgroundColor(Color aColor);
 
-	@Getter(value = FONT)
+	@Getter(value = FONT_KEY)
 	@XMLAttribute
 	public Font getFont();
 
-	@Setter(value = FONT)
+	@Setter(value = FONT_KEY)
 	public void setFont(Font aFont);
 
-	@Getter(value = ORIENTATION, defaultValue = "0")
+	@Getter(value = ORIENTATION_KEY, defaultValue = "0")
 	@XMLAttribute
 	public int getOrientation();
 
-	@Setter(value = ORIENTATION)
+	@Setter(value = ORIENTATION_KEY)
 	public void setOrientation(int anOrientation);
 
-	@Getter(value = IS_BACKGROUND_COLORED, defaultValue = "false")
+	@Getter(value = IS_BACKGROUND_COLORED_KEY, defaultValue = "false")
 	@XMLAttribute
 	public boolean getIsBackgroundColored();
 
-	@Setter(value = IS_BACKGROUND_COLORED)
+	@Setter(value = IS_BACKGROUND_COLORED_KEY)
 	public void setIsBackgroundColored(boolean aFlag);
 
 	public TextStyle clone();

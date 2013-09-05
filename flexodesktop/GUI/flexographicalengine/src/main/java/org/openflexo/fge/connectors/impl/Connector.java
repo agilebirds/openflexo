@@ -163,7 +163,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	public void setPaintAttributes(FGEConnectorGraphics g) {
 
 		// Foreground
-		if (connectorNode.getGraphicalRepresentation().getIsSelected()) {
+		if (connectorNode.getIsSelected()) {
 			if (connectorNode.getGraphicalRepresentation().getHasSelectedForeground()) {
 				g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getSelectedForeground());
 			} else if (connectorNode.getGraphicalRepresentation().getHasFocusedForeground()) {
@@ -171,8 +171,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 			} else {
 				g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getForeground());
 			}
-		} else if (connectorNode.getGraphicalRepresentation().getIsFocused()
-				&& connectorNode.getGraphicalRepresentation().getHasFocusedForeground()) {
+		} else if (connectorNode.getIsFocused() && connectorNode.getGraphicalRepresentation().getHasFocusedForeground()) {
 			g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getFocusedForeground());
 		} else {
 			g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getForeground());

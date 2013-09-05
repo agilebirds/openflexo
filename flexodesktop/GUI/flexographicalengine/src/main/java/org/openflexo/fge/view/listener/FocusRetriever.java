@@ -90,6 +90,8 @@ public class FocusRetriever {
 	public void handleMouseMove(MouseEvent event) {
 		DrawingTreeNode<?, ?> newFocusedObject = getFocusedObject(event);
 
+		// System.out.println("Hop, je bouge et je suis focuse sur " + newFocusedObject);
+
 		if (newFocusedObject != null) {
 			drawingView.getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
 			ControlArea<?> cp = getFocusedControlAreaForDrawable(newFocusedObject, event);
@@ -130,9 +132,17 @@ public class FocusRetriever {
 		}
 
 		FGEView<?> view = drawingView.viewForNode(node);
+		if (view == null) {
+			logger.warning("Unexpected null view for node " + node + " DrawingController=" + getController() + " DrawingView="
+					+ drawingView);
+			/*Map<DrawingTreeNode<?, ?>, FGEView<?>> contents = getController().getContents();
+			System.out.println("Pour node, j'ai:");
+			FGEView v = contents.get(node);
+			System.out.println("Prout");*/
+		}
 		FGEView<?> parenttView = node == drawingView.getDrawing().getRoot() ? drawingView : drawingView.viewForNode(node.getParentNode());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) parenttView);
-		if (node.getGraphicalRepresentation().getHasText()) {
+		if (node.hasText()) {
 			LabelView<?> labelView = view.getLabelView();
 			if (labelView != null) {
 				return labelView.getBounds().contains(p);
@@ -531,8 +541,7 @@ public class FocusRetriever {
 								}
 							}
 						}
-						if (childNode.getGraphicalRepresentation().hasFloatingLabel()
-								&& focusOnFloatingLabel(childNode, eventSource, eventLocation)) {
+						if (childNode.hasFloatingLabel() && focusOnFloatingLabel(childNode, eventSource, eventLocation)) {
 							// System.out.println("Detected floating label");
 							if (childNode instanceof ShapeNode) {
 								enclosingShapes.add((ShapeNode<?>) childNode);
@@ -569,10 +578,10 @@ public class FocusRetriever {
 			Collections.sort(enclosingShapes, new Comparator<ShapeNode<?>>() {
 				@Override
 				public int compare(ShapeNode<?> o1, ShapeNode<?> o2) {
-					if (o2.getGraphicalRepresentation().getIsSelected()) {
+					if (o2.getIsSelected()) {
 						return Integer.MAX_VALUE;
 					}
-					if (o1.getGraphicalRepresentation().getIsSelected()) {
+					if (o1.getIsSelected()) {
 						return Integer.MIN_VALUE;
 					}
 					return o2.getGraphicalRepresentation().getLayer() - o1.getGraphicalRepresentation().getLayer();
@@ -581,9 +590,9 @@ public class FocusRetriever {
 
 			ShapeNode<?> focusedShape = enclosingShapes.get(0);
 			int layer = focusedShape.getGraphicalRepresentation().getLayer();
-			if (focusedShape.getGraphicalRepresentation().getIsSelected()) {
+			if (focusedShape.getIsSelected()) {
 				for (ShapeNode<?> s : enclosingShapes) {
-					if (s.getGraphicalRepresentation().getIsSelected()) {
+					if (s.getIsSelected()) {
 						continue;
 					} else {
 						layer = s.getGraphicalRepresentation().getLayer();
@@ -593,7 +602,7 @@ public class FocusRetriever {
 			}
 			List<ShapeNode<?>> shapesInSameLayer = new ArrayList<ShapeNode<?>>();
 			for (ShapeNode<?> s : enclosingShapes) {
-				if (s.getGraphicalRepresentation().getLayer() == layer || s.getGraphicalRepresentation().getIsSelected()) {
+				if (s.getGraphicalRepresentation().getLayer() == layer || s.getIsSelected()) {
 					shapesInSameLayer.add(s);
 				} else {
 					break;
@@ -634,7 +643,7 @@ public class FocusRetriever {
 			if (insideFocusedShape != null) {
 				if (returned == null
 						|| returned.getGraphicalRepresentation().getLayer() < insideFocusedShape.getGraphicalRepresentation().getLayer()
-						|| insideFocusedShape.getGraphicalRepresentation().getIsSelected()) {
+						|| insideFocusedShape.getIsSelected()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Focused GR: " + insideFocusedShape);
 					}
@@ -643,7 +652,7 @@ public class FocusRetriever {
 			} else {
 				if (returned == null
 						|| returned.getGraphicalRepresentation().getLayer() < focusedShape.getGraphicalRepresentation().getLayer()
-						|| focusedShape.getGraphicalRepresentation().getIsSelected()) {
+						|| focusedShape.getIsSelected()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Focused GR: " + focusedShape);
 					}

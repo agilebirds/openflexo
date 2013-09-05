@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
@@ -241,10 +241,10 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	private void updateLabelView() {
-		if (!connectorNode.getGraphicalRepresentation().getHasText() && labelView != null) {
+		if (!connectorNode.hasText() && labelView != null) {
 			labelView.delete();
 			labelView = null;
-		} else if (connectorNode.getGraphicalRepresentation().getHasText() && labelView == null) {
+		} else if (connectorNode.hasText() && labelView == null) {
 			labelView = new LabelView<O>(connectorNode, getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView());
@@ -368,7 +368,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof NodeDeleted) {
 					handleNodeDeleted((NodeDeleted) notification);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
+				} else if (notification.getParameter() == GraphicalRepresentation.LAYER) {
 					updateLayer();
 					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
 						getPaintManager().invalidate(connectorNode);
@@ -378,16 +378,16 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						getParentView().revalidate();
 						getPaintManager().repaint(this);
 					}*/
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
+				} else if (notification.getParameter() == DrawingTreeNode.IS_FOCUSED) {
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
+				} else if (notification.getParameter() == DrawingTreeNode.IS_SELECTED) {
 					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
-					if (connectorNode.getGraphicalRepresentation().getIsSelected()) {
+					if (connectorNode.getIsSelected()) {
 						requestFocusInWindow();
 					}
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
+				} else if (notification.getParameter() == GraphicalRepresentation.TEXT) {
 					updateLabelView();
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
+				} else if (notification.getParameter() == GraphicalRepresentation.IS_VISIBLE) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {
 						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
@@ -395,7 +395,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						}
 					}
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ConnectorParameters.applyForegroundToSymbols) {
+				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.APPLY_FOREGROUND_TO_SYMBOLS) {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove) {
 					if (getPaintManager().isPaintingCacheEnabled()) {

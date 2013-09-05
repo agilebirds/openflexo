@@ -60,7 +60,7 @@ public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implem
 			java.awt.Color oldColor = color1;
 			this.color1 = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color1, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR1, oldColor, aColor));
 		}
 	}
 
@@ -75,7 +75,7 @@ public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implem
 			java.awt.Color oldColor = color2;
 			this.color2 = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.color2, oldColor, aColor));
+			notifyObservers(new FGENotification(COLOR2, oldColor, aColor));
 		}
 	}
 
@@ -90,7 +90,7 @@ public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implem
 			ColorGradientBackgroundStyle.ColorGradientDirection oldTexture = direction;
 			this.direction = aDirection;
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.direction, oldTexture, aDirection));
+			notifyObservers(new FGENotification(DIRECTION, oldTexture, aDirection));
 		}
 	}
 

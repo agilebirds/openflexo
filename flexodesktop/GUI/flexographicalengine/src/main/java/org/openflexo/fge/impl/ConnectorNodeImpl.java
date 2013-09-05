@@ -20,7 +20,6 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.controller.DrawingController;
@@ -433,7 +432,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}*/
 
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChanged(ShapeParameters.foreground, null, getGraphicalRepresentation().getForeground());
+			notifyAttributeChanged(ConnectorGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 
 	}
@@ -496,6 +495,12 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	@Override
 	public double distanceToConnector(FGEPoint aPoint, double scale) {
 		return connector.distanceToConnector(aPoint, scale);
+	}
+
+	@Override
+	public String toString() {
+		return "Connector-" + getIndex() + "[Shape-" + getStartNode().getIndex() + "][Shape-" + getEndNode().getIndex() + "]:"
+				+ getDrawable();
 	}
 
 }

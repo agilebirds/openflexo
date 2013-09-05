@@ -19,12 +19,12 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 
 public class ConnectorModified extends FGENotification {
 
 	public ConnectorModified() {
-		super(ConnectorParameters.connector, null, null);
+		super(ConnectorGraphicalRepresentation.CONNECTOR, null, null);
 	}
 
 	@Override

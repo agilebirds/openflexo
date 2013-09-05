@@ -1,6 +1,5 @@
 package org.openflexo.fge;
 
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -13,11 +12,11 @@ public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cl
 
 	public void setFactory(FGEModelFactory factory);
 
-	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
+	public <T> void notifyChange(GRParameter<T> parameter, T oldValue, T newValue);
 
-	public void notifyChange(GRParameter parameter);
+	public <T> void notifyChange(GRParameter<T> parameter);
 
-	public void notifyAttributeChange(GRParameter parameter);
+	public <T> void notifyAttributeChange(GRParameter<T> parameter);
 
 	public void notify(FGENotification notification);
 

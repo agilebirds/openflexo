@@ -2,14 +2,12 @@ package org.openflexo.fge.impl;
 
 import java.awt.Color;
 import java.util.Observable;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
@@ -53,22 +51,6 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	private boolean applyForegroundToSymbols = true;
 
 	private boolean debugCoveringArea = false;
-
-	// *******************************************************************************
-	// * Inner classes *
-	// *******************************************************************************
-
-	// *******************************************************************************
-	// * Fields *
-	// *******************************************************************************
-
-	// private ShapeGraphicalRepresentation startObject;
-	// private ShapeGraphicalRepresentation endObject;
-	// protected FGEConnectorGraphics graphics;
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
@@ -126,17 +108,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		// disableEndObjectObserving();
 	}
 
-	@Override
-	public Vector<GRParameter> getAllParameters() {
-		Vector<GRParameter> returned = super.getAllParameters();
-		Parameters[] allParams = Parameters.values();
-		for (int i = 0; i < allParams.length; i++) {
-			returned.add(allParams[i]);
-		}
-		return returned;
-	}
-
-	@Override
+	/*@Override
 	public final void setsWith(GraphicalRepresentation gr) {
 		super.setsWith(gr);
 		if (gr instanceof ConnectorGraphicalRepresentation) {
@@ -170,7 +142,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			ConnectorSpecification clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Accessors *
@@ -188,7 +160,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 				connector.deleteObserver(this);
 			}
 			aConnector.addObserver(this);
-			FGENotification notification = requireChange(ConnectorParameters.connector, aConnector);
+			FGENotification notification = requireChange(CONNECTOR, aConnector);
 			if (notification != null) {
 				this.connector = aConnector;
 				hasChanged(notification);
@@ -203,7 +175,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(ConnectorParameters.foreground, aForeground);
+		FGENotification notification = requireChange(FOREGROUND, aForeground);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -226,7 +198,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setSelectedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(ConnectorParameters.selectedForeground, aForeground, false);
+		FGENotification notification = requireChange(SELECTED_FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (selectedForeground != null) {
 				selectedForeground.deleteObserver(this);
@@ -259,7 +231,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setFocusedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(ConnectorParameters.focusedForeground, aForeground, false);
+		FGENotification notification = requireChange(FOCUSED_FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (focusedForeground != null) {
 				focusedForeground.deleteObserver(this);
@@ -642,10 +614,10 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
 	}*/
 
-	@Override
+	/*@Override
 	public boolean hasFloatingLabel() {
 		return hasText();
-	}
+	}*/
 
 	@Override
 	public String getInspectorName() {
@@ -669,7 +641,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(ConnectorParameters.foreground);
+			notifyAttributeChange(FOREGROUND);
 		}
 
 		/*if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
@@ -746,7 +718,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setEndSymbol(EndSymbolType endSymbol) {
-		FGENotification notification = requireChange(ConnectorParameters.endSymbol, endSymbol);
+		FGENotification notification = requireChange(END_SYMBOL, endSymbol);
 		if (notification != null) {
 			this.endSymbol = endSymbol;
 			hasChanged(notification);
@@ -760,7 +732,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setEndSymbolSize(double endSymbolSize) {
-		FGENotification notification = requireChange(ConnectorParameters.endSymbolSize, endSymbolSize);
+		FGENotification notification = requireChange(END_SYMBOL_SIZE, endSymbolSize);
 		if (notification != null) {
 			this.endSymbolSize = endSymbolSize;
 			hasChanged(notification);
@@ -774,7 +746,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setMiddleSymbol(MiddleSymbolType middleSymbol) {
-		FGENotification notification = requireChange(ConnectorParameters.middleSymbol, middleSymbol);
+		FGENotification notification = requireChange(MIDDLE_SYMBOL, middleSymbol);
 		if (notification != null) {
 			this.middleSymbol = middleSymbol;
 			hasChanged(notification);
@@ -788,7 +760,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setMiddleSymbolSize(double middleSymbolSize) {
-		FGENotification notification = requireChange(ConnectorParameters.middleSymbolSize, middleSymbolSize);
+		FGENotification notification = requireChange(MIDDLE_SYMBOL_SIZE, middleSymbolSize);
 		if (notification != null) {
 			this.middleSymbolSize = middleSymbolSize;
 			hasChanged(notification);
@@ -802,7 +774,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setStartSymbol(StartSymbolType startSymbol) {
-		FGENotification notification = requireChange(ConnectorParameters.startSymbol, startSymbol);
+		FGENotification notification = requireChange(START_SYMBOL, startSymbol);
 		if (notification != null) {
 			this.startSymbol = startSymbol;
 			hasChanged(notification);
@@ -816,7 +788,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setStartSymbolSize(double startSymbolSize) {
-		FGENotification notification = requireChange(ConnectorParameters.startSymbolSize, startSymbolSize);
+		FGENotification notification = requireChange(START_SYMBOL_SIZE, startSymbolSize);
 		if (notification != null) {
 			this.startSymbolSize = startSymbolSize;
 			hasChanged(notification);
@@ -830,7 +802,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation) {
-		FGENotification notification = requireChange(ConnectorParameters.relativeMiddleSymbolLocation, relativeMiddleSymbolLocation);
+		FGENotification notification = requireChange(RELATIVE_MIDDLE_SYMBOL_LOCATION, relativeMiddleSymbolLocation);
 		if (notification != null) {
 			this.relativeMiddleSymbolLocation = relativeMiddleSymbolLocation;
 			hasChanged(notification);
@@ -844,7 +816,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setApplyForegroundToSymbols(boolean applyForegroundToSymbols) {
-		FGENotification notification = requireChange(ConnectorParameters.applyForegroundToSymbols, applyForegroundToSymbols);
+		FGENotification notification = requireChange(APPLY_FOREGROUND_TO_SYMBOLS, applyForegroundToSymbols);
 		if (notification != null) {
 			this.applyForegroundToSymbols = applyForegroundToSymbols;
 			hasChanged(notification);
@@ -858,7 +830,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setDebugCoveringArea(boolean debugCoveringArea) {
-		FGENotification notification = requireChange(ConnectorParameters.debugCoveringArea, debugCoveringArea);
+		FGENotification notification = requireChange(DEBUG_COVERING_AREA, debugCoveringArea);
 		if (notification != null) {
 			this.debugCoveringArea = debugCoveringArea;
 			hasChanged(notification);

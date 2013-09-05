@@ -62,8 +62,7 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
@@ -302,7 +301,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public void paint(Graphics g) {
 		boolean skipPaint = getPaintManager().isPaintingCacheEnabled() && getPaintManager().getDrawingView().isBuffering()
 				&& (getPaintManager().isTemporaryObject(node) || isEditing);
-		if (skipPaint || isDeleted() || !node.getGraphicalRepresentation().hasText()) {
+		if (skipPaint || isDeleted() || !node.hasText()) {
 			return;
 		}
 		super.paint(g);
@@ -332,27 +331,27 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
-				if (notification.getParameter() == GraphicalRepresentation.Parameters.text
+				if (notification.getParameter() == GraphicalRepresentation.TEXT
 				// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
 				// properly use appropriate bindings
 						|| aNotification instanceof ShapeNeedsToBeRedrawn) {
 					updateText();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
+				} else if (notification.getParameter() == GraphicalRepresentation.TEXT_STYLE) {
 					updateFont();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.paragraphAlignment) {
+				} else if (notification.getParameter() == GraphicalRepresentation.PARAGRAPH_ALIGNEMENT) {
 					updateFont();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.horizontalTextAlignment
-						|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
+				} else if (notification.getParameter() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT
+						|| notification.getParameter() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT) {
 					updateBounds();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ShapeParameters.relativeTextX
-						|| notification.getParameter() == ShapeParameters.relativeTextY
-						|| notification.getParameter() == Parameters.absoluteTextX
-						|| notification.getParameter() == Parameters.absoluteTextY
-						|| notification.getParameter() == ShapeParameters.isFloatingLabel) {
+				} else if (notification.getParameter() == ShapeGraphicalRepresentation.RELATIVE_TEXT_X
+						|| notification.getParameter() == ShapeGraphicalRepresentation.RELATIVE_TEXT_Y
+						|| notification.getParameter() == GraphicalRepresentation.ABSOLUTE_TEXT_X
+						|| notification.getParameter() == GraphicalRepresentation.ABSOLUTE_TEXT_Y
+						|| notification.getParameter() == ShapeGraphicalRepresentation.IS_FLOATING_LABEL) {
 					updateBounds();
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
@@ -543,8 +542,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			});
 			return;
 		}
-		if (node.getGraphicalRepresentation().hasText()) {
-			textComponent.setText(node.getGraphicalRepresentation().getText());
+		if (node.hasText()) {
+			textComponent.setText(node.getText());
 		} else {
 			textComponent.setText("");
 		}

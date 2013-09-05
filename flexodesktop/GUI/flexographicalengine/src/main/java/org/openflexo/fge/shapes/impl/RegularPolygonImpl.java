@@ -108,7 +108,7 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	@Override
 	public void setNPoints(int pointsNb) {
-		FGENotification notification = requireChange(RegularPolygonParameters.nPoints, pointsNb);
+		FGENotification notification = requireChange(N_POINTS, pointsNb);
 		if (notification != null) {
 			npoints = pointsNb;
 			hasChanged(notification);
@@ -122,7 +122,7 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	@Override
 	public void setStartAngle(int anAngle) {
-		FGENotification notification = requireChange(RegularPolygonParameters.startAngle, anAngle);
+		FGENotification notification = requireChange(START_ANGLE, anAngle);
 		if (notification != null) {
 			startAngle = anAngle;
 			hasChanged(notification);

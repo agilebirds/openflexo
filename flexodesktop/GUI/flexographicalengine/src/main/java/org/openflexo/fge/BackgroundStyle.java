@@ -22,12 +22,15 @@ package org.openflexo.fge;
 import java.awt.Paint;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
 /**
  * Represent background properties which should be applied to a graphical representation
@@ -41,7 +44,17 @@ import org.openflexo.model.annotations.ModelEntity;
 		@Import(TextureBackgroundStyle.class), @Import(BackgroundImageBackgroundStyle.class) })
 public interface BackgroundStyle extends FGEStyle {
 
-	public static enum Parameters implements GRParameter {
+	@PropertyIdentifier(type = Float.class)
+	public static final String TRANSPARENCY_LEVEL_KEY = "transparencyLevel";
+	@PropertyIdentifier(type = Boolean.class)
+	public static final String USE_TRANSPARENCY_KEY = "useTransparency";
+
+	public static GRParameter<Float> TRANSPARENCY_LEVEL = GRParameter.getGRParameter(BackgroundStyle.class, TRANSPARENCY_LEVEL_KEY,
+			Float.class);
+	public static GRParameter<Boolean> USE_TRANSPARENCY = GRParameter.getGRParameter(BackgroundStyle.class, USE_TRANSPARENCY_KEY,
+			Boolean.class);
+
+	/*public static enum Parameters implements GRParameter {
 		color,
 		color1,
 		color2,
@@ -57,7 +70,7 @@ public interface BackgroundStyle extends FGEStyle {
 		imageBackgroundColor,
 		transparencyLevel,
 		useTransparency;
-	}
+	}*/
 
 	public static enum BackgroundStyleType {
 		NONE, COLOR, COLOR_GRADIENT, TEXTURE, IMAGE
@@ -70,12 +83,18 @@ public interface BackgroundStyle extends FGEStyle {
 	@Override
 	public String toString();
 
+	@Getter(value = TRANSPARENCY_LEVEL_KEY, defaultValue = "1.0")
+	@XMLAttribute
 	public float getTransparencyLevel();
 
+	@Setter(value = TRANSPARENCY_LEVEL_KEY)
 	public void setTransparencyLevel(float aLevel);
 
+	@Getter(value = USE_TRANSPARENCY_KEY, defaultValue = "false")
+	@XMLAttribute
 	public boolean getUseTransparency();
 
+	@Setter(value = USE_TRANSPARENCY_KEY)
 	public void setUseTransparency(boolean aFlag);
 
 	public BackgroundStyle clone();

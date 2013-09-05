@@ -19,25 +19,25 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.inspector.InspectableModification;
 
 public class FGENotification implements InspectableModification {
-	public GRParameter parameter;
+	public GRParameter<?> parameter;
 	public Object oldValue;
 	public Object newValue;
 
 	@Deprecated
 	private String parameterName;
 
-	public FGENotification(GRParameter parameter, Object oldValue, Object newValue) {
+	public <T> FGENotification(GRParameter<T> parameter, T oldValue, T newValue) {
 		super();
 		this.parameter = parameter;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
 	}
 
+	@Deprecated
 	public FGENotification(String parameterName, Object oldValue, Object newValue) {
 		super();
 		this.parameter = null;
@@ -60,7 +60,7 @@ public class FGENotification implements InspectableModification {
 		if (parameter == null) {
 			return parameterName;
 		}
-		return parameter.name();
+		return parameter.getName();
 	}
 
 	@Override
@@ -77,7 +77,8 @@ public class FGENotification implements InspectableModification {
 		if (parameter == null) {
 			return false;
 		}
-		return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
-				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);
+		/*return !parameter.equals(GraphicalRepresentation.Parameters.isSelected)
+				&& !parameter.equals(GraphicalRepresentation.Parameters.isFocused);*/
+		return true;
 	}
 }

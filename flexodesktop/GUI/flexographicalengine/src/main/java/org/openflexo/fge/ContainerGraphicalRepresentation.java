@@ -24,6 +24,7 @@ import org.openflexo.fge.impl.ContainerGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 
@@ -43,29 +44,34 @@ public interface ContainerGraphicalRepresentation extends GraphicalRepresentatio
 
 	// Property keys
 
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
+	@PropertyIdentifier(type = Double.class)
+	public static final String WIDTH_KEY = "width";
+	@PropertyIdentifier(type = Double.class)
+	public static final String HEIGHT_KEY = "height";
 
-	public static enum ContainerParameters implements GRParameter {
+	public static GRParameter<Double> WIDTH = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, WIDTH_KEY, Double.class);
+	public static GRParameter<Double> HEIGHT = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, HEIGHT_KEY, Double.class);
+
+	/*public static enum ContainerParameters implements GRParameter {
 		width, height;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = WIDTH, defaultValue = "100")
+	@Getter(value = WIDTH_KEY, defaultValue = "100")
 	@XMLAttribute
 	public abstract double getWidth();
 
-	@Setter(value = WIDTH)
+	@Setter(value = WIDTH_KEY)
 	public abstract void setWidth(double aValue);
 
-	@Getter(value = HEIGHT, defaultValue = "100")
+	@Getter(value = HEIGHT_KEY, defaultValue = "100")
 	@XMLAttribute
 	public abstract double getHeight();
 
-	@Setter(value = HEIGHT)
+	@Setter(value = HEIGHT_KEY)
 	public abstract void setHeight(double aValue);
 
 	public FGEDimension getSize();

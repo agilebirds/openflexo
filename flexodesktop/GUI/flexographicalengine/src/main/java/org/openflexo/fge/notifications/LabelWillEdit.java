@@ -19,12 +19,12 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.GraphicalRepresentation;
 
 public class LabelWillEdit extends FGENotification {
 
 	public LabelWillEdit() {
-		super(Parameters.text, null, null);
+		super(GraphicalRepresentation.TEXT, null, null);
 	}
 
 	@Override
