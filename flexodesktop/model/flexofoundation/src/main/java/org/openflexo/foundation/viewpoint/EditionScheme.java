@@ -193,7 +193,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -214,7 +214,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -223,7 +223,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	public Vector<EditionSchemeParameter> getParameters() {
