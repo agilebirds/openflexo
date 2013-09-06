@@ -540,6 +540,9 @@ public class DrawingPalette {
 
 	public void updatePalette() {
 		_paletteController.rebuildDrawingView();
+		if (scrollPane != null) {
+			scrollPane.setViewportView(getPaletteView());
+		}
 	}
 
 	public DragSourceContext getDragSourceContext() {
