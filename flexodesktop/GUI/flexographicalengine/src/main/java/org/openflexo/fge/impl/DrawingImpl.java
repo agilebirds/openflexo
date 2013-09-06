@@ -66,16 +66,23 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	private boolean editable = true;
 
 	private FGEModelFactory factory;
+	private PersistenceMode persistenceMode;
 
-	public DrawingImpl(M model, FGEModelFactory factory) {
+	public DrawingImpl(M model, FGEModelFactory factory, PersistenceMode persistenceMode) {
 		this.model = model;
 		this.factory = factory;
+		this.persistenceMode = persistenceMode;
 		nodes = new Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>>();
 		pendingConnectors = new ArrayList<PendingConnector<?>>();
 		init();
 	}
 
 	public abstract void init();
+
+	@Override
+	public PersistenceMode getPersistenceMode() {
+		return persistenceMode;
+	}
 
 	@Override
 	public FGEModelFactory getFactory() {

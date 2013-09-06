@@ -1,5 +1,6 @@
 package org.openflexo.fge;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -17,7 +18,7 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 	private ConnectorGraphicalRepresentation edgeRepresentation;
 
 	public GraphDrawing1(Graph graph, FGEModelFactory factory) {
-		super(graph, factory);
+		super(graph, factory, PersistenceMode.SharedGraphicalRepresentations);
 	}
 
 	@Override
@@ -74,9 +75,11 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 			}
 		});
 
-		nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, "drawable.name");
-		nodeBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.X, "drawable.x");
-		nodeBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.Y, "drawable.y");
+		nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
+		// nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X, new DataBinding<Double>("drawable.labelX"));
+		// nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y, new DataBinding<Double>("drawable.labelY"));
+		nodeBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.X, new DataBinding<Double>("drawable.x"), true);
+		nodeBinding.setDynamicPropertyValue(ShapeGraphicalRepresentation.Y, new DataBinding<Double>("drawable.y"), true);
 
 	}
 }

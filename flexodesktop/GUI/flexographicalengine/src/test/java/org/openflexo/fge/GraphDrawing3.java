@@ -1,5 +1,6 @@
 package org.openflexo.fge;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -17,7 +18,7 @@ public class GraphDrawing3 extends DrawingImpl<Graph> {
 	private ConnectorGraphicalRepresentation edgeRepresentation;
 
 	public GraphDrawing3(Graph graph, FGEModelFactory factory) {
-		super(graph, factory);
+		super(graph, factory, PersistenceMode.SharedGraphicalRepresentations);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class GraphDrawing3 extends DrawingImpl<Graph> {
 			}
 		});
 
-		nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, "drawable.name");
+		nodeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
 
 	}
 }

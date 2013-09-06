@@ -643,7 +643,9 @@ public class DrawingController<M> extends Observable implements Observer {
 		if (!focusedObjects.contains(aNode)) {
 			focusedObjects.add(aNode);
 			aNode.setIsFocused(true);
-			System.out.println("Je mets le focus sur " + aNode);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Focusing on " + aNode);
+			}
 		}
 	}
 

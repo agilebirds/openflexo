@@ -299,7 +299,12 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public void update(Observable observable, Object notification) {
-		System.out.println("update() in ShapeNodeImpl, received " + notification + " from " + observable);
+		// System.out.println("update() in ShapeNodeImpl, received " + notification + " from " + observable);
+
+		if (temporaryIgnoredObservables.contains(observable)) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
 
 		super.update(observable, notification);
 
@@ -528,14 +533,15 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getX() {
-		if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
+		return getPropertyValue(ShapeGraphicalRepresentation.X);
+		/*if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
 			try {
 				return getDynamicPropertyValue(ShapeGraphicalRepresentation.X);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
-		return getGraphicalRepresentation().getX();
+		return getGraphicalRepresentation().getX();*/
 	}
 
 	@Override
@@ -559,26 +565,28 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	protected void setXNoNotification(double aValue) {
-		if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
+		setPropertyValue(ShapeGraphicalRepresentation.X, aValue);
+		/*if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
 			try {
 				setDynamicPropertyValue(ShapeGraphicalRepresentation.X, aValue);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		// getGraphicalRepresentation().setX(aValue);
 	}
 
 	@Override
 	public double getY() {
-		if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
+		return getPropertyValue(ShapeGraphicalRepresentation.Y);
+		/*if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
 			try {
 				return getDynamicPropertyValue(ShapeGraphicalRepresentation.Y);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
-		return getGraphicalRepresentation().getY();
+		return getGraphicalRepresentation().getY();*/
 	}
 
 	@Override
@@ -595,13 +603,15 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	protected void setYNoNotification(double aValue) {
-		if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.Y)) {
+		setPropertyValue(ShapeGraphicalRepresentation.Y, aValue);
+
+		/*if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.Y)) {
 			try {
 				setDynamicPropertyValue(ShapeGraphicalRepresentation.Y, aValue);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		// getGraphicalRepresentation().setY(aValue);
 	}
 
@@ -1633,11 +1643,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	public Point getLabelLocation(double scale) {
 		Point point;
 		if (getGraphicalRepresentation().getIsFloatingLabel()) {
-			point = new Point((int) (getGraphicalRepresentation().getAbsoluteTextX() * scale + getViewX(scale)),
-					(int) (getGraphicalRepresentation().getAbsoluteTextY() * scale + getViewY(scale)));
+			point = new Point((int) (getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X) * scale + getViewX(scale)),
+					(int) (getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y) * scale + getViewY(scale)));
 		} else {
-			FGEPoint relativePosition = new FGEPoint(getGraphicalRepresentation().getRelativeTextX(), getGraphicalRepresentation()
-					.getRelativeTextY());
+			FGEPoint relativePosition = new FGEPoint(getPropertyValue(ShapeGraphicalRepresentation.RELATIVE_TEXT_X),
+					getPropertyValue(ShapeGraphicalRepresentation.RELATIVE_TEXT_Y));
 			point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getParentNode(), scale);
 		}
 		Dimension d = getLabelDimension(scale);
@@ -1669,6 +1679,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public void setLabelLocation(Point point, double scale) {
 		if (getGraphicalRepresentation().getIsFloatingLabel()) {
+			Double oldAbsoluteTextX = getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X);
+			Double oldAbsoluteTextY = getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y);
 			Dimension d = getLabelDimension(scale);
 			switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
 			case CENTER:
@@ -1692,8 +1704,12 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				break;
 			}
 			FGEPoint p = new FGEPoint((point.x - getViewX(scale)) / scale, (point.y - getViewY(scale)) / scale);
-			getGraphicalRepresentation().setAbsoluteTextX(p.x);
-			getGraphicalRepresentation().setAbsoluteTextY(p.y);
+			setPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X, p.x);
+			setPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y, p.y);
+			notifyAttributeChanged(GraphicalRepresentation.ABSOLUTE_TEXT_X, oldAbsoluteTextX,
+					getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X));
+			notifyAttributeChanged(GraphicalRepresentation.ABSOLUTE_TEXT_Y, oldAbsoluteTextY,
+					getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y));
 		}
 	}
 

@@ -27,6 +27,7 @@ public class GraphNode extends Observable {
 	}
 
 	public void setName(String name) {
+		System.out.println("Set node name with " + name);
 		this.name = name;
 	}
 
@@ -104,4 +105,24 @@ public class GraphNode extends Observable {
 	public String toString() {
 		return "GraphNode[" + name + "](" + x + "," + y + ")";
 	}
+
+	private double labelX = 30;
+	private double labelY = 0;
+
+	public double getLabelX() {
+		return labelX;
+	}
+
+	public void setLabelX(double labelX) {
+		this.labelX = labelX;
+	}
+
+	public double getLabelY() {
+		return labelY;
+	}
+
+	public void setLabelY(double labelY) {
+		this.labelY = labelY;
+	}
+
 }

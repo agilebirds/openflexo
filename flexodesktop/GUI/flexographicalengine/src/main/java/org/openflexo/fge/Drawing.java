@@ -81,6 +81,25 @@ import org.openflexo.model.annotations.PropertyIdentifier;
 public interface Drawing<M> {
 
 	/**
+	 * Encode the way the internal persistance of values for graphical properties is performed.<br>
+	 * <ul>
+	 * <li><b>SharedGraphicalRepresentation</b> mode indicates that {@link GraphicalRepresentation} instances are subject to be shared, and
+	 * that the framework cannot rely on {@link GraphicalRepresentation} unicity, and thus, cannot assert that GraphicalRepresentation might
+	 * carry property values. That means that the persistance encoding should be performed by the framework user using dynamic properties
+	 * bound to original model</li>
+	 * <li><b>UniqueGraphicalRepresentation</b> mode indicates that the framework user guarantees the providing of a unique
+	 * {@link GraphicalRepresentation} instance for each {@link DrawingTreeNode}. Thus, the framework will use those
+	 * {@link GraphicalRepresentation} to internally store graphical property values. Those {@link GraphicalRepresentation} may then be used
+	 * to provide persistance of graphical properties.</li>
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public enum PersistenceMode {
+		SharedGraphicalRepresentations, UniqueGraphicalRepresentations
+	}
+
+	/**
 	 * This interfaces encodes a node in the drawing tree. A node essentially references {@link GraphicalRepresentation} and the represented
 	 * drawable (an arbitrary java {@link Object}).<br>
 	 * 
@@ -214,6 +233,26 @@ public interface Drawing<M> {
 		 * @return
 		 */
 		public boolean isDeleted();
+
+		/**
+		 * Returns the property value for supplied parameter<br>
+		 * If a dynamic property was set, compute and return this value, according to binding declared as dynamic property value<br>
+		 * Otherwise, use the GraphicalRepresentation as a support for this value.
+		 * 
+		 * @param parameter
+		 * @return
+		 */
+		public <T> T getPropertyValue(GRParameter<T> parameter);
+
+		/**
+		 * Sets the property value for supplied parameter<br>
+		 * If a dynamic property was set, sets this value according to binding declared as dynamic property value<br>
+		 * Otherwise, use the GraphicalRepresentation as a support for this value.
+		 * 
+		 * @param parameter
+		 * @return
+		 */
+		public <T> void setPropertyValue(GRParameter<T> parameter, T value);
 
 		public boolean isConnectedToDrawing();
 
@@ -599,6 +638,8 @@ public interface Drawing<M> {
 		public FGEGeometricGraphics getGraphics();
 
 	}
+
+	public PersistenceMode getPersistenceMode();
 
 	public boolean isEditable();
 

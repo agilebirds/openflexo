@@ -419,6 +419,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	public void update(Observable observable, Object notification) {
 		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
 
+		if (temporaryIgnoredObservables.contains(observable)) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
+
 		super.update(observable, notification);
 
 		if (notification instanceof FGENotification) {

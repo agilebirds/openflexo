@@ -102,6 +102,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	private boolean mouseInsideLabel = false;
 
 	public LabelView(final DrawingTreeNode<O, ?> node, DrawingController<?> controller, FGEView<O> delegateView) {
+
 		setUI(new BasicScrollPaneUI());
 		getViewport().setUI(new BasicViewportUI());
 		this.controller = controller;
@@ -327,7 +328,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 				}
 			});
 		} else {
-			// System.out.println("Received: "+aNotification);
+			// System.out.println("Received event in LabelView: " + aNotification + " observers=" + o.countObservers());
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
@@ -374,6 +375,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	protected void updateBounds() {
 		updateBounds(true);
+		// System.out.println("LabelView for " + getNode() + " for " + getNode().getDrawable() + " update bounds to " + getBounds());
 	}
 
 	protected synchronized void updateBounds(final boolean repeat) {
@@ -389,6 +391,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			});
 			return;
 		}
+		// System.out.println("LabelView " + Integer.toHexString(hashCode()) + " for " + node);
 		Rectangle bounds = node.getLabelBounds(getScale());
 		if (bounds.isEmpty() || bounds.width < 5) {
 			bounds.width = 20;
@@ -598,8 +601,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		}
 
 		// If not continuous edition, do it now
-		if (!node.getGraphicalRepresentation().getContinuousTextEditing()) {
-			node.getGraphicalRepresentation().setText(textComponent.getText());
+		/*if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
+		node.getGraphicalRepresentation().setText(textComponent.getText());
+		}*/
+		if (node.getPropertyValue(GraphicalRepresentation.CONTINUOUS_TEXT_EDITING)) {
+			node.setText(textComponent.getText());
 		}
 		isEditing = false;
 		unregisterTextListener();
@@ -662,8 +668,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 				}
 			}
 			wasEdited = true;
-			if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
-				node.getGraphicalRepresentation().setText(textComponent.getText());
+			/*if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
+			node.getGraphicalRepresentation().setText(textComponent.getText());
+			}*/
+			if (node.getPropertyValue(GraphicalRepresentation.CONTINUOUS_TEXT_EDITING)) {
+				node.setText(textComponent.getText());
 			}
 			updateBoundsLater();
 		}
@@ -682,8 +691,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 				// if (!wasEdited) return;
 			}
 			wasEdited = true;
-			if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
+			/*if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
 				node.getGraphicalRepresentation().setText(textComponent.getText());
+			}*/
+			if (node.getPropertyValue(GraphicalRepresentation.CONTINUOUS_TEXT_EDITING)) {
+				node.setText(textComponent.getText());
 			}
 			updateBoundsLater();
 		}
@@ -694,8 +706,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 				return;
 			}
 			wasEdited = true;
-			if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
-				node.getGraphicalRepresentation().setText(textComponent.getText());
+			/*if (node.getGraphicalRepresentation().getContinuousTextEditing()) {
+			node.getGraphicalRepresentation().setText(textComponent.getText());
+			}*/
+			if (node.getPropertyValue(GraphicalRepresentation.CONTINUOUS_TEXT_EDITING)) {
+				node.setText(textComponent.getText());
 			}
 			updateBoundsLater();
 		}

@@ -8,9 +8,13 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -25,6 +29,7 @@ import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DependencyLoopException;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
@@ -68,6 +73,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	private boolean isSelected = false;
 	private boolean isFocused = false;
+
+	/**
+	 * Store temporary properties that may not be serialized
+	 */
+	private Map<GRParameter, Object> propertyValues = new HashMap<GRParameter, Object>();
 
 	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		this.drawing = drawingImpl;
@@ -357,8 +367,32 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	// * Observer implementation *
 	// *******************************************************************************
 
+	protected Set<Observable> temporaryIgnoredObservables = new HashSet<Observable>();
+
+	/**
+	 * 
+	 * @param observable
+	 * @return a flag indicating if observable was added to the list of ignored observables
+	 */
+	protected boolean ignoreNotificationsFrom(Observable observable) {
+		if (temporaryIgnoredObservables.contains(observable)) {
+			return false;
+		}
+		temporaryIgnoredObservables.add(observable);
+		return true;
+	}
+
+	protected void observeAgain(Observable observable) {
+		temporaryIgnoredObservables.remove(observable);
+	}
+
 	@Override
 	public void update(Observable observable, Object notification) {
+
+		if (temporaryIgnoredObservables.contains(observable)) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
 
 		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
 			// Those notifications are forwarded by my graphical representation
@@ -593,8 +627,8 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	@Override
 	public Point getLabelLocation(double scale) {
-		return new Point((int) (getGraphicalRepresentation().getAbsoluteTextX() * scale + getViewX(scale)),
-				(int) (getGraphicalRepresentation().getAbsoluteTextY() * scale + getViewY(scale)));
+		return new Point((int) (getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X) * scale + getViewX(scale)),
+				(int) (getPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y) * scale + getViewY(scale)));
 	}
 
 	@Override
@@ -610,8 +644,8 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	@Override
 	public void setLabelLocation(Point point, double scale) {
-		getGraphicalRepresentation().setAbsoluteTextX((point.x - getViewX(scale)) / scale);
-		getGraphicalRepresentation().setAbsoluteTextY((point.y - getViewY(scale)) / scale);
+		setPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_X, (point.x - getViewX(scale)) / scale);
+		setPropertyValue(GraphicalRepresentation.ABSOLUTE_TEXT_Y, (point.y - getViewY(scale)) / scale);
 	}
 
 	@Override
@@ -761,7 +795,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	protected <T> T getDynamicPropertyValue(GRParameter<T> parameter) throws InvocationTargetException {
 		if (hasDynamicPropertyValue(parameter)) {
 			try {
-				return (T) getGRBinding().getDynamicPropertyValue(parameter).getBindingValue(this);
+				return getGRBinding().getDynamicPropertyValue(parameter).getBindingValue(this);
 			} catch (TypeMismatchException e) {
 				throw new InvocationTargetException(e);
 			} catch (NullReferenceException e) {
@@ -796,29 +830,112 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	}
 
+	/**
+	 * Returns the property value for supplied parameter<br>
+	 * If a dynamic property was set, compute and return this value, according to binding declared as dynamic property value<br>
+	 * Otherwise, use the GraphicalRepresentation as a support for this value.
+	 * 
+	 * @param parameter
+	 * @return
+	 */
 	@Override
-	public String getText() {
-		if (hasDynamicPropertyValue(GraphicalRepresentation.TEXT)) {
+	public <T> T getPropertyValue(GRParameter<T> parameter) {
+
+		if (hasDynamicPropertyValue(parameter)) {
 			try {
-				return getDynamicPropertyValue(GraphicalRepresentation.TEXT);
+				return getDynamicPropertyValue(parameter);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
-		return getGraphicalRepresentation().getText();
+
+		// Now we have to think of this:
+		// New architecture of FGE now authorize a GR to be shared by many DrawingTreeNode
+		// If UniqueGraphicalRepresentations is active, use GR to store graphical properties
+
+		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
+			return (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+		}
+
+		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties
+
+		else if (getDrawing().getPersistenceMode() == PersistenceMode.SharedGraphicalRepresentations) {
+
+			T returned = (T) propertyValues.get(parameter);
+			if (returned == null) {
+				// Init default value with GR
+				returned = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+				if (returned != null) {
+					propertyValues.put(parameter, returned);
+				}
+			}
+
+			return returned;
+		}
+
+		else {
+			logger.warning("Not implemented: " + getDrawing().getPersistenceMode());
+			return null;
+		}
 	}
 
+	/**
+	 * Sets the property value for supplied parameter<br>
+	 * If a dynamic property was set, sets this value according to binding declared as dynamic property value<br>
+	 * Otherwise, use the GraphicalRepresentation as a support for this value.
+	 * 
+	 * @param parameter
+	 * @return
+	 */
 	@Override
-	public void setText(String text) {
-		if (hasDynamicSettablePropertyValue(GraphicalRepresentation.TEXT)) {
+	public <T> void setPropertyValue(GRParameter<T> parameter, T value) {
+		if (hasDynamicSettablePropertyValue(parameter)) {
 			try {
-				setDynamicPropertyValue(GraphicalRepresentation.TEXT, text);
+				setDynamicPropertyValue(parameter, value);
 				return;
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
-		getGraphicalRepresentation().setText(text);
+
+		// Now we have to think of this:
+		// New architecture of FGE now authorize a GR to be shared by many DrawingTreeNode
+		// If UniqueGraphicalRepresentations is active, use GR to store graphical properties
+
+		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
+			boolean wasObserving = ignoreNotificationsFrom((Observable) getGraphicalRepresentation());
+			getGraphicalRepresentation().setObjectForKey(value, parameter.getName());
+			if (wasObserving) {
+				observeAgain((Observable) getGraphicalRepresentation());
+			}
+		}
+
+		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties
+
+		else if (getDrawing().getPersistenceMode() == PersistenceMode.SharedGraphicalRepresentations) {
+			propertyValues.put(parameter, value);
+		}
+
+		else {
+			logger.warning("Not implemented: " + getDrawing().getPersistenceMode());
+		}
+
+	}
+
+	/**
+	 * Convenient method used to retrieve text property value
+	 */
+	@Override
+	public String getText() {
+		return getPropertyValue(GraphicalRepresentation.TEXT);
+	}
+
+	/**
+	 * Convenient method used to set text property value
+	 */
+	@Override
+	public void setText(String text) {
+		setPropertyValue(GraphicalRepresentation.TEXT, text);
 	}
 
 	@Override
