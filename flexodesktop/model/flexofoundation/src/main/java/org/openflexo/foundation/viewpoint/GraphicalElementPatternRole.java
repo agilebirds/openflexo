@@ -33,6 +33,7 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 
 	public GraphicalElementPatternRole(ViewPointBuilder builder) {
 		super(builder);
+		actions = new Vector<GraphicalElementAction>();
 		initDefaultSpecifications();
 	}
 
@@ -173,7 +174,7 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	}
 
 	public List<GraphicalElementAction.ActionMask> getReferencedMasks() {
-		ArrayList<GraphicalElementAction.ActionMask> returned = new ArrayList<GraphicalElementAction.ActionMask>();
+		List<GraphicalElementAction.ActionMask> returned = new ArrayList<GraphicalElementAction.ActionMask>();
 		for (GraphicalElementAction a : getActions()) {
 			if (!returned.contains(a.getActionMask())) {
 				returned.add(a.getActionMask());
@@ -183,7 +184,7 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	}
 
 	public List<GraphicalElementAction> getActions(ActionMask mask) {
-		ArrayList<GraphicalElementAction> returned = new ArrayList<GraphicalElementAction>();
+		List<GraphicalElementAction> returned = new ArrayList<GraphicalElementAction>();
 		for (GraphicalElementAction a : getActions()) {
 			if (a.getActionMask() == mask) {
 				returned.add(a);
