@@ -153,7 +153,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void delete() {
 		if (!deleted) {
-			getRootView().delete();
+			if (getRootView() != null) {
+				getRootView().delete();
+			}
 			// Next for-block should not be necessary because deletion is recursive, but just to be sure
 			for (FIBView<?, ?> view : new ArrayList<FIBView<?, ?>>(views.values())) {
 				view.delete();

@@ -91,6 +91,7 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 	@Override
 	public void deleteModuleView() {
 		deleteView();
+		getFIBController().delete();
 		getFlexoController().removeModuleView(this);
 	}
 
