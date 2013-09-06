@@ -1719,8 +1719,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
-								if (_bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleBindingPathElements(columnElement.getElement()) != null
+								if (_bindingSelector.getBindable().getBindingFactory() != null
+										&& _bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleBindingPathElements(columnElement.getElement()) != null
 										&& _bindingSelector.getBindable().getBindingFactory()
 												.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
