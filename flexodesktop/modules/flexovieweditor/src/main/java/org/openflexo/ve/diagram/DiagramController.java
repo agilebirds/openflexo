@@ -28,7 +28,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
@@ -74,9 +74,8 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
-					GraphicalRepresentation parentGraphicalRepresentation) {
-				logger.info("OK, perform draw new shape with " + graphicalRepresentation + " and parent: " + parentGraphicalRepresentation);
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation, ContainerNode<?, ?> parentNode) {
+				logger.info("OK, perform draw new shape with " + graphicalRepresentation + " and parent: " + parentNode);
 
 				AddShape action = AddShape.actionType.makeNewAction(getDiagramRootPane(), null, getVEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);

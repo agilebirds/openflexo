@@ -1,4 +1,4 @@
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
@@ -7,30 +7,33 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
+import org.openflexo.fge.drawingeditor.DiagramDrawing;
+import org.openflexo.fge.drawingeditor.DrawEdgeControl;
+import org.openflexo.fge.drawingeditor.ShowContextualMenuControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public class DrawingEditorFactory extends FGEModelFactory {
+public class DiagramFactory extends FGEModelFactory {
 
 	private static int totalOccurences = 0;
 
-	public DrawingEditorFactory() throws ModelDefinitionException {
-		super(MyDrawing.class, MyShape.class, MyConnector.class);
+	public DiagramFactory() throws ModelDefinitionException {
+		super(Diagram.class, Shape.class, Connector.class);
 	}
 
 	// Called for NEW
-	public MyDrawing makeNewDrawing() {
+	public Diagram makeNewDiagram() {
 		totalOccurences++;
-		MyDrawing returned = newInstance(MyDrawing.class);
-		returned.setFactory(this);
-		returned.setIndex(totalOccurences);
-		returned.getEditedDrawing().init();
+		Diagram returned = newInstance(Diagram.class);
+		// returned.setFactory(this);
+		// returned.setIndex(totalOccurences);
+		// returned.getEditedDrawing().init();
 		return returned;
 	}
 
-	public MyConnector makeNewConnector(MyShape from, MyShape to, EditedDrawing drawing) {
-		MyConnector returned = newInstance(MyConnector.class);
+	public Connector makeNewConnector(Shape from, Shape to, DiagramDrawing drawing) {
+		Connector returned = newInstance(Connector.class);
 		returned.setDrawing(drawing.getModel());
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE, returned, drawing));
 		returned.setStartShape(from);
@@ -38,8 +41,8 @@ public class DrawingEditorFactory extends FGEModelFactory {
 		return returned;
 	}
 
-	public MyShape makeNewShape(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
-		MyShape returned = newInstance(MyShape.class);
+	public Shape makeNewShape(ShapeType shape, FGEPoint p, DiagramDrawing drawing) {
+		Shape returned = newInstance(Shape.class);
 		returned.setDrawing(drawing.getModel());
 		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape, returned, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
@@ -55,8 +58,8 @@ public class DrawingEditorFactory extends FGEModelFactory {
 		return returned;
 	}
 
-	public MyShape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, EditedDrawing drawing) {
-		MyShape returned = newInstance(MyShape.class);
+	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, DiagramDrawing drawing) {
+		Shape returned = newInstance(Shape.class);
 		returned.setDrawing(drawing.getModel());
 		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR, returned, drawing);
 		gr.setX(p.x);
@@ -65,14 +68,14 @@ public class DrawingEditorFactory extends FGEModelFactory {
 		return returned;
 	}
 
-	public DrawingGraphicalRepresentation makeNewDrawingGR(EditedDrawing aDrawing) {
+	public DrawingGraphicalRepresentation makeNewDrawingGR(DiagramDrawing aDrawing) {
 		DrawingGraphicalRepresentation returned = newInstance(DrawingGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);
 		return returned;
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, MyShape aDrawable, EditedDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, Shape aDrawable, DiagramDrawing aDrawing) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);
@@ -85,7 +88,7 @@ public class DrawingEditorFactory extends FGEModelFactory {
 
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR, MyShape aDrawable, EditedDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR, Shape aDrawable, DiagramDrawing aDrawing) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);
@@ -99,7 +102,7 @@ public class DrawingEditorFactory extends FGEModelFactory {
 
 	public ConnectorGraphicalRepresentation makeNewConnectorGR(ConnectorType aConnectorType/*, ShapeGraphicalRepresentation aStartObject,
 																							ShapeGraphicalRepresentation anEndObject*/,
-			MyConnector aDrawable, EditedDrawing aDrawing) {
+			Connector aDrawable, DiagramDrawing aDrawing) {
 		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);

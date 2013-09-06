@@ -17,20 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.model.annotations.ImplementationClass;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.XMLElement;
+import java.util.logging.Logger;
 
-@ModelEntity
-@ImplementationClass(MyShapeImpl.class)
-@XMLElement(xmlTag = "MyShape")
-public interface MyShape extends MyDrawingElement<MyShape, ShapeGraphicalRepresentation> {
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.logging.FlexoLogger;
 
-	public String getName();
+public abstract class DiagramImpl extends DiagramElementImpl<Diagram, DrawingGraphicalRepresentation> implements Diagram {
 
-	public void setName(String name);
+	private static final Logger logger = FlexoLogger.getLogger(DiagramImpl.class.getPackage().getName());
+
+	// Used by PAMELA, do not use it
+	public DiagramImpl() {
+		super(null);
+	}
+
+	// Called for LOAD
+	public DiagramImpl(DrawingBuilder builder) {
+		this();
+		if (builder != null) {
+			builder.drawing = this;
+		}
+		// initializeDeserialization();
+	}
 
 }

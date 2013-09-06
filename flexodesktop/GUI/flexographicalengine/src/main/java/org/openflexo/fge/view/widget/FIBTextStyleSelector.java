@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
@@ -271,7 +272,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			drawing = new DrawingImpl<TextStylePreviewPanel>(this, factory) {
+			drawing = new DrawingImpl<TextStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override
 				public void init() {
 					final DrawingGRBinding<TextStylePreviewPanel> previewPanelBinding = bindDrawing(TextStylePreviewPanel.class,

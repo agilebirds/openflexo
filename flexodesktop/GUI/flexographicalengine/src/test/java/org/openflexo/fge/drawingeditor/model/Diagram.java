@@ -17,9 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
-
-import java.io.File;
+package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -27,11 +25,11 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(MyDrawingImpl.class)
-@XMLElement(xmlTag = "MyDrawing")
-public interface MyDrawing extends MyDrawingElement<MyDrawing, DrawingGraphicalRepresentation> {
+@ImplementationClass(DiagramImpl.class)
+@XMLElement(xmlTag = "Diagram")
+public interface Diagram extends DiagramElement<Diagram, DrawingGraphicalRepresentation> {
 
-	public File getFile();
+	/*public File getFile();
 
 	public void setFile(File file);
 
@@ -40,24 +38,24 @@ public interface MyDrawing extends MyDrawingElement<MyDrawing, DrawingGraphicalR
 	public void setIndex(int index);
 
 	@Override
-	public MyDrawing getDrawing();
+	public Diagram getDrawing();
 
 	public String getTitle();
 
-	public EditedDrawing getEditedDrawing();
+	public DiagramDrawing getEditedDrawing();
 
 	public boolean save();
 
 	@Override
-	public void finalizeDeserialization();
+	public void finalizeDeserialization();*/
 
 	public static class DrawingBuilder {
-		public MyDrawing drawing;
+		public Diagram drawing;
 	}
 
-	public DrawingEditorFactory getFactory();
+	// public DiagramFactory getFactory();
 
-	public void setFactory(DrawingEditorFactory factory);
+	// public void setFactory(DiagramFactory factory);
 
 	// ces methodes la ne devraient pas etre necessaire
 	/*@Override

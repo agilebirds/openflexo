@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
@@ -67,7 +68,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		// final Vector<RepresentedShape> singleton = new Vector<RepresentedShape>();
 		// singleton.add(representedShape);
 
-		drawing = new DrawingImpl<ShapePreviewPanel>(this, factory) {
+		drawing = new DrawingImpl<ShapePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 			@Override
 			public void init() {
 				final DrawingGRBinding<ShapePreviewPanel> previewPanelBinding = bindDrawing(ShapePreviewPanel.class, "previewPanel",

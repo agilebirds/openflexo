@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.model.annotations.Getter;
@@ -27,23 +27,23 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(MyConnectorImpl.class)
-@XMLElement(xmlTag = "MyConnector")
-public interface MyConnector extends MyDrawingElement<MyConnector, ConnectorGraphicalRepresentation> {
+@ImplementationClass(ConnectorImpl.class)
+@XMLElement(xmlTag = "Connector")
+public interface Connector extends DiagramElement<Connector, ConnectorGraphicalRepresentation> {
 
 	public static final String START_SHAPE = "startShape";
 	public static final String END_SHAPE = "endShape";
 
 	@Getter(START_SHAPE)
-	public MyShape getStartShape();
+	public Shape getStartShape();
 
 	@Setter(START_SHAPE)
-	public void setStartShape(MyShape startShape);
+	public void setStartShape(Shape startShape);
 
 	@Getter(END_SHAPE)
-	public abstract MyShape getEndShape();
+	public abstract Shape getEndShape();
 
 	@Setter(END_SHAPE)
-	public abstract void setEndShape(MyShape endShape);
+	public abstract void setEndShape(Shape endShape);
 
 }

@@ -851,7 +851,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
 		activePalette = aPalette;
 		for (FGEView<?> v : _controller.getContents().values()) {
-			v.registerPalette(aPalette);
+			if (v != this) {
+				v.registerPalette(aPalette);
+			}
 		}
 	}
 

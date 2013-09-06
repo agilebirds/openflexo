@@ -30,6 +30,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
@@ -280,7 +281,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			drawing = new DrawingImpl<ForegroundStylePreviewPanel>(this, factory) {
+			drawing = new DrawingImpl<ForegroundStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override
 				public void init() {
 					final DrawingGRBinding<ForegroundStylePreviewPanel> previewPanelBinding = bindDrawing(

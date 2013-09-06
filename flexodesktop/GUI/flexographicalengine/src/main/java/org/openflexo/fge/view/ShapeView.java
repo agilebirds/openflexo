@@ -83,7 +83,9 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		this.shapeNode = node;
 		node.finalizeConstraints();
 		updateLabelView();
-		relocateAndResizeView();
+		if (getController() != null) {
+			relocateAndResizeView();
+		}
 		mouseListener = makeShapeViewMouseListener();
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);

@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,80 +27,78 @@ import javax.inject.Inject;
 
 import org.openflexo.fge.GraphicalRepresentation;
 
-public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation> extends Observable
-		implements MyDrawingElement<M, G> {
+public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends Observable implements
+		DiagramElement<M, G> {
 
-	private MyDrawing _drawing;
-	private List<MyShape> shapes;
-	private List<MyConnector> connectors;
+	private Diagram diagram;
+	private List<Shape> shapes;
+	private List<Connector> connectors;
 
 	@Inject
 	private G graphicalRepresentation;
 
-	public MyDrawingElementImpl(MyDrawing drawing) {
-		shapes = new ArrayList<MyShape>();
-		connectors = new ArrayList<MyConnector>();
-		_drawing = drawing;
+	public DiagramElementImpl(Diagram drawing) {
+		shapes = new ArrayList<Shape>();
+		connectors = new ArrayList<Connector>();
+		diagram = drawing;
 	}
 
 	@Override
-	public List<MyShape> getShapes() {
+	public List<Shape> getShapes() {
 		return shapes;
 	}
 
 	@Override
-	public void setShapes(List<MyShape> someShapes) {
+	public void setShapes(List<Shape> someShapes) {
 		shapes.addAll(someShapes);
 	}
 
 	@Override
-	public void addToShapes(MyShape aShape) {
+	public void addToShapes(Shape aShape) {
 		shapes.add(aShape);
 		// System.out.println("Add "+aShape+" isDeserializing="+isDeserializing());
-		if (!isDeserializing()) {
-			getDrawing().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
-			// getDrawing().getEditedDrawing().addDrawable(aShape, this);
-		}
+		/*if (!isDeserializing()) {
+			getDiagram().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
+		}*/
 	}
 
 	@Override
-	public void removeFromShapes(MyShape aShape) {
+	public void removeFromShapes(Shape aShape) {
 		shapes.remove(aShape);
 	}
 
 	@Override
-	public List<MyConnector> getConnectors() {
+	public List<Connector> getConnectors() {
 		return connectors;
 	}
 
 	@Override
-	public void setConnectors(List<MyConnector> someConnectors) {
+	public void setConnectors(List<Connector> someConnectors) {
 		connectors.addAll(someConnectors);
 	}
 
 	@Override
-	public void addToConnectors(MyConnector aConnector) {
+	public void addToConnectors(Connector aConnector) {
 		connectors.add(aConnector);
 		// System.out.println("Add "+aConnector+" isDeserializing="+isDeserializing());
-		if (!isDeserializing()) {
-			getDrawing().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
-			// getDrawing().getEditedDrawing().addDrawable(aConnector, this);
-		}
+		/*if (!isDeserializing()) {
+			getDiagram().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
+		}*/
 	}
 
 	@Override
-	public void removeFromConnectors(MyConnector aConnector) {
+	public void removeFromConnectors(Connector aConnector) {
 		connectors.remove(aConnector);
 	}
 
 	@Override
-	public MyDrawing getDrawing() {
-		return _drawing;
+	public Diagram getDiagram() {
+		return diagram;
 	}
 
 	@Override
-	public void setDrawing(MyDrawing drawing) {
-		_drawing = drawing;
+	public void setDrawing(Diagram drawing) {
+		diagram = drawing;
 	}
 
 	@Override
@@ -133,9 +131,9 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 	}*/
 
 	@Override
-	public MyDrawingElementImpl<M, G> clone() {
+	public DiagramElementImpl<M, G> clone() {
 		try {
-			return (MyDrawingElementImpl<M, G>) super.clone();
+			return (DiagramElementImpl<M, G>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
@@ -146,8 +144,8 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o == getGraphicalRepresentation()) {
-			if (getDrawing() != null) {
-				getDrawing().setChanged();
+			if (getDiagram() != null) {
+				getDiagram().setChanged();
 			}
 		}
 	}

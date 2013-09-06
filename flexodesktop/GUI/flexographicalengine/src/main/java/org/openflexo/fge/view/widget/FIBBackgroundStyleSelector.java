@@ -38,6 +38,7 @@ import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
@@ -416,7 +417,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			drawing = new DrawingImpl<BackgroundStylePreviewPanel>(this, factory) {
+			drawing = new DrawingImpl<BackgroundStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override
 				public void init() {
 					final DrawingGRBinding<BackgroundStylePreviewPanel> previewPanelBinding = bindDrawing(

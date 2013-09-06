@@ -17,26 +17,26 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.fge.drawingeditor.model.Diagram.DrawingBuilder;
 
-public abstract class MyConnectorImpl extends MyDrawingElementImpl<MyConnector, ConnectorGraphicalRepresentation> implements MyConnector {
+public abstract class ConnectorImpl extends DiagramElementImpl<Connector, ConnectorGraphicalRepresentation> implements Connector {
 
 	// Called for LOAD
-	public MyConnectorImpl(DrawingBuilder builder) {
+	public ConnectorImpl(DrawingBuilder builder) {
 		super(builder.drawing);
 		// initializeDeserialization();
 	}
 
 	// Used by PAMELA, do not use it
-	public MyConnectorImpl() {
+	public ConnectorImpl() {
 		super(null);
 	}
 
 	// Called for NEW
-	/*public MyConnectorImpl(MyShape from, MyShape to, EditedDrawing drawing) {
+	/*public ConnectorImpl(Shape from, Shape to, DiagramDrawing drawing) {
 		super(drawing.getModel());
 
 		gr = drawing

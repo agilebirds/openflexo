@@ -27,22 +27,26 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.LaunchGraphDrawing.MyDrawing.MyShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.drawingeditor.model.Connector;
+import org.openflexo.fge.drawingeditor.model.DiagramElement;
+import org.openflexo.fge.drawingeditor.model.DiagramFactory;
+import org.openflexo.fge.drawingeditor.model.Shape;
 
 public class DrawEdgeControl extends MouseDragControl {
 
 	Point currentDraggingLocationInDrawingView = null;
 	boolean drawEdge = false;
-	ShapeGraphicalRepresentation fromShape = null;
-	ShapeGraphicalRepresentation toShape = null;
-	private DrawingEditorFactory factory;
+	ShapeNode<Shape> fromShape = null;
+	ShapeNode<Shape> toShape = null;
+	private DiagramFactory factory;
 
-	public DrawEdgeControl(DrawingEditorFactory factory) {
+	public DrawEdgeControl(DiagramFactory factory) {
 		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
 		action = new DrawEdgeAction();
 		this.factory = factory;
@@ -50,10 +54,10 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
-			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
+			if (node instanceof ShapeNode) {
 				drawEdge = true;
-				fromShape = (ShapeGraphicalRepresentation) graphicalRepresentation;
+				fromShape = (ShapeNode<Shape>) node;
 				((MyDrawingView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
@@ -61,13 +65,15 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event,
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
 				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
 					// System.out.println("Add ConnectorSpecification contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
-					MyConnector newConnector = factory.makeNewConnector(fromShape, toShape, (EditedDrawing) controller.getDrawing());
-					((MyDrawingController) controller).addNewConnector(newConnector);
+					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
+							(DiagramDrawing) controller.getDrawing());
+					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
+					((MyDrawingController) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
 				}
 				drawEdge = false;
 				fromShape = null;
@@ -79,11 +85,11 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
-				if (gr instanceof MyShapeGraphicalRepresentation && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
-					toShape = (MyShapeGraphicalRepresentation) gr;
+				DrawingTreeNode<?, ?> dtn = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				if (dtn instanceof ShapeNode && dtn != fromShape && !fromShape.getAncestors().contains(dtn)) {
+					toShape = (ShapeNode<Shape>) dtn;
 				} else {
 					toShape = null;
 				}
@@ -97,12 +103,18 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
-				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());
+				Point from = controller
+						.getDrawing()
+						.getRoot()
+						.convertRemoteNormalizedPointToLocalViewCoordinates(fromShape.getShape().getShape().getCenter(), fromShape,
+								controller.getScale());
 				Point to = currentDraggingLocationInDrawingView;
 				if (toShape != null) {
-					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-							toShape.getShape().getShape().getCenter(), toShape, controller.getScale());
+					to = controller
+							.getDrawing()
+							.getRoot()
+							.convertRemoteNormalizedPointToLocalViewCoordinates(toShape.getShape().getShape().getCenter(), toShape,
+									controller.getScale());
 					g.setColor(Color.BLUE);
 				} else {
 					g.setColor(Color.RED);

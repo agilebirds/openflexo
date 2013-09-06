@@ -4,22 +4,22 @@
 
 <model builder="org.openflexo.fge.drawingeditor.MyDrawing$DrawingBuilder" handlesReferences="yes" serializationMode="pseudoTree"> 
 
-  <entity name="org.openflexo.fge.drawingeditor.MyDrawingElement" abstract="YES" finalizer="finalizeDeserialization">
-    <property name="childs" type="vector" contains="org.openflexo.fge.drawingeditor.MyDrawingElement" primary="yes"/>
+  <entity name="org.openflexo.fge.drawingeditor.model.DiagramElement" abstract="YES" finalizer="finalizeDeserialization">
+    <property name="childs" type="vector" contains="org.openflexo.fge.drawingeditor.model.DiagramElement" primary="yes"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.drawingeditor.MyDrawing" xmlTag="Drawing">
+  <entity name="org.openflexo.fge.drawingeditor.model.Diagram" xmlTag="Drawing">
      <description>Drawing</description>
   	 <property name="graphicalRepresentation" xmlTag="MyDrawingGraphicalRepresentation"/>
   </entity>
 
-  <entity name="org.openflexo.fge.drawingeditor.MyShape" xmlTag="Shape">
+  <entity name="org.openflexo.fge.drawingeditor.model.Shape" xmlTag="Shape">
      <description>Shape</description>
   	 <property name="graphicalRepresentation" xmlTag="MyShapeGraphicalRepresentation"/>
   	 <property name="name" xmlTag="name" attribute="YES"/>
   </entity>
 
- <entity name="org.openflexo.fge.drawingeditor.MyConnector" xmlTag="Connector">
+ <entity name="org.openflexo.fge.drawingeditor.model.Connector" xmlTag="Connector">
      <description>Shape</description>
   	 <property name="graphicalRepresentation" xmlTag="MyConnectorGraphicalRepresentation"/>
   </entity>

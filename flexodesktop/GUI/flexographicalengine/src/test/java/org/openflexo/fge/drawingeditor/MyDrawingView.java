@@ -22,16 +22,16 @@ package org.openflexo.fge.drawingeditor;
 import java.awt.Graphics;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
+import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.view.DrawingView;
 
-public class MyDrawingView extends DrawingView {
+public class MyDrawingView extends DrawingView<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(MyDrawingView.class.getPackage().getName());
 
-	public MyDrawingView(EditedDrawing drawing, DrawingController controller) {
-		super(drawing, controller);
+	public MyDrawingView(MyDrawingController controller) {
+		super(controller);
 	}
 
 	private DrawEdgeAction _drawEdgeAction;

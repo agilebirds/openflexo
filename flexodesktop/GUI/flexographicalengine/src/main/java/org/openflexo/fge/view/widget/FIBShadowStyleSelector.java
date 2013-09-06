@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
@@ -269,7 +270,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			drawing = new DrawingImpl<ShadowStylePreviewPanel>(this, factory) {
+			drawing = new DrawingImpl<ShadowStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override
 				public void init() {
 					final DrawingGRBinding<ShadowStylePreviewPanel> previewPanelBinding = bindDrawing(ShadowStylePreviewPanel.class,

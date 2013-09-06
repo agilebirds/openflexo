@@ -150,8 +150,8 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 
 		controlPoints.clear();
 
-		if (getShape().getControlPoints() != null) {
-			for (FGEPoint pt : getShape().getControlPoints()) {
+		if (shape != null && shape.getControlPoints() != null) {
+			for (FGEPoint pt : shape.getControlPoints()) {
 				controlPoints.add(new ShapeResizingControlPoint(shapeNode, pt, null));
 			}
 		}

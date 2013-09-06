@@ -30,6 +30,8 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 		// nodeRepresentation.setY(50);
 		nodeRepresentation.setWidth(20);
 		nodeRepresentation.setHeight(20);
+		nodeRepresentation.setAbsoluteTextX(30);
+		nodeRepresentation.setAbsoluteTextY(0);
 		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.LINE, this);
 
 		final DrawingGRBinding<Graph> graphBinding = bindDrawing(Graph.class, "graph", new DrawingGRProvider<Graph>() {

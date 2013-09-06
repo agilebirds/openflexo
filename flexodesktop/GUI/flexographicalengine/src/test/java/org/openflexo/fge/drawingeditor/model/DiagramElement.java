@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import java.util.List;
 import java.util.Observable;
@@ -41,8 +41,8 @@ import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
 @ModelEntity
-@ImplementationClass(MyDrawingElementImpl.class)
-public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation> extends XMLSerializable, Cloneable,
+@ImplementationClass(DiagramElementImpl.class)
+public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends XMLSerializable, Cloneable,
 		Observer, AccessibleProxyObject, CloneableProxyObject {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
@@ -54,39 +54,39 @@ public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends Gr
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
-	public List<MyShape> getShapes();
+	public List<Shape> getShapes();
 
 	@Setter(SHAPES)
-	public void setShapes(List<MyShape> someShapes);
+	public void setShapes(List<Shape> someShapes);
 
 	@Adder(SHAPES)
 	@PastingPoint
-	public void addToShapes(MyShape aShape);
+	public void addToShapes(Shape aShape);
 
 	@Remover(SHAPES)
-	public void removeFromShapes(MyShape aShape);
+	public void removeFromShapes(Shape aShape);
 
 	@Getter(value = CONNECTORS, cardinality = Cardinality.LIST)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
-	public List<MyConnector> getConnectors();
+	public List<Connector> getConnectors();
 
 	@Setter(CONNECTORS)
-	public void setConnectors(List<MyConnector> someConnectors);
+	public void setConnectors(List<Connector> someConnectors);
 
 	@Adder(CONNECTORS)
 	@PastingPoint
-	public void addToConnectors(MyConnector aConnector);
+	public void addToConnectors(Connector aConnector);
 
 	@Remover(CONNECTORS)
-	public void removeFromConnectors(MyConnector aConnector);
+	public void removeFromConnectors(Connector aConnector);
 
 	@Getter(value = DRAWING)
-	public MyDrawing getDrawing();
+	public Diagram getDiagram();
 
 	@Setter(value = DRAWING)
-	public void setDrawing(MyDrawing drawing);
+	public void setDrawing(Diagram drawing);
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@XMLElement
@@ -97,9 +97,9 @@ public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends Gr
 
 	// public void initializeDeserialization();
 
-	public void finalizeDeserialization();
+	// public void finalizeDeserialization();
 
-	public MyDrawingElement<M, G> clone();
+	public DiagramElement<M, G> clone();
 
 	@Override
 	public void update(Observable o, Object arg);

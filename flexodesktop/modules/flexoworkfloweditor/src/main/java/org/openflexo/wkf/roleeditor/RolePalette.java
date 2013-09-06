@@ -110,8 +110,8 @@ public class RolePalette extends DrawingPalette {
 
 			@Override
 			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
-				// MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
-				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
+				// DiagramElement container = (DiagramElement)gr.getDrawable();
+				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 				logger.info("Dropping new role for " + gr.getDrawable());
 				FlexoWorkflow workflow = ((WorkflowModelObject) gr.getDrawable()).getWorkflow();

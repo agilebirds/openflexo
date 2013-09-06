@@ -122,7 +122,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	 */
 	private FGEModelFactory factory;
 
-	private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
+	protected Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
 
 	public DrawingController(Drawing<M> aDrawing, FGEModelFactory factory) {
 		super();
@@ -179,7 +179,10 @@ public class DrawingController<M> extends Observable implements Observer {
 				drawingView.add(v);
 			}
 		}
-		// drawingView.revalidate();
+		drawingView.revalidate();
+		System.out.println("Hop: " + drawingView.getPreferredSize());
+		System.out.println("Contents: " + drawingView.getComponentCount());
+		System.out.println("DrawingView: " + drawingView);
 		return drawingView;
 	}
 

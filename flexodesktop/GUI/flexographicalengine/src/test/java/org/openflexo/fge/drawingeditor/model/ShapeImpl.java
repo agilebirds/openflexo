@@ -17,27 +17,27 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.fge.drawingeditor.model.Diagram.DrawingBuilder;
 
-public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, ShapeGraphicalRepresentation> implements MyShape {
+public abstract class ShapeImpl extends DiagramElementImpl<Shape, ShapeGraphicalRepresentation> implements Shape {
 	public String name;
 
 	// Called for LOAD
-	public MyShapeImpl(DrawingBuilder builder) {
+	public ShapeImpl(DrawingBuilder builder) {
 		super(builder.drawing);
 		// initializeDeserialization();
 	}
 
 	// Used by PAMELA, do not use it
-	public MyShapeImpl() {
+	public ShapeImpl() {
 		super(null);
 	}
 
 	// Called for NEW
-	/*public MyShapeImpl(ShapeType shape, FGEPoint p, EditedDrawing drawing) {
+	/*public ShapeImpl(ShapeType shape, FGEPoint p, DiagramDrawing drawing) {
 		super(drawing.getModel());
 		MyShapeGraphicalRepresentation gr = drawing.getModel().getFactory().makeNewShapeGR(shape, this, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
@@ -52,7 +52,7 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, ShapeGra
 		setGraphicalRepresentation(gr);
 	}
 
-	public MyShapeImpl(ShapeGraphicalRepresentation aGR, FGEPoint p, EditedDrawing drawing) {
+	public ShapeImpl(ShapeGraphicalRepresentation aGR, FGEPoint p, DiagramDrawing drawing) {
 		super(drawing.getModel());
 		MyShapeGraphicalRepresentation gr = drawing.getModel().getFactory().makeNewShapeGR(aGR, this, drawing);
 		gr.setX(p.x);
@@ -72,7 +72,7 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, ShapeGra
 
 	@Override
 	public String toString() {
-		return "MyShape[" + name + ":" + getGraphicalRepresentation().toString() + "  drawable="
+		return "Shape[" + name + ":" + getGraphicalRepresentation().toString() + "  drawable="
 		/*+ (getGraphicalRepresentation().getDrawable() != null ? getGraphicalRepresentation().getDrawable().getClass()
 				.getSimpleName() : null)*/+ " drawing=" + getGraphicalRepresentation().getDrawing() + "]";
 	}

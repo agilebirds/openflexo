@@ -23,14 +23,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.RootNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
+import org.openflexo.fge.drawingeditor.model.DiagramElement;
+import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.logging.FlexoLogger;
@@ -45,9 +48,9 @@ public class MyDrawingPalette extends DrawingPalette {
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
 	// This factory is the one of the editor
-	private DrawingEditorFactory editorFactory;
+	private DiagramFactory editorFactory;
 
-	public MyDrawingPalette(DrawingEditorFactory editorFactory) {
+	public MyDrawingPalette(DiagramFactory editorFactory) {
 		super(360, 350, "default");
 		this.editorFactory = editorFactory;
 		int px = 0;
@@ -102,8 +105,8 @@ public class MyDrawingPalette extends DrawingPalette {
 			}
 			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation)
 			{
-				MyDrawingElement container = (MyDrawingElement)gr.getDrawable();
-				getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation, getController().getDrawing()),container);
+				DiagramElement container = (DiagramElement)gr.getDrawable();
+				getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation, getController().getDrawing()),container);
 				return true;
 			}
 			public PaletteElementGraphicalRepresentation getGraphicalRepresentation()
@@ -193,14 +196,14 @@ public class MyDrawingPalette extends DrawingPalette {
 			final boolean applyCurrentBackground, final boolean applyCurrentTextStyle, final boolean applyCurrentShadowStyle) {
 		PaletteElement returned = new PaletteElement() {
 			@Override
-			public boolean acceptDragging(GraphicalRepresentation gr) {
-				return gr instanceof DrawingGraphicalRepresentation || gr instanceof ShapeGraphicalRepresentation;
+			public boolean acceptDragging(DrawingTreeNode<?, ?> target) {
+				return target instanceof RootNode || target instanceof ShapeNode;
 			}
 
 			@Override
-			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
-				MyDrawingElement<?, ?> container = (MyDrawingElement<?, ?>) gr.getDrawable();
-				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
+			public boolean elementDragged(DrawingTreeNode<?, ?> target, FGEPoint dropLocation) {
+				DiagramElement<?, ?> container = (DiagramElement<?, ?>) target.getDrawable();
+				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 				ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
 				if (applyCurrentForeground) {
@@ -229,7 +232,7 @@ public class MyDrawingPalette extends DrawingPalette {
 				return MyDrawingPalette.this;
 			}
 		};
-		gr.setDrawable(returned);
+		// gr.setDrawable(returned);
 		return returned;
 	}
 }

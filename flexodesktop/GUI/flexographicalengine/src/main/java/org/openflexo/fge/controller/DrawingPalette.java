@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.controller;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -169,6 +170,7 @@ public class DrawingPalette {
 		if (paletteController == null) {
 			makePalettePanel();
 		}
+		System.out.println(">>>>>>>>> Returning " + paletteController.getDrawingView());
 		return paletteController.getDrawingView();
 	}
 
@@ -190,11 +192,14 @@ public class DrawingPalette {
 		/*for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().setValidated(true);
 		}*/
+		paletteDrawing.printGraphicalObjectHierarchy();
 		paletteController = new DrawingController<DrawingPalette>(paletteDrawing, factory) {
 			@Override
 			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
 				if (shapeNode.getDrawable() instanceof PaletteElement) {
-					return (ShapeView<O>) new PaletteElementView((ShapeNode<PaletteElement>) shapeNode, paletteController);
+					ShapeView<O> returned = (ShapeView<O>) new PaletteElementView((ShapeNode<PaletteElement>) shapeNode, this);
+					contents.put(shapeNode, returned);
+					return returned;
 				}
 				return super.makeShapeView(shapeNode);
 			}
@@ -202,6 +207,11 @@ public class DrawingPalette {
 		/*for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}*/
+		System.out.println("J'obtiens: " + paletteController.getDrawingView());
+		// paletteController.buildDrawingView();
+		// System.out.println("J'obtiens 2 : " + paletteController.getDrawingView());
+		// paletteController.getDrawingView().revalidate();
+		// System.out.println("J'obtiens 3 : " + paletteController.getDrawingView());
 	}
 
 	public class PaletteDrawing extends DrawingImpl<DrawingPalette> implements Drawing<DrawingPalette> {
@@ -209,12 +219,13 @@ public class DrawingPalette {
 		private final DrawingGraphicalRepresentation gr;
 
 		private PaletteDrawing() {
-			super(DrawingPalette.this, factory);
+			super(DrawingPalette.this, factory, PersistenceMode.UniqueGraphicalRepresentations);
 			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
+			gr.setBackgroundColor(Color.RED);
 			gr.setDrawWorkingArea(true);
-			setEditable(false);
+			setEditable(true);
 		}
 
 		@Override

@@ -47,6 +47,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.fge.drawingeditor.model.Diagram;
+import org.openflexo.fge.drawingeditor.model.DiagramFactory;
+import org.openflexo.fge.drawingeditor.model.DiagramImpl;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -119,7 +122,7 @@ public class TestDrawingEditor {
 
 	private FIBInspectorController inspector;
 
-	private DrawingEditorFactory factory;
+	private DiagramFactory factory;
 
 	// private Injector injector;
 
@@ -127,12 +130,12 @@ public class TestDrawingEditor {
 		super();
 
 		try {
-			factory = new DrawingEditorFactory();
+			factory = new DiagramFactory();
 			// System.out.println("factory: " + factory.debug());
 			// FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
 			// injector = Guice.createInjector(injectionModule);
 
-			factory = new DrawingEditorFactory();
+			// factory = new DiagramFactory();
 		} catch (ModelDefinitionException e1) {
 			e1.printStackTrace();
 		}
@@ -155,11 +158,11 @@ public class TestDrawingEditor {
 
 	}
 
-	private Vector<MyDrawing> _drawings = new Vector<MyDrawing>();
+	private Vector<Diagram> _drawings = new Vector<Diagram>();
 	private JPanel mainPanel;
 	private JTabbedPane tabbedPane;
 
-	private MyDrawing currentDrawing;
+	private Diagram currentDrawing;
 
 	private class MyDrawingViewScrollPane extends JScrollPane {
 		private MyDrawingView drawingView;
@@ -170,7 +173,7 @@ public class TestDrawingEditor {
 		}
 	}
 
-	public DrawingEditorFactory getFactory() {
+	public DiagramFactory getFactory() {
 		return factory;
 	}
 
@@ -178,7 +181,7 @@ public class TestDrawingEditor {
 		return injector;
 	}*/
 
-	private void addDrawing(final MyDrawing drawing) {
+	private void addDrawing(final Diagram drawing) {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.addChangeListener(new ChangeListener() {
@@ -194,7 +197,12 @@ public class TestDrawingEditor {
 			// mainPanel.add(drawing.getEditedDrawing().getPalette().getPaletteView(),BorderLayout.EAST);
 		}
 		_drawings.add(drawing);
-		tabbedPane.add(drawing.getTitle(), new MyDrawingViewScrollPane(drawing.getEditedDrawing().getController().getDrawingView()));
+
+		MyDrawingController controller = new MyDrawingController(drawing.getEditedDrawing(), drawing.getFactory());
+		// DrawingController<DiagramDrawing> controller = new DrawingController<DiagramDrawing>(aDrawing, factory)
+
+		tabbedPane.add(drawing.getTitle(),
+				new MyDrawingViewScrollPane(/*drawing.getEditedDrawing().getController()*/controller.getDrawingView()));
 		switchToDrawing(drawing);
 
 		/*frame.addKeyListener(new KeyAdapter() {
@@ -225,38 +233,34 @@ public class TestDrawingEditor {
 		});*/
 	}
 
-	private void removeDrawing(MyDrawing drawing) {
+	private void removeDrawing(Diagram drawing) {
 
 	}
 
-	public void switchToDrawing(MyDrawing drawing) {
+	public void switchToDrawing(Diagram drawing) {
 		tabbedPane.setSelectedIndex(_drawings.indexOf(drawing));
 	}
 
-	private void drawingSwitched(MyDrawing drawing) {
+	private void drawingSwitched(Diagram drawing) {
 		if (currentDrawing != null) {
-			mainPanel.remove(currentDrawing.getEditedDrawing().getController().getScalePanel());
-			currentDrawing.getEditedDrawing().getController().deleteObserver(inspector);
+			// TODO !!!
+			System.out.println("Quelque chose a faire la !!!");
+			// VOIR CA mainPanel.remove(currentDrawing.getEditedDrawing().getController().getScalePanel());
+			// VOIR CA currentDrawing.getEditedDrawing().getController().deleteObserver(inspector);
 		}
 		currentDrawing = drawing;
 
-		/*JPanel topPanel = new JPanel(new BorderLayout());
-		JPanel topPanel2 = new JPanel(new BorderLayout());
-		topPanel2.add(new JLabel("prout"), BorderLayout.CENTER);
-		topPanel.add(topPanel2, BorderLayout.CENTER);
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
-		topPanel2.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);*/
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
+		// VOIR CA topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
+		// VOIR CA topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
-		currentDrawing.getEditedDrawing().getController().addObserver(inspector);
+		// VOIR CA currentDrawing.getEditedDrawing().getController().addObserver(inspector);
 		updateFrameTitle();
 		mainPanel.revalidate();
 		mainPanel.repaint();
 		paletteDialog.getContentPane().removeAll();
-		paletteDialog.getContentPane().add(drawing.getEditedDrawing().getController().getPalette().getPaletteView());
+		// VOIR CA paletteDialog.getContentPane().add(drawing.getEditedDrawing().getController().getPalette().getPaletteView());
 		paletteDialog.pack();
 	}
 
@@ -409,8 +413,8 @@ public class TestDrawingEditor {
 	}
 
 	public void newDrawing() {
-		MyDrawing newDrawing = factory.makeNewDrawing();
-		/*MyDrawing newDrawing = injector.getInstance(MyDrawing.class);
+		Diagram newDrawing = factory.makeNewDiagram();
+		/*Diagram newDrawing = injector.getInstance(Diagram.class);
 		System.out.println("newDrawing= [" + newDrawing + "] of " + newDrawing.getClass());
 		System.out.println("editedDrawing=" + newDrawing.getEditedDrawing());
 		System.out.println("gr=" + newDrawing.getGraphicalRepresentation() + " of " + newDrawing.getGraphicalRepresentation().getClass());
@@ -423,7 +427,7 @@ public class TestDrawingEditor {
 	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			MyDrawing loadedDrawing = MyDrawingImpl.load(file, factory);
+			Diagram loadedDrawing = DiagramImpl.load(file, factory);
 			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
 			}
