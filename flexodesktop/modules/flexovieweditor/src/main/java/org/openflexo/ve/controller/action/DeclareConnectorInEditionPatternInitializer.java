@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
@@ -59,7 +59,7 @@ public class DeclareConnectorInEditionPatternInitializer extends
 		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
 			@Override
 			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
-				return instanciateAndShowDialog(action, FlexoCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+				return instanciateAndShowDialog(action, CommonFIB.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}

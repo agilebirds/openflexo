@@ -527,6 +527,11 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		return true;
 	}
 
+	@Override
+	public File getEditedComponentFile() {
+		return getFIBFile();
+	}
+
 	public static <T extends FIBAbstractEditor> void init(T abstractEditor) {
 		abstractEditor.loadFIB();
 		abstractEditor.getFrame().setVisible(true);

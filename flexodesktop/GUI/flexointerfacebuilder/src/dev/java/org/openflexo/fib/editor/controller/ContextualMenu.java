@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -48,6 +49,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.utils.BindingSelector;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 
 public class ContextualMenu {
@@ -155,7 +157,15 @@ public class ContextualMenu {
 				FIBReferencedComponent referencedComponent = (FIBReferencedComponent) object;
 				Object dataObject = ((FIBWidgetView) editorController.getController().viewForComponent(referencedComponent)).getValue();
 				System.out.println("dataObject=" + dataObject);
-				new FIBEmbeddedEditor(referencedComponent.getComponentFile(), dataObject);
+				File componentFile;
+				try {
+					componentFile = referencedComponent.retrieveComponentFile(editorController.getController());
+					System.out.println("componentFile=" + componentFile);
+					new FIBEmbeddedEditor(componentFile, dataObject);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return referencedComponent;
 			}
 		}, new ActionAvailability() {
@@ -227,8 +237,13 @@ public class ContextualMenu {
 				reusableComponent.setVisible(null);
 				logger.info("Save to file " + params.reusableComponentFile.getAbsolutePath());
 				FIBLibrary.save(reusableComponent, params.reusableComponentFile);
+				logger.info("Current directory = " + editorController.getEditor().getEditedComponentFile().getParentFile());
+				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(editorController.getEditor()
+						.getEditedComponentFile().getParentFile());
+				String relativeFilePath = relativePathFileConverter.convertToString(params.reusableComponentFile);
+				logger.info("Relative file path: " + relativeFilePath);
 				FIBReferencedComponent widget = new FIBReferencedComponent();
-				widget.setComponentFile(params.reusableComponentFile);
+				widget.setComponentFile(new DataBinding<String>('"' + relativeFilePath + '"'));
 				widget.setData(params.data);
 				widget.setVisible(visible);
 				parent.addToSubComponents(widget, reusableComponent.getConstraints());

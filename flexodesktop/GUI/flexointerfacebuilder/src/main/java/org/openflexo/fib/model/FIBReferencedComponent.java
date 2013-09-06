@@ -19,6 +19,8 @@
  */
 package org.openflexo.fib.model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -28,20 +30,18 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.toolbox.FileResource;
 
-public class FIBReferencedComponent extends FIBWidget  {
+public class FIBReferencedComponent extends FIBWidget {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponent.class.getPackage().getName());
 
 	// This is the Fib File Name used for the referencedComponent
 	private DataBinding<String> componentFile;
-
 
 	public static enum Parameters implements FIBModelAttribute {
 		componentFile, assignments
@@ -67,7 +67,7 @@ public class FIBReferencedComponent extends FIBWidget  {
 		return Object.class;
 	}
 
-	public DataBinding<String>  getComponentFile() {
+	public DataBinding<String> getComponentFile() {
 
 		if (componentFile == null) {
 			componentFile = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
@@ -77,7 +77,7 @@ public class FIBReferencedComponent extends FIBWidget  {
 		return componentFile;
 	}
 
-	public void setComponentFile(DataBinding<String>  componentFile) {
+	public void setComponentFile(DataBinding<String> componentFile) {
 
 		FIBAttributeNotification<DataBinding<String>> notification = requireChange(Parameters.componentFile, componentFile);
 
@@ -99,13 +99,51 @@ public class FIBReferencedComponent extends FIBWidget  {
 
 	}
 
+	@Override
 	public Type getDataType() {
-		if (referencedComponent != null){
-				return referencedComponent.getDataType();
+		if (referencedComponent != null) {
+			return referencedComponent.getDataType();
 		}
 		return super.getDataType();
 	}
 
+	/**
+	 * Retrieve component file from String typed binding.<br>
+	 * The binding evaluation may denote an absolute path or a relative path
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public File retrieveComponentFile(BindingEvaluationContext context) throws FileNotFoundException {
+		try {
+
+			String fibFileName = getComponentFile().getBindingValue(context);
+			if (fibFileName != null) {
+				// First try to consider it as a relative path
+				File fibFile = new FileResource(fibFileName);
+				if (fibFile.exists()) {
+					return fibFile;
+				}
+				// Otherwise, may be it's an absolute path ?
+				fibFile = new File(fibFileName);
+				if (fibFile.exists()) {
+					return fibFile;
+				}
+				// I cannot find the file
+				throw new FileNotFoundException(fibFileName);
+			}
+		} catch (TypeMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new FileNotFoundException();
+	}
 
 	// TODO A deplacer cote widget plutot (conseil de Guillaume)
 
@@ -113,28 +151,13 @@ public class FIBReferencedComponent extends FIBWidget  {
 		if (referencedComponent == null && getComponentFile() != null) {
 
 			try {
-
-				String fibFileName = getComponentFile().getBindingValue(context);
-				if (fibFileName != null) {
-					FileResource fibFile = new FileResource(fibFileName);
-
-					referencedComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+				File fibFile = retrieveComponentFile(context);
+				referencedComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+			} catch (FileNotFoundException e) {
+				if (deserializationPerformed) {
+					logger.warning("Cannot find related Fib File for current FIBReferencedComponent " + this.getName());
 				}
-				else {
-					if(deserializationPerformed){
-						logger.warning("Cannot find related Fib File for current FIBReferencedComponent " + this.getName());
-						}
-					referencedComponent = null;
-				}
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				referencedComponent = null;
 			}
 		}
 		return referencedComponent;
@@ -185,13 +208,13 @@ public class FIBReferencedComponent extends FIBWidget  {
 			assign.finalizeDeserialization();
 		}
 	}
+
 	/*
 	@Override
 	public Boolean getManageDynamicModel() {
 		return true;
 	}
 	 */
-
 
 	public FIBReferenceAssignment createAssignment() {
 		logger.info("Called createAssignment()");
@@ -345,9 +368,5 @@ public class FIBReferencedComponent extends FIBWidget  {
 		}
 
 	}
-	
-	
-
-
 
 }

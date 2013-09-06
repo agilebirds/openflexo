@@ -19,6 +19,8 @@
  */
 package org.openflexo.fib.editor;
 
+import java.io.File;
+
 import javax.swing.JFrame;
 
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
@@ -31,4 +33,6 @@ public interface FIBGenericEditor {
 	public FIBEditorPalette getPalette();
 
 	public FIBInspectorController getInspector();
+
+	public File getEditedComponentFile();
 }

@@ -83,6 +83,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.validation.ConsistencyCheckDialog;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
@@ -2186,7 +2187,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public boolean reviewModifiedResources() {
 		ResourceSavingInfo savingInfo = getResourceSavingInfo();
 		savingInfo.update();
-		FIBDialog<ResourceSavingInfo> dialog = FIBDialog.instanciateAndShowDialog(FlexoCst.REVIEW_UNSAVED_DIALOG_FIB, savingInfo,
+		FIBDialog<ResourceSavingInfo> dialog = FIBDialog.instanciateAndShowDialog(CommonFIB.REVIEW_UNSAVED_DIALOG_FIB, savingInfo,
 				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			savingInfo.saveSelectedResources(getEditor().getFlexoProgressFactory());
