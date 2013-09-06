@@ -571,6 +571,11 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.info("Saving project...");
 		}
 		saveModifiedResources(progress, true);
+
+		// Vincent: Not sure this is the right place, however the file deletion methods seems to be never called.
+		// It makes sens to delete the files which as to be deleted in the project when we save the project.
+		deleteFilesToBeDeleted();
+
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
 		}
@@ -3219,7 +3224,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				if (FileUtils.recursiveDeleteFile(f)) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Successfully deleted " + f.getAbsolutePath());
-						// filesToDelete.remove(f);
+						filesToDelete.remove(f);
 					}
 				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not delete " + f.getAbsolutePath());
