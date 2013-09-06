@@ -181,6 +181,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				ViewPointPalette palette = ((CalcPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, newContextualPalette);
+				orderedPalettes.add(palette);
+				Collections.sort(orderedPalettes);
 				registerPalette(newContextualPalette);
 				activatePalette(newContextualPalette);
 				paletteView.add(palette.getName(), newContextualPalette.getPaletteViewInScrollPane());
@@ -191,6 +193,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				ContextualPalette removedPalette = _contextualPalettes.get(palette);
 				unregisterPalette(removedPalette);
 				_contextualPalettes.remove(palette);
+				orderedPalettes.remove(palette);
 				paletteView.remove(removedPalette.getPaletteViewInScrollPane());
 				paletteView.revalidate();
 				paletteView.repaint();
