@@ -87,7 +87,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		}
 
 		for (FIBInspector inspector : inspectors.values()) {
-			FIBView inspectorView = FIBController.makeView(inspector, TestDrawingEditor.LOCALIZATION);
+			FIBView inspectorView = FIBController.makeView(inspector, LaunchDiagramEditor.LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			logger.info("Initialized inspector for " + inspector.getDataClass());

@@ -58,7 +58,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			if (node instanceof ShapeNode) {
 				drawEdge = true;
 				fromShape = (ShapeNode<Shape>) node;
-				((MyDrawingView) controller.getDrawingView()).setDrawEdgeAction(this);
+				((DiagramEditorView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
 			return false;
@@ -73,12 +73,12 @@ public class DrawEdgeControl extends MouseDragControl {
 					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
 							(DiagramDrawing) controller.getDrawing());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
-					((MyDrawingController) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
+					((DiagramEditorController) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
 				}
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;
-				((MyDrawingView) controller.getDrawingView()).setDrawEdgeAction(null);
+				((DiagramEditorView) controller.getDrawingView()).setDrawEdgeAction(null);
 				return true;
 			}
 			return false;

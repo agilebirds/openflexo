@@ -44,7 +44,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
-public class MyDrawingController extends DrawingController<Diagram> {
+public class DiagramEditorController extends DrawingController<Diagram> {
 
 	private JPopupMenu contextualMenu;
 	private DrawingTreeNode<?, ?> contextualMenuInvoker;
@@ -52,7 +52,7 @@ public class MyDrawingController extends DrawingController<Diagram> {
 
 	// private Shape copiedShape;
 
-	public MyDrawingController(final DiagramDrawing aDrawing, DiagramFactory factory) {
+	public DiagramEditorController(final DiagramDrawing aDrawing, DiagramFactory factory) {
 		super(aDrawing, factory);
 
 		setDrawShapeAction(new DrawShapeAction() {
@@ -74,8 +74,7 @@ public class MyDrawingController extends DrawingController<Diagram> {
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Shape newShape = getDrawing().getModel().getFactory()
-							.makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
+					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
 					addNewShape(newShape, (DiagramElement) contextualMenuInvoker.getDrawable());
 				}
 			});
@@ -114,16 +113,21 @@ public class MyDrawingController extends DrawingController<Diagram> {
 		return (DiagramDrawing) super.getDrawing();
 	}
 
+	@Override
+	public DiagramFactory getFactory() {
+		return (DiagramFactory) super.getFactory();
+	}
+
 	private void initPalette() {
 		// TODO Auto-generated method stub
-		_palette = new MyDrawingPalette(getDrawing().getModel().getFactory());
+		_palette = new DiagramEditorPalette(getFactory());
 		registerPalette(_palette);
 		activatePalette(_palette);
 	}
 
-	private MyDrawingPalette _palette;
+	private DiagramEditorPalette _palette;
 
-	public MyDrawingPalette getPalette() {
+	public DiagramEditorPalette getPalette() {
 		return _palette;
 	}
 
@@ -188,17 +192,17 @@ public class MyDrawingController extends DrawingController<Diagram> {
 
 	/*@Override
 	public DrawingView<DiagramDrawing> makeDrawingView() {
-		return new MyDrawingView(drawing, this);
+		return new DiagramEditorView(drawing, this);
 	}*/
 
 	@Override
-	public MyDrawingView makeDrawingView() {
-		return new MyDrawingView(this);
+	public DiagramEditorView makeDrawingView() {
+		return new DiagramEditorView(this);
 	}
 
 	@Override
-	public MyDrawingView getDrawingView() {
-		return (MyDrawingView) super.getDrawingView();
+	public DiagramEditorView getDrawingView() {
+		return (DiagramEditorView) super.getDrawingView();
 	}
 
 	private Clipboard clipboard;
@@ -235,12 +239,12 @@ public class MyDrawingController extends DrawingController<Diagram> {
 			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
 			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
 			// System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
-			System.out.println("Copied: " + getDrawing().getModel().getFactory().stringRepresentation(objectsToBeCopied[i]));
+			System.out.println("Copied: " + getFactory().stringRepresentation(objectsToBeCopied[i]));
 			i++;
 		}
 
 		try {
-			clipboard = getDrawing().getModel().getFactory().copy(objectsToBeCopied);
+			clipboard = getFactory().copy(objectsToBeCopied);
 		} catch (ModelExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -261,7 +265,7 @@ public class MyDrawingController extends DrawingController<Diagram> {
 		// addNewShape((Shape) copiedShape.clone(), (DiagramElement) contextualMenuInvoker.getDrawable());
 
 		try {
-			getDrawing().getModel().getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+			getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
 		} catch (ModelExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

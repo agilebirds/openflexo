@@ -52,7 +52,7 @@ public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRep
 						(Component)event.getSource(), 
 
 						(Component)view);
-				((MyDrawingController)controller).showContextualMenu(graphicalRepresentation,view,newPoint);
+				((DiagramEditorController)controller).showContextualMenu(graphicalRepresentation,view,newPoint);
 				return false;
 			}
 		});*/

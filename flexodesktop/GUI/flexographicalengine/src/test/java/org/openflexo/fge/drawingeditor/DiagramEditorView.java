@@ -26,11 +26,11 @@ import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.view.DrawingView;
 
-public class MyDrawingView extends DrawingView<Diagram> {
+public class DiagramEditorView extends DrawingView<Diagram> {
 
-	private static final Logger logger = Logger.getLogger(MyDrawingView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramEditorView.class.getPackage().getName());
 
-	public MyDrawingView(MyDrawingController controller) {
+	public DiagramEditorView(DiagramEditorController controller) {
 		super(controller);
 	}
 
@@ -55,8 +55,8 @@ public class MyDrawingView extends DrawingView<Diagram> {
 	}
 
 	/*@Override
-	public MyDrawingController getController() {
-		return (MyDrawingController) super.getController();
+	public DiagramEditorController getController() {
+		return (DiagramEditorController) super.getController();
 	}*/
 
 	/*@Override

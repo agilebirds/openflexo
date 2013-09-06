@@ -49,7 +49,6 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
-import org.openflexo.fge.drawingeditor.model.DiagramImpl;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -60,9 +59,9 @@ import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
 
-public class TestDrawingEditor {
+public class LaunchDiagramEditor {
 
-	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(LaunchDiagramEditor.class.getPackage().getName());
 
 	// Retrieve default Openflexo locales
 	public static final String LOCALIZATION_DIRNAME = "Localized";
@@ -111,9 +110,9 @@ public class TestDrawingEditor {
 
 		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 
-		TestDrawingEditor editor = new TestDrawingEditor();
+		LaunchDiagramEditor editor = new LaunchDiagramEditor();
 		editor.showPanel();
-		editor.newDrawing();
+		editor.newDiagramEditor();
 	}
 
 	private JFrame frame;
@@ -126,7 +125,7 @@ public class TestDrawingEditor {
 
 	// private Injector injector;
 
-	public TestDrawingEditor() {
+	public LaunchDiagramEditor() {
 		super();
 
 		try {
@@ -158,16 +157,16 @@ public class TestDrawingEditor {
 
 	}
 
-	private Vector<Diagram> _drawings = new Vector<Diagram>();
+	private Vector<DiagramEditor> diagramEditors = new Vector<DiagramEditor>();
 	private JPanel mainPanel;
 	private JTabbedPane tabbedPane;
 
-	private Diagram currentDrawing;
+	private DiagramEditor currentDiagramEditor;
 
 	private class MyDrawingViewScrollPane extends JScrollPane {
-		private MyDrawingView drawingView;
+		private DiagramEditorView drawingView;
 
-		private MyDrawingViewScrollPane(MyDrawingView v) {
+		private MyDrawingViewScrollPane(DiagramEditorView v) {
 			super(v);
 			drawingView = v;
 		}
@@ -181,7 +180,7 @@ public class TestDrawingEditor {
 		return injector;
 	}*/
 
-	private void addDrawing(final Diagram drawing) {
+	private void addDiagramEditor(DiagramEditor diagramEditor) {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.addChangeListener(new ChangeListener() {
@@ -196,14 +195,13 @@ public class TestDrawingEditor {
 			mainPanel.add(tabbedPane, BorderLayout.CENTER);
 			// mainPanel.add(drawing.getEditedDrawing().getPalette().getPaletteView(),BorderLayout.EAST);
 		}
-		_drawings.add(drawing);
+		diagramEditors.add(diagramEditor);
 
-		MyDrawingController controller = new MyDrawingController(drawing.getEditedDrawing(), drawing.getFactory());
+		// DiagramEditorController controller = new DiagramEditorController(diagramEditor.getEditedDrawing(), diagramEditor.getFactory());
 		// DrawingController<DiagramDrawing> controller = new DrawingController<DiagramDrawing>(aDrawing, factory)
 
-		tabbedPane.add(drawing.getTitle(),
-				new MyDrawingViewScrollPane(/*drawing.getEditedDrawing().getController()*/controller.getDrawingView()));
-		switchToDrawing(drawing);
+		tabbedPane.add(diagramEditor.getTitle(), new MyDrawingViewScrollPane(diagramEditor.getController().getDrawingView()));
+		switchToDiagramEditor(diagramEditor);
 
 		/*frame.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent event) 
@@ -233,43 +231,50 @@ public class TestDrawingEditor {
 		});*/
 	}
 
-	private void removeDrawing(Diagram drawing) {
+	private void removeDiagramEditor(DiagramEditor diagramEditor) {
 
 	}
 
-	public void switchToDrawing(Diagram drawing) {
-		tabbedPane.setSelectedIndex(_drawings.indexOf(drawing));
+	public void switchToDiagramEditor(DiagramEditor diagramEditor) {
+		tabbedPane.setSelectedIndex(diagramEditors.indexOf(diagramEditor));
 	}
 
-	private void drawingSwitched(Diagram drawing) {
-		if (currentDrawing != null) {
-			// TODO !!!
-			System.out.println("Quelque chose a faire la !!!");
-			// VOIR CA mainPanel.remove(currentDrawing.getEditedDrawing().getController().getScalePanel());
-			// VOIR CA currentDrawing.getEditedDrawing().getController().deleteObserver(inspector);
+	private void drawingSwitched(Diagram diagram) {
+		for (DiagramEditor editor : diagramEditors) {
+			if (editor.getDiagram() == diagram) {
+				drawingSwitched(editor);
+				return;
+			}
 		}
-		currentDrawing = drawing;
+	}
+
+	private void drawingSwitched(DiagramEditor diagramEditor) {
+		if (currentDiagramEditor != null) {
+			mainPanel.remove(currentDiagramEditor.getController().getScalePanel());
+			currentDiagramEditor.getController().deleteObserver(inspector);
+		}
+		currentDiagramEditor = diagramEditor;
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		// VOIR CA topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
-		// VOIR CA topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
+		topPanel.add(currentDiagramEditor.getController().getToolbox().getStyleToolBar());
+		topPanel.add(currentDiagramEditor.getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
-		// VOIR CA currentDrawing.getEditedDrawing().getController().addObserver(inspector);
+		currentDiagramEditor.getController().addObserver(inspector);
 		updateFrameTitle();
 		mainPanel.revalidate();
 		mainPanel.repaint();
 		paletteDialog.getContentPane().removeAll();
-		// VOIR CA paletteDialog.getContentPane().add(drawing.getEditedDrawing().getController().getPalette().getPaletteView());
+		paletteDialog.getContentPane().add(currentDiagramEditor.getController().getPalette().getPaletteView());
 		paletteDialog.pack();
 	}
 
 	private void updateFrameTitle() {
-		frame.setTitle("Basic drawing editor - " + currentDrawing.getTitle());
+		frame.setTitle("Basic drawing editor - " + currentDiagramEditor.getTitle());
 	}
 
 	private void updateTabTitle() {
-		tabbedPane.setTitleAt(_drawings.indexOf(currentDrawing), currentDrawing.getTitle());
+		tabbedPane.setTitleAt(diagramEditors.indexOf(currentDiagramEditor), currentDiagramEditor.getTitle());
 	}
 
 	public void showPanel() {
@@ -286,7 +291,7 @@ public class TestDrawingEditor {
 		newItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				newDrawing();
+				newDiagramEditor();
 			}
 		});
 
@@ -294,7 +299,7 @@ public class TestDrawingEditor {
 		loadItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				loadDrawing();
+				loadDiagramEditor();
 			}
 		});
 
@@ -302,7 +307,7 @@ public class TestDrawingEditor {
 		saveItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				saveDrawing();
+				saveDiagramEditor();
 			}
 		});
 
@@ -387,15 +392,15 @@ public class TestDrawingEditor {
 	}
 
 	public void closeDrawing() {
-		if (currentDrawing == null) {
+		if (currentDiagramEditor == null) {
 			return;
 		}
-		if (currentDrawing.hasChanged()) {
+		if (currentDiagramEditor.getDiagram().hasChanged()) {
 			int result = JOptionPane.showOptionDialog(frame, "Would you like to save drawing changes?", "Save changes",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.YES_OPTION);
 			switch (result) {
 			case JOptionPane.YES_OPTION:
-				if (!currentDrawing.save()) {
+				if (!currentDiagramEditor.save()) {
 					return;
 				}
 				break;
@@ -405,48 +410,41 @@ public class TestDrawingEditor {
 				return;
 			}
 		}
-		_drawings.remove(currentDrawing);
+		diagramEditors.remove(currentDiagramEditor);
 		tabbedPane.remove(tabbedPane.getSelectedIndex());
-		if (_drawings.size() == 0) {
-			newDrawing();
+		if (diagramEditors.size() == 0) {
+			newDiagramEditor();
 		}
 	}
 
-	public void newDrawing() {
-		Diagram newDrawing = factory.makeNewDiagram();
-		/*Diagram newDrawing = injector.getInstance(Diagram.class);
-		System.out.println("newDrawing= [" + newDrawing + "] of " + newDrawing.getClass());
-		System.out.println("editedDrawing=" + newDrawing.getEditedDrawing());
-		System.out.println("gr=" + newDrawing.getGraphicalRepresentation() + " of " + newDrawing.getGraphicalRepresentation().getClass());
-		newDrawing.getGraphicalRepresentation().setDrawing(newDrawing.getEditedDrawing());
-		newDrawing.getGraphicalRepresentation().setDrawable(newDrawing);
-		newDrawing.getEditedDrawing().init();*/
-		addDrawing(newDrawing);
+	public void newDiagramEditor() {
+		DiagramEditor newDiagramEditor = DiagramEditor.newDiagramEditor(factory);
+		addDiagramEditor(newDiagramEditor);
 	}
 
-	public void loadDrawing() {
+	public void loadDiagramEditor() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			Diagram loadedDrawing = DiagramImpl.load(file, factory);
-			if (loadedDrawing != null) {
-				addDrawing(loadedDrawing);
+			DiagramEditor loadedDiagramEditor = DiagramEditor.loadDiagramEditor(file, factory);
+			if (loadedDiagramEditor != null) {
+				addDiagramEditor(loadedDiagramEditor);
 			}
 		}
 	}
 
-	public boolean saveDrawing() {
-		if (currentDrawing == null) {
+	public boolean saveDiagramEditor() {
+		if (currentDiagramEditor == null) {
 			return false;
 		}
-		if (currentDrawing.getFile() == null) {
+		if (currentDiagramEditor.getFile() == null) {
 			return saveDrawingAs();
 		} else {
-			return currentDrawing.save();
+			return currentDiagramEditor.save();
 		}
 	}
 
 	public boolean saveDrawingAs() {
-		if (currentDrawing == null) {
+		if (currentDiagramEditor == null) {
 			return false;
 		}
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
@@ -454,10 +452,10 @@ public class TestDrawingEditor {
 			if (!file.getName().endsWith(".drw")) {
 				file = new File(file.getParentFile(), file.getName() + ".drw");
 			}
-			currentDrawing.setFile(file);
+			currentDiagramEditor.setFile(file);
 			updateFrameTitle();
 			updateTabTitle();
-			return currentDrawing.save();
+			return currentDiagramEditor.save();
 		} else {
 			return false;
 		}

@@ -38,9 +38,9 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.logging.FlexoLogger;
 
-public class MyDrawingPalette extends DrawingPalette {
+public class DiagramEditorPalette extends DrawingPalette {
 
-	private static final Logger logger = FlexoLogger.getLogger(MyDrawingPalette.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(DiagramEditorPalette.class.getPackage().getName());
 
 	private static final int GRID_WIDTH = 80;
 	private static final int GRID_HEIGHT = 60;
@@ -50,7 +50,7 @@ public class MyDrawingPalette extends DrawingPalette {
 	// This factory is the one of the editor
 	private DiagramFactory editorFactory;
 
-	public MyDrawingPalette(DiagramFactory editorFactory) {
+	public DiagramEditorPalette(DiagramFactory editorFactory) {
 		super(360, 350, "default");
 		this.editorFactory = editorFactory;
 		int px = 0;
@@ -115,7 +115,7 @@ public class MyDrawingPalette extends DrawingPalette {
 			}		
 			public DrawingPalette getPalette()
 			{
-				return MyDrawingPalette.this;
+				return DiagramEditorPalette.this;
 			}
 		};
 		gr.setDrawable(returned);
@@ -123,8 +123,8 @@ public class MyDrawingPalette extends DrawingPalette {
 	}
 
 	@Override
-	public MyDrawingController getController() {
-		return (MyDrawingController) super.getController();
+	public DiagramEditorController getController() {
+		return (DiagramEditorController) super.getController();
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
@@ -229,7 +229,7 @@ public class MyDrawingPalette extends DrawingPalette {
 
 			@Override
 			public DrawingPalette getPalette() {
-				return MyDrawingPalette.this;
+				return DiagramEditorPalette.this;
 			}
 		};
 		// gr.setDrawable(returned);

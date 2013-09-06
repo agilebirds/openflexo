@@ -38,7 +38,7 @@ public class ShowContextualMenuControl extends MouseClickControl {
 			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DrawingController<?> controller, java.awt.event.MouseEvent event) {
 				FGEView view = controller.getDrawingView().viewForNode(dtn);
 				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-				((MyDrawingController) controller).showContextualMenu(dtn, view, newPoint);
+				((DiagramEditorController) controller).showContextualMenu(dtn, view, newPoint);
 				return false;
 			}
 		}, false, false, false, false);

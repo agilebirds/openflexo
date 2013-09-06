@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.localization.FlexoLocalization;
@@ -41,7 +40,7 @@ public class DiagramEditor {
 
 	private Diagram diagram;
 	private DiagramDrawing drawing;
-	private DrawingController<Diagram> controller;
+	private DiagramEditorController controller;
 	private int index;
 	private File file = null;
 	private DiagramFactory factory;
@@ -105,9 +104,9 @@ public class DiagramEditor {
 		return drawing;
 	}
 
-	public DrawingController<Diagram> getController() {
+	public DiagramEditorController getController() {
 		if (controller == null) {
-			controller = new DrawingController<Diagram>(getDrawing(), factory);
+			controller = new DiagramEditorController(getDrawing(), factory);
 		}
 		return controller;
 	}
@@ -116,7 +115,7 @@ public class DiagramEditor {
 		if (file != null) {
 			return file.getName();
 		} else {
-			return FlexoLocalization.localizedForKey(TestDrawingEditor.LOCALIZATION, "untitled") + "-" + index;
+			return FlexoLocalization.localizedForKey(LaunchDiagramEditor.LOCALIZATION, "untitled") + "-" + index;
 		}
 	}
 

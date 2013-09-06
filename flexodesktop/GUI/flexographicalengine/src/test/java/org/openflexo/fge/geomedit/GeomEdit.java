@@ -292,7 +292,7 @@ public class GeomEdit {
 		frame.setJMenuBar(mb);
 
 		/*DiagramDrawing ed = drawing.getEditedDrawing();
-		DrawingController<DiagramDrawing> dc = new MyDrawingController(ed);
+		DrawingController<DiagramDrawing> dc = new DiagramEditorController(ed);
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
 		panel.add(dc.getScalePanel(), BorderLayout.NORTH);*/
 
