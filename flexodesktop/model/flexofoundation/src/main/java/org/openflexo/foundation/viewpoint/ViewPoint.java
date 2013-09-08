@@ -600,9 +600,11 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			getResource().delete();
 		}
 
-		for (VirtualModel vm : getVirtualModels()) {
+		// needed?
+		/*for (VirtualModel vm : getVirtualModels()) {
 			removeFromVirtualModels(vm);
-		}
+			vm.delete();
+		}*/
 
 		// Delete the viewpoint resource from the view library
 		getViewPointLibrary().delete(this);
