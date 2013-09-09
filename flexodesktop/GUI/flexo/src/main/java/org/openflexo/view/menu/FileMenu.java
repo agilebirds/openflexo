@@ -419,16 +419,16 @@ public class FileMenu extends FlexoMenu {
 			validate.doAction();
 			if (validate.getErrorsNb() > 0) {
 				StringBuilder sb = new StringBuilder();
-				if (validate.getIeValidationReport().getErrorNb() > 0) {
+				if (validate.getIeValidationReport() != null & validate.getIeValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_components") + "\n");
 				}
-				if (validate.getWkfValidationReport().getErrorNb() > 0) {
+				if (validate.getWkfValidationReport() != null && validate.getWkfValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_processes") + "\n");
 				}
-				if (validate.getDmValidationReport().getErrorNb() > 0) {
+				if (validate.getDmValidationReport() != null && validate.getDmValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_data_model") + "\n");
 				}
-				if (validate.getDkvValidationReport().getErrorNb() > 0) {
+				if (validate.getDkvValidationReport() != null && validate.getDkvValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_the_dkv") + "\n");
 				}
 				sb.append(FlexoLocalization.localizedForKey("would_you_like_to_continue_anyway") + "?");
