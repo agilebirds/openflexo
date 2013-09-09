@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false">
-  <Label label="creates_new_view_point" align="center" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
-  <Label label="view_point_name" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-  <TextField columns="40" text="TextField" data="data.newCalcName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcNameTextField" localize="true">
+  <Label label="creates_new_view_point" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
+  <Label label="view_point_name" align="right" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="2" data="data.newCalcName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcNameTextField" localize="true" columns="40" text="TextField">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="view_point_uri" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-  <TextField columns="6" text="TextField" data="data.newCalcURI" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcURITextField" localize="true">
+  <Label label="view_point_uri" align="right" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="4" data="data.newCalcURI" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcURITextField" localize="true" columns="6" text="TextField">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="label" data="data.errorMessage" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=24;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!((data.isNewCalcNameValid &amp; data.isNewCalcURIValid)))" font="Dialog,2,10" foregroundColor="255,0,0" localize="true">
+  <Label label="label" index="5" data="data.errorMessage" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=24;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!((data.isNewCalcNameValid &amp; data.isNewCalcURIValid)))" font="Dialog,2,10" foregroundColor="255,0,0" localize="true">
     <Dependancy componentName="CalcNameTextField" />
     <Dependancy componentName="CalcURITextField" />
     <LocalizedDictionary />
   </Label>
-  <Label label="ontological_scope" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true">
+  <Label label="ontological_scope" index="6" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true">
     <LocalizedDictionary />
   </Label>
-  <RadioButtonList columns="1" hGap="0" vGap="-2" data="data.ontologicalScopeChoice" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="radioButtonList" format="object.name" localize="true" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint$OntologicalScopeChoices" autoSelectFirstRow="true">
+  <RadioButtonList columns="1" hGap="0" vGap="-2" index="7" data="data.ontologicalScopeChoice" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="radioButtonList" format="object.name" localize="true" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint$OntologicalScopeChoices" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
-  <Label label="ontology_file" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" localize="true" />
-  <File mode="OpenMode" filter="*.xsd, *.owl" title="Please select an ontology to import as calc ontology" isDirectory="false" data="data.ontologyFile" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=6;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" name="OntologyFileSelector" localize="true">
+  <Label label="ontology_file" align="right" index="8" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" localize="true" />
+  <File mode="OpenMode" filter="*.xsd, *.owl" title="Please select an ontology to import as calc ontology" isDirectory="false" localize="true" name="OntologyFileSelector" index="9" data="data.ontologyFile" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=6;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)">
     <Dependancy componentName="CreatesOntologyButton" />
   </File>
-  <Label label="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 1)" localize="true">
+  <Label label="" index="10" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 1)" localize="true">
     <LocalizedDictionary />
   </Label>
-  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)" opaque="false">
-    <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.importedOntologies" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)">
+  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" index="11" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)" opaque="false">
+    <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" index="11" data="data.importedOntologies" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)">
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
       <LabelColumn data="iterator.uRI" title="imported_ontologies" columnWidth="100" resizable="true" displayTitle="true" name="label" />
       <AddAction method="data.addToImportedOntologies(OntologySelector.data)" isAvailable="(OntologySelector.data != null)" name="add_action" />
@@ -36,29 +36,29 @@
       <Dependancy componentName="ImportOntologyButton" />
       <LocalizedDictionary />
     </Table>
-    <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=south;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
-      <Button action="data.addToImportedOntologies(OntologySelector.data)" buttonType="Trigger" label="import_ontology" constraints="border(index=1;location=east)" name="ImportOntologyButton" localize="true" enable="(OntologySelector.data != null)">
+    <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" index="12" constraints="border(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=south;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
+      <Button action="data.addToImportedOntologies(OntologySelector.data)" buttonType="Trigger" label="import_ontology" localize="true" enable="(OntologySelector.data != null)" name="ImportOntologyButton" index="1" constraints="border(index=1;location=east)">
         <LocalizedDictionary />
       </Button>
-      <Custom componentClassName="org.openflexo.components.widget.FIBOntologySelector" constraints="border(index=2;location=center)" name="OntologySelector" localize="true" manageDynamicModel="true">
+      <Custom componentClassName="org.openflexo.components.widget.FIBOntologySelector" localize="true" manageDynamicModel="true" name="OntologySelector" index="2" constraints="border(index=2;location=center)">
         <Assignment variable="component.ontologyLibrary" value="data.calcFolder.viewPointLibrary.ontologyLibrary" />
       </Custom>
-      <Label label="select_ontology" constraints="border(index=0;location=west)" localize="true">
+      <Label label="select_ontology" index="0" constraints="border(index=0;location=west)" localize="true">
         <LocalizedDictionary />
       </Label>
       <LocalizedDictionary />
     </Panel>
   </Panel>
-  <Label label="description" align="right" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-  <TextArea columns="6" rows="5" text="TextArea" data="data.newCalcDescription" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" localize="true" />
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
-    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" localize="true" enable="data.isValid">
+  <Label label="description" align="right" index="12" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextArea columns="6" rows="5" text="TextArea" index="13" data="data.newCalcDescription" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" localize="true" />
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" index="14" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" enable="data.isValid" index="0" constraints="flow(index=0)">
       <Dependancy componentName="CalcNameTextField" />
       <Dependancy componentName="OntologyFileSelector" />
       <Dependancy componentName="radioButtonList" />
       <Dependancy componentName="CalcURITextField" />
     </Button>
-    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="description" lang="English">Description</Localized>
@@ -68,12 +68,12 @@
     <Localized key="validate" lang="French">Valider</Localized>
     <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="description" lang="Dutch">Description</Localized>
-    <Localized key="validate" lang="Dutch">Validate</Localized>
-    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="validate" lang="Dutch">Pas toe</Localized>
+    <Localized key="cancel" lang="Dutch">Annuleren</Localized>
     <Localized key="calc_name" lang="French">Nom du calque ontologique</Localized>
     <Localized key="creates_new_ontologic_calc" lang="French">Créer un nouveau calque ontologique</Localized>
     <Localized key="calc_uri" lang="French">URI du calque</Localized>
-    <Localized key="ontology_file" lang="French">Fichier contenant l'ontologie à utiliser</Localized>
+    <Localized key="ontology_file" lang="French">Fichier de l'ontologie</Localized>
     <Localized key="calc_name" lang="English">Ontologic calc name</Localized>
     <Localized key="calc_uri" lang="English">Calc URI</Localized>
     <Localized key="creates_new_ontologic_calc" lang="English">Creates new ontologic calc</Localized>
@@ -95,29 +95,67 @@
     <Localized key="please_supply_valid_uri" lang="English">Please supply valid URI</Localized>
     <Localized key="malformed_uri" lang="French">URI mal formée (une uri valide soit posséder la terminaison .owl)</Localized>
     <Localized key="malformed_uri" lang="English">Malformed URI (valid uri must end with .owl)</Localized>
-    <Localized key="creates_new_view_point" lang="French">Créer un nouveau point de vue</Localized>
+    <Localized key="creates_new_view_point" lang="French">Créer une nouveau point de vue</Localized>
     <Localized key="creates_new_view_point" lang="English">Creates new view point</Localized>
-    <Localized key="view_point_name" lang="French">Nom du point de vue</Localized>
+    <Localized key="view_point_name" lang="French">View point name</Localized>
     <Localized key="view_point_name" lang="English">View point name</Localized>
-    <Localized key="view_point_uri" lang="French">URI du point de vue</Localized>
-    <Localized key="view_point_uri" lang="English">View point URI</Localized>
+    <Localized key="view_point_uri" lang="French">View point uri</Localized>
+    <Localized key="view_point_uri" lang="English">View point uri</Localized>
     <Localized key="ontological_scope" lang="French">Domaine ontologique</Localized>
     <Localized key="ontological_scope" lang="English">Ontological domain</Localized>
-    <Localized key="ontological_scope" lang="Dutch">ontological_scope</Localized>
+    <Localized key="ontological_scope" lang="Dutch">Ontological domain</Localized>
     <Localized key="import_existing_ontology" lang="English">Import existing ontology</Localized>
     <Localized key="import_existing_ontology" lang="French">Importer une ontologie existante</Localized>
-    <Localized key="import_existing_ontology" lang="Dutch">import_existing_ontology</Localized>
+    <Localized key="import_existing_ontology" lang="Dutch">Import existing ontology</Localized>
     <Localized key="creates_new_ontology" lang="English">Creates new ontology</Localized>
     <Localized key="creates_new_ontology" lang="French">Créer une nouvelle ontologie</Localized>
-    <Localized key="creates_new_ontology" lang="Dutch">creates_new_ontology</Localized>
-    <Localized key="select_ontology" lang="French">Sélectionner une ontologie</Localized>
+    <Localized key="creates_new_ontology" lang="Dutch">Creates new ontology</Localized>
+    <Localized key="select_ontology" lang="French">select_ontology</Localized>
     <Localized key="select_ontology" lang="English">Select ontology</Localized>
     <Localized key="IMPORT_EXISTING_ONTOLOGY" lang="English">Use an ontology dedicated to this view point</Localized>
     <Localized key="IMPORT_EXISTING_ONTOLOGY" lang="French">Utiliser une ontologie dédié à ce point de vue</Localized>
-    <Localized key="IMPORT_EXISTING_ONTOLOGY" lang="Dutch">import_existing_ontology</Localized>
-    <Localized key="creates_ontology" lang="Dutch">creates_ontology</Localized>
+    <Localized key="IMPORT_EXISTING_ONTOLOGY" lang="Dutch">Use an ontology dedicated to this view point</Localized>
+    <Localized key="creates_ontology" lang="Dutch">Creates ontology</Localized>
     <Localized key="CREATES_NEW_ONTOLOGY" lang="English">Creates new ontology importing existing ontologies</Localized>
     <Localized key="CREATES_NEW_ONTOLOGY" lang="French">Créer une ontologie en important des ontologies existantes</Localized>
-    <Localized key="CREATES_NEW_ONTOLOGY" lang="Dutch">creates_new_ontology</Localized>
+    <Localized key="CREATES_NEW_ONTOLOGY" lang="Dutch">Creates new ontology importing existing ontologies</Localized>
+    <Localized key="Use an ontology dedicated to this view point" lang="English">Use an ontology dedicated to this view point</Localized>
+    <Localized key="Use an ontology dedicated to this view point" lang="French">Use an ontology dedicated to this view point</Localized>
+    <Localized key="Use an ontology dedicated to this view point" lang="Dutch">Use an ontology dedicated to this view point</Localized>
+    <Localized key="Creates new ontology importing existing ontologies" lang="English">Creates new ontology importing existing ontologies</Localized>
+    <Localized key="Creates new ontology importing existing ontologies" lang="French">Creates new ontology importing existing ontologies</Localized>
+    <Localized key="Creates new ontology importing existing ontologies" lang="Dutch">Creates new ontology importing existing ontologies</Localized>
+    <Localized key="add_action" lang="English">Add action</Localized>
+    <Localized key="add_action" lang="French">Ajouter une action</Localized>
+    <Localized key="add_action" lang="Dutch">Add action</Localized>
+    <Localized key="Utiliser une ontologie dédié à ce point de vue" lang="English">Utiliser une ontologie dédié à ce point de vue</Localized>
+    <Localized key="Utiliser une ontologie dédié à ce point de vue" lang="French">Utiliser une ontologie dédié à ce point de vue</Localized>
+    <Localized key="Utiliser une ontologie dédié à ce point de vue" lang="Dutch">Utiliser une ontologie dédié à ce point de vue</Localized>
+    <Localized key="Créer une ontologie en important des ontologies existantes" lang="English">Créer une ontologie en important des ontologies existantes</Localized>
+    <Localized key="Créer une ontologie en important des ontologies existantes" lang="French">Créer une ontologie en important des ontologies existantes</Localized>
+    <Localized key="Créer une ontologie en important des ontologies existantes" lang="Dutch">Créer une ontologie en important des ontologies existantes</Localized>
+    <Localized key="creates_new_view_point" lang="Dutch">Creates new view point</Localized>
+    <Localized key="view_point_name" lang="Dutch">View point name</Localized>
+    <Localized key="view_point_uri" lang="Dutch">View point uri</Localized>
+    <Localized key="ontology_file" lang="Dutch">Ontology file</Localized>
+    <Localized key="select_ontology" lang="Dutch">Select ontology</Localized>
+    <Localized key="calc_name" lang="Dutch">Ontologic calc name</Localized>
+    <Localized key="creates_new_ontologic_calc" lang="Dutch">Creates new ontologic calc</Localized>
+    <Localized key="calc_uri" lang="Dutch">Calc URI</Localized>
+    <Localized key="malformed_uri" lang="Dutch">Malformed URI (valid uri must end with .owl)</Localized>
+    <Localized key="please_supply_valid_uri" lang="Dutch">Please supply valid URI</Localized>
+    <Localized key="please_supply_valid_view_point_name" lang="Dutch">Please supply valid view point name</Localized>
+    <Localized key="view_point_names" lang="English">View point name</Localized>
+    <Localized key="view_point_names" lang="French">View point name</Localized>
+    <Localized key="view_point_names" lang="Dutch">View point name</Localized>
+    <Localized key="Nom du point de vue" lang="English">View point name</Localized>
+    <Localized key="Nom du point de vue" lang="French">View point name</Localized>
+    <Localized key="Nom du point de vue" lang="Dutch">View point name</Localized>
+    <Localized key="uri du point de vue" lang="English">View point uri</Localized>
+    <Localized key="uri du point de vue" lang="French">View point uri</Localized>
+    <Localized key="uri du point de vue" lang="Dutch">View point uri</Localized>
+    <Localized key="Seectionne l'ontologie" lang="English">Select ontology</Localized>
+    <Localized key="Seectionne l'ontologie" lang="French">select_ontology</Localized>
+    <Localized key="Seectionne l'ontologie" lang="Dutch">Select ontology</Localized>
   </LocalizedDictionary>
 </Panel>
