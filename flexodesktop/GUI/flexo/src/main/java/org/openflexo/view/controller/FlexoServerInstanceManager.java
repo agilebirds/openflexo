@@ -92,7 +92,7 @@ public class FlexoServerInstanceManager {
 	public FlexoServerAddressBook getAddressBook() {
 		if (addressBook == null) {
 			synchronized (this) {
-				if (addressBook != null) {
+				if (addressBook == null) {
 					URL url = null;
 					try {
 						url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
