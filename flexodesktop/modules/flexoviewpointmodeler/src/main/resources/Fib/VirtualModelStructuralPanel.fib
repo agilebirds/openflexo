@@ -29,7 +29,7 @@
       <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole" />
     </Table>
     <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="0" data="" constraints="split(splitIdentifier=editionPatternDetails)" visible="">
-      <FIBReferencedComponent componentFile="&quot;EditionPatternPanel.fib&quot;" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="EditionPatternBrowser.selected" constraints="border(location=center)" visible="(EditionPatternBrowser.selected != null)" />
+      <FIBReferencedComponent componentFile="EditionPatternPanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="EditionPatternBrowser.selected" constraints="border(location=center)" visible="(EditionPatternBrowser.selected != null)" />
     </Panel>
   </SplitPanel>
   <LocalizedDictionary>
