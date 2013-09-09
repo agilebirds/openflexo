@@ -737,6 +737,12 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 	protected FlexoModelObject performDeleteAction(DeleteAction action) {
 		FlexoModelObject objectToDelete = (FlexoModelObject) action.getObject().getBindingValue(this);
+		if (objectToDelete == null) {
+			if (action.getObject().getBinding() != null) {
+				logger.warning("No value found for " + action.getObject().getBinding().getStringRepresentation());
+			}
+			return null;
+		}
 		try {
 			logger.info("Delete object " + objectToDelete + " for object " + action.getObject() + " this=" + this);
 			objectToDelete.delete();

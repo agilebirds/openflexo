@@ -759,7 +759,7 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 	 * @return true
 	 */
 	protected boolean useEqualsLookup() {
-		return true;
+		return false;
 	}
 
 	/**

@@ -58,6 +58,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
@@ -564,7 +565,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (ts.getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));
 		}
-		Font font = ts.getFont().deriveFont(at);
+		Font font = ts.getFont();
+		if (font == null) {
+			font = FGEConstants.DEFAULT_TEXT_FONT;
+		}
+		font = font.deriveFont(at);
 		textComponent.setFont(font);
 		SimpleAttributeSet set = new SimpleAttributeSet();
 		if (getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.CENTER) {
@@ -579,7 +584,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		textComponent.setOpaque(ts.getIsBackgroundColored());
 		textComponent.setBackground(ts.getBackgroundColor());
 		StyleConstants.setFontFamily(set, font.getFamily());
-		StyleConstants.setFontSize(set, (int) (ts.getFont().getSize() * getScale()));
+		StyleConstants.setFontSize(set, (int) (font.getSize() * getScale()));
 		if (font.isBold()) {
 			StyleConstants.setBold(set, true);
 		}

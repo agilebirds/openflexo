@@ -62,6 +62,7 @@ import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -225,7 +226,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 						for (PropertyEntry e : propertyEntries) {
-							if (e != null && e.selectEntry) {
+							if (e != null && e.property != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
 								if (e.property instanceof OntologyDataProperty) {
 									switch (((OntologyDataProperty) e.property).getDataType()) {
@@ -510,10 +511,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 		public PropertyEntry(OntologyProperty property) {
 			this.property = property;
-			if (StringUtils.isNotEmpty(property.getDescription())) {
-				label = property.getDescription();
+			if (property != null) {
+				if (StringUtils.isNotEmpty(property.getDescription())) {
+					label = property.getDescription();
+				} else {
+					label = property.getName() + "_of_" + getIndividualPatternRoleName();
+				}
 			} else {
-				label = property.getName() + "_of_" + getIndividualPatternRoleName();
+				label = FlexoLocalization.localizedForKey("property");
 			}
 		}
 

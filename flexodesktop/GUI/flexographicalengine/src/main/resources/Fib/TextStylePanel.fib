@@ -1,38 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="gridbag" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.graphics.TextStyle" controllerClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector$TextStyleDetailsPanel$CustomFIBController" font="SansSerif,0,11" width="320" height="180" name="TextStylePanel">
   <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="MainPanel">
-    <Label label="font" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
-      <LocalizedDictionary />
-    </Label>
+    <Label label="font" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true" />
     <Font sampleText="Sample for this font" index="1" data="data.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" localize="true" />
-    <Label label="background" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
-      <LocalizedDictionary />
-    </Label>
+    <Label label="background" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true" />
     <Panel layout="flow" hGap="-1" vGap="1" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)">
       <Color index="0" data="data.backgroundColor" constraints="flow(index=0)" localize="true" enable="data.isBackgroundColored" />
       <CheckBox negate="true" selected="true" index="1" data="data.isBackgroundColored" constraints="flow(index=1)" name="checkbox" localize="true" />
-      <Label label="transparent" index="2" constraints="flow(index=2)" localize="true">
-        <LocalizedDictionary />
-      </Label>
+      <Label label="transparent" index="2" constraints="flow(index=2)" localize="true" />
     </Panel>
-    <Label label="foreground" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true">
-      <LocalizedDictionary />
-    </Label>
+    <Label label="foreground" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" localize="true" />
     <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=2;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)">
       <Color allowsNull="false" index="0" data="data.color" constraints="flow(index=0)" localize="true" />
     </Panel>
-    <Label label="orientation" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" visible="(!(data.noStroke))" localize="true">
-      <LocalizedDictionary />
-    </Label>
+    <Label label="orientation" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left;x=0;y=0)" visible="(!(data.noStroke))" localize="true" />
     <Number minValue="-180" maxValue="180" increment="5" numberType="IntegerType" columns="3" index="7" data="data.orientation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;x=0;y=0)" name="LineWidth" localize="true" valueChangedAction="controller.parameterChanged()" />
   </Panel>
   <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="ControlPanel">
-    <Button action="controller.apply()" buttonType="Trigger" label="apply" index="0" constraints="flow(index=0)" localize="true">
-      <LocalizedDictionary />
-    </Button>
-    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" index="1" constraints="flow(index=1)" localize="true">
-      <LocalizedDictionary />
-    </Button>
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" localize="true" index="0" constraints="flow(index=0)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="font" lang="English">Font</Localized>

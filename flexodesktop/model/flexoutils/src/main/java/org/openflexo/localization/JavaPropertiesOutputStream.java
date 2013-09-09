@@ -26,4 +26,10 @@ public class JavaPropertiesOutputStream extends OutputStream {
 			fos.write(b);
 		}
 	}
+
+	@Override
+	public void close() throws IOException {
+		super.close();
+		fos.close();
+	}
 }

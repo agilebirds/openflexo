@@ -23,8 +23,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.JScrollPane;
-
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -73,6 +71,12 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 	}
 
 	@Override
+	public void delete() {
+		_calcPalette.deleteObserver(this);
+		super.delete();
+	}
+
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == _calcPalette) {
 			if (dataModification instanceof CalcPaletteElementInserted) {
@@ -81,17 +85,13 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				ContextualPaletteElement e = makePaletteElement(dm.newValue());
 				addElement(e);
 				e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
-				JScrollPane oldPaletteView = getPaletteViewInScrollPane();
 				updatePalette();
-				getController().updatePalette(_calcPalette, oldPaletteView);
 			} else if (dataModification instanceof CalcPaletteElementRemoved) {
 				logger.info("Notified new Palette Element removed");
 				CalcPaletteElementRemoved dm = (CalcPaletteElementRemoved) dataModification;
 				ContextualPaletteElement e = getContextualPaletteElement(dm.oldValue());
 				removeElement(e);
-				JScrollPane oldPaletteView = getPaletteViewInScrollPane();
 				updatePalette();
-				getController().updatePalette(_calcPalette, oldPaletteView);
 			}
 		}
 	}

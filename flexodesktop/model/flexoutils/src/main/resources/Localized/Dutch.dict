@@ -1523,6 +1523,7 @@ copying_images=Bezig met kopi\u00EBren van de afbeeldingen...
 could_not_attach_screenshot=De schermafbeelding kon niet worden toegevoegd
 could_not_connect_to_web_sevice=Onmogelijk te connecteren met de web service
 could_not_find_project_on_server=Could not find project on server
+could_not_identify_user=Could not identify user
 could_not_load_module=Onmogellijk om het module te laden
 could_not_load_view=Onmogelijk om de view te laden
 could_not_modify_read_only_eomodel=Onmogelijk te modificeren\: alleen lezen is toegestaan voor het Data Model

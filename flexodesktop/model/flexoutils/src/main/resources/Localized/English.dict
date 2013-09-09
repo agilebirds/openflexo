@@ -1524,6 +1524,7 @@ copying_images=Copying images...
 could_not_attach_screenshot=Could not attach screenshot
 could_not_connect_to_web_sevice=Could not connect to web service
 could_not_find_project_on_server=Could not find project on server
+could_not_identify_user=Could not identify user
 could_not_load_module=Could not load module
 could_not_load_view=Could not load view
 could_not_modify_read_only_eomodel=Could not modify\: read-only Data Model

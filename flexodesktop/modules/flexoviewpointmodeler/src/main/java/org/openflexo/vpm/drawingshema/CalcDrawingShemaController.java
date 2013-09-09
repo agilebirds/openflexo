@@ -21,10 +21,10 @@ package org.openflexo.vpm.drawingshema;
 
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -53,7 +53,7 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 	private VPMController _controller;
 	private CommonPalette _commonPalette;
 	private CalcDrawingShemaModuleView _moduleView;
-	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
+	private Map<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
 	public CalcDrawingShemaController(VPMController controller, ExampleDrawingShema shema, boolean readOnly) {
 		super(new CalcDrawingShemaRepresentation(shema, readOnly), controller.getSelectionManager());
@@ -181,6 +181,8 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				ViewPointPalette palette = ((CalcPaletteInserted) dataModification).newValue();
 				ContextualPalette newContextualPalette = new ContextualPalette(palette);
 				_contextualPalettes.put(palette, newContextualPalette);
+				orderedPalettes.add(palette);
+				Collections.sort(orderedPalettes);
 				registerPalette(newContextualPalette);
 				activatePalette(newContextualPalette);
 				paletteView.add(palette.getName(), newContextualPalette.getPaletteViewInScrollPane());
@@ -191,20 +193,12 @@ public class CalcDrawingShemaController extends SelectionManagingDrawingControll
 				ContextualPalette removedPalette = _contextualPalettes.get(palette);
 				unregisterPalette(removedPalette);
 				_contextualPalettes.remove(palette);
+				orderedPalettes.remove(palette);
 				paletteView.remove(removedPalette.getPaletteViewInScrollPane());
 				paletteView.revalidate();
 				paletteView.repaint();
 			}
 		}
-	}
-
-	protected void updatePalette(ViewPointPalette palette, JScrollPane oldPaletteView) {
-		int index = paletteView.indexOfComponent(oldPaletteView);
-		paletteView.remove(oldPaletteView);
-		ContextualPalette cp = _contextualPalettes.get(palette);
-		paletteView.insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
-		paletteView.revalidate();
-		paletteView.repaint();
 	}
 
 	public ExampleDrawingShema getShema() {

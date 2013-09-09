@@ -195,8 +195,12 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			File projectDirectory = NewProjectComponent.getProjectDirectory();
 			if (projectDirectory != null) {
-				getController().getProjectLoader().newProject(projectDirectory);
-
+				try {
+					getController().getProjectLoader().newProject(projectDirectory);
+				} catch (ProjectInitializerException e) {
+					e.printStackTrace();
+					FlexoController.notify(e.getMessage());
+				}
 			}
 		}
 	}

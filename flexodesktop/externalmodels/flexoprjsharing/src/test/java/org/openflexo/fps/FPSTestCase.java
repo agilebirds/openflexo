@@ -40,6 +40,7 @@ import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.wkf.WKFElementType;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
@@ -112,7 +113,13 @@ public abstract class FPSTestCase extends FlexoTestCase {
 		logger.info("Project directory: " + projectDirectory.getAbsolutePath());
 		projectIdentifier = projectDirectory.getName().substring(0, projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + projectIdentifier);
-		editor = FlexoResourceManager.initializeNewProject(projectDirectory, EDITOR_FACTORY, null);
+		try {
+			editor = FlexoResourceManager.initializeNewProject(projectDirectory, EDITOR_FACTORY, null);
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			return null;
+		}
 		createSubProcess(projectIdentifier, null, editor);
 		FlexoProject project = editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
