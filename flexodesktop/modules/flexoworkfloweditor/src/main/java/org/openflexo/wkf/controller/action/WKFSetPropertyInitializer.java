@@ -20,7 +20,6 @@
 package org.openflexo.wkf.controller.action;
 
 import java.util.EventObject;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -34,13 +33,7 @@ import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.InvalidParentProcessException;
 import org.openflexo.foundation.wkf.InvalidProcessReferencesException;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.WKFDelete;
-import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
-import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
-import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -128,29 +121,6 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 				if (action.getFocusedObject() instanceof FlexoProcess && action.getKey().equals("parentProcess")) {
 					FlexoProcess movedProcess = (FlexoProcess) action.getFocusedObject();
 					((WKFController) getController()).getWorkflowBrowser().focusOn(movedProcess);
-				} else if (action.getFocusedObject() instanceof SubProcessNode && action.getKey().equals("subProcess")) {
-					if (action.getPreviousValue() instanceof FlexoProcess && ((FlexoProcess) action.getPreviousValue()).isImported()
-							&& !(action.getValue() instanceof FlexoProcess && ((FlexoProcess) action.getValue()).isImported())) {
-						if (action.getFocusedObject() instanceof SingleInstanceSubProcessNode
-								|| action.getFocusedObject() instanceof WSCallSubProcessNode
-								|| action.getFocusedObject() instanceof LoopSubProcessNode) {
-							if (((SubProcessNode) action.getFocusedObject()).getPreConditions().size() > 0) {
-								WKFDelete delete = WKFDelete.actionType
-										.makeNewAction(null,
-												new Vector<WKFObject>(((SubProcessNode) action.getFocusedObject()).getPreConditions()),
-												getEditor());
-								delete.setNoConfirmation(true);
-								delete.doAction();
-							}
-							if (((SubProcessNode) action.getFocusedObject()).getOutgoingPostConditions().size() > 0) {
-								WKFDelete delete = WKFDelete.actionType.makeNewAction(null,
-										new Vector<WKFObject>(((SubProcessNode) action.getFocusedObject()).getOutgoingPostConditions()),
-										getEditor());
-								delete.setNoConfirmation(true);
-								delete.doAction();
-							}
-						}
-					}
 				}
 				return true;
 			}

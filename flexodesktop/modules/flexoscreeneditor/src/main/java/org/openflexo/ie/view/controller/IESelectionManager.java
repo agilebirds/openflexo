@@ -212,8 +212,16 @@ public class IESelectionManager extends MouseSelectionManager {
 	 */
 	@Override
 	protected void internallyAddToSelected(FlexoObject object, boolean isNewFocusedObject) {
-		if (object instanceof IEWidget && ((IEWidget) object).getWOComponent().getRootSequence() == object) {
+		if (object == null || object.isDeleted()) {
+			return;
+		}
+		if (object instanceof IEWidget) {
+			if (((IEWidget) object).getWOComponent() == null) {
+				return;
+			}
+			if (((IEWidget) object).getWOComponent().getRootSequence() == object) {
 			object = ((IEWidget) object).getWOComponent();
+		}
 		}
 		if (object instanceof ComponentDefinition) {
 			if (((ComponentDefinition) object).isLoaded()) {

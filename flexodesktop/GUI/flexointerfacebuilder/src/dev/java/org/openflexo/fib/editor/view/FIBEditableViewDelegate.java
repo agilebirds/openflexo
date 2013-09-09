@@ -506,8 +506,6 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
 
-			System.out.println("dragDropEnd in MoveDSListener");
-
 			// getDrawingView().resetCapturedNode();
 			if (!e.getDropSuccess()) {
 				if (logger.isLoggable(Level.INFO)) {

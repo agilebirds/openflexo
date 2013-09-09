@@ -25,6 +25,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.dkv.Language;
+import org.openflexo.foundation.rm.FlexoComponentResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -102,6 +103,10 @@ public class LocalizationFileResource extends TextFileResource<LocalizedFileGene
 	@Override
 	public void rebuildDependancies() {
 		super.rebuildDependancies();
+		addToDependentResources(getProject().getFlexoDKVResource());
+		for (FlexoComponentResource componentResource : getProject().getResourcesOfClass(FlexoComponentResource.class)) {
+			addToDependentResources(componentResource);
+		}
 	}
 
 	static String getDefaultFileName(Language lg) {

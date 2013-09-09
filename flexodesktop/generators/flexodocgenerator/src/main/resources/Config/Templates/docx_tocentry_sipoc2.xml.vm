@@ -20,7 +20,7 @@
 </w:p>
 
 #set($workflow = ${project.getWorkflow()})
-#if(${workflow.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+#if(${workflow.getRoleList().getRoles().size()}>0)
 	<w:p>
 		<w:r>
 			<w:t>The following roles are defined for this process:</w:t>
@@ -29,12 +29,6 @@
 	
 	#set($rolesTablesContents = $generator.getNewVector())
 	#foreach($role in ${workflow.getSortedRoles()})
-		#set($row = $generator.getNewVector())
-        #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
-		#void($row.add("#description($role)"))
-		#void($rolesTablesContents.add($row))
-	#end
-	#foreach($role in ${workflow.getImportedRoleList().getSortedRoles()})
 		#set($row = $generator.getNewVector())
         #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
 		#void($row.add("#description($role)"))

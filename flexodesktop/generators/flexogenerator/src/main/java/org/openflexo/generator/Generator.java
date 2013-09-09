@@ -88,6 +88,7 @@ import org.openflexo.generator.exception.VelocityException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.HTMLUtils;
+import org.openflexo.toolbox.Holder;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -104,26 +105,6 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	private static final List<Class<?>> TOOL_CLASSES = Arrays.asList(AlternatorTool.class, ComparisonDateTool.class, ConversionTool.class,
 			DateTool.class, DisplayTool.class, EscapeTool.class, RenderTool.class, SortTool.class);
-
-	public static class Holder<T> {
-		private T value;
-
-		public T get() {
-			return value;
-		}
-
-		public T getValue() {
-			return get();
-		}
-
-		public void set(T value) {
-			this.value = value;
-		}
-
-		public void setValue(T value) {
-			set(value);
-		}
-	}
 
 	private static final Logger logger = FlexoLogger.getLogger(Generator.class.getPackage().getName());
 

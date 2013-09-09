@@ -116,15 +116,17 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 		}
 	}
 
-	private FlexoModelObjectReference modelObjectReference;
+	private FlexoModelObjectReference<?> modelObjectReference;
 
-	public FlexoModelObjectReference getModelObjectReference() {
+	public FlexoModelObjectReference<?> getModelObjectReference() {
 		return modelObjectReference;
 	}
 
-	public void setModelObjectReference(FlexoModelObjectReference objectReference) {
+	public void setModelObjectReference(FlexoModelObjectReference<?> objectReference) {
 		if (this.modelObjectReference != null) {
+			FlexoModelObjectReference<?> old = this.modelObjectReference;
 			this.modelObjectReference = null;
+			old.delete();
 		}
 		this.modelObjectReference = objectReference;
 		if (this.modelObjectReference != null) {
@@ -133,19 +135,25 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
-		setChanged();
-		notifyObservers(new TOCModification(reference, null));
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		if (this.modelObjectReference == reference) {
+			setModelObjectReference(null);
+			setChanged();
+			notifyObservers(new TOCModification(reference, null));
+		}
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
-		setChanged();
-		notifyObservers(new TOCModification(reference, null));
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		if (reference == this.modelObjectReference) {
+			setModelObjectReference(null);
+			setChanged();
+			notifyObservers(new TOCModification(reference, null));
+		}
 	}
 
 	public boolean isModelObjectSection() {

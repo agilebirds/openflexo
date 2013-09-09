@@ -124,8 +124,7 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof FlexoWorkflow
-				&& !((FlexoWorkflow) object).isCache();
+		return object instanceof FlexoProcess || object instanceof FlexoWorkflow && !((FlexoWorkflow) object).isCache();
 	}
 
 	@Override

@@ -23,8 +23,8 @@ import java.awt.Color;
 
 public interface ProcessEditorConstants {
 
-	public static final double PROCESS_DEFAULT_WIDTH = 1000;
-	public static final double PROCESS_DEFAULT_HEIGHT = 1000;
+	public static final double PROCESS_DEFAULT_WIDTH = 3000;
+	public static final double PROCESS_DEFAULT_HEIGHT = 5000;
 
 	public static final String BASIC_PROCESS_EDITOR = "bpe";
 

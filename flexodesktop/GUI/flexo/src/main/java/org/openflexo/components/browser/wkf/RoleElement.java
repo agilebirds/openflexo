@@ -37,11 +37,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a Role
@@ -73,25 +69,8 @@ public class RoleElement extends BrowserElement {
 	}
 
 	@Override
-	public boolean isNameEditable() {
-		return !getRole().isImported();
-	}
-
-	@Override
 	public void setName(String aName) throws DuplicateRoleException {
-		if (getRole().isImported()) {
-			return;
-		}
 		getRole().setName(aName);
-	}
-
-	@Override
-	public String getToolTip() {
-		if (getRole().isImported() && getRole().isDeletedOnServer()) {
-			return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
-		} else {
-			return null;
-		}
 	}
 
 	@Override
@@ -114,27 +93,7 @@ public class RoleElement extends BrowserElement {
 		if (customIcon == null) {
 			customIcon = buildCustomIcon(getRole().getColor());
 		}
-		IconMarker[] markers = getIconMarkers();
-		if (markers != null) {
-			return IconFactory.getImageIcon(customIcon, markers);
-		}
 		return decorateIcon(customIcon);
-	}
-
-	private IconMarker[] getIconMarkers() {
-		int count = 0;
-		if (getRole().isImported()) {
-			count = 2;
-		}
-		IconMarker[] markers = null;
-		if (count > 0) {
-			markers = new IconMarker[count];
-		}
-		if (getRole().isImported()) {
-			markers[0] = IconLibrary.IMPORT;
-			markers[1] = IconLibrary.WARNING;
-		}
-		return markers;
 	}
 
 	public ImageIcon buildCustomIcon(Color aColor) {

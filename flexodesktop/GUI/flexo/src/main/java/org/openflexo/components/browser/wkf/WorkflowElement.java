@@ -26,10 +26,7 @@ import javax.swing.Icon;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -55,9 +52,7 @@ public class WorkflowElement extends BrowserElement {
 	protected void buildChildrenVector() {
 		// We add the roles
 		addToChilds(getFlexoWorkflow().getRoleList());
-		if (getFlexoWorkflow().getImportedRoleList() != null && getFlexoWorkflow().getImportedRoleList().getRoles().size() > 0) {
-			addToChilds(getFlexoWorkflow().getImportedRoleList());
-		}
+
 		/*if (getFlexoWorkflow().getProject().getProjectData() != null) {
 			for (FlexoProjectReference ref : getFlexoWorkflow().getProject().getProjectData().getImportedProjects()) {
 				if (ref.getReferredProject() != null && ref.getReferredProject().getFlexoWorkflow(false) != null) {
@@ -109,14 +104,6 @@ public class WorkflowElement extends BrowserElement {
 
 	public FlexoWorkflow getFlexoWorkflow() {
 		return (FlexoWorkflow) getObject();
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof ImportedRoleLibraryCreated) {
-			refreshWhenPossible();
-		}
-		super.update(observable, dataModification);
 	}
 
 }

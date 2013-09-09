@@ -367,16 +367,7 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	public static enum RectPolylinConstraints {
-		NONE,
-		ORTHOGONAL_LAYOUT,
-		ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST,
-		ORTHOGONAL_LAYOUT_VERTICAL_FIRST,
-		HORIZONTAL_OR_VERTICAL_LAYOUT,
-		HORIZONTAL_LAYOUT,
-		VERTICAL_LAYOUT,
-		ORIENTATIONS_FIXED,
-		START_ORIENTATION_FIXED,
-		END_ORIENTATION_FIXED
+		NONE, ORTHOGONAL_LAYOUT, ORTHOGONAL_LAYOUT_HORIZONTAL_FIRST, ORTHOGONAL_LAYOUT_VERTICAL_FIRST, HORIZONTAL_OR_VERTICAL_LAYOUT, HORIZONTAL_LAYOUT, VERTICAL_LAYOUT, ORIENTATIONS_FIXED, START_ORIENTATION_FIXED, END_ORIENTATION_FIXED
 	}
 
 	private RectPolylinConstraints rectPolylinConstraints = RectPolylinConstraints.NONE;
@@ -2526,6 +2517,20 @@ public class RectPolylinConnector extends Connector {
 				getEndObject());
 		returned = getEndObject().getShape().getShape().getNearestPoint(returned);
 		return returned;
+	}
+
+	@Override
+	public void resetConnectorLayout() {
+		switch (adjustability) {
+		case AUTO_LAYOUT:
+			break;
+		case BASICALLY_ADJUSTABLE:
+			setCrossedControlPoint(null);
+			break;
+		case FULLY_ADJUSTABLE:
+			setWasManuallyAdjusted(false);
+			break;
+		}
 	}
 
 	@Override

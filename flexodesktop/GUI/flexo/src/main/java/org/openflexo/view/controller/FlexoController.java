@@ -38,12 +38,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -74,9 +71,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.xml.rpc.ServiceException;
+import javax.ws.rs.WebApplicationException;
+import javax.xml.ws.Holder;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
@@ -176,8 +173,6 @@ import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
@@ -188,7 +183,6 @@ import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.FlexoDialog;
@@ -196,13 +190,10 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.FlexoRelativeWindow;
 import org.openflexo.view.ModuleView;
-import org.openflexo.view.controller.WebServiceURLDialog.PPMWSClientParameter;
 import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.controller.model.Location;
 import org.openflexo.view.menu.FlexoMenuBar;
-import org.openflexo.ws.client.PPMWebService.PPMWebServiceAuthentificationException;
-import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
@@ -1603,87 +1594,29 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		super.finalize();
 	}
 
-	public PPMWebServiceClient getWSClient() {
-		return getWSClient(false);
-	}
-
-	public PPMWebServiceClient getWSClient(boolean forceDialog) {
-		ModelFactory factory;
-		try {
-			factory = new ModelFactory(PPMWSClientParameter.class);
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-			throw new Error("Improperly configured PPMWSClientParameter. ", e);
-		}
-		FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
-				.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
-		PPMWSClientParameter params = factory.newInstance(PPMWSClientParameter.class);
-		params.setWSInstance(instance);
-		params.setWSLogin(AdvancedPrefs.getWebServiceLogin());
-		params.setWSPassword(AdvancedPrefs.getWebServiceMd5Password());
-		params.setWSURL(AdvancedPrefs.getWebServiceUrl());
-		params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
-		if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
-			params.setWSURL(params.getWSInstance().getWSURL());
-		}
-		String oldMD5Password = params.getWSPassword();
-		if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
-				|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
-			WebServiceURLDialog data = new WebServiceURLDialog();
-			data.setClientParameter(params);
-			FIBDialog<WebServiceURLDialog> dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data, getFlexoFrame(),
-					true, FlexoLocalization.getMainLocalizer());
-			if (dialog.getStatus() == Status.VALIDATED) {
-				if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
-					params.setWSURL(params.getWSInstance().getWSURL());
-				}
-				try {
-					String password = params.getWSPassword();
-					if (oldMD5Password == null || !oldMD5Password.equals(password)) {
-						params.setWSPassword(ToolBox.getMd5Hash(params.getWSPassword()));
+	public boolean handleWSException(final Exception e) throws InterruptedException {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			final Holder<Boolean> returned = new Holder<Boolean>();
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						returned.value = _handleWSException(e);
 					}
-				} catch (NoSuchAlgorithmException e1) {
-					e1.printStackTrace();
-					FlexoController.notify(e1.getMessage());
-					AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(false);
-					AdvancedPrefs.save();
-					return null;
-				}
-				if (params.getWSInstance() != null) {
-					AdvancedPrefs.setWebServiceInstance(params.getWSInstance().getID());
-				}
-				if (params.getWSURL() != null) {
-					AdvancedPrefs.setWebServiceUrl(params.getWSURL());
-				}
-				if (params.getWSLogin() != null) {
-					AdvancedPrefs.setWebServiceLogin(params.getWSLogin());
-				}
-				if (params.getWSPassword() != null) {
-					AdvancedPrefs.setWebServiceMd5Password(params.getWSPassword());
-				}
-				AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
-				AdvancedPrefs.save();
-			} else {
-				return null;
+				});
+			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+				return false;
 			}
+			return returned.value != null && returned.value;
 		}
-
-		// now that we have the parameters. We have to invoke the WS
-
-		PPMWebServiceClient client = null;
-		try {
-			client = new PPMWebServiceClient(params.getWSURL(), params.getWSLogin(), params.getWSPassword());
-		} catch (ServiceException e1) {
-			e1.printStackTrace();
-			FlexoController.notify(e1.getMessage());
-			AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(false);
-			AdvancedPrefs.save();
-			return null;
-		}
-		return client;
+		return _handleWSException(e);
 	}
 
-	public void handleWSException(RemoteException e) {
+	private boolean _handleWSException(Throwable e) {
+		if (e instanceof RuntimeException && e.getCause() != null) {
+			e = e.getCause();
+		}
 		if (e.getCause() instanceof TooManyFailedAttemptException) {
 			throw (TooManyFailedAttemptException) e.getCause();
 		}
@@ -1701,62 +1634,64 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
 					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect")
 					+ (location != null ? "\n" + FlexoLocalization.localizedForKey("try_with_this_one") + " " + location : ""));
-			return;
+			return false;
 		}
-		if (e instanceof PPMWebServiceAuthentificationException) {
-			handleWSException((PPMWebServiceAuthentificationException) e);
-		} else if (e.getCause() instanceof ConnectException) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("connection_error")
-					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : ""));
+		if (e instanceof WebApplicationException) {
+			WebApplicationException wae = (WebApplicationException) e;
+			Object entity = wae.getResponse().getEntity();
+			switch (wae.getResponse().getStatus()) {
+			case 500:
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			case 401:
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			default:
+				if (entity != null) {
+					return FlexoController.confirm(entity.toString() + "\n"
+							+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				} else {
+					return FlexoController.confirm(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server")
+							+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				}
+			}
+		}
+		if (e.getCause() instanceof ConnectException) {
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error")
+					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : "") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e.getMessage() != null && "(500)Apple WebObjects".equals(e.getMessage())
 				|| e.getMessage().startsWith("No such operation")) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
-					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect"));
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
+					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e.toString() != null && e.toString().startsWith("javax.net.ssl.SSLHandshakeException")) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("connection_error") + ": " + e);
-		} else if (e.detail instanceof SocketTimeoutException) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("connection_timeout"));
-		} else if (e.detail instanceof IOException || e.getCause() instanceof IOException) {
-			IOException ioEx = (IOException) (e.detail instanceof IOException ? e.detail : e.getCause());
-			FlexoController.notify(FlexoLocalization.localizedForKey("connection_error") + ": "
-					+ FlexoLocalization.localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage());
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": " + e + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+		} else if (e instanceof SocketTimeoutException) {
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_timeout") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+		} else if (e instanceof IOException || e.getCause() instanceof IOException) {
+			IOException ioEx = (IOException) (e instanceof IOException ? e : e.getCause());
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": "
+					+ FlexoLocalization.localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage() + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else {
 			if (e.getMessage() != null && e.getMessage().indexOf("Content is not allowed in prolog") > -1) {
 				FlexoController
 						.notify("Check your connection url in FlexoPreferences > Advanced.\n It seems wrong.\nsee logs for details.");
+				return false;
 			} else {
-				FlexoController
-						.notify(FlexoLocalization.localizedForKey("webservice_remote_error")
+				return FlexoController
+						.confirm(FlexoLocalization.localizedForKey("webservice_remote_error")
 								+ " \n"
 								+ (e.getMessage() == null || "java.lang.NullPointerException".equals(e.getMessage()) ? "Check your connection parameters.\nThe service may be temporary unavailable."
-										: e.getMessage()));
+										: e.getMessage()) + "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			}
 		}
-	}
-
-	public void handleWSException(ServiceException e) {
-		FlexoController.notify(FlexoLocalization.localizedForKey("webservice_connection_failed"));
-	}
-
-	public void handleWSException(PPMWebServiceAuthentificationException e) {
+		/*FlexoController.notify(FlexoLocalization.localizedForKey("webservice_connection_failed"));
 		FlexoController.notify(FlexoLocalization.localizedForKey("webservice_authentification_failed") + ": "
-				+ FlexoLocalization.localizedForKey(e.getMessage1()));
-	}
-
-	private boolean isWSUrlValid(final String wsURL) {
-		return wsURL != null
-				&& (wsURL.toLowerCase().startsWith("http://") && wsURL.charAt(7) != '/' || wsURL.toLowerCase().startsWith("https://")
-						&& wsURL.charAt(8) != '/');
-	}
-
-	private boolean urlSeemsIncorrect(String wsURL) {
-		try {
-			URL url = new URL(wsURL);
-			// Bug 1007330 Fix
-			return url.getAuthority() == null;
-		} catch (MalformedURLException e) {
-			return true;
-		}
+				+ FlexoLocalization.localizedForKey(e.getMessage1()));*/
 	}
 
 	/**

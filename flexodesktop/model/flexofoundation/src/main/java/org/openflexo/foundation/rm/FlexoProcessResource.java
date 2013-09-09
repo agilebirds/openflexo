@@ -34,7 +34,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
 import org.openflexo.foundation.rm.FlexoProject.FlexoIDMustBeUnique.DuplicateObjectIDIssue;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -176,12 +175,6 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			if (s != null) {
 				encoder._setDateFormat(s);
 			}
-		}
-
-		try {
-			FlexoProcessImageBuilder.writeSnapshot(getFlexoProcess());
-		} catch (Exception e) {
-			logger.warning("Save image snapshot for process " + getFlexoProcess().getName() + e.getMessage());
 		}
 
 	}

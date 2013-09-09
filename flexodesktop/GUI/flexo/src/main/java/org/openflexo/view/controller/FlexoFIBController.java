@@ -83,6 +83,14 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		this.controller = controller;
 	}
 
+	@Override
+	public void delete() {
+		if (getDataObject() instanceof FlexoObservable) {
+			((FlexoObservable) getDataObject()).deleteObserver(this);
+		}
+		super.delete();
+	}
+
 	public FlexoController getFlexoController() {
 		return controller;
 	}

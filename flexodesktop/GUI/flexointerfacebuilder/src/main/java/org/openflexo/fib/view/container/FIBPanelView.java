@@ -45,6 +45,7 @@ import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.swing.ButtonLayout;
 import org.openflexo.toolbox.StringUtils;
 
 public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel> {
@@ -129,6 +130,10 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		case gridbag:
 			panel.setLayout(new GridBagLayout());
 			break;
+		case buttons:
+			panel.setLayout(new ButtonLayout(getComponent().getFlowAlignment() != null ? getComponent().getFlowAlignment().getAlign() : -1,
+					getComponent().getHGap() != null ? getComponent().getHGap() : 5));
+			break;
 		default:
 			break;
 		}
@@ -212,7 +217,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		// Vector<FIBComponent> allSubComponents = getComponent().getSubComponents();
 
 		if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
-				|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
+				|| getComponent().getLayout() == Layout.buttons || getComponent().getLayout() == Layout.twocols
+				|| getComponent().getLayout() == Layout.gridbag) {
 
 			/*System.out.println("Apres le retrieve: ");
 			for (FIBComponent c : allSubComponents) {

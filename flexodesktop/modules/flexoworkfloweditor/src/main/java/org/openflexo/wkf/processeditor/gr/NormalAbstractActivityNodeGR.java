@@ -36,6 +36,7 @@ import org.openflexo.foundation.wkf.dm.RoleChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
@@ -51,8 +52,8 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(true);
 		setRelativeTextX(0.5); // Center label horizontally
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		foreground.setLineWidth(0.2);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
+		foreground.setLineWidth(1.0);
 		setForeground(foreground);
 		updateBackground();
 		setMinimalWidth(NODE_MINIMAL_WIDTH);

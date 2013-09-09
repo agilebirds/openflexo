@@ -81,9 +81,6 @@ public class WKFValidationModel extends ValidationModel {
 		registerRule(new FlexoProcess.ProcessHierarchyIsConsistent());
 		registerRule(new FlexoProcess.ProcessMustDefineBusinessDataClass());
 		registerRule(new FlexoProcess.BusinessDataClassMustHaveStatusProperty());
-		registerRule(new FlexoProcess.ImportedProcessShouldExistOnServer());
-
-		registerRule(new Role.ImportedRoleShouldExistOnServer());
 
 		registerRule(new StatusList.ProcessShouldHaveAtLeastAStatus());
 		registerRule(new StatusList.ProcessShouldHaveADefaultStatus());

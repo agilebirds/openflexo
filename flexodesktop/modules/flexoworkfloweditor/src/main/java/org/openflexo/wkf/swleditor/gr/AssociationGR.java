@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
@@ -35,6 +34,7 @@ import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.dm.WKFDataModification;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation.Arrow;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class AssociationGR extends EdgeGR<WKFAssociation> {
@@ -44,7 +44,7 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 
 	public AssociationGR(WKFAssociation edge, SwimmingLaneRepresentation aDrawing) {
 		super(edge, aDrawing.getFirstVisibleObject(edge.getStartNode()), aDrawing.getFirstVisibleObject(edge.getEndNode()), aDrawing);
-		setForeground(ForegroundStyle.makeStyle(Color.darkGray, 1.0f, DashStyle.DOTS_DASHES));
+		setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f, DashStyle.DOTS_DASHES));
 		setApplyForegroundToSymbols(false);
 	}
 

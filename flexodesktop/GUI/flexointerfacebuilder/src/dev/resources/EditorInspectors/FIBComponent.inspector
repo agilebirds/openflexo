@@ -59,6 +59,10 @@
 					</Panel>
 				</Panel>
 
+				<Panel name="ButtonConstraints" border="titled" borderTitle="button_layout_constraints" data="data.constraints" dataClassName="org.openflexo.fib.model.ButtonLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='buttons'"> 
+					
+				</Panel>
+
 				<Panel name="BoxConstraints" border="titled" opaque="false" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='box')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="boxConstraintsIndex" data="BoxConstraints.data.index" constraints="twocols(location=right)"/>

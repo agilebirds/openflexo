@@ -122,12 +122,6 @@ public class WKFControllerActionInitializer extends ControllerActionInitializer 
 		new AddPortInitializer(AddPort.createOutPort, WKFIconLibrary.SMALL_OUT_PORT_LEFT_ICON, this);
 		new AddPortInitializer(AddPort.createInOutPort, WKFIconLibrary.SMALL_IN_OUT_PORT_LEFT_ICON, this);
 
-		/*
-		new ImportRolesInitializer(this);
-		new ImportProcessesInitializer(this);
-		new ConvertIntoLocalRoleInitializer(this);
-		new ConvertIntoLocalProcessInitializer(this);
-		*/
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			new AddServiceInterfaceInitializer(this);
 			new AddServiceOperationInitializer(this);

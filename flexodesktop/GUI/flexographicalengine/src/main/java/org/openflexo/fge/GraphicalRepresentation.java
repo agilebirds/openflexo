@@ -138,8 +138,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private TextStyle textStyle = TextStyle.makeDefault();
 	private String text;
-	private boolean multilineAllowed = false;
-	private boolean lineWrap = false;
+	private boolean multilineAllowed = true;
+	private boolean lineWrap = true;
 	private boolean continuousTextEditing = true;
 	private double absoluteTextX = 0;
 	private double absoluteTextY = 0;

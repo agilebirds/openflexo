@@ -322,6 +322,8 @@ public class VPMIconLibrary extends IconLibrary {
 					return WKFIconLibrary.ACTIVITY_NODE_ICON;
 				case Operation:
 					return WKFIconLibrary.OPERATION_NODE_ICON;
+				case Screen:
+					return SEIconLibrary.SCREEN_COMPONENT_ICON;
 				case Action:
 					return WKFIconLibrary.ACTION_NODE_ICON;
 				case Event:

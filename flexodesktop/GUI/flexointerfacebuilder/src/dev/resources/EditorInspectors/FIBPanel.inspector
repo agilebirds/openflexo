@@ -11,8 +11,8 @@
 				<Panel name="LayoutPanel" border="titled" borderTitle="Layout" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
 				    <Label label="layout" constraints="twocols(location=left)"/>
 				    <DropDown data="data.layout" constraints="twocols(location=right)" showReset="false"/>
-				    <Label label="alignment" constraints="twocols(location=left)" visible="data.layout='flow'"/>
-				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="false" visible="data.layout='flow'"/>
+				    <Label label="alignment" constraints="twocols(location=left)" visible="data.layout='flow' | (data.layout='buttons')"/>
+				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="true" visible="data.layout='flow' | (data.layout='buttons')"/>
 				    <Label label="axis" constraints="twocols(location=left)" visible="data.layout='box'"/>
 				    <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" showReset="false" visible="data.layout='box'"/>
 					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') | (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">

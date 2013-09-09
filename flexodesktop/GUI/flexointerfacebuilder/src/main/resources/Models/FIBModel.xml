@@ -417,6 +417,7 @@
   
   <entity name="org.openflexo.fib.model.FIBButtonColumn" xmlTag="ButtonColumn"> 
       <property name="action" xmlTag="action" attribute="YES"/> 
+      <property name="enabled" xmlTag="enabled" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustomColumn" xmlTag="CustomColumn"> 

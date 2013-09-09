@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -353,27 +354,27 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update(new Vector<FIBComponent>());
+					update(new ArrayList<FIBComponent>());
 				}
 			});
 		} else {
-			update(new Vector<FIBComponent>());
+			update(new ArrayList<FIBComponent>());
 		}
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public final void propertyChange(PropertyChangeEvent evt) {
 		// System.out.println("Widget "+getWidget()+" : propertyChange "+evt);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
 				public void run() {
-					update(new Vector<FIBComponent>());
+					update(new ArrayList<FIBComponent>());
 				}
 			});
 		} else {
-			update(new Vector<FIBComponent>());
+			update(new ArrayList<FIBComponent>());
 		}
 	}
 
@@ -467,7 +468,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			});
 			return;
 		}
-		update(new Vector<FIBComponent>());
+		update(new ArrayList<FIBComponent>());
 	}
 
 	@Override

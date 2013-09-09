@@ -113,9 +113,15 @@ public class CopiedFileData implements GeneratedResourceData {
 				aFile.mkdirs();
 				FileUtils.copyDirToDir(source, aFile);
 			} else {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Resource to copy file is neither a file nor a directory "
-							+ this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
+				if (this.flexoCopiedResource.getResourceToCopy() != null) {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("Resource to copy file is neither a file nor a directory "
+								+ this.flexoCopiedResource.getResourceToCopy().getFile().getAbsolutePath());
+					} else {
+						if (logger.isLoggable(Level.SEVERE)) {
+							logger.severe("Resource to copy is null! ");
+						}
+					}
 				}
 			}
 			if (needsNotifyEndOfSaving) {
