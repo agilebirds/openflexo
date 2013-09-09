@@ -358,6 +358,9 @@ public class ServerRestService {
 
 	public ServerRestClient getWSClient(boolean forceDialog) {
 		ServerRestClientParameter params = getServerRestClientParameter(forceDialog);
+		if (params == null) {
+			return null;
+		}
 		// now that we have the parameters. We have to invoke the WS
 		ServerRestClient client;
 		try {
