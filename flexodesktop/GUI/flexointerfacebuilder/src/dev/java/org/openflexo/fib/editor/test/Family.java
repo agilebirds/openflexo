@@ -19,11 +19,13 @@
  */
 package org.openflexo.fib.editor.test;
 
+import java.io.File;
 import java.util.Vector;
 
 import javax.swing.Icon;
 
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.toolbox.FileResource;
 
 public class Family {
 
@@ -89,6 +91,18 @@ public class Family {
 	@Override
 	public String toString() {
 		return super.toString() + " children=" + Integer.toHexString(children.hashCode()) + " : " + children;
+	}
+
+	public File fibForPerson(Person person) {
+		if (person == null) {
+			return null;
+		}
+		if (person.gender == Gender.Male) {
+			return new FileResource("src/dev/resources/TestFIB/TestMalePerson.fib");
+		} else if (person.gender == Gender.Female) {
+			return new FileResource("src/dev/resources/TestFIB/TestFemalePerson.fib");
+		}
+		return null;
 	}
 
 	public static class Person {

@@ -9,6 +9,6 @@
     <RemoveAction method="data.deleteChild(selected)" isAvailable="" name="delete_child" />
   </Table>
   <TextField index="1" data="LaBelleTable.selected.toString" constraints="border(index=1;location=north)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="6" text="TextField" editable="" />
-  <FIBReferencedComponent componentFile="&quot;TestPerson.fib&quot;" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="LaBelleTable.selected" constraints="border(location=east)" visible="" />
+  <FIBReferencedComponent componentFile="TestPerson.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="LaBelleTable.selected" constraints="border(location=east)" visible="" />
   <LocalizedDictionary />
 </Panel>

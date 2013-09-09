@@ -264,6 +264,7 @@
   
   <entity name="org.openflexo.fib.model.FIBReferencedComponent" xmlTag="FIBReferencedComponent"> 
     <property name="componentFile" xmlTag="componentFile" attribute="YES"/> 
+    <property name="dynamicComponentFile" xmlTag="dynamicComponentFile" attribute="YES"/> 
     <property name="assignments" xmlTag="ReferenceAssignment" type="vector"/> 
   </entity>
    

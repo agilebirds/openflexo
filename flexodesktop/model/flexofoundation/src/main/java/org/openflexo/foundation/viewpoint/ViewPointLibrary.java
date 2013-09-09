@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -155,6 +156,27 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 		map.put(uri, vpRes);
 		setChanged();
 		notifyObservers(new OntologyCalcCreated(vpRes));
+		return vpRes;
+	}
+
+	/**
+	 * Register supplied ViewPointResource in this library
+	 * 
+	 * @param vpRes
+	 * @return
+	 */
+	public ViewPointResource unregisterViewPoint(ViewPointResource vpRes) {
+		map.remove(vpRes);
+
+		// Unregister the viewpoint resource from the viewpoint repository
+		List<FlexoResourceCenter> resourceCenters = getResourceCenterService().getResourceCenters();
+		for (FlexoResourceCenter rc : resourceCenters) {
+			ViewPointRepository vpr = rc.getViewPointRepository();
+			if (vpr != null) {
+				vpr.unregisterResource(vpRes);
+			}
+		}
+		setChanged();
 		return vpRes;
 	}
 
@@ -340,6 +362,16 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	@Override
 	public ValidationModel getDefaultValidationModel() {
 		return VALIDATION_MODEL;
+	}
+
+	public void delete(ViewPointResource vr) {
+		logger.info("Remove viewpoint " + vr);
+		unregisterViewPoint(vr);
+		vr.delete();
+	}
+
+	public void delete(ViewPoint v) {
+		delete(v.getResource());
 	}
 
 }

@@ -19,13 +19,15 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
@@ -45,7 +47,6 @@ import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
-import org.openflexo.toolbox.FileResource;
 
 /**
  * Defines an abstract custom widget
@@ -54,12 +55,14 @@ import org.openflexo.toolbox.FileResource;
  * 
  */
 public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedComponent, JComponent, Object> implements
-BindingEvaluationContext {
+		BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponentWidget.class.getPackage().getName());
 
+	private FIBComponent referencedComponent = null;
 	private FIBView<FIBComponent, JComponent> referencedComponentView;
 	private FIBViewFactory factory;
+	private boolean isComponentLoading = false;
 
 	private final JLabel NOT_FOUND_LABEL = new JLabel("<Not found component>");
 
@@ -77,16 +80,80 @@ BindingEvaluationContext {
 		return false;
 	}
 
-	private boolean isComponentLoading = false;
+	public FIBComponent getReferencedComponent() {
 
+		if (referencedComponent == null) {
+			referencedComponent = retrieveReferencedComponent();
+		}
+		return referencedComponent;
+	}
 
+	private FIBComponent retrieveReferencedComponent() {
+
+		if (getWidget().getDynamicComponentFile() != null && getWidget().getDynamicComponentFile().isSet()
+				&& getWidget().getDynamicComponentFile().isValid()) {
+			// The component file is dynamically defined, use it
+			File componentFile;
+			try {
+				componentFile = getWidget().getDynamicComponentFile().getBindingValue(getController());
+				if (componentFile != null) {
+					return FIBLibrary.instance().retrieveFIBComponent(componentFile);
+				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+
+		else if (getWidget().getComponentFile() != null) {
+			// The component file is statically defined, use it
+			return FIBLibrary.instance().retrieveFIBComponent(getWidget().getComponentFile());
+		}
+
+		return null;
+	}
+
+	@Override
+	public final void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
+		updateDynamicallyReferencedComponentWhenRequired();
+		super.updateDataObject(dataObject);
+	}
+
+	private void updateDynamicallyReferencedComponentWhenRequired() {
+		// We now check that the referenced component is still valid
+		if (referencedComponent != retrieveReferencedComponent()) {
+			// We have detected that referenced component has changed
+			// We reset internal values and call updateLayout on the container
+			referencedComponent = null;
+			if (referencedComponentView != null) {
+				referencedComponentView.delete();
+				referencedComponentView = null;
+			}
+			((FIBContainerView<?, ?>) getParentView()).updateLayout();
+		}
+	}
 
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
 			// System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
 
-			FIBComponent loaded = getWidget().loadReferencedComponent(this);
+			FIBComponent loaded = getReferencedComponent();
 
 			if (loaded instanceof FIBWidget) {
 				referencedComponentView = factory.makeWidget((FIBWidget) loaded);
@@ -138,9 +205,7 @@ BindingEvaluationContext {
 			}
 		}
 	}
-	
-	
-	
+
 	@Override
 	public boolean updateWidgetFromModel() {
 		// We need here to "force" update while some assignments may be required
@@ -175,7 +240,10 @@ BindingEvaluationContext {
 			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("DropSchemeWidget")) {
 				System.out.println("Returns data for DropSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
 			}*/
-			return referencedComponentView.getDynamicModel().getData();
+			if (referencedComponentView != null) {
+				return referencedComponentView.getDynamicModel().getData();
+			}
+			return null;
 		}
 		if (variable.getVariableName().equals("component")) {
 			return referencedComponentView.getComponent();
@@ -202,11 +270,10 @@ BindingEvaluationContext {
 
 	@Override
 	public String toString() {
-		if (referencedComponentView != null){
+		if (referencedComponentView != null) {
 			return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
 					+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
-		}
-		else{
+		} else {
 			return super.toString();
 		}
 	}
