@@ -22,7 +22,7 @@ package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * This edition primitive addresses the duplication of a shape
@@ -30,17 +30,13 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/CloneShapePanel.fib")
 public class CloneShape extends AddShape {
 
 	private static final Logger logger = Logger.getLogger(CloneShape.class.getPackage().getName());
 
 	public CloneShape(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.CloneShape;
 	}
 
 }

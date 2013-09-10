@@ -20,7 +20,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -37,7 +36,6 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.toolbox.FileResource;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -51,6 +49,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
+	/*@Deprecated
 	public static enum EditionActionType {
 		AddClass,
 		AddIndividual,
@@ -79,7 +78,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		FetchRequest,
 		SelectIndividual,
 		SelectEditionPatternInstance
-	}
+	}*/
 
 	private MS modelSlot;
 
@@ -103,16 +102,14 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		return null;
 	}
 
-	
 	// TODO: Suppress all of this
-	@Deprecated
-	public abstract EditionActionType getEditionActionType();
+	// @Deprecated
+	// public abstract EditionActionType getEditionActionType();
 
-	private static String _uiPanelComponentFib = new String("Fib/ProcedureActionPanel.fib");
-	public static String getUiPanelComponent() {
+	// private static String _uiPanelComponentFib = new String("Fib/ProcedureActionPanel.fib");
+	/*public static String getUiPanelComponent() {
 		return _uiPanelComponentFib;
-	}
-
+	}*/
 
 	@Override
 	public EditionScheme getEditionScheme() {
@@ -256,10 +253,10 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		return getScheme().getEditionPattern();
 	}
 
-	public Type getActionClass(){
+	public Type getActionClass() {
 		return getClass();
 	}
-	
+
 	public int getIndex() {
 		if (getScheme() != null && getScheme().getActions() != null) {
 			return getScheme().getActions().indexOf(this);

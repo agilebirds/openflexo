@@ -21,7 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * This edition primitive addresses the duplication of an individual
@@ -29,17 +29,13 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/CloneIndividualPanel.fib")
 public abstract class CloneIndividual extends AddIndividual {
 
 	private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
 
 	public CloneIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.CloneIndividual;
 	}
 
 }

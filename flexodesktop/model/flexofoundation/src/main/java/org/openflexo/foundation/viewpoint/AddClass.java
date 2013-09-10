@@ -31,8 +31,10 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/AddClassPanel.fib")
 public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyClass> extends AddConcept<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(AddClass.class.getPackage().getName());
@@ -44,16 +46,6 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 	public AddClass(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddClass;
-	}
-
-	/*@Override
-	public List<ClassPatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles(ClassPatternRole.class);
-	}*/
 
 	@Override
 	public ClassPatternRole getPatternRole() {

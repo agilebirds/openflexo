@@ -8,10 +8,12 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
+@FIBPanel("Fib/SelectExcelSheetPanel.fib")
 public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet> {
 
 	private static final Logger logger = Logger.getLogger(SelectExcelSheet.class.getPackage().getName());
@@ -19,11 +21,6 @@ public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelShe
 	public SelectExcelSheet(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public org.openflexo.foundation.viewpoint.EditionAction.EditionActionType getEditionActionType() {
-		return EditionActionType.FetchRequest;
 	}
 
 	@Override

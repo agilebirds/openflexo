@@ -23,12 +23,11 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/ProcedureActionPanel.fib")
 public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(ProcedureAction.class.getPackage().getName());
@@ -37,11 +36,6 @@ public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends Editio
 
 	public ProcedureAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Procedure;
 	}
 
 	public DataBinding<Object> getParameter() {
@@ -54,7 +48,7 @@ public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends Editio
 
 	}
 
-	public void setParameter(DataBinding<Object> paramIndivBinding) {	
+	public void setParameter(DataBinding<Object> paramIndivBinding) {
 
 		if (paramIndivBinding != null) {
 			paramIndivBinding.setOwner(this);
@@ -65,8 +59,7 @@ public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends Editio
 
 		this.parameter = paramIndivBinding;
 
-	}	
-
+	}
 
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
@@ -88,10 +81,9 @@ public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends Editio
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action,
-			T initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, T initialContext) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

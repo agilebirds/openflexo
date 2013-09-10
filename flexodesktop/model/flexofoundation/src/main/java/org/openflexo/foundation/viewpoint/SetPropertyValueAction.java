@@ -24,7 +24,6 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionType;
 
 /**
  * Interface implemented by all {@link EditionAction} setting a value to an object (interface used to share GUI)
@@ -33,8 +32,6 @@ import org.openflexo.foundation.viewpoint.EditionAction.EditionActionType;
  * 
  */
 public interface SetPropertyValueAction {
-
-	public EditionActionType getEditionActionType();
 
 	public Type getSubjectType();
 

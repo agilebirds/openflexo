@@ -47,6 +47,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -55,6 +56,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/AddShapePanel.fib")
 public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
@@ -63,11 +65,6 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	public AddShape(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddShape;
 	}
 
 	@Override

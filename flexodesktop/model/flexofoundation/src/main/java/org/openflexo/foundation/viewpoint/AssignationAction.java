@@ -49,11 +49,6 @@ public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 	}
 
 	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Assignation;
-	}
-
-	@Override
 	public boolean isAssignationRequired() {
 		return true;
 	}

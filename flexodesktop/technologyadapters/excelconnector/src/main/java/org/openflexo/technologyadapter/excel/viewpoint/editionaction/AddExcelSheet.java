@@ -8,21 +8,18 @@ import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
+@FIBPanel("Fib/AddExcelSheetPanel.fib")
 public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet> {
 
 	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
 	public AddExcelSheet(VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public org.openflexo.foundation.viewpoint.EditionAction.EditionActionType getEditionActionType() {
-		return EditionActionType.Assignation;
 	}
 
 	@Override

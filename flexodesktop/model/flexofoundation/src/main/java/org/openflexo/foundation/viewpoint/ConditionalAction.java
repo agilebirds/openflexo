@@ -27,8 +27,10 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/ConditionalActionPanel.fib")
 public class ConditionalAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
@@ -52,11 +54,6 @@ public class ConditionalAction extends ControlStructureAction {
 
 		out.append("}", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Conditional;
 	}
 
 	public DataBinding<Boolean> getCondition() {

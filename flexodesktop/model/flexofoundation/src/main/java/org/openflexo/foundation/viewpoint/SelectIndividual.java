@@ -27,6 +27,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -40,6 +41,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
+@FIBPanel("Fib/SelectIndividualPanel.fib")
 public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends FetchRequest<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectIndividual.class.getPackage().getName());
@@ -63,11 +65,6 @@ public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T ex
 			out.append(")", context);
 		}
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.SelectIndividual;
 	}
 
 	@Override

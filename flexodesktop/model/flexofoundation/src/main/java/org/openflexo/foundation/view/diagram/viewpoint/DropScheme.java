@@ -31,8 +31,10 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/DropSchemePanel.fib")
 public class DropScheme extends AbstractCreationScheme implements DiagramEditionScheme {
 
 	private String target;

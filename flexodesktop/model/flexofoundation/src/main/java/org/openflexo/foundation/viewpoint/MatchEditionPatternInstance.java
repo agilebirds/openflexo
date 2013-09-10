@@ -43,6 +43,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * This action is used to perform synchronization regarding an {@link EditionPatternInstance} in a given {@link VirtualModelInstance}.<br>
@@ -55,6 +56,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
  * @param <M>
  * @param <MM>
  */
+@FIBPanel("Fib/MatchEditionPatternInstancePanel.fib")
 public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
@@ -113,11 +115,6 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 			return sb.toString();
 		}
 		return null;
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.MatchEditionPatternInstance;
 	}
 
 	public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {

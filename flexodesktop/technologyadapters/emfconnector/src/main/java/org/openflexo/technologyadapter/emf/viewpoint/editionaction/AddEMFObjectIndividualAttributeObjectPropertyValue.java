@@ -44,6 +44,7 @@ import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -58,6 +59,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author gbesancon
  * 
  */
+@FIBPanel("Fib/AddEMFObjectIndividualAttributeObjectPropertyValuePanel.fib")
 public class AddEMFObjectIndividualAttributeObjectPropertyValue extends
 		SetEMFPropertyValue<EMFObjectIndividualAttributeObjectPropertyValue> implements SetObjectPropertyValueAction {
 
@@ -71,16 +73,6 @@ public class AddEMFObjectIndividualAttributeObjectPropertyValue extends
 	 */
 	public AddEMFObjectIndividualAttributeObjectPropertyValue(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.AssignableAction#getEditionActionType()
-	 */
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddObjectPropertyStatement;
 	}
 
 	@Override

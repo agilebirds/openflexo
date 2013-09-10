@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * A {@link SynchronizationScheme} is applied to a {@link VirtualModelInstance} to automatically manage contained
@@ -29,6 +30,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/SynchronizationSchemePanel.fib")
 public class SynchronizationScheme extends AbstractActionScheme {
 
 	public SynchronizationScheme(VirtualModel.VirtualModelBuilder builder) {

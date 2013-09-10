@@ -30,8 +30,10 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/LinkSchemePanel.fib")
 public class LinkScheme extends AbstractCreationScheme implements DiagramEditionScheme {
 
 	private String fromTarget;
