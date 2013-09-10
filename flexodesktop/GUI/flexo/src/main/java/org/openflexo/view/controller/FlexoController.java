@@ -146,6 +146,7 @@ import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WorkflowModelObject;
@@ -2130,4 +2131,38 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 		return false;
 	}
+
+	public File getFIBPanelForObject(Object anObject) {
+		if (anObject != null) {
+			return getFIBPanelForClass(anObject.getClass());
+		}
+		return null;
+	}
+
+	private Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
+
+	public File getFIBPanelForClass(Class<?> aClass) {
+		if (aClass == null) {
+			return null;
+		}
+		File returned = fibPanelsForClasses.get(aClass);
+		if (returned == null) {
+			if (aClass.getAnnotation(FIBPanel.class) != null) {
+				File fibPanel = new FileResource(aClass.getAnnotation(FIBPanel.class).value());
+				if (fibPanel.exists()) {
+					logger.info("Found " + fibPanel);
+					fibPanelsForClasses.put(aClass, fibPanel);
+					return fibPanel;
+				} else {
+					logger.warning("Not found " + fibPanel);
+					return null;
+				}
+			}
+			if (aClass.getSuperclass() != null) {
+				return getFIBPanelForClass(aClass.getSuperclass());
+			}
+		}
+		return returned;
+	}
+
 }

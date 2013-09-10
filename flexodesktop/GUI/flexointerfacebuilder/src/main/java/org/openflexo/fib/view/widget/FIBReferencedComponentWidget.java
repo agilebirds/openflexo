@@ -64,12 +64,13 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	private FIBViewFactory factory;
 	private boolean isComponentLoading = false;
 
-	private final JLabel NOT_FOUND_LABEL = new JLabel("<Not found component>");
+	private JLabel NOT_FOUND_LABEL = new JLabel("<Not found component>");
 
 	public FIBReferencedComponentWidget(FIBReferencedComponent model, FIBController controller, FIBViewFactory factory) {
 		super(model, controller);
 		this.factory = factory;
 		updateFont();
+		NOT_FOUND_LABEL = new JLabel("Prout pour " + model.getName());
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			// The component file is dynamically defined, use it
 			File componentFile;
 			try {
-				componentFile = getWidget().getDynamicComponentFile().getBindingValue(getController());
+				componentFile = getWidget().getDynamicComponentFile().getBindingValue(getBindingEvaluationContext());
 				if (componentFile != null) {
 					return FIBLibrary.instance().retrieveFIBComponent(componentFile);
 				}
@@ -171,6 +172,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public synchronized JComponent getJComponent() {
 		if (getReferencedComponentView() != null) {
 			JComponent returned = getReferencedComponentView().getJComponent();
+			/*if (returned != null && getWidget().getOpaque() != null) {
+				returned.setOpaque(getWidget().getOpaque());
+			}*/
 			return returned;
 		}
 		return NOT_FOUND_LABEL;
