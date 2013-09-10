@@ -34,6 +34,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
@@ -44,6 +45,7 @@ import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
 // No more applicable
 @Deprecated
+@FIBPanel("Fib/AddRestrictionStatementPanel.fib")
 public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private static final Logger logger = Logger.getLogger(AddRestrictionStatement.class.getPackage().getName());
@@ -52,11 +54,6 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	public AddRestrictionStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddRestrictionStatement;
 	}
 
 	public String _getPropertyURI() {

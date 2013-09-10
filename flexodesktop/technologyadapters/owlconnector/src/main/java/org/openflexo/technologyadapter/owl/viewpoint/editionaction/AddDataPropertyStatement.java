@@ -41,6 +41,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
@@ -48,6 +49,7 @@ import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/AddDataPropertyStatementPanel.fib")
 public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement> implements SetDataPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
@@ -57,11 +59,6 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	public AddDataPropertyStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddDataPropertyStatement;
 	}
 
 	@Override
