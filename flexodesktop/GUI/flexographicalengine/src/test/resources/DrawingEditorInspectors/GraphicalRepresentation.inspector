@@ -4,7 +4,7 @@
 		<property name="text" label="text" widget="TEXT_FIELD" constraint="0" depends="isMultilineAllowed" conditional="isMultilineAllowed=false">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="multilineText" label="text" widget="TEXT_AREA" constraint="1" depends="isMultilineAllowed" conditional="isMultilineAllowed=true">
+		<property name="text" label="text" widget="TEXT_AREA" constraint="1" depends="isMultilineAllowed" conditional="isMultilineAllowed=true">
 			<param name="columns" value="10"/>
 		</property>
 		<property name="textStyle" label="text_style" widget="CUSTOM" constraint="2">

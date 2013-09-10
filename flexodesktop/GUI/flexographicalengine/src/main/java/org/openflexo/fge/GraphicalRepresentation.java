@@ -1070,14 +1070,6 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		this.text = text;
 	}
 
-	public String getMultilineText() {
-		return getText();
-	}
-
-	public void setMultilineText(String text) {
-		setText(text);
-	}
-
 	public boolean getHasText() {
 		return hasText;
 	}

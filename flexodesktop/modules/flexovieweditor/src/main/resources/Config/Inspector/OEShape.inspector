@@ -70,7 +70,7 @@
 		<property name="editionPatternInstanceId" label="edition_pattern_id" widget="READ_ONLY_TEXT_FIELD" constraint="2">
 			<param name="columns" value="20"/>
 		</property>
-		<property name="graphicalRepresentation.multilineText" label="text" widget="TEXT_AREA" constraint="7" depends="labelIsBoundToOntologicConcept,graphicalRepresentation.isMultilineAllowed" conditional="labelIsBoundToOntologicConcept=FALSE AND graphicalRepresentation.isMultilineAllowed=true">
+		<property name="graphicalRepresentation.text" label="text" widget="TEXT_AREA" constraint="7" depends="labelIsBoundToOntologicConcept,graphicalRepresentation.isMultilineAllowed" conditional="labelIsBoundToOntologicConcept=FALSE AND graphicalRepresentation.isMultilineAllowed=true">
 			<param name="columns" value="10"/>
 		</property>
 		<property name="graphicalRepresentation.isMultilineAllowed" label="multiple_lines" widget="CHECKBOX" constraint="8">
