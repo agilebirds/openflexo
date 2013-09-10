@@ -49,37 +49,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
-	/*@Deprecated
-	public static enum EditionActionType {
-		AddClass,
-		AddIndividual,
-		AddObjectPropertyStatement,
-		AddDataPropertyStatement,
-		AddIsAStatement,
-		AddRestrictionStatement,
-		AddConnector,
-		AddShape,
-		AddDiagram,
-		AddEditionPatternInstance,
-		MatchEditionPatternInstance,
-		CloneShape,
-		CloneConnector,
-		CloneIndividual,
-		DeclarePatternRole,
-		Assignation,
-		Execution,
-		Procedure,
-		DeleteAction,
-		GraphicalAction,
-		GoToObject,
-		Iteration,
-		FetchRequestIteration,
-		Conditional,
-		FetchRequest,
-		SelectIndividual,
-		SelectEditionPatternInstance
-	}*/
-
 	private MS modelSlot;
 
 	private DataBinding<Boolean> conditional;
@@ -101,15 +70,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		return null;
 	}
-
-	// TODO: Suppress all of this
-	// @Deprecated
-	// public abstract EditionActionType getEditionActionType();
-
-	// private static String _uiPanelComponentFib = new String("Fib/ProcedureActionPanel.fib");
-	/*public static String getUiPanelComponent() {
-		return _uiPanelComponentFib;
-	}*/
 
 	@Override
 	public EditionScheme getEditionScheme() {
