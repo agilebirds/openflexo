@@ -16,7 +16,6 @@
 		<module>flexoinspector</module>
 		<module>flexopamela</module>
 		<module>flexoutils</module>
-		<module>flexowsclient</module>
 		<module>flexoxmlcode</module>
 	</modules>
 </project>
