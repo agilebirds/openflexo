@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.ViewFolder;
@@ -51,6 +52,10 @@ public class MoveViewFolder extends FlexoAction<MoveViewFolder, ViewFolder, View
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewFolder.class);
+	}
 
 	private ViewFolder folder;
 

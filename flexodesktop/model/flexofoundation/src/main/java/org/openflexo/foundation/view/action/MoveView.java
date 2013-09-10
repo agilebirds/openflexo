@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.ViewDefinition;
@@ -54,6 +55,10 @@ public class MoveView extends FlexoAction<MoveView, ViewDefinition, ViewDefiniti
 	};
 
 	private ViewFolder folder;
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewDefinition.class);
+	}
 
 	protected MoveView(ViewDefinition focusedObject, Vector<ViewDefinition> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

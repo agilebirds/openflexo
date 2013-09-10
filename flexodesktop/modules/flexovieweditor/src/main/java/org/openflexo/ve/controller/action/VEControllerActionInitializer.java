@@ -63,6 +63,9 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 			new VESelectAllInitializer(this);
 		}
 
+		new MoveViewInitializer(this);
+		new MoveViewFolderInitializer(this);
+
 		// Shema library perspective
 		new AddViewInitializer(this);
 		new AddViewFolderInitializer(this);
