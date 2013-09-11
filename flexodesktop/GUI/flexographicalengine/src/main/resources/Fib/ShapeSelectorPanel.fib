@@ -50,6 +50,8 @@
       <LabelColumn data="CustomPolygonPanel.data.points.indexOf(iterator)" title="id" columnWidth="15" resizable="true" displayTitle="true" name="label" />
       <NumberColumn numberType="DoubleType" data="iterator.x" title="x" columnWidth="50" resizable="true" displayTitle="true" valueChangedAction="controller.shapeChanged()" name="number" />
       <NumberColumn numberType="DoubleType" data="iterator.y" title="y" columnWidth="50" resizable="true" displayTitle="true" valueChangedAction="controller.shapeChanged()" name="number" />
+      <AddAction method="CustomPolygonPanel.data.addPoint()" name="add_point" />
+      <RemoveAction method="CustomPolygonPanel.data.removeFromPoints(selected)" isAvailable="(CustomPolygonPanel.data.points.size &gt; 3)" name="delete_point" />
     </Table>
   </Panel>
   <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="12" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="ControlPanel">

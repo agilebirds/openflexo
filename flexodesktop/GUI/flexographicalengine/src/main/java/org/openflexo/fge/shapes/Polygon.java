@@ -82,6 +82,10 @@ public class Polygon extends Shape {
 		}
 	}
 
+	public void addPoint() {
+		addToPoints(new FGEPoint());
+	}
+
 	public void addToPoints(FGEPoint aPoint) {
 		points.add(aPoint);
 		updateShape();
