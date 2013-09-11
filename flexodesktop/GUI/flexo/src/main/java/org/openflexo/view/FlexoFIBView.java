@@ -275,6 +275,9 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		if (dataObject instanceof FlexoObservable) {
 			((FlexoObservable) dataObject).deleteObserver(this);
 		}
+		if (dataObject instanceof HasPropertyChangeSupport) {
+			manager.removeListener(this, (HasPropertyChangeSupport) dataObject);
+		}
 		manager.delete();
 		getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
 	}
