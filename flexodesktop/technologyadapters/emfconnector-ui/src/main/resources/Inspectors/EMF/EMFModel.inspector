@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.technologyadapter.emf.model.EMFModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.technologyadapter.emf.model.EMFModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="uri" localize="true" name="URILabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="URI" data="data.URI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
-      <Label label="version" localize="true" name="VersionLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Version" data="data.resource.version.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-      <Label label="metamodel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <TextField data="data.metaModel.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" text="TextField" />    </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" columns="10" />
+      <Label label="uri" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="URILabel" localize="true" />
+      <TextField index="3" data="data.URI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="URI" readOnly="true" localize="true" columns="10" />
+      <Label label="version" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="VersionLabel" localize="true" />
+      <TextField index="5" data="data.resource.version.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Version" readOnly="true" localize="true" columns="10" />
+      <Label label="metamodel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField index="7" data="data.metaModel.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" text="TextField" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="EMF Model" />
 </Panel>
-

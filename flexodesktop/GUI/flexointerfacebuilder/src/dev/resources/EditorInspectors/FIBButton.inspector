@@ -1,37 +1,24 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBButton">
-	<Parameter name="title" value="Button"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-							
-				<Label label="label" constraints="twocols(location=left)"/>
-				<TextField data="data.label" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
-	
-				<Label label="button_icon" constraints="twocols(location=left)"/>
-				<Custom data="data.buttonIcon" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-				</Custom>
-		
-				<Label label="button_type" constraints="twocols(location=left)"/>
-				<DropDown data="data.buttonType" constraints="twocols(location=right)" showReset="false"/>
-				
-				<Label label="is_default" constraints="twocols(location=left;expandHorizontally=true)"/>
-				<CheckBox data="data.isDefault" constraints="twocols(location=right)" />
-			
-			</Tab>
-
-			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="action" constraints="twocols(location=left)"/>
-				<Custom data="data.action" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-				</Custom>
-				
-			</Tab>
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBButton" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="label" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.label" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+      <Label label="button_icon" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.buttonIcon" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+      </Custom>
+      <Label label="button_type" constraints="twocols(location=left)" localize="true" />
+      <DropDown data="data.buttonType" constraints="twocols(location=right)" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
+      <Label label="is_default" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <CheckBox selected="false" data="data.isDefault" constraints="twocols(location=right)" localize="true" />
+    </Tab>
+    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ControlsTab">
+      <Label label="action" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.action" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+      </Custom>
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Button" />
 </Panel>
