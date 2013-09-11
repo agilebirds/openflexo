@@ -25,6 +25,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
@@ -267,6 +268,10 @@ public abstract class FlexoActionType<A extends FlexoAction<A, T1, T2>, T1 exten
 	 */
 	public boolean isEnabled(T1 object, Vector<T2> globalSelection) {
 		if (object != null && object.getActionList().indexOf(this) == -1) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Cannot execute " + getLocalizedName() + " on " + object.getClass().getName()
+						+ " because action is not registered on this object type");
+			}
 			return false;
 		}
 

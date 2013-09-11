@@ -64,13 +64,13 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	private FIBViewFactory factory;
 	private boolean isComponentLoading = false;
 
-	private JLabel NOT_FOUND_LABEL = new JLabel("<Not found component>");
+	private JLabel NOT_FOUND_LABEL;
 
 	public FIBReferencedComponentWidget(FIBReferencedComponent model, FIBController controller, FIBViewFactory factory) {
 		super(model, controller);
 		this.factory = factory;
+		NOT_FOUND_LABEL = new JLabel("<" + model.getName() + ": not found component>");
 		updateFont();
-		NOT_FOUND_LABEL = new JLabel("Component Not Found " + model.getName());
 	}
 
 	/**
@@ -82,10 +82,6 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	}
 
 	public FIBComponent getReferencedComponent() {
-
-		if (referencedComponent == null) {
-			referencedComponent = retrieveReferencedComponent();
-		}
 		return referencedComponent;
 	}
 
@@ -131,22 +127,29 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			});
 			return;
 		}
+		// super.updateDataObject(dataObject);
 		updateDynamicallyReferencedComponentWhenRequired();
 		super.updateDataObject(dataObject);
 	}
 
-	private void updateDynamicallyReferencedComponentWhenRequired() {
+	/**
+	 * Called whenever the referenced component may have changed
+	 */
+	private boolean updateDynamicallyReferencedComponentWhenRequired() {
 		// We now check that the referenced component is still valid
 		if (referencedComponent != retrieveReferencedComponent()) {
 			// We have detected that referenced component has changed
 			// We reset internal values and call updateLayout on the container
-			referencedComponent = null;
+			referencedComponent = retrieveReferencedComponent();
 			if (referencedComponentView != null) {
 				referencedComponentView.delete();
 				referencedComponentView = null;
 			}
 			((FIBContainerView<?, ?>) getParentView()).updateLayout();
+			return true;
 		}
+		// Otherwise referenced component has not changed
+		return false;
 	}
 
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
@@ -212,6 +215,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	@Override
 	public boolean updateWidgetFromModel() {
+
+		updateDynamicallyReferencedComponentWhenRequired();
+
 		// We need here to "force" update while some assignments may be required
 
 		// if (notEquals(getValue(), customComponent.getEditedObject())) {
@@ -241,8 +247,8 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			/*if (getWidget().getName() != null && getWidget().getName().equals("DropSchemePanel")) {
 				System.out.println("Returns data for DropSchemePanel as " + referencedComponentView.getDynamicModel().getData());
 			}
-			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("DropSchemeWidget")) {
-				System.out.println("Returns data for DropSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
+			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("EditionSchemeWidget")) {
+				System.out.println("Returns data for EditionSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
 			}*/
 			if (referencedComponentView != null) {
 				return referencedComponentView.getDynamicModel().getData();

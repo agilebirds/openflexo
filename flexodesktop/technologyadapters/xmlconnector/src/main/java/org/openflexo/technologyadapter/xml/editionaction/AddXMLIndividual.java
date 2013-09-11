@@ -27,20 +27,17 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xml.XMLModelSlot;
-import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
-import org.openflexo.technologyadapter.xml.model.XMLModel;
 
 /**
  * @author xtof
- *
+ * 
  */
 public class AddXMLIndividual extends AssignableAction<XMLModelSlot, XMLIndividual> {
 
 	public AddXMLIndividual(VirtualModelBuilder builder) {
 		super(builder);
 	}
-
 
 	@Override
 	public Type getAssignableType() {

@@ -64,8 +64,6 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	private final FIBInspectorPanel inspectorPanel;
 
-	private final JComponent inspectorPanelScrollPane;
-
 	private JComponent bottomRightDummy;
 
 	/**
@@ -91,7 +89,6 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 		// Initialized inspector panel
 		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
-		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
 	}
 
 	public void focusOnDiagram(Diagram aDiagram) {
@@ -118,7 +115,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 	public JComponent getBottomRightView() {
 		if (getCurrentDiagramModuleView() != null) {
 			// if (_controller != null && _controller.getCurrentModuleView() != null) {
-			return inspectorPanelScrollPane;
+			return inspectorPanel;
 		} else {
 			return bottomRightDummy;
 		}

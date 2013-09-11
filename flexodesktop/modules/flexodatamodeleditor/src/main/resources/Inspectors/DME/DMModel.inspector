@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="StatsTab">
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="StatsTab">
       <Label align="center" index="1" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
       <Label label="# entities" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsTop=5;location=left)" name="StatisticseoEntityCountLabel" localize="true" />
       <TextField index="3" data="data.statistics.eoEntityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=right)" name="StatisticseoEntityCount" readOnly="true" localize="true" />
@@ -10,7 +10,7 @@
       <Label label="# relationships" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsTop=5;location=left)" name="StatisticseoRelationshipCountLabel" localize="true" />
       <TextField index="7" data="data.statistics.eoRelationshipCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=right)" name="StatisticseoRelationshipCount" readOnly="true" localize="true" />
     </Tab>
-    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="CodeTab">
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="CodeTab">
       <Label label="eo_code_generation_available" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="EOCodeGenerationAvailableLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -24,7 +24,7 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </CheckBox>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
       <Label label="default_connection_string" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="GlobalDefaultConnectionStringLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -44,7 +44,7 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label index="1" data="data.helpText" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;location=right)" width="200" height="200" name="HelpText" localize="true" />
     </Tab>
   </TabPanel>

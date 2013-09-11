@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="flexo_model_object_type" localize="true" name="FlexoModelObjectTypeLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" />
-      <DropDown localize="true" name="FlexoModelObjectType" data="data.flexoModelObjectType" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" visible="(data.type = &quot;FlexoModelObject&quot;)" width="150" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole$FlexoModelObjectType" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="flexo_model_object_type" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" visible="(data.type = &quot;FlexoModelObject&quot;)" name="FlexoModelObjectTypeLabel" localize="true" />
+      <DropDown index="3" data="data.flexoModelObjectType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.type = &quot;FlexoModelObject&quot;)" width="150" name="FlexoModelObjectType" localize="true" iteratorClassName="org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole$FlexoModelObjectType" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -13,4 +13,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Model Object Pattern Role" />
 </Panel>
-

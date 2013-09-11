@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.technologyadapter.TypeAwareModelSlot" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.technologyadapter.TypeAwareModelSlot" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label index="6" label="metamodel" localize="true" name="MetaModelLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" data="data.metaModelResource" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="metamodel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="MetaModelLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="7" data="data.metaModelResource" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)">
         <Assignment variable="component.informationSpace" value="data.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
         <Assignment variable="component.technologyAdapter" value="data.technologyAdapter" />
       </Custom>
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
   </TabPanel>
-  <LocalizedDictionary>
-  </LocalizedDictionary>
+  <LocalizedDictionary />
   <Parameter name="title" value="Type-aware Model Slot" />
 </Panel>
-

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBDropDown" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label label="name" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="15" />
       <Label label="data" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="dataLabel" localize="true" />
@@ -49,7 +49,7 @@
       <CheckBox selected="false" data="data.showReset" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <Label label="show_reset" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
       <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="index" localize="true" />
       <Label label="value_transform" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
@@ -74,7 +74,7 @@
         <Assignment variable="component.bindingDefinition" value="data.ICON" />
       </Custom>
     </Tab>
-    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="ControlsTab">
+    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ControlsTab">
       <Label label="click_action" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.clickAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
         <Assignment variable="component.bindable" value="data.eventListener" />
@@ -187,9 +187,9 @@
         <Label label="weights" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
         <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
           <Label label="weightX" constraints="flow()" localize="true" />
-          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightX" constraints="flow()" name="gridBagConstraintsWeightX" localize="true" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightX" constraints="flow()" name="gridBagConstraintsWeightX" localize="true" />
           <Label label="weightY" constraints="flow()" localize="true" />
-          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightY" constraints="flow()" name="gridBagConstraintsWeightY" localize="true" />
+          <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightY" constraints="flow()" name="gridBagConstraintsWeightY" localize="true" />
         </Panel>
         <Label label="anchor" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
         <DropDown data="GridBagConstraints.data.anchor" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.GridBagLayoutConstraints$AnchorType" autoSelectFirstRow="false" />
@@ -255,11 +255,11 @@
         <DropDown data="data.verticalScrollbarPolicy" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="data.useScrollBar" localize="true" iteratorClassName="org.openflexo.fib.model.FIBComponent$VerticalScrollBarPolicy" autoSelectFirstRow="false" />
       </Panel>
     </Tab>
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="GraphicsTab">
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab">
       <Panel layout="twocols" border="titled" borderTitle="font_and_colors" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
         <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
           <Label label="define_specific_font" index="1" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Font sampleText="Sample for this font" index="2" data="data.font" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Font sampleText="Sample for this font" localize="true" index="2" data="data.font" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
           <Label label="background_color" index="5" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <Color index="6" data="data.backgroundColor" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <Label label="foreground_color" index="9" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
@@ -269,7 +269,7 @@
         </Panel>
       </Panel>
     </Tab>
-    <Tab title="Depends" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" name="DependenciesTab">
+    <Tab title="Depends" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DependenciesTab">
       <Panel layout="border" border="titled" borderTitle="Dynamic dependencies" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
         <Table iteratorClassName="org.openflexo.fib.model.FIBComponent" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="DependenciesTable" data="data.mayDepends" constraints="border(location=center)">
           <LabelColumn data="data.toString" title="owner" columnWidth="200" resizable="true" displayTitle="true" />
@@ -285,7 +285,7 @@
         </Table>
       </Panel>
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="DocumentationTab">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DocumentationTab">
       <TextArea data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
       <Label label="tooltip" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.tooltip.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
@@ -295,7 +295,7 @@
       <Label label="tooltip_text" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
       <TextField data="data.tooltipText" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="15" />
     </Tab>
-    <Tab title="Params" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="7" font="SansSerif,0,11" name="ParametersTab">
+    <Tab title="Params" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="7" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ParametersTab">
       <Table iteratorClassName="org.openflexo.fib.model.FIBParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ParametersTable" data="data.parameters" constraints="border(location=center)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="name" />
         <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="description" />
