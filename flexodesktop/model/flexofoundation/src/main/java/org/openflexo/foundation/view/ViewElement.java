@@ -237,7 +237,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	/**
 	 * Return EditionPatternInstance for that object<br>
 	 * 
-	 * If many EditionPatternInstance are defined for this object, return preferabely an EditionPatternReference where this object plays a
+	 * If many EditionPatternInstance are defined for this object, return preferably an EditionPatternReference where this object plays a
 	 * primary role
 	 * 
 	 * @return
