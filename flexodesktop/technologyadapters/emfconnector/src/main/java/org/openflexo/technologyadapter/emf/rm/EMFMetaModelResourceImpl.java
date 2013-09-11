@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.emf.rm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -76,15 +77,26 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	@Override
 	public EMFMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
 		EMFMetaModel result = null;
+		Class<?> ePackageClass = null;
+		ClassLoader classLoader = null;
+		File f = getFile();
+
 		// Load class and instanciate.
-		JarClassLoader jarClassLoader = new JarClassLoader(Collections.singletonList(getFile()));
-		Class<?> ePackageClass = jarClassLoader.findClass(getPackageClassName());
+
 		try {
+			if (f != null){
+				classLoader = new JarClassLoader(Collections.singletonList(getFile()));
+				ePackageClass = classLoader.loadClass(getPackageClassName());
+			}
+			else {
+				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
+				ePackageClass = classLoader.loadClass(getPackageClassName());
+			}
 			if (ePackageClass != null) {
 				Field ePackageField = ePackageClass.getField("eINSTANCE");
 				if (ePackageField != null) {
 					setPackage((EPackage) ePackageField.get(null));
-					Class<?> resourceFactoryClass = jarClassLoader.findClass(getResourceFactoryClassName());
+					Class<?> resourceFactoryClass = classLoader.loadClass(getResourceFactoryClassName());
 					if (resourceFactoryClass != null) {
 						setResourceFactory((Resource.Factory) resourceFactoryClass.newInstance());
 						if (getPackage() != null && getPackage().getNsURI().equalsIgnoreCase(getURI()) && getResourceFactory() != null) {
@@ -105,6 +117,8 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return result;
