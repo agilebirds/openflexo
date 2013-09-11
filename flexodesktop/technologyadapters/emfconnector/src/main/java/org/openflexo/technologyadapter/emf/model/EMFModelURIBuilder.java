@@ -29,11 +29,13 @@
 package org.openflexo.technologyadapter.emf.model;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResourceImpl;
 
 /**
  * EMF Uri Builder from Object.
@@ -42,6 +44,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  */
 public class EMFModelURIBuilder {
 
+
+	private static final Logger logger = Logger.getLogger(EMFModelURIBuilder.class.getPackage().getName());
+
+	
 	/**
 	 * Name of resource.
 	 * 
@@ -60,20 +66,30 @@ public class EMFModelURIBuilder {
 	 */
 	public static String getName(EObject eObject) {
 		StringBuilder builder = new StringBuilder();
-		List<EAttribute> eAttributes = eObject.eClass().getEAllAttributes();
-		if (eAttributes.size() != 0) {
-			for (EAttribute eAttribute : eAttributes) {
-				if (builder.length() == 0) {
-					Object value = eObject.eGet(eAttribute);
-					if (value != null) {
-						builder.append(value);
+		// NPE protection
+		if (eObject != null){
+			List<EAttribute> eAttributes = eObject.eClass().getEAllAttributes();
+			if (eAttributes.size() != 0) {
+				for (EAttribute eAttribute : eAttributes) {
+					if (builder.length() == 0) {
+						Object value = eObject.eGet(eAttribute);
+						if (value != null) {
+							builder.append(value);
+						}
 					}
 				}
 			}
-		}
-		// If no name use URI Fragment
-		if (builder.length() == 0) {
-			builder.append(eObject.eResource().getURIFragment(eObject));
+			// If no name use URI Fragment
+			if (builder.length() == 0) {
+				Resource res = eObject.eResource();
+				if (res != null){
+					builder.append(eObject.eResource().getURIFragment(eObject));
+				}
+				else {
+					// If no resource use Class SimpleName
+					builder.append(eObject.getClass().getSimpleName());
+					}
+			}
 		}
 		return builder.toString();
 	}

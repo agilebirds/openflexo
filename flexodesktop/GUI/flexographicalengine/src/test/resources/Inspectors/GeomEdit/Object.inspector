@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.GeometricObjectGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+<Panel layout="border" titleFont="SansSerif,0,12" darkLevel="0" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="4" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab" />
-    <Tab index="3" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="foreground" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" data="data.foreground" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="background" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" data="data.background" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="display_label" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" data="data.displayLabel" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" />
-      <Label label="absolute_text_x" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.absoluteTextX" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="absolute_text_y" localize="true" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.absoluteTextY" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" localize="true" />
+    <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab">
+      <Label label="foreground" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" manageDynamicModel="true" index="1" data="data.foreground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
+      <Label label="background" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" manageDynamicModel="true" index="3" data="data.background" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" />
+      <Label label="display_label" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" localize="true" />
+      <CheckBox selected="false" index="5" data="data.displayLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" localize="true" />
+      <Label label="absolute_text_x" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="7" data="data.absoluteTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" localize="true" />
+      <Label label="absolute_text_y" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="9" data="data.absoluteTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" localize="true" />
     </Tab>
-    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="layer" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" data="data.layer" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="is_visible" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" data="data.isVisible" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
+      <Label label="layer" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.layer" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+      <Label label="is_visible" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -46,4 +46,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Object" />
 </Panel>
-

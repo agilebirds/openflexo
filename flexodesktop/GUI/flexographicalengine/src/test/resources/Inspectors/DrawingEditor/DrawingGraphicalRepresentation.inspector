@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.drawingeditor.FIBInspector" layout="border" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="EditionTab">
-      <Label label="selection_color" localize="true" name="SelectionColorLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Color data="data.selectionColor" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="SelectionColor" localize="true" />
-      <Label label="focus_color" localize="true" name="FocusColorLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Color data="data.focusColor" constraints="twocols(location=right;index=23;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="FocusColor" localize="true" />
-      <Label label="rectangle_selection_color" localize="true" name="RectangleSelectingSelectionColorLabel" constraints="twocols(location=left;index=24;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Color data="data.rectangleSelectingSelectionColor" constraints="twocols(location=right;index=25;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="RectangleSelectingSelectionColor" localize="true" />
+<Panel layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+      <Label label="selection_color" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;location=left)" name="SelectionColorLabel" localize="true" />
+      <Color index="21" data="data.selectionColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;location=right)" name="SelectionColor" localize="true" />
+      <Label label="focus_color" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;location=left)" name="FocusColorLabel" localize="true" />
+      <Color index="23" data="data.focusColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=23;location=right)" name="FocusColor" localize="true" />
+      <Label label="rectangle_selection_color" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;location=left)" name="RectangleSelectingSelectionColorLabel" localize="true" />
+      <Color index="25" data="data.rectangleSelectingSelectionColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;location=right)" name="RectangleSelectingSelectionColor" localize="true" />
     </Tab>
-    <Tab index="0" title="Drawing" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="DrawingTab">
-      <Label label="width" localize="true" name="WidthLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Number numberType="DoubleType" columns="10" data="data.width" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="Width" localize="true" />
-      <Label label="height" localize="true" name="HeightLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Number numberType="DoubleType" columns="10" data="data.height" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="Height" localize="true" />
-      <Label label="background_color" localize="true" name="BackgroundColorLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Color data="data.backgroundColor" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" useScrollBar="false" name="BackgroundColor" localize="true" />
-      <Label label="draw_working_area" localize="true" name="DrawWorkingAreaLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <CheckBox selected="false" localize="true" name="DrawWorkingArea" data="data.drawWorkingArea" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+    <Tab title="Drawing" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DrawingTab">
+      <Label label="width" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="WidthLabel" localize="true" />
+      <Number numberType="DoubleType" columns="10" index="1" data="data.width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Width" localize="true" />
+      <Label label="height" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="HeightLabel" localize="true" />
+      <Number numberType="DoubleType" columns="10" index="3" data="data.height" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Height" localize="true" />
+      <Label label="background_color" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="BackgroundColorLabel" localize="true" />
+      <Color index="5" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="BackgroundColor" localize="true" />
+      <Label label="draw_working_area" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="DrawWorkingAreaLabel" localize="true" />
+      <CheckBox selected="false" index="7" data="data.drawWorkingArea" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="DrawWorkingArea" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -46,4 +46,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Drawing" />
 </Panel>
-

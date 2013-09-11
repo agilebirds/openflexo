@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.toc.TOCRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label label="title" index="50" constraints="twocols(expandHorizontally=false;expandVertically=false;index=50;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TitleLabel" localize="true" />
       <TextField index="51" data="data.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=51;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Title" localize="true" />
       <Label label="doc_title" index="52" constraints="twocols(expandHorizontally=false;expandVertically=false;index=52;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DocTitleLabel" localize="true" />

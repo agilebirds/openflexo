@@ -46,17 +46,6 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 		super.delete();
 	}
 
-	/*
-	 * @Override public void updateDataObject(Object dataObject) { update();
-	 * System.out.println("Je suis le FIBTabPanelView " +
-	 * getComponent().getName()); if (isComponentVisible()) { for (FIBView v :
-	 * subViews) { System.out.println("Je m'occupe de mon fils: " +
-	 * v.getComponent().getName()); v.updateDataObject(dataObject); } if
-	 * (getDynamicModel() != null) { logger.fine("Container: " + getComponent()
-	 * + " value data for " + getDynamicModel() + " is " + getValue());
-	 * getDynamicModel().setData(getValue()); notifyDynamicModelChanged(); } } }
-	 */
-
 	@Override
 	protected JTabbedPane createJComponent() {
 		tabbedPane = new JTabbedPane();

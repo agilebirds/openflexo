@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMMethod" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="CodeTab">
-      <Label label="access_modifier" localize="true" name="VisibilityModifierLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.localizedName" localize="true" name="VisibilityModifier" index="3" data="data.visibilityModifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" list="data.visibilityModifier.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMVisibilityType" autoSelectFirstRow="false" />
-      <Label label="abstract_modifier" localize="true" name="IsAbstractLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isStatic = false)" />
-      <CheckBox selected="false" localize="true" name="IsAbstract" index="5" data="data.isAbstract" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isStatic = false)" />
-      <Label label="static_modifier" localize="true" name="IsStaticLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isAbstract = false)" />
-      <CheckBox selected="false" localize="true" name="IsStatic" index="7" data="data.isStatic" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.isAbstract = false)" />
-      <Label label="synchronized_modifier" localize="true" name="IsSynchronizedLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <CheckBox selected="false" localize="true" name="IsSynchronized" index="9" data="data.isSynchronized" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" />
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="CodeTab">
+      <Label label="access_modifier" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="VisibilityModifierLabel" localize="true" />
+      <DropDown showReset="true" index="3" data="data.visibilityModifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="VisibilityModifier" format="object.localizedName" localize="true" list="data.visibilityModifier.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMVisibilityType" autoSelectFirstRow="false" />
+      <Label label="abstract_modifier" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isStatic = false)" name="IsAbstractLabel" localize="true" />
+      <CheckBox selected="false" index="5" data="data.isAbstract" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isStatic = false)" name="IsAbstract" localize="true" />
+      <Label label="static_modifier" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isAbstract = false)" name="IsStaticLabel" localize="true" />
+      <CheckBox selected="false" index="7" data="data.isStatic" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.isAbstract = false)" name="IsStatic" localize="true" />
+      <Label label="synchronized_modifier" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="IsSynchronizedLabel" localize="true" />
+      <CheckBox selected="false" index="9" data="data.isSynchronized" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="IsSynchronized" localize="true" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="statically_defined_in_template" localize="true" name="IsStaticallyDefinedInTemplateLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <CheckBox selected="false" readOnly="true" tooltipText="Set to true if this property was statically defined in template during last model reinjection" localize="true" name="IsStaticallyDefinedInTemplate" index="1" data="data.isStaticallyDefinedInTemplate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+      <Label label="statically_defined_in_template" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IsStaticallyDefinedInTemplateLabel" localize="true" />
+      <CheckBox selected="false" index="1" data="data.isStaticallyDefinedInTemplate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="IsStaticallyDefinedInTemplate" readOnly="true" tooltipText="Set to true if this property was statically defined in template during last model reinjection" localize="true" />
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
-      <Label label="return_type" localize="true" name="ReturnTypeLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" index="5" data="data.returnType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="ReturnType" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="return_type" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="ReturnTypeLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" localize="true" manageDynamicModel="true" name="ReturnType" index="5" data="data.returnType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)">
         <Assignment variable="component.project" value="data.project" />
         <Assignment variable="component.owner" value="data" />
       </Custom>
-      <Label label="parameters" align="center" localize="true" name="ParametersLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;location=center)" />
+      <Label label="parameters" align="center" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;location=center)" name="ParametersLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.dm.DMMethod$DMMethodParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Parameters" index="7" data="data.parameters" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;location=right)">
         <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="180" resizable="true" displayTitle="true">
@@ -65,4 +65,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Method" />
 </Panel>
-

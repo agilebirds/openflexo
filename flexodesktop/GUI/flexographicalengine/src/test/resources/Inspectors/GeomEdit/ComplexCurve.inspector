@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.ComplexCurveGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+<Panel layout="border" titleFont="SansSerif,0,12" darkLevel="0" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="closure" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <DropDown localize="true" data="data.drawable.closure" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
+      <Label label="closure" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <DropDown index="1" data="data.drawable.closure" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -13,4 +13,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Complex curve" />
 </Panel>
-

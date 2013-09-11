@@ -129,7 +129,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		if (getLocation() == TwoColsLayoutLocation.left) {
 			c.fill = GridBagConstraints.NONE;
 			c.weightx = 0; // 1.0;
-			c.gridwidth = GridBagConstraints.RELATIVE;
+			c.gridwidth = 1;
 			c.anchor = GridBagConstraints.NORTHEAST;
 			if (getExpandVertically()) {
 				// c.weighty = 1.0;

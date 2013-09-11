@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.Circle" font="SansSerif,0,12" name="Inspector">
+<Panel layout="border" titleFont="SansSerif,0,12" darkLevel="0" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="center_x" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.centerX" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="center_y" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.centerY" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="radius" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" data="data.drawable.radius" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="filled" localize="true" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" data="data.drawable.isFilled" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
+      <Label label="center_x" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="1" data="data.drawable.centerX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+      <Label label="center_y" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="3" data="data.drawable.centerY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
+      <Label label="radius" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="5" data="data.drawable.radius" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" localize="true" />
+      <Label label="filled" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" localize="true" />
+      <CheckBox selected="false" index="7" data="data.drawable.isFilled" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -26,4 +26,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Circle" />
 </Panel>
-
