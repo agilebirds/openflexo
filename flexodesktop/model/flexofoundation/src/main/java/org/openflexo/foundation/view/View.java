@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
@@ -333,6 +334,21 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		setChanged();
 		notifyObservers(new ShemaDeleted(this.getShemaDefinition()));
 		deleteObservers();
+	}
+
+	public boolean isObjectUsedAsActorOfPatternRole(FlexoModelObject object) {
+		Collection<ViewElement> viewElements = getChildrenOfType(ViewElement.class);
+		for (ViewElement element : viewElements) {
+			EditionPatternInstance epi = element.getEditionPatternInstance();
+			if (epi != null) {
+				for (FlexoModelObject o : epi.getActors().values()) {
+					if (o == object) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 }

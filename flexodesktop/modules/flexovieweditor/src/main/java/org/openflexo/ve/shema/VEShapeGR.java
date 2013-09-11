@@ -22,6 +22,13 @@ package org.openflexo.ve.shema;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
@@ -31,20 +38,31 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.ontology.EditionPatternActorChanged;
 import org.openflexo.foundation.ontology.EditionPatternReference;
+import org.openflexo.foundation.ontology.owl.OWLIndividual;
 import org.openflexo.foundation.view.ConnectorInserted;
 import org.openflexo.foundation.view.ConnectorRemoved;
 import org.openflexo.foundation.view.ElementUpdated;
 import org.openflexo.foundation.view.ShapeInserted;
 import org.openflexo.foundation.view.ShapeRemoved;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole.PatternRoleType;
+import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
+import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
+import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.xml.VEShemaBuilder;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.controller.FlexoController;
 
 public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implements GraphicalFlexoObserver, VEShemaConstants {
 
@@ -83,6 +101,9 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 
 		if (aShape != null) {
 			aShape.addObserver(this);
+			if (aShape.getEditionPatternInstance() != null) {
+				aShape.getEditionPatternInstance().addObserver(this);
+			}
 		}
 
 		if (aShape != null) {
@@ -115,6 +136,9 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	public void delete() {
 		if (getDrawable() != null) {
 			getDrawable().deleteObserver(this);
+			if (getDrawable().getEditionPatternInstance() != null) {
+				getDrawable().getEditionPatternInstance().deleteObserver(this);
+			}
 		}
 		super.delete();
 	}
@@ -150,6 +174,73 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof ElementUpdated) {
 				update();
+			}
+		} else if (observable == getOEShape().getEditionPatternInstance()) {
+			if (dataModification instanceof EditionPatternActorChanged) {
+				PatternRole patternRole = ((EditionPatternActorChanged) dataModification).getPatternRole();
+				if (patternRole.getType() == PatternRoleType.Individual) {
+					final OWLIndividual individual = (OWLIndividual) dataModification.oldValue();
+					if (individual != null) {
+						View shema = getOEShape().getShema();
+						if (!shema.isObjectUsedAsActorOfPatternRole(individual)) {
+							String name = individual.getName();
+							for (InspectorEntry e : patternRole.getEditionPattern().getInspector().getEntries()) {
+								if (e instanceof IndividualInspectorEntry && e.getData() != null
+										&& patternRole.getName().equals(e.getData().toString())) {
+									final String renderer = ((IndividualInspectorEntry) e).getRenderer();
+									if (renderer != null) {
+										class InlineBindable implements Bindable {
+
+											private BindingModel bindingModel;
+											private BindingFactory factory;
+
+											public InlineBindable() {
+												bindingModel = new BindingModel();
+												factory = new EditionPatternBindingFactory();
+												int index = renderer.indexOf('.');
+												bindingModel.addToBindingVariables(new OntologyIndividualPathElement(index > 0 ? renderer
+														.substring(0, index) : renderer, individual.getTypes().get(0), null, individual
+														.getFlexoOntology()));
+											}
+
+											@Override
+											public BindingModel getBindingModel() {
+												return bindingModel;
+											}
+
+											@Override
+											public BindingFactory getBindingFactory() {
+												return factory;
+											}
+
+										}
+										try {
+											DataBinding<String> db = new DataBinding<String>(renderer, new InlineBindable(), String.class,
+													BindingDefinitionType.GET);
+											if (db.isValid()) {
+												name = db.getBindingValue(new BindingEvaluationContext() {
+
+													@Override
+													public Object getValue(BindingVariable variable) {
+														return individual;
+													}
+												});
+												break;
+											}
+										} catch (Exception e1) {
+											e1.printStackTrace();
+											// OK forget it
+										}
+									}
+								}
+							}
+							if (FlexoController.confirm(name + " " + FlexoLocalization.localizedForKey("does_not_seem_to_be_used_anymore")
+									+ ". " + FlexoLocalization.localizedForKey("would_you_like_to_delete_it") + "?")) {
+								individual.delete();
+							}
+						}
+					}
+				}
 			}
 		}
 	}
