@@ -134,4 +134,11 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 	}
 
 	public abstract ModelSlotInstance<MS, RD> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
+	
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		isValid();
+		return errorMessage;
+	}
 }
