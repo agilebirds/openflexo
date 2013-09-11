@@ -530,7 +530,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		if (hasValidRenderer()) {
 			try {
 				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
-				return getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
+				Object obj = getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext(){
 					@Override
 					public Object getValue(BindingVariable variable) {
 						if (variable.getVariableName().equals("instance")) {
@@ -540,6 +540,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						return null;
 					}
 				});
+				if (obj instanceof String){
+					return (String) obj;
+				}
+				else {
+					return obj.toString();
+				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

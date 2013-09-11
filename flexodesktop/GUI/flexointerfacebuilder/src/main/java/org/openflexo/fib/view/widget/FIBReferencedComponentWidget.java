@@ -70,7 +70,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		super(model, controller);
 		this.factory = factory;
 		updateFont();
-		NOT_FOUND_LABEL = new JLabel("Prout pour " + model.getName());
+		NOT_FOUND_LABEL = new JLabel("Component Not Found " + model.getName());
 	}
 
 	/**
@@ -252,7 +252,14 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		if (variable.getVariableName().equals("component")) {
 			return referencedComponentView.getComponent();
 		}
-		return getBindingEvaluationContext().getValue(variable);
+		BindingEvaluationContext evCtxt = getBindingEvaluationContext();
+		// NPE Protection
+		if (evCtxt != null && variable != null){
+			return getBindingEvaluationContext().getValue(variable);
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override

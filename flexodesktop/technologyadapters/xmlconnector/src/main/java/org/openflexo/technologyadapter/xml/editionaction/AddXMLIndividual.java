@@ -41,11 +41,6 @@ public class AddXMLIndividual extends AssignableAction<XMLModelSlot, XMLIndividu
 		super(builder);
 	}
 
-	@Override
-	public org.openflexo.foundation.viewpoint.EditionAction.EditionActionType getEditionActionType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Type getAssignableType() {
