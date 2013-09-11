@@ -221,9 +221,10 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 
 	@Override
 	public FlexoMetaModelResource<OWLOntology, OWLOntology> getMetaModelResource() {
-		logger.warning("FlexoMetaModelResource() not implemented in OWLOntologyResource");
+		logger.warning("FlexoMetaModelResource() not fully implemented in OWLOntologyResource");
 		// TODO: implement this and extends cardinality
-		return null;
+
+		return getModel().getImportedOntologies().get(0).getResource();
 	}
 
 	@Override
