@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.wkf;
 
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -34,7 +33,6 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -46,10 +44,8 @@ import org.openflexo.foundation.wkf.dm.ProcessRemovedFromFolder;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing a process
@@ -99,14 +95,6 @@ public class ProcessElement extends BrowserElement {
 			logger.finer("Building children for process " + getName());
 		}
 
-		if (isImported()) {
-			Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getFlexoProcess().getProcessNode().getSubProcesses());
-			Collections.sort(processes, FlexoModelObject.NAME_COMPARATOR);
-			for (FlexoModelObject process : processes) {
-				addToChilds(((FlexoProcessNode) process).getProcess());
-			}
-			return;
-		}
 		// We add the roles
 		// addToChilds(getFlexoProcess().getRoleList());
 
@@ -170,34 +158,17 @@ public class ProcessElement extends BrowserElement {
 
 	private IconMarker[] getIconMarkers() {
 		int count = 0;
-		if (isImported()) {
-			count++;
-			if (getFlexoProcess().isDeletedOnServer()) {
-				count++;
-			}
-		} else if (getFlexoProcess().getIsWebService()) {
+		if (getFlexoProcess().getIsWebService()) {
 			count++;
 		}
 		IconMarker[] markers = null;
 		if (count > 0) {
 			markers = new IconMarker[count];
 		}
-		if (isImported()) {
-			markers[0] = IconLibrary.IMPORT;
-			if (getFlexoProcess().isDeletedOnServer()) {
-				markers[1] = IconLibrary.WARNING;
-			}
-		} else if (getFlexoProcess().getIsWebService()) {
+		if (getFlexoProcess().getIsWebService()) {
 			markers[0] = WKFIconLibrary.WS_MARKER;
 		}
 		return markers;
-	}
-
-	/**
-	 * @return
-	 */
-	private boolean isImported() {
-		return getFlexoProcess().isImported();
 	}
 
 	@Override
@@ -210,24 +181,7 @@ public class ProcessElement extends BrowserElement {
 	}
 
 	@Override
-	public String getToolTip() {
-		if (getFlexoProcess().isDeletedOnServer()) {
-			return FlexoLocalization.localizedForKey("object_is_no_more_available_in_portfolio");
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public boolean isNameEditable() {
-		return !isImported();
-	}
-
-	@Override
 	public void setName(String aName) throws FlexoException {
-		if (isImported()) {
-			return;
-		}
 		try {
 			getFlexoProcess().setName(aName);
 		} catch (DuplicateResourceException e) {

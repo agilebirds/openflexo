@@ -34,21 +34,25 @@
     <Localized key="type" lang="French">Type</Localized>
     <Localized key="uri" lang="Dutch">URI</Localized>
     <Localized key="description" lang="Dutch">Description</Localized>
-    <Localized key="kind" lang="Dutch">Type</Localized>
+    <Localized key="kind" lang="Dutch">Generic Type</Localized>
     <Localized key="type" lang="Dutch">Type</Localized>
     <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
     <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
     <Localized key="edition_patterns_declared_in_this_calc" lang="English">Edition patterns declared in this calc</Localized>
     <Localized key="edition_patterns_declared_in_this_calc" lang="French">Edition patterns déclarés dans ce calque</Localized>
-    <Localized key="pattern_role" lang="French">Pattern role</Localized>
-    <Localized key="pattern_role" lang="English">Pattern role</Localized>
+    <Localized key="pattern_role" lang="French">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="English">Pattern Role</Localized>
     <Localized key="palette" lang="English">Palette</Localized>
     <Localized key="palette" lang="French">Palette</Localized>
     <Localized key="palette" lang="Dutch">Palette</Localized>
     <Localized key="view_point" lang="English">View Point</Localized>
     <Localized key="view_point" lang="French">Point de vue</Localized>
     <Localized key="view_point" lang="Dutch">View Point</Localized>
-    <Localized key="example_diagram" lang="French">Diagramme exemple</Localized>
+    <Localized key="example_diagram" lang="French">Example diagram</Localized>
     <Localized key="example_diagram" lang="English">Example diagram</Localized>
+    <Localized key="example_diagram" lang="Dutch">Example diagram</Localized>
+    <Localized key="edition_pattern" lang="Dutch">Editie pattern</Localized>
+    <Localized key="pattern_role" lang="Dutch">Rol van de patroon</Localized>
+    <Localized key="edition_patterns_declared_in_this_calc" lang="Dutch">Edition patterns declared in this calc</Localized>
   </LocalizedDictionary>
 </Panel>

@@ -124,10 +124,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					}
 				}
 
-				if (action.getEndNode() instanceof SubProcessNode && ((SubProcessNode) action.getEndNode()).getSubProcess() != null
-						&& ((SubProcessNode) action.getEndNode()).getSubProcess().isImported()) {
-					skipEndNodeCheck = true;
-				} else if (action.getEndNode() instanceof SingleInstanceSubProcessNode || action.getEndNode() instanceof LoopSubProcessNode
+				if (action.getEndNode() instanceof SingleInstanceSubProcessNode || action.getEndNode() instanceof LoopSubProcessNode
 						|| action.getEndNode() instanceof WSCallSubProcessNode) {
 					final SubProcessNode node = (SubProcessNode) action.getEndNode();
 					if (node.getSubProcess() == null || node.getPortMapRegistery() == null) {
@@ -164,12 +161,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 					}
 				}
 
-				if (action.getStartingNode() instanceof SubProcessNode
-						&& ((SubProcessNode) action.getStartingNode()).getSubProcess() != null
-						&& ((SubProcessNode) action.getStartingNode()).getSubProcess().isImported()
-						&& !((SubProcessNode) action.getStartingNode()).mightHaveOperationPetriGraph()) {
-					skipStartNodeCheck = true;
-				} else if (action.getStartingNode() instanceof SingleInstanceSubProcessNode
+				if (action.getStartingNode() instanceof SingleInstanceSubProcessNode
 						|| action.getStartingNode() instanceof LoopSubProcessNode
 						|| action.getStartingNode() instanceof WSCallSubProcessNode) {
 					final SubProcessNode node = (SubProcessNode) action.getStartingNode();

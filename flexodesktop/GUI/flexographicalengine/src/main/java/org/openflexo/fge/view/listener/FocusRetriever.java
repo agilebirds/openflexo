@@ -392,25 +392,30 @@ public class FocusRetriever {
 									// it is closer than the other edge
 									// or if its middle symbol is closer (within
 									// selection range of course)
-									if (distance < distanceToNearestConnector) {
+									if (gr.getIsSelected()) {
+										distance = 0;
+									}
+									if (distance < distanceToNearestConnector || gr.getIsSelected()) {
 										// If we are clearly nearer than another
 										// connector, then this is the one the
 										// user has selected
 										distanceToNearestConnector = distance;
 										nearestConnector = gr;
-										for (ControlArea<?> ca : gr.getControlAreas()) {
-											// Point pt1 =
-											// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
-											// getScale());
-											// Point pt2 =
-											// gr.convertNormalizedPointToViewCoordinates(p3,
-											// getScale());
-											// double cpDistance =
-											// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
-											double cpDistance = ca.getDistanceToArea(p3, getScale());
-											if (cpDistance < selectionDistance && cpDistance < distance) {
-												// System.out.println("Detected control point");
-												distanceToNearestConnector = cpDistance;
+										if (!gr.getIsSelected()) {
+											for (ControlArea<?> ca : gr.getControlAreas()) {
+												// Point pt1 =
+												// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
+												// getScale());
+												// Point pt2 =
+												// gr.convertNormalizedPointToViewCoordinates(p3,
+												// getScale());
+												// double cpDistance =
+												// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
+												double cpDistance = ca.getDistanceToArea(p3, getScale());
+												if (cpDistance < selectionDistance && cpDistance < distance) {
+													// System.out.println("Detected control point");
+													distanceToNearestConnector = cpDistance;
+												}
 											}
 										}
 										smallestDistanceToCPOfNearestConnector = updateSmallestDistanceToCPForConnector(gr, p2, distance);
@@ -431,7 +436,7 @@ public class FocusRetriever {
 											// We have found a control area
 											// which is closer than the previous
 											// selected connector
-											if (cpDistance < selectionDistance && cpDistance < distance) {
+											if (cpDistance < selectionDistance && cpDistance < distanceToNearestConnector) {
 												// System.out.println("Detected control point");
 												distanceToNearestConnector = cpDistance;
 												nearestConnector = gr;

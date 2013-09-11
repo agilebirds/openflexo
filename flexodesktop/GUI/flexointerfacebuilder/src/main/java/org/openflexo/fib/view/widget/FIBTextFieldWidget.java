@@ -82,9 +82,6 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 			panel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 					RIGHT_COMPENSATING_BORDER));
 		}
-		/*
-		 * else { textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED)); }
-		 */
 
 		if (isReadOnly()) {
 			textField.setEditable(false);

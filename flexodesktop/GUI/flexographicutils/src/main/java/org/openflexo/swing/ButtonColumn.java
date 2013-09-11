@@ -119,9 +119,13 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
 			editButton.setText(value.toString());
 			editButton.setIcon(null);
 		}
-
+		editButton.setEnabled(isEnabled(table, value, row, column));
 		this.editorValue = value;
 		return editButton;
+	}
+
+	public boolean isEnabled(JTable table, Object value, int row, int column) {
+		return true;
 	}
 
 	private void setTable(JTable table) {
@@ -169,7 +173,7 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
 			renderButton.setText(value.toString());
 			renderButton.setIcon(null);
 		}
-
+		renderButton.setEnabled(isEnabled(table, value, row, column));
 		return renderButton;
 	}
 

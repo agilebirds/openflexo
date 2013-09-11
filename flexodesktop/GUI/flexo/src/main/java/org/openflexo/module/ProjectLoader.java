@@ -214,7 +214,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 		loadProject(projectDirectory);
 	}
 
-	public FlexoEditor newProject(File projectDirectory) {
+	public FlexoEditor newProject(File projectDirectory) throws ProjectInitializerException {
 		if (!ProgressWindow.hasInstance()) {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("building_new_project"), 10);
 		} else {

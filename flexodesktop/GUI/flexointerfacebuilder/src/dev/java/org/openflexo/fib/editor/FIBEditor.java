@@ -497,6 +497,11 @@ public class FIBEditor implements FIBGenericEditor {
 		return frame;
 	}
 
+	@Override
+	public File getEditedComponentFile() {
+		return editedFIB.fibFile;
+	}
+
 	class LAFMenuItem extends JCheckBoxMenuItem {
 		private LookAndFeelInfo laf;
 

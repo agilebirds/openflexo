@@ -31,14 +31,13 @@ import org.openflexo.toolbox.FileResource;
 
 public class TestLibraryFromToXML extends FlexoTestCase {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibraryFromToXML.class.getPackage()
-			.getName());
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibraryFromToXML.class
+			.getPackage().getName());
 
 	private static final String FILE_NAME = "library";
 	private static final String LIBRARY_URI = "http://www.example.org/Library#Library";
 	private static final String BOOK_URI = "http://www.example.org/Library#Book";
 	private static final String BOOK_TITLE_URI = "http://www.example.org/Library/Book#title";
-
 
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
@@ -51,31 +50,34 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		super(name);
 	}
 
-
-	private static final void dumpIndividual(IXMLIndividual<XSOntIndividual,XSOntProperty> indiv, String prefix){
+	private static final void dumpIndividual(IXMLIndividual<XSOntIndividual, XSOntProperty> indiv, String prefix) {
 
 		System.out.println(prefix + "Indiv : " + indiv.getName() + "  ==> " + indiv.getUUID());
 
-		for (XSOntProperty x: indiv.getAttributes()){
-			System.out.print (prefix + "   attr : " + x.getName() +" [ " + x.isSimpleAttribute() + "]" );
-			if (x.isSimpleAttribute())
-				System.out.println("  =  " +  ((XSOntIndividual) indiv).getPropertyValue(x).getValues().toString());
-			else 
-				System.out.println();
+		for (XSOntProperty x : indiv.getAttributes()) {
+			// System.out.print(prefix + "   attr : " + x.getName() + " [ " + x.isSimpleAttribute() + "]");
+			if (x.isSimpleAttribute()) {
+				// System.out.println("  =  " + ((XSOntIndividual) indiv).getPropertyValue(x).getValues().toString());
+			} else {
+				// System.out.println();
+			}
 		}
 
-		System.out.println("");
-		for (IXMLIndividual<XSOntIndividual,XSOntProperty> x: indiv.getChildren()) dumpIndividual(x,prefix +"     ");
+		// System.out.println("");
+		for (IXMLIndividual<XSOntIndividual, XSOntProperty> x : indiv.getChildren()) {
+			if (x != indiv) {
+				dumpIndividual(x, prefix + "     ");
+			}
+		}
 
-		System.out.println("");
-		System.out.flush();
+		// System.out.println("");
+		// System.out.flush();
 	}
-
-
 
 	/**
 	 * Instanciate test ResourceCenter
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void test0LoadTestResourceCenter() throws IOException {
 		log("test0LoadTestResourceCenter()");
@@ -86,23 +88,24 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
 		mmRepository = (XSDMetaModelRepository) resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
 		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
-		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
+		baseDirName = ((DirectoryResourceCenter) resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
 		assertNotNull(mmRepository);
 		assertEquals(3, mmRepository.getAllResources().size());
-		assertTrue(modelRepository.getAllResources().size()>2);
+		assertTrue(modelRepository.getAllResources().size() > 2);
 	}
 
-	public void test0LibraryFromXML() throws ParserConfigurationException, TransformerException, FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+	public void test0LibraryFromXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
+			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test0LibraryFromXML()");
 
 		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
 
-		XMLXSDFileResource libraryRes = (XMLXSDFileResource) modelRepository.getResource("file:" + baseDirName + "/XML/example_library_1.xml");
+		XMLXSDFileResource libraryRes = modelRepository.getResource("file:" + baseDirName + "/XML/example_library_1.xml");
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.example.org/Library");
+		XSDMetaModelResource mmLibraryRes = mmRepository.getResource("http://www.example.org/Library");
 
 		XMLXSDModel mLib = libraryRes.getModel();
 
@@ -111,47 +114,47 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		libraryRes.loadResourceData(null);
 
 		assertNotNull(mLib);
-		assertTrue(((XMLXSDModel) mLib).getResource().isLoaded());
+		assertTrue(mLib.getResource().isLoaded());
 
 		dumpIndividual(mLib.getRoot(), "---");
 
-
 	}
 
-	public void test1LibraryToXML() throws ParserConfigurationException, TransformerException, FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+	public void test1LibraryToXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
+			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test1LibraryToXML()");
 
 		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.example.org/Library");
+		XSDMetaModelResource mmLibraryRes = mmRepository.getResource("http://www.example.org/Library");
 
-		if (!mmLibraryRes.isLoaded()){
+		if (!mmLibraryRes.isLoaded()) {
 			mmLibraryRes.loadResourceData(null);
 		}
 		XSDMetaModel mmLib = mmLibraryRes.getMetaModelData();
 
 		assertNotNull(mmLib);
-		assertTrue(((XSDMetaModel) mmLib).getResource().isLoaded());
+		assertTrue(mmLib.getResource().isLoaded());
 
-		if (((XSDMetaModel) mmLib).getResource().isLoaded() == false) {
+		if (mmLib.getResource().isLoaded() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to load.");
 			}
 		} else {
 
+			XMLXSDFileResource libRes = (XMLXSDFileResource) xsdAdapter.createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter,
+					"GenXML", "library.xml", mmLibraryRes);
 
-			XMLXSDFileResource libRes = (XMLXSDFileResource) xsdAdapter.createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, "GenXML", "library.xml", mmLibraryRes);
-
-			XMLXSDModel lib = (XMLXSDModel) libRes.getModel();
+			XMLXSDModel lib = libRes.getModel();
 
 			// TODO : this wont work anymore as we suppressed name's significance for XSOntIndividual
-			XSOntIndividual library = lib.createOntologyIndividual( mmLib.getClass(LIBRARY_URI));
+			XSOntIndividual library = lib.createOntologyIndividual(mmLib.getClass(LIBRARY_URI));
 			lib.setRoot(library);
 			XSOntIndividual book1 = lib.createOntologyIndividual(mmLib.getClass(BOOK_URI));
 			book1.addToPropertyValue(mmLib.getProperty(BOOK_TITLE_URI), "My First Book");
-			XSOntIndividual book2 = lib.createOntologyIndividual( mmLib.getClass(BOOK_URI));
+			XSOntIndividual book2 = lib.createOntologyIndividual(mmLib.getClass(BOOK_URI));
 			book2.addToPropertyValue(mmLib.getProperty(BOOK_TITLE_URI), "My Second Book");
 			library.addChild(book1);
 			library.addChild(book2);

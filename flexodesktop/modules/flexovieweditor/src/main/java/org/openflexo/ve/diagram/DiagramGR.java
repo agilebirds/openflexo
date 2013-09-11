@@ -57,7 +57,8 @@ public class DiagramGR extends DrawingGraphicalRepresentation<DiagramRootPane> i
 			aDrawing.getDiagramRootPane().setGraphicalRepresentation(this);
 			aDrawing.getDiagramRootPane().addObserver(this);
 		}
-
+		setIsResizable(true);
+		setDrawWorkingArea(true);
 	}
 
 	@Override

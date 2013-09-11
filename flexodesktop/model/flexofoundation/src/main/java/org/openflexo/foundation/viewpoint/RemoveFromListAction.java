@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/RemoveFromListActionPanel.fib")
 public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
 
 	private static final Logger logger = Logger.getLogger(RemoveFromListAction.class.getPackage().getName());
@@ -51,11 +51,6 @@ public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends Assignable
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Assignation;
 	}
 
 	@Override
@@ -97,7 +92,7 @@ public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends Assignable
 	@Override
 	public Type getAssignableType() {
 		if (getValue().isSet() && getValue().isValid()) {
-			return new ParameterizedTypeImpl(List.class,getValue().getAnalyzedType());
+			return new ParameterizedTypeImpl(List.class, getValue().getAnalyzedType());
 		}
 		return new ParameterizedTypeImpl(List.class, IFlexoOntologyIndividual.class);
 	}

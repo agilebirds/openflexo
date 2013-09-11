@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" borderTitle="Panel" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="border(location=center)" visible="" name="VirtualModelStructuralPanel">
+<Panel opaque="false" layout="border" borderTitle="Panel" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="border(location=center)" visible="" name="VirtualModelStructuralPanel">
   <SplitPanel data="" constraints="border(location=center)" visible="">
     <ColSplit name="ColSplit" weight="0.0">
       <Leaf name="structural" weight="0.0" />
@@ -29,7 +29,7 @@
       <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole" />
     </Table>
     <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="0" data="" constraints="split(splitIdentifier=editionPatternDetails)" visible="">
-      <FIBReferencedComponent componentFile="&quot;EditionPatternPanel.fib&quot;" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="EditionPatternBrowser.selected" constraints="border(location=center)" visible="(EditionPatternBrowser.selected != null)" />
+      <FIBReferencedComponent componentFile="EditionPatternPanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="EditionPatternBrowser.selected" constraints="border(location=center)" visible="(EditionPatternBrowser.selected != null)" />
     </Panel>
   </SplitPanel>
   <LocalizedDictionary>

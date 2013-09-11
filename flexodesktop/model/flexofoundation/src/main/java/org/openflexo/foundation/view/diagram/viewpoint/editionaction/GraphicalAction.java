@@ -45,7 +45,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalFeature;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/GraphicalActionPanel.fib")
 public class GraphicalAction extends EditionAction<DiagramModelSlot, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
@@ -55,11 +57,6 @@ public class GraphicalAction extends EditionAction<DiagramModelSlot, DiagramElem
 
 	public GraphicalAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.GraphicalAction;
 	}
 
 	public java.lang.reflect.Type getGraphicalFeatureType() {

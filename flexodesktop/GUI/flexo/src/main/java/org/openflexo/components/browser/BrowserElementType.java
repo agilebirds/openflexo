@@ -128,7 +128,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -197,7 +196,6 @@ public enum BrowserElementType {
 
 	PROJECT("project", FlexoProject.class, IconLibrary.OPENFLEXO_NOTEXT_16),
 	WORKFLOW("workflow", FlexoWorkflow.class, WKFIconLibrary.WORKFLOW_ICON),
-	IMPORTED_PROCESS_LIBRARY("imported_process_library", FlexoImportedProcessLibrary.class, WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON),
 	PROCESS("process", FlexoProcess.class, WKFIconLibrary.PROCESS_ICON),
 	PROCESS_NODE("process", FlexoProcessNode.class, WKFIconLibrary.PROCESS_ICON),
 	PROCESS_FOLDER("process_folder", ProcessFolder.class, WKFIconLibrary.PROCESS_FOLDER_ICON),

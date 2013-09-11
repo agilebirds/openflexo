@@ -53,7 +53,7 @@ public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoPr
 
 		@Override
 		public boolean isEnabledForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported() && object.getParentProcess() != null;
+			return object != null && object.getParentProcess() != null;
 		}
 
 	};
@@ -70,9 +70,6 @@ public class MakeFlexoProcessContextFree extends FlexoUndoableAction<MakeFlexoPr
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getFocusedObject().isImported()) {
-			return;
-		}
 		_setParentProcessAction = SetPropertyAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
 		_setParentProcessAction.setKey("parentProcess");
 		_setParentProcessAction.setValue(null);

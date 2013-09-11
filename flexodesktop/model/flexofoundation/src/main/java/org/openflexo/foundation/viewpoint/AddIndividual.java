@@ -33,9 +33,11 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/AddIndividualPanel.fib")
 public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
@@ -86,11 +88,6 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 			return sb.toString();
 		}
 		return null;
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddIndividual;
 	}
 
 	public abstract Class<T> getOntologyIndividualClass();

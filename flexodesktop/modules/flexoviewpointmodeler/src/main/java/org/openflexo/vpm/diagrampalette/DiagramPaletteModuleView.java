@@ -44,7 +44,7 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 		_controller = controller;
 
 		add(controller.getDrawingView(), BorderLayout.CENTER);
-		validate();
+		revalidate();
 
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}

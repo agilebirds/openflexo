@@ -46,7 +46,7 @@ public class PrintProcessAction extends FlexoGUIAction<PrintProcessAction, Flexo
 
 		@Override
 		public boolean isVisibleForSelection(FlexoProcess object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported();
+			return object != null;
 		}
 
 		@Override

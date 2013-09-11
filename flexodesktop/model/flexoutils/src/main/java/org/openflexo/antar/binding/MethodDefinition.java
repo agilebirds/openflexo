@@ -76,7 +76,7 @@ public class MethodDefinition extends Observable implements Function {
 
 	public String getSimplifiedSignature() {
 		if (_signatureNFQ == null) {
-			StringBuffer signature = new StringBuffer();
+			StringBuilder signature = new StringBuilder();
 			signature.append(method.getName());
 			signature.append("(");
 			signature.append(getParameterListAsString(false));
@@ -129,7 +129,7 @@ public class MethodDefinition extends Observable implements Function {
 	private String getParameterListAsString(boolean fullyQualified) {
 		String _searched = fullyQualified ? _parameterListAsStringFQ : _parameterListAsString;
 		if (_searched == null) {
-			StringBuffer returned = new StringBuffer();
+			StringBuilder returned = new StringBuilder();
 			boolean isFirst = true;
 			for (Type p : method.getGenericParameterTypes()) {
 				Type contextualParamType = TypeUtils.makeInstantiatedType(p, declaringType);

@@ -96,7 +96,6 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMValidationModel;
 import org.openflexo.foundation.dm.JarClassLoader;
-import org.openflexo.foundation.gen.FlexoProcessImageNotificationCenter;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
@@ -149,7 +148,6 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FixProposal;
-import org.openflexo.foundation.validation.FlexoImportedObjectValidationModel;
 import org.openflexo.foundation.validation.FlexoProjectValidationModel;
 import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.Validable;
@@ -161,7 +159,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -301,7 +298,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	protected transient ResourceHashtable resources;
 
 	private FlexoProjectValidationModel projectValidationModel;
-	private FlexoImportedObjectValidationModel importedObjectValidationModel;
 
 	private static int ID = 0;
 
@@ -571,11 +567,15 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			logger.info("Saving project...");
 		}
 		saveModifiedResources(progress, true);
+
+		// Vincent: Not sure this is the right place, however the file deletion methods seems to be never called.
+		// It makes sens to delete the files which as to be deleted in the project when we save the project.
+		deleteFilesToBeDeleted();
+
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
 		}
 
-		FlexoProcessImageNotificationCenter.getInstance().notifyNewImage();
 	}
 
 	/**
@@ -1200,6 +1200,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			resources.remove(resourceIdentifier);
 			setChanged();
 			notifyObservers(new ResourceRemoved(resource));
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not remove resource with resourceIdentifier " + resourceIdentifier);
+			}
 		}
 	}
 
@@ -1296,11 +1300,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 			identifier = null;
 			for (Entry<String, FlexoResource<? extends FlexoResourceData>> r : resources.entrySet()) {
-				{
-					if (r.getValue() == resource) {
-						identifier = r.getKey();
-						break;
-					}
+				if (r.getValue() == resource) {
+					identifier = r.getKey();
+					break;
 				}
 			}
 		}
@@ -2190,13 +2192,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			projectValidationModel = new FlexoProjectValidationModel(this);
 		}
 		return projectValidationModel;
-	}
-
-	public ValidationModel getImportedObjectValidationModel() {
-		if (importedObjectValidationModel == null) {
-			importedObjectValidationModel = new FlexoImportedObjectValidationModel(this);
-		}
-		return importedObjectValidationModel;
 	}
 
 	/**
@@ -3219,7 +3214,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				if (FileUtils.recursiveDeleteFile(f)) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Successfully deleted " + f.getAbsolutePath());
-						// filesToDelete.remove(f);
+						filesToDelete.remove(f);
 					}
 				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not delete " + f.getAbsolutePath());
@@ -4267,26 +4262,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return ontologyLibrary;
 	}*/
-
-	/*
-	 * private CalcLibrary calcLibrary = null;
-	 * 
-	 * public CalcLibrary getCalcLibrary() { return getCalcLibrary(true); }
-	 * 
-	 * public CalcLibrary getCalcLibrary(boolean createIfNotExist) { if (calcLibrary == null) { if (createIfNotExist) calcLibrary = new
-	 * CalcLibrary(getOntologyLibrary()); else return null; } return calcLibrary; }
-	 */
-
-	public FlexoImportedProcessLibrary getImportedProcessLibrary() {
-		if (getFlexoWorkflow(false) == null) {
-			return null;
-		}
-		return getWorkflow().getImportedProcessLibrary();
-	}
-
-	public RoleList getImportedRoleList() {
-		return getWorkflow().getImportedRoleList();
-	}
 
 	public boolean getIsLocalized() {
 		return getDKVModel(false) != null && getDKVModel().getLanguages().size() > 1;

@@ -144,6 +144,13 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return controller;
 	}
 
+	/**
+	 * Return the BindingEvaluationContext valid in the context of current widget.<br>
+	 * Note that embedded component (components used in the context of FIBReferencedComponent) should point to the BindingEvaluationContext
+	 * of their embedding component
+	 * 
+	 * @return
+	 */
 	public BindingEvaluationContext getBindingEvaluationContext() {
 		if (getParentView() != null) {
 			return getParentView().getBindingEvaluationContext();
@@ -352,7 +359,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public FIBView<?, ?> getParentView() {
-		if (getComponent() != null){
+		if (getComponent() != null) {
 			if (getComponent().getParent() != null) {
 				return getController().viewForComponent(getComponent().getParent());
 			}

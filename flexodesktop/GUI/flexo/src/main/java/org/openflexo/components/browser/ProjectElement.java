@@ -19,15 +19,8 @@
  */
 package org.openflexo.components.browser;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.ImportedObjectLibraryDeleted;
-import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
-import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
-import org.openflexo.foundation.rm.ResourceAdded;
-import org.openflexo.foundation.rm.ResourceRemoved;
 
 /**
  * Browser element representing the project
@@ -89,21 +82,6 @@ public class ProjectElement extends BrowserElement {
 		/*if (getProject().getShemaLibrary(false) != null) {
 			addToChilds(getProject().getShemaLibrary(false));
 		}*/
-		if (getProject().getImportedProcessLibrary() != null) {
-			addToChilds(getProject().getImportedProcessLibrary());
-		}
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		// logger.info("Project element received "+dataModification);
-		if (dataModification instanceof ImportedRoleLibraryCreated || dataModification instanceof ImportedProcessLibraryCreated
-				|| dataModification instanceof ImportedObjectLibraryDeleted || dataModification instanceof ResourceAdded
-				|| dataModification instanceof ResourceRemoved) {
-			refreshWhenPossible();
-		} else {
-			super.update(observable, dataModification);
-		}
 	}
 
 	@Override

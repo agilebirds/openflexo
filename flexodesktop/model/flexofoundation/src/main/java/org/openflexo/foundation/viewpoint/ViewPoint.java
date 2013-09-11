@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom2.Attribute;
@@ -49,6 +50,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
+import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
 import org.openflexo.toolbox.ChainedCollection;
@@ -111,7 +113,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		ViewPoint viewpoint = new ViewPoint();
 		vpRes.setResourceData(viewpoint);
 		viewpoint.setResource(vpRes);
-
 		// And register it to the library
 		library.registerViewPoint(vpRes);
 
@@ -585,6 +586,37 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		} catch (SaveResourceException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void delete() {
+		// tests on this deleted object
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("delete: Viewpoint " + getName());
+		}
+
+		if (getResource() != null) {
+			// Set the file resource to be remove upon next save of the resource manager
+			getResource().delete();
+		}
+
+		// needed?
+		/*for (VirtualModel vm : getVirtualModels()) {
+			removeFromVirtualModels(vm);
+			vm.delete();
+		}*/
+
+		// Delete the viewpoint resource from the view library
+		getViewPointLibrary().delete(this);
+		setChanged();
+
+		// Notify observers that the view has been deleted
+		notifyObservers(new ViewPointDataModification("viewPoints", this, null));
+
+		// Set the current state of this view to deleted
+		super.delete();
+
+		deleteObservers();
 	}
 
 	/**

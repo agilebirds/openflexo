@@ -19,8 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/ActionSchemePanel.fib")
 public class ActionScheme extends AbstractActionScheme {
 
 	public ActionScheme(VirtualModel.VirtualModelBuilder builder) {

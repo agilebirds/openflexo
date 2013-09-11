@@ -132,6 +132,10 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		container.add(checkBox, gbc);
 		updateCheckboxVisibility();
 		updateFont();
+		if (!ToolBox.isMacOSLaf()) {
+			container.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
+					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
+		}
 	}
 
 	@Override

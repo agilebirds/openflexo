@@ -197,7 +197,7 @@ public class WKFTreeDropTarget extends TreeDropTarget {
 	}
 
 	private boolean canMoveFolder(ProcessFolder srcFolder, FlexoProcess targetProcess) {
-		if (targetProcess == null || targetProcess.isImported()) {
+		if (targetProcess == null) {
 			return false;
 		}
 		boolean ok = true;

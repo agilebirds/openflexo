@@ -41,6 +41,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * This action is used to explicitely instanciate a new {@link EditionPatternInstance} in a given {@link VirtualModelInstance} with some
@@ -52,6 +53,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
  * @param <MM>
  */
 
+@FIBPanel("Fib/AddEditionPatternInstancePanel.fib")
 public class AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
@@ -62,11 +64,6 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 
 	public AddEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddEditionPatternInstance;
 	}
 
 	public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {
@@ -373,7 +370,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
-	ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
+			ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
 		public AddEditionPatternInstanceMustAddressACreationScheme() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
@@ -438,7 +435,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 	}
 
 	public static class VirtualModelInstanceBindingIsRequiredAndMustBeValid extends
-	BindingIsRequiredAndMustBeValid<AddEditionPatternInstance> {
+			BindingIsRequiredAndMustBeValid<AddEditionPatternInstance> {
 		public VirtualModelInstanceBindingIsRequiredAndMustBeValid() {
 			super("'virtual_model_instance'_binding_is_not_valid", AddEditionPatternInstance.class);
 		}

@@ -812,7 +812,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					if (selectedValue.getElement() instanceof FunctionPathElement) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
 						if (currentElement instanceof FunctionPathElement
-								&& (((FunctionPathElement) currentElement).getFunction() != null)
+								&& ((FunctionPathElement) currentElement).getFunction() != null
 								&& ((FunctionPathElement) currentElement).getFunction().equals(
 										((FunctionPathElement) selectedValue.getElement()).getFunction())) {
 							// logger.info("On y arrive");
@@ -1737,8 +1737,9 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
-								if (bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleSimplePathElements(columnElement.getElement()) != null
+								if (bindingSelector.getBindable().getBindingFactory() != null
+										&& bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleSimplePathElements(columnElement.getElement()) != null
 										&& bindingSelector.getBindable().getBindingFactory()
 												.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);

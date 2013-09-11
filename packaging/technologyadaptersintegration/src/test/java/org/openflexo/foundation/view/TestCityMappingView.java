@@ -38,8 +38,9 @@ import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
+import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
@@ -82,7 +83,14 @@ public class TestCityMappingView extends FlexoTestCase {
 		File projectDirectory = new File("/Users/sylvain/tmp/TestProject.prj");
 
 		// Instantiate an editor using provided directory, factory and service manager
-		FlexoEditor editor = FlexoResourceManager.initializeNewProject(projectDirectory, editorFactory, serviceManager);
+		FlexoEditor editor;
+		try {
+			editor = FlexoResourceManager.initializeNewProject(projectDirectory, editorFactory, serviceManager);
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			return;
+		}
 
 		// You might now access to your newly created project
 		FlexoProject project = editor.getProject();

@@ -122,7 +122,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			I item = it.next();
 			if (item instanceof File) {
-				System.out.println("searching " + item);
+				//System.out.println("searching " + item);
 				File candidateFile = (File) item;
 				ExcelWorkbookResource wbRes = tryToLookupWorkbook(resourceCenter, candidateFile);
 			}

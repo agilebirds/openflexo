@@ -35,19 +35,16 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/AddDiagramPanel.fib")
 public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
 	public AddDiagram(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddDiagram;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.CGFile" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Templates" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="TemplatesTab">
+    <Tab title="Templates" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TemplatesTab">
       <Label label="generated" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IsCodeGenerationAvailableLabel" localize="true" />
       <CheckBox selected="false" index="1" data="data.isCodeGenerationAvailable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="IsCodeGenerationAvailable" readOnly="true" localize="true" />
       <Label label="requires_following_templates" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" visible="(data.isCodeGenerationAvailable = true)" name="ResourcegeneratorusedTemplatesLabel" localize="true" />
@@ -15,7 +15,7 @@
         <CustomAction method="data.editTemplate(selected)" isAvailable="data.isCustomTemplate(selected)" name="edit" />
       </Table>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
       <Label label="last_generated_on" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="MemoryLastGenerationDateAsStringLabel" localize="true" />
       <TextField index="1" data="data.generationStatus.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="GenerationStatus" readOnly="true" localize="true" />
       <Label label="last_written_to_disk_on" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="LastGenerationDateAsStringLabel" localize="true" />
@@ -33,7 +33,7 @@
       <Label label="needs_update_reason" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" name="NeedsUpdateReasonLabel" localize="true" />
       <TextArea index="15" data="data.needsUpdateReason" constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="NeedsUpdateReason" readOnly="true" localize="true" />
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="FileNameLabel" localize="true" />
       <TextField index="1" data="data.fileName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="FileName" readOnly="true" localize="true" />
       <Label label="description" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="DescriptionLabel" localize="true" />

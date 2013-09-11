@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.graphics.ShadowStyle;
@@ -80,7 +80,7 @@ public class PushToPaletteInitializer extends ActionInitializer<DiagramShapePush
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				return instanciateAndShowDialog(action, FlexoCst.PUSH_TO_PALETTE_DIALOG_FIB);
+				return instanciateAndShowDialog(action, CommonFIB.PUSH_TO_PALETTE_DIALOG_FIB);
 			}
 		};
 	}

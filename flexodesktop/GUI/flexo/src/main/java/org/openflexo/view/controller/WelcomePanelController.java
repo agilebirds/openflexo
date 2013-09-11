@@ -94,6 +94,10 @@ public class WelcomePanelController extends FlexoFIBController {
 			e.printStackTrace();
 			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
 			show();
+		} catch (ProjectInitializerException e) {
+			e.printStackTrace();
+			FlexoController.notify(e.getMessage());
+			show();
 		}
 	}
 

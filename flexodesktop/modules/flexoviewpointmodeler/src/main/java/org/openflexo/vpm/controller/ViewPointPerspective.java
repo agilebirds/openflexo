@@ -91,6 +91,14 @@ public class ViewPointPerspective extends FlexoPerspective {
 		setFooter(infoLabel);
 	}
 
+	@Override
+	public JComponent getHeader() {
+		if (_controller.getCurrentModuleView() instanceof ExampleDiagramModuleView) {
+			return ((ExampleDiagramModuleView) _controller.getCurrentModuleView()).getController().getScalePanel();
+		}
+		return null;
+	}
+
 	public ModuleView<?> getCurrentModuleView() {
 		return _controller.getCurrentModuleView();
 	}

@@ -33,7 +33,6 @@ import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.FlexoImportableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionizer;
@@ -42,11 +41,7 @@ import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
-import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.validation.ValidationIssue;
-import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.wkf.action.AddRoleSpecialization;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
@@ -58,9 +53,6 @@ import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.OperatorNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ws.client.PPMWebService.PPMObject;
-import org.openflexo.ws.client.PPMWebService.PPMRole;
 
 /**
  * Represents a role in the workflow
@@ -68,8 +60,8 @@ import org.openflexo.ws.client.PPMWebService.PPMRole;
  * @author sguerin
  * 
  */
-public final class Role extends WorkflowModelObject implements FlexoImportableObject, DataFlexoObserver, Serializable, DeletableObject,
-		InspectableObject, Sortable {
+public final class Role extends WorkflowModelObject implements DataFlexoObserver, Serializable, DeletableObject, InspectableObject,
+		Sortable {
 
 	private static final Logger logger = Logger.getLogger(Role.class.getPackage().getName());
 
@@ -119,9 +111,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	 */
 	@Override
 	public String getInspectorName() {
-		if (isImported()) {
-			return Inspectors.WKF.IMPORTED_ROLE;
-		}
 		return Inspectors.WKF.ROLE_INSPECTOR;
 	}
 
@@ -147,9 +136,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public String getNameForInspector() {
-		if (isImported()) {
-			return FlexoLocalization.localizedForKey("[external]") + " " + (getName() != null ? getName() : "");
-		}
 		return getName();
 	}
 
@@ -270,19 +256,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		return false;
 	}
 
-	private boolean isImported = false;
-
-	@Override
-	public boolean isImported() {
-		if (getRoleList() != null) {
-			return getRoleList().isImportedRoleList();
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("No role list defined on " + this);
-		}
-		return isImported;
-	}
-
 	@Override
 	public Role getUncachedObject() {
 		return getRole(true);
@@ -316,61 +289,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		return null;
 	}
 
-	public static Role createImportedRoleFromRole(RoleList roleList, PPMRole role) {
-		Role fir = new Role(roleList.getWorkflow(), role.getName());
-		fir.isImported = true;
-		fir.updateFromObject(role);
-		return fir;
-	}
-
-	public void updateFromObject(PPMRole object) {
-		try {
-			super.updateFromObject(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (object.getRgb() != null) {
-			setColor(new Color(object.getRed(), object.getGreen(), object.getBlue()));
-		} else {
-			setColor(null);
-		}
-	}
-
-	@Override
-	public Class<? extends PPMObject> getEquivalentPPMClass() {
-		return PPMRole.class;
-	}
-
-	public PPMRole getEquivalentPPMRole() {
-		PPMRole role = new PPMRole();
-		copyObjectAttributesInto(role);
-		if (getColor() != null) {
-			role.setRgbColor(getColor().getRed(), getColor().getGreen(), getColor().getBlue());
-		}
-		return role;
-	}
-
-	public boolean isEquivalentTo(PPMRole object) {
-		if (!super.isEquivalentTo(object)) {
-			return false;
-		}
-		if (getColor() != null && object.getRgb() == null || getColor() == null && object.getRgb() != null) {
-			return false;
-		}
-		if (getColor() != null && object.getRgb() != null) {
-			if (getColor().getRed() != object.getRed()) {
-				return false;
-			}
-			if (getColor().getGreen() != object.getGreen()) {
-				return false;
-			}
-			if (getColor().getBlue() != object.getBlue()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	@Override
 	public final void delete() {
 		for (RoleSpecialization rs : (Vector<RoleSpecialization>) getRoleSpecializations().clone()) {
@@ -384,9 +302,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 				logger.fine("2 Delete " + rs.getFullyQualifiedName());
 			}
 			rs.delete();
-		}
-		if (isImported()) {
-			isImported = true;// This is important, because it allows to do some tests on this deleted object
 		}
 		if (getRoleList() != null && getRoleList().getRoles().contains(this)) {
 			getRoleList().removeFromRoles(this);
@@ -526,9 +441,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	public void addToRoleSpecializations(RoleSpecialization aRoleSpecialization) {
-		if (isImported()) {
-			return;
-		}
 		if (aRoleSpecialization.getRole() == null) {
 			aRoleSpecialization.setRole(this);
 		}
@@ -673,32 +585,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	public boolean isDefaultRole() {
 		return getWorkflow().getRoleList().getDefaultRole() == this;
-	}
-
-	public static class ImportedRoleShouldExistOnServer extends ValidationRule<ImportedRoleShouldExistOnServer, Role> {
-		public ImportedRoleShouldExistOnServer() {
-			super(Role.class, "imported_role_should_exist_on_server");
-		}
-
-		@Override
-		public ValidationIssue<ImportedRoleShouldExistOnServer, Role> applyValidation(Role process) {
-			if (process.isImported() && process.isDeletedOnServer()) {
-				return new ValidationWarning<ImportedRoleShouldExistOnServer, Role>(this, process,
-						"role_($object.name)_no_longer_exists_on_server", new DeleteRole());
-			}
-			return null;
-		}
-
-		public static class DeleteRole extends FixProposal<ImportedRoleShouldExistOnServer, Role> {
-			public DeleteRole() {
-				super("delete_role_($object.name)");
-			}
-
-			@Override
-			protected void fixAction() {
-				getObject().delete();
-			}
-		}
 	}
 
 	/**

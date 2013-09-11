@@ -339,7 +339,8 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 		super.paint(g, controller);
 
-		if (!(bgStyle instanceof ColorBackgroundStyle) || !((ColorBackgroundStyle) bgStyle).getColor().equals(getBackgroundColor())) {
+		if (!(bgStyle instanceof ColorBackgroundStyle) || ((ColorBackgroundStyle) bgStyle).getColor() == null
+				|| !((ColorBackgroundStyle) bgStyle).getColor().equals(getBackgroundColor())) {
 			bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
 		}
 

@@ -56,7 +56,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	public static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
 	public static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
 	public static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
-	public static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
+	public static final String WEB_SERVICE_PWD_KEY = "webServicePassword";
 	public static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
 	public static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
 
@@ -301,13 +301,13 @@ public class AdvancedPrefs extends ContextPreferences {
 		getPreferences().setProperty(WEB_SERVICE_LOGIN_KEY, webServiceLogin);
 	}
 
-	public static String getWebServiceMd5Password() {
-		String answer = getPreferences().getProperty(WEB_SERVICE_PWD_KEY);
+	public static String getWebServicePassword() {
+		String answer = getPreferences().getPasswordProperty(WEB_SERVICE_PWD_KEY);
 		return answer;
 	}
 
-	public static void setWebServiceMd5Password(String webServiceMd5Password) {
-		getPreferences().setProperty(WEB_SERVICE_PWD_KEY, webServiceMd5Password);
+	public static void setWebServicePassword(String password) {
+		getPreferences().setPasswordProperty(WEB_SERVICE_PWD_KEY, password);
 	}
 
 	public static boolean getRememberAndDontAskWebServiceParamsAnymore() {

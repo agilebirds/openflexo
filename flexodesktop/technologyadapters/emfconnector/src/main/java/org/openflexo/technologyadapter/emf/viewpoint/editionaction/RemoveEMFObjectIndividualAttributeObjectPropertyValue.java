@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObjectPropertyValue;
 
@@ -42,6 +43,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObj
  * @author gbesancon
  * 
  */
+@FIBPanel("Fib/RemoveEMFObjectIndividualAttributeObjectPropertyValuePanel.fib")
 public class RemoveEMFObjectIndividualAttributeObjectPropertyValue extends
 		AssignableAction<EMFModelSlot, EMFObjectIndividualAttributeObjectPropertyValue> {
 
@@ -52,16 +54,6 @@ public class RemoveEMFObjectIndividualAttributeObjectPropertyValue extends
 	 */
 	public RemoveEMFObjectIndividualAttributeObjectPropertyValue(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.AssignableAction#getEditionActionType()
-	 */
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddObjectPropertyStatement;// FIXME
 	}
 
 	/**

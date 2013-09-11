@@ -1,31 +1,21 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBReferencedComponent">
-	<Parameter name="title" value="Referenced component"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="file" constraints="twocols(location=left)"/>
-				<File data="data.componentFile" constraints="twocols(location=right;expandHorizontally=true)"/>
-		
-				<Label label="assignments" align="center" constraints="twocols(location=center;expandHorizontally=true)" columns="15"/>
-
-				<Table name="AssignmentsTable" iteratorClassName="org.openflexo.fib.model.FIBReferencedComponent$FIBReferenceAssignment" data="data.assignments" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)" visibleRowCount="5" rowHeight="20">
-					<CustomColumn title="Variable" data="iterator.variable" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-						<ColumnAssignment variable="component.bindable" value="iterator"/>
-					</CustomColumn>
-					<CustomColumn title="Value" data="iterator.value" componentClassName="org.openflexo.fib.utils.BindingSelector" columnWidth="200" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-						<ColumnAssignment variable="component.bindable" value="data"/>
-					</CustomColumn>
-					<AddAction name="new_assignment" method="data.createAssignment()"/>
-					<RemoveAction name="delete_assignment" method="data.deleteAssignment(selected)"/>
-				</Table>
-							
-			</Tab>
-						
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBReferencedComponent" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="file" constraints="twocols(location=left)" localize="true" />
+      <File isDirectory="false" localize="true" data="data.componentFile" constraints="twocols(expandHorizontally=true;location=right)" />
+      <Label label="assignments" align="center" constraints="twocols(expandHorizontally=true;location=center)" localize="true" />
+      <Table iteratorClassName="org.openflexo.fib.model.FIBReferencedComponent$FIBReferenceAssignment" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="AssignmentsTable" data="data.assignments" constraints="twocols(expandHorizontally=true;expandVertically=true;location=center)">
+        <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.variable" title="Variable" columnWidth="200" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindable" value="iterator" />
+        </CustomColumn>
+        <CustomColumn componentClassName="org.openflexo.fib.utils.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" title="Value" columnWidth="200" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.bindable" value="data" />
+        </CustomColumn>
+        <AddAction method="data.createAssignment()" name="new_assignment" />
+        <RemoveAction method="data.deleteAssignment(selected)" name="delete_assignment" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Referenced component" />
 </Panel>

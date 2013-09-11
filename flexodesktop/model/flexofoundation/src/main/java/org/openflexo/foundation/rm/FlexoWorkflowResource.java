@@ -147,7 +147,6 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 			progress.resetSecondaryProgress(project.getFlexoWorkflow().allLocalProcessesCount());
 		}
 		if (!isCache()) {
-			loadProcesses(progress, workflow, workflow.allImportedProcessNodes());
 			loadProcesses(progress, workflow, workflow.allLocalProcessNodes());
 			for (Enumeration<FlexoProcessNode> e = workflow.allLocalProcessNodes(); e.hasMoreElements();) {
 				FlexoProcessNode nextProcessNode = e.nextElement();

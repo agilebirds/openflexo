@@ -1,6 +1,6 @@
 package org.openflexo.vpm.fib;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.components.widget.FIBDiagramPaletteBrowser;
 import org.openflexo.components.widget.FIBExampleDiagramBrowser;
 import org.openflexo.components.widget.FIBViewPointBrowser;
@@ -64,11 +64,11 @@ public class TestVPMFIB extends FIBTestCase {
 	}
 
 	public void testDeclareConnectorInEditionPatternDialog() {
-		validateFIB(FlexoCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+		validateFIB(CommonFIB.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 	}
 
 	public void testDeclareShapeInEditionPatternDialog() {
-		validateFIB(FlexoCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
+		validateFIB(CommonFIB.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 	}
 
 	public void testPushToPaletteDialog() {
@@ -76,7 +76,7 @@ public class TestVPMFIB extends FIBTestCase {
 	}
 
 	public void testReviewUnsavedDialog() {
-		validateFIB(FlexoCst.REVIEW_UNSAVED_DIALOG_FIB);
+		validateFIB(CommonFIB.REVIEW_UNSAVED_DIALOG_FIB);
 	}
 
 	public void testShowLanguageRepresentationDialog() {

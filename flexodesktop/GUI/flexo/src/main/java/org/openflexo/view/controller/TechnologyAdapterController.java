@@ -19,6 +19,9 @@
  */
 package org.openflexo.view.controller;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -35,10 +38,12 @@ import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
@@ -56,6 +61,8 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapterController.class.getPackage().getName());
 
 	private TechnologyAdapterControllerService technologyAdapterControllerService;
+
+	private Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
 
 	/**
 	 * Returns applicable {@link TechnologyAdapterService}
@@ -176,5 +183,36 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective);
+
+	public File getFIBPanelForObject(Object anObject) {
+		if (anObject != null) {
+			return getFIBPanelForClass(anObject.getClass());
+		}
+		return null;
+	}
+
+	public File getFIBPanelForClass(Class<?> aClass) {
+		if (aClass == null) {
+			return null;
+		}
+		File returned = fibPanelsForClasses.get(aClass);
+		if (returned == null) {
+			if (aClass.getAnnotation(FIBPanel.class) != null) {
+				File fibPanel = new FileResource(aClass.getAnnotation(FIBPanel.class).value());
+				if (fibPanel.exists()) {
+					logger.info("Found " + fibPanel);
+					fibPanelsForClasses.put(aClass, fibPanel);
+					return fibPanel;
+				} else {
+					logger.warning("Not found " + fibPanel);
+					return null;
+				}
+			}
+			if (aClass.getSuperclass() != null) {
+				return getFIBPanelForClass(aClass.getSuperclass());
+			}
+		}
+		return returned;
+	}
 
 }

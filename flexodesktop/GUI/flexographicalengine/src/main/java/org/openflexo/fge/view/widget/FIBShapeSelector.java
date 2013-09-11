@@ -27,19 +27,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.Arc;
-import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.Losange;
-import org.openflexo.fge.shapes.Oval;
-import org.openflexo.fge.shapes.Polygon;
-import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.RegularPolygon;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.fge.shapes.Square;
-import org.openflexo.fge.shapes.Star;
-import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -135,17 +124,6 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 		private Shape shape;
 
-		private Rectangle rectangle;
-		private Square square;
-		private Polygon polygon;
-		private RegularPolygon regularPolygon;
-		private Losange losange;
-		private Triangle triangle;
-		private Oval oval;
-		private Circle circle;
-		private Arc arc;
-		private Star star;
-
 		private PropertyChangeSupport pcSupport;
 
 		public ShapeFactory(Shape shape) {
@@ -194,70 +172,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 				// System.out.println("set shape type to " + shapeType);
 
-				switch (shapeType) {
-				case RECTANGLE:
-					if (rectangle == null) {
-						rectangle = (Rectangle) Shape.makeShape(shapeType, null);
-					}
-					shape = rectangle;
-					break;
-				case SQUARE:
-					if (square == null) {
-						square = (Square) Shape.makeShape(shapeType, null);
-					}
-					shape = square;
-					break;
-				case CUSTOM_POLYGON:
-					if (polygon == null) {
-						polygon = new Polygon(null, new FGEPoint(0.1, 0.1), new FGEPoint(0.3, 0.9), new FGEPoint(0.9, 0.3));
-					}
-					shape = polygon;
-					break;
-				case POLYGON:
-					if (regularPolygon == null) {
-						regularPolygon = (RegularPolygon) Shape.makeShape(shapeType, null);
-					}
-					shape = regularPolygon;
-					break;
-				case TRIANGLE:
-					if (triangle == null) {
-						triangle = (Triangle) Shape.makeShape(shapeType, null);
-					}
-					shape = triangle;
-					break;
-				case LOSANGE:
-					if (losange == null) {
-						losange = (Losange) Shape.makeShape(shapeType, null);
-					}
-					shape = losange;
-					break;
-				case OVAL:
-					if (oval == null) {
-						oval = (Oval) Shape.makeShape(shapeType, null);
-					}
-					shape = oval;
-					break;
-				case CIRCLE:
-					if (circle == null) {
-						circle = (Circle) Shape.makeShape(shapeType, null);
-					}
-					shape = circle;
-					break;
-				case ARC:
-					if (arc == null) {
-						arc = (Arc) Shape.makeShape(shapeType, null);
-					}
-					shape = arc;
-					break;
-				case STAR:
-					if (star == null) {
-						star = (Star) Shape.makeShape(shapeType, null);
-					}
-					shape = star;
-					break;
-				default:
-					shape = Shape.makeShape(shapeType, null);
-				}
+				shape = Shape.makeShape(shapeType, null);
 
 				pcSupport.firePropertyChange("shapeType", oldShapeType, getShapeType());
 			}

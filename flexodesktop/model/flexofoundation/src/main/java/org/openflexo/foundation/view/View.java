@@ -384,21 +384,23 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 			logger.fine("delete: View " + getName());
 		}
 		if (getResource() != null) {
+			// Set the file resource to be remove upon next save of the resource manager
 			getResource().delete();
 		}
+		// Delete the view in the folder
+		// getFolder().removeFromResources(resource);
 
-		if (getResource() != null) {
-			getResource().delete();
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("View " + getName() + " has no ViewDefinition associated!");
-			}
-		}
-
-		super.delete();
+		// Delete the view resource from the view library
+		getProject().getViewLibrary().delete(this);
 
 		setChanged();
+
+		// Notify observers that the view has been deleted
 		notifyObservers(new ViewDeleted(this));
+
+		// Set the current state of this view to deleted
+		super.delete();
+
 		deleteObservers();
 	}
 

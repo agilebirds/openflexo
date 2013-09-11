@@ -49,6 +49,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -57,17 +58,13 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/AddConnectorPanel.fib")
 public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
 	public AddConnector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddConnector;
 	}
 
 	@Override
@@ -310,8 +307,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		public ValidationIssue<AddConnectorActionMustHaveAValidStartingShape, AddConnector> applyValidation(AddConnector action) {
 			ConnectorPatternRole pr = action.getPatternRole();
 			DataBinding<DiagramShape> db = action.getFromShape();
-			if ( pr != null && pr.getStartShapeAsDefinedInAction()
-					&& !(db.isSet() && db.isValid())) {
+			if (pr != null && pr.getStartShapeAsDefinedInAction() && !(db.isSet() && db.isValid())) {
 				Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector>>();
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
@@ -389,8 +385,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		public ValidationIssue<AddConnectorActionMustHaveAValidEndingShape, AddConnector> applyValidation(AddConnector action) {
 			ConnectorPatternRole pr = action.getPatternRole();
 			DataBinding<DiagramShape> shape = action.getToShape();
-			if (pr != null && pr.getEndShapeAsDefinedInAction()
-					&& !(shape.isSet() && shape.isValid())) {
+			if (pr != null && pr.getEndShapeAsDefinedInAction() && !(shape.isSet() && shape.isValid())) {
 				Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector>>();
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();

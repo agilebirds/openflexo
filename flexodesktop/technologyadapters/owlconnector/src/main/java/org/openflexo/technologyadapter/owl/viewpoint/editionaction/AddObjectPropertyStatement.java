@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
@@ -49,6 +50,7 @@ import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/AddObjectPropertyStatementPanel.fib")
 public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement> implements SetObjectPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
@@ -70,11 +72,6 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 			return null;
 		}
 		return null;
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.AddObjectPropertyStatement;
 	}
 
 	@Override

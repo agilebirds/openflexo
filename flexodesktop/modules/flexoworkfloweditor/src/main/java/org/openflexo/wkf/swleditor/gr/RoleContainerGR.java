@@ -48,7 +48,6 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.ConvertedIntoLocalObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.Role;
@@ -97,7 +96,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		setTextStyle(TextStyle.makeTextStyle(mainColor,new Font("SansSerif", Font.BOLD, 12)));
 
 		updatePropertiesFromWKFPreferences();*/
-		setIsLabelEditable(!role.isImported());
 		updateColors();
 
 		setDecorationPainter(new DecorationPainter() {
@@ -296,8 +294,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				} else {
 					notifyShapeNeedsToBeRedrawn();
 				}
-			} else if (dataModification instanceof ConvertedIntoLocalObject) {
-				setIsLabelEditable(!getRole().isImported());
 			} else if (dataModification instanceof RoleRemoved) {
 				getDrawing().requestRebuildCompleteHierarchy();
 			}

@@ -30,15 +30,18 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 public class FIBButtonColumn extends FIBTableColumn {
 
 	@Deprecated
-	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, DataBinding.BindingDefinitionType.GET, false);
+	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, DataBinding.BindingDefinitionType.GET,
+			false);
 	@Deprecated
 	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
+	private static BindingDefinition ENABLED = new BindingDefinition("enabled", Boolean.class, BindingDefinitionType.GET, false);
 
 	public static enum Parameters implements FIBModelAttribute {
-		action, buttonIcon;
+		action, enabled;
 	}
 
 	private DataBinding<Object> action;
+	private DataBinding<Boolean> enabled;
 
 	// private DataBinding buttonIcon;
 
@@ -60,6 +63,26 @@ public class FIBButtonColumn extends FIBTableColumn {
 
 	public BindingDefinition getActionBindingDefinition() {
 		return ACTION;
+	}
+
+	public DataBinding getEnabled() {
+		if (enabled == null) {
+			enabled = new DataBinding<Boolean>(this, Boolean.class, DataBinding.BindingDefinitionType.GET);
+		}
+		return enabled;
+	}
+
+	public void setEnabled(DataBinding enabled) {
+		if (enabled != null) {
+			enabled.setOwner(this);
+			enabled.setDeclaredType(Boolean.class);
+			enabled.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		}
+		this.enabled = enabled;
+	}
+
+	public BindingDefinition getEnabledBindingDefinition() {
+		return ENABLED;
 	}
 
 	/*

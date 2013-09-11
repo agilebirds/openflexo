@@ -51,12 +51,12 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 
 		@Override
 		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object != null && !object.isImported();
+			return object != null;
 		}
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof FlexoFolderContainerNode || object instanceof FlexoProcess) && !object.isImported();
+			return object instanceof FlexoFolderContainerNode || object instanceof FlexoProcess;
 		}
 
 	};

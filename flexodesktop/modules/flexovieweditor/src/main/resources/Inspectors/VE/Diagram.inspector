@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.model.Diagram" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.model.Diagram" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="10" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
-      <TabPanel name="GRTab" data="data.rootPane.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=10;expandHorizontally=true;expandVertically=true)">
-        <Tab index="0" title="Drawing" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="BasicTab">
-      <Label label="width" localize="true" name="WidthLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="DoubleType" columns="10" data="GRTab.data.width" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationwidth" localize="true" />
-      <Label label="height" localize="true" name="HeightLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="DoubleType" columns="10" data="GRTab.data.height" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationheight" localize="true" />
-      <Label label="background_color" localize="true" name="BackgroundColorLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Color data="GRTab.data.backgroundColor" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationbackgroundColor" localize="true" />
-      <Label label="draw_working_area" localize="true" name="DrawWorkingAreaLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="GRTab.data.drawWorkingArea" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
- 		</Tab>
- 		</TabPanel>
-    </Tab>    
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="10" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab">
+      <TabPanel name="GRTab" index="10" data="data.rootPane.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;location=center)">
+        <Tab title="Drawing" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+          <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="WidthLabel" localize="true" />
+          <Number numberType="DoubleType" columns="10" index="5" data="GRTab.data.width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="GraphicalRepresentationwidth" localize="true" />
+          <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="HeightLabel" localize="true" />
+          <Number numberType="DoubleType" columns="10" index="7" data="GRTab.data.height" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="GraphicalRepresentationheight" localize="true" />
+          <Label label="background_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="BackgroundColorLabel" localize="true" />
+          <Color index="9" data="GRTab.data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="GraphicalRepresentationbackgroundColor" localize="true" />
+          <Label label="draw_working_area" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="DrawWorkingAreaLabel" localize="true" />
+          <CheckBox selected="false" index="1" data="GRTab.data.drawWorkingArea" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="GraphicalRepresentationdrawWorkingArea" localize="true" />
+        </Tab>
+      </TabPanel>
+    </Tab>
   </TabPanel>
-  <LocalizedDictionary>
-  </LocalizedDictionary>
+  <LocalizedDictionary />
   <Parameter name="title" value="Diagram" />
 </Panel>
-

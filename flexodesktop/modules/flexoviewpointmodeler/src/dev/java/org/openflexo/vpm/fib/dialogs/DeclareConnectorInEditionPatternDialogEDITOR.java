@@ -22,14 +22,14 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.TestApplicationContext;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.VPMCst;
 
 public class DeclareConnectorInEditionPatternDialogEDITOR extends FIBAbstractEditor {
 
@@ -42,13 +42,14 @@ public class DeclareConnectorInEditionPatternDialogEDITOR extends FIBAbstractEdi
 
 		ExampleDiagram shema = calc1.getDefaultDiagramSpecification().getExampleDiagrams().get(0);
 		ExampleDiagramConnector connector = (ExampleDiagramConnector) shema.getChilds().get(2);
-		DeclareConnectorInEditionPattern action = DeclareConnectorInEditionPattern.actionType.makeNewAction(connector, null, null);
+		DeclareExampleDiagramConnectorInEditionPattern action = DeclareExampleDiagramConnectorInEditionPattern.actionType.makeNewAction(
+				connector, null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VPMCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB;
+		return CommonFIB.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

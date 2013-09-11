@@ -19,34 +19,28 @@
  */
 package org.openflexo.fib.model;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
-import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.fib.FIBLibrary;
-import org.openflexo.toolbox.FileResource;
 
-public class FIBReferencedComponent extends FIBWidget  {
+public class FIBReferencedComponent extends FIBWidget {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponent.class.getPackage().getName());
 
-	// This is the Fib File Name used for the referencedComponent
-	private DataBinding<String> componentFile;
-
+	private File componentFile;
+	private DataBinding<File> dynamicComponentFile;
 
 	public static enum Parameters implements FIBModelAttribute {
-		componentFile, assignments
+		componentFile, dynamicComponentFile, assignments
 	}
 
+	// TODO: Should be moved to FIBReferencedComponent widget
 	private FIBComponent referencedComponent;
 	private Vector<FIBReferenceAssignment> assignments;
 
@@ -67,31 +61,44 @@ public class FIBReferencedComponent extends FIBWidget  {
 		return Object.class;
 	}
 
-	public DataBinding<String>  getComponentFile() {
-
-		if (componentFile == null) {
-			componentFile = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			componentFile.setBindingName("componentFile");
-			componentFile.setCacheable(true);
-		}
+	public File getComponentFile() {
 		return componentFile;
 	}
 
-	public void setComponentFile(DataBinding<String>  componentFile) {
+	public void setComponentFile(File componentFile) {
+		FIBAttributeNotification<File> notification = requireChange(Parameters.componentFile, componentFile);
+		if (notification != null) {
+			this.componentFile = componentFile;
+			// component = null;
+			notify(notification);
+		}
+	}
 
-		FIBAttributeNotification<DataBinding<String>> notification = requireChange(Parameters.componentFile, componentFile);
+	public DataBinding<File> getDynamicComponentFile() {
+
+		if (dynamicComponentFile == null) {
+			dynamicComponentFile = new DataBinding<File>(this, File.class, DataBinding.BindingDefinitionType.GET);
+			dynamicComponentFile.setBindingName("componentFile");
+			dynamicComponentFile.setCacheable(true);
+		}
+		return dynamicComponentFile;
+	}
+
+	public void setDynamicComponentFile(DataBinding<File> dynamicComponentFile) {
+
+		FIBAttributeNotification<DataBinding<File>> notification = requireChange(Parameters.dynamicComponentFile, dynamicComponentFile);
 
 		if (notification != null) {
 
-			if (componentFile != null) {
-				componentFile.setOwner(this);
-				componentFile.setDeclaredType(String.class);
-				componentFile.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-				componentFile.setBindingName("componentFile");
-				componentFile.setCacheable(true);
+			if (dynamicComponentFile != null) {
+				dynamicComponentFile.setOwner(this);
+				dynamicComponentFile.setDeclaredType(File.class);
+				dynamicComponentFile.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				dynamicComponentFile.setBindingName("dynamicComponentFile");
+				dynamicComponentFile.setCacheable(true);
 			}
 
-			this.componentFile = componentFile;
+			this.dynamicComponentFile = dynamicComponentFile;
 
 			referencedComponent = null;
 			notify(notification);
@@ -99,45 +106,12 @@ public class FIBReferencedComponent extends FIBWidget  {
 
 	}
 
+	@Override
 	public Type getDataType() {
-		if (referencedComponent != null){
-				return referencedComponent.getDataType();
+		if (referencedComponent != null) {
+			return referencedComponent.getDataType();
 		}
 		return super.getDataType();
-	}
-
-
-	// TODO A deplacer cote widget plutot (conseil de Guillaume)
-
-	public FIBComponent loadReferencedComponent(BindingEvaluationContext context) {
-		if (referencedComponent == null && getComponentFile() != null) {
-
-			try {
-
-				String fibFileName = getComponentFile().getBindingValue(context);
-				if (fibFileName != null) {
-					FileResource fibFile = new FileResource(fibFileName);
-
-					referencedComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
-				}
-				else {
-					if(deserializationPerformed){
-						logger.warning("Cannot find related Fib File for current FIBReferencedComponent " + this.getName());
-						}
-					referencedComponent = null;
-				}
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return referencedComponent;
 	}
 
 	public boolean hasAssignment(String variableName) {
@@ -185,13 +159,22 @@ public class FIBReferencedComponent extends FIBWidget  {
 			assign.finalizeDeserialization();
 		}
 	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		if (getDynamicComponentFile().isSet()) {
+			returned.add(getDynamicComponentFile());
+		}
+		return returned;
+	}
+
 	/*
 	@Override
 	public Boolean getManageDynamicModel() {
 		return true;
 	}
 	 */
-
 
 	public FIBReferenceAssignment createAssignment() {
 		logger.info("Called createAssignment()");
@@ -334,20 +317,16 @@ public class FIBReferencedComponent extends FIBWidget  {
 
 	}
 
-	public static class componentFileBindingMustBeValid extends BindingMustBeValid<FIBReferencedComponent> {
-		public componentFileBindingMustBeValid() {
-			super("'componentFile'_binding_is_not_valid", FIBReferencedComponent.class);
+	public static class DynamicComponentFileBindingMustBeValid extends BindingMustBeValid<FIBReferencedComponent> {
+		public DynamicComponentFileBindingMustBeValid() {
+			super("'dynamic_componentFile'_binding_is_not_valid", FIBReferencedComponent.class);
 		}
 
 		@Override
-		public DataBinding<String> getBinding(FIBReferencedComponent object) {
-			return object.getComponentFile();
+		public DataBinding<File> getBinding(FIBReferencedComponent object) {
+			return object.getDynamicComponentFile();
 		}
 
 	}
-	
-	
-
-
 
 }

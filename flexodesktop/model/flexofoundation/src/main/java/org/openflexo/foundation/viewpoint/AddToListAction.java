@@ -25,17 +25,16 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/AddToListActionPanel.fib")
 public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
 
 	private static final Logger logger = Logger.getLogger(AddToListAction.class.getPackage().getName());
@@ -51,11 +50,6 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Assignation;
 	}
 
 	@Override
@@ -96,7 +90,7 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 
 	@Override
 	public Type getAssignableType() {
-		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA 
+		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
 		/* if (getValue().isSet() && getValue().isValid()) {
 			return new ParameterizedTypeImpl(List.class,getValue().getAnalyzedType());
 		} */
@@ -112,29 +106,25 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 
 		try {
 
-			if ( assignation != null){
-				Object assigObj =  assignation.getBindingValue(action);
-				if (assigObj instanceof List){
-					if (objToAdd != null){
+			if (assignation != null) {
+				Object assigObj = assignation.getBindingValue(action);
+				if (assigObj instanceof List) {
+					if (objToAdd != null) {
 						((List) assigObj).add(objToAdd);
-					}
-					else {
+					} else {
 						logger.warning("Won't add null object to list");
-						
+
 					}
-				}
-				else {
-					if (assigObj == null){
-						logger.warning("Cannot add object to a null target : " + assignation.getUnparsedBinding() );
-					}
-					else {
-						logger.warning("Cannot add object to a non list target : " + assigObj.toString() );
+				} else {
+					if (assigObj == null) {
+						logger.warning("Cannot add object to a null target : " + assignation.getUnparsedBinding());
+					} else {
+						logger.warning("Cannot add object to a non list target : " + assigObj.toString());
 					}
 					return null;
 				}
 
-			}
-			else {
+			} else {
 				logger.warning("Cannot perform Assignation as assignation is null");
 			}
 		} catch (TypeMismatchException e) {
@@ -163,6 +153,7 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		public ValueBindingIsRequiredAndMustBeValid() {
 			super("'value'_binding_is_not_valid", AddToListAction.class);
 		}
+
 		@Override
 		public DataBinding<Object> getBinding(AddToListAction object) {
 			return object.getValue();

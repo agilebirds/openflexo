@@ -80,11 +80,6 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 		return null;
 	}
 
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.FetchRequest;
-	}
-
 	public abstract Type getFetchedType();
 
 	@Override

@@ -542,10 +542,10 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	@Override
 	public synchronized void delete(boolean deleteFile) {
 		willBeDeleted = true;
+		stopObserving();
 		if (sourceReference != null) {
 			sourceReference.delete(false);
 		}
-		stopObserving();
 		super.delete(deleteFile);
 	}
 

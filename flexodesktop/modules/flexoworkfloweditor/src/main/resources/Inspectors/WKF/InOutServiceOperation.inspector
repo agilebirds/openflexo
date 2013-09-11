@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.ServiceOperation" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
-    <Tab title="Messages" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="MessagesTab" opaque="false">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
+    <Tab title="Messages" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="MessagesTab">
       <Label label="input_message" align="center" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="InputMessageDefinitionentriesLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -28,7 +28,7 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
       <Label label="InfoLabel" index="1" data="data.tabInputOutputBindingDescription" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=right)" name="TabInputOutputBindingDescription" localize="true" />
       <Label label="input_message_bindings" align="center" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=center)" name="InputMessageBindingsbindingsLabel" localize="true" />
       <Label label="output_message_bindings" align="center" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" name="OutputMessageBindingsbindingsLabel" localize="true" />
