@@ -197,12 +197,14 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		private IndexPathElement index;
 		private Hashtable<String, VariableBindingPathElement> variables;
 		private Bindable container;
+		private ChildCountPathElement childCount;
 
 		public ComponentPathElement(String pathElementName, GraphicalRepresentation<?> gr, Bindable container) {
 			this.pathElementName = pathElementName;
 			this.gr = gr;
 			this.container = container;
 			index = new IndexPathElement(gr);
+			childCount = new ChildCountPathElement(gr);
 			if (gr.getParentGraphicalRepresentation() != null) {
 				parent = new ComponentPathElement("parent", gr.getParentGraphicalRepresentation(), gr);
 			}
@@ -222,6 +224,10 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 		public GraphicalRepresentation<?> getComponent() {
 			return gr;
+		}
+
+		public ChildCountPathElement getChildCount() {
+			return childCount;
 		}
 
 		@Override
@@ -338,6 +344,68 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		}
 	}
 
+	public static class ChildCountPathElement implements SimplePathElement<Integer>, FinalBindingPathElement<Integer> {
+		private GraphicalRepresentation<?> gr;
+
+		public ChildCountPathElement(GraphicalRepresentation<?> gr) {
+			this.gr = gr;
+		}
+
+		public GraphicalRepresentation<?> getComponent() {
+			return gr;
+		}
+
+		@Override
+		public Class getDeclaringClass() {
+			return gr.getClass();
+		}
+
+		@Override
+		public Type getType() {
+			return Integer.TYPE;
+		}
+
+		@Override
+		public String getSerializationRepresentation() {
+			return "childCount";
+		}
+
+		@Override
+		public boolean isBindingValid() {
+			return true;
+		}
+
+		@Override
+		public String getLabel() {
+			return getSerializationRepresentation();
+		}
+
+		@Override
+		public String getTooltipText(Type resultingType) {
+			return getSerializationRepresentation();
+		}
+
+		@Override
+		public boolean isSettable() {
+			return false;
+		}
+
+		@Override
+		public Integer getBindingValue(Object target, BindingEvaluationContext context) {
+			List<? extends Object> children = gr.getContainedObjects();
+			if (children != null) {
+				return children.size();
+			} else {
+				return 0;
+			}
+		}
+
+		@Override
+		public void setBindingValue(Integer value, Object target, BindingEvaluationContext context) {
+			// Not settable
+		}
+	}
+
 	@Override
 	public BindingPathElement getBindingPathElement(BindingPathElement father, String propertyName) {
 		if (father instanceof ComponentsBindingVariable) {
@@ -353,6 +421,9 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			}
 			if (propertyName.equals("parent")) {
 				return ((ComponentPathElement) father).getParent();
+			}
+			if (propertyName.equals("childCount")) {
+				return ((ComponentPathElement) father).getChildCount();
 			}
 			for (GRParameter p : allowedPropertiesInBindings) {
 				if (isAllowedProperty(propertyName)) {
@@ -380,6 +451,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 					returned.add(bpe);
 				}
 			}
+			returned.add(((ComponentPathElement) father).getChildCount());
 			returned.addAll(((ComponentPathElement) father).variables.values());
 			return returned;
 		}
