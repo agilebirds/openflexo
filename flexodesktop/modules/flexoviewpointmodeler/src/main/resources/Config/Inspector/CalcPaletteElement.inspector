@@ -85,7 +85,7 @@
 	</tab>
 
 	<tab name="Advanced" index="2" layout="DEFAULT">
-		<property name="graphicalRepresentation.multilineText" label="text" widget="TEXT_AREA" constraint="1" depends="isMultilineAllowed" conditional="isMultilineAllowed=true">
+		<property name="graphicalRepresentation.text" label="text" widget="TEXT_AREA" constraint="1" depends="isMultilineAllowed" conditional="isMultilineAllowed=true">
 			<param name="columns" value="10"/>
 		</property>
 		<property name="graphicalRepresentation.isMultilineAllowed" label="multiple_lines" widget="CHECKBOX" constraint="3">
