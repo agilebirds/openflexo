@@ -40,6 +40,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.CreationScheme;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
@@ -358,5 +359,9 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 	public CreationSchemeAction getCreationSchemeAction() {
 		return creationSchemeAction;
+	}
+	
+	public ViewPoint getViewpoint(){
+		return (ViewPoint) getFocusedObject().getViewPoint(); 
 	}
 }
