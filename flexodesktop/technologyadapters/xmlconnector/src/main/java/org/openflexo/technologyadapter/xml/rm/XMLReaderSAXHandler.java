@@ -94,20 +94,20 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 
 			// Depending on the choices made when interpreting MetaModel, an XML Element
 			// might be translated as a Property or a new Type....
-			// If type is not found maybe we should look if it the particular element
-			// has been translated as an ObjectProperty or DataProperty
-
 			Type currentType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(uri+"#"+localName);
 
-			if (currentContainer != null && currentType == null){
+			// looking for the equally named property in currentContainer
+			if (currentContainer != null){
 				currentAttribute = (AC) ((IXMLIndividual<?, ?>) currentContainer).getAttributeByName(localName);
+			}
 
-				if (currentAttribute != null){
-					if (!currentAttribute.isSimpleAttribute() ){
-						// this is a complex attribute, we will create an individual and then add to the attribute values
-						currentType = ((IXMLAttribute) currentAttribute).getAttributeType();
-						attributeStack.push(currentAttribute);
-					}
+			if (currentAttribute != null ){
+				Type attrType = ((IXMLAttribute) currentAttribute).getAttributeType();
+
+				if (!currentAttribute.isSimpleAttribute() ){
+					// this is a complex attribute, we will create an individual and then add to the attribute values
+					currentType = attrType;
+					attributeStack.push(currentAttribute);
 				}
 			}
 
@@ -144,7 +144,7 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 						NSPrefix = attrQName;
 						NSPrefix.replace(attrName, "");
 					}
-					
+
 					aType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(attrURI+"#"+attrName);
 
 					if (typeName.equals(XMLFileResourceImpl.CDATA_TYPE_NAME)){
@@ -165,21 +165,39 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 
 				}
 
+				//************************************
+				// Current element is not contained in another one, it is root!
+
 
 				if ( currentContainer == null) {
 					((IXMLModel) aXMLModel).setRoot( (IXMLIndividual<IC, AC>) anIndividual);
 					if (uri != null && !uri.isEmpty()){
-						
+
 						((IXMLModel) aXMLModel).setNamespace(uri,NSPrefix);
-						}
+					}
 					currentContainer = anIndividual;
+					// logger.info("OPENING ROOT Container is + " + currentContainer.toString() + "   / Attribute is: " + currentAttribute );
+
 				}
-				else {
-					((IXMLIndividual<IC, AC>) currentContainer).addChild((IXMLIndividual<IC, AC>) anIndividual);
+
+				//************************************
+				// Current element is contained in another one
+
+				else if (currentContainer != anIndividual) {
+					
+					if ( currentAttribute != null) {
+						logger.info("ADDING " + anIndividual.toString() + " TO " + currentContainer.toString() + "   / Attribute is: " + currentAttribute );
+
+						currentAttribute.addValue((IXMLIndividual<IC, AC>) currentContainer, anIndividual);
+					}
+					else {
+						((IXMLIndividual<IC, AC>) currentContainer).addChild((IXMLIndividual<IC, AC>) anIndividual);
+					}
 				}
 				indivStack.push(anIndividual);
 				currentContainer = anIndividual;
 
+				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -226,6 +244,7 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 			else {
 				currentContainer = null;
 			}
+
 		}
 
 

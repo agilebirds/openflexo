@@ -38,6 +38,8 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static final String LIBRARY_URI = "http://www.example.org/Library#Library";
 	private static final String BOOK_URI = "http://www.example.org/Library#Book";
 	private static final String BOOK_TITLE_URI = "http://www.example.org/Library/Book#title";
+	private static final String LIB_NAME_URI = "http://www.example.org/Library/Library#name";
+	private static final String LIB_BOOKS_URI = "http://www.example.org/Library/Library#books";
 
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
@@ -152,12 +154,13 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 			// TODO : this wont work anymore as we suppressed name's significance for XSOntIndividual
 			XSOntIndividual library = lib.createOntologyIndividual(mmLib.getClass(LIBRARY_URI));
 			lib.setRoot(library);
+			library.addToPropertyValue(mmLib.getProperty(LIB_NAME_URI), "My Library");
 			XSOntIndividual book1 = lib.createOntologyIndividual(mmLib.getClass(BOOK_URI));
 			book1.addToPropertyValue(mmLib.getProperty(BOOK_TITLE_URI), "My First Book");
 			XSOntIndividual book2 = lib.createOntologyIndividual(mmLib.getClass(BOOK_URI));
 			book2.addToPropertyValue(mmLib.getProperty(BOOK_TITLE_URI), "My Second Book");
-			library.addChild(book1);
-			library.addChild(book2);
+			library.addToPropertyValue(mmLib.getProperty(LIB_BOOKS_URI), book1);
+			library.addToPropertyValue(mmLib.getProperty(LIB_BOOKS_URI), book2);
 
 			try {
 				lib.save();

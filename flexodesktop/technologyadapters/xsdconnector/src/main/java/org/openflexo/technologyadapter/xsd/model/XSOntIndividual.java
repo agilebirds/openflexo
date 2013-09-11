@@ -254,6 +254,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	
 		XSPropertyValue returned = values.get(property);
 
+		logger.info(" PROPERTY VALUE IS: " + returned);
+		
 		if (returned == null) {
 			if (property instanceof XSOntObjectProperty ) {
 				if (newValue == null) {
@@ -264,6 +266,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 					this.addChild((XSOntIndividual) newValue);
 				} 
 				values.put((XSOntObjectProperty) property, returned);
+				logger.info(" CREATED PROPERTY VALUE IS: " + returned);
+
 				return returned; 
 			}
 			else if (property instanceof XSOntDataProperty) {
