@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns1:Library xmlns:ns1="http://www.example.org/Library">
+<ns1:Library xmlns:ns1="http://www.example.org/Library"><name><![CDATA[My Library]]></name>
+<ns1:books>
+<title><![CDATA[My First Book]]></title>
+</ns1:books>
+<ns1:books>
+<title><![CDATA[My Second Book]]></title>
+</ns1:books>
+
 </ns1:Library>
 

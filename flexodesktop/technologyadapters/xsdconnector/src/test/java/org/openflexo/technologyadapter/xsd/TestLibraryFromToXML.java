@@ -3,6 +3,7 @@ package org.openflexo.technologyadapter.xsd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,6 +24,7 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
+import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
@@ -38,8 +40,8 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static final String LIBRARY_URI = "http://www.example.org/Library#Library";
 	private static final String BOOK_URI = "http://www.example.org/Library#Book";
 	private static final String BOOK_TITLE_URI = "http://www.example.org/Library/Book#title";
-	private static final String LIB_NAME_URI = "http://www.example.org/Library/Library#name";
-	private static final String LIB_BOOKS_URI = "http://www.example.org/Library/Library#books";
+	private static final String LIB_NAME_URI = "http://www.example.org/Library/LibraryType#name";
+	private static final String LIB_BOOKS_URI = "http://www.example.org/Library/LibraryType#books";
 
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
@@ -57,23 +59,45 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		System.out.println(prefix + "Indiv : " + indiv.getName() + "  ==> " + indiv.getUUID());
 
 		for (XSOntProperty x : indiv.getAttributes()) {
-			// System.out.print(prefix + "   attr : " + x.getName() + " [ " + x.isSimpleAttribute() + "]");
+			XSPropertyValue pv = ((XSOntIndividual) indiv).getPropertyValue(x);
+			List<? extends Object> values = null;
+
+			if (pv != null){
+				values =pv.getValues();
+			}
+
 			if (x.isSimpleAttribute()) {
-				// System.out.println("  =  " + ((XSOntIndividual) indiv).getPropertyValue(x).getValues().toString());
+				System.out.print(prefix + "   Data attr : " + x.getName() );
+				if (values != null){
+					System.out.println("  =  " + values.toString());
+				}
+				else {
+					System.out.println("");
+				}
 			} else {
-				// System.out.println();
+				System.out.println(prefix + "   Object attr : " + x.getName() );
+				if (values != null){
+					for (Object o : values){
+						XSOntIndividual child = (XSOntIndividual) o;
+						dumpIndividual((IXMLIndividual<XSOntIndividual, XSOntProperty>) child, prefix + "      ");
+					}
+				}
+
 			}
 		}
 
-		// System.out.println("");
+		System.out.println(prefix + "--- Dumping Children");
 		for (IXMLIndividual<XSOntIndividual, XSOntProperty> x : indiv.getChildren()) {
 			if (x != indiv) {
 				dumpIndividual(x, prefix + "     ");
 			}
+			else {
+				logger.info("NON MAIS NON!!!! CELA NE DOIT PAS ARRIVER");
+			}
 		}
 
-		// System.out.println("");
-		// System.out.flush();
+		System.out.println("");
+		System.out.flush();
 	}
 
 	/**
@@ -98,7 +122,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	}
 
 	public void test0LibraryFromXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
-			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+	ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test0LibraryFromXML()");
 
@@ -123,7 +147,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	}
 
 	public void test1LibraryToXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
-			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+	ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test1LibraryToXML()");
 

@@ -115,6 +115,11 @@ public class XMLAttribute extends FlexoObject implements IXMLAttribute {
 	public boolean isSimpleAttribute() {
 		return true;
 	}
+	
+	@Override
+	public boolean isElement() {
+		return false;
+	}
 
 	@Override
 	public void addValue(IXMLIndividual<?, ?> indiv, Object value) {

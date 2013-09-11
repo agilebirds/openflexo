@@ -119,9 +119,10 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 		// Attributes
 		writeAttributes(rootIndiv);
 		myWriter.writeCharacters(LINE_SEP);
+
 		// children node 
 		for (Object i : rootIndiv.getChildren()){
-			writeElement(i);			
+			writeElement(i,((IXMLIndividual)i).getName());			
 		}
 		// CDATA
 		String content = rootIndiv.getContentDATA();
@@ -136,17 +137,16 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 	}
 
 
-	private void writeElement(Object o) throws XMLStreamException {
+	private void writeElement(Object o, String name) throws XMLStreamException {
 		IXMLIndividual indiv = (IXMLIndividual) o;
 
-		myWriter.writeStartElement(NSURI,indiv.getName());
+		myWriter.writeStartElement(NSURI,name);
 
 		// Attributes
 		writeAttributes(indiv);
-		myWriter.writeCharacters(LINE_SEP);
 		// children node 
 		for (Object i : indiv.getChildren()){
-			writeElement(i);			
+			writeElement(i,((IXMLIndividual)i).getName());			
 		}
 		// CDATA
 		String content = indiv.getContentDATA();
@@ -164,25 +164,43 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 		// Simple Attributes First
 		String value = null;				
 
-		// FIXME : maybe better if we get attributeValues 
+		// Data Properties 
 		for (IXMLAttribute a : indiv.getAttributes()){
-			if (a.isSimpleAttribute()){
+			if (a.isSimpleAttribute() && !a.isElement()){
 				value = (String) indiv.getAttributeStringValue(a);
 				if (value != null){
 					myWriter.writeAttribute(a.getName(), value);
 				}
 			}
-			else {
-				List<?> indivList = (List<?>) indiv.getAttributeValue(a.getName());
-				if (indivList != null) {
-					for (Object o : indivList) { 
-						this.writeElement(o);
+		}
+		
+		for (IXMLAttribute a : indiv.getAttributes()){
+			if (a.isSimpleAttribute() && a.isElement()){
+
+				List<?> valueList = (List<?>) indiv.getAttributeValue(a.getName());
+				if (valueList != null) {
+					for (Object o : valueList) { 
+						myWriter.writeStartElement(a.getName());
+						myWriter.writeCData(o.toString());
+						myWriter.writeEndElement();
+						myWriter.writeCharacters(LINE_SEP);
 					}
 				}
+			}
+		}
+		// Object Properties
+		for (IXMLAttribute a : indiv.getAttributes()){
 
+			if (!a.isSimpleAttribute()){
+				List<?> valueList = (List<?>) indiv.getAttributeValue(a.getName());
+				if (valueList != null) {
+					for (Object o : valueList) { 
+						this.writeElement(o,a.getName());
+					}
+				}
 			}
 		}
 	}
 
-
 }
+

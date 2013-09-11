@@ -168,6 +168,11 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		return true;
 	}
 
+	@Override
+	public boolean isElement() {
+		return !isFromAttribute;
+	}
+
 
 	@Override
 	public void addValue(IXMLIndividual<?, ?> indiv, Object value) {
