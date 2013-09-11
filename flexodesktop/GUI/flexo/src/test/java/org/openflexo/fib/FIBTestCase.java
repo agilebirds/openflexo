@@ -29,4 +29,31 @@ public class FIBTestCase extends TestCase {
 		}
 		assertEquals(0, validationReport.getErrorNb());
 	}
+
+	public static String generateFIBTestCaseClass(File directory, String relativePath) {
+		StringBuffer sb = new StringBuffer();
+		for (File f : directory.listFiles()) {
+			if (f.getName().endsWith(".fib")) {
+				String fibName = f.getName().substring(0, f.getName().indexOf(".fib"));
+				sb.append("public void test" + fibName + "() {\n");
+				sb.append("  validateFIB(\"" + relativePath + f.getName() + "\");\n");
+				sb.append("}\n\n");
+			}
+		}
+		return sb.toString();
+	}
+
+	public static String generateInspectorTestCaseClass(File directory, String relativePath) {
+		StringBuffer sb = new StringBuffer();
+		for (File f : directory.listFiles()) {
+			if (f.getName().endsWith(".inspector")) {
+				String fibName = f.getName().substring(0, f.getName().indexOf(".inspector"));
+				sb.append("public void test" + fibName + "Inspector() {\n");
+				sb.append("  validateFIB(\"" + relativePath + f.getName() + "\");\n");
+				sb.append("}\n\n");
+			}
+		}
+		return sb.toString();
+	}
+
 }
