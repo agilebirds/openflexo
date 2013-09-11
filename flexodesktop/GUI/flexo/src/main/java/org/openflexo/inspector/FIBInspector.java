@@ -656,6 +656,7 @@ public class FIBInspector extends FIBPanel {
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setLayout(Layout.twocols);
+		newTab.setUseScrollBar(true);
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));

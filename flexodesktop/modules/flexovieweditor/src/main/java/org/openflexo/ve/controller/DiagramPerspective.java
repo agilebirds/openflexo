@@ -65,8 +65,6 @@ public class DiagramPerspective extends FlexoPerspective {
 
 	private final FIBInspectorPanel inspectorPanel;
 
-	private final JComponent inspectorPanelScrollPane;
-
 	private JComponent bottomRightDummy;
 
 	/**
@@ -108,7 +106,6 @@ public class DiagramPerspective extends FlexoPerspective {
 
 		// Initialized inspector panel
 		inspectorPanel = new FIBInspectorPanel(controller.getModuleInspectorController());
-		inspectorPanelScrollPane = inspectorPanel; // new JScrollPane(inspectorPanel);
 		setTopLeftView(_browserView);
 		setBottomLeftView(shemaBrowserView);
 	}
@@ -126,7 +123,7 @@ public class DiagramPerspective extends FlexoPerspective {
 		if (getCurrentShemaModuleView() == null) {
 			return bottomRightDummy;
 		}
-		return inspectorPanelScrollPane;
+		return inspectorPanel;
 	}
 
 	public void focusOnShema(View shema) {

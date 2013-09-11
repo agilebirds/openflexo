@@ -1,95 +1,73 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBWidget">
-	<Parameter name="title" value="Widget"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="enable" constraints="twocols(location=left)"/>
-				<Custom data="data.enable.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ENABLE"/>
-				</Custom>
-		
-				<Label label="format" constraints="twocols(location=left)"/>
-				<Custom data="data.format.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data.formatter"/>
-					<Assignment variable="component.bindingDefinition" value="data.FORMAT"/>
-				</Custom>
-		
-				<CheckBox data="data.localize" constraints="twocols(location=left)"/>
-				<Label label="localize_component" constraints="twocols(location=right;expandHorizontally=true)"/>
-
-				<CheckBox data="data.readOnly" constraints="twocols(location=left)" columns="15"/>
-				<Label label="read_only_component" constraints="twocols(location=right;expandHorizontally=true)"/>
-
-			</Tab>
-			
-			<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
-                <Label label="value_transform" constraints="twocols(location=left)"/>
-                <Custom data="data.valueTransform.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-                    <Assignment variable="component.bindable" value="data.valueBindable"/>
-                    <Assignment variable="component.bindingDefinition" value="data.valueTransformBindingDefinition"/>
-                </Custom>
-                <Label label="value_validator" constraints="twocols(location=left)"/>
-                <Custom data="data.valueValidator.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-                    <Assignment variable="component.bindable" value="data.valueBindable"/>
-                    <Assignment variable="component.bindingDefinition" value="data.valueValidatorDefinition"/>
-                </Custom>
-            </Tab>
-
-			<Tab name="ControlsTab" title="Controls" index="2" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="click_action" constraints="twocols(location=left)"/>
-				<Custom data="data.clickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION"/>
-				</Custom>
-
-				<Label label="double_click_action" constraints="twocols(location=left)"/>
-				<Custom data="data.doubleClickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION"/>
-				</Custom>
-
-				<Label label="right_click_action" constraints="twocols(location=left)"/>
-				<Custom data="data.rightClickAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data.eventListener"/>
-					<Assignment variable="component.bindingDefinition" value="data.RIGHT_CLICK_ACTION"/>
-				</Custom>
-
-				<Label label="enter_pressed_action" constraints="twocols(location=left)"/>
-				<Custom data="data.enterPressedAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ENTER_PRESSED_ACTION"/>
-				</Custom>
-
-				<Label label="value_changed" constraints="twocols(location=left)"/>
-				<Custom data="data.valueChangedAction.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.VALUE_CHANGED_ACTION"/>
-				</Custom>
-
-				<CheckBox data="data.manageDynamicModel" constraints="twocols(location=left)" columns="15"/>
-				<Label label="dynamic_model" constraints="twocols(location=right;expandHorizontally=true)"/>
-				
-			</Tab>
-						
-			<Tab name="DocumentationTab" title="Doc" index="6" layout="twocols" font="SansSerif,0,11" >
-				<Label label="tooltip" constraints="twocols(location=left)"/>
-				<Custom data="data.tooltip.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.TOOLTIP"/>
-				</Custom>
-				<Label label="tooltip_text" constraints="twocols(location=left)"/>
-				<TextField data="data.tooltipText" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
-			</Tab>
-
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBWidget" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="enable" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.enable.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.ENABLE" />
+      </Custom>
+      <Label label="format" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.format.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.formatter" />
+        <Assignment variable="component.bindingDefinition" value="data.FORMAT" />
+      </Custom>
+      <CheckBox selected="false" data="data.localize" constraints="twocols(location=left)" localize="true" />
+      <Label label="localize_component" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+      <CheckBox selected="false" data="data.readOnly" constraints="twocols(location=left)" localize="true" />
+      <Label label="read_only_component" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+      <Label label="value_transform" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueTransform.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.valueBindable" />
+        <Assignment variable="component.bindingDefinition" value="data.valueTransformBindingDefinition" />
+      </Custom>
+      <Label label="value_validator" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueValidator.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.valueBindable" />
+        <Assignment variable="component.bindingDefinition" value="data.valueValidatorDefinition" />
+      </Custom>
+    </Tab>
+    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ControlsTab">
+      <Label label="click_action" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.clickAction.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION" />
+      </Custom>
+      <Label label="double_click_action" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.doubleClickAction.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION" />
+      </Custom>
+      <Label label="right_click_action" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.rightClickAction.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.RIGHT_CLICK_ACTION" />
+      </Custom>
+      <Label label="enter_pressed_action" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.enterPressedAction.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.ENTER_PRESSED_ACTION" />
+      </Custom>
+      <Label label="value_changed" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueChangedAction.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.VALUE_CHANGED_ACTION" />
+      </Custom>
+      <CheckBox selected="false" data="data.manageDynamicModel" constraints="twocols(location=left)" localize="true" />
+      <Label label="dynamic_model" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+    </Tab>
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DocumentationTab">
+      <Label label="tooltip" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.tooltip.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.TOOLTIP" />
+      </Custom>
+      <Label label="tooltip_text" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.tooltipText" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+    </Tab>
+  </TabPanel>
   <LocalizedDictionary>
     <Localized key="enable" lang="English">Enable</Localized>
     <Localized key="format" lang="English">Format</Localized>
@@ -111,5 +89,5 @@
     <Localized key="localize_component" lang="Dutch">Localize component</Localized>
     <Localized key="dynamic_model" lang="Dutch">Dynamic model</Localized>
   </LocalizedDictionary>
-
+  <Parameter name="title" value="Widget" />
 </Panel>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.ontology.OntologyDataProperty" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.OntologyDataProperty" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" validateOnReturn="true" readOnly="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="ontology_super_properties" align="center" localize="true" name="SuperPropertiesLabel" constraints="twocols(location=left;index=6;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" data="data.superProperties" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=true)" name="SuperProperties" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="ontology_super_properties" align="center" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=left)" name="SuperPropertiesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="SuperProperties" index="7" data="data.superProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
         <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
       </Table>
-      <Label label="ontology_sub_properties" align="center" localize="true" name="SubPropertiesLabel" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" data="data.subProperties" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="SubProperties" localize="true" manageDynamicModel="true">
+      <Label label="ontology_sub_properties" align="center" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;location=left)" name="SubPropertiesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.ontology.OntologyProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="SubProperties" index="9" data="data.subProperties" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;location=right)">
         <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
       </Table>
@@ -30,4 +30,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Ontologic data property" />
 </Panel>
-

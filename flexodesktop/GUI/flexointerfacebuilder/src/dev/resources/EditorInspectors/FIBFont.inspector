@@ -1,19 +1,12 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBFont">
-	<Parameter name="title" value="Font selector"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="sample_text" constraints="twocols(location=left;expandHorizontally=true)"/>
-				<TextField data="data.sampleText" constraints="twocols(location=right)" columns="15"/>
-				<Label label="allowsNull" constraints="twocols(location=left)"/>
-                <CheckBox data="data.allowsNull"/>
-			</Tab>
-						
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBFont" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="sample_text" constraints="twocols(expandHorizontally=true;location=left)" localize="true" />
+      <TextField data="data.sampleText" constraints="twocols(location=right)" localize="true" columns="15" />
+      <Label label="allowsNull" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.allowsNull" constraints="twocols()" localize="true" />
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Font selector" />
 </Panel>

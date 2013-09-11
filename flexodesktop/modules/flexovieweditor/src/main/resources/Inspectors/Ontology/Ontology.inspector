@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.ontology.FlexoOntology" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.FlexoOntology" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=21;expandHorizontally=true;expandVertically=false)" />
-      <Label label="uri" localize="true" name="UriLabel" constraints="twocols(location=left;index=22;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Uri" data="data.URI" constraints="twocols(location=right;index=23;expandHorizontally=true;expandVertically=false)" />
-      <Label label="is_loaded" localize="true" name="IsLoadedLabel" constraints="twocols(location=left;index=24;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" readOnly="true" localize="true" name="IsLoaded" data="data.isLoaded" constraints="twocols(location=right;index=25;expandHorizontally=false;expandVertically=false)" />
-      <Label label="is_read_only" localize="true" name="IsReadOnlyLabel" constraints="twocols(location=left;index=26;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" readOnly="true" localize="true" name="IsReadOnly" data="data.isReadOnly" constraints="twocols(location=right;index=27;expandHorizontally=false;expandVertically=false)" />
-      <Label label="imported_ontologies" align="center" localize="true" name="ImportedOntologiesLabel" constraints="twocols(location=center;index=28;expandHorizontally=true;expandVertically=false)" visible="(data.isLoaded = true)" />
-      <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" data="data.importedOntologies" constraints="twocols(location=right;index=29;expandHorizontally=true;expandVertically=true)" visible="(data.isLoaded = true)" name="ImportedOntologies" localize="true" manageDynamicModel="true">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;location=left)" name="NameLabel" localize="true" />
+      <TextField index="21" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;location=right)" name="Name" readOnly="true" localize="true" columns="10" />
+      <Label label="uri" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;location=left)" name="UriLabel" localize="true" />
+      <TextField index="23" data="data.URI" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;location=right)" name="Uri" readOnly="true" localize="true" columns="10" />
+      <Label label="is_loaded" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;location=left)" name="IsLoadedLabel" localize="true" />
+      <CheckBox selected="false" index="25" data="data.isLoaded" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;location=right)" name="IsLoaded" readOnly="true" localize="true" />
+      <Label label="is_read_only" index="26" constraints="twocols(expandHorizontally=false;expandVertically=false;index=26;location=left)" name="IsReadOnlyLabel" localize="true" />
+      <CheckBox selected="false" index="27" data="data.isReadOnly" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;location=right)" name="IsReadOnly" readOnly="true" localize="true" />
+      <Label label="imported_ontologies" align="center" index="28" constraints="twocols(expandHorizontally=true;expandVertically=false;index=28;location=center)" visible="(data.isLoaded = true)" name="ImportedOntologiesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ImportedOntologies" index="29" data="data.importedOntologies" constraints="twocols(expandHorizontally=true;expandVertically=true;index=29;location=right)" visible="(data.isLoaded = true)">
         <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
         <LabelColumn data="iterator.URI" title="uri" columnWidth="150" resizable="true" displayTitle="true" />
       </Table>
-      <Label name="SemanticStatementsLabel">
- 		 <Parameter name="hidden" value="true" />
+      <Label constraints="twocols()" name="SemanticStatementsLabel" localize="true">
+        <Parameter name="hidden" value="true" />
       </Label>
-      <Table name="SemanticStatements">
- 		 <Parameter name="hidden" value="true" />
+      <Table iteratorClassName="java.lang.Object" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="SemanticStatements" constraints="twocols()">
+        <Parameter name="hidden" value="true" />
       </Table>
     </Tab>
   </TabPanel>
@@ -46,4 +46,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Abstract ontology" />
 </Panel>
-

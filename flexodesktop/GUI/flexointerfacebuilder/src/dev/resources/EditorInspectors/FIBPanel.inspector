@@ -1,70 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBPanel" name="Inspector">
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Panel name="LayoutPanel" border="titled" borderTitle="Layout" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
-				    <Label label="layout" constraints="twocols(location=left)"/>
-				    <DropDown data="data.layout" constraints="twocols(location=right)" showReset="false"/>
-				    <Label label="alignment" constraints="twocols(location=left)" visible="data.layout='flow' | (data.layout='buttons')"/>
-				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="true" visible="data.layout='flow' | (data.layout='buttons')"/>
-				    <Label label="axis" constraints="twocols(location=left)" visible="data.layout='box'"/>
-				    <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" showReset="false" visible="data.layout='box'"/>
-					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') | (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">
-				        <Label label="hGap"/>
-				        <Number numberType="IntegerType" data="data.hGap" columns="3"/>
-				        <Label label="vGap"/>
-				        <Number numberType="IntegerType" data="data.vGap" columns="3"/>
-					</Panel>
-					<Panel layout="flow" hGap="0" vGap="0" visible="data.layout='grid'" constraints="twocols(location=center;expandHorizontally=true)">
-				        <Label label="columns"/>
-				        <Number numberType="IntegerType" data="data.cols" columns="3"/>
-				        <Label label="rows"/>
-				        <Number numberType="IntegerType" data="data.rows" columns="3"/>
-					</Panel>
-				</Panel>
-
-			</Tab>
-			
-			<Tab name="AdvancedTab" title="Components" index="1" layout="twocols" font="SansSerif,0,11" >
-			
-					<CheckBox data="data.protectContent" constraints="twocols(location=left)"/>
-					<Label label="protect_content_against_modifications" constraints="twocols(location=right)"/>
-					<CheckBox data="data.trackViewPortWidth" constraints="twocols(location=left)"/>
-					<Label label="track_view_port_width" constraints="twocols(location=right)"/>
-					<CheckBox data="data.trackViewPortHeight" constraints="twocols(location=left)"/>
-					<Label label="track_view_port_height" constraints="twocols(location=right)"/>
-			</Tab>
-			
-			<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
-			
- 				<Panel name="BorderPanel" border="rounded3d" darkLevel="1" borderTitle="Border" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
-					<Label label="border" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="0" vGap="0" constraints="twocols(location=right)">
-					  <DropDown data="data.border" showReset="false"/>
-					  <Color data="data.borderColor" showReset="false" visible="data.border='line'"/>
-					  <TextField data="data.borderTitle" visible="(data.border='titled') | (data.border='rounded3d')"/>
-					</Panel>
-				    <Label label="title_font" constraints="twocols(location=left)" visible="(data.border='titled') | (data.border='rounded3d')"/>
-   		      		<Font data="data.titleFont" constraints="twocols(location=right)" visible="(data.border='titled') | (data.border='rounded3d')"/>
-				    <Label label="dark_level" constraints="twocols(location=left)" visible="data.border='rounded3d'"/>
-				    <Number numberType="IntegerType" data="data.darkLevel" columns="3" constraints="twocols(location=right)" visible="data.border='rounded3d'"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.border='empty') | (data.border='rounded3d')">
-				        <Label label="top"/>
-				        <Number numberType="IntegerType" data="data.borderTop" columns="2"/>
-				        <Label label="left"/>
-				        <Number numberType="IntegerType" data="data.borderLeft" columns="2"/>
-				        <Label label="bottom"/>
-				        <Number numberType="IntegerType" data="data.borderBottom" columns="2"/>
-				        <Label label="right"/>
-				        <Number numberType="IntegerType" data="data.borderRight" columns="2"/>
-					</Panel>
-				</Panel>
-  			    
- 			</Tab>
-			
-		</TabPanel>
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Panel layout="twocols" border="titled" borderTitle="Layout" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" name="LayoutPanel">
+        <Label label="layout" constraints="twocols(location=left)" localize="true" />
+        <DropDown data="data.layout" constraints="twocols(location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$Layout" autoSelectFirstRow="false" />
+        <Label label="alignment" constraints="twocols(location=left)" visible="(data.layout = (&quot;flow&quot; | (data.layout = &quot;buttons&quot;)))" localize="true" />
+        <DropDown showReset="true" data="data.flowAlignment" constraints="twocols(location=right)" visible="(data.layout = (&quot;flow&quot; | (data.layout = &quot;buttons&quot;)))" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$FlowLayoutAlignment" autoSelectFirstRow="false" />
+        <Label label="axis" constraints="twocols(location=left)" visible="(data.layout = &quot;box&quot;)" localize="true" />
+        <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" visible="(data.layout = &quot;box&quot;)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$BoxLayoutAxis" autoSelectFirstRow="false" />
+        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" visible="((data.layout = &quot;flow&quot;) | (data.layout = &quot;grid&quot;))">
+          <Label label="hGap" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="3" data="data.hGap" constraints="flow()" localize="true" />
+          <Label label="vGap" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="3" data="data.vGap" constraints="flow()" localize="true" />
+        </Panel>
+        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" visible="(data.layout = &quot;grid&quot;)">
+          <Label label="columns" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="3" data="data.cols" constraints="flow()" localize="true" />
+          <Label label="rows" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="3" data="data.rows" constraints="flow()" localize="true" />
+        </Panel>
+      </Panel>
+    </Tab>
+    <Tab title="Components" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+      <CheckBox selected="false" data="data.protectContent" constraints="twocols(location=left)" localize="true" />
+      <Label label="protect_content_against_modifications" constraints="twocols(location=right)" localize="true" />
+      <CheckBox selected="false" data="data.trackViewPortWidth" constraints="twocols(location=left)" localize="true" />
+      <Label label="track_view_port_width" constraints="twocols(location=right)" localize="true" />
+      <CheckBox selected="false" data="data.trackViewPortHeight" constraints="twocols(location=left)" localize="true" />
+      <Label label="track_view_port_height" constraints="twocols(location=right)" localize="true" />
+    </Tab>
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab">
+      <Panel layout="twocols" border="rounded3d" borderTitle="Border" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" constraints="twocols(expandHorizontally=true;location=center)" name="BorderPanel">
+        <Label label="border" constraints="twocols(location=left)" localize="true" />
+        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(location=right)">
+          <DropDown data="data.border" constraints="flow()" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$Border" autoSelectFirstRow="false" />
+          <Color data="data.borderColor" constraints="flow()" visible="(data.border = &quot;line&quot;)" localize="true" />
+          <TextField data="data.borderTitle" constraints="flow()" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
+        </Panel>
+        <Label label="title_font" constraints="twocols(location=left)" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
+        <Font sampleText="Sample for this font" data="data.titleFont" constraints="twocols(location=right)" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
+        <Label label="dark_level" constraints="twocols(location=left)" visible="(data.border = &quot;rounded3d&quot;)" localize="true" />
+        <Number numberType="IntegerType" columns="3" data="data.darkLevel" constraints="twocols(location=right)" visible="(data.border = &quot;rounded3d&quot;)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" visible="((data.border = &quot;empty&quot;) | (data.border = &quot;rounded3d&quot;))">
+          <Label label="top" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="2" data="data.borderTop" constraints="flow()" localize="true" />
+          <Label label="left" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="2" data="data.borderLeft" constraints="flow()" localize="true" />
+          <Label label="bottom" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="2" data="data.borderBottom" constraints="flow()" localize="true" />
+          <Label label="right" constraints="flow()" localize="true" />
+          <Number numberType="IntegerType" columns="2" data="data.borderRight" constraints="flow()" localize="true" />
+        </Panel>
+      </Panel>
+    </Tab>
+  </TabPanel>
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="index" lang="English">Index</Localized>

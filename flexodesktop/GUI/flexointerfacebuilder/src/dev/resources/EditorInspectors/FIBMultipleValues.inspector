@@ -1,54 +1,35 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBMultipleValues">
-	<Parameter name="title" value="Multiple Values Widget"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="static_list" constraints="twocols(location=left)"/>
-				<TextField data="data.staticList" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
-
-				<Label label="list" constraints="twocols(location=left)"/>
-				<Custom data="data.list.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.LIST"/>
-				</Custom>
-		
-				<Label label="array" constraints="twocols(location=left)"/>
-				<Custom data="data.array.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15">
-					<Assignment variable="component.bindable" value="data"/>
-					<Assignment variable="component.bindingDefinition" value="data.ARRAY"/>
-				</Custom>
-		
-				<Label label="iterator_class" constraints="twocols(location=left)" />
-				<Custom data="data.iteratorClass" componentClassName="org.openflexo.fib.utils.ClassSelector" 
-						constraints="twocols(location=right;expandHorizontally=true)" 
-						columns="15"/>
-
-			</Tab>
-						
-			<Tab name="AdvancedTab" title="Advanced" index="1" layout="twocols" font="SansSerif,0,11" >
-
-				<CheckBox data="data.autoSelectFirstRow" constraints="twocols(location=left)" />
-				<Label label="select_first_row" constraints="twocols(location=right)" />
-
-				<CheckBox data="data.showText" constraints="twocols(location=left)"/>
-				<Label label="show_text" constraints="twocols(location=right;expandHorizontally=true)"/>
-		
-				<CheckBox data="data.showIcon" constraints="twocols(location=left)"/>
-				<Label label="show_icon" constraints="twocols(location=right;expandHorizontally=true)"/>
-
-				<Label label="icon" constraints="twocols(location=left)" visible="data.showIcon"/>
-				<Custom data="data.icon.binding" componentClassName="org.openflexo.fib.utils.BindingSelector" constraints="twocols(location=right;expandHorizontally=true)" columns="15"  visible="data.showIcon">
-					<Assignment variable="component.bindable" value="data.formatter"/>
-					<Assignment variable="component.bindingDefinition" value="data.ICON"/>
-				</Custom>
-
-			</Tab>
-
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBMultipleValues" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="static_list" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.staticList" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
+      <Label label="list" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.list.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.LIST" />
+      </Custom>
+      <Label label="array" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.array.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.ARRAY" />
+      </Custom>
+      <Label label="iterator_class" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" localize="true" manageDynamicModel="true" data="data.iteratorClass" constraints="twocols(expandHorizontally=true;location=right)" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
+      <CheckBox selected="false" data="data.autoSelectFirstRow" constraints="twocols(location=left)" localize="true" />
+      <Label label="select_first_row" constraints="twocols(location=right)" localize="true" />
+      <CheckBox selected="false" data="data.showText" constraints="twocols(location=left)" localize="true" />
+      <Label label="show_text" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+      <CheckBox selected="false" data="data.showIcon" constraints="twocols(location=left)" localize="true" />
+      <Label label="show_icon" constraints="twocols(expandHorizontally=true;location=right)" localize="true" />
+      <Label label="icon" constraints="twocols(location=left)" visible="data.showIcon" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.icon.binding" constraints="twocols(expandHorizontally=true;location=right)" visible="data.showIcon">
+        <Assignment variable="component.bindable" value="data.formatter" />
+        <Assignment variable="component.bindingDefinition" value="data.ICON" />
+      </Custom>
+    </Tab>
+  </TabPanel>
+  <Parameter name="title" value="Multiple Values Widget" />
 </Panel>

@@ -21,6 +21,7 @@ package org.openflexo.fib.view.container;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
@@ -33,6 +34,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
@@ -174,11 +176,19 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 			@Override
 			public boolean getScrollableTracksViewportWidth() {
+				Container parent = getParent();
+				if (parent instanceof JViewport) {
+					return parent.getWidth() > getPreferredSize().width && FIBPanelView.this.getComponent().isTrackViewPortWidth();
+				}
 				return FIBPanelView.this.getComponent().isTrackViewPortWidth();
 			}
 
 			@Override
 			public boolean getScrollableTracksViewportHeight() {
+				Container parent = getParent();
+				if (parent instanceof JViewport) {
+					return parent.getHeight() > getPreferredSize().height && FIBPanelView.this.getComponent().isTrackViewPortHeight();
+				}
 				return FIBPanelView.this.getComponent().isTrackViewPortHeight();
 			}
 

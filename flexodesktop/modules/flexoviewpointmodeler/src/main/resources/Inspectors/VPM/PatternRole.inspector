@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.viewpoint.PatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.PatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="pattern_role_name" localize="true" name="PatternRoleNameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" localize="true" name="PatternRoleName" data="data.patternRoleName" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="pattern_role_name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="PatternRoleNameLabel" localize="true" />
+      <TextField index="1" data="data.patternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="PatternRoleName" localize="true" columns="10" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -12,4 +12,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Pattern Role" />
 </Panel>
-

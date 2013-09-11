@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.ViewObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <TabPanel name="GRTab" index="4" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.GraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
         <Tab title="Text" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
           <Label label="text" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(GRTab.data.isMultilineAllowed = false)" name="TextLabel" localize="true" />
@@ -25,27 +25,27 @@
           <TabPanel name="ControlsTab" index="6" constraints="twocols(expandHorizontally=true;expandVertically=true;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
             <Tab title="mouse_click_controls" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="MouseClickControlTab">
               <Table iteratorClassName="org.openflexo.fge.controller.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MouseClickControls" index="0" data="GRTab.data.mouseClickControls" constraints="border(index=0;location=center)">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-                <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
-                <NumberColumn numberType="IntegerType" data="iterator.clickCount" title="clics" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
-                <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
+                <TextFieldColumn data="iterator.name" title="name" columnWidth="60" resizable="true" displayTitle="true" />
+                <DropDownColumn data="iterator.button" title="button" columnWidth="50" resizable="false" displayTitle="true" />
+                <NumberColumn numberType="IntegerType" data="iterator.clickCount" title="clics" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="30" resizable="false" displayTitle="true" />
+                <DropDownColumn data="iterator.actionType" title="action" columnWidth="70" resizable="true" displayTitle="true" />
                 <AddAction method="GRTab.data.createMouseClickControl" name="new" />
                 <RemoveAction method="GRTab.data.deleteMouseClickControl(selected)" isAvailable="GRTab.data.isMouseClickControlDeletable(selected)" name="delete" />
               </Table>
             </Tab>
             <Tab title="mouse_drag_controls" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="MouseDragControlTab">
               <Table iteratorClassName="org.openflexo.fge.controller.MouseDragControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MouseDragControls" index="0" data="GRTab.data.mouseDragControls" constraints="border(index=0;location=center)">
-                <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
-                <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
-                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
-                <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
+                <TextFieldColumn data="iterator.name" title="name" columnWidth="60" resizable="true" displayTitle="true" />
+                <DropDownColumn data="iterator.button" title="button" columnWidth="50" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="30" resizable="false" displayTitle="true" />
+                <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="30" resizable="false" displayTitle="true" />
+                <DropDownColumn data="iterator.actionType" title="action" columnWidth="70" resizable="true" displayTitle="true" />
                 <AddAction method="GRTab.data.createMouseDragControl" name="new" />
                 <RemoveAction method="GRTab.data.deleteMouseDragControl(selected)" isAvailable="GRTab.data.isMouseDragControlDeletable(selected)" name="delete" />
               </Table>

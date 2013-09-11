@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMTranstyper" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="CodeTab" />
-    <Tab title="Transtyping" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="TranstypingTab">
-      <Label label="allows_mapping_definition" localize="true" name="AllowsMappingDefinitionLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <CheckBox selected="false" readOnly="true" localize="true" name="AllowsMappingDefinition" index="1" data="data.allowsMappingDefinition" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
-      <Label label="define_data_mapping" localize="true" name="IsMappingDefinedLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.allowsMappingDefinition = true)" />
-      <CheckBox selected="false" localize="true" name="IsMappingDefined" index="3" data="data.isMappingDefined" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.allowsMappingDefinition = true)" />
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="CodeTab" />
+    <Tab title="Transtyping" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TranstypingTab">
+      <Label label="allows_mapping_definition" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="AllowsMappingDefinitionLabel" localize="true" />
+      <CheckBox selected="false" index="1" data="data.allowsMappingDefinition" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="AllowsMappingDefinition" readOnly="true" localize="true" />
+      <Label label="define_data_mapping" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.allowsMappingDefinition = true)" name="IsMappingDefinedLabel" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isMappingDefined" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.allowsMappingDefinition = true)" name="IsMappingDefined" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.dm.DMTranstyper$DMTranstyperValue" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Values" index="5" data="data.values" constraints="twocols(expandHorizontally=true;expandVertically=true;index=4;location=right)" visible="((data.allowsMappingDefinition = true) &amp; (data.isMappingDefined = true))">
         <LabelColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.propertyValue" format="object.stringRepresentation" title="value" columnWidth="200" resizable="true" displayTitle="true">
@@ -16,17 +16,17 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" localize="true" name="NameLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
-      <Label label="returned_type" localize="true" name="ReturnedTypeLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" index="3" data="data.returnedType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="ReturnedType" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="returned_type" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="ReturnedTypeLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" localize="true" manageDynamicModel="true" name="ReturnedType" index="3" data="data.returnedType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)">
         <Assignment variable="component.project" value="data.project" />
         <Assignment variable="component.owner" value="data" />
       </Custom>
-      <Label label="base_entity" localize="true" name="BaseEntitynameLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="5" data="data.baseEntity.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="BaseEntityname" readOnly="true" localize="true" />
-      <Label label="entries_defined_for_this_transtyper" align="center" localize="true" name="EntriesLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" />
+      <Label label="base_entity" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="BaseEntitynameLabel" localize="true" />
+      <TextField index="5" data="data.baseEntity.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="BaseEntityname" readOnly="true" localize="true" />
+      <Label label="entries_defined_for_this_transtyper" align="center" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" name="EntriesLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.dm.DMTranstyper$DMTranstyperEntry" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Entries" index="7" data="data.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
         <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
@@ -64,4 +64,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Transtyper" />
 </Panel>
-
