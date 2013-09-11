@@ -8,10 +8,15 @@ import junit.framework.TestCase;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.validation.ValidationError;
 import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.toolbox.FileResource;
 
 public class FIBTestCase extends TestCase {
 
 	static final Logger logger = Logger.getLogger(FIBTestCase.class.getPackage().getName());
+
+	public void validateFIB(String fibRelativePath) {
+		validateFIB(new FileResource(fibRelativePath));
+	}
 
 	public void validateFIB(File fibFile) {
 		FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
