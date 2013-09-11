@@ -121,7 +121,11 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public LocalizedDictionary getLocalizedDictionary() {
-		return getViewPoint().getLocalizedDictionary();
+		if (getViewPoint() != null) {
+			return getViewPoint().getLocalizedDictionary();
+		} else {
+			return null;
+		}
 	}
 
 	public abstract ViewPoint getViewPoint();
