@@ -425,10 +425,8 @@ public class GRBindingFactory extends DefaultBindingFactory {
 			if (propertyName.equals("childCount")) {
 				return ((ComponentPathElement) father).getChildCount();
 			}
-			for (GRParameter p : allowedPropertiesInBindings) {
-				if (isAllowedProperty(propertyName)) {
-					return KeyValueLibrary.getKeyValueProperty(((ComponentPathElement) father).getType(), propertyName);
-				}
+			if (isAllowedProperty(propertyName)) {
+				return KeyValueLibrary.getKeyValueProperty(((ComponentPathElement) father).getType(), propertyName);
 			}
 			return ((ComponentPathElement) father).variables.get(propertyName);
 		}
