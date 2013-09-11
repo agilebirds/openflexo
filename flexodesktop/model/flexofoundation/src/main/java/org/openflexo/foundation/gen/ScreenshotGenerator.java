@@ -416,7 +416,7 @@ public class ScreenshotGenerator {
 
 	public static ScreenshotImage makeImage(BufferedImage bi, int left, int top, int width, int height) {
 		ScreenshotImage i = new ScreenshotImage();
-		i.image = bi.getSubimage(left, top, width, height);
+		i.image = bi.getSubimage(left, top, Math.min(width, bi.getWidth() - left), Math.min(height, bi.getHeight() - top));
 		i.trimInfo = new Rectangle(left, top, width, height);
 		return i;
 	}
