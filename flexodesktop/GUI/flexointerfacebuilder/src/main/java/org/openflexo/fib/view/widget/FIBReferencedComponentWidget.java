@@ -258,7 +258,10 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		if (variable.getVariableName().equals("component")) {
 			return referencedComponentView.getComponent();
 		}
-		return getBindingEvaluationContext().getValue(variable);
+		if (getBindingEvaluationContext() != null) {
+			return getBindingEvaluationContext().getValue(variable);
+		}
+		return null;
 	}
 
 	@Override

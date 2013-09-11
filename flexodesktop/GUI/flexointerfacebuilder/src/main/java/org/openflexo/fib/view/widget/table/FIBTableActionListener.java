@@ -64,7 +64,9 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 	}
 
 	public void delete() {
-		tableAction.deleteObserver(this);
+		if (tableAction != null) {
+			tableAction.deleteObserver(this);
+		}
 		this.tableAction = null;
 		this.tableWidget = null;
 	}
