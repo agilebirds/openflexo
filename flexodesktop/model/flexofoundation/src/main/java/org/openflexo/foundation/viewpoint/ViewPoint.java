@@ -611,7 +611,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		setChanged();
 
 		// Notify observers that the view has been deleted
-		notifyObservers(new ViewPointDataModification("viewPoints", this, null));
+		notifyObservers(new ViewPointDataModification("deleted", this, null));
 
 		// Set the current state of this view to deleted
 		super.delete();
