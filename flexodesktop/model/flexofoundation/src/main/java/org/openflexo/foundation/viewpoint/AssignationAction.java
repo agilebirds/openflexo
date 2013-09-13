@@ -30,7 +30,10 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+
+@FIBPanel("Fib/AssignationActionPanel.fib")
 public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
 	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());

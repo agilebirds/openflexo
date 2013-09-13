@@ -4,8 +4,8 @@ import org.openflexo.fib.FIBTestCase;
 
 public class TestEMFFibs extends FIBTestCase {
 
-	/*public void testXXX() {
-		validateFIB("Fib/XXX.fib");
-	}*/
+	public void testAddEMFObjectIndividualAttributeObjectPropertyValuePanel() {
+		validateFIB("Fib/AddEMFObjectIndividualAttributeObjectPropertyValuePanel.fib");
+	}
 
 }
