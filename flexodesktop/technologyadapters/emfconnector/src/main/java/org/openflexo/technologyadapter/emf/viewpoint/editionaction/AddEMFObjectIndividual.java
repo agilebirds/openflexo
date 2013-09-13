@@ -31,9 +31,11 @@ import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
+import org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFEnumIndividual;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -102,7 +104,12 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							result.getObject().eSet(property.getObject(), value);
+							if (value instanceof AEMFMetaModelObjectImpl){
+								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
+							}
+							else {
+								result.getObject().eSet(property.getObject(), value);
+							}
 						} else if (objectPropertyAssertion.getOntologyProperty() instanceof EMFReferenceObjectProperty) {
 							EMFReferenceObjectProperty property = (EMFReferenceObjectProperty) objectPropertyAssertion
 									.getOntologyProperty();
@@ -110,7 +117,12 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							result.getObject().eSet(property.getObject(), value);
+							if (value instanceof AEMFMetaModelObjectImpl){
+								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
+							}
+							else {
+								result.getObject().eSet(property.getObject(), value);
+							}
 						} else {
 							logger.warning("Unexpected "
 									+ objectPropertyAssertion.getOntologyProperty()
