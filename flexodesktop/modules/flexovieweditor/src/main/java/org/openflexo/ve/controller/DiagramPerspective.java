@@ -45,6 +45,7 @@ import org.openflexo.ve.shema.VEShemaController;
 import org.openflexo.ve.shema.VEShemaModuleView;
 import org.openflexo.ve.view.VEBrowserView;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.NoModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
@@ -168,9 +169,11 @@ public class DiagramPerspective extends FlexoPerspective {
 			ViewDefinition viewDefinition = (ViewDefinition) object;
 			View shema = viewDefinition.getView();
 			if (shema == null) {
-				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
-						+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
-						+ viewDefinition._getCalcURI() + " " + FlexoLocalization.localizedForKey("in_your_resource_center"));
+				return new NoModuleView<ViewDefinition>(controller, viewDefinition,
+						FlexoLocalization.localizedForKey("could_not_load_view") + " " + viewDefinition.getName() + ". "
+								+ FlexoLocalization.localizedForKey("make_sure_you_have_the_view_point_with_uri") + " "
+								+ viewDefinition._getCalcURI() + " " + FlexoLocalization.localizedForKey("in_your_resource_center"), this,
+						false);
 			} else {
 				return getControllerForShema(shema).getModuleView();
 			}

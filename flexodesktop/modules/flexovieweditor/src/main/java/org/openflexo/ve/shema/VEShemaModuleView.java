@@ -48,7 +48,7 @@ public class VEShemaModuleView extends JPanel implements ModuleView<View>, Prope
 		topPanel.add(_controller.getToolbox().getStyleToolBar());
 		add(topPanel, BorderLayout.NORTH);
 		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
-		validate();
+		revalidate();
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
