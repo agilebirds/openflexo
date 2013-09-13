@@ -1,13 +1,17 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -18,6 +22,8 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 	private ShapeGraphicalRepresentation<?> _graphicalRepresentation;
 
 	private ShapePatternRole parentShapePatternRole;
+	
+	private List<ShapePatternRole> _possibleParentPatternRole;
 
 	public ShapePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -106,14 +112,29 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 
 	public void setParentShapeAsDefinedInAction(boolean flag) {
 		// System.out.println(">>>> setParentShapeAsDefinedInAction() with " + flag);
-		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
-			setParentShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		if (!flag && _possibleParentPatternRole.size() > 0) {
+			setParentShapePatternRole(_possibleParentPatternRole.get(0));
 		} else {
 			// System.out.println("setParentShapePatternRole with null");
 			setParentShapePatternRole(null);
+			flag = true;
 		}
 	}
 
+	// Get the list of shape pattern roles that can be set as parent shape pattern role.
+	// These possible shapes are the edition pattern other shapes excepted itself
+	public List<ShapePatternRole> getPossibleParentShapePatternRoles(){
+		if(_possibleParentPatternRole==null){
+			_possibleParentPatternRole = new ArrayList<ShapePatternRole>();
+		}
+		_possibleParentPatternRole.clear();
+		List<ShapePatternRole> shapesPatternRoles = getEditionPattern().getShapePatternRoles();
+		for (ShapePatternRole shapePatternRole : shapesPatternRoles) {
+			if(shapePatternRole!=this && !_possibleParentPatternRole.contains(shapePatternRole))_possibleParentPatternRole.add(shapePatternRole);
+		}
+		return _possibleParentPatternRole;
+	}
+	
 	public boolean isEmbeddedIn(ShapePatternRole aPR) {
 		if (getParentShapePatternRole() != null) {
 			if (getParentShapePatternRole() == aPR) {
