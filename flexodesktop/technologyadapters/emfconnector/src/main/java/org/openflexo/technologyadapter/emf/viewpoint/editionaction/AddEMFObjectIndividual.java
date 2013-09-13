@@ -121,7 +121,12 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
 							}
 							else {
-								result.getObject().eSet(property.getObject(), value);
+								if (value instanceof EMFObjectIndividual){
+									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+								}
+								else {
+									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), value);
+								}
 							}
 						} else {
 							logger.warning("Unexpected "

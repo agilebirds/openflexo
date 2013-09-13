@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl" modelVersion="1.0" name="UseCaseDiagram.owl">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl" modelVersion="1.0" name="UseCaseDiagram">
   <LocalizedDictionary id="2" />
-  <OWLModelSlot id="3" isRequired="false" isReadOnly="false" metaModelURI="http://www.agilebirds.com/openflexo/ontologies/UML/UML2.owl" name="owl" />
   <description>Use case diagrams describe what a system does from the standpoint of an external observer. The emphasis is on what a system does rather than how.
 Use case diagrams are closely connected to scenarios. A scenario is an example of what happens when someone interacts with the system. Here is a scenario for a medical clinic.
 "A patient calls the clinic to make an appointment for a yearly checkup. The receptionist finds the nearest empty time slot in the appointment book and schedules the appointment for that time slot. "

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiagramSpecification id="1" name="City2_View" modelVersion="1.0">
+  <description>Diagramme to create City2 EMF models</description>
+  <EditionPattern id="2" name="CityGR">
+    <DropScheme id="3" target="top" name="dropCityAtTopLevel" label="dropCityAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <AddShape id="4" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
+        <AddressedDiagramModelSlot idref="5" />
+      </AddShape>
+      <AddShape id="6" container="shape" extendParentBoundsToHostThisShape="false" assignation="icon">
+        <AddressedDiagramModelSlot idref="5" />
+      </AddShape>
+      <AddEMFObjectIndividual id="7" assignation="city" individualName="&quot;A New City&quot;">
+        <AddressedEMFModelSlot idref="8" />
+      </AddEMFObjectIndividual>
+    </DropScheme>
+    <ContainedEMFObjectIndividualPatternRole id="9" name="city" patternRole="city" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/City">
+      <AddressedEMFModelSlot id="8" isRequired="true" isReadOnly="false" name="city2model" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city2" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="10" patternRole="shape" name="shape" exampleLabel="label">
+      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="1.0" y="1.0" width="398.0" height="128.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="1" yConstraints="1" widthConstraints="(parent.width - 2)" heightConstraints="(parent.height - 2)" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="12" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="13" color="254,254,254" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="15" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="16" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="17" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="18" top="0" bottom="0" left="0" right="0" />
+        <RectangleShape id="19" isRounded="true" arcSize="30.0" />
+        <ShadowStyle id="20" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="21" font="SansSerif,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <AddressedDiagramModelSlot id="5" isRequired="true" isReadOnly="false" name="this" virtualModelURI="http://www.openflexo.org/cityviews/City2_View" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="22" patternRole="icon" name="icon" exampleLabel="">
+      <ShapeGraphicalRepresentation id="23" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="50.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="0" yConstraints="0" widthConstraints="50" heightConstraints="50" identifier="object_0_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="24" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="25" imageFile="../icons/City.png" scaleX="0.46875" scaleY="0.46875" deltaX="0.0" deltaY="0.0" imageBackgroundType="OPAQUE" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="26" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="27" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="28" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="29" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="30" top="0" bottom="0" left="0" right="0" />
+        <CircleShape id="31" />
+        <ShadowStyle id="32" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="33" font="SansSerif,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="10" />
+      <AddressedDiagramModelSlot idref="5" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="9" />
+    <PrimaryRepresentationShapePatternRole idref="10" />
+    <Inspector id="34" inspectorTitle="CityGR" />
+  </EditionPattern>
+  <LocalizedDictionary id="35" />
+  <DiagramModelSlot idref="5" />
+  <EMFModelSlot idref="8" />
+  <Inspector id="36" inspectorTitle="City2_View" />
+</DiagramSpecification>
