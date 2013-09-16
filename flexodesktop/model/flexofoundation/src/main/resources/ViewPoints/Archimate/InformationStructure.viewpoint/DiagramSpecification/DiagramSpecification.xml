@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DiagramSpecification id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/InformationStructure.owl" owlFile="InformationStructure.owl">
+  <OWLModelSlot id="1000" isRequired="true" isReadOnly="false" metaModelURI="http://www.bolton.ac.uk/archimate" name="owl" />
   <EditionPattern id="2" name="Artifact" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/InformationStructure.owl#ArchimateElement">
     <DropScheme id="3" target="top" name="dropArtifactAtTopLevel" label="dropArtifactAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <URIParameter id="4" base="&quot;Artifact&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
