@@ -65,7 +65,8 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  */
 @DeclareModelSlots({ // ModelSlot(s) declaration
 	@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
-	@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
+	// Removed because it is unusable
+//	@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
 })
 @DeclareRepositoryType({ EMFMetaModelRepository.class, EMFModelRepository.class })
 public class EMFTechnologyAdapter extends TechnologyAdapter {

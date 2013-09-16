@@ -104,6 +104,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
 							result = converter.convertMetaModel(getPackage());
 							result.setResource(this);
+							this.resourceData = result;
 						}
 					}
 				}

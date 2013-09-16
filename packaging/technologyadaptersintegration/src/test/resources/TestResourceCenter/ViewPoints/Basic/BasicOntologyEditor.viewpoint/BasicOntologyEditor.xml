@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl" modelVersion="1.0" name="BasicOntology.owl">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl" modelVersion="1.0" name="BasicOntologyEditor">
   <LocalizedDictionary id="2">
     <Localized id="3" key="concept_name" lang="en">Concept name</Localized>
     <Localized id="4" key="IsARelationship" lang="en">'Is a' relationship</Localized>
@@ -31,6 +31,5 @@
     <Localized id="30" key="owner" lang="French">Propriétaire</Localized>
     <Localized id="31" key="statement" lang="French">Fait ontologique</Localized>
   </LocalizedDictionary>
-  <OWLModelSlot id="32" isRequired="false" isReadOnly="false" name="owl" />
   <description>This calc is intented to edit basic ontologies</description>
 </ViewPoint>

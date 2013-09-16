@@ -63,7 +63,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInstance.class.getPackage().toString());
 
 	protected static final String DELETED_PROPERTY = "deleted";
-
+	protected static final String EMPTY_STRING = "<emtpy>";
+	
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
@@ -544,7 +545,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 					return (String) obj;
 				}
 				else {
-					return obj.toString();
+					if (obj != null) {
+						return obj.toString();
+					}
+					else return EMPTY_STRING;
 				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
