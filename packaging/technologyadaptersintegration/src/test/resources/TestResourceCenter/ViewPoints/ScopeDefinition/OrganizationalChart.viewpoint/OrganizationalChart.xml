@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl" modelVersion="1.0" name="OrganizationalChart.owl">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl" modelVersion="1.0" name="OrganizationalChart">
   <LocalizedDictionary id="2" />
-  <OWLModelSlot id="3" isRequired="false" isReadOnly="false" metaModelURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl" name="owl" />
 </ViewPoint>
