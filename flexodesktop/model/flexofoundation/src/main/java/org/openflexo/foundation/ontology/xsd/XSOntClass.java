@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.toolbox.StringUtils;
 
 public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XSOntologyURIDefinitions {
@@ -97,6 +98,12 @@ public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XS
 		} else {
 			return Inspectors.VE.ONTOLOGY_CLASS_INSPECTOR;
 		}
+	}
+
+	@Override
+	public List<OntologyIndividual> getIndividuals() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
