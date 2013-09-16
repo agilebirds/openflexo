@@ -122,4 +122,9 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	public RD getModel() {
 		return getResourceData();
 	}
+
+	@Override
+	public String getBindingDescription() {
+		return getResourceURI();
+	}
 }

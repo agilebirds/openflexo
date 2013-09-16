@@ -109,4 +109,9 @@ public class VirtualModelModelSlotInstance<VMI extends VirtualModelInstance<VMI,
 		this.virtualModelInstanceURI = virtualModelInstanceURI;
 	}
 
+	@Override
+	public String getBindingDescription() {
+		return getVirtualModelInstanceURI();
+	}
+
 }

@@ -106,4 +106,9 @@ public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends F
 	public M getModel() {
 		return getResourceData();
 	}
+
+	@Override
+	public String getBindingDescription() {
+		return getModelURI();
+	}
 }
