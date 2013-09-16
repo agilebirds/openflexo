@@ -427,7 +427,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	public void loadFIB() {
 		fibFile = getFIBFile();
 
-		fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+		fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false);
 
 		if (fibComponent == null) {
 			logger.log(Level.SEVERE, "Fib component not found ! Path: '" + fibFile.getAbsolutePath() + "'");
