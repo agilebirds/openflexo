@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" titleFont="SansSerif,0,12" darkLevel="0" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.PolygonGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
-      <Label label="filled" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
-      <CheckBox selected="false" index="1" data="data.drawable.isFilled" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
+      <Label label="filled" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" data="data.drawable.isFilled" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -13,3 +13,4 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Polygon" />
 </Panel>
+
