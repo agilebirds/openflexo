@@ -27,7 +27,7 @@ public class FIBNumber extends FIBWidget {
 		numberType, validateOnReturn, minValue, maxValue, increment, allowsNull, columns
 	}
 
-	private boolean allowsNull = true;
+	private boolean allowsNull = false;
 	private boolean validateOnReturn = false;
 	private Number minValue;
 	private Number maxValue;

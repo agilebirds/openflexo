@@ -28,7 +28,7 @@ public class FIBColor extends FIBWidget {
 		allowsNull;
 	}
 
-	private boolean allowsNull = true;
+	private boolean allowsNull = false;
 
 	public FIBColor() {
 	}
