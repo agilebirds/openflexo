@@ -9,9 +9,9 @@
       <Label label="viewpoint" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="ViewpointnameLabel" localize="true" />
       <TextField index="5" data="data.viewPoint.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Viewpointname" readOnly="true" localize="true" columns="10" />
       <Label label="version" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="ViewpointVersionLabel" localize="true" />
-      <TextField index="7" data="data.viewPoint.version" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="ViewpointVersion" readOnly="true" localize="true" columns="10" />
-      <Label label="index" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="IndexLabel" localize="true" />
-      <Number numberType="IntegerType" columns="5" index="9" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="Index" localize="true" />
+      <TextField index="7" data="data.viewPoint.version.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="ViewpointVersion" readOnly="true" localize="true" columns="10" />
+      <!--  <Label label="index" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="IndexLabel" localize="true" />
+      <Number numberType="IntegerType" columns="5" index="9" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="Index" localize="true" />-->
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
   </TabPanel>
