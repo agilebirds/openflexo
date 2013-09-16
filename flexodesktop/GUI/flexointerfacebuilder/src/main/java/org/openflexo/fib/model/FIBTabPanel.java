@@ -23,6 +23,8 @@ import java.util.Vector;
 
 public class FIBTabPanel extends FIBContainer {
 
+	private boolean restrictPreferredSizeToSelectedComponent = false;
+
 	public FIBTabPanel() {
 	}
 
@@ -39,6 +41,17 @@ public class FIBTabPanel extends FIBContainer {
 			}
 		}
 		return returned;
+	}
+
+	public boolean isRestrictPreferredSizeToSelectedComponent() {
+		return restrictPreferredSizeToSelectedComponent;
+	}
+
+	public void setRestrictPreferredSizeToSelectedComponent(boolean restrictPreferredSizeToSelectedComponent) {
+		this.restrictPreferredSizeToSelectedComponent = restrictPreferredSizeToSelectedComponent;
+		setChanged();
+		notifyChange("restrictPreferredSizeToSelectedComponent", !restrictPreferredSizeToSelectedComponent,
+				restrictPreferredSizeToSelectedComponent);
 	}
 
 }
