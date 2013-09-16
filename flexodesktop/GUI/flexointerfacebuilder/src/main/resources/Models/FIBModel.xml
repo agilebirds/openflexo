@@ -78,10 +78,11 @@
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBTab" xmlTag="Tab"> 
-     <property name="title" xmlTag="title" attribute="YES"/> 
+     <property name="title" xmlTag="title" attribute="YES"/>
   </entity>
    
-  <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel"> 
+  <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel">
+     <property name="restrictPreferredSizeToSelectedComponent" xmlTag="restrictPreferredSizeToSelectedComponent" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBSplitPanel" xmlTag="SplitPanel"> 
