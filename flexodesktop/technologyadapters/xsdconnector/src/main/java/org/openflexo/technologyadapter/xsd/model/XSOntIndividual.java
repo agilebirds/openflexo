@@ -253,7 +253,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	public XSPropertyValue addToPropertyValue(IFlexoOntologyStructuralProperty property, Object newValue) {
 	
 		XSPropertyValue returned = values.get(property);
-
+		
 		if (returned == null) {
 			if (property instanceof XSOntObjectProperty ) {
 				if (newValue == null) {
@@ -261,9 +261,9 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 				}
 				else if (newValue instanceof XSOntIndividual) {
 					returned = new XSObjectPropertyValue((XSOntObjectProperty) property, (XSOntIndividual) newValue);
-					this.addChild((XSOntIndividual) newValue);
-				} 
+					} 
 				values.put((XSOntObjectProperty) property, returned);
+				
 				return returned; 
 			}
 			else if (property instanceof XSOntDataProperty) {

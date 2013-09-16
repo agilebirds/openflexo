@@ -80,7 +80,7 @@
               <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="3" index="2" data="RectPolylinConnectorPanel.data.arcSize" constraints="flow(expandHorizontally=false;expandVertically=false;index=2;location=right)" visible="RectPolylinConnectorPanel.data.isRounded" name="ArcSize" localize="true" />
             </Panel>
           </Panel>
-          <Panel layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" data="(!org.openflexo.fge.connectors.CurveConnector)GRTab.data.connector" dataClassName="org.openflexo.fge.connectors.CurveConnector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" visible="(GRTab.data.connectorType = &quot;CURVE&quot;)" name="CurveConnectorPanel">
+          <Panel layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" data="($org.openflexo.fge.connectors.CurveConnector)GRTab.data.connector" dataClassName="org.openflexo.fge.connectors.CurveConnector" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" visible="(GRTab.data.connectorType = &quot;CURVE&quot;)" name="CurveConnectorPanel">
             <Label label="adjustable_bounds" align="right" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" width="130" height="16" name="AreBoundsAdjustableLabel" localize="true" />
             <CheckBox selected="false" index="1" data="CurveConnectorPanel.data.areBoundsAdjustable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="AreBoundsAdjustable" localize="true" />
           </Panel>

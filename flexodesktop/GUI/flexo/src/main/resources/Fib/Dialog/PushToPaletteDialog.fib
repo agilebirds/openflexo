@@ -45,6 +45,14 @@
       <Dependancy componentName="editionPatternDropDown" />
     </Table>
   </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" cols="2" rows="2" flowAlignment="LEADING" boxLayoutAxis="X_AXIS" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" darkLevel="0" index="13" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.AbstractPushEditonPatternToPalette" constraints="gridbag(anchor=west;fill=both;gridHeight=1;gridWidth=0;gridX=1;gridY=7;index=12;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=7.0;weightY=-4.0)" opaque="false">
+    <Label label="Set X Location" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" localize="true" />
+    <Panel layout="flow" hGap="0" vGap="5" flowAlignment="LEADING" borderTitle="Panel" darkLevel="0" index="0" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=north_west;expandHorizontally=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0;x=0;y=0)" opaque="false">
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.xLocation" constraints="flow()" name="Integer" localize="true" />
+    </Panel>
+    <Label label="Set Y Location" index="0" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" localize="true" />
+    <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" index="0" data="data.yLocation" constraints="flow(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="Integer" localize="true" />
+  </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="LucidaGrande,0,13" darkLevel="0" index="13" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="LucidaGrande,0,13" opaque="false">
     <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" enable="data.isValid" index="0" constraints="flow(index=0)">
       <Dependancy componentName="ShemaName" />

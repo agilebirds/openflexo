@@ -169,6 +169,11 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 		return false;
 	}
 
+	@Override
+	public boolean isElement() {
+		return true;
+	}
+
 
 	@Override
 	public void addValue(IXMLIndividual<?, ?> indiv, Object value) {

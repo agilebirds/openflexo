@@ -195,6 +195,7 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		}
 
 		panel = new ScrollablePanel();
+		panel.setOpaque(false);
 		updateGraphicalProperties();
 
 		_setPanelLayoutParameters();

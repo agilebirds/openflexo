@@ -265,4 +265,20 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 		return null;
 	}
 
+	@Override
+	public synchronized boolean hasWritePermission() {
+		return true;
+	}
+
+	@Override
+	public void delete() {
+		if(hasWritePermission()){
+			super.delete();
+			getProject().deleteFilesToBeDeleted();
+		}
+	
+	}
+
+	
+	
 }

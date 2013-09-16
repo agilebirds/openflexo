@@ -29,6 +29,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
@@ -61,6 +62,8 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 
 	public Object graphicalRepresentation;
 	public DiagramPalette palette;
+	public int xLocation;
+	public int yLocation;;
 	private EditionPattern editionPattern;
 	public DropScheme dropScheme;
 	private String newElementName;
@@ -110,10 +113,6 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				}
 			}
-			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
-			_newPaletteElement.setEditionPattern(editionPattern);
-			_newPaletteElement.setDropScheme(dropScheme);
-			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
 
 			if (overrideDefaultGraphicalRepresentations) {
 				for (DrawingObjectEntry entry : drawingObjectEntries) {
@@ -130,6 +129,16 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 				}
 			}
 
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+				((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
+				((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
+			}
+			
+			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
+			_newPaletteElement.setEditionPattern(editionPattern);
+			_newPaletteElement.setDropScheme(dropScheme);
+			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
+			
 		} else {
 			logger.warning("Focused role is null !");
 		}

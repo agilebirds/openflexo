@@ -595,10 +595,10 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			logger.fine("delete: Viewpoint " + getName());
 		}
 
-		if (getResource() != null) {
+		/*if (getResource() != null) {
 			// Set the file resource to be remove upon next save of the resource manager
 			getResource().delete();
-		}
+		}*/
 
 		// needed?
 		/*for (VirtualModel vm : getVirtualModels()) {
@@ -611,7 +611,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		setChanged();
 
 		// Notify observers that the view has been deleted
-		notifyObservers(new ViewPointDataModification("viewPoints", this, null));
+		notifyObservers(new ViewPointDataModification("deleted", this, null));
 
 		// Set the current state of this view to deleted
 		super.delete();

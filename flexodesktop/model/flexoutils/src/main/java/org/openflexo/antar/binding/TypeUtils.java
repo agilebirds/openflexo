@@ -224,7 +224,6 @@ public class TypeUtils {
 		return type.equals(Object.class);
 	}
 
-
 	public static boolean isFile(Type type) {
 		if (type == null) {
 			return false;
@@ -232,7 +231,6 @@ public class TypeUtils {
 		return type.equals(File.class);
 	}
 
-	
 	public static boolean isShort(Type type) {
 		if (type == null) {
 			return false;
@@ -340,7 +338,7 @@ public class TypeUtils {
 		if (isObject(aType)) {
 			return true;
 		}
-	
+
 		// Special case for Custom types
 		if (aType instanceof CustomType) {
 			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);
@@ -548,8 +546,7 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return type instanceof Class
-				|| (type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType()))
+		return type instanceof Class || type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType())
 				|| type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
@@ -623,6 +620,19 @@ public class TypeUtils {
 			return type;
 		}
 
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (context instanceof Class && ((Class) context).getTypeParameters().length > 0) {
+			Type[] args = new Type[((Class) context).getTypeParameters().length];
+			for (int i = 0; i < ((Class) context).getTypeParameters().length; i++) {
+				args[i] = new WilcardTypeImpl(((Class) context).getTypeParameters()[i].getBounds(), new Type[0]);
+			}
+			ParameterizedType inferedType = new ParameterizedTypeImpl((Class) context, args);
+			return makeInstantiatedType(type, inferedType);
+		}
+
 		if (type instanceof ParameterizedType) {
 			Type[] actualTypeArguments = new Type[((ParameterizedType) type).getActualTypeArguments().length];
 			for (int i = 0; i < ((ParameterizedType) type).getActualTypeArguments().length; i++) {
@@ -653,6 +663,7 @@ public class TypeUtils {
 							} else {
 								logger.warning("Could not retrieve parameterized type " + tv + " with context "
 										+ simpleRepresentation(context));
+								// ((TypeVariable)type).getGenericDeclaration().g
 								return type;
 							}
 						}
@@ -667,7 +678,7 @@ public class TypeUtils {
 				logger.fine("Not found type variable " + tv + " in context " + context + " GenericDeclaration="
 						+ tv.getGenericDeclaration() + " bounds=" + (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class));
 			}
-			return (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class);
+			return tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class;
 		}
 
 		if (type instanceof WildcardType) {

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.openflexo.org/cityviews" version="0.1" modelVersion="1.0" name="CityViews">
+  <LocalizedDictionary id="2" />
+  <description>Sample diagrams to manipulate EMF models conformant to city1&amp;2 metamodels</description>
+</ViewPoint>

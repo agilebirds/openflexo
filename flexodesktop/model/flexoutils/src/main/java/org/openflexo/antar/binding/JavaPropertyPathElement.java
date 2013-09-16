@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.KeyValueCoder;
 import org.openflexo.xmlcode.KeyValueDecoder;
 
@@ -76,7 +77,14 @@ public class JavaPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		return KeyValueDecoder.objectForKey(target, getPropertyName());
+		try {
+			Object obj = KeyValueDecoder.objectForKey(target, getPropertyName());
+			return obj;
+		}
+		catch (InvalidObjectSpecificationException e) {
+			logger.warning("Cannot retrieve Java property Value for: " + getPropertyName());
+		}
+		return null;
 	}
 
 	@Override

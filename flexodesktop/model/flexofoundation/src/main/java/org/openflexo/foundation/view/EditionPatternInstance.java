@@ -63,7 +63,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInstance.class.getPackage().toString());
 
 	protected static final String DELETED_PROPERTY = "deleted";
-
+	protected static final String EMPTY_STRING = "<emtpy>";
+	
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
@@ -530,7 +531,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		if (hasValidRenderer()) {
 			try {
 				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
-				return getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
+				Object obj = getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext(){
 					@Override
 					public Object getValue(BindingVariable variable) {
 						if (variable.getVariableName().equals("instance")) {
@@ -540,6 +541,15 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						return null;
 					}
 				});
+				if (obj instanceof String){
+					return (String) obj;
+				}
+				else {
+					if (obj != null) {
+						return obj.toString();
+					}
+					else return EMPTY_STRING;
+				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

@@ -70,8 +70,7 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 	private StringBuffer cdataBuffer = new StringBuffer();
 
 	private Stack<IC> indivStack = new Stack<IC>();
-	private Stack<AC> attributeStack = new Stack<AC>();
-
+	
 	public XMLReaderSAXHandler( FlexoModelResource<M, MM> xmlFileResourceImpl, boolean allowTypeCreation) {
 		super();
 		xmlResource = xmlFileResourceImpl;
@@ -85,29 +84,27 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 	public void startElement (String uri, String localName,String qName, 
 			Attributes attributes) throws SAXException {
 
-		String NSPrefix = "p"; // default		
-
+		String NSPrefix = "p"; // default
+		
+		currentAttribute = null;
+		
 		try {
-
-			IC anIndividual = null;
-
 
 			// Depending on the choices made when interpreting MetaModel, an XML Element
 			// might be translated as a Property or a new Type....
-			// If type is not found maybe we should look if it the particular element
-			// has been translated as an ObjectProperty or DataProperty
-
 			Type currentType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(uri+"#"+localName);
 
-			if (currentContainer != null && currentType == null){
+			// looking for the equally named property in currentContainer
+			if (currentContainer != null){
 				currentAttribute = (AC) ((IXMLIndividual<?, ?>) currentContainer).getAttributeByName(localName);
+			}
 
-				if (currentAttribute != null){
-					if (!currentAttribute.isSimpleAttribute() ){
-						// this is a complex attribute, we will create an individual and then add to the attribute values
-						currentType = ((IXMLAttribute) currentAttribute).getAttributeType();
-						attributeStack.push(currentAttribute);
-					}
+			if (currentAttribute != null ){
+				Type attrType = ((IXMLAttribute) currentAttribute).getAttributeType();
+
+				if (!currentAttribute.isSimpleAttribute() ){
+					// this is a complex attribute, we will create an individual and then add to the attribute values
+					currentType = attrType;
 				}
 			}
 
@@ -117,15 +114,15 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 				currentType = ((IXMLMetaModel) aMetaModel).createNewType(uri,localName,qName);
 			}
 
+			// creates individual
 			if (currentType != null){
-				// creates individual
-				anIndividual = (IC) ((IXMLModel) aXMLModel).addNewIndividual(currentType);
-				((IXMLIndividual<IC,AC>) anIndividual).setType(currentType);
-				currentIndividual = (IC) anIndividual;
+				currentIndividual = (IC) ((IXMLModel) aXMLModel).addNewIndividual(currentType);
+				((IXMLIndividual<IC,AC>) currentIndividual).setType(currentType);
+				currentIndividual = (IC) currentIndividual;
 				cdataBuffer.delete(0,cdataBuffer.length());
 			}
 
-			if (anIndividual != null){
+			if (currentIndividual != null){
 				//************************************
 				// processing Attributes
 
@@ -144,7 +141,7 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 						NSPrefix = attrQName;
 						NSPrefix.replace(attrName, "");
 					}
-					
+
 					aType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(attrURI+"#"+attrName);
 
 					if (typeName.equals(XMLFileResourceImpl.CDATA_TYPE_NAME)){
@@ -165,20 +162,35 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 
 				}
 
+				//************************************
+				// Current element is contained in another one
+
+				if (currentContainer != null && currentContainer != currentIndividual) {
+
+					if ( currentAttribute != null) {
+						//	logger.info("ADDING " + anIndividual.toString() + " TO " + currentContainer.toString() + "   / Attribute is: " + currentAttribute );
+						currentAttribute.addValue((IXMLIndividual<IC, AC>) currentContainer, currentIndividual);
+					}
+					else {
+						((IXMLIndividual<IC, AC>) currentContainer).addChild((IXMLIndividual<IC, AC>) currentIndividual);
+					}
+				}
+
+				//************************************
+				// Current element is not contained in another one, it is root!
 
 				if ( currentContainer == null) {
-					((IXMLModel) aXMLModel).setRoot( (IXMLIndividual<IC, AC>) anIndividual);
+					((IXMLModel) aXMLModel).setRoot( (IXMLIndividual<IC, AC>) currentIndividual);
 					if (uri != null && !uri.isEmpty()){
-						
+
 						((IXMLModel) aXMLModel).setNamespace(uri,NSPrefix);
-						}
-					currentContainer = anIndividual;
+					}
+					// logger.info("OPENING ROOT Container is + " + currentContainer.toString() + "   / Attribute is: " + currentAttribute );
+
 				}
-				else {
-					((IXMLIndividual<IC, AC>) currentContainer).addChild((IXMLIndividual<IC, AC>) anIndividual);
-				}
-				indivStack.push(anIndividual);
-				currentContainer = anIndividual;
+
+				indivStack.push(currentContainer);
+				currentContainer = currentIndividual;
 
 			}
 		} catch (Exception e) {
@@ -203,36 +215,28 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 
 		String str = cdataBuffer.toString().trim();
 
-		if (currentAttribute != null && currentAttribute.isSimpleAttribute() && str.length() > 0){
-			currentAttribute.addValue((IXMLIndividual<?, ?>) currentContainer, str);
-			cdataBuffer.delete(0,cdataBuffer.length());
-		}
-		else {
-			if (currentAttribute != null && currentIndividual != null && !currentAttribute.isSimpleAttribute()){
-				currentAttribute.addValue((IXMLIndividual<?, ?>) currentContainer, currentIndividual);
+		if (str.length() > 0) {
+			if (currentAttribute != null && currentAttribute.isSimpleAttribute()){
+				currentAttribute.addValue((IXMLIndividual<?, ?>) currentIndividual, str);
+				cdataBuffer.delete(0,cdataBuffer.length());
 			}
-			else 
-				if (currentIndividual != null && str.length() >0){
-					((IXMLIndividual<?, ?>) currentIndividual).createAttribute(IXMLIndividual.CDATA_ATTR_NAME, String.class ,str);
-					cdataBuffer.delete(0,cdataBuffer.length());
-				}
-
-			// node stack management
-
-			if (!indivStack.isEmpty()) currentIndividual = indivStack.pop();
-			if (!indivStack.isEmpty()){
-				currentContainer = indivStack.lastElement();
+			else if (currentIndividual != null){
+				((IXMLIndividual<?, ?>) currentIndividual).createAttribute(IXMLIndividual.CDATA_ATTR_NAME, String.class ,str);
+				cdataBuffer.delete(0,cdataBuffer.length());
 			}
 			else {
-				currentContainer = null;
+				logger.info("ERROR: don't know where to allocate the CDATA textual information");
 			}
 		}
 
+		// node stack management
 
-		// cleans stuff
+		if (!indivStack.isEmpty()){	currentContainer = indivStack.pop();}
+		else {
+			currentContainer = null;
+		}
 
-		if (!attributeStack.isEmpty()) currentAttribute = attributeStack.lastElement();
-		// currentIndividual = null;
+
 	}
 
 

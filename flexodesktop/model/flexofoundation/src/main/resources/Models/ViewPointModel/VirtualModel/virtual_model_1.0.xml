@@ -459,8 +459,9 @@
 	
 	<entity name="org.openflexo.foundation.viewpoint.AddToListAction" xmlTag="AddToListAction">
 		<property name="value" xmlTag="value" attribute="YES" />
+		<property name="list" xmlTag="list" attribute="YES" />
 	</entity>
-	
+		
 	<entity name="org.openflexo.foundation.viewpoint.RemoveFromListAction" xmlTag="RemoveFromListAction">
 		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>

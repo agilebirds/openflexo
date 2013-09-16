@@ -149,8 +149,20 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			for (FIBView v : new ArrayList<FIBView>(subViews.values())) {
 				v.updateDataObject(dataObject);
 			}
-			if (getDynamicModel() != null && getComponent().getData().isSet()) {
+			/*if (getDynamicModel() != null && getComponent().getData().isSet()) {
 				logger.fine("Container: " + getComponent() + " value data for " + getDynamicModel() + " is " + getValue());
+				getDynamicModel().setData(getValue());
+				notifyDynamicModelChanged();
+			}*/
+		}
+		updateDataDynamicValue();
+	}
+
+	private void updateDataDynamicValue() {
+		if (getDynamicModel() != null && getComponent().getData().isSet() && getComponent().getData().isValid()) {
+			logger.fine("Container: " + getComponent() + " value data for " + getDynamicModel() + " is " + getValue());
+			Object newDataValue = getValue();
+			if (getDynamicModel().getData() != getValue()) {
 				getDynamicModel().setData(getValue());
 				notifyDynamicModelChanged();
 			}
@@ -192,7 +204,10 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	 */
 	@Override
 	public boolean update(List<FIBComponent> callers) {
-		return super.update(callers);
+		boolean returned = super.update(callers);
+		updateDataDynamicValue();
+
+		return returned;
 	}
 
 	protected void registerViewForComponent(FIBView view, FIBComponent component) {
