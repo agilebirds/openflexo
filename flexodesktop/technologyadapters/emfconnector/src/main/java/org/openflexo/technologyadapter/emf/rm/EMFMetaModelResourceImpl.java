@@ -21,8 +21,14 @@ package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EPackage;
@@ -85,8 +91,23 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 
 		try {
 			if (f != null){
+				ClassLoader currentThreadClassLoader
+				= Thread.currentThread().getContextClassLoader();
+
+				// Add the conf dir to the classpath
+				// Chain the current thread classloader
+
 				classLoader = new JarClassLoader(Collections.singletonList(getFile()));
+
+				System.out.println("**************** A Classloader to load : " + getFile().getCanonicalPath());
+				URLClassLoader child = new URLClassLoader (new URL[]{f.toURI().toURL()}, this.getClass().getClassLoader());
+
+				
 				ePackageClass = classLoader.loadClass(getPackageClassName());
+
+				// Replace the thread classloader - assumes
+				// you have permissions to do so
+				Thread.currentThread().setContextClassLoader(classLoader);
 			}
 			else {
 				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
@@ -120,6 +141,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;
