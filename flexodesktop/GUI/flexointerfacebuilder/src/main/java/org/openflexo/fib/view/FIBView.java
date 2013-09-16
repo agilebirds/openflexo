@@ -244,6 +244,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			if (getDynamicModel() != null) {
 				getDynamicModel().setVisible(visible);
 			}
+			updateDataObject(getDataObject());
 		}
 	}
 
@@ -356,6 +357,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				preferredSize.height = getComponent().getHeight();
 			}
 			getJComponent().setPreferredSize(preferredSize);
+		} else {
+			getJComponent().setPreferredSize(null);
 		}
 	}
 
