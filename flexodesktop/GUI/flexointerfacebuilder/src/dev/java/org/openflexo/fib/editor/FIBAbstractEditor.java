@@ -555,9 +555,15 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		return true;
 	}
 
-	public static <T extends FIBAbstractEditor> void init(T abstractEditor) {
+	public static <T extends FIBAbstractEditor> void init(final T abstractEditor) {
 		abstractEditor.loadFIB();
 		abstractEditor.getFrame().setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				abstractEditor.getFrame().toFront();
+			}
+		});
 	}
 
 	public static <T extends FIBAbstractEditor> void main(final Class<T> klass) {
