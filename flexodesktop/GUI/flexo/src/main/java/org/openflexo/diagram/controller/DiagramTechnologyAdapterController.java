@@ -19,6 +19,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -113,7 +114,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.CONNECTOR_ICON, IconLibrary.DUPLICATE);
 		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
-			return null;
+			return IconFactory.getImageIcon(VPMIconLibrary.GRAPHICAL_ACTION_ICON);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VEIconLibrary.DELETE_ICON;
 		}
