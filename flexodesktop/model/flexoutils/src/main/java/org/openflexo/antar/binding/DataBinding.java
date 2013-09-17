@@ -114,9 +114,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	private DataBinding.BindingDefinitionType bdType = null;
 	private boolean mandatory = false;
 	// TODO : XtoF, first attempt to have better performances
+	// Sylvain: the caching is now performed for a given BindingModel
+	// We assume here that the type model is not dynamic, only BindingVariable name and type changing are notified
+	// If type model is not dynamic, use setCacheable(false)
 	private boolean wasValid = false;
-	private boolean cacheable = false;
-
+	private boolean cacheable = true;
+	private BindingModel bindingModelOnWhichValidityWasTested = null;
+	private String invalidBindingReason;
 
 	private boolean needsParsing = false;
 	private String bindingName;
@@ -306,17 +310,18 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		}
 	}
 
-	private String invalidBindingReason;
+	/**
+	 * Called when the typing model has changed
+	 */
+	public void markedAsToBeReanalized() {
+		bindingModelOnWhichValidityWasTested = null;
+		wasValid = false;
+	}
 
 	public boolean isValid() {
 
 		invalidBindingReason = "unknown";
 
-		if (cacheable && wasValid) {
-			return true;
-		}
-		
-		
 		if (getOwner() == null) {
 			invalidBindingReason = "null owner";
 			wasValid = false;
@@ -329,12 +334,24 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return false;
 		}
 
-		
+		if (cacheable && wasValid && getOwner().getBindingModel() == bindingModelOnWhichValidityWasTested) {
+			// Use cache info to test DataBinding validity
+			return true;
+		}
+		// TODO: implements and use correct equals() implementation on BindingModel class
+		/*if (cacheable && wasValid) {
+			logger.info("Already tested for an other BindingModel");
+			logger.info("Tested on " + bindingModelOnWhichValidityWasTested);
+			logger.info("Should be now tested on " + getOwner().getBindingModel());
+		}*/
+
 		if (getExpression() == null) {
 			invalidBindingReason = "null expression";
 			wasValid = false;
 			return false;
 		}
+
+		bindingModelOnWhichValidityWasTested = getOwner().getBindingModel();
 
 		if (getOwner() != null) {
 			try {
@@ -625,7 +642,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 				if (evaluatedExpression instanceof CastExpression) {
 					Expression argument = ((CastExpression) evaluatedExpression).getArgument();
-					if ( argument instanceof Constant) {
+					if (argument instanceof Constant) {
 						// Special case for Files to be converted from Strings
 						if (declaredType == File.class && argument.getEvaluationType() == EvaluationType.STRING) {
 							return (T) new File((String) ((Constant) argument).getValue());
