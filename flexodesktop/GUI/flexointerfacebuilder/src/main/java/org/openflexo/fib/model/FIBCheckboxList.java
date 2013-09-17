@@ -84,7 +84,7 @@ public class FIBCheckboxList extends FIBMultipleValues {
 	@Override
 	public Type getDataType() {
 		Type[] args = new Type[1];
-		args[0] = getIteratorClass();
+		args[0] = getIteratorType();
 		return new ParameterizedTypeImpl(List.class, args);
 	}
 

@@ -448,6 +448,19 @@ public class TypeUtils {
 			}
 			return true;
 		}
+
+		// In this case, the type is not fully resolved, we only consider the first upper bound
+		if (aType instanceof TypeVariable) {
+			TypeVariable tv = (TypeVariable) aType;
+			if (tv.getBounds() != null && tv.getBounds().length > 0 && tv.getBounds()[0] != null) {
+				return isTypeAssignableFrom(tv.getBounds()[0], anOtherType);
+			}
+		}
+
+		if (aType instanceof WildcardType) {
+			logger.warning("WildcardType not implemented yet !");
+		}
+
 		return org.apache.commons.lang3.reflect.TypeUtils.isAssignable(anOtherType, aType);
 		/*if (getBaseEntity() == type.getBaseEntity()) {
 			// Base entities are the same, let's analyse parameters
@@ -601,6 +614,29 @@ public class TypeUtils {
 	}
 
 	/**
+	 * Build a new type infering implicit typing constraints<br>
+	 * Raw classes are parameterized
+	 * 
+	 * @param aType
+	 * @return
+	 */
+	public static Type makeInferedType(Type aType) {
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (aType instanceof Class && ((Class) aType).getTypeParameters().length > 0) {
+			Type[] args = new Type[((Class) aType).getTypeParameters().length];
+			for (int i = 0; i < ((Class) aType).getTypeParameters().length; i++) {
+				args[i] = new WilcardTypeImpl(((Class) aType).getTypeParameters()[i].getBounds(), new Type[0]);
+			}
+			return new ParameterizedTypeImpl((Class) aType, args);
+		}
+		return aType;
+
+	}
+
+	/**
 	 * Build instanciated DMType considering supplied type is generic (contains TypeVariable definitions) Returns a clone of DMType where
 	 * all references to TypeVariable are replaced by values defined in context type. For example, given type=Enumeration<E> and
 	 * context=Vector<String>, returns Enumeration<String> If supplied type is not generic, return type value (without cloning!)
@@ -625,12 +661,7 @@ public class TypeUtils {
 		// We make an indirection with an infered context computed with default bounds
 		// declared in generic type
 		if (context instanceof Class && ((Class) context).getTypeParameters().length > 0) {
-			Type[] args = new Type[((Class) context).getTypeParameters().length];
-			for (int i = 0; i < ((Class) context).getTypeParameters().length; i++) {
-				args[i] = new WilcardTypeImpl(((Class) context).getTypeParameters()[i].getBounds(), new Type[0]);
-			}
-			ParameterizedType inferedType = new ParameterizedTypeImpl((Class) context, args);
-			return makeInstantiatedType(type, inferedType);
+			return makeInstantiatedType(type, makeInferedType(context));
 		}
 
 		if (type instanceof ParameterizedType) {

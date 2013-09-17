@@ -75,7 +75,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 
 	public void setSelectionManager(SelectionManager selectionManager) {
 		if (_selectionManager != null) {
-			selectionManager.removeFromSelectionListeners(this);
+			_selectionManager.removeFromSelectionListeners(this);
 		}
 		_selectionManager = selectionManager;
 		if (_selectionManager != null) {

@@ -52,7 +52,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	@Deprecated
 	public BindingDefinition getSelectedBindingDefinition() {
 		if (SELECTED == null) {
-			SELECTED = new BindingDefinition("selected", getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET, false);
+			SELECTED = new BindingDefinition("selected", getIteratorType(), DataBinding.BindingDefinitionType.GET_SET, false);
 		}
 		return SELECTED;
 	}
@@ -207,7 +207,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	private void createTableBindingModel() {
 		tableBindingModel = new BindingModel(getBindingModel());
 
-		tableBindingModel.addToBindingVariables(new BindingVariable("iterator", getIteratorClass()));
+		tableBindingModel.addToBindingVariables(new BindingVariable("iterator", getIteratorType()));
 		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
 
 		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
@@ -223,7 +223,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	private void createActionBindingModel() {
 		actionBindingModel = new BindingModel(getBindingModel());
 
-		actionBindingModel.addToBindingVariables(new BindingVariable("selected", getIteratorClass()));
+		actionBindingModel.addToBindingVariables(new BindingVariable("selected", getIteratorType()));
 		// System.out.println("dataClass="+getDataClass()+" dataClassName="+dataClassName);
 
 		// logger.info("******** Table: "+getName()+" Add BindingVariable: iterator type="+getIteratorClass());
@@ -238,7 +238,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 
 	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
+			selected = new DataBinding<Object>(this, getIteratorType(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
@@ -246,7 +246,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	public void setSelected(DataBinding<Object> selected) {
 		if (selected != null) {
 			selected.setOwner(this);
-			selected.setDeclaredType(getIteratorClass());
+			selected.setDeclaredType(getIteratorType());
 			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
 		}
 		this.selected = selected;
@@ -286,6 +286,19 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		return null;
 	}*/
 
+	private Type iteratorType;
+
+	public Type getIteratorType() {
+		Class<?> iteratorClass = getIteratorClass();
+		if (iteratorClass.getTypeParameters().length > 0) {
+			if (iteratorType == null) {
+				iteratorType = TypeUtils.makeInferedType(iteratorClass);
+			}
+			return iteratorType;
+		}
+		return iteratorClass;
+	}
+
 	public Class getIteratorClass() {
 		if (iteratorClass == null) {
 			iteratorClass = Object.class;
@@ -315,7 +328,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	public Type getDynamicAccessType() {
 		Type[] args = new Type[2];
 		args[0] = getDataType();
-		args[1] = getIteratorClass();
+		args[1] = getIteratorType();
 		return new ParameterizedTypeImpl(FIBTableDynamicModel.class, args);
 	}
 

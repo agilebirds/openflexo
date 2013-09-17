@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DiagramSpecification id="1" name="DiagramSpecification" modelVersion="1.0">
+  <OWLModelSlot id="1000" isRequired="true" isReadOnly="false" metaModelURI="http://www.bolton.ac.uk/archimate" name="owl" />
   <EditionPattern id="2" name="Stakeholder" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Stakeholder.owl#ArchimateElements">
     <DropScheme id="3" target="top" name="dropStakeholderAtTopLevel" label="dropStakeholderAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <URIParameter id="4" base="&quot;Stakeholder&quot;" name="uri" label="uri" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="true" />

@@ -167,4 +167,11 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 				+ (getModelSlot() != null ? getModelSlot().getName() + ":" + getModelSlot().getClass().getSimpleName() + "_"
 						+ (getName() != null ? getName() : getFlexoID()) : "null");
 	}
+
+	/**
+	 * Returns a string describing how the model slot instance is bound to a data source
+	 * 
+	 * @return
+	 */
+	public abstract String getBindingDescription();
 }

@@ -14,13 +14,13 @@ public class OWLModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 	public void setOption(org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption option) {
 		super.setOption(option);
 		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
-			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myXMLFile";
+			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myOntology";
 			relativePath = "/";
-			filename = "myXMLFile" + getModelSlot().getTechnologyAdapter().getExpectedOntologyExtension();
+			filename = "myOntology" + getModelSlot().getTechnologyAdapter().getExpectedOntologyExtension();
 		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelUri = "ResourceCenter/Models/";
 			relativePath = "/";
-			filename = "myXMLFile" + getModelSlot().getTechnologyAdapter().getExpectedOntologyExtension();
+			filename = "myOntology" + getModelSlot().getTechnologyAdapter().getExpectedOntologyExtension();
 		}
 	}
 

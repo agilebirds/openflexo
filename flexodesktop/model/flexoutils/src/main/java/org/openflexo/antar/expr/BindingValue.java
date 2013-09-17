@@ -253,7 +253,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 	public boolean isLastBindingPathElement(BindingPathElement element) {
 
 		if (bindingPath.size() == 0) {
-			return (element.equals(getBindingVariable()));
+			return element.equals(getBindingVariable());
 		}
 
 		return bindingPath.get(bindingPath.size() - 1).equals(element);
@@ -443,9 +443,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 
 	public void markedAsToBeReanalized() {
 		needsToBeReanalized = true;
-		/*if (isValid()) {
-			analysingSuccessfull = true;
-		}*/
+		dataBinding.markedAsToBeReanalized();
 	}
 
 	public boolean isValid(DataBinding<?> dataBinding) {
@@ -486,7 +484,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 		needsToBeReanalized = false;
 
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Is BindingValue " + this + " valid ?");
+			logger.fine("Is BindingValue valid ?");
 		}
 
 		if (getBindingVariable() == null) {
@@ -580,7 +578,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 
 	@Override
 	public int hashCode() {
-		return (toString()).hashCode();
+		return toString().hashCode();
 	}
 
 	/**
