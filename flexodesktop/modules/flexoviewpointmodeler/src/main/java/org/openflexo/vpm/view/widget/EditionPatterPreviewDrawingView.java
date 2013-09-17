@@ -19,6 +19,9 @@
  */
 package org.openflexo.vpm.view.widget;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
@@ -37,10 +40,12 @@ public class EditionPatterPreviewDrawingView extends DrawingView<EditionPatternP
 		return (EditionPatternPreviewController) super.getController();
 	}
 
-	/*@Override
-	public Dimension getPreferredSize()
-	{
-		// TODO Auto-generated method stub
-		return super.getPreferredSize();
-	}*/
+	@Override
+	public Dimension getPreferredSize() {
+		Rectangle rect = new Rectangle(0, 0, 300, 200);
+		for (Component c : getComponents()) {
+			rect = rect.union(c.getBounds());
+		}
+		return rect.getSize();
+	}
 }

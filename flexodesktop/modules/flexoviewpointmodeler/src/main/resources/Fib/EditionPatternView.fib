@@ -33,7 +33,7 @@
           <TextFieldColumn data="iterator.patternRoleName" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" />
           <DropDownColumn data="iterator.type" title="kind" columnWidth="100" resizable="true" displayTitle="true" name="dropdown" />
           <LabelColumn data="iterator.preciseType" title="type" columnWidth="110" resizable="true" displayTitle="true" name="label" />
-          <CheckBoxColumn data="iterator.isPrimaryRole" title="" columnWidth="20" resizable="true" displayTitle="true" name="checkbox" />
+          <CheckBoxColumn data="iterator.isPrimaryRole" title="" columnWidth="24" resizable="false" displayTitle="true" name="checkbox" />
           <AddAction method="data.createShapePatternRole" name="add_shape" />
           <AddAction method="data.createConnectorPatternRole" name="add_connector" />
           <AddAction method="data.createFlexoModelObjectPatternRole" name="add_flexo_model_object" />
@@ -347,9 +347,9 @@
     <Tab title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="2" constraints="border(index=1;location=center)" opaque="false" name="EditionSchemeTab">
       <SplitPanel index="0" constraints="border(index=0;location=center)">
         <ColSplit name="ColSplit" weight="0.0">
-          <Leaf name="top" weight="0.4000000059604645" />
+          <Leaf name="top" weight="0.29999998211860657" />
           <Divider />
-          <Leaf name="bottom" weight="0.6000000238418579" />
+          <Leaf name="bottom" weight="0.699999988079071" />
         </ColSplit>
         <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="split(index=0;location=north;splitIdentifier=top)" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
           <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionScheme" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemeTable" index="0" data="data.editionSchemes" constraints="border(index=0;location=west)">
@@ -688,9 +688,9 @@
           <Tab title="edition_actions" layout="border" borderTitle="Actions" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" opaque="false" name="ActionsPanel">
             <SplitPanel index="0" constraints="border(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
               <RowSplit name="RowSplit" weight="0.0">
-                <Leaf name="left" weight="0.0" />
+                <Leaf name="left" weight="0.25" />
                 <Divider />
-                <Leaf name="right" weight="1.0" />
+                <Leaf name="right" weight="0.75" />
               </RowSplit>
               <Panel layout="gridbag" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=right;weightX=1.0;weightY=1.0)" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ActionDetailsPanel">
                 <Panel layout="none" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" index="13" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(EditionActionBrowser.selected = null)" opaque="false" name="NoSelectedActionPanel" />
@@ -1206,9 +1206,9 @@
       </Panel>
       <SplitPanel index="1" constraints="border(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
         <RowSplit name="RowSplit" weight="0.0">
-          <Leaf name="left" weight="0.5" />
+          <Leaf name="left" weight="0.25" />
           <Divider />
-          <Leaf name="right" weight="0.5" />
+          <Leaf name="right" weight="0.75" />
         </RowSplit>
         <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="split(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;splitIdentifier=left;weightX=0.0;weightY=0.0)" opaque="false" name="InspectorPropertyBrowserPanel">
           <Table iteratorClassName="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="InspectorPropertyTable" index="1" data="InspectorTab.data.entries" constraints="border(anchor=center;fill=both;gridHeight=0;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
