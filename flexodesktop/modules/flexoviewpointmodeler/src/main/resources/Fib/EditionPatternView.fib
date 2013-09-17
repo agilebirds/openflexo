@@ -1147,7 +1147,7 @@
                     <BrowserAddAction method="selected.createCloneShapeAction" name="clone_shape" />
                     <BrowserAddAction method="selected.createCloneConnectorAction" name="clone_connector" />
                     <BrowserAddAction method="selected.createCloneIndividualAction" name="clone_individual" />
-                    <BrowserAddAction method="selected.createDeletionAction" name="add_delete" />
+                    <BrowserAddAction method="selected.createDeleteAction" name="add_delete" />
                   </BrowserElement>
                   <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ControlStructureAction" label="controlStructure.stringRepresentation" icon="controller.iconForObject(controlStructure)" isEditable="false" filtered="false" defaultVisible="true" name="controlStructure">
                     <Children data="controlStructure.actions" name="children" />
