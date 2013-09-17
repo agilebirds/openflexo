@@ -327,7 +327,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	protected void synchronizeWithTextFieldValue(String textValue) {
 		try {
 			isUpdatingModel = true;
-
+			if (org.apache.commons.lang3.StringUtils.isEmpty(textValue)) {
+				setEditedObject(null);
+				apply();
+				return;
+			}
 			AbstractBinding newEditedBinding = makeBindingFromString(textValue);
 
 			if (newEditedBinding != null) {
