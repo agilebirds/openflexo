@@ -4,13 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,50 +18,10 @@ import java.util.zip.ZipException;
 
 import org.apache.commons.io.FileUtils;
 
-public class JarClassLoader extends URLClassLoader {
-
+public class JarClassLoader extends ClassLoader {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(JarClassLoader.class.getPackage()
 			.getName());
-
-	@Override
-	public URL findResource(String name) {
-
-		System.out.println("********** JE SUIS un FindResource et je cherche: "  + name);
-		
-		for (File jarDir : jarDirectories) {
-			Collection<File> lstFile = FileUtils.listFiles(jarDir, new String[] { "jar" }, false);
-			for (File f : lstFile){
-				try {
-					this.addURL(f.toURI().toURL());
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		// TODO Auto-generated method stub
-		return super.findResource(name);
-	}
-
-
-	@Override
-	public Enumeration<URL> findResources(String name) throws IOException {
-
-		System.out.println("********** JE SUIS un FindResourceSS et je cherche: "  + name);
-		
-		for (File jarDir : jarDirectories) {
-			Collection<File> lstFile = FileUtils.listFiles(jarDir, new String[] { "jar" }, false);
-			for (File f : lstFile){
-				this.addURL(f.toURI().toURL());
-			}
-		}
-		
-		
-		// TODO Auto-generated method stub
-		return super.findResources(name);
-	}
 
 	private Map<String, Class<?>> classForClassName;
 
@@ -77,13 +32,12 @@ public class JarClassLoader extends URLClassLoader {
 	private Set<File> bannedZip;
 
 	public JarClassLoader(List<File> jarDirectories) {
-		super(new URL[]{}, JarClassLoader.class.getClassLoader());
+		super();
 		this.jarDirectories = jarDirectories;
 		jarFiles = new HashSet<JarFile>();
 		classForClassName = Collections.synchronizedMap(new HashMap<String, Class<?>>());
 	}
 
-	
 	@Override
 	protected void finalize() throws Throwable {
 		System.err.println("Finalizing Jar Class Loader");

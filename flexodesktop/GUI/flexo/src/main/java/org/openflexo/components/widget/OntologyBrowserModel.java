@@ -858,7 +858,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 	}
 
 	public Font getFont(IFlexoOntologyConcept object, Font baseFont) {
-		if (object.getOntology() != getContext()) {
+		if (baseFont != null && object.getOntology() != getContext()) {
 			return baseFont.deriveFont(Font.ITALIC);
 		}
 		return baseFont;
