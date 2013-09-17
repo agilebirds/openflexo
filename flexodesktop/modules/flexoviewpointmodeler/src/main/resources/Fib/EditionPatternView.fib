@@ -1365,7 +1365,8 @@
                   <RemoveAction method="ListIndividualInspectorEntryPanel.data.removeFromStaticList(selected)" name="delete_action" />
                 </Table>
               </Panel>
-              <TextArea columns="40" rows="2" text="TextArea" index="24" data="EntryPanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
+              <Label label="description" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="Description Label" localize="true" />
+              <TextArea columns="40" rows="2" text="TextArea" index="24" data="EntryPanel.data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
             </Panel>
           </Panel>
         </SplitPanel>
@@ -1579,7 +1580,7 @@
     <Localized key="add_ontologic_object" lang="English">Add ontologic object</Localized>
     <Localized key="add_list" lang="English">Add list</Localized>
     <Localized key="add_list" lang="French">Ajouter une liste</Localized>
-    <Localized key="add_list" lang="Dutch">Lijst toevoegen</Localized>
+    <Localized key="add_list" lang="Dutch">Add list</Localized>
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="French">Ne pas afficher la boite de dialogue de confirmation</Localized>
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="English">Skip confirmation panel as no parameters are defined</Localized>
     <Localized key="action_scheme" lang="French">Schème d'action</Localized>
@@ -1686,9 +1687,6 @@
     <Localized key="new_navigation_scheme" lang="French">Schème de nouvelle navigation</Localized>
     <Localized key="new_deletion_scheme" lang="French">Schème de nouvelle suppression</Localized>
     <Localized key="new_creation_scheme" lang="French">Schème de nouvelle création</Localized>
-    <Localized key="" lang="English" />
-    <Localized key="" lang="French" />
-    <Localized key="" lang="Dutch" />
     <Localized key="primary" lang="English">Primary</Localized>
     <Localized key="primary" lang="French">Primaire</Localized>
     <Localized key="primary" lang="Dutch">Primary</Localized>
@@ -2055,9 +2053,9 @@
     <Localized key="Rôle" lang="English">Rôle</Localized>
     <Localized key="Rôle" lang="French">Rôle</Localized>
     <Localized key="Rôle" lang="Dutch">Rôle</Localized>
-    <Localized key="Activité" lang="English">Activité</Localized>
+    <Localized key="Activité" lang="English">Activity</Localized>
     <Localized key="Activité" lang="French">Activité</Localized>
-    <Localized key="Activité" lang="Dutch">Activité</Localized>
+    <Localized key="Activité" lang="Dutch">Activity</Localized>
     <Localized key="Opération" lang="English">Opération</Localized>
     <Localized key="Opération" lang="French">Opération</Localized>
     <Localized key="Opération" lang="Dutch">Opération</Localized>
@@ -2086,5 +2084,29 @@
     <Localized key="resiz." lang="Dutch">Resiz.</Localized>
     <Localized key="shape_role" lang="Dutch">Shape role</Localized>
     <Localized key="skip_confirmation_panel_as_no_parameters_are_defined" lang="Dutch">Skip confirmation panel as no parameters are defined</Localized>
+    <Localized key="shapeValueStream" lang="English">shapeValueStream</Localized>
+    <Localized key="shapeValueStream" lang="French">shapeValueStream</Localized>
+    <Localized key="shapeValueStream" lang="Dutch">shapeValueStream</Localized>
+    <Localized key="shapeLeftText" lang="English">shapeLeftText</Localized>
+    <Localized key="shapeLeftText" lang="French">shapeLeftText</Localized>
+    <Localized key="shapeLeftText" lang="Dutch">shapeLeftText</Localized>
+    <Localized key="shapeRightText" lang="English">shapeRightText</Localized>
+    <Localized key="shapeRightText" lang="French">shapeRightText</Localized>
+    <Localized key="shapeRightText" lang="Dutch">shapeRightText</Localized>
+    <Localized key="list_type" lang="English">List type</Localized>
+    <Localized key="list_type" lang="French">Type de listes</Localized>
+    <Localized key="list_type" lang="Dutch">List type</Localized>
+    <Localized key="Individual" lang="English">Individual</Localized>
+    <Localized key="Individual" lang="French">Individual</Localized>
+    <Localized key="Individual" lang="Dutch">Individual</Localized>
+    <Localized key="static_list" lang="English">Static list</Localized>
+    <Localized key="static_list" lang="French">List statique</Localized>
+    <Localized key="static_list" lang="Dutch">Static list</Localized>
+    <Localized key="textfield" lang="English">Textfield</Localized>
+    <Localized key="textfield" lang="French">Champ texte</Localized>
+    <Localized key="textfield" lang="Dutch">Tekstveld</Localized>
+    <Localized key="" lang="English" />
+    <Localized key="" lang="French" />
+    <Localized key="" lang="Dutch" />
   </LocalizedDictionary>
 </Panel>
