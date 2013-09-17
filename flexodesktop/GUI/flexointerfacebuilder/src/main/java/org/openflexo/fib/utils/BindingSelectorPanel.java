@@ -1130,21 +1130,21 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		if (element == null) {
 			return EMPTY_MODEL;
 		}
-		if (TypeUtils.isResolved(element.getType())) {
-			Hashtable<Type, BindingColumnListModel> h = _listModels.get(element);
-			if (h == null) {
-				h = new Hashtable<Type, BindingColumnListModel>();
-				_listModels.put(element, h);
-			}
-			BindingColumnListModel returned = h.get(resultingType);
-			if (returned == null) {
-				returned = makeColumnListModel(element, resultingType);
-				h.put(resultingType, returned);
-			}
-			return returned;
-		} else {
-			return EMPTY_MODEL;
+		// if (TypeUtils.isResolved(element.getType())) {
+		Hashtable<Type, BindingColumnListModel> h = _listModels.get(element);
+		if (h == null) {
+			h = new Hashtable<Type, BindingColumnListModel>();
+			_listModels.put(element, h);
 		}
+		BindingColumnListModel returned = h.get(resultingType);
+		if (returned == null) {
+			returned = makeColumnListModel(element, resultingType);
+			h.put(resultingType, returned);
+		}
+		return returned;
+		/*} else {
+			return EMPTY_MODEL;
+		}*/
 	}
 
 	protected BindingColumnListModel makeColumnListModel(BindingPathElement element, Type resultingType) {
@@ -1553,9 +1553,11 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				}
 			}
 			_elements.clear();
+
 			if (TypeUtils.getBaseClass(_type) == null) {
 				return;
 			}
+
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
 			_accessibleProperties.addAll(bindingSelector.getBindable().getBindingFactory().getAccessibleSimplePathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
