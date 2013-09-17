@@ -2193,6 +2193,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void setIsFloatingLabel(boolean isFloatingLabel) {
 		FGENotification notification = requireChange(Parameters.isFloatingLabel, isFloatingLabel);
 		if (notification != null) {
+			if (isFloatingLabel && getLabelMetricsProvider() != null && isConnectedToDrawing()) {
+				FGEPoint relativePosition = new FGEPoint(getRelativeTextX(), getRelativeTextY());
+				Point location = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition,
+						getContainerGraphicalRepresentation(), 1.0);
+
+				setAbsoluteTextX(location.x - getViewX(1.0));
+				setAbsoluteTextY(location.y - getViewY(1.0));
+			}
 			this.isFloatingLabel = isFloatingLabel;
 			hasChanged(notification);
 		}
