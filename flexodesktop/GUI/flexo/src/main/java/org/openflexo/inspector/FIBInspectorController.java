@@ -70,6 +70,14 @@ public class FIBInspectorController extends FlexoFIBController {
 				}
 			}
 		}
+		if ("project".equals(variable.getVariableName())) {
+			if (getDataObject() instanceof FlexoModelObject) {
+				return ((FlexoModelObject) getDataObject()).getProject();
+			}
+			if (getEditor() != null) {
+				return getEditor().getProject();
+			}
+		}
 		return super.getValue(variable);
 	}
 

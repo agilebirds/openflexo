@@ -87,6 +87,7 @@ public abstract class ViewPointObject extends ViewPointLibraryObject implements 
 	}
 
 	public void notifyBindingChanged(ViewPointDataBinding binding) {
+		setChanged();
 		if (getPropertyChangeSupport() != null) {
 			if (binding != null && binding.getBindingAttribute() != null) {
 				getPropertyChangeSupport().firePropertyChange(binding.getBindingAttribute().toString(), null, binding);

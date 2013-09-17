@@ -198,6 +198,14 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		return newEntry;
 	}
 
+	public ListInspectorEntry createNewListEntry() {
+		ListInspectorEntry newEntry = new ListInspectorEntry(null);
+		newEntry.setName("list");
+		// newEntry.setLabel("flexoObject");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
 	public InspectorEntry deleteEntry(InspectorEntry entry) {
 		removeFromEntries(entry);
 		entry.delete();

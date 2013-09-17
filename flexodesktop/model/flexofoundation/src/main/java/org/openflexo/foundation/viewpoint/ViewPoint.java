@@ -48,6 +48,7 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -129,7 +130,8 @@ public class ViewPoint extends ViewPointObject {
 					logger.fine("Reading file " + xmlFile.getAbsolutePath());
 				}
 				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), builder,
-						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
+						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter,
+								ListInspectorEntry.StringHolder.converter));
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
 				}
@@ -359,7 +361,8 @@ public class ViewPoint extends ViewPointObject {
 	@Override
 	public StringEncoder getStringEncoder() {
 		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter,
+					ListInspectorEntry.StringHolder.converter);
 		}
 		return encoder;
 	}

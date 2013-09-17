@@ -44,7 +44,7 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	static final Logger logger = Logger.getLogger(InspectorEntry.class.getPackage().getName());
 
 	public static enum InspectorEntryBindingAttribute implements InspectorBindingAttribute {
-		data, conditional, domainValue, rangeValue, parentClassValue, conceptValue
+		data, conditional, domainValue, rangeValue, parentClassValue, conceptValue, list, format;
 	}
 
 	public static BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);

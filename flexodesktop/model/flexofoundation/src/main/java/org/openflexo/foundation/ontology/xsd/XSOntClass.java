@@ -101,7 +101,7 @@ public class XSOntClass extends AbstractXSOntObject implements OntologyClass, XS
 	}
 
 	@Override
-	public List<OntologyIndividual> getIndividuals() {
+	public List<OntologyIndividual> getAllIndividuals() {
 		// TODO Auto-generated method stub
 		return null;
 	}

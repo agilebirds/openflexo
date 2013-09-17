@@ -101,6 +101,14 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry" xmlTag="FlexoObject">
 		<property name="flexoObjectType" xmlTag="flexoObjectType" attribute="YES" />
 	</entity>
+	
+	<entity name="org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry" xmlTag="ListInspectorEntry">
+		<property name="listType" xmlTag="type" attribute="YES" />
+		<property name="conceptURI" xmlTag="conceptURI" attribute="YES" />
+		<property name="staticList" xmlTag="Value" type="vector"/>
+		<property name="list" xmlTag="list" attribute="YES" />
+		<property name="format" xmlTag="format" attribute="YES" />
+	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.PatternRole" abstract="yes" contexts="Contained,PrimaryConcept,PrimaryRepresentation">
 		<property name="patternRoleName" xmlTag="patternRole" attribute="YES" />

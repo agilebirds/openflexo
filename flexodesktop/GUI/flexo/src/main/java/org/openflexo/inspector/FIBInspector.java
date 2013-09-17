@@ -21,12 +21,16 @@ package org.openflexo.inspector;
 
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.components.widget.FIBIndividualSelector;
@@ -36,6 +40,7 @@ import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;
+import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBNumber.NumberType;
@@ -51,6 +56,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.OntologyClass;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
@@ -62,6 +68,9 @@ import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry.ListType;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry.StringHolder;
 import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
@@ -90,8 +99,8 @@ public class FIBInspector extends FIBPanel {
 
 	private FIBInspector superInspector;
 
-	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
+	private List<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
+	private Map<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
 
 	public FIBInspector getSuperInspector() {
 		return superInspector;
@@ -329,9 +338,11 @@ public class FIBInspector extends FIBPanel {
 			EditionPattern ep = currentEditionPatterns.get(i);
 			_bindingModel.addToBindingVariables(new EditionPatternInstancePathElement(ep, i, getDataClass()));
 		}
+		_bindingModel.addToBindingVariables(new BindingVariableImpl<FlexoProject>(this, "project", FlexoProject.class));
 	}
 
 	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab) {
+		// The inspector widgets must remain unnamed in order to properly work.
 		if (entry instanceof TextFieldInspectorEntry) {
 			FIBTextField tf = new FIBTextField();
 			tf.setValidateOnReturn(true); // Avoid to many ontologies manipulations
@@ -608,6 +619,90 @@ public class FIBInspector extends FIBPanel {
 			default:
 				break;
 			}
+		} else if (entry instanceof ListInspectorEntry) {
+			final ListInspectorEntry listEntry = (ListInspectorEntry) entry;
+			FIBDropDown dd = new FIBDropDown();
+			// The next line causes issues in the deserialization of bindings. The inspector widgets must remain unnamed in order to
+			// properly work.
+			// dd.setName(listEntry.getName());
+			if (listEntry.getFormat() != null && listEntry.getFormat().isValid()) {
+				dd.setFormat(new DataBinding(listEntry.getFormat().toString()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return listEntry.getBindingFactory();
+					}
+
+				});
+			}
+			if (listEntry.getListType() == ListType.Individual) {
+				if (listEntry.getConcept() != null) {
+					dd.setList(new DataBinding("project.projectOntology.getClass(\"" + listEntry.getConcept().getURI()
+							+ "\").allIndividuals") {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return listEntry.getBindingFactory();
+						}
+					});
+				}
+			}
+			if (dd.getList() != null && dd.getList().isUnset()) {
+				if (listEntry.getList() != null && listEntry.getList().isValid()) {
+					dd.setList(new DataBinding(listEntry.getList().toString()) {
+						@Override
+						public BindingFactory getBindingFactory() {
+							return listEntry.getBindingFactory();
+						}
+					});
+				} else {
+					switch (listEntry.getListType()) {
+					case Action:
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("TODO: please implement me");
+						}
+						break;
+					case Activity:
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("TODO: please implement me");
+						}
+						break;
+					case Event:
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("TODO: please implement me");
+						}
+						break;
+					case Individual:
+						dd.setList(new DataBinding("project.projectOntology.individuals"));
+						break;
+					case Operation:
+						break;
+					case Process:
+						dd.setList(new DataBinding("project.workflow.allFlexoProcesses"));
+						break;
+					case ProcessFolder:
+						dd.setList(new DataBinding("project.workflow.allFlexoProcesses"));
+						break;
+					case Role:
+						dd.setList(new DataBinding("project.workflow.allAssignableRoles"));
+						break;
+					case Screen:
+						dd.setList(new DataBinding("project.flexoComponentLibrary.allComponentList"));
+						break;
+					case String:
+						StringBuilder sb = new StringBuilder();
+						for (StringHolder h : listEntry.getStaticList()) {
+							if (sb.length() > 0) {
+								sb.append(',');
+							}
+							sb.append(h.get());
+						}
+						dd.setStaticList(sb.toString());
+						break;
+
+					}
+				}
+			}
+			newTab.addToSubComponents(dd, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
+			return dd;
 		}
 
 		FIBLabel unknown = new FIBLabel();
@@ -640,6 +735,7 @@ public class FIBInspector extends FIBPanel {
 			label.setLabel(entryLabel);
 			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
 			FIBWidget widget = makeWidget(entry, newTab);
+			// epIdentifier will be resolved with the binding model of this inspector. See also #createBindingModel()
 			widget.setData(new DataBinding(epIdentifier + "." + entry.getData().toString()) {
 				@Override
 				public BindingFactory getBindingFactory() {
@@ -665,6 +761,8 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected String getEditionPatternIdentifier(EditionPattern ep, int refIndex) {
+		// This is a copy of the method
+		// org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement#getSerializationRepresentation()
 		return ep.getViewPoint().getName() + "_" + ep.getName() + "_" + refIndex;
 	}
 

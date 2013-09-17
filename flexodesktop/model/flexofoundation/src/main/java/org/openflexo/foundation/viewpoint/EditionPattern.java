@@ -28,10 +28,12 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -758,6 +760,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		for (PatternRole role : getPatternRoles()) {
 			_bindingModel.addToBindingVariables(PatternRolePathElement.makePatternRolePathElement(role, this));
 		}
+		_bindingModel.addToBindingVariables(new BindingVariableImpl<FlexoProject>(this, "project", FlexoProject.class));
 		notifyBindingModelChanged();
 	}
 

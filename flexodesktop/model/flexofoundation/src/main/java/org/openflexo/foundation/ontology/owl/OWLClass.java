@@ -165,7 +165,8 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		}
 	}
 
-	public List<OntologyIndividual> getIndividuals() {
+	@Override
+	public List<OntologyIndividual> getAllIndividuals() {
 		List<OntologyIndividual> individuals = new ArrayList<OntologyIndividual>();
 		for (OntologyIndividual i : getOntology().getIndividuals()) {
 			if (isSuperConceptOf(i)) {
