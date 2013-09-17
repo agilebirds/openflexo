@@ -180,7 +180,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 				PatternRole patternRole = ((EditionPatternActorChanged) dataModification).getPatternRole();
 				if (patternRole.getType() == PatternRoleType.Individual) {
 					final OWLIndividual individual = (OWLIndividual) dataModification.oldValue();
-					if (individual != null) {
+					if (individual != null && !individual.isDeleted()) {
 						View shema = getOEShape().getShema();
 						if (!shema.isObjectUsedAsActorOfPatternRole(individual)) {
 							String name = individual.getName();

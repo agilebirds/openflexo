@@ -501,6 +501,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 
+		// Notification of the edition pattern instances. Make sure that the flag 'isDeleted' is already true before notifying!
 		for (EditionPatternReference ref : new ArrayList<EditionPatternReference>(getEditionPatternReferences())) {
 			if (ref.getEditionPatternInstance() != null) {
 				ref.getEditionPatternInstance().nullifyPatternActor(ref.getPatternRole());
