@@ -21,8 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -580,34 +578,29 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
-			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+			if (pr instanceof ConnectorPatternRole) {
 				rolesToDelete.add(pr);
 			}
 		}
-		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
-			@Override
-			public int compare(PatternRole o1, PatternRole o2) {
-				if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
-					return 1;
-				} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
-					return -1;
-				}
 
-				if (o1 instanceof ShapePatternRole) {
-					if (o2 instanceof ShapePatternRole) {
-						if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
-							return -1;
-						}
-						if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
-							return 1;
-						}
-						return 0;
-					}
-				}
-				return 0;
+		for (PatternRole pr : getPatternRoles()) {
+			if (pr instanceof ShapePatternRole) {
+				rolesToDelete.add(pr);
 			}
+		}
 
-		});
+		for (PatternRole pr : getPatternRoles()) {
+			if (pr instanceof StatementPatternRole) {
+				rolesToDelete.add(pr);
+			}
+		}
+
+		for (PatternRole pr : getPatternRoles()) {
+			if (pr instanceof IndividualPatternRole) {
+				rolesToDelete.add(pr);
+			}
+		}
+
 		for (PatternRole pr : rolesToDelete) {
 			DeleteAction a = new DeleteAction(null);
 			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
