@@ -872,6 +872,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				getShape().rebuildControlPoints();
 				hasChanged(notification);
 			}
+			checkLocationConstraints();
 		}
 	}
 
@@ -1314,6 +1315,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			this.dimensionConstraints = dimensionConstraints;
 			getShape().rebuildControlPoints();
 			hasChanged(notification);
+			checkDimensionConstraints();
 		}
 	}
 
@@ -1673,26 +1675,59 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	@Override
+	protected void notifyChange(org.openflexo.fge.GraphicalRepresentation.GRParameter parameter, Object oldValue, Object newValue) {
+		if (parameter == Parameters.xConstraints || parameter == Parameters.yConstraints) {
+			checkLocationConstraints();
+		} else if (parameter == Parameters.widthConstraints || parameter == Parameters.heightConstraints) {
+			checkDimensionConstraints();
+		}
+		super.notifyChange(parameter, oldValue, newValue);
+	}
+
 	public void finalizeConstraints() {
 		if (xConstraints != null && xConstraints.isValid()) {
 			xConstraints.finalizeDeserialization();
 			setX((Double) TypeUtils.castTo(xConstraints.getBindingValue(this), Double.class));
-			setLocationConstraints(LocationConstraints.UNMOVABLE);
 		}
 		if (yConstraints != null && yConstraints.isValid()) {
 			yConstraints.finalizeDeserialization();
 			setY((Double) TypeUtils.castTo(yConstraints.getBindingValue(this), Double.class));
-			setLocationConstraints(LocationConstraints.UNMOVABLE);
 		}
 		if (widthConstraints != null && widthConstraints.isValid()) {
 			widthConstraints.finalizeDeserialization();
 			setWidth((Double) TypeUtils.castTo(widthConstraints.getBindingValue(this), Double.class));
-			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		}
 		if (heightConstraints != null && heightConstraints.isValid()) {
 			heightConstraints.finalizeDeserialization();
 			setHeight((Double) TypeUtils.castTo(heightConstraints.getBindingValue(this), Double.class));
+		}
+		checkLocationConstraints();
+		checkDimensionConstraints();
+	}
+
+	protected void checkDimensionConstraints() {
+		boolean w = widthConstraints != null && widthConstraints.isValid();
+		boolean h = heightConstraints != null && heightConstraints.isValid();
+		if (w && h) {
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+		} else if (w) {
+			setDimensionConstraints(DimensionConstraints.WIDTH_FIXED);
+		} else if (h) {
+			setDimensionConstraints(DimensionConstraints.HEIGHT_FIXED);
+		}
+	}
+
+	protected void checkLocationConstraints() {
+		boolean x = xConstraints != null && xConstraints.isValid();
+		boolean y = yConstraints != null && yConstraints.isValid();
+
+		if (x && y) {
+			setLocationConstraints(LocationConstraints.UNMOVABLE);
+		} else if (x) {
+			setLocationConstraints(LocationConstraints.X_FIXED);
+		} else if (y) {
+			setLocationConstraints(LocationConstraints.Y_FIXED);
 		}
 	}
 
