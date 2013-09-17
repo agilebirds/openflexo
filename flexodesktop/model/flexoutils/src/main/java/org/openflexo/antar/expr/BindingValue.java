@@ -486,7 +486,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 		needsToBeReanalized = false;
 
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Is BindingValue " + this + " valid ?");
+			logger.fine("Is BindingValue valid ?");
 		}
 
 		if (getBindingVariable() == null) {
