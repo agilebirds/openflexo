@@ -251,7 +251,7 @@ public class ViewPointPaletteElement extends ViewPointObject {
 
 	public GraphicalRepresentation<?> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		for (OverridingGraphicalRepresentation ogr : getOverridingGraphicalRepresentations()) {
-			if (ogr.getPatternRoleName().equals(patternRole.getPatternRoleName())) {
+			if (ogr.getPatternRoleName() != null && ogr.getPatternRoleName().equals(patternRole.getPatternRoleName())) {
 				return ogr.getGraphicalRepresentation();
 			}
 		}
