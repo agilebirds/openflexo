@@ -29,13 +29,18 @@ public class GRBindingFactory extends DefaultBindingFactory {
 
 	private static final Logger logger = Logger.getLogger(GRBindingFactory.class.getPackage().getName());
 
-	private static GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text,
+	private static final GRParameter[] allowedPropertiesInBindings = { Parameters.layer, Parameters.text,
 			ShapeGraphicalRepresentation.Parameters.relativeTextX, ShapeGraphicalRepresentation.Parameters.relativeTextY,
 			Parameters.absoluteTextX, Parameters.absoluteTextY, Parameters.isVisible, ShapeGraphicalRepresentation.Parameters.x,
 			ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
 			ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.minimalWidth,
 			ShapeGraphicalRepresentation.Parameters.minimalHeight, ShapeGraphicalRepresentation.Parameters.maximalWidth,
-			ShapeGraphicalRepresentation.Parameters.maximalHeight };
+			ShapeGraphicalRepresentation.Parameters.maximalHeight, new GRParameter() {
+				@Override
+				public String name() {
+					return "locationInDrawing";
+				}
+			} };
 
 	private static Class<? extends GraphicalRepresentation<?>> DECLARING_CLASS;
 
@@ -461,7 +466,7 @@ public class GRBindingFactory extends DefaultBindingFactory {
 		if (father instanceof ComponentsBindingVariable) {
 			return Collections.emptyList();
 		} else if (father instanceof ComponentPathElement) {
-			return Collections.emptyList();
+			return /*KeyValueLibrary.getAccessibleMethods(((ComponentPathElement) father).getType())*/Collections.emptyList();
 		}
 		return super.getAccessibleCompoundBindingPathElements(father);
 	}
