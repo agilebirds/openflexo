@@ -605,11 +605,7 @@ public abstract class SelectionManager extends Observable {
 			setCurrentInspectedObjectToNone();
 		} else if (getSelectionSize() == 1) {
 			FlexoObject selection = getSelection().firstElement();
-			// if (selection instanceof InspectableObject) {
 			setCurrentInspectedObject(selection);
-			/*} else {
-				setCurrentInspectedObjectToNone();
-			}*/
 		} else if (getSelectionSize() > 1) {
 			setCurrentInspectedObjectToMultiple();
 		}
