@@ -204,14 +204,14 @@ public class ButtonColumn extends AbstractCellEditor implements TableCellRendere
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (table.isEditing() && table.getCellEditor() == this) {
+		if (table != null && table.isEditing() && table.getCellEditor() == this) {
 			isButtonColumnEditor = true;
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (isButtonColumnEditor && table.isEditing()) {
+		if (isButtonColumnEditor && table != null && table.isEditing()) {
 			table.getCellEditor().stopCellEditing();
 		}
 
