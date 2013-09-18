@@ -90,23 +90,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 
 		try {
 			if (f != null){
-				ClassLoader currentThreadClassLoader
-				= Thread.currentThread().getContextClassLoader();
 
-				// Add the conf dir to the classpath
-				// Chain the current thread classloader
-
-				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));
-
-				System.out.println("**************** A Classloader to load : " + getFile().getCanonicalPath());
-				URLClassLoader child = new URLClassLoader (new URL[]{f.toURI().toURL()}, this.getClass().getClassLoader());
-
-				
+				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));				
 				ePackageClass = classLoader.loadClass(getPackageClassName());
-
-				// Replace the thread classloader - assumes
-				// you have permissions to do so
-				Thread.currentThread().setContextClassLoader(classLoader);
+				
 			}
 			else {
 				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
@@ -115,10 +102,14 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 			if (ePackageClass != null) {
 				Field ePackageField = ePackageClass.getField("eINSTANCE");
 				if (ePackageField != null) {
-					setPackage((EPackage) ePackageField.get(null));
+					EPackage ePack = (EPackage) ePackageField.get(null);
+					setPackage(ePack);
+					EPackage.Registry.INSTANCE.put(ePack.getNsPrefix(), ePack);
 					Class<?> resourceFactoryClass = classLoader.loadClass(getResourceFactoryClassName());
 					if (resourceFactoryClass != null) {
 						setResourceFactory((Resource.Factory) resourceFactoryClass.newInstance());
+
+
 						if (getPackage() != null && getPackage().getNsURI().equalsIgnoreCase(getURI()) && getResourceFactory() != null) {
 
 							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
@@ -140,10 +131,6 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;
