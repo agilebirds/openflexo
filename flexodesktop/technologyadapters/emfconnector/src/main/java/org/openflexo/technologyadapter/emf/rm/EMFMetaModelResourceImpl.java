@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -21,14 +22,17 @@ package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
@@ -37,6 +41,7 @@ import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
 import org.openflexo.toolbox.IProgress;
+import org.openflexo.toolbox.JarInDirClassLoader;
 
 /**
  * EMF MetaModel Resource Implementation.
@@ -85,8 +90,23 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 
 		try {
 			if (f != null){
-				classLoader = new JarClassLoader(Collections.singletonList(getFile()));
+				ClassLoader currentThreadClassLoader
+				= Thread.currentThread().getContextClassLoader();
+
+				// Add the conf dir to the classpath
+				// Chain the current thread classloader
+
+				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));
+
+				System.out.println("**************** A Classloader to load : " + getFile().getCanonicalPath());
+				URLClassLoader child = new URLClassLoader (new URL[]{f.toURI().toURL()}, this.getClass().getClassLoader());
+
+				
 				ePackageClass = classLoader.loadClass(getPackageClassName());
+
+				// Replace the thread classloader - assumes
+				// you have permissions to do so
+				Thread.currentThread().setContextClassLoader(classLoader);
 			}
 			else {
 				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
@@ -120,6 +140,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;

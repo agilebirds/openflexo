@@ -53,7 +53,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.dm.OntologyClassInserted;
 import org.openflexo.foundation.ontology.dm.OntologyClassRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyDataPropertyInserted;
@@ -392,8 +391,9 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	 * @return
 	 */
 	public Set<OWLOntology> getAllImportedOntologies() {
-		Set<OWLOntology> returned = OntologyUtils.getAllImportedOntologies(this);
-		return returned;
+		// Set<OWLOntology> returned = OntologyUtils.getAllImportedOntologies(this);
+		// return returned;
+		return getOntologyLibrary().getAllImportedOntology(this);
 	}
 
 	/**

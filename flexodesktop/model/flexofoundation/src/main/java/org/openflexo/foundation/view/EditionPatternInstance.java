@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -64,7 +65,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	protected static final String DELETED_PROPERTY = "deleted";
 	protected static final String EMPTY_STRING = "<emtpy>";
-	
+
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
@@ -142,7 +143,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	public <T> void setObjectForPatternRole(T object, PatternRole<T> patternRole) {
-		logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		}
 		T oldObject = getPatternActor(patternRole);
 		if (object != oldObject) {
 			// Un-register last reference
@@ -531,7 +534,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		if (hasValidRenderer()) {
 			try {
 				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
-				Object obj = getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext(){
+				Object obj = getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
 					@Override
 					public Object getValue(BindingVariable variable) {
 						if (variable.getVariableName().equals("instance")) {
@@ -541,14 +544,13 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						return null;
 					}
 				});
-				if (obj instanceof String){
+				if (obj instanceof String) {
 					return (String) obj;
-				}
-				else {
+				} else {
 					if (obj != null) {
 						return obj.toString();
-					}
-					else return EMPTY_STRING;
+					} else
+						return EMPTY_STRING;
 				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
