@@ -36,6 +36,7 @@ import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -611,8 +612,10 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		setChanged();
 
 		// Notify observers that the view has been deleted
-		notifyObservers(new ViewPointDataModification("deleted", this, null));
-
+		//notifyObservers(new ViewPointDataModification("deleted", this, null));
+		notifyObservers(new ObjectDeleted(this));
+		setChanged();
+		
 		// Set the current state of this view to deleted
 		super.delete();
 

@@ -113,15 +113,18 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 		if (superClass == this) {
 			return;
 		}
-		if (superClass.redefinesOriginalDefinition()) {
-			if (superClasses.contains(superClass.getOriginalDefinition())) {
-				superClasses.remove(superClass.getOriginalDefinition());
+		// NPE Protection
+		if (superClass != null){
+			if (superClass.redefinesOriginalDefinition()) {
+				if (superClasses.contains(superClass.getOriginalDefinition())) {
+					superClasses.remove(superClass.getOriginalDefinition());
+				}
 			}
-		}
-		if (!superClasses.contains(superClass)) {
-			superClasses.add(superClass);
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Add " + superClass.getName() + " as a super class of " + getName());
+			if (!superClasses.contains(superClass)) {
+				superClasses.add(superClass);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Add " + superClass.getName() + " as a super class of " + getName());
+				}
 			}
 		}
 	}
