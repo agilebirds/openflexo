@@ -118,6 +118,8 @@ public abstract class FlexoObject extends FlexoObservable {
 	 * At this level, only manage {@link #isDeleted()} feature
 	 */
 	public void delete() {
+		setChanged();
+		notifyObservers(new ObjectDeleted(this));
 		if (isDeleted()) {
 			return;
 		}
