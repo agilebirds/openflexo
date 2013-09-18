@@ -487,7 +487,11 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
+		
+		if (!(getTableModel().getValues() != null && getTableModel().getValues().size() > 0)) {
+			return;
+		}
+		
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
@@ -506,9 +510,11 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			leadIndex = i;
 			i++;
 		}
+		
 		if (leadIndex > -1) {
 			leadIndex = _table.convertRowIndexToModel(leadIndex);
 		}
+			
 		selectedObject = getTableModel().elementAt(leadIndex);
 
 		Vector<Object> oldSelection = selection;
