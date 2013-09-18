@@ -26,11 +26,11 @@ package org.openflexo.foundation;
  */
 public class ObjectDeleted extends DataModification {
 
-	public ObjectDeleted(FlexoModelObject object) {
+	public ObjectDeleted(FlexoObject object) {
 		super(FlexoObservable.DELETED_PROPERTY, object, null);
 	}
 
-	public FlexoModelObject getDeletedObject() {
-		return (FlexoModelObject) oldValue();
+	public FlexoObject getDeletedObject() {
+		return (FlexoObject) oldValue();
 	}
 }
