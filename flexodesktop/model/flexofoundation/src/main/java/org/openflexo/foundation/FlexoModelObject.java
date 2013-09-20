@@ -395,8 +395,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 		super.delete();
 
-		setChanged();
-		notifyObservers(new ObjectDeleted(this));
+		/*setChanged();
+		notifyObservers(new ObjectDeleted(this));*/
 		if (getProject() != null) {
 			getProject().notifyObjectDeleted(this);
 		}
