@@ -19,13 +19,16 @@
  */
 package org.openflexo.foundation.resource;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
+import org.openflexo.toolbox.FileUtils;
 
 /**
  * This is the very first implementation of the new ResourceManager
@@ -39,6 +42,8 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 
 	private List<FlexoResource<?>> resources;
 
+	private List<File> filesToDelete;
+
 	public static ResourceManager createInstance() {
 		return new ResourceManager();
 	}
@@ -47,6 +52,7 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 		// Not now: will be performed by the ServiceManager
 		// initialize();
 		resources = new ArrayList<FlexoResource<?>>();
+		filesToDelete = new ArrayList<File>();
 	}
 
 	@Override
@@ -113,4 +119,32 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 		return null;
 	}
 
+	public void addToFilesToDelete(File f) {
+		filesToDelete.add(f);
+	}
+
+	public void removeFromFilesToDelete(File f) {
+		filesToDelete.remove(f);
+	}
+
+	public void deleteFilesToBeDeleted() {
+		for (File f : filesToDelete) {
+			try {
+				if (FileUtils.recursiveDeleteFile(f)) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Successfully deleted " + f.getAbsolutePath());
+						// filesToDelete.remove(f);
+					}
+				} else if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not delete " + f.getAbsolutePath());
+				}
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Could not delete " + f.getAbsolutePath());
+				}
+			}
+		}
+		filesToDelete.clear();
+	}
 }

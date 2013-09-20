@@ -203,9 +203,7 @@ public abstract class FlexoFileResourceImpl<RD extends ResourceData<RD>> extends
 		if (hasWritePermission()) {
 			if (super.delete()) {
 				if (getFile() != null && getFile().exists() && deleteFile) {
-					if (this instanceof FlexoProjectResource) {
-						((FlexoProjectResource) this).getProject().addToFilesToDelete(getFile());
-					}
+					getServiceManager().getResourceManager().addToFilesToDelete(getFile());
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
 					}

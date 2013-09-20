@@ -2134,6 +2134,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
 			savingInfo.saveSelectedResources(getEditor().getFlexoProgressFactory());
+			getApplicationContext().getResourceManager().deleteFilesToBeDeleted();
 			return true;
 		}
 		return false;

@@ -571,12 +571,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		saveModifiedResources(progress, true);
 
-		// Vincent: Not sure this is the right place, however the file deletion
-		// methods seems to be never called.
-		// It makes sens to delete the files which as to be deleted in the
-		// project when we save the project.
-		// Sylvain: I confirm: this is the right place !
-		deleteFilesToBeDeleted();
+		getServiceManager().getResourceManager().deleteFilesToBeDeleted();
 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
@@ -3227,14 +3222,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return _rebuildDependanciesIsRequired;
 	}
 
+	@Deprecated
 	public void addToFilesToDelete(File f) {
 		filesToDelete.add(f);
 	}
 
+	@Deprecated
 	public void removeFromFilesToDelete(File f) {
 		filesToDelete.remove(f);
 	}
 
+	@Deprecated
 	public void deleteFilesToBeDeleted() {
 		for (File f : filesToDelete) {
 			try {
