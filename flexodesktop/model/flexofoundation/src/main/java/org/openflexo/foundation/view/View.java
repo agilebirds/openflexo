@@ -383,12 +383,12 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 		// Delete the view resource from the view library
 		// Dereference the resource
-		if (resource != null) {
+		if (getProject() != null && getProject().getViewLibrary() != null && resource != null) {
 			getProject().getViewLibrary().unregisterResource(resource);
 			resource = null;
 		}
 
-		// Delete object
+		// Delete view
 		super.delete();
 
 		// Delete observers
