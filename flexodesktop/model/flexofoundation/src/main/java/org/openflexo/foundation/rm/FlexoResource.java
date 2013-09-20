@@ -443,11 +443,6 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	@Override
-	public String getDeletedProperty() {
-		return DELETED_PROPERTY;
-	}
-
-	@Override
 	public boolean isDeleted() {
 		return isDeleted;
 	}

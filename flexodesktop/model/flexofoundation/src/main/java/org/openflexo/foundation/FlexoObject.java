@@ -100,7 +100,7 @@ public abstract class FlexoObject extends FlexoObservable {
 	}
 
 	@Override
-	public String getDeletedProperty() {
+	public final String getDeletedProperty() {
 		return DELETED_PROPERTY;
 	}
 

@@ -467,12 +467,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public String getDeletedProperty() {
 		// when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
 		// property of that notification
 		return DELETED_PROPERTY;
-	}
+	}*/
 
 	@Override
 	public String getDisplayableName() {

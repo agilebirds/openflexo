@@ -403,11 +403,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	}
 
-	@Override
-	public String getDeletedProperty() {
-		return DELETED_PROPERTY;
-	}
-
 	public void undelete() {
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("Delete
 		// "+this.getClass().getName()+" : "+this);
