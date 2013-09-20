@@ -142,6 +142,7 @@ import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -1986,6 +1987,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			} catch (FlexoException e) {
 				e.printStackTrace();
 			}
+		} else if (object instanceof ViewResource) {
+			return VEIconLibrary.VIEW_ICON;
+		} else if (object instanceof DiagramResource) {
+			return VEIconLibrary.DIAGRAM_ICON;
+		} else if (object instanceof VirtualModelInstanceResource) {
+			return VEIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
 		} else if (object instanceof TechnologyAdapterResource<?>) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyAdapterResource<?>) object)
 					.getTechnologyAdapter());
