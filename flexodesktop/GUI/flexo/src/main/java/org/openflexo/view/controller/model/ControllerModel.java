@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.dm.DMObject;
@@ -399,7 +398,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		return NO_LOCATION;
 	}
 
-	private FlexoModelObject getParent(FlexoObject object) {
+	private FlexoObject getParent(FlexoObject object) {
 		if (object instanceof DMObject) {
 			return ((DMObject) object).getParent();
 		} else if (object instanceof FlexoProcess) {
@@ -483,9 +482,9 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				handleProjectRemoval((FlexoProject) evt.getOldValue());
 				setCurrentProject(null);
 			}
-		} else if (evt.getOldValue() instanceof FlexoModelObject
-				&& evt.getPropertyName().equals(((FlexoModelObject) evt.getOldValue()).getDeletedProperty())) {
-			handleObjectDeletion((FlexoModelObject) evt.getOldValue());
+		} else if (evt.getOldValue() instanceof FlexoObject
+				&& evt.getPropertyName().equals(((FlexoObject) evt.getOldValue()).getDeletedProperty())) {
+			handleObjectDeletion((FlexoObject) evt.getOldValue());
 		}
 	}
 
@@ -509,7 +508,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		}
 	}
 
-	private void handleObjectDeletion(FlexoModelObject deletedObject) {
+	private void handleObjectDeletion(FlexoObject deletedObject) {
 		while (objects.remove(deletedObject)) {
 			;
 		}
@@ -530,7 +529,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		registrationManager.removeListener(deletedObject.getDeletedProperty(), this, deletedObject);
 	}
 
-	private void updateHistoryForDeletedObject(Stack<Location> history, FlexoModelObject deletedObject) {
+	private void updateHistoryForDeletedObject(Stack<Location> history, FlexoObject deletedObject) {
 		Iterator<Location> i = history.iterator();
 		while (i.hasNext()) {
 			Location hl = i.next();
