@@ -273,7 +273,7 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 	@Override
 	public boolean delete() {
 		if (super.delete()) {
-			getProject().addToFilesToDelete(getDirectory());
+			getServiceManager().getResourceManager().addToFilesToDelete(getDirectory());
 			return true;
 		}
 		return false;
