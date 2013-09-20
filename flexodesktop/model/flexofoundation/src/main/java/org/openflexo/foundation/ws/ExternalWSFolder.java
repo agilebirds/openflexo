@@ -73,12 +73,13 @@ public class ExternalWSFolder extends WSFolder {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: ExternalWSFolder");
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

@@ -134,7 +134,7 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (HibernateRelationship hibernateRelationship : new Vector<HibernateRelationship>(getRelationships())) {
 			hibernateRelationship.delete();
@@ -160,6 +160,7 @@ public class HibernateEntity extends TechnologyModelObject implements FlexoObser
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

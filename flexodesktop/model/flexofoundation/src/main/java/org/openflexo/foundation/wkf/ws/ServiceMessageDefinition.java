@@ -76,7 +76,7 @@ public class ServiceMessageDefinition extends AbstractMessageDefinition implemen
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (isInputMessageDefinition()) {
 			getOperation().setInputMessageDefinition(null);
 		}
@@ -91,6 +91,7 @@ public class ServiceMessageDefinition extends AbstractMessageDefinition implemen
 		super.delete();
 		deleteObservers();
 		_operation = null;
+		return true;
 	}
 
 	@Override

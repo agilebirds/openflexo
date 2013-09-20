@@ -44,11 +44,12 @@ public abstract class FlexoFolderContainerNode extends WorkflowModelObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		for (ProcessFolder folder : new Vector<ProcessFolder>(getFolders())) {
 			folder.delete();
 		}
 		super.delete();
+		return true;
 	}
 
 	public Vector<ProcessFolder> getFolders() {

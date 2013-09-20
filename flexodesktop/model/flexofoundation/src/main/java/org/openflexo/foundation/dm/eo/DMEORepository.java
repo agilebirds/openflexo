@@ -348,11 +348,11 @@ public abstract class DMEORepository extends DMRepository {
 	}
 
 	@Override
-	public final void delete() {
-		delete(false);
+	public final boolean delete() {
+		return delete(false);
 	}
 
-	public void delete(boolean deleteEOModelFiles) {
+	public boolean delete(boolean deleteEOModelFiles) {
 		Vector eoModelsToDelete = new Vector();
 		eoModelsToDelete.addAll(getDMEOModels().values());
 		for (Enumeration en = eoModelsToDelete.elements(); en.hasMoreElements();) {
@@ -363,7 +363,7 @@ public abstract class DMEORepository extends DMRepository {
 		_DMEOModels = null;
 		_entitiesForEOEntity.clear();
 		_entitiesForEOEntity = null;
-		super.delete();
+		return super.delete();
 		// Observers are deleted in super implementation
 		// deleteObservers();
 	}

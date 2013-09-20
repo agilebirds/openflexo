@@ -127,11 +127,11 @@ public abstract class CGRepositoryFileResource<GRD extends GeneratedResourceData
 	}
 
 	@Override
-	public synchronized void delete(boolean deleteFile) {
+	public synchronized boolean delete(boolean deleteFile) {
 		if (getGenerator() != null && getCGFile() != null) {
 			getGenerator().deleteObserver(getCGFile());
 		}
-		super.delete(deleteFile);
+		return super.delete(deleteFile);
 	}
 
 	@Override

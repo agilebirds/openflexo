@@ -319,9 +319,10 @@ public final class PortRegistery extends WKFObject implements InspectableObject,
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

@@ -87,7 +87,7 @@ public class InternalWSService extends WSService implements FlexoObserver, Inspe
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: internalWSGroup " + getName());
 		}
@@ -120,6 +120,7 @@ public class InternalWSService extends WSService implements FlexoObserver, Inspe
 		setChanged();
 		notifyObservers(new InternalWSServiceRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	// ==========================================================================

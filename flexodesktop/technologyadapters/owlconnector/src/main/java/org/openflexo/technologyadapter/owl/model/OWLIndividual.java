@@ -63,12 +63,13 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getFlexoOntology().removeIndividual(this);
 		getOntResource().remove();
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

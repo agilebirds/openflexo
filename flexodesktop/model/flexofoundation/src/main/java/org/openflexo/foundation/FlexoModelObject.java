@@ -363,7 +363,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// if (logger.isLoggable(Level.FINE)) logger.fine ("Delete
 		// "+this.getClass().getName()+" : "+this);
 		if (isDeleted()) {
@@ -371,7 +371,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			// and it will fail
 			// a good idea would be to avoid this double invocation.
 			// In the mean time, this little hack will do the trick.
-			return;
+			return false;
 
 		}
 		if (getProject() != null) {
@@ -400,6 +400,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getProject() != null) {
 			getProject().notifyObjectDeleted(this);
 		}
+		return true;
 
 	}
 

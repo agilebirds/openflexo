@@ -94,13 +94,14 @@ public class Domain extends DKVObject implements FlexoObserver, InspectableObjec
 	}
 
 	@Override
-	final public void delete() {
+	final public boolean delete() {
 		setChanged();
 		notifyObservers(new DomainDeleted(this));
 		getDkvModel().deleteObserver(this);
 		getDkvModel().removeFromDomains(this);
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

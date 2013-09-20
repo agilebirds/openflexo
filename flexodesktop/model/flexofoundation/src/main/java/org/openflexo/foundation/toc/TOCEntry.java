@@ -120,7 +120,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		for (TOCEntry entry : new ArrayList<TOCEntry>(tocEntries)) {
 			entry.delete();
 		}
@@ -136,6 +136,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 		deleteObservers();
 		repository = null;
 		content = null;
+		return true;
 	}
 
 	@Override

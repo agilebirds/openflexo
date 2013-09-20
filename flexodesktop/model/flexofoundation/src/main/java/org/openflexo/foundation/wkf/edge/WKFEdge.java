@@ -62,14 +62,14 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getStartNode() != null) {
 			removeOutgoingEdgeFromStartNode(getStartNode());
 		}
 		if (getEndNode() != null) {
 			removeIncomingEdgeFromEndNode(getEndNode());
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	protected void resetStartAndEndNode() {

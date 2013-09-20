@@ -245,7 +245,7 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getComponentInstance() != null) {
 			removeComponentInstance();
 		}
@@ -255,6 +255,7 @@ public class OperationNode extends FatherNode implements ApplicationHelpEntryPoi
 		// getParentPetriGraph().removeFromNodes(this);
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	// ==========================================================================

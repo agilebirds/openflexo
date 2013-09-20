@@ -41,7 +41,7 @@ public interface IWidget extends IObject {
 
 	public Vector<IWidget> getAllNonSequenceWidget();
 
-	public void delete();
+	public boolean delete();
 
 	public void removeFromContainer();
 

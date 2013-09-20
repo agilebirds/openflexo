@@ -187,9 +187,10 @@ public class MonitoringScreenDefinition extends ComponentDefinition implements S
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

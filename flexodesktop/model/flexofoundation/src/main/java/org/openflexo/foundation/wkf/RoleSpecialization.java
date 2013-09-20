@@ -132,7 +132,7 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getRole() != null && getRole().getRoleSpecializations().contains(this)) {
 			getRole().removeFromRoleSpecializations(this);
 		}
@@ -140,6 +140,7 @@ public final class RoleSpecialization extends WorkflowModelObject implements Dat
 		setChanged();
 		notifyObservers(new RoleSpecializationRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	/**

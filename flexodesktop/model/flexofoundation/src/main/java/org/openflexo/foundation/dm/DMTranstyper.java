@@ -366,7 +366,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// logger.info(">>> delete() called for property "+hashCode()+" (is "+_implementationType+")");
 
 		if (getDeclaringEntity() != null) {
@@ -383,6 +383,7 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		bindingModel = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public String getTranstyperStringRepresentation() {

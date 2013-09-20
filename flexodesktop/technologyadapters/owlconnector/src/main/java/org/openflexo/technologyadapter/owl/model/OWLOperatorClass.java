@@ -69,8 +69,8 @@ public abstract class OWLOperatorClass extends OWLClass {
 	}
 
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean delete() {
+		return super.delete();
 	}
 
 	@Override

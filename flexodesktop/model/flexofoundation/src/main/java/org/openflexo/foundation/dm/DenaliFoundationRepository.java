@@ -236,9 +236,10 @@ public class DenaliFoundationRepository extends DMEORepository {
 	}
 
 	@Override
-	public void delete(boolean deleteEOModelFiles) {
+	public boolean delete(boolean deleteEOModelFiles) {
 		getDMModel().removeFromDenaliFoundationRepositories(this);
 		super.delete(deleteEOModelFiles);
+		return true;
 	}
 
 	private FlexoProjectFile _denaliFoundationDirectory;

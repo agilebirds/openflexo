@@ -80,9 +80,9 @@ public class ThesaurusDatabaseRepository extends DMEORepository {
 	}
 
 	@Override
-	public void delete(boolean deleteEOModelFiles) {
+	public boolean delete(boolean deleteEOModelFiles) {
 		getDMModel().removeFromThesaurusDatabaseRepositories(this);
-		super.delete(deleteEOModelFiles);
+		return super.delete(deleteEOModelFiles);
 	}
 
 	/**

@@ -116,14 +116,17 @@ public abstract class FlexoObject extends FlexoObservable {
 	 * Abstract implementation of delete<br>
 	 * This method should be overriden.<br>
 	 * At this level, only manage {@link #isDeleted()} feature
+	 * 
+	 * @return flag indicating if deletion has successfully been performed
 	 */
-	public void delete() {
+	public boolean delete() {
 		setChanged();
 		notifyObservers(new ObjectDeleted(this));
 		if (isDeleted()) {
-			return;
+			return false;
 		}
 		isDeleted = true;
+		return true;
 	}
 
 	/**

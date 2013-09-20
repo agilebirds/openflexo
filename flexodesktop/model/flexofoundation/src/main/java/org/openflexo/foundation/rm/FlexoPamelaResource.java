@@ -201,4 +201,12 @@ public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends F
 		}
 	}
 
+	@Override
+	public void unloadResourceData() {
+		if (isLoaded()) {
+			getResourceData().delete();
+			_resourceData = null;
+		}
+	}
+
 }

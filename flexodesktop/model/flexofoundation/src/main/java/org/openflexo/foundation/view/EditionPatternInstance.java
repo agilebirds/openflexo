@@ -374,7 +374,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 * Delete this EditionPattern instance using default DeletionScheme
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// Also implement properly #getDeletedProperty()
 		if (getEditionPattern().getDefaultDeletionScheme() != null) {
 			delete(getEditionPattern().getDefaultDeletionScheme());
@@ -382,14 +382,15 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			// Generate on-the-fly default deletion scheme
 			delete(getEditionPattern().generateDefaultDeletionScheme());
 		}
+		return true;
 	}
 
 	/**
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
-	public void delete(DeletionScheme deletionScheme) {
+	public boolean delete(DeletionScheme deletionScheme) {
 		if (isDeleted()) {
-			return;
+			return false;
 		}
 		VirtualModelInstance container = getVirtualModelInstance();
 		if (container != null) {
@@ -413,6 +414,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						+ primaryPatternActor);
 			}
 		}
+		return true;
 	}
 
 	/**

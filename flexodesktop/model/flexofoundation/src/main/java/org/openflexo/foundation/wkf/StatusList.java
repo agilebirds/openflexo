@@ -345,10 +345,11 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		_status.removeAllElements();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

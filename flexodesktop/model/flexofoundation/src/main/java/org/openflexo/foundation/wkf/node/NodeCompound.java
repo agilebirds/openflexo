@@ -322,9 +322,10 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

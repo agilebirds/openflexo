@@ -140,7 +140,7 @@ public class WSRepository extends WSObject implements FlexoObserver {
 	 * WSDLRepository should be deleted.
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSRepository " + getName());
 		}
@@ -158,6 +158,7 @@ public class WSRepository extends WSObject implements FlexoObserver {
 		setChanged();
 		notifyObservers(new WSRepositoryRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	// ==========================================================================

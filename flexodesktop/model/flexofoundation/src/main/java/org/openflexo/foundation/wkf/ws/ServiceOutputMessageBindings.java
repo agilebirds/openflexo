@@ -150,11 +150,12 @@ public class ServiceOutputMessageBindings extends ServiceMessageBindings impleme
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		getServiceOperation().setOutputMessageBindings(null);
 		outputBindingModel = null;
 		super.delete();
+		return true;
 	}
 
 	/**

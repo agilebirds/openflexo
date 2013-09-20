@@ -164,12 +164,13 @@ public final class Status extends WKFObject implements DeletableObject, Inspecta
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getStatusList() != null && getStatusList().getStatus().contains(this)) {
 			getStatusList().removeFromStatus(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

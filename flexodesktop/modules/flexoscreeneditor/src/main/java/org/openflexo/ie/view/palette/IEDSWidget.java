@@ -78,12 +78,13 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (paletteWidget.canDeleteWidget()) {
 			paletteWidget.deleteWidget();
 		} else if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Cannot delete these kind of widgets");
 		}
+		return true;
 	}
 
 	// ==========================================================================
@@ -130,6 +131,7 @@ public class IEDSWidget extends IEAbstractWidget implements PaletteElement {
 	private FlexoProject _project;
 	private ComponentDefinition component;
 
+	@Override
 	public void setProject(FlexoProject prj) {
 		_project = prj;
 	}

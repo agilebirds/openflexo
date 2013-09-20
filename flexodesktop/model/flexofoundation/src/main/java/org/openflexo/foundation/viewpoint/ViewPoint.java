@@ -51,7 +51,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
 import org.openflexo.toolbox.ChainedCollection;
@@ -590,7 +589,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// tests on this deleted object
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: Viewpoint " + getName());
@@ -612,14 +611,16 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		setChanged();
 
 		// Notify observers that the view has been deleted
-		//notifyObservers(new ViewPointDataModification("deleted", this, null));
+		// notifyObservers(new ViewPointDataModification("deleted", this, null));
 		notifyObservers(new ObjectDeleted(this));
 		setChanged();
-		
+
 		// Set the current state of this view to deleted
 		super.delete();
 
 		deleteObservers();
+
+		return true;
 	}
 
 	/**

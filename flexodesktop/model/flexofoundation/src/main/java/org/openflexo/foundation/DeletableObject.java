@@ -31,7 +31,7 @@ public interface DeletableObject {
 	/**
 	 * Delete this object
 	 */
-	public void delete();
+	public boolean delete();
 
 	/**
 	 * Build and return a vector of all the objects that will be deleted during this deletion

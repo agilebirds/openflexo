@@ -270,9 +270,10 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	// public abstract ImageIcon getImageIcon();

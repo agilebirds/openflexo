@@ -263,11 +263,11 @@ public final class DefaultServiceInterface extends ServiceInterface implements I
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Delete in DefaultServiceInterface... ????");
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	public static ServiceInterface copyPortsFromRegistry(ServiceInterface toInterface, PortRegistery fromReg) {

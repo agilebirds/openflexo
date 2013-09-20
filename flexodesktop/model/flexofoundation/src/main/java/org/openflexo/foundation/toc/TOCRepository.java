@@ -118,10 +118,11 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		super.delete();
 		getData().removeFromRepositories(this);
 		docType = null;
+		return true;
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class ERDiagram extends DMObject {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		DMModel model = getDMModel();
 		super.delete();
 		// This removes the only ref
@@ -61,6 +61,7 @@ public class ERDiagram extends DMObject {
 
 		// this method is final because of this call
 		deleteObservers();
+		return true;
 	}
 
 	@Override

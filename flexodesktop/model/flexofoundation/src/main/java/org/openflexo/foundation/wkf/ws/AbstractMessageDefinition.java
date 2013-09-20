@@ -203,10 +203,11 @@ public abstract class AbstractMessageDefinition extends WKFObject implements Ins
 	// ==========================================================================
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		_entries.clear();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

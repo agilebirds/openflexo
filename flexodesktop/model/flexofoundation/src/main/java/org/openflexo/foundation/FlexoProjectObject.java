@@ -62,7 +62,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (FlexoModelObjectReference<EditionPatternInstance> ref : new ArrayList<FlexoModelObjectReference<EditionPatternInstance>>(
 				editionPatternReferences)) {
@@ -75,7 +75,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		editionPatternReferences.clear();
 		editionPatternReferences = null;
 
-		super.delete();
+		return super.delete();
 
 	}
 
@@ -129,7 +129,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 				}
 			}
 		});*/
-		//logger.info("****************** addToEditionPatternReferences() with " + ref);
+		// logger.info("****************** addToEditionPatternReferences() with " + ref);
 		ref.setOwner(this);
 		editionPatternReferences.add(ref);
 		setChanged();

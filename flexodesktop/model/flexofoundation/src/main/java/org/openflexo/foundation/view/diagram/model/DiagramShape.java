@@ -99,7 +99,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> i
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -111,6 +111,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> i
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

@@ -91,6 +91,9 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 				if (r.isLoaded() && r.getResourceData(null).isModified()) {
 					returned.add(r);
 				}
+				if (r.isDeleted()) {
+					returned.add(r);
+				}
 			} catch (Exception e) {
 				// Don't care here
 			}

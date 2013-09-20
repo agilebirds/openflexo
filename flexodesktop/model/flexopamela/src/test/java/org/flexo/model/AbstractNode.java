@@ -40,7 +40,7 @@ public interface AbstractNode extends WKFObject {
 	public AbstractNode init(@Parameter(FlexoModelObject.FLEXO_ID) String flexoID, @Parameter(FlexoModelObject.NAME) String name);
 
 	@Override
-	public void delete();
+	public boolean delete();
 
 	@Getter(value = OUTGOING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.START_NODE)
 	@XMLElement(context = "Outgoing", primary = true)

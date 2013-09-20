@@ -92,12 +92,13 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/* @Override

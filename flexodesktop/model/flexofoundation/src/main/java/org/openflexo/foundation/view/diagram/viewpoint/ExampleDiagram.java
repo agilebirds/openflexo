@@ -109,12 +109,13 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getVirtualModel() != null) {
 			getVirtualModel().removeFromExampleDiagrams(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override
@@ -122,6 +123,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 		return diagramSpecification;
 	}
 
+	@Override
 	public DiagramSpecification getDiagramSpecification() {
 		return diagramSpecification;
 	}

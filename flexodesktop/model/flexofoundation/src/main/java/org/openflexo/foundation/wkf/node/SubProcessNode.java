@@ -102,7 +102,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		super.delete();
 		if (getServiceInterface() != null) {
 			setServiceInterface(null);
@@ -113,6 +113,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (_portMapRegistery != null) {
 			_portMapRegistery.delete();
 		}
+		return true;
 	}
 
 	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess) {

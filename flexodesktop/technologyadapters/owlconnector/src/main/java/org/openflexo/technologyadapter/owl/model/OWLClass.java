@@ -64,12 +64,13 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getFlexoOntology().removeClass(this);
 		getOntResource().remove();
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 			return;
 		}
 		// NPE Protection
-		if (superClass != null){
+		if (superClass != null) {
 			if (superClass.redefinesOriginalDefinition()) {
 				if (superClasses.contains(superClass.getOriginalDefinition())) {
 					superClasses.remove(superClass.getOriginalDefinition());

@@ -288,7 +288,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
 			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
@@ -306,7 +306,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 			}
 		}
 		dependingObjects.clear();
-		super.delete();
+		return super.delete();
 	}
 
 	@Override

@@ -218,7 +218,7 @@ public class DMPackage extends DMObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Vector<DMEntity> entitiesToDelete = new Vector<DMEntity>();
 		entitiesToDelete.addAll(getEntities());
 		for (Enumeration en = entitiesToDelete.elements(); en.hasMoreElements();) {
@@ -234,6 +234,7 @@ public class DMPackage extends DMObject {
 		entities = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public String getRelativePath() {

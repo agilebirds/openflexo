@@ -72,12 +72,12 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		FlexoWorkflowResource workflowResource = getReferringProject().getImportedWorkflowResource(this);
 		if (workflowResource != null) {
 			workflowResource.delete();
 		}
-		performSuperDelete();
+		return performSuperDelete();
 	}
 
 	@Override

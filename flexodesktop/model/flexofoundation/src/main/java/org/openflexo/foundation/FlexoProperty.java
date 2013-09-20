@@ -49,11 +49,11 @@ public class FlexoProperty extends FlexoObject implements XMLSerializable {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getOwner() != null) {
 			getOwner().removeFromCustomProperties(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	public String getName() {

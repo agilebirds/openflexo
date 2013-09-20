@@ -69,7 +69,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (metricsDefinitionReference != null) {
 			metricsDefinitionReference.delete();
 		}
@@ -80,6 +80,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 		owner = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public boolean hasValue() {

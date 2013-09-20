@@ -94,9 +94,9 @@ public class ProjectDatabaseRepository extends DMEORepository {
 	}
 
 	@Override
-	public void delete(boolean deleteEOModelFiles) {
+	public boolean delete(boolean deleteEOModelFiles) {
 		getDMModel().removeFromProjectDatabaseRepositories(this);
-		super.delete(deleteEOModelFiles);
+		return super.delete(deleteEOModelFiles);
 	}
 
 	/**

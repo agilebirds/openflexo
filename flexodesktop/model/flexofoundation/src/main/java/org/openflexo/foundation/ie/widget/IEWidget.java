@@ -139,7 +139,7 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete IEWidget with parent:" + getParent());
 		}
@@ -151,6 +151,7 @@ public abstract class IEWidget extends IEAbstractWidget implements InspectableOb
 		super.delete();
 		performAfterDeleteOperations();
 		deleteObservers();
+		return true;
 	}
 
 	public void performOnDeleteOperations() {

@@ -67,12 +67,12 @@ public class CopyOfFlexoResource<G extends IFlexoResourceGenerator, F extends CG
 	}
 
 	@Override
-	public synchronized void delete(boolean deleteFile) {
+	public synchronized boolean delete(boolean deleteFile) {
 		if (getCGFile() != null && !getCGFile().isMarkedForDeletion()) {
 			getCGFile().setMarkedForDeletion(true);
 			getCGFile().delete(deleteFile);
 		}
-		super.delete(deleteFile);
+		return super.delete(deleteFile);
 	}
 
 	@Override

@@ -50,11 +50,12 @@ public class WKFAssociation extends WKFEdge<WKFNode, WKFNode> implements Deletab
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		setChanged();
 		notifyObservers(new AssociationRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	@Override

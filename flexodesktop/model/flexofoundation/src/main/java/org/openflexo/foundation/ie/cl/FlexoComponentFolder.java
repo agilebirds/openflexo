@@ -241,10 +241,11 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getFatherFolder().removeFromSubFolders(this);
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public boolean isValidForANewComponentName(String value) {

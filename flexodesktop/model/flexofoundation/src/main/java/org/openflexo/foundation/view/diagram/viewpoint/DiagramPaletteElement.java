@@ -267,12 +267,13 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getPalette() != null) {
 			getPalette().removeFromElements(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {

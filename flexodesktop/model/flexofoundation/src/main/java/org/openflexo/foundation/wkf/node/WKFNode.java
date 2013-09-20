@@ -44,7 +44,7 @@ public abstract class WKFNode extends WKFObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Enumeration<WKFAssociation> en = new Vector<WKFAssociation>(incomingAssociations).elements();
 		while (en.hasMoreElements()) {
 			en.nextElement().delete();
@@ -53,7 +53,7 @@ public abstract class WKFNode extends WKFObject {
 		while (en.hasMoreElements()) {
 			en.nextElement().delete();
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	/**
