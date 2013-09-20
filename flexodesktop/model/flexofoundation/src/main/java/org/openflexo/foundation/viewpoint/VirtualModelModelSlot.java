@@ -133,9 +133,11 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	private String virtualModelURI;
 
 	public VirtualModelResource<?> getVirtualModelResource() {
-		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI)) {
-			virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
-			logger.info("Looked-up " + virtualModelResource);
+		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI) && getViewPoint() != null) {
+			if (getViewPoint().getVirtualModelNamed(virtualModelURI) != null) {
+				virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
+				logger.info("Looked-up " + virtualModelResource);
+			}
 		}
 		return virtualModelResource;
 	}
