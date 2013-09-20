@@ -122,7 +122,7 @@ public class FocusRetriever {
 		FGEView<?> containerView = graphicalRepresentation == drawingView.getGraphicalRepresentation() ? drawingView : drawingView
 				.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) containerView);
-		if (graphicalRepresentation.getHasText()) {
+		if (graphicalRepresentation.hasText()) {
 			LabelView<?> labelView = view.getLabelView();
 			if (labelView != null) {
 				return labelView.getBounds().contains(p);
