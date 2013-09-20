@@ -359,16 +359,16 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return null;
 	}
 
-	private boolean deleted = false;
+	// private boolean deleted = false;
 
-	public boolean deleted() {
+	/*public boolean deleted() {
 		return deleted;
 	}
 
 	@Override
 	public boolean isDeleted() {
 		return deleted();
-	}
+	}*/
 
 	/**
 	 * Delete this EditionPattern instance using default DeletionScheme
@@ -377,12 +377,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public boolean delete() {
 		// Also implement properly #getDeletedProperty()
 		if (getEditionPattern().getDefaultDeletionScheme() != null) {
-			delete(getEditionPattern().getDefaultDeletionScheme());
+			return delete(getEditionPattern().getDefaultDeletionScheme());
 		} else {
 			// Generate on-the-fly default deletion scheme
-			delete(getEditionPattern().generateDefaultDeletionScheme());
+			return delete(getEditionPattern().generateDefaultDeletionScheme());
 		}
-		return true;
 	}
 
 	/**
@@ -397,7 +396,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			container.removeFromEditionPatternInstancesList(this);
 		}
 		// logger.warning("EditionPatternInstance deletion !");
-		deleted = true;
+		// deleted = true;
 		if (getEditionPattern().getPrimaryRepresentationRole() != null) {
 			Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
 			if (primaryPatternActor instanceof FlexoModelObject) {
@@ -414,7 +413,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						+ primaryPatternActor);
 			}
 		}
-		return true;
+		return super.delete();
 	}
 
 	/**

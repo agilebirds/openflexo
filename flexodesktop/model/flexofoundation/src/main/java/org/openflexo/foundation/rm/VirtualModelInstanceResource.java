@@ -35,6 +35,7 @@ public interface VirtualModelInstanceResource<VMI extends VirtualModelInstance<V
 
 	public VMI getVirtualModelInstance();
 
+	@Getter(value = CONTAINER, inverse = CONTENTS)
 	@Override
 	public ViewResource getContainer();
 
