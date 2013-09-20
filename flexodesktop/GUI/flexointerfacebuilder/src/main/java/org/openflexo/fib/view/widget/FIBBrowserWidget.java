@@ -615,22 +615,24 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		System.out.println("getComponent().getSelected()=" + getComponent().getSelected() + " of "
 				+ getComponent().getSelected().getClass());
 		System.out.println("getComponent().getSelected().isValid()=" + getComponent().getSelected().isValid());*/
-
-		if (getComponent().getSelected().isValid()) {
-			logger.fine("Sets SELECTED binding with " + getDynamicModel().selected);
-			try {
-				getComponent().getSelected().setBindingValue(getDynamicModel().selected, getBindingEvaluationContext());
-			} catch (TypeMismatchException e1) {
-				e1.printStackTrace();
-			} catch (NullReferenceException e1) {
-				e1.printStackTrace();
-			} catch (InvocationTargetException e1) {
-				e1.printStackTrace();
-			} catch (NotSettableContextException e1) {
-				e1.printStackTrace();
+		if(getComponent()!=null)
+		{
+			if (getComponent().getSelected().isValid()) {
+				logger.fine("Sets SELECTED binding with " + getDynamicModel().selected);
+				try {
+					getComponent().getSelected().setBindingValue(getDynamicModel().selected, getBindingEvaluationContext());
+				} catch (TypeMismatchException e1) {
+					e1.printStackTrace();
+				} catch (NullReferenceException e1) {
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
+					e1.printStackTrace();
+				} catch (NotSettableContextException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
-
+	
 		notifyDynamicModelChanged();
 
 		updateFont();

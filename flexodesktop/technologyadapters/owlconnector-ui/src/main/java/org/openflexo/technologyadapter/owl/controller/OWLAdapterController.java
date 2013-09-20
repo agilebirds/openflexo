@@ -38,8 +38,12 @@ import org.openflexo.technologyadapter.owl.viewpoint.OWLPropertyPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRole;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddDataPropertyStatement;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddObjectPropertyStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddRestrictionStatement;
+import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassStatement;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
@@ -175,7 +179,20 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
-		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
+		} 
+		if (AddDataPropertyStatement.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(DataPropertyStatement.class), IconLibrary.DUPLICATE);
+		}
+		if (AddObjectPropertyStatement.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(ObjectPropertyStatement.class), IconLibrary.DUPLICATE);
+		}
+		if (AddRestrictionStatement.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLStatement.class), IconLibrary.DUPLICATE);
+		}
+		if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(SubClassStatement.class), IconLibrary.DUPLICATE);
+		}
+		else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLClass.class), IconLibrary.DUPLICATE);
 		}
 		return super.getIconForEditionAction(editionActionClass);
