@@ -56,6 +56,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
+@Deprecated
 public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoObject implements XMLSerializable, Validable {
 
 	private FlexoServiceManager serviceManager;
@@ -435,11 +436,12 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 * sub-classes
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		isDeleted = true;
 		getProject().removeResource(this);
 		setChanged();
 		notifyObservers(new DataModification(DELETED_PROPERTY, this, null));
+		return true;
 	}
 
 	@Override

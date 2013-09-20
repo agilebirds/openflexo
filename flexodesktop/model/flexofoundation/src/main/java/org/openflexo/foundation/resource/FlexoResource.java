@@ -19,7 +19,6 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
@@ -264,6 +263,12 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 			FileNotFoundException, FlexoException;
 
 	/**
+	 * Delete (dereference) resource data if resource data is loaded<br>
+	 * Also delete the resource data
+	 */
+	public void unloadResourceData();
+
+	/**
 	 * Save the &quot;real&quot; resource data of this resource.
 	 * 
 	 * @throws SaveResourceException
@@ -287,14 +292,34 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public void notifyResourceSaved();
 
 	/**
-	 * Called to notify that a resource has been added to contents TODO: integrate this in setContents() when this interface will extends
-	 * {@link AccessibleProxyObject}
+	 * Called to notify that a resource has been added to contents
+	 * 
+	 * @param resource
+	 *            : resource beeing added
 	 */
 	public void notifyContentsAdded(FlexoResource<?> resource);
 
 	/**
-	 * Delete this resource
+	 * Called to notify that a resource has been remove to contents<br>
+	 * 
+	 * @param resource
+	 *            : resource being removed
 	 */
-	public void delete();
+	public void notifyContentsRemoved(FlexoResource<?> resource);
+
+	/**
+	 * Delete this resource<br>
+	 * Also delete the resource data of this resource, when instantiated
+	 * 
+	 * @return flag indicating if deletion has successfully been performed
+	 */
+	public boolean delete();
+
+	/**
+	 * Return a flag indicating if this resource was deleted
+	 * 
+	 * @return
+	 */
+	public boolean isDeleted();
 
 }
