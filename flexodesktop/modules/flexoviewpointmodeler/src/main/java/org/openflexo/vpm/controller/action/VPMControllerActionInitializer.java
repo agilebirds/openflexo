@@ -58,7 +58,7 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new DeleteViewPointInitializer(this);
 		new CreateModelSlotInitializer(this);
 		new CreateVirtualModelInitializer(this);
-		new CreateDiagramSpecificationInitializer(this);
+		new DeleteVirtualModelInitializer(this);
 		new CreatePatternRoleInitializer(this);
 		new CreateEditionActionInitializer(this);
 		new AddEditionPatternInitializer(this);
@@ -67,6 +67,8 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new ShowFMLRepresentationInitializer(this);
 
 		// ExampleDiagram edition
+		new CreateDiagramSpecificationInitializer(this);
+		new DeleteDiagramSpecificationInitializer(this);
 		new CreateExampleDiagramInitializer(this);
 		new DeleteExampleDiagramInitializer(this);
 		new PushToPaletteInitializer(this);

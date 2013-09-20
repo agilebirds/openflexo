@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint.action;
+package org.openflexo.foundation.view.diagram.viewpoint.action;
 
 import java.security.InvalidParameterException;
 import java.util.Vector;
@@ -29,47 +29,48 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
-public class DeleteViewpoint extends FlexoAction<DeleteViewpoint, ViewPoint, ViewPointObject> {
+public class DeleteDiagramSpecification extends FlexoAction<DeleteDiagramSpecification, DiagramSpecification, ViewPointObject> {
 
-	private static final Logger logger = Logger.getLogger(DeleteViewpoint.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeleteDiagramSpecification.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteViewpoint, ViewPoint, ViewPointObject> actionType = new FlexoActionType<DeleteViewpoint, ViewPoint, ViewPointObject>(
-			"delete_view_point", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+	public static FlexoActionType<DeleteDiagramSpecification, DiagramSpecification, ViewPointObject> actionType = new FlexoActionType<DeleteDiagramSpecification, DiagramSpecification, ViewPointObject>(
+			"delete_diagram_specification", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteViewpoint makeNewAction(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
-			return new DeleteViewpoint(focusedObject, globalSelection, editor);
+		public DeleteDiagramSpecification makeNewAction(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection,
+				FlexoEditor editor) {
+			return new DeleteDiagramSpecification(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+		public boolean isVisibleForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
+			return object != null && object.getClass().equals(DiagramSpecification.class);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(ViewPoint object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+		public boolean isEnabledForSelection(DiagramSpecification object, Vector<ViewPointObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteViewpoint.actionType, ViewPoint.class);
+		FlexoModelObject.addActionForClass(DeleteDiagramSpecification.actionType, DiagramSpecification.class);
 	}
 
-	DeleteViewpoint(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	DeleteDiagramSpecification(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Delete viewpoint");
+		logger.info("Delete VirtualModel");
 		if (getFocusedObject().getResource() != null) {
 			getFocusedObject().getResource().delete();
 		}

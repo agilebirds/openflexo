@@ -17,6 +17,7 @@ import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
@@ -25,7 +26,7 @@ import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> extends FlexoXMLFileResourceImpl<VM> implements
-		VirtualModelResource<VM> {
+		VirtualModelResource<VM>, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelResourceImpl.class.getPackage().getName());
 
@@ -221,6 +222,20 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 		}
 		logger.fine("Returned null");
 		return null;
+	}
+
+	@Override
+	public boolean delete() {
+		if (super.delete()) {
+			getServiceManager().getResourceManager().addToFilesToDelete(getDirectory());
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ViewPointResource getContainer() {
+		return (ViewPointResource) performSuperGetter(CONTAINER);
 	}
 
 }

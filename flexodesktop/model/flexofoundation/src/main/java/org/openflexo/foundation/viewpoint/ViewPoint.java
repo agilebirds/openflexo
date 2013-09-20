@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom2.Attribute;
@@ -36,7 +35,6 @@ import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -590,34 +588,18 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	@Override
 	public boolean delete() {
-		// tests on this deleted object
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("delete: Viewpoint " + getName());
+
+		logger.info("Deleting ViewPoint " + this);
+
+		// Unregister the viewpoint resource from the viewpoint library
+		if (getResource() != null && getViewPointLibrary() != null) {
+			getViewPointLibrary().unregisterViewPoint(getResource());
 		}
 
-		/*if (getResource() != null) {
-			// Set the file resource to be remove upon next save of the resource manager
-			getResource().delete();
-		}*/
-
-		// needed?
-		/*for (VirtualModel vm : getVirtualModels()) {
-			removeFromVirtualModels(vm);
-			vm.delete();
-		}*/
-
-		// Delete the viewpoint resource from the view library
-		getViewPointLibrary().delete(this);
-		setChanged();
-
-		// Notify observers that the view has been deleted
-		// notifyObservers(new ViewPointDataModification("deleted", this, null));
-		notifyObservers(new ObjectDeleted(this));
-		setChanged();
-
-		// Set the current state of this view to deleted
+		// Delete viewpoint
 		super.delete();
 
+		// Delete observers
 		deleteObservers();
 
 		return true;
