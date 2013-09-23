@@ -41,7 +41,7 @@ public class FIBReferencedComponent extends FIBWidget {
 	}
 
 	// TODO: Should be moved to FIBReferencedComponent widget
-	private FIBComponent referencedComponent;
+	//private FIBComponent referencedComponent;
 	private Vector<FIBReferenceAssignment> assignments;
 
 	public FIBReferencedComponent() {
@@ -55,9 +55,9 @@ public class FIBReferencedComponent extends FIBWidget {
 
 	@Override
 	public Type getDefaultDataClass() {
-		if (referencedComponent != null) {
+		/*if (referencedComponent != null) {
 			return referencedComponent.getDataType();
-		}
+		}*/
 		return Object.class;
 	}
 
@@ -100,7 +100,7 @@ public class FIBReferencedComponent extends FIBWidget {
 
 			this.dynamicComponentFile = dynamicComponentFile;
 
-			referencedComponent = null;
+		//	referencedComponent = null;
 			notify(notification);
 		}
 
@@ -108,9 +108,9 @@ public class FIBReferencedComponent extends FIBWidget {
 
 	@Override
 	public Type getDataType() {
-		if (referencedComponent != null) {
+		/*if (referencedComponent != null) {
 			return referencedComponent.getDataType();
-		}
+		}*/
 		return super.getDataType();
 	}
 

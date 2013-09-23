@@ -52,6 +52,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBReferencedComponent.FIBReferenceAssignment;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
@@ -630,13 +631,18 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 			if (c2 instanceof FIBContainer) {
 				addAllSubComponents((FIBContainer) c2, returned);
 			}	
-			else if (c2 instanceof FIBReferencedComponent){
+			/*else if (c2 instanceof FIBReferencedComponent){
 				FIBComponent referenced =((FIBReferencedComponent) c2).getComponent();
+				
+				// TEST
+				FIBReferencedComponent ref = ((FIBReferencedComponent) c2);
+				
+				
 				if (referenced instanceof FIBContainer){
 					returned.add((FIBContainer) referenced);
 					addAllSubComponents((FIBContainer) referenced, returned);
 				}
-			}
+			}*/
 		}
 	}
 
