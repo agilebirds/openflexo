@@ -83,6 +83,27 @@
             <Assignment variable="component.bindable" value="GRTab.data" />
             <Assignment variable="component.bindingDefinition" value="GRTab.data.HEIGHT_CONSTRAINTS" />
           </Custom>
+          <Label label="x_initial_constraints" index="17" constraints="twocols(expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xInitialConstraints)" index="17" data="GRTab.data.xInitialConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.X_INITIAL_CONSTRAINTS" />
+          </Custom>
+          <Label label="y_initial_constraints" index="17" constraints="twocols(expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yInitialConstraints)" index="17" data="GRTab.data.yInitialConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.Y_INITIAL_CONSTRAINTS" />
+          </Custom>
+          <Label label="width_initial_constraints" index="17" constraints="twocols(expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthInitialConstraints)" index="17" data="GRTab.data.widthInitialConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.WIDTH_INITIAL_CONSTRAINTS" />
+          </Custom>
+          <Label label="height_initial_constraints" index="17" constraints="twocols(expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightInitialConstraints)" index="17" data="GRTab.data.heightInitialConstraints.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+            <Assignment variable="component.bindable" value="GRTab.data" />
+            <Assignment variable="component.bindingDefinition" value="GRTab.data.HEIGHT_INITIAL_CONSTRAINTS" />
+          </Custom>
+          
           <Label label="border" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BorderLabel" localize="true" />
           <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Label label="top" index="0" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="BorderTopLabel" localize="true" />

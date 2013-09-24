@@ -356,6 +356,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added shape " + newShape + " under " + container);
 		}
+		if (applyConstraints()) {
+			newGR.applyInitialConstraints();
+			newGR.updateConstraints();
+		}
 		return newShape;
 	}
 
@@ -363,6 +367,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		// Be sure that the newly created shape is updated
 		newShape.update();
 		return newShape;
+	}
+
+	protected boolean applyConstraints() {
+		return true;
 	}
 
 	protected ViewConnector performAddConnector(org.openflexo.foundation.viewpoint.AddConnector action) {

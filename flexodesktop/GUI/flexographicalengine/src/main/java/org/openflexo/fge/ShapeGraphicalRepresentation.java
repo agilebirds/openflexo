@@ -129,7 +129,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		xConstraints,
 		yConstraints,
 		widthConstraints,
-		heightConstraints;
+		heightConstraints,
+		xInitialConstraints,
+		yInitialConstraints,
+		widthInitialConstraints,
+		heightInitialConstraints;
 	}
 
 	private double x = 0;
@@ -1745,6 +1749,49 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public void applyInitialConstraints() {
+		// System.out.println("updateInitialConstraints() called, valid=" + xInitialConstraints.isValid() + "," +
+		// yInitialConstraints.isValid() + ","
+		// + widthInitialConstraints.isValid() + "," + heightInitialConstraints.isValid());
+		logger.fine("Called updateInitialConstraints(), drawable=" + getDrawable() + " index=" + getIndex() + " class=" + getClass());
+		if (xInitialConstraints != null && xInitialConstraints.isValid()) {
+			// System.out.println("x was " + getX() + " constraint=" + xInitialConstraints);
+			Number n = (Number) xInitialConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for x is now: " + newValue);
+				setX(n.doubleValue());
+			}
+			// System.out.println("x is now " + getX());
+		}
+		if (yInitialConstraints != null && yInitialConstraints.isValid()) {
+			// System.out.println("y was " + getY() + " constraint=" + yInitialConstraints);
+			Number n = (Number) yInitialConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for x is now: " + newValue);
+				setY(n.doubleValue());
+			}
+			// System.out.println("y is now " + getY());
+		}
+		if (widthInitialConstraints != null && widthInitialConstraints.isValid()) {
+			Number n = (Number) widthInitialConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for x is now: " + newValue);
+				setWidth(n.doubleValue());
+			}
+			// System.out.println("width is now " + getWidth());
+		}
+		if (heightInitialConstraints != null && heightInitialConstraints.isValid()) {
+			// System.out.println("height was " + getHeight() + " constraint=" + heightInitialConstraints);
+			Number n = (Number) heightInitialConstraints.getBindingValue(this);
+			if (n != null) {
+				// System.out.println("New value for x is now: " + newValue);
+				setHeight(n.doubleValue());
+			}
+			// System.out.println("height is now " + getHeight());
+		}
+
+	}
+
 	public void updateConstraints() {
 		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
@@ -1817,6 +1864,92 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		} else if (constraint.getBindingAttribute() == Parameters.heightConstraints && heightConstraints != null
 				&& heightConstraints.isValid()) {
 			updateHeightPosition();
+		}
+	}
+
+	public static BindingDefinition X_INITIAL_CONSTRAINTS = new BindingDefinition("xInitialConstraints", Double.class,
+			BindingDefinitionType.GET, false);
+	public static BindingDefinition Y_INITIAL_CONSTRAINTS = new BindingDefinition("yInitialConstraints", Double.class,
+			BindingDefinitionType.GET, false);
+	public static BindingDefinition WIDTH_INITIAL_CONSTRAINTS = new BindingDefinition("widthInitialConstraints", Double.class,
+			BindingDefinitionType.GET, false);
+	public static BindingDefinition HEIGHT_INITIAL_CONSTRAINTS = new BindingDefinition("heightInitialConstraints", Double.class,
+			BindingDefinitionType.GET, false);
+
+	private DataBinding xInitialConstraints;
+	private DataBinding yInitialConstraints;
+	private DataBinding widthInitialConstraints;
+	private DataBinding heightInitialConstraints;
+
+	public DataBinding getXInitialConstraints() {
+		if (xInitialConstraints == null) {
+			xInitialConstraints = new DataBinding(this, Parameters.xInitialConstraints, X_INITIAL_CONSTRAINTS);
+		}
+		return xInitialConstraints;
+	}
+
+	public void setXInitialConstraints(DataBinding xInitialConstraints) {
+		FGENotification notification = requireChange(Parameters.xInitialConstraints, xInitialConstraints);
+		if (notification != null) {
+			xInitialConstraints.setOwner(this);
+			xInitialConstraints.setBindingAttribute(Parameters.xInitialConstraints);
+			xInitialConstraints.setBindingDefinition(X_INITIAL_CONSTRAINTS);
+			this.xInitialConstraints = xInitialConstraints;
+			hasChanged(notification);
+		}
+	}
+
+	public DataBinding getYInitialConstraints() {
+		if (yInitialConstraints == null) {
+			yInitialConstraints = new DataBinding(this, Parameters.yInitialConstraints, Y_INITIAL_CONSTRAINTS);
+		}
+		return yInitialConstraints;
+	}
+
+	public void setYInitialConstraints(DataBinding yInitialConstraints) {
+		FGENotification notification = requireChange(Parameters.yInitialConstraints, yInitialConstraints);
+		if (notification != null) {
+			yInitialConstraints.setOwner(this);
+			yInitialConstraints.setBindingAttribute(Parameters.yInitialConstraints);
+			yInitialConstraints.setBindingDefinition(Y_INITIAL_CONSTRAINTS);
+			this.yInitialConstraints = yInitialConstraints;
+			hasChanged(notification);
+		}
+	}
+
+	public DataBinding getWidthInitialConstraints() {
+		if (widthInitialConstraints == null) {
+			widthInitialConstraints = new DataBinding(this, Parameters.widthInitialConstraints, WIDTH_INITIAL_CONSTRAINTS);
+		}
+		return widthInitialConstraints;
+	}
+
+	public void setWidthInitialConstraints(DataBinding widthInitialConstraints) {
+		FGENotification notification = requireChange(Parameters.widthInitialConstraints, widthInitialConstraints);
+		if (notification != null) {
+			widthInitialConstraints.setOwner(this);
+			widthInitialConstraints.setBindingAttribute(Parameters.widthInitialConstraints);
+			widthInitialConstraints.setBindingDefinition(WIDTH_INITIAL_CONSTRAINTS);
+			this.widthInitialConstraints = widthInitialConstraints;
+			hasChanged(notification);
+		}
+	}
+
+	public DataBinding getHeightInitialConstraints() {
+		if (heightInitialConstraints == null) {
+			heightInitialConstraints = new DataBinding(this, Parameters.heightInitialConstraints, HEIGHT_INITIAL_CONSTRAINTS);
+		}
+		return heightInitialConstraints;
+	}
+
+	public void setHeightInitialConstraints(DataBinding heightInitialConstraints) {
+		FGENotification notification = requireChange(Parameters.heightInitialConstraints, heightInitialConstraints);
+		if (notification != null) {
+			heightInitialConstraints.setOwner(this);
+			heightInitialConstraints.setBindingAttribute(Parameters.heightInitialConstraints);
+			heightInitialConstraints.setBindingDefinition(HEIGHT_INITIAL_CONSTRAINTS);
+			this.heightInitialConstraints = heightInitialConstraints;
+			hasChanged(notification);
 		}
 	}
 
