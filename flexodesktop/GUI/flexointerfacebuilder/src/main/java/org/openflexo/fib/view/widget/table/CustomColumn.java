@@ -92,12 +92,11 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		Class[] types = new Class[1];
 		types[0] = dataClass;
 		try {
-			boolean found = false;
 			Constructor<FIBCustomComponent<T, ?>> constructor = null;
-			while (!found && types[0] != null && customComponentClass != null) {
+			while (types[0] != null && customComponentClass != null) {
 				try {
 					constructor = customComponentClass.getConstructor(types);
-					found = true;
+					break;
 				} catch (NoSuchMethodException e) {
 					types[0] = types[0].getSuperclass();
 				}
