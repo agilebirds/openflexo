@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBOntologyEditor" controllerClassName="org.openflexo.view.controller.FlexoFIBController" name="main" opaque="false">
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBOntologyEditor" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false" name="main">
   <Panel layout="gridbag" borderTitle="Panel" borderLeft="10" borderRight="5" darkLevel="0" index="0" constraints="border(index=0;location=north)" opaque="false">
     <Label label="Ontology" index="0" data="data.ontology.name" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
     <Label label="URI" index="1" data="data.ontology.uRI" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=-5;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
   </Panel>
   <Panel layout="gridbag" hGap="5" vGap="5" flowAlignment="LEADING" darkLevel="0" constraints="border(location=center)" opaque="false">
-    <Panel layout="gridbag" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyClass)" name="ClassPanel" opaque="false">
-      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyClass" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="ClassDetails" opaque="false">
+    <Panel layout="gridbag" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyClass)" opaque="false" name="ClassPanel">
+      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyClass" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" opaque="false" name="ClassDetails">
         <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=north)" opaque="false">
           <Image imageFile="../../../../interfacebuilder/src/dev/resources/FIBEditorPalette/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" index="0" data="controller.ontologyClassIcon.image" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <Label label="class" index="0" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
@@ -68,8 +68,8 @@
         </TabPanel>
       </Panel>
     </Panel>
-    <Panel layout="gridbag" darkLevel="0" index="1" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyIndividual)" name="IndividualPanel" opaque="false">
-      <Panel layout="border" borderTitle="Panel" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyIndividual" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="IndividualDetails" opaque="false">
+    <Panel layout="gridbag" darkLevel="0" index="1" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyIndividual)" opaque="false" name="IndividualPanel">
+      <Panel layout="border" borderTitle="Panel" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyIndividual" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" opaque="false" name="IndividualDetails">
         <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=north)" opaque="false">
           <Label label="individual" align="right" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <TextField index="2" data="IndividualDetails.data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" columns="6" text="TextField" />
@@ -114,8 +114,8 @@
         </TabPanel>
       </Panel>
     </Panel>
-    <Panel layout="gridbag" darkLevel="0" index="2" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyObjectProperty)" name="ObjectPropertyPanel" opaque="false">
-      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyObjectProperty" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="ObjectPropertyDetails" opaque="false">
+    <Panel layout="gridbag" darkLevel="0" index="2" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyObjectProperty)" opaque="false" name="ObjectPropertyPanel">
+      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyObjectProperty" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" opaque="false" name="ObjectPropertyDetails">
         <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=north)" opaque="false">
           <Label label="Property" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <TextField index="2" data="ObjectPropertyDetails.data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" columns="6" text="TextField" />
@@ -174,8 +174,8 @@
         </TabPanel>
       </Panel>
     </Panel>
-    <Panel layout="gridbag" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyDataProperty)" name="DataPropertyPanel" opaque="false">
-      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyDataProperty" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="DataPropertyDetails" opaque="false">
+    <Panel layout="gridbag" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected != null) &amp; OntologyBrowser.selected.isOntologyDataProperty)" opaque="false" name="DataPropertyPanel">
+      <Panel layout="border" borderTitle="Panel" borderLeft="5" darkLevel="0" index="0" data="OntologyBrowser.selected" dataClassName="org.openflexo.foundation.ontology.OntologyDataProperty" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" opaque="false" name="DataPropertyDetails">
         <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=north)" opaque="false">
           <Label label="Property" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
           <TextField index="2" data="DataPropertyDetails.data.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=5;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" columns="6" text="TextField" />
@@ -234,7 +234,7 @@
         </TabPanel>
       </Panel>
     </Panel>
-    <Panel layout="gridbag" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=5;insetsLeft=5;insetsRight=5;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected = null) | ((((!(OntologyBrowser.selected.isOntologyClass)) &amp; (!(OntologyBrowser.selected.isOntologyIndividual))) &amp; (!(OntologyBrowser.selected.isOntologyObjectProperty))) &amp; (!(OntologyBrowser.selected.isOntologyDataProperty))))" name="InformationsPanel" opaque="false">
+    <Panel layout="gridbag" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=5;insetsLeft=5;insetsRight=5;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0;x=0;y=0)" visible="((OntologyBrowser.selected = null) | ((((!(OntologyBrowser.selected.isOntologyClass)) &amp; (!(OntologyBrowser.selected.isOntologyIndividual))) &amp; (!(OntologyBrowser.selected.isOntologyObjectProperty))) &amp; (!(OntologyBrowser.selected.isOntologyDataProperty))))" opaque="false" name="InformationsPanel">
       <TextArea columns="6" rows="2" text="TextArea" index="0" data="data.ontology.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.5)" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ImportedOntologiesTable" index="1" data="data.ontology.importedOntologies" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=1.0)">
         <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
@@ -244,7 +244,7 @@
     </Panel>
   </Panel>
   <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" constraints="border(location=east)" opaque="false">
-    <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="data.allowsSearch" name="SearchPanel" opaque="false">
+    <Panel layout="gridbag" borderTitle="" borderTop="0" borderBottom="0" borderLeft="0" borderRight="0" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="data.allowsSearch" opaque="false" name="SearchPanel">
       <TextField index="0" data="data.filteredName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="SearchTextField" localize="true" manageDynamicModel="true" valueChangedAction="data.search()" validateOnReturn="true" columns="7" text="TextField" />
       <Button action="data.search()" buttonIcon="data.searchIcon" buttonType="Trigger" label="search" localize="true" manageDynamicModel="true" name="SearchButton" index="1" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!(data.isSearching))" />
       <Button action="data.dismissSearch()" buttonIcon="data.cancelIcon" buttonType="Trigger" label="done" localize="true" name="DoneButton" index="2" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isSearching" />
@@ -259,7 +259,7 @@
         <Children data="data.model.getChildren(element)" name="children" />
       </BrowserElement>
     </Browser>
-    <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" border="rounded3d" borderTitle="Display options" borderTop="0" borderBottom="5" borderLeft="5" borderRight="5" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="OptionsPanel" opaque="false">
+    <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="1" border="rounded3d" borderTitle="Display options" borderTop="0" borderBottom="5" borderLeft="5" borderRight="5" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false" name="OptionsPanel">
       <Panel layout="gridbag" hGap="0" vGap="0" flowAlignment="LEFT" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" opaque="false">
         <CheckBox selected="true" index="0" data="data.strictMode" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="StrictModeCB" localize="true" />
         <Label label="strict_mode" index="1" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
@@ -311,18 +311,18 @@
     <Localized key="add_property" lang="French">Ajouter une property</Localized>
     <Localized key="label" lang="Dutch">Label</Localized>
     <Localized key="add_property" lang="Dutch">Add property</Localized>
-    <Localized key="add_see_also" lang="French">add_see_also</Localized>
-    <Localized key="add_is_defined_by" lang="French">add_is_defined_by</Localized>
+    <Localized key="add_see_also" lang="French">Ajouter "see_also"</Localized>
+    <Localized key="add_is_defined_by" lang="French">Ajouter is_defined_by</Localized>
     <Localized key="add_class" lang="French">Ajouter une classe</Localized>
     <Localized key="add_comment" lang="French">add_comment</Localized>
-    <Localized key="add_label" lang="French">add_label</Localized>
-    <Localized key="add_comment" lang="English">add_comment</Localized>
+    <Localized key="add_label" lang="French">Ajouter un label</Localized>
+    <Localized key="add_comment" lang="English">Add comment</Localized>
     <Localized key="add_individual" lang="French">Ajouter un individuel</Localized>
     <Localized key="add_individual" lang="English">Add individual</Localized>
     <Localized key="add_class" lang="English">Add class</Localized>
-    <Localized key="add_is_defined_by" lang="English">add_is_defined_by</Localized>
-    <Localized key="add_label" lang="English">add_label</Localized>
-    <Localized key="add_see_also" lang="English">add_see_also</Localized>
+    <Localized key="add_is_defined_by" lang="English">Add is defined by</Localized>
+    <Localized key="add_label" lang="English">Add label</Localized>
+    <Localized key="add_see_also" lang="English">Add see also</Localized>
     <Localized key="delete_action" lang="French">Supprimer l'action</Localized>
     <Localized key="delete_class" lang="French">Supprimer la classe</Localized>
     <Localized key="delete_individual" lang="French">Supprimer l'individuel</Localized>
@@ -332,8 +332,8 @@
     <Localized key="delete_individual" lang="English">Delete individual</Localized>
     <Localized key="delete_property" lang="English">Delete property</Localized>
     <Localized key="delete_action" lang="Dutch">Delete action</Localized>
-    <Localized key="individual" lang="French">individual</Localized>
-    <Localized key="individual" lang="English">individual</Localized>
+    <Localized key="individual" lang="French">Instance</Localized>
+    <Localized key="individual" lang="English">Individual</Localized>
     <Localized key="ontologic_class" lang="French">Classe ontologique</Localized>
     <Localized key="ontologic_class" lang="English">Ontologic class</Localized>
     <Localized key="ontologic_class" lang="Dutch">Ontologic class</Localized>
@@ -343,63 +343,63 @@
     <Localized key="datatype_property" lang="French">Propriété donnée</Localized>
     <Localized key="datatype_property" lang="English">Datatype property</Localized>
     <Localized key="datatype_property" lang="Dutch">Datatype property</Localized>
-    <Localized key="properties_whose_domain_is_this" lang="French">properties_whose_domain_is_this</Localized>
-    <Localized key="properties_whose_range_is_this" lang="French">properties_whose_range_is_this</Localized>
-    <Localized key="properties_whose_domain_is_this" lang="English">properties_whose_domain_is_this</Localized>
-    <Localized key="properties_whose_range_is_this" lang="English">properties_whose_range_is_this</Localized>
+    <Localized key="properties_whose_domain_is_this" lang="French">Propriétés dont c'est le domaine</Localized>
+    <Localized key="properties_whose_range_is_this" lang="French">propriétés dont c'est le range</Localized>
+    <Localized key="properties_whose_domain_is_this" lang="English">Properties whose domain is this</Localized>
+    <Localized key="properties_whose_range_is_this" lang="English">Properties whose range is this</Localized>
     <Localized key="property" lang="English">Property</Localized>
     <Localized key="domain" lang="English">Domain</Localized>
     <Localized key="property" lang="French">Propriété</Localized>
     <Localized key="domain" lang="French">Domaine</Localized>
     <Localized key="property" lang="Dutch">Property</Localized>
     <Localized key="domain" lang="Dutch">Domain</Localized>
-    <Localized key="range" lang="French">range</Localized>
-    <Localized key="range" lang="English">range</Localized>
-    <Localized key="super_properties" lang="French">super_properties</Localized>
+    <Localized key="range" lang="French">Range</Localized>
+    <Localized key="range" lang="English">Range</Localized>
+    <Localized key="super_properties" lang="French">Sur-propriétés</Localized>
     <Localized key="Super classes" lang="French">Super classes</Localized>
     <Localized key="Super classes" lang="English">Super classes</Localized>
-    <Localized key="super_properties" lang="English">super_properties</Localized>
-    <Localized key="sub_properties" lang="French">sub_properties</Localized>
-    <Localized key="sub_properties" lang="English">sub_properties</Localized>
+    <Localized key="super_properties" lang="English">Super properties</Localized>
+    <Localized key="sub_properties" lang="French">Sous-propriétés</Localized>
+    <Localized key="sub_properties" lang="English">Sub properties</Localized>
     <Localized key="done" lang="English">Done</Localized>
     <Localized key="done" lang="French">Annuler</Localized>
-    <Localized key="done" lang="Dutch">done</Localized>
+    <Localized key="done" lang="Dutch">Done</Localized>
     <Localized key="search" lang="English">Search</Localized>
     <Localized key="search" lang="French">Rechercher</Localized>
     <Localized key="search" lang="Dutch">search</Localized>
     <Localized key="ontology" lang="English">Ontology</Localized>
     <Localized key="ontology" lang="French">Ontologie</Localized>
-    <Localized key="ontology" lang="Dutch">ontology</Localized>
+    <Localized key="ontology" lang="Dutch">Ontology</Localized>
     <Localized key="root_class" lang="English">Root class</Localized>
     <Localized key="root_class" lang="French">Classe racine</Localized>
-    <Localized key="root_class" lang="Dutch">root_class</Localized>
+    <Localized key="root_class" lang="Dutch">Root class</Localized>
     <Localized key="strict_mode" lang="English">Strict mode</Localized>
     <Localized key="strict_mode" lang="French">Mode "strict"</Localized>
-    <Localized key="strict_mode" lang="Dutch">strict_mode</Localized>
+    <Localized key="strict_mode" lang="Dutch">Strict mode</Localized>
     <Localized key="hierarchic_presentation" lang="English">Hierarchic presentation</Localized>
     <Localized key="hierarchic_presentation" lang="French">Présentation hiérarchique</Localized>
-    <Localized key="hierarchic_presentation" lang="Dutch">hierarchic_presentation</Localized>
+    <Localized key="hierarchic_presentation" lang="Dutch">Hierarchic presentation</Localized>
     <Localized key="present_properties_in_classes" lang="English">Present properties in classes</Localized>
     <Localized key="present_properties_in_classes" lang="French">Présenter les propriétés dans les classes</Localized>
-    <Localized key="present_properties_in_classes" lang="Dutch">present_properties_in_classes</Localized>
+    <Localized key="present_properties_in_classes" lang="Dutch">Present properties in classes</Localized>
     <Localized key="show_OWL_RDF_concepts" lang="English">Show OWL/RDF concepts</Localized>
     <Localized key="show_OWL_RDF_concepts" lang="French">Voir les concepts OWL/RDF</Localized>
-    <Localized key="show_OWL_RDF_concepts" lang="Dutch">show_OWL_RDF_concepts</Localized>
+    <Localized key="show_OWL_RDF_concepts" lang="Dutch">Show OWL/RDF concepts</Localized>
     <Localized key="display_classes" lang="English">Display classes</Localized>
     <Localized key="display_classes" lang="French">Afficher les classes</Localized>
-    <Localized key="display_classes" lang="Dutch">display_classes</Localized>
+    <Localized key="display_classes" lang="Dutch">Display classes</Localized>
     <Localized key="display_individuals" lang="English">Display individuals</Localized>
     <Localized key="display_individuals" lang="French">Afficher les instances</Localized>
-    <Localized key="display_individuals" lang="Dutch">display_individuals</Localized>
+    <Localized key="display_individuals" lang="Dutch">Display individuals</Localized>
     <Localized key="display_object_properties" lang="English">Display objet properties</Localized>
     <Localized key="display_object_properties" lang="French">Afficher les propriétés "objet"</Localized>
-    <Localized key="display_object_properties" lang="Dutch">display_object_properties</Localized>
+    <Localized key="display_object_properties" lang="Dutch">Display objet properties</Localized>
     <Localized key="display_datatype_properties" lang="English">Display datatype properties</Localized>
     <Localized key="display_datatype_properties" lang="French">Afficher les propriétés "données"</Localized>
-    <Localized key="display_datatype_properties" lang="Dutch">display_datatype_properties</Localized>
+    <Localized key="display_datatype_properties" lang="Dutch">Display datatype properties</Localized>
     <Localized key="display_annotation_properties" lang="English">Display annotation properties</Localized>
     <Localized key="display_annotation_properties" lang="French">Afficher les propriétés d'annotation</Localized>
-    <Localized key="display_annotation_properties" lang="Dutch">display_annotation_properties</Localized>
+    <Localized key="display_annotation_properties" lang="Dutch">Display annotation properties</Localized>
     <Localized key="Options" lang="English">Options</Localized>
     <Localized key="Options" lang="French">Options</Localized>
     <Localized key="Options" lang="Dutch">Options</Localized>
@@ -467,15 +467,22 @@
     <Localized key="Display options" lang="French">Display options</Localized>
     <Localized key="Display options" lang="Dutch">Display options</Localized>
     <Localized key="Super classes" lang="Dutch">Super classes</Localized>
-    <Localized key="properties_whose_domain_is_this" lang="Dutch">properties_whose_domain_is_this</Localized>
-    <Localized key="properties_whose_range_is_this" lang="Dutch">properties_whose_range_is_this</Localized>
-    <Localized key="range" lang="Dutch">range</Localized>
-    <Localized key="add_see_also" lang="Dutch">add_see_also</Localized>
-    <Localized key="add_is_defined_by" lang="Dutch">add_is_defined_by</Localized>
-    <Localized key="add_comment" lang="Dutch">add_comment</Localized>
-    <Localized key="add_label" lang="Dutch">add_label</Localized>
-    <Localized key="individual" lang="Dutch">individual</Localized>
-    <Localized key="super_properties" lang="Dutch">super_properties</Localized>
-    <Localized key="sub_properties" lang="Dutch">sub_properties</Localized>
+    <Localized key="properties_whose_domain_is_this" lang="Dutch">Properties whose domain is this</Localized>
+    <Localized key="properties_whose_range_is_this" lang="Dutch">Properties whose range is this</Localized>
+    <Localized key="range" lang="Dutch">Range</Localized>
+    <Localized key="add_see_also" lang="Dutch">Add see also</Localized>
+    <Localized key="add_is_defined_by" lang="Dutch">Add is defined by</Localized>
+    <Localized key="add_comment" lang="Dutch">Add comment</Localized>
+    <Localized key="add_label" lang="Dutch">Add label</Localized>
+    <Localized key="individual" lang="Dutch">Individual</Localized>
+    <Localized key="super_properties" lang="Dutch">Super properties</Localized>
+    <Localized key="sub_properties" lang="Dutch">Sub properties</Localized>
+    <Localized key="add_class" lang="Dutch">Add class</Localized>
+    <Localized key="add_individual" lang="Dutch">Add individual</Localized>
+    <Localized key="Class name" lang="English">Class name</Localized>
+    <Localized key="Class name" lang="Dutch">Class name</Localized>
+    <Localized key="delete_class" lang="Dutch">Delete class</Localized>
+    <Localized key="delete_individual" lang="Dutch">Delete individual</Localized>
+    <Localized key="delete_property" lang="Dutch">Delete property</Localized>
   </LocalizedDictionary>
 </Panel>
