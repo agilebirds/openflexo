@@ -160,7 +160,9 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 						&& (tab.getEditor() == null || !tab.getEditor().equals(getController().getControllerModel().getCurrentEditor()))) {
 					return false;
 				}
-				ModuleView<?> view = getController().moduleViewForLocation(tab, true);
+				// Here we should not create the view if it does not exists yet because this method can be invoked while the module view is
+				// being created
+				ModuleView<?> view = getController().moduleViewForLocation(tab, false);
 				return view != null && !(view instanceof EmptyPanel);
 			}
 
