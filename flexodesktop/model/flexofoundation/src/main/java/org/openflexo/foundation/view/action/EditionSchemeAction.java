@@ -52,6 +52,7 @@ import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass.Restrictio
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewConnector;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.ViewShape;
@@ -259,7 +260,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 			assignedObject = declaredObject;
 		} else if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
 			logger.info("Add shema " + action);
-			View newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
+			ViewDefinition newShema = performAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action);
 			assignedObject = newShema;
 		} else if (action instanceof org.openflexo.foundation.viewpoint.AddEditionPattern) {
 			logger.info("Add EditionPattern " + action + " EP="
@@ -413,7 +414,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return newConnector;
 	}
 
-	protected View performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
+	protected ViewDefinition performAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action) {
 		View initialShema = retrieveOEShema();
 		AddView addDiagramAction = AddView.actionType.makeNewEmbeddedAction(initialShema.getShemaDefinition().getFolder(), null, this);
 		addDiagramAction.newViewTitle = action.getDiagramName(this);
@@ -422,7 +423,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
 		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
-			View newDiagram = addDiagramAction.getNewDiagram().getView();
+			ViewDefinition newDiagram = addDiagramAction.getNewDiagram();
 			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
 			if (shapePatternRole == null) {
 				logger.warning("Sorry, shape pattern role is undefined");
@@ -711,7 +712,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 
 	protected EditionPatternInstance performAddEditionPattern(org.openflexo.foundation.viewpoint.AddEditionPattern action) {
 		logger.info("Perform performAddEditionPattern " + action);
-		View view = action.getView(this);
+		ViewDefinition view = action.getView(this);
 		logger.info("View: " + view);
 		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, this);
 		creationSchemeAction.setCreationScheme(action.getCreationScheme());

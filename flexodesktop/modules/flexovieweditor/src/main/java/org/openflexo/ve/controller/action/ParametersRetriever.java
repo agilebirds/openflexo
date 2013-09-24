@@ -255,6 +255,19 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		} else if (parameter instanceof FlexoObjectParameter) {
 			FlexoObjectParameter foParameter = (FlexoObjectParameter) parameter;
 			switch (foParameter.getFlexoObjectType()) {
+			case View:
+				FIBCustom viewSelector = new FIBCustom();
+				viewSelector.setComponentClass(org.openflexo.components.widget.FIBViewSelector.class);
+				viewSelector.addToAssignments(new FIBCustomAssignment(viewSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				viewSelector.setData(new DataBinding("parameters." + parameter.getName()) {
+					@Override
+					public BindingFactory getBindingFactory() {
+						return parameter.getBindingFactory();
+					}
+				});
+				panel.addToSubComponents(viewSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
+				return viewSelector;
 			case Process:
 				FIBCustom processSelector = new FIBCustom();
 				processSelector.setComponentClass(org.openflexo.components.widget.FIBProcessSelector.class);

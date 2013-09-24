@@ -31,6 +31,8 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -67,6 +69,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+		FlexoModelObject.addActionForClass(actionType, ViewLibrary.class);
 	}
 
 	private View _view;
@@ -124,6 +127,8 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		if (_view == null) {
 			if (getFocusedObject() instanceof View) {
 				_view = (View) getFocusedObject();
+			} else if (getFocusedObject() instanceof ViewDefinition) {
+				_view = ((ViewDefinition) getFocusedObject()).getView();
 			}
 		}
 		return _view;
