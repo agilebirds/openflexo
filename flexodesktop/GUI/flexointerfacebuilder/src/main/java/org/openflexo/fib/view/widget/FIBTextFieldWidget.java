@@ -144,8 +144,6 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
-
 								((JDialog) w).getRootPane().getDefaultButton().doClick();
 							}
 						});
