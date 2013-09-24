@@ -839,9 +839,6 @@ public class BindingValue extends AbstractBinding {
 		if (current == null) {
 			return returned;
 		}
-		if (getStringRepresentation().equals("data.getConsistencyIcon(iterator)")) {
-			System.err.println("coucou");
-		}
 		try {
 			for (BindingPathElement element : getBindingPath()) {
 				returned.add(new TargetObject(current, element.getLabel()));
