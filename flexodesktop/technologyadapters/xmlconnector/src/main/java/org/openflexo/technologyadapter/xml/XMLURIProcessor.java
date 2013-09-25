@@ -33,6 +33,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
@@ -70,7 +72,7 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 
 	// TODO Change to a common Type for XML & XMLXSD
 	private XMLType mappedClass;
-	private XMLModelSlot modelSlot;
+	private TypeAwareModelSlot<?, ?> modelSlot;
 	private IXMLAttribute baseAttributeForURI;
 	
 	// Cache des URis Pour aller plus vite ??
@@ -78,8 +80,12 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	private Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
 
 
-	public void setModelSlot(XMLModelSlot xmlModelSlot) {
-		modelSlot = xmlModelSlot;
+	public void setModelSlot(ModelSlot aModelSlot) {
+		modelSlot = (TypeAwareModelSlot<?, ?>) aModelSlot;
+	}
+
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		return modelSlot;
 	}
 
 	// Serialized properties

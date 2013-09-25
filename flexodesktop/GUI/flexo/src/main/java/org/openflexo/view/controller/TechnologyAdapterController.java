@@ -188,7 +188,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	}
 
-	public abstract boolean hasModuleViewForObject(FlexoObject object);
+	public abstract boolean hasModuleViewForObject(TechnologyObject object);
+
+	public abstract String getWindowTitleforObject(TechnologyObject object);
 
 	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective);

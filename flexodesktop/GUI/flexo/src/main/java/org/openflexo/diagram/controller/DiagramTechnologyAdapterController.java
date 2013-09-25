@@ -122,9 +122,14 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		// TODO not applicable
 		return false;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		return object.toString();
 	}
 
 	@Override

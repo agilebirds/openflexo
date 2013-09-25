@@ -36,8 +36,8 @@ public class BasicExcelModelConverter {
 		excelObjects.put(workbook, excelWorkbook);
 		for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
 			Sheet sheet = workbook.getSheetAt(index);
-			ExcelSheet excelSheet = convertExcelSheetToSheet(sheet, technologyAdapter);
-			excelWorkbook.addExcelSheet(excelSheet);
+			ExcelSheet excelSheet = convertExcelSheetToSheet(sheet, excelWorkbook, technologyAdapter);
+			excelWorkbook.addToExcelSheets(excelSheet);
 		}
 		return excelWorkbook;
 	}
@@ -45,13 +45,22 @@ public class BasicExcelModelConverter {
 	/**
 	 * Convert a Sheet into an Excel Sheet
 	 */
-	public ExcelSheet convertExcelSheetToSheet(Sheet sheet, ExcelTechnologyAdapter technologyAdapter) {
+	public ExcelSheet convertExcelSheetToSheet(Sheet sheet, ExcelWorkbook workbook, ExcelTechnologyAdapter technologyAdapter) {
 		ExcelSheet excelSheet = null;
 		if (excelObjects.get(sheet) == null) {
-			excelSheet = new ExcelSheet(sheet, technologyAdapter);
+			excelSheet = new ExcelSheet(sheet, workbook, technologyAdapter);
 			excelObjects.put(sheet, excelSheet);
+			int lastRow = -1;
 			for (Row row : sheet) {
+				while (row.getRowNum() > lastRow + 1) {
+					// Missing row
+					ExcelRow excelRow = new ExcelRow(null, technologyAdapter);
+					excelSheet.addToExcelRows(excelRow);
+					lastRow++;
+				}
 				ExcelRow excelRow = convertExcelRowToRow(row, technologyAdapter);
+				excelSheet.addToExcelRows(excelRow);
+				lastRow = excelRow.getRowNum();
 			}
 		} else {
 			excelSheet = (ExcelSheet) excelObjects.get(sheet);

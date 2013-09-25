@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.technologyadapter.excel.model.ExcelSheet">
+  <Table iteratorClassName="org.openflexo.technologyadapter.excel.model.ExcelRow" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="table" data="data.excelRows" constraints="border(location=center)">
+    <NumberColumn numberType="IntegerType" data="iterator.rowNum" title="number" columnWidth="30" resizable="false" displayTitle="false" name="number" />
+    <LabelColumn data="iterator.row.getCell(0).toString" title="column1" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.row.getCell(1).toString" title="column2" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.row.getCell(2).toString" title="column3" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.row.getCell(3).toString" title="column4" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="iterator.row.getCell(4).toString" title="column5" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+  </Table>
+  <LocalizedDictionary />
+</Panel>

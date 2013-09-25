@@ -77,7 +77,8 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
 	/* Used to process URIs for XML Objects */
-	private Hashtable<String, XSURIProcessor> uriProcessors;
+	private List< XSURIProcessor> uriProcessors;
+	private Hashtable<String, XSURIProcessor> uriProcessorsMap;
 
 	/*public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
@@ -87,15 +88,21 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 
 	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
+		if (uriProcessorsMap == null) {
+			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();
+		}
 		if (uriProcessors == null) {
-			uriProcessors = new Hashtable<String, XSURIProcessor>();
+			uriProcessors = new ArrayList<XSURIProcessor>();
 		}
 	}
 
 	public XSDModelSlot(VirtualModelBuilder builder) {
 		super(builder);
+		if (uriProcessorsMap == null) {
+			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();
+		}
 		if (uriProcessors == null) {
-			uriProcessors = new Hashtable<String, XSURIProcessor>();
+			uriProcessors = new ArrayList<XSURIProcessor>();
 		}
 	}
 
@@ -185,7 +192,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
 		String ltypeURI = ((XSOntClass) xsO.getType()).getURI();
-		XSURIProcessor mapParams = uriProcessors.get(ltypeURI);
+		XSURIProcessor mapParams = uriProcessorsMap.get(ltypeURI);
 
 		if (mapParams != null){
 			return mapParams.getURIForObject((TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
@@ -200,7 +207,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	@Override
 	public Object retrieveObjectWithURI(TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
 
-		XSURIProcessor mapParams = uriProcessors.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
+		XSURIProcessor mapParams = uriProcessorsMap.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
 		if (mapParams != null){
 			try {
 				return mapParams.retrieveObjectWithURI(msInstance, objectURI);
@@ -209,7 +216,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 				e.printStackTrace();
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -217,40 +224,57 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	// ============================== uriProcessors Map ===================
 	// ==========================================================================
 
-	public void setUriProcessors(Hashtable<String, XSURIProcessor> uriProcessingParameters) {
+	public void setUriProcessors(List<XSURIProcessor> uriProcessingParameters) {
 		this.uriProcessors = uriProcessingParameters;
 	}
 
-	public Hashtable<String, XSURIProcessor> getUriProcessors() {
+	public List<XSURIProcessor> getUriProcessors() {
 		return uriProcessors;
 	}
 
 	public XSURIProcessor createURIProcessor(){
 		XSURIProcessor xsuriProc = new XSURIProcessor();
-		// TODO remplacer le hash par une liste + table de hash pour cacher les URI....
-		// add
+		xsuriProc.setModelSlot(this);
+		uriProcessors.add(xsuriProc);
 		return xsuriProc;
 	}
-	
+
+	public void updateURIMapForProcessor(XSURIProcessor xsuriProc){
+		String uri = xsuriProc._getTypeURI();
+		if(uri != null){
+			for (String k : uriProcessorsMap.keySet()){
+				XSURIProcessor p = uriProcessorsMap.get(k);
+				if (p.equals(xsuriProc)){
+					uriProcessorsMap.remove(k);
+				}
+			}
+			uriProcessorsMap.put(uri, xsuriProc);
+		}
+	}
+
 	public void addToUriProcessors(XSURIProcessor xsuriProc) {
 		xsuriProc.setModelSlot(this);
-		// TODO To be optimized => e.g. cach typeURI String?
-		uriProcessors.put(xsuriProc._getTypeURI().toString(), xsuriProc);
+		uriProcessors.add(xsuriProc);
+		uriProcessorsMap.put(xsuriProc._getTypeURI().toString(), xsuriProc);
 	}
 
 	public void removeFromUriProcessors(XSURIProcessor xsuriProc) {
-		// TODO To be optimized => e.g. cach typeURI String?
-		uriProcessors.remove(xsuriProc._getTypeURI().toString());
-		xsuriProc.reset();
+		String uri = xsuriProc._getTypeURI();
+		if(uri != null){
+			for (String k : uriProcessorsMap.keySet()){
+				XSURIProcessor p = uriProcessorsMap.get(k);
+				if (p.equals(xsuriProc)){
+					uriProcessorsMap.remove(k);
+				}
+			}
+			uriProcessors.remove(xsuriProc);
+			xsuriProc.reset();
+		}
 	}
 
 	// Do not use this since not efficient, used in deserialization only
 	public List<XSURIProcessor> getUriProcessorsList() {
-		List<XSURIProcessor> returned = new ArrayList<XSURIProcessor>();
-		for (XSURIProcessor xsuriProc : uriProcessors.values()) {
-			returned.add(xsuriProc);
-		}
-		return returned;
+		return uriProcessors;
 	}
 
 	public void setUriProcessorsList(List<XSURIProcessor> uriProcList) {
