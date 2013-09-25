@@ -37,7 +37,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -159,6 +158,20 @@ public class ExcelSheetView extends JPanel {
 			if (cell == null) {
 				return "";
 			}
+			switch (cell.getCellType()) {
+			case Cell.CELL_TYPE_BLANK:
+				return "";
+			case Cell.CELL_TYPE_NUMERIC:
+				return cell.getNumericCellValue();
+			case Cell.CELL_TYPE_STRING:
+				return cell.getStringCellValue();
+			case Cell.CELL_TYPE_FORMULA:
+				return cell.getNumericCellValue();
+			case Cell.CELL_TYPE_BOOLEAN:
+				return cell.getBooleanCellValue();
+			case Cell.CELL_TYPE_ERROR:
+				return "!ERROR:" + cell.getErrorCellValue();
+			}
 			return cell;
 		};
 
@@ -191,42 +204,39 @@ public class ExcelSheetView extends JPanel {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Color foreground = null;
 			Color background = null;
-			Border border = new CellBorder(row, column);
+
+			Border border = null;
 			Font font = null;
-			TableModel model = table.getModel();
+
+			Cell cell = tableModel.getCellAt(row, column);
+			if (cell == null) {
+				// border = new EmptyCellBorder();
+			} else {
+				border = new CellBorder(row, column);
+			}
 
 			DefaultTableCellRenderer returned = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected,
 					hasFocus, row, column);
 
-			if (row < sheet.getExcelRows().size()) {
-				Cell cell;
-				ExcelRow excelRow = sheet.getExcelRows().get(row);
-				if (excelRow.getRow() == null) {
-					cell = null;
-				} else {
-					cell = excelRow.getRow().getCell(column);
-				}
+			if (cell != null) {
+				CellStyle style = cell.getCellStyle();
+				if (style != null) {
+					background = getBackgroundColor(style);
+					foreground = getForegroundColor(style);
+					font = getFont(style);
 
-				if (cell != null) {
-					CellStyle style = cell.getCellStyle();
-					if (style != null) {
-						background = getBackgroundColor(style);
-						foreground = getForegroundColor(style);
-						font = getFont(style);
-
-						switch (style.getAlignment()) {
-						case CellStyle.ALIGN_CENTER:
-							returned.setHorizontalAlignment(SwingConstants.CENTER);
-							break;
-						case CellStyle.ALIGN_LEFT:
-							returned.setHorizontalAlignment(SwingConstants.LEFT);
-							break;
-						case CellStyle.ALIGN_RIGHT:
-							returned.setHorizontalAlignment(SwingConstants.RIGHT);
-							break;
-						default:
-							returned.setHorizontalAlignment(SwingConstants.LEFT);
-						}
+					switch (style.getAlignment()) {
+					case CellStyle.ALIGN_CENTER:
+						returned.setHorizontalAlignment(SwingConstants.CENTER);
+						break;
+					case CellStyle.ALIGN_LEFT:
+						returned.setHorizontalAlignment(SwingConstants.LEFT);
+						break;
+					case CellStyle.ALIGN_RIGHT:
+						returned.setHorizontalAlignment(SwingConstants.RIGHT);
+						break;
+					default:
+						returned.setHorizontalAlignment(SwingConstants.LEFT);
 					}
 				}
 			}
@@ -253,6 +263,30 @@ public class ExcelSheetView extends JPanel {
 			return this;
 		}
 
+		/*class EmptyCellBorder implements Border {
+			@Override
+			public Insets getBorderInsets(Component c) {
+				return new Insets(1, 1, 1, 1);
+			}
+
+			@Override
+			public boolean isBorderOpaque() {
+				return false;
+			}
+
+			@Override
+			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+				Color oldColor = g.getColor();
+				g.setColor(Color.LIGHT_GRAY);
+				g.drawLine(x, y, width - 1, y);
+				g.drawLine(x, y, x, height - 1);
+				g.drawLine(x, height - 1, width - 1, height - 1);
+				g.drawLine(width - 1, y, width - 1, height - 1);
+				g.setColor(oldColor);
+			}
+
+		}*/
+
 		class CellBorder implements Border {
 
 			private Cell cell;
@@ -265,22 +299,6 @@ public class ExcelSheetView extends JPanel {
 				rightCell = tableModel.getCellAt(row, column + 1);
 			}
 
-			/**
-			 * Paints the border for the specified component with the specified position and size.
-			 * 
-			 * @param c
-			 *            the component for which this border is being painted
-			 * @param g
-			 *            the paint graphics
-			 * @param x
-			 *            the x position of the painted border
-			 * @param y
-			 *            the y position of the painted border
-			 * @param width
-			 *            the width of the painted border
-			 * @param height
-			 *            the height of the painted border
-			 */
 			@Override
 			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 				Color oldColor = g.getColor();
@@ -338,21 +356,13 @@ public class ExcelSheetView extends JPanel {
 						&& (bottomCell == null || bottomCell.getCellStyle().getBorderTop() == CellStyle.BORDER_NONE);
 			}
 
-			/**
-			 * Reinitialize the insets parameter with this Border's current Insets.
-			 * 
-			 * @param c
-			 *            the component for which this border insets value applies
-			 * @param insets
-			 *            the object to be reinitialized
-			 */
-			public Insets getBorderInsets(Component c, Insets insets) {
+			/*public Insets getBorderInsets(Component c, Insets insets) {
 				insets.left = hasLeftBorder() ? 1 : 0;
 				insets.top = hasTopBorder() ? 1 : 0;
 				insets.right = hasRightBorder() ? 1 : 0;
 				insets.bottom = hasBottomBorder() ? 1 : 0;
 				return insets;
-			}
+			}*/
 
 			@Override
 			public boolean isBorderOpaque() {
