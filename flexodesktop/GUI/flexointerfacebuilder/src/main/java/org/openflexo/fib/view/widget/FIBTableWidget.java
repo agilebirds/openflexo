@@ -457,8 +457,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public boolean mayRepresent(Object o) {
-		if (getValue() != null) {
-			return getValue().contains(o);
+		List<Object> values = getTableModel().getValues();
+		if (values != null) {
+			return values.contains(o);
 		}
 		return false;
 	}
