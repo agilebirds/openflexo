@@ -213,14 +213,17 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource(force) == null || getResource(force).isLoaded() && !getResource(force).getIsLoading()) {
-					if (getResource(force) == null) {
-						status = ReferenceStatus.RESOURCE_NOT_FOUND;
-					} else {
-						status = ReferenceStatus.NOT_FOUND;
-					}
-					if (force) {
-						owner.objectCantBeFound(this);
+				} else {
+					FlexoXMLStorageResource resource2 = getResource(false);
+					if (resource2 == null || resource2.isLoaded() && !resource2.getIsLoading()) {
+						if (resource2 == null) {
+							status = ReferenceStatus.RESOURCE_NOT_FOUND;
+						} else {
+							status = ReferenceStatus.NOT_FOUND;
+							if (force) {
+								owner.objectCantBeFound(this);
+							}
+						}
 					}
 				}
 			}

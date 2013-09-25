@@ -127,7 +127,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 				if (action.getEndNode() instanceof SingleInstanceSubProcessNode || action.getEndNode() instanceof LoopSubProcessNode
 						|| action.getEndNode() instanceof WSCallSubProcessNode) {
 					final SubProcessNode node = (SubProcessNode) action.getEndNode();
-					if (node.getSubProcess() == null || node.getPortMapRegistery() == null) {
+					if (node.getSubProcess(true) == null || node.getPortMapRegistery() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_process_defined_for_end_sub_process_node"));
 						return false;
 					}
@@ -165,7 +165,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 						|| action.getStartingNode() instanceof LoopSubProcessNode
 						|| action.getStartingNode() instanceof WSCallSubProcessNode) {
 					final SubProcessNode node = (SubProcessNode) action.getStartingNode();
-					if (node.getSubProcess() == null || node.getPortMapRegistery() == null) {
+					if (node.getSubProcess(true) == null || node.getPortMapRegistery() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("no_process_defined_for_start_sub_process_node"));
 						return false;
 					}

@@ -67,6 +67,6 @@ public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess, Sub
 	}
 
 	public FlexoProcess getProcessToOpen() {
-		return getFocusedObject().getSubProcess();
+		return getFocusedObject().getSubProcess(true);
 	}
 }

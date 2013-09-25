@@ -2282,6 +2282,8 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 				}
 				node.setSubProcessName(null);
 			}
+			/*
+			 * With the use of imported process, this is no longer valid. 
 			if (node.getSubProcess() == null && node.getPortMapRegistery() != null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Inconsistent data : PortMapRegistery defined while no sub-process is defined: remove it");
@@ -2289,6 +2291,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 				node.getPortMapRegistery().delete();
 				node.setSubProcessName(null);
 			}
+			*/
 		}
 		// Now do it with message edges
 		// Vector<MessageEdge> unboundMessageEdgesToRemove = new
