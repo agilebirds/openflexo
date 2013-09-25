@@ -2,6 +2,7 @@ package org.openflexo.technologyadapter.owl;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
@@ -59,7 +60,7 @@ public class OWLModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 	@Override
 	public boolean isValidConfiguration() {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
-			return StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
+			return getResourceCenter() != null && getResourceCenter() instanceof FileSystemBasedResourceCenter && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 		}
 		else{
