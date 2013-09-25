@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.GraphicalRepresentation;
@@ -49,12 +48,9 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	private EditionPatternPreviewController previewController;
 	private final Vector<ApplyCancelListener> applyCancelListener;
 
-	private final JLabel EMPTY_LABEL = new JLabel("<empty>");
-
 	public EditionPatternPreviewComponent() {
 		super();
 		setLayout(new BorderLayout());
-		// add(EMPTY_LABEL,BorderLayout.CENTER);
 		applyCancelListener = new Vector<ApplyCancelListener>();
 	}
 
