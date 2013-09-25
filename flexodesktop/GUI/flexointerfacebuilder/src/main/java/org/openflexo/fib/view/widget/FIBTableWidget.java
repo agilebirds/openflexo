@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -413,9 +413,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 					if (_fibTable.getCreateNewRowOnClick()) {
 						if (!e.isConsumed() && e.getClickCount() == 2) {
 							// System.out.println("OK, on essaie de gerer un new par double click");
-							Enumeration<FIBTableActionListener> en = getFooter().getAddActionListeners();
-							while (en.hasMoreElements()) {
-								FIBTableActionListener action = en.nextElement();
+							Iterator<FIBTableActionListener> i = getFooter().getAddActionListeners().iterator();
+							while (i.hasNext()) {
+								FIBTableActionListener action = i.next();
 								if (action.isAddAction()) {
 									action.actionPerformed(new ActionEvent(_table, ActionEvent.ACTION_PERFORMED, null, EventQueue
 											.getMostRecentEventTime(), e.getModifiers()));

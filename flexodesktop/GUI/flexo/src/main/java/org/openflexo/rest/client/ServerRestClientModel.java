@@ -689,6 +689,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public List<Account> loadAccounts() {
 		ServerRestClient client = getServerRestClient(false);
+		if (client == null) {
+			throw new RuntimeException("Operation cancelled");
+		}
 		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true");
 		return client.accounts(client.createClient(), builder.build()).getAsXml(null, null, "accountName asc",
 				new GenericType<List<Account>>() {
@@ -808,6 +811,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			@Override
 			public List<User> load(String key) throws Exception {
 				ServerRestClient client = getServerRestClient(false);
+				if (client == null) {
+					throw new RuntimeException("Operation cancelled");
+				}
 				UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("active", "true").queryParam("userType", "DNL");
 				return client.users(client.createClient(), builder.build()).getAsXml(null, null, "login asc",
 						new GenericType<List<User>>() {
@@ -882,14 +888,20 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
+	public void goOnline() {
+		controller.getApplicationContext().getServerRestService().setOffline(false);
+	}
+
 	public void refresh() {
 		accountCache.invalidateAll();
 		accountUserCache.invalidateAll();
+		goOnline();
 		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateProjectEditionSession(),
 				new UpdateVersions());
 	}
 
 	public void refreshVersions() {
+		goOnline();
 		performOperationsInSwingWorker(new UpdateVersions());
 	}
 
@@ -992,6 +1004,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (getUser() == null) {
 			return;
 		}
+		goOnline();
 		DocGenerationChoice choice = new DocGenerationChoice(version);
 		choice.setDocFormat(DocFormat.WORD);
 		choice.setDocType(serverProject.getDocTypes().get(0));
@@ -1010,6 +1023,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (getUser() == null) {
 			return;
 		}
+		goOnline();
 		Job job = new Job();
 		job.setCreator(getUser());
 		job.setJobType(JobType.PROTOTYPE_BUILDER);

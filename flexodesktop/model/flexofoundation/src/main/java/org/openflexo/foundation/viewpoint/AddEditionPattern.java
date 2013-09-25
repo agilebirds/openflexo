@@ -31,7 +31,7 @@ import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -63,8 +63,8 @@ public class AddEditionPattern extends AssignableAction {
 		return null;
 	}
 
-	public View getView(EditionSchemeAction action) {
-		return (View) getView().getBindingValue(action);
+	public ViewDefinition getView(EditionSchemeAction action) {
+		return (ViewDefinition) getView().getBindingValue(action);
 	}
 
 	/*@Override
@@ -87,7 +87,7 @@ public class AddEditionPattern extends AssignableAction {
 
 	private ViewPointDataBinding view;
 
-	private BindingDefinition VIEW = new BindingDefinition("view", View.class, BindingDefinitionType.GET, true);
+	private BindingDefinition VIEW = new BindingDefinition("view", ViewDefinition.class, BindingDefinitionType.GET, true);
 
 	public BindingDefinition getViewBindingDefinition() {
 		return VIEW;

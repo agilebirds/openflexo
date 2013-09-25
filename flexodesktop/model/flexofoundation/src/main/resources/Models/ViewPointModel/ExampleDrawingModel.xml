@@ -111,6 +111,10 @@
  	 <property name="yConstraints" xmlTag="yConstraints" attribute="YES"/>
  	 <property name="widthConstraints" xmlTag="widthConstraints" attribute="YES"/>
  	 <property name="heightConstraints" xmlTag="heightConstraints" attribute="YES"/>
+     <property name="xInitialConstraints" xmlTag="xInitialConstraints" attribute="YES"/>
+     <property name="yInitialConstraints" xmlTag="yInitialConstraints" attribute="YES"/>
+     <property name="widthInitialConstraints" xmlTag="widthInitialConstraints" attribute="YES"/>
+     <property name="heightInitialConstraints" xmlTag="heightInitialConstraints" attribute="YES"/>
   </entity>
 
   <entity name="org.openflexo.fge.ConnectorGraphicalRepresentation" xmlTag="ConnectorGraphicalRepresentation" >

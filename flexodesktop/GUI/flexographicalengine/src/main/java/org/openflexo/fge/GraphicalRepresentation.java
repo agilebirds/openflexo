@@ -382,7 +382,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	// ***************************************************************************
 
 	public void setsWith(GraphicalRepresentation<?> gr) {
-		if (gr instanceof GraphicalRepresentation) {
+		if (gr != null) {
 			for (Parameters p : Parameters.values()) {
 				if (p != Parameters.identifier && p != Parameters.mouseClickControls && p != Parameters.mouseDragControls) {
 					_setParameterValueWith(p, gr);

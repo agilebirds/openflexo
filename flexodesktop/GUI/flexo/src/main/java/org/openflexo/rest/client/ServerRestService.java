@@ -1,6 +1,7 @@
 package org.openflexo.rest.client;
 
 import java.awt.Desktop;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,6 +42,7 @@ import org.openflexo.rest.client.model.JobHistory;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.rest.client.model.UserType;
 import org.openflexo.swing.FlexoSwingUtils;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -51,7 +53,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 
-public class ServerRestService {
+public class ServerRestService implements HasPropertyChangeSupport {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ServerRestService.class.getPackage()
 			.getName());
@@ -60,7 +62,11 @@ public class ServerRestService {
 
 	private boolean started = false;
 
+	private boolean offline = false;
+
 	private boolean forceDialog = true;
+
+	private PropertyChangeSupport pcSupport = new PropertyChangeSupport(this);
 
 	private class RemoteJobChecker implements Runnable {
 		@Override
@@ -237,6 +243,9 @@ public class ServerRestService {
 
 			@Override
 			public ServerRestClientParameter call() throws Exception {
+				if (isOffline()) {
+					return null;
+				}
 				WebServiceURLDialog data = new WebServiceURLDialog();
 				data.setClientParameter(params);
 				FIBDialog<WebServiceURLDialog> dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data,
@@ -275,20 +284,21 @@ public class ServerRestService {
 					AdvancedPrefs.save();
 					return params;
 				} else {
+					setOffline(true);
 					return null;
 				}
 			}
 
 		}
 
-		public ServerRestClientParameter getServerRestClientParameter(boolean forceDialog) throws Error {
+		public synchronized ServerRestClientParameter getServerRestClientParameter(boolean forceDialog) throws Error {
 
 			ModelFactory factory;
 			try {
 				factory = new ModelFactory(ServerRestClientParameter.class);
 			} catch (ModelDefinitionException e) {
 				e.printStackTrace();
-				throw new Error("Improperly configured PPMWSClientParameter. ", e);
+				throw new Error("Improperly configured ServerRestClientParameter.", e);
 			}
 			FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
 					.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
@@ -304,6 +314,7 @@ public class ServerRestService {
 			if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
 					|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
 				try {
+					params.setRemember(true);
 					params = FlexoSwingUtils.syncRunInEDT(new ParameterCallable(params));
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -393,5 +404,26 @@ public class ServerRestService {
 			scheduledFuture.cancel(true);
 			started = false;
 		}
+	}
+
+	public boolean isOffline() {
+		return offline;
+	}
+
+	public void setOffline(boolean offline) {
+		if (this.offline != offline) {
+			this.offline = offline;
+			pcSupport.firePropertyChange("offline", !offline, offline);
+		}
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
 	}
 }

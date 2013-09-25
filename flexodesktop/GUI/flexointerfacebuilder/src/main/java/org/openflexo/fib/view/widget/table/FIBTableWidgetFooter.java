@@ -25,8 +25,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -333,14 +334,14 @@ public class FIBTableWidgetFooter extends JPanel {
 		return optionsActionMenu;
 	}
 
-	private Hashtable<FIBTableAction, FIBTableActionListener> _addActions;
-	private Hashtable<FIBTableAction, FIBTableActionListener> _removeActions;
-	private Hashtable<FIBTableAction, FIBTableActionListener> _otherActions;
+	private Map<FIBTableAction, FIBTableActionListener> _addActions;
+	private Map<FIBTableAction, FIBTableActionListener> _removeActions;
+	private Map<FIBTableAction, FIBTableActionListener> _otherActions;
 
 	private void initializeActions(FIBTableWidget tableWidget) {
-		_addActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
-		_removeActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
-		_otherActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
+		_addActions = new LinkedHashMap<FIBTableAction, FIBTableActionListener>();
+		_removeActions = new LinkedHashMap<FIBTableAction, FIBTableActionListener>();
+		_otherActions = new LinkedHashMap<FIBTableAction, FIBTableActionListener>();
 
 		for (FIBTableAction plAction : tableWidget.getComponent().getActions()) {
 			FIBTableActionListener plActionListener = new FIBTableActionListener(plAction, tableWidget);
@@ -355,22 +356,22 @@ public class FIBTableWidgetFooter extends JPanel {
 	}
 
 	public void delete() {
-		for (FIBTableAction a : _addActions.keySet()) {
-			_addActions.get(a).delete();
+		for (FIBTableActionListener a : _addActions.values()) {
+			a.delete();
 		}
-		for (FIBTableAction a : _removeActions.keySet()) {
-			_removeActions.get(a).delete();
+		for (FIBTableActionListener a : _removeActions.values()) {
+			a.delete();
 		}
-		for (FIBTableAction a : _otherActions.keySet()) {
-			_otherActions.get(a).delete();
+		for (FIBTableActionListener a : _otherActions.values()) {
+			a.delete();
 		}
 
 		_widget = null;
 		_fibTable = null;
 	}
 
-	public Enumeration<FIBTableActionListener> getAddActionListeners() {
-		return _addActions.elements();
+	public Collection<FIBTableActionListener> getAddActionListeners() {
+		return _addActions.values();
 	}
 
 	public void setModel(Object model) {

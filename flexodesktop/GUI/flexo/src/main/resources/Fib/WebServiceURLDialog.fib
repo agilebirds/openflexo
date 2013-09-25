@@ -1,37 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" dataClassName="org.openflexo.rest.client.WebServiceURLDialog" width="625" height="300" opaque="false">
-  <Panel layout="gridbag" borderTitle="Panel" constraints="border(location=center)" opaque="false">
-    <Label label="url" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=1;gridX=0;index=1;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=0.0;fill=none)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)">
-      <LocalizedDictionary />
-    </Label>
-    <RadioButtonList format="(object.name + (&quot; (&quot; + (object.uRL + &quot;)&quot;)))" localize="true" name="InstanceSelector" data="data.clientParameter.wSInstance" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=0;gridX=1;index=2;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=1.0;fill=both)" list="data.addressBook.instances" iteratorClassName="org.openflexo.view.controller.FlexoServerInstance" />
-    <Label label="Flexo server instance" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=north_east;gridY=0;gridX=0;index=3;gridWidth=1;insetsTop=6;insetsBottom=3;weightY=0.0;weightX=0.0;fill=none)">
-      <LocalizedDictionary />
-    </Label>
-    <TextField validateOnReturn="true" columns="30" passwd="false" text="TextField" data="data.clientParameter.wSURL" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=1;gridX=1;index=4;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=1.0;fill=horizontal)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)" localize="true" />
-    <Label label="login" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=2;gridX=0;index=5;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)">
-      <LocalizedDictionary />
-    </Label>
-    <TextField validateOnReturn="true" columns="30" passwd="false" text="TextField" data="data.clientParameter.wSLogin" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=2;gridX=1;index=6;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
-    <Label label="password" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=3;gridX=0;index=7;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;fill=none;weightX=0.0)">
-      <LocalizedDictionary />
-    </Label>
-    <TextField validateOnReturn="true" columns="30" passwd="true" text="TextField" data="data.clientParameter.wSPassword" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=center;gridY=3;gridX=1;index=8;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=horizontal;weightX=1.0)" localize="true" />
-    <Label label="web_service_remember_and_dont_ask_params_anymore" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=4;gridX=0;index=9;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="true" localize="true" name="checkbox" data="data.clientParameter.remember" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=4;gridX=1;index=10;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;fill=none;weightX=0.0)" />
-    <Panel layout="buttons" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=5;gridX=0;index=0;gridWidth=2;insetsTop=0;insetsBottom=0;weightY=0.0;fill=horizontal;weightX=0.0)" opaque="false">
-      <Button buttonType="Trigger" label="OK" constraints="flow(index=0)" localize="true" clickAction="controller.validateAndDispose()">
-        <LocalizedDictionary />
-      </Button>
-      <Button buttonType="Trigger" label="Cancel" constraints="flow(index=1)" localize="true" clickAction="controller.cancelAndDispose()">
-        <LocalizedDictionary />
-      </Button>
-      <LocalizedDictionary />
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.WebServiceURLDialog" opaque="false" width="625" height="300">
+  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" constraints="border(location=center)" opaque="false">
+    <Label label="url" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=1;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)" localize="true" />
+    <RadioButtonList columns="1" hGap="0" vGap="-2" index="2" data="data.clientParameter.wSInstance" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=1;gridY=0;index=2;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="InstanceSelector" format="(object.name + (&quot; (&quot; + (object.uRL + &quot;)&quot;)))" localize="true" list="data.addressBook.instances" iteratorClassName="org.openflexo.view.controller.FlexoServerInstance" autoSelectFirstRow="false" />
+    <Label label="Flexo server instance" index="3" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=0;gridY=0;index=3;insetsBottom=3;insetsLeft=5;insetsRight=0;insetsTop=6;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <TextField index="4" data="data.clientParameter.wSURL" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=1;gridY=1;index=4;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)" localize="true" validateOnReturn="true" columns="30" text="TextField" />
+    <Label label="login" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=0;gridY=2;index=5;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <TextField index="6" data="data.clientParameter.wSLogin" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=1;gridY=2;index=6;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" validateOnReturn="true" columns="30" text="TextField" />
+    <Label label="password" index="7" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=0;gridY=3;index=7;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <TextField passwd="true" index="8" data="data.clientParameter.wSPassword" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=1;gridY=3;index=8;insetsBottom=3;insetsLeft=5;insetsRight=5;insetsTop=3;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" validateOnReturn="true" columns="30" text="TextField" />
+    <Panel layout="buttons" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=2;gridX=0;gridY=5;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" opaque="false">
+      <Button buttonType="Trigger" label="OK" default="true" localize="true" clickAction="controller.validateAndDispose()" index="0" constraints="flow(index=0)" />
+      <Button buttonType="Trigger" label="Cancel" localize="true" clickAction="controller.cancelAndDispose()" index="1" constraints="flow(index=1)" />
     </Panel>
-    <LocalizedDictionary />
   </Panel>
   <LocalizedDictionary />
 </Panel>
-

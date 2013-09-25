@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -34,7 +35,7 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectInspectorEntry and FlexoModelObjectPatternRole
 	public enum FlexoObjectType {
-		Process, ProcessFolder, Role, Activity, Operation, Action
+		View, Process, ProcessFolder, Role, Activity, Operation, Action
 	}
 
 	private FlexoObjectType flexoObjectType;
@@ -45,7 +46,12 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 
 	@Override
 	public Type getType() {
+		if (getFlexoObjectType() == null) {
+			return FlexoModelObject.class;
+		}
 		switch (getFlexoObjectType()) {
+		case View:
+			return View.class;
 		case Process:
 			return FlexoProcess.class;
 		case ProcessFolder:

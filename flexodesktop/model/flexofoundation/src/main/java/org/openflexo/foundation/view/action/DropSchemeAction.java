@@ -213,6 +213,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 							- primaryGR.getY()));
 				}
 			}
+			gr.applyInitialConstraints();
 			gr.updateConstraints();
 		} else {
 			logger.warning("Inconsistant data: shape has not been created");
@@ -223,6 +224,12 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		}
 
 		return newShape;
+	}
+
+	@Override
+	protected boolean applyConstraints() {
+		// We do it ourselves
+		return false;
 	}
 
 	@Override
