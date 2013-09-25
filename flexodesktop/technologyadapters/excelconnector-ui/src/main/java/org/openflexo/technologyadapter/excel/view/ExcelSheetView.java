@@ -174,7 +174,15 @@ public class ExcelSheetView extends JPanel {
 			case Cell.CELL_TYPE_STRING:
 				return cell.getStringCellValue();
 			case Cell.CELL_TYPE_FORMULA:
-				return cell.getNumericCellValue();
+				try {
+					return cell.getNumericCellValue();
+				} catch (IllegalStateException e1) {
+					try {
+						return cell.getStringCellValue();
+					} catch (IllegalStateException e2) {
+						return cell;
+					}
+				}
 			case Cell.CELL_TYPE_BOOLEAN:
 				return cell.getBooleanCellValue();
 			case Cell.CELL_TYPE_ERROR:

@@ -120,7 +120,11 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		controlActions.add(ConditionalAction.class);
 		controlActions.add(IterationAction.class);
 		controlActions.add(FetchRequestIterationAction.class);
-
+		
+		// If the model slot is empty, then select the first one
+		if(modelSlot==null && !focusedObject.getVirtualModel().getModelSlots().isEmpty()){
+			modelSlot=(ModelSlot)focusedObject.getVirtualModel().getModelSlots().get(0);
+		}
 	}
 
 	public List<Class<? extends EditionAction>> getBuiltInActions() {
