@@ -62,15 +62,10 @@ public class XSURIProcessor extends XMLURIProcessor {
 	private XSOntProperty baseAttributeForURI;
 
 
-	private XSDModelSlot modelSlot;
 	// Cache des URis Pour aller plus vite ??
 	// TODO some optimization required
 	private Map<String, AbstractXSOntObject> uriCache = new HashMap<String, AbstractXSOntObject>();
 
-
-	public void setModelSlot(XSDModelSlot xsdModelSlot) {
-		modelSlot = xsdModelSlot;
-	}
 
 	// Lifecycle management methods
 	public void reset() {
@@ -78,6 +73,14 @@ public class XSURIProcessor extends XMLURIProcessor {
 		baseAttributeForURI = null;
 	}
 
+
+	// TODO WARNING!!! Pb avec les typeURI....
+	public void _setTypeURI(String name) {
+		typeURI = URI.create(name);
+		bindtypeURIToMappedClass();
+	}
+
+	
 	// TODO
 	public XSOntClass getMappedClass() {
 		if (mappedClass == null && typeURI != null){
@@ -110,6 +113,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 	}
 
 	public void bindtypeURIToMappedClass() {
+		XSDModelSlot modelSlot = (XSDModelSlot) getModelSlot();
 		if (modelSlot != null) {
 			String mmURI = modelSlot.getMetaModelURI();
 			if (mmURI != null) {
