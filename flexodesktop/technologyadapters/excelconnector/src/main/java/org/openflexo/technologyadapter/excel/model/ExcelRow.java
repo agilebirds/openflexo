@@ -21,7 +21,9 @@ public class ExcelRow extends ExcelObject {
 	public ExcelRow(Row row, ExcelTechnologyAdapter adapter) {
 		super(adapter);
 		this.row = row;
-		addToPropertyValue(new ExcelProperty("RowNum", adapter), row.getRowNum());
+		if (row != null) {
+			addToPropertyValue(new ExcelProperty("RowNum", adapter), row.getRowNum());
+		}
 	}
 
 	@Override

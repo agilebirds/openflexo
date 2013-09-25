@@ -40,8 +40,9 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 			Sheet sheet = modelSlotInstance.getResourceData().getWorkbook().createSheet();
 
 			// Instanciate Wrapper.
-			result = modelSlotInstance.getResourceData().getConverter().convertExcelSheetToSheet(sheet, null);
-			modelSlotInstance.getResourceData().addExcelSheet(result);
+			result = modelSlotInstance.getResourceData().getConverter()
+					.convertExcelSheetToSheet(sheet, modelSlotInstance.getResourceData(), null);
+			modelSlotInstance.getResourceData().addToExcelSheets(result);
 			modelSlotInstance.getResourceData().setIsModified();
 
 		} else {
