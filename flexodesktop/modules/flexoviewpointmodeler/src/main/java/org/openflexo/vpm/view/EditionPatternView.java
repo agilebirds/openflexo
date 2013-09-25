@@ -71,27 +71,51 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 		FIBTableWidget localizedTable = (FIBTableWidget) getFIBView("LocalizedTable");
 
 		if (object instanceof PatternRole) {
-			patternRoleTable.setSelectedObject(object);
+			if(patternRoleTable!=null){
+				patternRoleTable.setSelectedObject(object);
+			}	
 		} else if (object instanceof EditionScheme) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(object);
+			}	
 		} else if (object instanceof EditionSchemeParameter) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());	
+			}
+			if(parametersTable!=null){
+				parametersTable.setSelectedObject(object);
+			}
 			// this is not a tab any more
 			// editionSchemePanel.setSelectedIndex(0);
-			parametersTable.setSelectedObject(object);
 		} else if (object instanceof EditionAction) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
+			}
 			// this is not a tab any more
 			// editionSchemePanel.setSelectedIndex(1);
-			editionActionBrowser.setSelectedObject(object);
+			if(editionActionBrowser!=null){
+				editionActionBrowser.setSelectedObject(object);
+			}
 		} else if (object instanceof EditionPatternInspector) {
-			mainTabPanel.setSelectedIndex(1);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(1);
+			}
 		} else if (object instanceof InspectorEntry) {
-			mainTabPanel.setSelectedIndex(1);
-			inspectorPropertyTable.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(1);
+			}
+			if(inspectorPropertyTable!=null){
+				inspectorPropertyTable.setSelectedObject(object);
+			}
 		}
 	}
 }

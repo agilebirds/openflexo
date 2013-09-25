@@ -35,7 +35,7 @@
       </Custom>
       <Label label="model" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <Custom componentClassName="org.openflexo.components.widget.FIBModelSelector" localize="true" manageDynamicModel="true" name="ModelSelector" data="SelectExistingModelPanel.data.modelResource" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-        <Assignment variable="component.technologyAdapter" />
+        <Assignment variable="component.technologyAdapter" value="data.modelSlot.technologyAdapter"/>
         <Assignment variable="component.informationSpace" value="data.action.virtualModel.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
         <Assignment variable="component.project" value="data.action.editor.project" />
         <Assignment variable="component.selectableCondition" />

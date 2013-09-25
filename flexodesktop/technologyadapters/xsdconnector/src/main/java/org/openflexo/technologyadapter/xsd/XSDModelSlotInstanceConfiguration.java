@@ -21,13 +21,13 @@ public class XSDModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 			filename = "myXMLFile"
 					+ getModelSlot().getTechnologyAdapter().getExpectedModelExtension(
 							(XSDMetaModelResource) getModelSlot().getMetaModelResource());
-		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+		} /*else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelUri = "ResourceCenter/Models/";
 			relativePath = "/";
 			filename = "myXMLFile"
 					+ getModelSlot().getTechnologyAdapter().getExpectedModelExtension(
 							(XSDMetaModelResource) getModelSlot().getMetaModelResource());
-		}
+		}*/
 	}
 
 }
