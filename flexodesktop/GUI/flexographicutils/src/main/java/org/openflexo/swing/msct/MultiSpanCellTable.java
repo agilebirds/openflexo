@@ -25,6 +25,21 @@ public class MultiSpanCellTable extends JTable {
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	}
 
+	/**
+	 * Return cumulative row height from startIndex (inclusive) to endIndex (exclusive)
+	 * 
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
+	 */
+	private int getCumulativeRowHeight(int startIndex, int endIndex) {
+		int returned = 0;
+		for (int i = startIndex; i < endIndex; i++) {
+			returned += getRowHeight(i);
+		}
+		return returned;
+	}
+
 	@Override
 	public Rectangle getCellRect(int row, int column, boolean includeSpacing) {
 		Rectangle sRect = super.getCellRect(row, column, includeSpacing);
@@ -43,9 +58,11 @@ public class MultiSpanCellTable extends JTable {
 		int index = 0;
 		int columnMargin = getColumnModel().getColumnMargin();
 		Rectangle cellFrame = new Rectangle();
-		int aCellHeight = rowHeight + rowMargin;
+		/*int aCellHeight = rowHeight + rowMargin;
 		cellFrame.y = row * aCellHeight;
-		cellFrame.height = n[CellSpan.ROW] * aCellHeight;
+		cellFrame.height = n[CellSpan.ROW] * aCellHeight;*/
+		cellFrame.y = getCumulativeRowHeight(0, row);
+		cellFrame.height = getCumulativeRowHeight(row, row + n[CellSpan.ROW]);
 
 		Enumeration eeration = getColumnModel().getColumns();
 		while (eeration.hasMoreElements()) {
@@ -71,7 +88,15 @@ public class MultiSpanCellTable extends JTable {
 
 	private int[] rowColumnAtPoint(Point point) {
 		int[] retValue = { -1, -1 };
-		int row = point.y / (rowHeight + rowMargin);
+		int currentHeight = 0;
+		int row = super.rowAtPoint(point);
+		/*int row = 0;
+		while (point.y > currentHeight) {
+			currentHeight += getRowHeight(row);
+			row++;
+		}*/
+
+		// int row = point.y / (rowHeight + rowMargin);
 		if ((row < 0) || (getRowCount() <= row))
 			return retValue;
 		int column = getColumnModel().getColumnIndexAtX(point.x);

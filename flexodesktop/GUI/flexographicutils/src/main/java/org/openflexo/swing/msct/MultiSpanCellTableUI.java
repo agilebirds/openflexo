@@ -27,18 +27,32 @@ class MultiSpanCellTableUI extends BasicTableUI {
 		int firstIndex = table.rowAtPoint(new Point(0, clipBounds.y));
 		int lastIndex = table.getRowCount() - 1;
 
-		Rectangle rowRect = new Rectangle(0, 0, tableWidth, table.getRowHeight() + table.getRowMargin());
-		rowRect.y = firstIndex * rowRect.height;
-
+		int heightForRow = getCumulativeRowHeight(0, firstIndex);
 		for (int index = firstIndex; index <= lastIndex; index++) {
+			Rectangle rowRect = new Rectangle(0, heightForRow, tableWidth, table.getRowHeight(index));
 			if (rowRect.intersects(clipBounds)) {
 				// System.out.println(); // debug
 				// System.out.print("" + index +": "); // row
 				paintRow(g, index);
 			}
-			rowRect.y += rowRect.height;
+			heightForRow += table.getRowHeight(index);
 		}
 		g.setClip(oldClipBounds);
+	}
+
+	/**
+	 * Return cumulative row height from startIndex (inclusive) to endIndex (exclusive)
+	 * 
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
+	 */
+	private int getCumulativeRowHeight(int startIndex, int endIndex) {
+		int returned = 0;
+		for (int i = startIndex; i < endIndex; i++) {
+			returned += table.getRowHeight(i);
+		}
+		return returned;
 	}
 
 	private void paintRow(Graphics g, int row) {
