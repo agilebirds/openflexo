@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -83,19 +84,25 @@ public class ExcelSheetView extends JPanel {
 		// table.setShowVerticalLines(true);
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			TableColumn col = table.getColumnModel().getColumn(i);
-			// FlexoLocalization.localizedForKey(getController().getLocalizer(),getTableModel().columnAt(i).getTitle());
-			col.setWidth(sheet.getSheet().getColumnWidth(i) / 20);
-			col.setPreferredWidth(sheet.getSheet().getColumnWidth(i) / 20);
-			// col.setMinWidth(sheet.getSheet().getColumnWidth(i) / 8);
-			// col.setMaxWidth(sheet.getSheet().getColumnWidth(i) / 8);
-			System.out.println("Column " + i + " size=" + sheet.getSheet().getColumnWidth(i) / 20);
+			if (i == 0) {
+				col.setWidth(25);
+				col.setPreferredWidth(25);
+				col.setMinWidth(25);
+				col.setMaxWidth(25);
+				col.setResizable(false);
+				col.setHeaderValue(null);
+			} else {
+				col.setWidth(sheet.getSheet().getColumnWidth(i - 1) / 40);
+				col.setPreferredWidth(sheet.getSheet().getColumnWidth(i - 1) / 40);
+				col.setHeaderValue("" + Character.toChars(i + 64)[0]);
+			}
 		}
 		table.setDefaultRenderer(Object.class, new ExcelSheetCellRenderer());
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		add(new JScrollPane(table), BorderLayout.CENTER);
 		validate();
 
 		for (Row row : sheet.getSheet()) {
-			System.out.println("Height for row " + row.getRowNum() + " is " + (int) row.getHeightInPoints());
 			table.setRowHeight(row.getRowNum(), (int) row.getHeightInPoints());
 		}
 
@@ -136,17 +143,16 @@ public class ExcelSheetView extends JPanel {
 	class ExcelSheetTableModel extends MultiSpanCellTableModel {
 
 		public ExcelSheetTableModel() {
-			super(sheet.getExcelRows().size(), sheet.getMaxColNumber() /*+ 16*/);
+			super(sheet.getExcelRows().size(), sheet.getMaxColNumber() + 1 /*+ 16*/);
 			for (int i = 0; i < sheet.getSheet().getNumMergedRegions(); i++) {
 				CellRangeAddress cellRange = sheet.getSheet().getMergedRegion(i);
-				System.out.println("Merged: " + cellRange);
 				int[] rows = new int[cellRange.getLastRow() - cellRange.getFirstRow() + 1];
 				for (int index = cellRange.getFirstRow(); index <= cellRange.getLastRow(); index++) {
 					rows[index - cellRange.getFirstRow()] = index;
 				}
 				int[] columns = new int[cellRange.getLastColumn() - cellRange.getFirstColumn() + 1];
 				for (int index = cellRange.getFirstColumn(); index <= cellRange.getLastColumn(); index++) {
-					columns[index - cellRange.getFirstColumn()] = index;
+					columns[index - cellRange.getFirstColumn()] = index + 1;
 				}
 				((CellSpan) getCellAttribute()).combine(rows, columns);
 			}
@@ -154,6 +160,8 @@ public class ExcelSheetView extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int column) {
+			if (column == 0)
+				return row + 1;
 			Cell cell = getCellAt(row, column);
 			if (cell == null) {
 				return "";
@@ -176,12 +184,14 @@ public class ExcelSheetView extends JPanel {
 		};
 
 		public Cell getCellAt(int row, int column) {
+			if (column == 0)
+				return null;
 			if (row >= 0 && row < getSheet().getExcelRows().size()) {
 				ExcelRow excelRow = getSheet().getExcelRows().get(row);
 				if (excelRow.getRow() == null) {
 					return null;
 				}
-				return excelRow.getRow().getCell(column);
+				return excelRow.getRow().getCell(column - 1);
 			}
 			return null;
 		}
@@ -208,15 +218,32 @@ public class ExcelSheetView extends JPanel {
 			Border border = null;
 			Font font = null;
 
+			DefaultTableCellRenderer returned = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected,
+					hasFocus, row, column);
+
+			if (column == 0) {
+
+				JTableHeader header = table.getTableHeader();
+
+				if (header != null) {
+					returned.setHorizontalAlignment(SwingConstants.CENTER);
+					returned.setForeground(header.getForeground());
+					returned.setBackground(header.getBackground());
+					returned.setFont(header.getFont());
+				}
+				if (isSelected) {
+					returned.setFont(getFont().deriveFont(Font.BOLD));
+				}
+				returned.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+				return returned;
+			}
+
 			Cell cell = tableModel.getCellAt(row, column);
 			if (cell == null) {
 				// border = new EmptyCellBorder();
 			} else {
 				border = new CellBorder(row, column);
 			}
-
-			DefaultTableCellRenderer returned = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected,
-					hasFocus, row, column);
 
 			if (cell != null) {
 				CellStyle style = cell.getCellStyle();
@@ -253,7 +280,7 @@ public class ExcelSheetView extends JPanel {
 				returned.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
 				if (table.isCellEditable(row, column)) {
 					returned.setForeground((foreground != null) ? foreground : UIManager.getColor("Table.focusCellForeground"));
-					returned.setBackground(UIManager.getColor("Table.focusCellBackground"));
+					returned.setBackground(Color.BLUE/*UIManager.getColor("Table.focusCellBackground")*/);
 				}
 			} else {
 				returned.setBorder(border != null ? border : noFocusBorder);
