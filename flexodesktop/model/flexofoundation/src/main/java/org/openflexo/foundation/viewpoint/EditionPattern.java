@@ -877,7 +877,7 @@ public class EditionPattern extends EditionPatternObject {
 
 		@Override
 		public ValidationIssue<EditionPatternShouldHaveRoles, EditionPattern> applyValidation(EditionPattern editionPattern) {
-			if (editionPattern.getPatternRoles().size() == 0) {
+			if (!(editionPattern instanceof VirtualModel) && editionPattern.getPatternRoles().size() == 0) {
 				return new ValidationWarning<EditionPatternShouldHaveRoles, EditionPattern>(this, editionPattern,
 						"edition_pattern_role_has_no_role");
 			}
