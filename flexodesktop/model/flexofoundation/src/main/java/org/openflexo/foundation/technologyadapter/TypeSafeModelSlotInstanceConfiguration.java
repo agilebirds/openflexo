@@ -57,7 +57,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
+		//options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -106,7 +106,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 			} else {
 				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
 			}
-		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+		} /*else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
 			if (modelResource != null) {
 				msInstance.setResourceData(getModelResource().getModel());
@@ -115,7 +115,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}
 			return msInstance;
-		}
+		}*/
 		return null;
 	}
 
@@ -124,10 +124,10 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 				modelSlot.getMetaModelResource());
 	}
 
-	private FlexoModelResource<M, MM> createSharedEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
+	/*private FlexoModelResource<M, MM> createSharedEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
-	}
+	}*/
 
 	public FlexoResourceCenter getResourceCenter() {
 		return resourceCenter;
@@ -186,11 +186,11 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 			return StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+		}/* else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		}
+		}*/
 		return false;
 	}
 }
