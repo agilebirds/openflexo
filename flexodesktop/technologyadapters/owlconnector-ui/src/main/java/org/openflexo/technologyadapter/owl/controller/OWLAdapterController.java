@@ -179,7 +179,7 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
-		} 
+		}
 		if (AddDataPropertyStatement.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(DataPropertyStatement.class), IconLibrary.DUPLICATE);
 		}
@@ -191,16 +191,23 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 		}
 		if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(SubClassStatement.class), IconLibrary.DUPLICATE);
-		}
-		else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
+		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLClass.class), IconLibrary.DUPLICATE);
 		}
 		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		return object instanceof OWLOntology;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof OWLOntology) {
+			return ((OWLOntology) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override

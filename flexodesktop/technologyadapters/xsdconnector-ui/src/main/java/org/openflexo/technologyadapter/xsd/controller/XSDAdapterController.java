@@ -150,8 +150,19 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		return object instanceof XSDMetaModel || object instanceof XMLXSDModel;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof XMLXSDModel) {
+			return ((XMLXSDModel) object).getName();
+		}
+		if (object instanceof XSDMetaModel) {
+			return ((XSDMetaModel) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override
