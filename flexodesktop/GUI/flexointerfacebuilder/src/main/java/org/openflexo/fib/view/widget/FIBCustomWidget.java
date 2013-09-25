@@ -154,18 +154,23 @@ BindingEvaluationContext {
 	public synchronized boolean updateModelFromWidget(boolean forceUpdate) {
 		if (forceUpdate || notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
-			if (getWidget().getValueChangedAction().isValid()) {
-				try {
-					getWidget().getValueChangedAction().execute(getBindingEvaluationContext());
-				} catch (TypeMismatchException e) {
-					e.printStackTrace();
-				} catch (NullReferenceException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+			FIBCustom widget = getWidget();
+			// NPE Protection
+			if (widget != null) {
+				DataBinding<?> db = widget.getValueChangedAction();
+				if (db != null && db.isValid()) {
+					try {
+						db.execute(getBindingEvaluationContext());
+					} catch (TypeMismatchException e) {
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					return true;
 				}
 			}
-			return true;
 		}
 		return false;
 	}
