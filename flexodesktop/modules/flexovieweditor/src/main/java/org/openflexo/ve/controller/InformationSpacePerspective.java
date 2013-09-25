@@ -100,7 +100,7 @@ public class InformationSpacePerspective extends FlexoPerspective {
 			TechnologyAdapter ta = ((TechnologyObject) object).getTechnologyAdapter();
 			TechnologyAdapterController<?> tac = _controller.getApplicationContext().getTechnologyAdapterControllerService()
 					.getTechnologyAdapterController(ta);
-			return tac.hasModuleViewForObject(object);
+			return tac.hasModuleViewForObject((TechnologyObject) object);
 		}
 		return false;
 	}
