@@ -173,7 +173,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 
 
 	// TODO, TO BE OPTIMIZED
-	public List<XMLIndividual> getIndividualsOfType(XMLType aType) {
+	public List<XMLIndividual> getIndividualsOfType(IXMLType aType) {
 		ArrayList<XMLIndividual> returned = new ArrayList<XMLIndividual>();
 		for (XMLIndividual o : individuals.values()){
 			if (o.getType() == aType) {

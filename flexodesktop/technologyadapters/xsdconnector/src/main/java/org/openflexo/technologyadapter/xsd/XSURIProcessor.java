@@ -34,6 +34,9 @@ import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xml.XMLURIProcessor;
+import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
+import org.openflexo.technologyadapter.xml.model.IXMLType;
+import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
@@ -56,10 +59,6 @@ public class XSURIProcessor extends XMLURIProcessor {
 
 	// Properties actually used to calculate URis
 
-	// TODO ça c'est CACA!
-	// TODO getter/setter sur mappedClass + modif de l'URI en fonction de .....
-	private XSOntClass mappedClass;
-	private XSOntProperty baseAttributeForURI;
 
 
 	// Cache des URis Pour aller plus vite ??
@@ -70,7 +69,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 	// Lifecycle management methods
 	public void reset() {
 		super.reset();
-		baseAttributeForURI = null;
+		this.setBaseAttributeForURI(null);
 	}
 
 
@@ -82,7 +81,9 @@ public class XSURIProcessor extends XMLURIProcessor {
 
 
 	// TODO
-	public XSOntClass getMappedClass() {
+	@Override
+	public IXMLType getMappedClass() {
+		IXMLType mappedClass = super.getMappedClass();
 		if (mappedClass == null && typeURI != null){
 			bindtypeURIToMappedClass();
 		}
@@ -90,29 +91,17 @@ public class XSURIProcessor extends XMLURIProcessor {
 	}
 
 	// TODO
-	public void setMappedClass(XSOntClass mappedClass) {
-		this.mappedClass = mappedClass;
-		if (mappedClass != null){
+	@Override
+	public void setMappedClass(IXMLType mappedClass) {
+		super.setMappedClass(mappedClass);
+		if (mappedClass != null && !mappedClass.getURI().equals(_getTypeURI())){
 			_setTypeURI(mappedClass.getURI());
 		}
 		setChanged();
 		notifyObservers();
 	}
 
-	// FIXME do this propre
-	public XSOntProperty getBaseAttributeForURI() {
-		if (mappedClass == null && typeURI != null){
-			bindtypeURIToMappedClass();
-		}
-		return baseAttributeForURI;
-	}
 
-	public void setBaseAttributeForURI(XSOntProperty baseAttributeForURI) {
-		this.baseAttributeForURI = baseAttributeForURI;
-		if (this.baseAttributeForURI != null ){
-			this.attributeName = this.baseAttributeForURI.getName();
-		}
-	}
 
 	public void bindtypeURIToMappedClass() {
 		XSDModelSlot modelSlot = (XSDModelSlot) getModelSlot();
@@ -122,15 +111,15 @@ public class XSURIProcessor extends XMLURIProcessor {
 				// FIXME : to be re-factored
 				XSDMetaModelResource mmResource = (XSDMetaModelResource) modelSlot.getMetaModelResource();
 				if (mmResource != null) {
-					mappedClass = mmResource.getMetaModelData().getClass(typeURI.toString());
+					setMappedClass(mmResource.getMetaModelData().getClass(typeURI.toString()));
 					if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
-						baseAttributeForURI = (XSOntProperty) mappedClass.getPropertyByName(attributeName);
+						setBaseAttributeForURI((XSOntProperty) ((XSOntClass) getMappedClass()).getPropertyByName(attributeName));
 					}
 				} else {
 					XSDModelSlot.logger.warning("unable to map typeURI to an OntClass, as metaModelResource is Null ");
 				}
 			} else
-				mappedClass = null;
+				setMappedClass(null);
 		} else {
 			XSDModelSlot.logger.warning("unable to map typeURI to an OntClass, as modelSlot is Null ");
 		}
@@ -143,17 +132,17 @@ public class XSURIProcessor extends XMLURIProcessor {
 		StringBuffer completeURIStr = new StringBuffer();
 
 		// if processor not initialized
-		if (mappedClass == null) {
+		if (getMappedClass() == null) {
 			bindtypeURIToMappedClass();
 		}
 		// processor should be initialized
-		if (mappedClass == null) {
+		if (getMappedClass() == null) {
 			XSDModelSlot.logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
 			return null;
 		} else {
-			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null && mappedClass != null) {
+			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null && getMappedClass() != null) {
 
-				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
+				XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
 				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);
 				try {
 					builtURI = URLEncoder.encode(value.toString(),"UTF-8");
@@ -191,7 +180,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 		AbstractXSOntObject o = uriCache.get(objectURI);
 
 		// if processor not initialized
-		if (mappedClass == null) {
+		if (getMappedClass() == null) {
 			bindtypeURIToMappedClass();
 		}
 
@@ -199,19 +188,20 @@ public class XSURIProcessor extends XMLURIProcessor {
 
 		FlexoModelResource<XMLXSDModel, XSDMetaModel> resource = (FlexoModelResource<XMLXSDModel, XSDMetaModel>) msInstance.getResource();
 
-		if (!resource.isLoaded()) {
-			resource.getModelData();
-		}
+		// should not be a preoccupation of XSURI
+		// if (!resource.isLoaded()) {
+		// 	resource.getModelData();
+		// }
 
 		// retrieve object
 		if (o == null) {
 
 			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
 
-				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
+				XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
 				String attrValue = URI.create(objectURI).getQuery();
 
-				for (XSOntIndividual obj: ((XSOntology) resource.getModel()).getIndividualsOfClass(mappedClass)){
+				for (XSOntIndividual obj: ((XSOntology) resource.getModel()).getIndividualsOfClass(getMappedClass())){
 
 					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(aProperty);
 					try {
@@ -225,8 +215,8 @@ public class XSURIProcessor extends XMLURIProcessor {
 				}
 
 			} 	else if (mappingStyle == MappingStyle.SINGLETON ){
-				List<?> indivList = ((XSOntology) msInstance.getResourceData()).getIndividualsOfClass(mappedClass);
-				if (indivList.size() != 1) {
+				List<?> indivList = ((XSOntology) msInstance.getResourceData()).getIndividualsOfClass(getMappedClass());
+				if (indivList.size() > 1) {
 					throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type " + this._getTypeURI().toString());
 				}
 				else if (indivList.size() ==0){

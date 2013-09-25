@@ -191,8 +191,8 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, Object o) {
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
-		String ltypeURI = ((XSOntClass) xsO.getType()).getURI();
-		XSURIProcessor mapParams = uriProcessorsMap.get(ltypeURI);
+		XSOntClass lClass = ((XSOntClass) xsO.getType());
+		XSURIProcessor mapParams = retrieveURIProcessorForType(lClass);
 
 		if (mapParams != null){
 			return mapParams.getURIForObject((TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
@@ -204,10 +204,41 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 
 	}
 
+	public XSURIProcessor retrieveURIProcessorForType(XSOntClass aClass){
+
+		logger.info("SEARCHING for an uriProcessor for "  + aClass.getURI());
+		
+		XSURIProcessor mapParams = uriProcessorsMap.get(aClass.getURI());
+		
+		if (mapParams == null ){
+			for (XSOntClass s : aClass.getSuperClasses()){
+				if (mapParams == null) {
+					// on ne cherche que le premier...
+					logger.info("SEARCHING for an uriProcessor for "  + s.getURI());
+					if (mapParams == null) {
+						mapParams = retrieveURIProcessorForType(s);
+					}
+				}
+			}
+			if (mapParams != null) {
+				logger.info("UPDATING the MapUriProcessors for an uriProcessor for "  + aClass.getURI());
+				uriProcessorsMap.put(aClass.getURI(), mapParams);
+			}
+		}
+		return mapParams;
+	}
+
 	@Override
 	public Object retrieveObjectWithURI(TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
+		String typeUri = XSURIProcessor.retrieveTypeURI(msInstance, objectURI);
+		XMLXSDModel model = msInstance.getModel();
+		XSURIProcessor mapParams =  uriProcessorsMap.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
+		if (mapParams == null){
+			// Look for a processor in superClasses
+			XSOntClass aClass = (XSOntClass) model.getMetaModel().getTypeFromURI(typeUri);
+			mapParams = retrieveURIProcessorForType(aClass);
+		}
 
-		XSURIProcessor mapParams = uriProcessorsMap.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
 		if (mapParams != null){
 			try {
 				return mapParams.retrieveObjectWithURI(msInstance, objectURI);
