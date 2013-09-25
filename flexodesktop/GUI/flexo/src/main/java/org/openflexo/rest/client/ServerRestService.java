@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.io.FileUtils;
@@ -151,6 +152,16 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				JobHistory history = jobHistory.get(0);
 				String uuid = history.getJobResult();
 				ClientResponse response = client.files(createClient, client.getBASE_URI()).getAsOctetStream(uuid, ClientResponse.class);
+				if (response.getStatus() >= 400) {
+					String message = "";
+					try {
+						message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
+							.entity(message).build());
+				}
 				String fileName = uuid;
 				List<String> list = response.getHeaders().get("content-disposition");
 				for (String string : list) {
