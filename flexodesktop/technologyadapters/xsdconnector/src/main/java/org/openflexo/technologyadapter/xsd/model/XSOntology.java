@@ -220,8 +220,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntIndividual createOntologyIndividual(XSOntClass type)  {
 
 		XSOntIndividual individual = new XSOntIndividual(getTechnologyAdapter());
-		individual.setName(type.getName());
-		individual.setType(type);
+		if (type != null){
+			individual.setName(type.getName());
+			individual.setType(type);
+		}
 		return individual;
 	}	
 

@@ -120,7 +120,9 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 		} else {
 			if (getPatternRole() != null) {
 				// System.out.println("Je reponds avec le pattern role " + getPatternRole());
-				return getPatternRole().getOntologicType();
+				IFlexoOntologyClass t = getPatternRole().getOntologicType();
+				setOntologyClass(t);
+				return t;
 			}
 		}
 		// System.out.println("Je reponds null");

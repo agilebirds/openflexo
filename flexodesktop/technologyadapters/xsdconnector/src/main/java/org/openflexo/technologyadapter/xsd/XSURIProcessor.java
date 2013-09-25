@@ -80,7 +80,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 		bindtypeURIToMappedClass();
 	}
 
-	
+
 	// TODO
 	public XSOntClass getMappedClass() {
 		if (mappedClass == null && typeURI != null){
@@ -107,9 +107,11 @@ public class XSURIProcessor extends XMLURIProcessor {
 		return baseAttributeForURI;
 	}
 
-	// TODO
 	public void setBaseAttributeForURI(XSOntProperty baseAttributeForURI) {
 		this.baseAttributeForURI = baseAttributeForURI;
+		if (this.baseAttributeForURI != null ){
+			this.attributeName = this.baseAttributeForURI.getName();
+		}
 	}
 
 	public void bindtypeURIToMappedClass() {
