@@ -23,8 +23,6 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 	
 	private List<ShapePatternRole> _possibleParentPatternRole;
 
-	private boolean isParentShapeDefinedInAction;
-	
 	public ShapePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -110,22 +108,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 		return getParentShapePatternRole() == null;
 	}
 
-	public boolean isParentShapeDefinedInAction() {
-		return isParentShapeDefinedInAction;
-	}
-
-	public void setParentShapeDefinedInAction(boolean isParentShapeDefinedInAction) {
-		this.isParentShapeDefinedInAction = isParentShapeDefinedInAction;
-		// System.out.println(">>>> setParentShapeAsDefinedInAction() with " + flag);
-		if (!this.isParentShapeDefinedInAction && _possibleParentPatternRole.size() > 0) {
-			setParentShapePatternRole(_possibleParentPatternRole.get(0));
-		} else {
-			// System.out.println("setParentShapePatternRole with null");
-			setParentShapePatternRole(null);
-		}
-	}
-	
-	/*public void setParentShapeAsDefinedInAction(boolean flag) {
+	public void setParentShapeAsDefinedInAction(boolean flag) {
 		// System.out.println(">>>> setParentShapeAsDefinedInAction() with " + flag);
 		if (!flag && _possibleParentPatternRole.size() > 0) {
 			setParentShapePatternRole(_possibleParentPatternRole.get(0));
@@ -134,7 +117,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 			setParentShapePatternRole(null);
 			flag = true;
 		}
-	}*/
+	}
 
 	// Get the list of shape pattern roles that can be set as parent shape pattern role.
 	// These possible shapes are the edition pattern other shapes excepted itself
