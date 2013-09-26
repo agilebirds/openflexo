@@ -8,6 +8,12 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
+/**
+ * Represents an Excel sheet, implemented as a wrapper of a POI sheet
+ * 
+ * @author vincent, sylvain
+ * 
+ */
 public class ExcelSheet extends ExcelObject {
 
 	private Map<ExcelProperty, ExcelPropertyValue> values = new HashMap<ExcelProperty, ExcelPropertyValue>();
@@ -61,6 +67,27 @@ public class ExcelSheet extends ExcelObject {
 			}
 		}
 		return returned;
+	}
+
+	public ExcelRow getRowAt(int row) {
+		if (row < 0) {
+			return null;
+		}
+		// Append missing rows
+		while (getExcelRows().size() <= row) {
+			addToExcelRows(new ExcelRow(null, this, getTechnologyAdapter()));
+		}
+		return getExcelRows().get(row);
+	}
+
+	public ExcelCell getCellAt(int row, int column) {
+		if (row < 0) {
+			return null;
+		}
+		if (column < 0) {
+			return null;
+		}
+		return getRowAt(row).getCellAt(column);
 	}
 
 	@Override

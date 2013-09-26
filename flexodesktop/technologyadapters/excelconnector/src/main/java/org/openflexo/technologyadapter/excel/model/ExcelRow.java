@@ -8,22 +8,52 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Row;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
+/**
+ * Represents an Excel row, implemented as a wrapper of a POI row
+ * 
+ * @author vincent, sylvain
+ * 
+ */
 public class ExcelRow extends ExcelObject {
 
 	private Map<ExcelProperty, ExcelPropertyValue> values = new HashMap<ExcelProperty, ExcelPropertyValue>();
 
 	private Row row;
+	private ExcelSheet excelSheet;
+	private List<ExcelCell> excelCells;
 
 	public Row getRow() {
 		return row;
 	}
 
-	public ExcelRow(Row row, ExcelTechnologyAdapter adapter) {
+	public ExcelRow(Row row, ExcelSheet excelSheet, ExcelTechnologyAdapter adapter) {
 		super(adapter);
 		this.row = row;
+		this.excelSheet = excelSheet;
+		excelCells = new ArrayList<ExcelCell>();
 		if (row != null) {
 			addToPropertyValue(new ExcelProperty("RowNum", adapter), row.getRowNum());
 		}
+	}
+
+	public ExcelSheet getExcelSheet() {
+		return excelSheet;
+	}
+
+	public List<ExcelCell> getExcelCells() {
+		return excelCells;
+	}
+
+	public void setExcelCells(List<ExcelCell> excelCells) {
+		this.excelCells = excelCells;
+	}
+
+	public void addToExcelCells(ExcelCell newExcelCell) {
+		this.excelCells.add(newExcelCell);
+	}
+
+	public void removeFromExcelCells(ExcelCell deletedExcelCell) {
+		this.excelCells.remove(deletedExcelCell);
 	}
 
 	@Override
@@ -58,6 +88,21 @@ public class ExcelRow extends ExcelObject {
 	public ExcelPropertyValue removeFromPropertyValue(ExcelProperty property, Object valueToRemove) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public ExcelCell getExcelCell(int columnIndex) {
+		return getCellAt(columnIndex);
+	}
+
+	public ExcelCell getCellAt(int columnIndex) {
+		if (columnIndex < 0) {
+			return null;
+		}
+		// Append missing cells
+		while (getExcelCells().size() <= columnIndex) {
+			addToExcelCells(new ExcelCell(null, this, getTechnologyAdapter()));
+		}
+		return getExcelCells().get(columnIndex);
 	}
 
 }
