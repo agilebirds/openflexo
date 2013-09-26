@@ -42,19 +42,19 @@ import javax.swing.table.TableColumn;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.openflexo.swing.msct.CellSpan;
 import org.openflexo.swing.msct.MultiSpanCellTable;
 import org.openflexo.swing.msct.MultiSpanCellTableModel;
-import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.view.controller.FlexoController;
 
 /**
  * Widget allowing to edit/view a ExcelSheet.<br>
+ * We use here an implementation of a MultiSpanCellTable to do it.
  * 
  * @author sguerin
  * 
@@ -77,8 +77,8 @@ public class ExcelSheetView extends JPanel {
 		table = new MultiSpanCellTable(tableModel);
 		table.setBackground(Color.WHITE);
 		table.setShowGrid(true);
-		table.setRowMargin(-1);
-		table.getColumnModel().setColumnMargin(-1);
+		table.setRowMargin(0);
+		table.getColumnModel().setColumnMargin(0);
 
 		// table.setShowHorizontalLines(true);
 		// table.setShowVerticalLines(true);
@@ -140,6 +140,13 @@ public class ExcelSheetView extends JPanel {
 		return sheet;
 	}
 
+	/**
+	 * Inner class encoding a table model wrapping the sheet model.<br>
+	 * Note than index of the row is used as the first column, then all columns indexes are shift of one unit
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	class ExcelSheetTableModel extends MultiSpanCellTableModel {
 
 		public ExcelSheetTableModel() {
@@ -162,46 +169,14 @@ public class ExcelSheetView extends JPanel {
 		public Object getValueAt(int row, int column) {
 			if (column == 0)
 				return row + 1;
-			Cell cell = getCellAt(row, column);
-			if (cell == null) {
-				return "";
-			}
-			switch (cell.getCellType()) {
-			case Cell.CELL_TYPE_BLANK:
-				return "";
-			case Cell.CELL_TYPE_NUMERIC:
-				return cell.getNumericCellValue();
-			case Cell.CELL_TYPE_STRING:
-				return cell.getStringCellValue();
-			case Cell.CELL_TYPE_FORMULA:
-				try {
-					return cell.getNumericCellValue();
-				} catch (IllegalStateException e1) {
-					try {
-						return cell.getStringCellValue();
-					} catch (IllegalStateException e2) {
-						return cell;
-					}
-				}
-			case Cell.CELL_TYPE_BOOLEAN:
-				return cell.getBooleanCellValue();
-			case Cell.CELL_TYPE_ERROR:
-				return "!ERROR:" + cell.getErrorCellValue();
-			}
-			return cell;
+			ExcelCell cell = getCellAt(row, column);
+			return cell.getDisplayValue();
 		};
 
-		public Cell getCellAt(int row, int column) {
+		public ExcelCell getCellAt(int row, int column) {
 			if (column == 0)
 				return null;
-			if (row >= 0 && row < getSheet().getExcelRows().size()) {
-				ExcelRow excelRow = getSheet().getExcelRows().get(row);
-				if (excelRow.getRow() == null) {
-					return null;
-				}
-				return excelRow.getRow().getCell(column - 1);
-			}
-			return null;
+			return getSheet().getCellAt(row, column - 1);
 		}
 
 		public ExcelSheet getSheet() {
@@ -209,6 +184,12 @@ public class ExcelSheetView extends JPanel {
 		}
 	}
 
+	/**
+	 * This is the renderer of an excel sheet
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	class ExcelSheetCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
 		protected Border noFocusBorder;
 
@@ -246,15 +227,15 @@ public class ExcelSheetView extends JPanel {
 				return returned;
 			}
 
-			Cell cell = tableModel.getCellAt(row, column);
-			if (cell == null) {
+			ExcelCell cell = tableModel.getCellAt(row, column);
+			if (cell.getCell() == null) {
 				// border = new EmptyCellBorder();
 			} else {
 				border = new CellBorder(row, column);
 			}
 
-			if (cell != null) {
-				CellStyle style = cell.getCellStyle();
+			if (cell.getCell() != null) {
+				CellStyle style = cell.getCell().getCellStyle();
 				if (style != null) {
 					background = getBackgroundColor(style);
 					foreground = getForegroundColor(style);
@@ -322,41 +303,52 @@ public class ExcelSheetView extends JPanel {
 
 		}*/
 
+		/**
+		 * Inner class implementing cell border rendering.<br>
+		 * A trick happen here: to avoid representing bold lines for two adjacents cells requiring a border, we represent in the rendering
+		 * of the cell only the top and left borders, when necessary.<br>
+		 * The rendering of right and bottom borders are necessary if and only if respectively the right and bottom cells require a left and
+		 * top border.
+		 * 
+		 * @author sylvain
+		 * 
+		 */
 		class CellBorder implements Border {
 
-			private Cell cell;
-			private Cell bottomCell;
-			private Cell rightCell;
+			private ExcelCell cell;
 
 			public CellBorder(int row, int column) {
 				this.cell = tableModel.getCellAt(row, column);
-				bottomCell = tableModel.getCellAt(row + 1, column);
-				rightCell = tableModel.getCellAt(row, column + 1);
 			}
 
+			/**
+			 * Paint the border<br>
+			 * A trick happen here: to avoid representing bold lines for two adjacents cells requiring a border, we represent in the
+			 * rendering of the cell only the top and left borders, when necessary.<br>
+			 * The rendering of right and bottom borders are necessary if and only if respectively the right and bottom cells require a left
+			 * and top border.
+			 */
 			@Override
 			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 				Color oldColor = g.getColor();
 
 				if (hasTopBorder()) {
-					g.setColor(getColor(cell.getCellStyle().getTopBorderColor()));
+					g.setColor(getColor(cell.getCell().getCellStyle().getTopBorderColor()));
 					g.drawLine(x, y, width - 1, y);
 				}
 				if (hasLeftBorder()) {
-					g.setColor(getColor(cell.getCellStyle().getLeftBorderColor()));
+					g.setColor(getColor(cell.getCell().getCellStyle().getLeftBorderColor()));
 					g.drawLine(x, y, x, height - 1);
 				}
 				if (hasBottomBorder()) {
-					g.setColor(getColor(cell.getCellStyle().getBottomBorderColor()));
-					g.drawLine(x, height - 2, width - 1, height - 2);
+					g.setColor(getColor(cell.getCell().getCellStyle().getBottomBorderColor()));
+					g.drawLine(x, height - 1, width - 1, height - 1);
 				}
 				if (hasRightBorder()) {
-					g.setColor(getColor(cell.getCellStyle().getRightBorderColor()));
-					g.drawLine(width - 2, y, width - 2, height - 1);
+					g.setColor(getColor(cell.getCell().getCellStyle().getRightBorderColor()));
+					g.drawLine(width - 1, y, width - 1, height - 1);
 				}
 
-				// g.setColor(lineColor);
-				// g.drawRect(x, y, width - 1, height - 1);
 				g.setColor(oldColor);
 			}
 
@@ -372,32 +364,20 @@ public class ExcelSheetView extends JPanel {
 			}
 
 			private boolean hasTopBorder() {
-				return (cell != null && cell.getCellStyle().getBorderTop() != CellStyle.BORDER_NONE)
-				/*|| (topCell != null && topCell.getCellStyle().getBorderBottom() != CellStyle.BORDER_NONE)*/;
+				return cell.hasTopBorder();
 			}
 
 			private boolean hasLeftBorder() {
-				return (cell != null && cell.getCellStyle().getBorderLeft() != CellStyle.BORDER_NONE)
-				/*|| (leftCell != null && leftCell.getCellStyle().getBorderRight() != CellStyle.BORDER_NONE)*/;
+				return cell.hasLeftBorder();
 			}
 
 			private boolean hasRightBorder() {
-				return (cell != null && cell.getCellStyle().getBorderRight() != CellStyle.BORDER_NONE)
-						&& (rightCell == null || rightCell.getCellStyle().getBorderLeft() == CellStyle.BORDER_NONE);
+				return cell.hasRightBorder() && !cell.getNextCell().hasLeftBorder();
 			}
 
 			private boolean hasBottomBorder() {
-				return (cell != null && cell.getCellStyle().getBorderBottom() != CellStyle.BORDER_NONE)
-						&& (bottomCell == null || bottomCell.getCellStyle().getBorderTop() == CellStyle.BORDER_NONE);
+				return cell.hasBottomBorder() && !cell.getLowerCell().hasTopBorder();
 			}
-
-			/*public Insets getBorderInsets(Component c, Insets insets) {
-				insets.left = hasLeftBorder() ? 1 : 0;
-				insets.top = hasTopBorder() ? 1 : 0;
-				insets.right = hasRightBorder() ? 1 : 0;
-				insets.bottom = hasBottomBorder() ? 1 : 0;
-				return insets;
-			}*/
 
 			@Override
 			public boolean isBorderOpaque() {
