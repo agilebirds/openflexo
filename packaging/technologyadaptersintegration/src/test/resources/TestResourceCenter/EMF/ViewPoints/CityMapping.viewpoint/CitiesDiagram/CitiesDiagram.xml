@@ -28,7 +28,7 @@
       <GRSpec id="22" featureName="label" value="city.render" readOnly="true" />
     </ContainedShapePatternRole>
     <ContainedEditionPatternInstancePatternRole id="23" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="city" patternRole="city">
-      <AddressedVirtualModelModelSlot id="24" isRequired="true" isReadOnly="false" name="cityMapping" />
+      <AddressedVirtualModelModelSlot id="24" virtualModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping" isRequired="true" isReadOnly="false" name="cityMapping" />
     </ContainedEditionPatternInstancePatternRole>
     <PrimaryRepresentationShapePatternRole idref="10" />
     <Inspector id="25" inspectorTitle="CityGR" />

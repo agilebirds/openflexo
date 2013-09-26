@@ -3,10 +3,10 @@
   <EditionPattern id="2" name="City">
     <CreationScheme id="3" name="creation" label="creation" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <IndividualParameter id="4" conceptURI="http://www.thalesgroup.com/openflexo/emf/model/city1/City" name="cityInModel1" label="cityInModel1" usePaletteLabelAsDefaultValue="false" isRequired="false">
-        <AddressedEMFModelSlot id="5" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city1" name="model1" />
+        <AddressedEMFModelSlot id="5" isRequired="true" isReadOnly="false" name="model1" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city1" />
       </IndividualParameter>
       <IndividualParameter id="6" conceptURI="http://www.thalesgroup.com/openflexo/emf/model/city2/City" name="cityInModel2" label="cityInModel2" usePaletteLabelAsDefaultValue="false" isRequired="false">
-        <AddressedEMFModelSlot id="7" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city2" name="model2" />
+        <AddressedEMFModelSlot id="7" isRequired="true" isReadOnly="false" name="model2" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city2" />
       </IndividualParameter>
       <DeclarePatternRole id="8" object="parameters.cityInModel1" assignation="cityInModel1" />
       <DeclarePatternRole id="9" object="parameters.cityInModel2" assignation="cityInModel2" />
@@ -27,10 +27,10 @@
       <DeleteAction id="17" object="cityInModel1" />
       <DeleteAction id="18" object="cityInModel2" />
     </DeletionScheme>
-    <ContainedEMFObjectIndividualPatternRole id="19" patternRole="cityInModel1" name="cityInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/City">
+    <ContainedEMFObjectIndividualPatternRole id="19" name="cityInModel1" patternRole="cityInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/City">
       <AddressedEMFModelSlot idref="5" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEMFObjectIndividualPatternRole id="20" patternRole="cityInModel2" name="cityInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/City">
+    <ContainedEMFObjectIndividualPatternRole id="20" name="cityInModel2" patternRole="cityInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/City">
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="19" />
@@ -49,7 +49,7 @@
         <AddressedEMFModelSlot idref="7" />
       </IndividualParameter>
       <EditionPatternInstanceParameter id="29" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="cityParameter" label="city" usePaletteLabelAsDefaultValue="false" isRequired="false">
-        <AddressedVirtualModelModelSlot id="30" isRequired="false" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping" name="this" />
+        <AddressedVirtualModelModelSlot id="30" virtualModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping" isRequired="false" isReadOnly="false" name="this" />
       </EditionPatternInstanceParameter>
       <DeclarePatternRole id="31" object="parameters.houseInModel1" name="" assignation="houseInModel1" />
       <DeclarePatternRole id="32" object="parameters.appartmentInModel2" assignation="appartmentInModel2" />
@@ -59,13 +59,13 @@
       <DeleteAction id="35" object="houseInModel1" />
       <DeleteAction id="36" object="appartmentInModel2" />
     </DeletionScheme>
-    <ContainedEMFObjectIndividualPatternRole id="37" patternRole="houseInModel1" name="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+    <ContainedEMFObjectIndividualPatternRole id="37" name="houseInModel1" patternRole="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
       <AddressedEMFModelSlot idref="5" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEMFObjectIndividualPatternRole id="38" patternRole="appartmentInModel2" name="appartmentInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Appartment">
+    <ContainedEMFObjectIndividualPatternRole id="38" name="appartmentInModel2" patternRole="appartmentInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Appartment">
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEditionPatternInstancePatternRole id="39" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" patternRole="city" name="city">
+    <ContainedEditionPatternInstancePatternRole id="39" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="city" patternRole="city">
       <AddressedVirtualModelModelSlot idref="30" />
     </ContainedEditionPatternInstancePatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="37" />
@@ -92,13 +92,13 @@
       <DeleteAction id="52" object="houseInModel1" />
       <DeleteAction id="53" object="mansionInModel2" />
     </DeletionScheme>
-    <ContainedEMFObjectIndividualPatternRole id="54" patternRole="houseInModel1" name="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+    <ContainedEMFObjectIndividualPatternRole id="54" name="houseInModel1" patternRole="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
       <AddressedEMFModelSlot idref="5" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEMFObjectIndividualPatternRole id="55" patternRole="mansionInModel2" name="mansionInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Mansion">
+    <ContainedEMFObjectIndividualPatternRole id="55" name="mansionInModel2" patternRole="mansionInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Mansion">
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEditionPatternInstancePatternRole id="56" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" patternRole="city" name="city">
+    <ContainedEditionPatternInstancePatternRole id="56" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="city" patternRole="city">
       <AddressedVirtualModelModelSlot idref="30" />
     </ContainedEditionPatternInstancePatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="54" />
@@ -117,10 +117,10 @@
       <DeclarePatternRole id="64" object="parameters.residentInModel1" assignation="residentInModel1" />
       <DeclarePatternRole id="65" object="parameters.houseInModel2" assignation="houseInModel2" />
     </CreationScheme>
-    <ContainedEMFObjectIndividualPatternRole id="66" patternRole="residentInModel1" name="residentInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/Resident">
+    <ContainedEMFObjectIndividualPatternRole id="66" name="residentInModel1" patternRole="residentInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/Resident">
       <AddressedEMFModelSlot idref="5" />
     </ContainedEMFObjectIndividualPatternRole>
-    <ContainedEMFObjectIndividualPatternRole id="67" patternRole="houseInModel2" name="houseInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/House">
+    <ContainedEMFObjectIndividualPatternRole id="67" name="houseInModel2" patternRole="houseInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/House">
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="66" />
