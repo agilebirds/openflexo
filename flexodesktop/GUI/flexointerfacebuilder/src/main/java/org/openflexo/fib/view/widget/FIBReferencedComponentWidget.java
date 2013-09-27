@@ -69,7 +69,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public FIBReferencedComponentWidget(FIBReferencedComponent model, FIBController controller, FIBViewFactory factory) {
 		super(model, controller);
 		this.factory = factory;
-		NOT_FOUND_LABEL = new JLabel("<" + model.getName() + ": not found component>");
+		NOT_FOUND_LABEL = new JLabel(""/*"<" + model.getName() + ": not found component>"*/);
 		updateFont();
 	}
 
@@ -260,10 +260,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		}
 		BindingEvaluationContext evCtxt = getBindingEvaluationContext();
 		// NPE Protection
-		if (evCtxt != null && variable != null){
+		if (evCtxt != null && variable != null) {
 			return getBindingEvaluationContext().getValue(variable);
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
