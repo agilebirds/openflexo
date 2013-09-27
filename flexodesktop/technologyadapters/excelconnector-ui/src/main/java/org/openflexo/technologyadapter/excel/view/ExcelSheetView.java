@@ -23,22 +23,33 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -48,6 +59,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.openflexo.swing.msct.CellSpan;
 import org.openflexo.swing.msct.MultiSpanCellTable;
 import org.openflexo.swing.msct.MultiSpanCellTableModel;
+import org.openflexo.swing.msct.TableCellExtendedRenderer;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.view.controller.FlexoController;
@@ -69,6 +81,9 @@ public class ExcelSheetView extends JPanel {
 	private ExcelSheetTableModel tableModel;
 	private MultiSpanCellTable table;
 
+	private JTextField cellIdentifier;
+	private JTextField cellValue;
+
 	public ExcelSheetView(ExcelSheet sheet, FlexoController controller) {
 		super(new BorderLayout());
 		this.sheet = sheet;
@@ -77,19 +92,18 @@ public class ExcelSheetView extends JPanel {
 		table = new MultiSpanCellTable(tableModel);
 		table.setBackground(Color.WHITE);
 		table.setShowGrid(true);
+		table.setGridColor(Color.LIGHT_GRAY);
 		table.setRowMargin(0);
 		table.getColumnModel().setColumnMargin(0);
 
-		// table.setShowHorizontalLines(true);
-		// table.setShowVerticalLines(true);
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			TableColumn col = table.getColumnModel().getColumn(i);
 			if (i == 0) {
 				col.setWidth(25);
 				col.setPreferredWidth(25);
 				col.setMinWidth(25);
-				col.setMaxWidth(25);
-				col.setResizable(false);
+				col.setMaxWidth(100);
+				// col.setResizable(false);
 				col.setHeaderValue(null);
 			} else {
 				col.setWidth(sheet.getSheet().getColumnWidth(i - 1) / 40);
@@ -100,11 +114,72 @@ public class ExcelSheetView extends JPanel {
 		table.setDefaultRenderer(Object.class, new ExcelSheetCellRenderer());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		add(new JScrollPane(table), BorderLayout.CENTER);
-		validate();
 
-		for (Row row : sheet.getSheet()) {
-			table.setRowHeight(row.getRowNum(), (int) row.getHeightInPoints());
-		}
+		cellIdentifier = new JTextField(6);
+		cellIdentifier.setEditable(false);
+		cellIdentifier.setHorizontalAlignment(SwingConstants.CENTER);
+		cellValue = new JTextField();
+		cellValue.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				valueEditedForSelectedCell(cellValue.getText());
+			}
+		});
+		/*cellValue.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				valueEditedForSelectedCell(cellValue.getText());
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				valueEditedForSelectedCell(cellValue.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				valueEditedForSelectedCell(cellValue.getText());
+			}
+		});*/
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(cellIdentifier, BorderLayout.WEST);
+		topPanel.add(cellValue, BorderLayout.CENTER);
+		add(topPanel, BorderLayout.NORTH);
+
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				selectionChanged();
+			}
+		});
+		table.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+
+			@Override
+			public void columnSelectionChanged(ListSelectionEvent e) {
+				selectionChanged();
+			}
+
+			@Override
+			public void columnRemoved(TableColumnModelEvent e) {
+			}
+
+			@Override
+			public void columnMoved(TableColumnModelEvent e) {
+			}
+
+			@Override
+			public void columnMarginChanged(ChangeEvent e) {
+			}
+
+			@Override
+			public void columnAdded(TableColumnModelEvent e) {
+			}
+		});
+
+		updateRowHeights();
+
+		validate();
 
 		/*for (Object p : sheet.getSheet().getWorkbook().getAllPictures()) {
 			System.out.println("Picture: " + p);
@@ -173,6 +248,21 @@ public class ExcelSheetView extends JPanel {
 			return cell.getDisplayValue();
 		};
 
+		@Override
+		public void setValueAt(Object aValue, int row, int column) {
+			if (column == 0)
+				return;
+			ExcelCell cell = getCellAt(row, column);
+			setValueForCell(cell, aValue.toString());
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			if (column == 0)
+				return false;
+			return true;
+		}
+
 		public ExcelCell getCellAt(int row, int column) {
 			if (column == 0)
 				return null;
@@ -190,7 +280,7 @@ public class ExcelSheetView extends JPanel {
 	 * @author sylvain
 	 * 
 	 */
-	class ExcelSheetCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+	class ExcelSheetCellRenderer extends DefaultTableCellRenderer implements TableCellExtendedRenderer {
 		protected Border noFocusBorder;
 
 		public ExcelSheetCellRenderer() {
@@ -207,8 +297,8 @@ public class ExcelSheetView extends JPanel {
 			Border border = null;
 			Font font = null;
 
-			DefaultTableCellRenderer returned = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected,
-					hasFocus, row, column);
+			DefaultTableCellRenderer returned = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, column == 0 ? value
+					: "", isSelected, hasFocus, row, column);
 
 			if (column == 0) {
 
@@ -234,26 +324,40 @@ public class ExcelSheetView extends JPanel {
 				border = new CellBorder(row, column);
 			}
 
-			if (cell.getCell() != null) {
-				CellStyle style = cell.getCell().getCellStyle();
-				if (style != null) {
-					background = getBackgroundColor(style);
-					foreground = getForegroundColor(style);
-					font = getFont(style);
+			CellStyle style = cell.getCellStyle();
+			if (style != null) {
+				background = getBackgroundColor(style);
+				foreground = getForegroundColor(style);
+				font = getFont(style);
 
-					switch (style.getAlignment()) {
-					case CellStyle.ALIGN_CENTER:
-						returned.setHorizontalAlignment(SwingConstants.CENTER);
-						break;
-					case CellStyle.ALIGN_LEFT:
-						returned.setHorizontalAlignment(SwingConstants.LEFT);
-						break;
-					case CellStyle.ALIGN_RIGHT:
-						returned.setHorizontalAlignment(SwingConstants.RIGHT);
-						break;
-					default:
-						returned.setHorizontalAlignment(SwingConstants.LEFT);
-					}
+				switch (style.getAlignment()) {
+				case CellStyle.ALIGN_CENTER:
+					returned.setHorizontalAlignment(SwingConstants.CENTER);
+					break;
+				case CellStyle.ALIGN_LEFT:
+					returned.setHorizontalAlignment(SwingConstants.LEFT);
+					break;
+				case CellStyle.ALIGN_RIGHT:
+					returned.setHorizontalAlignment(SwingConstants.RIGHT);
+					break;
+				default:
+					returned.setHorizontalAlignment(SwingConstants.LEFT);
+				}
+				switch (style.getVerticalAlignment()) {
+				case CellStyle.VERTICAL_TOP:
+					returned.setVerticalAlignment(SwingConstants.TOP);
+					break;
+				case CellStyle.VERTICAL_BOTTOM:
+					returned.setVerticalAlignment(SwingConstants.BOTTOM);
+					break;
+				case CellStyle.VERTICAL_CENTER:
+					returned.setVerticalAlignment(SwingConstants.CENTER);
+					break;
+				case CellStyle.VERTICAL_JUSTIFY:
+					returned.setVerticalAlignment(SwingConstants.CENTER);
+					break;
+				default:
+					returned.setVerticalAlignment(SwingConstants.CENTER);
 				}
 			}
 			if (isSelected) {
@@ -269,38 +373,88 @@ public class ExcelSheetView extends JPanel {
 				returned.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
 				if (table.isCellEditable(row, column)) {
 					returned.setForeground((foreground != null) ? foreground : UIManager.getColor("Table.focusCellForeground"));
-					returned.setBackground(Color.BLUE/*UIManager.getColor("Table.focusCellBackground")*/);
+					// returned.setBackground(Color.BLUE/*UIManager.getColor("Table.focusCellBackground")*/);
 				}
 			} else {
 				returned.setBorder(border != null ? border : noFocusBorder);
 			}
 
-			setValue(value);
+			// setValue(value);
 			return this;
 		}
 
-		/*class EmptyCellBorder implements Border {
-			@Override
-			public Insets getBorderInsets(Component c) {
-				return new Insets(1, 1, 1, 1);
+		@Override
+		public void paintExtendedContents(Graphics g, int row, int column) {
+			ExcelCell cell = tableModel.getCellAt(row, column);
+			if (cell == null) {
+				return;
 			}
+			if (StringUtils.isNotEmpty(cell.getDisplayValue()) && cell.getCellStyle() != null) {
+				Rectangle cellBounds = table.getCellRect(row, column, true);
+				Font f = g.getFont();
+				Color c = g.getColor();
+				Font font = getFont(cell.getCellStyle());
+				Color foreground = getForegroundColor(cell.getCellStyle());
+				g.setFont(font != null ? font : table.getFont());
+				g.setColor(foreground != null ? foreground : table.getForeground());
+				FontMetrics fm = g.getFontMetrics(getFont(cell.getCellStyle()));
+				Rectangle2D stringBounds = fm.getStringBounds(cell.getDisplayValue(), g);
+				int x;
+				int y;
+				switch (cell.getCellStyle().getAlignment()) {
+				case CellStyle.ALIGN_CENTER:
+					x = (int) (cellBounds.x - stringBounds.getCenterX() + cellBounds.getWidth() / 2);
+					break;
+				case CellStyle.ALIGN_LEFT:
+					x = (int) (cellBounds.x - stringBounds.getX());
+					break;
+				case CellStyle.ALIGN_RIGHT:
+					x = (int) (cellBounds.x - stringBounds.getX());
+					break;
+				default:
+					x = (int) (cellBounds.x - stringBounds.getX());
+				}
+				switch (cell.getCellStyle().getVerticalAlignment()) {
+				case CellStyle.VERTICAL_TOP:
+					y = (int) (cellBounds.y - stringBounds.getY());
+					break;
+				case CellStyle.VERTICAL_BOTTOM:
+					y = (cellBounds.y + cellBounds.height - 3);
+					break;
+				case CellStyle.VERTICAL_CENTER:
+					y = (int) (cellBounds.y - stringBounds.getCenterY() + cellBounds.getHeight() / 2);
+					break;
+				case CellStyle.VERTICAL_JUSTIFY:
+					y = (int) (cellBounds.y - stringBounds.getCenterY() + cellBounds.getHeight() / 2);
+					break;
+				default:
+					y = (int) (cellBounds.y - stringBounds.getY());
+				}
 
-			@Override
-			public boolean isBorderOpaque() {
-				return false;
+				g.drawString(cell.getDisplayValue(), x, y);
+				g.setColor(c);
+				g.setFont(f);
 			}
+		}
 
-			@Override
-			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-				Color oldColor = g.getColor();
-				g.setColor(Color.LIGHT_GRAY);
-				g.drawLine(x, y, width - 1, y);
-				g.drawLine(x, y, x, height - 1);
-				g.drawLine(x, height - 1, width - 1, height - 1);
-				g.drawLine(width - 1, y, width - 1, height - 1);
-				g.setColor(oldColor);
-			}
+		/*
+		FontMetrics fm = SwingUtilities2.getFontMetrics(label, g);
 
+		private String layout(JLabel label, FontMetrics fm,
+		        int width, int height) {
+		Insets insets = label.getInsets(null);
+		String text = label.getText();
+		Icon icon = (label.isEnabled()) ? label.getIcon() :
+		                        label.getDisabledIcon();
+		Rectangle paintViewR = new Rectangle();
+		paintViewR.x = insets.left;
+		paintViewR.y = insets.top;
+		paintViewR.width = width - (insets.left + insets.right);
+		paintViewR.height = height - (insets.top + insets.bottom);
+		paintIconR.x = paintIconR.y = paintIconR.width = paintIconR.height = 0;
+		paintTextR.x = paintTextR.y = paintTextR.width = paintTextR.height = 0;
+		return layoutCL(label, fm, text, icon, paintViewR, paintIconR,
+		      paintTextR);
 		}*/
 
 		/**
@@ -430,4 +584,36 @@ public class ExcelSheetView extends JPanel {
 		}
 	}
 
+	protected void selectionChanged() {
+		ExcelCell selected = sheet.getCellAt(table.getSelectedRow(), table.getSelectedColumn() - 1);
+		if (selected == null) {
+			cellIdentifier.setText("");
+			cellValue.setText("");
+		} else {
+			cellIdentifier.setText(selected.getCellIdentifier());
+			cellValue.setText(selected.getDisplayCellSpecification());
+		}
+	}
+
+	protected void valueEditedForSelectedCell(String value) {
+		ExcelCell selected = sheet.getCellAt(table.getSelectedRow(), table.getSelectedColumn() - 1);
+		if (selected == null) {
+			return;
+		} else {
+			setValueForCell(selected, value);
+		}
+	}
+
+	protected void setValueForCell(ExcelCell cell, String value) {
+		cell.setCellValue(value);
+		tableModel.fireTableDataChanged();
+		updateRowHeights();
+		table.changeSelection(cell.getRowIndex(), cell.getColumnIndex() + 1, false, false);
+	}
+
+	private void updateRowHeights() {
+		for (Row row : sheet.getSheet()) {
+			table.setRowHeight(row.getRowNum(), (int) row.getHeightInPoints());
+		}
+	}
 }
