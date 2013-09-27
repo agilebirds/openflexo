@@ -2,6 +2,7 @@ package org.openflexo.antar.binding;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -39,11 +42,30 @@ public class DependingObjects {
 		dependingObjects.add(object);
 	}
 
-	public synchronized void refreshObserving(BindingEvaluationContext context/*, boolean debug*/) {
+	public synchronized void refreshObserving(BindingEvaluationContext context) {
+		refreshObserving(context, false);
+	}
 
-		/*if (debug) {
-			logger.info("refreshObserving() for " + observerObject);
-		}*/
+	public synchronized void refreshObserving(BindingEvaluationContext context, boolean debug) {
+
+		if (debug) {
+			logger.info("-------------> refreshObserving() for " + observerObject);
+			logger.info("-------------> DependencyBindings:");
+			for (DataBinding<?> db : observerObject.getDependencyBindings()) {
+				try {
+					logger.info("-------------> binding: " + db + " value:" + db.getBindingValue(context));
+				} catch (TypeMismatchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 
 		if (observerObject == null) {
 			return;
@@ -92,18 +114,18 @@ public class DependingObjects {
 					logger.fine("Observer " + observerObject + " remove property change listener: " + o.target + " property:"
 							+ o.propertyName);
 				}
-				/*if (debug) {
-					logger.info("Observer " + observerObject + " remove property change listener: " + o.target + " property:"
-							+ o.propertyName);
-				}*/
+				if (debug) {
+					logger.info("-------------> Observer " + observerObject + " remove property change listener: " + o.target
+							+ " property:" + o.propertyName);
+				}
 				pcSupport.removePropertyChangeListener(o.propertyName, observerObject);
 			} else if (o.target instanceof Observable) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Widget " + observerObject + " remove observable: " + o);
 				}
-				/*if (debug) {
-					logger.info("Widget " + observerObject + " remove observable: " + o);
-				}*/
+				if (debug) {
+					logger.info("-------------> Widget " + observerObject + " remove observable: " + o);
+				}
 				((Observable) o.target).deleteObserver(observerObject);
 			}
 		}
@@ -112,19 +134,21 @@ public class DependingObjects {
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Observer " + observerObject + " add property change listener: " + o.target + " property:" + o.propertyName);
+					logger.fine("-------------> Observer " + observerObject + " add property change listener: " + o.target + " property:"
+							+ o.propertyName);
 				}
-				/*if (debug) {
-					logger.info("Observer " + observerObject + " add property change listener: " + o.target + " property:" + o.propertyName);
-				}*/
+				if (debug) {
+					logger.info("-------------> Observer " + observerObject + " add property change listener: " + o.target + " property:"
+							+ o.propertyName);
+				}
 				pcSupport.addPropertyChangeListener(o.propertyName, observerObject);
 			} else if (o.target instanceof Observable) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Observer " + observerObject + " add observable: " + o);
 				}
-				/*if (debug) {
+				if (debug) {
 					logger.info("Observer " + observerObject + " add observable: " + o + " for " + o.propertyName);
-				}*/
+				}
 				((Observable) o.target).addObserver(observerObject);
 			}
 		}
