@@ -84,6 +84,26 @@ class MultiSpanCellTableUI extends BasicTableUI {
 			}
 		}
 
+		/*if (table instanceof MultiSpanCellTable) {
+			for (int column = 0; column < numColumns; column++) {
+				Rectangle extendedCellRect = ((MultiSpanCellTable) table).getExtendedCellRect(row, column, true);
+				// System.out.println("J'ai peint " + table.getCellRect(row, column, true) + " et je dois essayer de peindre "
+				// + extendedCellRect);
+				int cellRow, cellColumn;
+				if (cellAtt.isVisible(row, column)) {
+					cellRow = row;
+					cellColumn = column;
+					// System.out.print("   "+column+" "); // debug
+				} else {
+					cellRow = row + cellAtt.getSpan(row, column)[CellSpan.ROW];
+					cellColumn = column + cellAtt.getSpan(row, column)[CellSpan.COLUMN];
+					// System.out.print("  ("+column+")"); // debug
+				}
+				if (extendedCellRect.intersects(rect)) {
+					paintExtendedCell(g, extendedCellRect, cellRow, cellColumn);
+				}
+			}
+		}*/
 	}
 
 	private void paintCell(Graphics g, Rectangle cellRect, int row, int column) {
@@ -92,7 +112,8 @@ class MultiSpanCellTableUI extends BasicTableUI {
 
 		Color c = g.getColor();
 		g.setColor(table.getGridColor());
-		g.drawRect(cellRect.x, cellRect.y, cellRect.width - 1, cellRect.height - 1);
+		g.drawRect(cellRect.x, cellRect.y, column == table.getModel().getColumnCount() - 1 ? cellRect.width - 1 : cellRect.width,
+				row == table.getModel().getRowCount() - 1 ? cellRect.height - 1 : cellRect.height);
 		g.setColor(c);
 
 		cellRect.setBounds(cellRect.x + spacingWidth / 2, cellRect.y + spacingHeight / 2, cellRect.width - spacingWidth, cellRect.height
@@ -110,6 +131,28 @@ class MultiSpanCellTableUI extends BasicTableUI {
 				rendererPane.add(component);
 			}
 			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y, cellRect.width, cellRect.height, true);
+
+			if (renderer instanceof TableCellExtendedRenderer) {
+				((TableCellExtendedRenderer) renderer).paintExtendedContents(g, row, column);
+			}
 		}
 	}
+
+	/*private void paintExtendedCell(Graphics g, Rectangle cellRect, int row, int column) {
+		int spacingHeight = table.getRowMargin();
+		int spacingWidth = table.getColumnModel().getColumnMargin();
+
+		cellRect.setBounds(cellRect.x + spacingWidth / 2, cellRect.y + spacingHeight / 2, cellRect.width - spacingWidth, cellRect.height
+				- spacingHeight);
+
+		TableCellRenderer renderer = ((MultiSpanCellTable) table).getExtendedCellRenderer(row, column);
+		if (renderer != null) {
+			Component component = table.prepareRenderer(renderer, row, column);
+
+			if (component.getParent() == null) {
+				rendererPane.add(component);
+			}
+			rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y, cellRect.width, cellRect.height, true);
+		}
+	}*/
 }

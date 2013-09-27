@@ -58,9 +58,6 @@ public class MultiSpanCellTable extends JTable {
 		int index = 0;
 		int columnMargin = getColumnModel().getColumnMargin();
 		Rectangle cellFrame = new Rectangle();
-		/*int aCellHeight = rowHeight + rowMargin;
-		cellFrame.y = row * aCellHeight;
-		cellFrame.height = n[CellSpan.ROW] * aCellHeight;*/
 		cellFrame.y = getCumulativeRowHeight(0, row);
 		cellFrame.height = getCumulativeRowHeight(row, row + n[CellSpan.ROW]);
 
@@ -84,6 +81,13 @@ public class MultiSpanCellTable extends JTable {
 					cellFrame.height - spacing.height);
 		}
 		return cellFrame;
+	}
+
+	public Rectangle getExtendedCellRect(int row, int column, boolean includeSpacing) {
+		Rectangle extCellRect = getCellRect(row, column, includeSpacing);
+		int tableWidth = getColumnModel().getTotalColumnWidth();
+		extCellRect.width = tableWidth - extCellRect.x;
+		return extCellRect;
 	}
 
 	private int[] rowColumnAtPoint(Point point) {
