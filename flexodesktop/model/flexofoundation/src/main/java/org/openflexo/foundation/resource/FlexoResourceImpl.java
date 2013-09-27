@@ -74,13 +74,15 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
-	 * Sets {@link ResourceData} for this resource
+	 * Programmatically sets {@link ResourceData} for this resource<br>
+	 * The resource is then notified that it has been loaded
 	 * 
 	 * @param resourceData
 	 */
 	@Override
 	public void setResourceData(RD resourceData) {
 		this.resourceData = resourceData;
+		notifyResourceLoaded();
 	}
 
 	/**

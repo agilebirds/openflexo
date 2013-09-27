@@ -34,7 +34,7 @@ public class ResourceLoaded extends DataModification implements ServiceNotificat
 	 * @param resource
 	 */
 	public <RD extends ResourceData<RD>> ResourceLoaded(FlexoResource<RD> resource, RD resourceData) {
-		super(null, resourceData);
+		super("isLoaded", null, resourceData);
 	}
 
 }
