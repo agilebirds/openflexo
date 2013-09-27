@@ -908,7 +908,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 		// logger.info("Update in BindingSelectorPanel with binding " + binding);
 
-		if (binding == null || binding.isConstant()) {
+		if (binding == null || binding.isConstant() || binding.isUnset()) {
 			clearColumns();
 			if (binding == null) {
 				setEditStaticValue(false);
