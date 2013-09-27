@@ -292,9 +292,13 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
 			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
-		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+		// Vincent: I remove this lines because if the delete is called from a deletion scheme of the edition pattern instance,
+		// then the edition pattern instance id still not marked to deleted at this point.
+		// The the next lines cause an infinite loop!!
+		// It might be a possibility to have a "deleting" status.
+		/*if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
-		}
+		}*/
 		for (TargetObject o : dependingObjects) {
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
