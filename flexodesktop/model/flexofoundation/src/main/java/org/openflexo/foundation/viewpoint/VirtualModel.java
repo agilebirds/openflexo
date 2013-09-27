@@ -395,7 +395,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	public ModelSlot getModelSlot(String modelSlotName) {
 		for (ModelSlot ms : getModelSlots()) {
-			if (ms.getName().equals(modelSlotName)) {
+			if (ms != null && ms.getName().equals(modelSlotName)) {
 				return ms;
 			}
 		}
