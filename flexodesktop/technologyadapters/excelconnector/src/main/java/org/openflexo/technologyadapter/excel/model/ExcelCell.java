@@ -323,7 +323,11 @@ public class ExcelCell extends ExcelObject {
 	 * @return
 	 */
 	public String getDisplayValue() {
-		return FORMATTER.formatCellValue(cell, getExcelSheet().getEvaluator());
+		try {
+			return FORMATTER.formatCellValue(cell, getExcelSheet().getEvaluator());
+		} catch (RuntimeException e) {
+			return "!ERROR: " + e.getMessage();
+		}
 	}
 
 	/**
@@ -446,18 +450,14 @@ public class ExcelCell extends ExcelObject {
 	 * @return
 	 */
 	public String getDisplayCellSpecification() {
-		if (getCellType() == CellType.NumericFormula || getCellType() == CellType.StringFormula) {
-			return "=" + FORMATTER.formatCellValue(cell);
+		try {
+			if (getCellType() == CellType.NumericFormula || getCellType() == CellType.StringFormula) {
+				return "=" + FORMATTER.formatCellValue(cell);
+			}
+			return FORMATTER.formatCellValue(cell);
+		} catch (RuntimeException e) {
+			return "!ERROR: " + e.getMessage();
 		}
-		return FORMATTER.formatCellValue(cell);
-		/*switch (getCellType()) {
-		case NumericFormula:
-			return cell.getCellFormula();
-		case StringFormula:
-			return cell.getCellFormula();
-		default:
-			return getDisplayValue();
-		}*/
 	};
 
 	/**
