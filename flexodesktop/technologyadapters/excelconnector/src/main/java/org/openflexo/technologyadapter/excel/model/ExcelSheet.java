@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
@@ -22,6 +23,8 @@ public class ExcelSheet extends ExcelObject {
 	private ExcelWorkbook workbook;
 	private List<ExcelRow> excelRows;
 
+	private FormulaEvaluator evaluator;
+
 	public Sheet getSheet() {
 		return sheet;
 	}
@@ -31,7 +34,12 @@ public class ExcelSheet extends ExcelObject {
 		this.sheet = sheet;
 		this.workbook = workbook;
 		excelRows = new ArrayList<ExcelRow>();
+		evaluator = workbook.getWorkbook().getCreationHelper().createFormulaEvaluator();
 		addToPropertyValue(new ExcelProperty("Name", adapter), sheet.getSheetName());
+	}
+
+	public FormulaEvaluator getEvaluator() {
+		return evaluator;
 	}
 
 	@Override

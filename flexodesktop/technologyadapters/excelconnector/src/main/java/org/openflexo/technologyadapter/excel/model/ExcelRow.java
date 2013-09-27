@@ -36,6 +36,12 @@ public class ExcelRow extends ExcelObject {
 		}
 	}
 
+	protected void createRowWhenNonExistant() {
+		if (row == null) {
+			row = excelSheet.getSheet().createRow(getRowNum());
+		}
+	}
+
 	public ExcelSheet getExcelSheet() {
 		return excelSheet;
 	}
@@ -62,8 +68,15 @@ public class ExcelRow extends ExcelObject {
 		return null;
 	}
 
+	public int getRowIndex() {
+		if (row != null) {
+			return row.getRowNum();
+		}
+		return getExcelSheet().getExcelRows().indexOf(this);
+	}
+
 	public int getRowNum() {
-		return row.getRowNum();
+		return getRowIndex();
 	}
 
 	@Override

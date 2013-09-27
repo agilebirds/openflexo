@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -126,25 +127,32 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	 * @throws FlexoException
 	 */
 	@Override
-	public ExcelWorkbook loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
+	public ExcelWorkbook loadResourceData(IProgress progress) throws InvalidExcelFormatException {
 
 		ExcelWorkbook resourceData = null;
 
+		FileInputStream fis = null;
 		try {
-			FileInputStream fis = new FileInputStream(getFile());
+			fis = new FileInputStream(getFile());
 			HSSFWorkbook wbOpenned = new HSSFWorkbook(fis);
 			// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 			BasicExcelModelConverter converter = new BasicExcelModelConverter();
 			resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
 			// TODO how to change this?
-			resourceData.setResource(retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager()));
-
-			fis.close();
+			resourceData.setResource(this/*retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager())*/);
+			setResourceData(resourceData);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (OfficeXmlFileException e) {
+			// TODO: load an XSSFWorkbook
+			throw new InvalidExcelFormatException(this, e);
+		} finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		setResourceData(resourceData);
 		return resourceData;
 	}
 

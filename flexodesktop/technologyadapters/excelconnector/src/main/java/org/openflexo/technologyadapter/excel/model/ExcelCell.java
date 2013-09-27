@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
@@ -17,6 +20,8 @@ import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
  * 
  */
 public class ExcelCell extends ExcelObject {
+
+	static final Logger logger = Logger.getLogger(ExcelCell.class.getPackage().getName());
 
 	private Map<ExcelProperty, ExcelPropertyValue> values = new HashMap<ExcelProperty, ExcelPropertyValue>();
 
@@ -51,7 +56,7 @@ public class ExcelCell extends ExcelObject {
 		if (cell != null) {
 			return cell.getColumnIndex();
 		} else {
-			return -1;
+			return getExcelRow().getExcelCells().indexOf(this);
 		}
 	}
 
@@ -59,7 +64,7 @@ public class ExcelCell extends ExcelObject {
 		if (cell != null) {
 			return cell.getRowIndex();
 		} else {
-			return -1;
+			return getExcelRow().getRowIndex();
 		}
 	}
 
@@ -310,19 +315,15 @@ public class ExcelCell extends ExcelObject {
 		}
 	}
 
+	private static final DataFormatter FORMATTER = new DataFormatter();
+
 	/**
 	 * Return the value to be displayed in a generic viewer
 	 * 
 	 * @return
 	 */
 	public String getDisplayValue() {
-		Object o = getCellValue();
-		if (o == null)
-			return "";
-		if (getCellType() == CellType.Error) {
-			return "!Error:" + o;
-		}
-		return o.toString();
+		return FORMATTER.formatCellValue(cell, getExcelSheet().getEvaluator());
 	}
 
 	/**
@@ -337,8 +338,14 @@ public class ExcelCell extends ExcelObject {
 		case Boolean:
 			return cell.getBooleanCellValue();
 		case Numeric:
+			if (DateUtil.isCellDateFormatted(cell)) {
+				return cell.getDateCellValue();
+			}
 			return cell.getNumericCellValue();
 		case NumericFormula:
+			if (DateUtil.isCellDateFormatted(cell)) {
+				return cell.getDateCellValue();
+			}
 			return cell.getNumericCellValue();
 		case String:
 			return cell.getStringCellValue();
@@ -353,6 +360,104 @@ public class ExcelCell extends ExcelObject {
 		default:
 			return "????";
 		}
+	};
+
+	private void setCellFormula(String formula) {
+		if (formula.startsWith("=")) {
+			formula = formula.substring(formula.indexOf("=") + 1);
+		}
+		try {
+			cell.setCellFormula(formula);
+		} catch (IllegalArgumentException e) {
+			logger.warning("Cannot parse forumla: " + formula);
+		}
+		getExcelSheet().getEvaluator().clearAllCachedResultValues();
+	}
+
+	protected void createCellWhenNonExistant() {
+		if (cell == null) {
+			getExcelRow().createRowWhenNonExistant();
+			cell = getExcelRow().getRow().createCell(getColumnIndex());
+		}
+	}
+
+	public void setCellValue(String value) {
+
+		createCellWhenNonExistant();
+
+		if (value.startsWith("=")) {
+			setCellFormula(value);
+			return;
+		}
+		if (value.equalsIgnoreCase("true")) {
+			cell.setCellValue(true);
+			getExcelSheet().getEvaluator().clearAllCachedResultValues();
+			return;
+		} else if (value.equalsIgnoreCase("false")) {
+			cell.setCellValue(false);
+			getExcelSheet().getEvaluator().clearAllCachedResultValues();
+			return;
+		}
+		try {
+			double doubleValue = Double.parseDouble(value);
+			cell.setCellValue(doubleValue);
+			getExcelSheet().getEvaluator().clearAllCachedResultValues();
+			return;
+		} catch (NumberFormatException e) {
+			cell.setCellValue(value);
+			getExcelSheet().getEvaluator().clearAllCachedResultValues();
+			return;
+		}
+		/*
+				switch (getCellType()) {
+				case Blank:
+					cell.setCellValue(value);
+					getExcelSheet().getEvaluator().clearAllCachedResultValues();
+					break;
+				case Boolean:
+					cell.setCellValue(Boolean.parseBoolean(value));
+					getExcelSheet().getEvaluator().clearAllCachedResultValues();
+					break;
+				case Numeric:
+					cell.setCellValue(Double.parseDouble(value));
+					getExcelSheet().getEvaluator().clearAllCachedResultValues();
+					break;
+				case NumericFormula:
+					setCellFormula(value);
+					break;
+				case String:
+					cell.setCellValue(value);
+					getExcelSheet().getEvaluator().clearAllCachedResultValues();
+					break;
+				case StringFormula:
+					setCellFormula(value);
+					break;
+				case Empty:
+					// TODO: create cell
+					return;
+				default:
+					;
+				}*/
+	}
+
+	/**
+	 * Return the specification of this cell
+	 * 
+	 * @return
+	 */
+	public String getDisplayCellSpecification() {
+		if (getCellType() == CellType.NumericFormula || getCellType() == CellType.StringFormula) {
+			return "=" + FORMATTER.formatCellValue(cell);
+		}
+		return FORMATTER.formatCellValue(cell);
+		/*switch (getCellType()) {
+		case NumericFormula:
+			return cell.getCellFormula();
+		case StringFormula:
+			return cell.getCellFormula();
+		default:
+			return getDisplayValue();
+		}*/
 	};
 
 	/**
@@ -417,6 +522,13 @@ public class ExcelCell extends ExcelObject {
 					&& getBottomMergedCell().cell.getCellStyle().getBorderBottom() != CellStyle.BORDER_NONE;
 		}
 		return false;
+	}
+
+	public CellStyle getCellStyle() {
+		if (getCell() != null) {
+			return getCell().getCellStyle();
+		}
+		return null;
 	}
 
 }
