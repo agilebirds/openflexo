@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hibernate.type.Type;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -74,8 +75,8 @@ import com.sun.xml.xsom.XSType;
  */
 
 public abstract class XSDMetaModelResourceImpl extends
-		FlexoFileResourceImpl<XSDMetaModel> implements
-		XSOntologyURIDefinitions, XSDMetaModelResource {
+FlexoFileResourceImpl<XSDMetaModel> implements
+XSOntologyURIDefinitions, XSDMetaModelResource {
 
 	private static final Logger logger = Logger
 			.getLogger(XSDMetaModelResourceImpl.class.getPackage().getName());
@@ -105,7 +106,7 @@ public abstract class XSDMetaModelResourceImpl extends
 
 			// FIXME : check if its ok
 			technologyContextManager
-					.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel>) returned);
+			.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel>) returned);
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -169,8 +170,23 @@ public abstract class XSDMetaModelResourceImpl extends
 
 			for (XSComplexType complexType : fetcher.getComplexTypes()) {
 				try {
-					XSOntClass xsClass = aModel.createOntologyClass(
-							complexType.getName(), fetcher.getUri(complexType));
+					XSOntClass xsClass =  aModel.getClass(fetcher.getUri(complexType));
+					if (xsClass == null){
+						// create XSOntClass if it does not exist
+						xsClass = aModel.createOntologyClass(complexType.getName(), fetcher.getUri(complexType));
+					}
+					XSType btype = complexType.getBaseType();
+					if (btype != null && !btype.getName().equalsIgnoreCase("anyType")) {
+						XSOntClass superClass = aModel.getClass(fetcher.getUri(btype));
+						if (superClass == null){
+							// create XSOntClass if it does not exist
+							superClass = aModel.createOntologyClass(btype.getName(), fetcher.getUri(btype));
+						}
+						if (superClass != null ) {
+							xsClass.addToSuperClasses(superClass);
+
+						}
+					}
 				} catch (DuplicateURIException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

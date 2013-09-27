@@ -123,6 +123,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 		editionPatternInstances = new Hashtable<EditionPattern, Map<Long, EditionPatternInstance>>();
+		view.addToVirtualModelInstances(this);
 	}
 
 	@Override

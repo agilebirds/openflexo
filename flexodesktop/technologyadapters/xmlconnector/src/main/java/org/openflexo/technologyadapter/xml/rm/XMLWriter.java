@@ -173,18 +173,20 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 				}
 			}
 		}
-		
+
 		for (IXMLAttribute a : indiv.getAttributes()){
 			if (a.isSimpleAttribute() && a.isElement()){
 
 				List<?> valueList = (List<?>) indiv.getAttributeValue(a.getName());
-				if (valueList != null) {
+				if (valueList != null && valueList.size() > 0) {
+					myWriter.writeStartElement(a.getName());
 					for (Object o : valueList) { 
-						myWriter.writeStartElement(a.getName());
-						myWriter.writeCData(o.toString());
-						myWriter.writeEndElement();
-						myWriter.writeCharacters(LINE_SEP);
+						if ( o != null) {
+							myWriter.writeCData(o.toString());
+						}
 					}
+					myWriter.writeEndElement();
+					myWriter.writeCharacters(LINE_SEP);
 				}
 			}
 		}

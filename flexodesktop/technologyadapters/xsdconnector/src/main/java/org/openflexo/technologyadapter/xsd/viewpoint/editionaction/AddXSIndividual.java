@@ -104,16 +104,19 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 			// and verify that there is no duplicate URIs
 
 			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
-			Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
-			if (o == null ) {
-				model.addIndividual(newIndividual);
-				modelSlotInstance.getResourceData().setIsModified();
-			}
-			else {
-				throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
-			}
+			if (processedURI != null) {
+				Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
+				if (o == null ) {
+					model.addIndividual(newIndividual);
+					modelSlotInstance.getResourceData().setIsModified();
+				}
+				else {
+					throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
+				}
 
-			return newIndividual;
+				return newIndividual;
+			}
+			else return null;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();
 			return null;

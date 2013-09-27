@@ -96,11 +96,13 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas
 
-			if(!xmlFile.exists()){
-				returned.save(null);
-				returned.isLoaded = true;
+			if(xmlFile.exists()){
+				logger.warning("will load an existing File: " + xmlFile.getCanonicalPath());
+				returned.loadResourceData(null);
+			}else{
+			returned.save(null);
+			returned.isLoaded = true;
 			}
-
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();

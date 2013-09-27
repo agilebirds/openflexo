@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
 import org.openflexo.foundation.ontology.IFlexoOntologyModel;
@@ -45,6 +46,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.technologyadapter.xml.model.IXMLType;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDDataType;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
@@ -179,10 +181,11 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 
 	// TODO, TO BE OPTIMIZED
-	public List<XSOntIndividual> getIndividualsOfClass(XSOntClass aClass) {
+	public List<XSOntIndividual> getIndividualsOfClass(IXMLType aClass) {
 		ArrayList<XSOntIndividual> returned = new ArrayList<XSOntIndividual>();
 		for (XSOntIndividual o : individuals.values()){
-			if (o.getType() == aClass) {
+			
+			if (((XSOntClass)aClass).isSuperClassOf((IFlexoOntologyClass) o.getType())) {
 				returned.add(o);
 			}
 		}
@@ -220,8 +223,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntIndividual createOntologyIndividual(XSOntClass type)  {
 
 		XSOntIndividual individual = new XSOntIndividual(getTechnologyAdapter());
-		individual.setName(type.getName());
-		individual.setType(type);
+		if (type != null){
+			individual.setName(type.getName());
+			individual.setType(type);
+		}
 		return individual;
 	}	
 
