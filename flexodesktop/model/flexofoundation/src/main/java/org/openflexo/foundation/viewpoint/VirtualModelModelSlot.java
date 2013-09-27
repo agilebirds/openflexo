@@ -180,7 +180,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	 * @return
 	 */
 	public boolean isReflexiveModelSlot() {
-		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
+		return getName() != null && getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME)
+				&& getVirtualModelResource() == getVirtualModel().getResource();
 	}
 
 	/**
