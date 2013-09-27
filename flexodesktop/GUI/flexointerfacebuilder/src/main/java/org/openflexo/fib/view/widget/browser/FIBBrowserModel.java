@@ -297,8 +297,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				}*/
 
 				dependingObjects = new DependingObjects(this);
-				dependingObjects.refreshObserving(browserElementType, getBrowserElement().getName() != null
-						&& getBrowserElement().getName().equals("diagramSpecification"));
+				dependingObjects.refreshObserving(browserElementType);
 
 			}
 
