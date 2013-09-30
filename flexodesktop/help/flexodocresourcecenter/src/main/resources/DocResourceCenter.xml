@@ -14456,6 +14456,12 @@ forward to the next nodes.</description>
                     </RelatedToDocItem>
                     <RelatedToDocItem id="WKFProjectModuleView" identifier="WKFProjectModuleView" embedded="false" hidden="true">
                       <description>No description</description>
+                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_sub_process" identifier="WKFProjectModuleView-add_new_sub_process" embedded="false" hidden="true">
+                        <description />
+                      </EmbeddingChildDocItem>
+                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_role" identifier="WKFProjectModuleView-add_new_role" embedded="false" hidden="true">
+                        <description />
+                      </EmbeddingChildDocItem>
                       <RelatedToDocItem idref="process_edition" />
                       <RelatedToDocItem idref="process_edition" />
                     </RelatedToDocItem>
@@ -14540,6 +14546,7 @@ forward to the next nodes.</description>
                   <description>No description</description>
                   <RelatedToDocItem id="server_client_perspective" identifier="server_client_perspective" embedded="false" hidden="true">
                     <description>No description</description>
+                    <RelatedToDocItem idref="DefaultModuleView" />
                     <RelatedToDocItem idref="DefaultModuleView" />
                   </RelatedToDocItem>
                 </InheritanceChildDocItem>
@@ -15781,6 +15788,8 @@ forward to the next nodes.</description>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionWKFProjectModuleView" primaryDocItemId="WKFProjectModuleView" identifier="WKFProjectModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="WKFProjectModuleView" />
+              <DocItem idref="WKFProjectModuleView-add_new_role" />
+              <DocItem idref="WKFProjectModuleView-add_new_sub_process" />
             </DocItemFolder>
             <DocItem idref="process_edition" />
           </DocItemFolder>
