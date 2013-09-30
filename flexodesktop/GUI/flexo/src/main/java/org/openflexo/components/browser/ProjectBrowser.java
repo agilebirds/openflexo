@@ -480,7 +480,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 		setIsRebuildingStructure();
 		try {
-			if (_elements != null) {
+			if (_elements != null && _elements.size() > 0) {
 				clearTree();
 			}
 			if (getRootObject() != null) {
@@ -574,7 +574,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_elements.clear();
 		_expansionSynchronizedElements.removeAllElements();
 		_expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
-		_elements = null;
 	}
 
 	Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
