@@ -21,6 +21,7 @@ package org.openflexo.foundation.ontology.owl;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
 
 import com.hp.hpl.jena.ontology.UnionClass;
@@ -35,6 +36,20 @@ public class OWLUnionClass extends OWLOperatorClass {
 		super(anOntClass, ontology);
 		this.ontClass = anOntClass;
 		init();
+	}
+
+	@Override
+	public boolean isSuperClassOf(OntologyClass aClass) {
+		boolean superClassOf = super.isSuperClassOf(aClass);
+		if (superClassOf) {
+			return true;
+		}
+		for (OWLClass c : getOperands()) {
+			if (c.isSuperClassOf(aClass)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
