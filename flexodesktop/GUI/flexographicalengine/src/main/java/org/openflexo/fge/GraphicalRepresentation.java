@@ -400,7 +400,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 						excepted = true;
 					}
 				}
-				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls && p != Parameters.identifier && !excepted) {
+				if (p != Parameters.mouseClickControls && p != Parameters.mouseDragControls /*&& p != Parameters.identifier */&& !excepted) {
 					_setParameterValueWith(p, gr);
 				}
 			}
