@@ -146,7 +146,7 @@ public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElem
 		}*/
 
 		for (EditionPatternInstance epi : getEPIThatWillBeDeleted()) {
-			if(selectedEditionPatternInstanceDeletionSchemes.get(epi)!=null){
+			if(selectedEditionPatternInstanceDeletionSchemes!=null && selectedEditionPatternInstanceDeletionSchemes.get(epi)!=null){
 				epi.delete(selectedEditionPatternInstanceDeletionSchemes.get(epi));
 			}
 			else{
