@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -1692,19 +1691,31 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void finalizeConstraints() {
 		if (xConstraints != null && xConstraints.isValid()) {
 			xConstraints.finalizeDeserialization();
-			setX((Double) TypeUtils.castTo(xConstraints.getBindingValue(this), Double.class));
+			Object bv = xConstraints.getBindingValue(this);
+			if (bv instanceof Number) {
+				setX(((Number) bv).doubleValue());
+			}
 		}
 		if (yConstraints != null && yConstraints.isValid()) {
 			yConstraints.finalizeDeserialization();
-			setY((Double) TypeUtils.castTo(yConstraints.getBindingValue(this), Double.class));
+			Object bv = yConstraints.getBindingValue(this);
+			if (bv instanceof Number) {
+				setY(((Number) bv).doubleValue());
+			}
 		}
 		if (widthConstraints != null && widthConstraints.isValid()) {
 			widthConstraints.finalizeDeserialization();
-			setWidth((Double) TypeUtils.castTo(widthConstraints.getBindingValue(this), Double.class));
+			Object bv = widthConstraints.getBindingValue(this);
+			if (bv instanceof Number) {
+				setWidth(((Number) bv).doubleValue());
+			}
 		}
 		if (heightConstraints != null && heightConstraints.isValid()) {
 			heightConstraints.finalizeDeserialization();
-			setHeight((Double) TypeUtils.castTo(heightConstraints.getBindingValue(this), Double.class));
+			Object bv = heightConstraints.getBindingValue(this);
+			if (bv instanceof Number) {
+				setHeight(((Number) bv).doubleValue());
+			}
 		}
 		checkLocationConstraints();
 		checkDimensionConstraints();
