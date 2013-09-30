@@ -21,11 +21,11 @@ package org.openflexo.foundation.view.diagram.action;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -36,6 +36,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
 
 public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElements, DiagramElement, DiagramElement> {
 
@@ -111,6 +112,9 @@ public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElem
 	private Vector<DiagramElement> viewElementsToDelete;
 	private Vector<EditionPatternInstance> epiThatWillBeDeleted;
 	private Vector<FlexoModelObject> allObjectsThatWillBeDeleted;
+	private HashMap<EditionPatternInstance,DeletionScheme> selectedEditionPatternInstanceDeletionSchemes;
+	private DeletionScheme selectedDeletionScheme;
+	private EditionPatternInstance selectedEditionPatternInstance;
 
 	protected DeleteDiagramElements(DiagramElement focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -142,7 +146,12 @@ public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElem
 		}*/
 
 		for (EditionPatternInstance epi : getEPIThatWillBeDeleted()) {
-			epi.delete();
+			if(selectedEditionPatternInstanceDeletionSchemes.get(epi)!=null){
+				epi.delete(selectedEditionPatternInstanceDeletionSchemes.get(epi));
+			}
+			else{
+				epi.delete();	
+			}
 		}
 
 		for (DiagramElement o : getViewElementsToDelete()) {
@@ -199,14 +208,25 @@ public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElem
 				return 0;
 			}
 		});
-
 		allObjectsThatWillBeDeleted = new Vector<FlexoModelObject>();
 		for (EditionPatternInstance epi : epiThatWillBeDeleted) {
-			List<FlexoModelObject> l = epi.objectsThatWillBeDeleted();
-			if (l != null) {
-				for (FlexoModelObject o : l) {
-					if (!allObjectsThatWillBeDeleted.contains(o)) {
-						allObjectsThatWillBeDeleted.add(o);
+			if(selectedEditionPatternInstanceDeletionSchemes!=null && selectedEditionPatternInstanceDeletionSchemes.get(epi)!=null){
+				List<FlexoModelObject> l = epi.objectsThatWillBeDeleted(selectedEditionPatternInstanceDeletionSchemes.get(epi));
+				if (l != null) {
+					for (FlexoModelObject o : l) {
+						if (!allObjectsThatWillBeDeleted.contains(o)) {
+							allObjectsThatWillBeDeleted.add(o);
+						}
+					}
+				}
+			}
+			else{
+				List<FlexoModelObject> l = epi.objectsThatWillBeDeleted();
+				if (l != null) {
+					for (FlexoModelObject o : l) {
+						if (!allObjectsThatWillBeDeleted.contains(o)) {
+							allObjectsThatWillBeDeleted.add(o);
+						}
 					}
 				}
 			}
@@ -266,4 +286,26 @@ public class DeleteDiagramElements extends FlexoUndoableAction<DeleteDiagramElem
 		return allObjectsThatWillBeDeleted;
 	}
 
+	public DeletionScheme getSelectedDeletionScheme() {
+		return selectedDeletionScheme;
+	}
+
+	public void setSelectedDeletionScheme(DeletionScheme selectedDeletionScheme) {
+		if(getSelectedEditionPatternInstance()!=null){
+			if(selectedEditionPatternInstanceDeletionSchemes==null){
+				selectedEditionPatternInstanceDeletionSchemes = new HashMap<EditionPatternInstance,DeletionScheme>();
+			}
+			selectedEditionPatternInstanceDeletionSchemes.put(getSelectedEditionPatternInstance(), selectedDeletionScheme);
+			this.selectedDeletionScheme = selectedDeletionScheme;
+			computeElementsToDelete();
+		}
+	}
+	
+	public EditionPatternInstance getSelectedEditionPatternInstance() {
+		return selectedEditionPatternInstance;
+	}
+
+	public void setSelectedEditionPatternInstance(EditionPatternInstance selectedEditionPatternInstance) {
+		this.selectedEditionPatternInstance = selectedEditionPatternInstance;
+	}
 }

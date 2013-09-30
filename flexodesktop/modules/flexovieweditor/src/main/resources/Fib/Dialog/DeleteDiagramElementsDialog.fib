@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" borderTop="5" borderBottom="5" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.action.DeleteDiagramElements" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="500" height="400">
-  <Label label="delete_view_elements" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
-  <Label label="confirmation_text" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,11">
+<Panel layout="gridbag" borderTop="5" borderBottom="5" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.action.DeleteDiagramElements" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="800" height="557">
+  <Label label="delete_view_elements" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
+  <Label label="confirmation_text" align="center" index="1" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,11" localize="true">
     <LocalizedDictionary />
   </Label>
-  <Table iteratorClassName="org.openflexo.foundation.view.EditionPatternInstance" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.ePIThatWillBeDeleted" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="Lucida Grande,0,11">
-    <IconColumn data="controller.iconForObject(iterator.pattern)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
-    <LabelColumn data="iterator.displayableName" title="name" columnWidth="130" resizable="true" displayTitle="true" name="label" />
-    <LabelColumn data="iterator.pattern.name" title="type" columnWidth="130" resizable="true" displayTitle="true" name="label" />
+  <Table iteratorClassName="org.openflexo.foundation.view.EditionPatternInstance" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="data.selectedEditionPatternInstance" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="epiTable" index="2" data="data.ePIThatWillBeDeleted" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" font="Lucida Grande,0,11">
+    <IconColumn data="controller.iconForObject(iterator.editionPattern)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
+    <LabelColumn data="($org.openflexo.foundation.view.EditionPatternInstance)iterator.displayableName" title="name" columnWidth="130" resizable="true" displayTitle="true" name="label" />
+    <LabelColumn data="($org.openflexo.foundation.view.EditionPatternInstance)iterator.editionPattern" title="type" columnWidth="130" resizable="true" displayTitle="true" name="label" />
     <LocalizedDictionary />
   </Table>
-  <Panel layout="none" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
-    <Label label="show_objects_that_will_be_deleted" localize="true" constraints="flow(index=1)" font="Lucida Grande,2,11">
+  <Panel layout="split" hGap="10" vGap="3" cols="2" rows="2" flowAlignment="CENTER" boxLayoutAxis="X_AXIS" borderColor="0,0,0" borderTitle="Panel" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" index="3" data="epiTable.selected" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(epiTable.selected != null)" opaque="false">
+    <Label label="Deletion Scheme" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" visible="(epiTable.selected != null)" localize="true" />
+    <DropDown data="data.selectedDeletionScheme" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" visible="(epiTable.selected != null)" name="dropdown" localize="true" staticList="" list="epiTable.selected.editionPattern.deletionSchemes" iteratorClassName="org.openflexo.foundation.viewpoint.DeletionScheme" autoSelectFirstRow="true">
+      <Dependancy componentName="epiTable" />
+    </DropDown>
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="0" cols="2" rows="2" flowAlignment="LEADING" boxLayoutAxis="X_AXIS" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Panel layout="border" darkLevel="0" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" />
+    <CheckBox selected="false" index="0" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" name="ShowDetailsCB" localize="true" manageDynamicModel="true" />
+    <Label label="show_objects_that_will_be_deleted" index="1" constraints="flow(alignmentX=0.5;alignmentY=0.5;anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0;x=0;y=0)" font="Lucida Grande,2,11" localize="true">
       <LocalizedDictionary />
     </Label>
-    <CheckBox selected="false" localize="true" manageDynamicModel="true" name="ShowDetailsCB" constraints="flow(index=0)" />
   </Panel>
-  <Table iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.allObjectsThatWillBeDeleted" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="ShowDetailsCB.data" font="Lucida Grande,0,11">
+  <Table iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" index="5" data="data.allObjectsThatWillBeDeleted" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="ShowDetailsCB.data" font="Lucida Grande,0,11">
     <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="30" resizable="false" displayTitle="false" name="icon" />
     <LabelColumn data="iterator.displayableDescription" title="name" columnWidth="130" resizable="true" displayTitle="true" name="label" />
     <LabelColumn data="iterator.localizedClassName" title="type" columnWidth="130" resizable="true" displayTitle="true" name="label" />
     <CustomAction method="data.selectAll()" name="select_all" />
     <CustomAction method="data.selectNone()" name="select_none" />
-    <Dependancy componentName="SelectAllButton" />
-    <Dependancy componentName="SelectNoneButton" />
+    <Dependancy componentName="dropdown" />
     <LocalizedDictionary />
   </Table>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
-    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="delete" constraints="flow(index=0)" localize="true">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" index="6" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="delete" localize="true" index="0" constraints="flow(index=0)">
       <Dependancy componentName="URITextField" />
     </Button>
-    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" localize="true" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="validate" lang="English">Validate</Localized>
@@ -64,11 +69,10 @@
     <Localized key="select_all" lang="Dutch">Select all</Localized>
     <Localized key="also_delete_following_ontologic_objects" lang="French">les objets ontologiques suivants seront supprimés</Localized>
     <Localized key="also_delete_following_ontologic_objects" lang="English">also delete following ontologic objects</Localized>
-      <Localized key="show_objects_that_will_be_deleted" lang="English">Show objects that will be deleted</Localized>
+    <Localized key="show_objects_that_will_be_deleted" lang="English">Show objects that will be deleted</Localized>
     <Localized key="show_objects_that_will_be_deleted" lang="French">Voir les objets qui vont être supprimés</Localized>
     <Localized key="show_objects_that_will_be_deleted" lang="Dutch">Show objects that will be deleted</Localized>
-     <Localized key="delete_view_elements" lang="French">Supprimer des éléments de la vue</Localized>
+    <Localized key="delete_view_elements" lang="French">Supprimer des éléments de la vue</Localized>
     <Localized key="delete_view_elements" lang="English">Delete view elements</Localized>
   </LocalizedDictionary>
 </Panel>
-
