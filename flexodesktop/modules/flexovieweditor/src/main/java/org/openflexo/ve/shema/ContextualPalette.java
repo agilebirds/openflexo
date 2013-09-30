@@ -193,7 +193,7 @@ public class ContextualPalette extends DrawingPalette {
 									public void actionPerformed(ActionEvent e) {
 										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
 												getController().getVEController().getEditor());
-										action.dropLocation = dropLocation;
+										action.setDropLocation(dropLocation);
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
 										action.doAction();
@@ -209,7 +209,7 @@ public class ContextualPalette extends DrawingPalette {
 						} else if (availableDropPatterns.size() == 1) {
 							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
 									.getVEController().getEditor());
-							action.dropLocation = dropLocation;
+							action.setDropLocation(dropLocation);
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);
 							action.doAction();

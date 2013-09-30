@@ -80,7 +80,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	private DropScheme _dropScheme;
 	private ViewShape _primaryShape;
 
-	public FGEPoint dropLocation;
+	private FGEPoint dropLocation;
 
 	DropSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -169,7 +169,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 				// Declare shape as new shape only if it is the primary representation role of the EP
 
 				_primaryShape = newShape;
-				gr.setLocation(dropLocation);
+				gr.setLocation(getDropLocation());
 
 				// Temporary comment this portion of code if child shapes are declared inside this shape
 				if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
@@ -209,7 +209,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 				Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
 				if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
 					ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
-					gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY()
+					gr.setLocation(new FGEPoint(getDropLocation().x + gr.getX() - primaryGR.getX(), getDropLocation().y + gr.getY()
 							- primaryGR.getY()));
 				}
 			}
@@ -256,6 +256,14 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;
+	}
+
+	public FGEPoint getDropLocation() {
+		return dropLocation;
+	}
+
+	public void setDropLocation(FGEPoint dropLocation) {
+		this.dropLocation = dropLocation;
 	}
 
 }

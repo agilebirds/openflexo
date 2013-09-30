@@ -521,6 +521,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getVEController()
 				.getEditor());
 		dropSchemeAction.setDropScheme(dropScheme);
+		dropSchemeAction.setDropLocation(dropLocation);
 		dropSchemeAction.escapeParameterRetrievingWhenValid = true;
 		dropSchemeAction.doAction();
 
