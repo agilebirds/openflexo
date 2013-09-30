@@ -1218,6 +1218,17 @@ public abstract class OWLOntology extends OWLObject implements FlexoOntology {
 		return returned;
 	}
 
+	@Override
+	public List<? extends OntologyIndividual> getAccessibleIndividuals(OntologyClass klass) {
+		List<OntologyIndividual> individuals = new ArrayList<OntologyIndividual>();
+		for (OntologyIndividual i : getAccessibleIndividuals()) {
+			if (klass.isSuperConceptOf(i)) {
+				individuals.add(i);
+			}
+		}
+		return individuals;
+	}
+
 	/**
 	 * Return all object properties accessible in the context of this ontology.<br>
 	 * This means that properties are also retrieved from imported ontologies (non-strict mode)

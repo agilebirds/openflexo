@@ -154,6 +154,14 @@ public interface FlexoOntology extends OntologyObject {
 	public List<? extends OntologyIndividual> getAccessibleIndividuals();
 
 	/**
+	 * Return all individuals accessible in the context of this ontology.<br>
+	 * This means that individuals are also retrieved from imported ontologies (non-strict mode)
+	 * 
+	 * @return
+	 */
+	public List<? extends OntologyIndividual> getAccessibleIndividuals(OntologyClass klass);
+
+	/**
 	 * Return all object properties accessible in the context of this ontology.<br>
 	 * This means that properties are also retrieved from imported ontologies (non-strict mode)
 	 * 

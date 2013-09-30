@@ -18,6 +18,7 @@ import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologicDataType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
@@ -499,6 +500,17 @@ public abstract class XSOntology extends AbstractXSOntObject implements FlexoOnt
 			}
 		}
 		return new ArrayList<XSOntIndividual>(result.values());
+	}
+
+	@Override
+	public List<? extends OntologyIndividual> getAccessibleIndividuals(OntologyClass klass) {
+		List<OntologyIndividual> individuals = new ArrayList<OntologyIndividual>();
+		for (OntologyIndividual i : getAccessibleIndividuals()) {
+			if (isSuperConceptOf(i)) {
+				individuals.add(i);
+			}
+		}
+		return individuals;
 	}
 
 	@Override

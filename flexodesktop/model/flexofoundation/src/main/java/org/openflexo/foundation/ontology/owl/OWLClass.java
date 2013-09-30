@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyProperty;
 import org.openflexo.toolbox.StringUtils;
@@ -163,17 +162,6 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 				appendToSuperClasses(THING_CLASS);
 			}
 		}
-	}
-
-	@Override
-	public List<OntologyIndividual> getAllIndividuals() {
-		List<OntologyIndividual> individuals = new ArrayList<OntologyIndividual>();
-		for (OntologyIndividual i : getOntology().getIndividuals()) {
-			if (isSuperConceptOf(i)) {
-				individuals.add(i);
-			}
-		}
-		return individuals;
 	}
 
 	@Deprecated

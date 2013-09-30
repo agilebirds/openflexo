@@ -39,6 +39,4 @@ public interface OntologyClass extends OntologyObject {
 	 */
 	public boolean isThing();
 
-	List<OntologyIndividual> getAllIndividuals();
-
 }

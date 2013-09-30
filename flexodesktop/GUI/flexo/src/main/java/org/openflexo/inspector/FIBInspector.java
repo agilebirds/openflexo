@@ -636,8 +636,8 @@ public class FIBInspector extends FIBPanel {
 			}
 			if (listEntry.getListType() == ListType.Individual) {
 				if (listEntry.getConcept() != null) {
-					dd.setList(new DataBinding("project.projectOntology.getClass(\"" + listEntry.getConcept().getURI()
-							+ "\").allIndividuals") {
+					dd.setList(new DataBinding("project.projectOntology.getAccessibleIndividuals(project.projectOntology.getClass(\""
+							+ listEntry.getConcept().getURI() + "\"))") {
 						@Override
 						public BindingFactory getBindingFactory() {
 							return listEntry.getBindingFactory();
