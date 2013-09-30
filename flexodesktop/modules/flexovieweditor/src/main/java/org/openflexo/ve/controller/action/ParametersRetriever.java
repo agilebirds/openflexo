@@ -258,8 +258,8 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			case View:
 				FIBCustom viewSelector = new FIBCustom();
 				viewSelector.setComponentClass(org.openflexo.components.widget.FIBViewSelector.class);
-				viewSelector.addToAssignments(new FIBCustomAssignment(viewSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
+				viewSelector.addToAssignments(new FIBCustomAssignment(viewSelector, new DataBinding("component.project"), new DataBinding(
+						"data.project"), true));
 				viewSelector.setData(new DataBinding("parameters." + parameter.getName()) {
 					@Override
 					public BindingFactory getBindingFactory() {
@@ -561,7 +561,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		Hashtable<EditionSchemeParameter, FIBComponent> widgets = new Hashtable<EditionSchemeParameter, FIBComponent>();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			FIBLabel label = new FIBLabel();
-			label.setLabel(parameter.getLabel());
+			label.setLabel(FlexoLocalization.localizedForKey(editionScheme.getViewPoint().getLocalizedDictionary(), parameter.getLabel()));
 			returned.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
 			FIBComponent widget = makeWidget(parameter, returned, index++);
 			widgets.put(parameter, widget);
@@ -581,7 +581,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 		FIBPanel buttonsPanel = new FIBPanel();
 
-		buttonsPanel.setLayout(Layout.flow);
+		buttonsPanel.setLayout(Layout.buttons);
 		buttonsPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
 		buttonsPanel.setHGap(0);
 		buttonsPanel.setVGap(5);
