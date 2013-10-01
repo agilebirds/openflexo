@@ -1203,6 +1203,7 @@
             <AddAction method="data.inspector.createNewTableProperty" name="add_table" />
             <RemoveAction method="data.inspector.deleteEntry(selected)" name="delete" />
             <AddAction method="data.inspector.createNewTextArea" name="add_textarea" />
+            <AddAction method="data.inspector.createNewWysiwyg" name="add_wysiwyg" />
             <AddAction method="data.inspector.createNewInteger" name="add_integer" />
             <AddAction method="data.inspector.createNewCheckbox" name="add_checkbox" />
             <AddAction method="data.inspector.createNewIndividual" name="add_individual" />
@@ -1881,6 +1882,9 @@
     <Localized key="add_textfield" lang="English">Add textfield</Localized>
     <Localized key="add_textfield" lang="French">Ajouter un champ texte</Localized>
     <Localized key="add_textfield" lang="Dutch">Add textfield</Localized>
+    <Localized key="add_wysiwyg" lang="English">Add wysiwyg</Localized>
+    <Localized key="add_wysiwyg" lang="French">Voeg een tekstveld opgemaakt</Localized>
+    <Localized key="add_wysiwyg" lang="Dutch">Add textfield</Localized>
     <Localized key="add_table" lang="English">Add table</Localized>
     <Localized key="add_table" lang="French">Ajouter un tableau</Localized>
     <Localized key="add_table" lang="Dutch">Add table</Localized>

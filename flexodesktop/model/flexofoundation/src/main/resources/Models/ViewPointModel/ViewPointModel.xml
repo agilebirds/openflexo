@@ -63,6 +63,9 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry" xmlTag="TextArea">
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.inspector.WysiwygInspectorEntry" xmlTag="Wysiwyg">
+	</entity>
+
 	<entity name="org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry" xmlTag="Integer">
 	</entity>
 

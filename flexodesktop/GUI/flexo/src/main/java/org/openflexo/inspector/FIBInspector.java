@@ -41,6 +41,7 @@ import org.openflexo.fib.model.FIBCheckBox;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomAssignment;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBHtmlEditor;
 import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBNumber.NumberType;
@@ -75,6 +76,7 @@ import org.openflexo.foundation.viewpoint.inspector.ObjectPropertyInspectorEntry
 import org.openflexo.foundation.viewpoint.inspector.PropertyInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.WysiwygInspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -356,6 +358,14 @@ public class FIBInspector extends FIBPanel {
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
 			newTab.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true));
 			return ta;
+		} else if (entry instanceof WysiwygInspectorEntry) {
+			FIBHtmlEditor wysiwyg = new FIBHtmlEditor();
+			wysiwyg.makeLightHtmlEditor();
+			wysiwyg.setUseScrollBar(true);
+			wysiwyg.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			wysiwyg.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
+			newTab.addToSubComponents(wysiwyg, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true));
+			return wysiwyg;
 		} else if (entry instanceof CheckboxInspectorEntry) {
 			FIBCheckBox cb = new FIBCheckBox();
 			newTab.addToSubComponents(cb, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));

@@ -134,6 +134,13 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		return newEntry;
 	}
 
+	public WysiwygInspectorEntry createNewWysiwyg() {
+		WysiwygInspectorEntry newEntry = new WysiwygInspectorEntry(null);
+		newEntry.setName("wysiwyg");
+		addToEntries(newEntry);
+		return newEntry;
+	}
+
 	public IntegerInspectorEntry createNewInteger() {
 		IntegerInspectorEntry newEntry = new IntegerInspectorEntry(null);
 		newEntry.setName("integer");
