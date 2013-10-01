@@ -23,8 +23,8 @@ public class TestVEDialogFibs extends FIBTestCase {
 		validateFIB("Fib/Dialog/ConfigureModelSlotInstanceDialog.fib");
 	}
 
-	public void testConfigureTypeSafeModelSlotInstanceDialog() {
-		validateFIB("Fib/Dialog/ConfigureTypeSafeModelSlotInstanceDialog.fib");
+	public void testConfigureTypeAwareModelSlotInstanceDialog() {
+		validateFIB("Fib/Dialog/ConfigureTypeAwareModelSlotInstanceDialog.fib");
 	}
 
 	public void testConfigureVirtualModelSlotInstanceDialog() {

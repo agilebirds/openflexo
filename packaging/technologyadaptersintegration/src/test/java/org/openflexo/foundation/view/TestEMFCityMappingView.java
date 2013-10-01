@@ -38,7 +38,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
 import org.openflexo.foundation.view.diagram.DiagramModelSlotInstanceConfiguration;
@@ -144,7 +144,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		// Model Slot city1
 		ModelSlot city1ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city1");
 		assertNotNull(city1ModelSlot);
-		TypeSafeModelSlotInstanceConfiguration city1ModelSlotConfiguration = (TypeSafeModelSlotInstanceConfiguration) createDiagram
+		TypeAwareModelSlotInstanceConfiguration city1ModelSlotConfiguration = (TypeAwareModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city1ModelSlot);
 		city1ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
 		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity1");
@@ -154,7 +154,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		// Model Slot city2
 		ModelSlot city2ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city2");
 		assertNotNull(city2ModelSlot);
-		TypeSafeModelSlotInstanceConfiguration city2ModelSlotConfiguration = (TypeSafeModelSlotInstanceConfiguration) createDiagram
+		TypeAwareModelSlotInstanceConfiguration city2ModelSlotConfiguration = (TypeAwareModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city2ModelSlot);
 		city2ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
 		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity2");
@@ -179,10 +179,10 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertEquals(3, newDiagram.getModelSlotInstances().size());
 		ModelSlotInstance<?, ?> diagramModelSlotInstance = newDiagram.getModelSlotInstance("diagram");
 		assertNotNull(diagramModelSlotInstance);
-		TypeSafeModelSlotInstance<?, ?, ?> city1ModelSlotInstance = (TypeSafeModelSlotInstance<?, ?, ?>) newDiagram
+		TypeAwareModelSlotInstance<?, ?, ?> city1ModelSlotInstance = (TypeAwareModelSlotInstance<?, ?, ?>) newDiagram
 				.getModelSlotInstance("city1");
 		assertNotNull(city1ModelSlotInstance);
-		TypeSafeModelSlotInstance<?, ?, ?> city2ModelSlotInstance = (TypeSafeModelSlotInstance<?, ?, ?>) newDiagram
+		TypeAwareModelSlotInstance<?, ?, ?> city2ModelSlotInstance = (TypeAwareModelSlotInstance<?, ?, ?>) newDiagram
 				.getModelSlotInstance("city2");
 		assertNotNull(city2ModelSlotInstance);
 		// System.out.println("DiagramModel=" + diagramModelSlotInstance.getModelURI());

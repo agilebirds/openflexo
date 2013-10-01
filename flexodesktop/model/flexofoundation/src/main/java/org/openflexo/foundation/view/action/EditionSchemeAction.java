@@ -41,7 +41,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
@@ -368,7 +368,7 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
 
-						newURI = modelSlot.generateUniqueURIName((TypeSafeModelSlotInstance) getVirtualModelInstance()
+						newURI = modelSlot.generateUniqueURIName((TypeAwareModelSlotInstance) getVirtualModelInstance()
 								.getModelSlotInstance(modelSlot), newURI);
 						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
 						super.put(uriParam, newURI);
@@ -394,7 +394,7 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 			URIParameter uriParam = (URIParameter) parameter;
 			if (uriParam.getModelSlot() instanceof TypeAwareModelSlot) {
 				TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
-				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
+				return modelSlot.generateUniqueURI((TypeAwareModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
 						(String) getParameterValue(parameter));
 			}
 		}

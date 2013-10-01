@@ -542,19 +542,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return modelSlots;
 	}*/
 
-	/*@Deprecated
-	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
-		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
-		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot instanceof TypeSafeModelSlot) {
-				if (((TypeSafeModelSlot) modelSlot).getMetaModelResource() != null) {
-					allMetaModels.add(((TypeSafeModelSlot) modelSlot).getMetaModelResource());
-				}
-			}
-		}
-		return allMetaModels;
-	}*/
-
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca

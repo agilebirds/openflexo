@@ -35,7 +35,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -209,7 +209,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
+			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
 		if (o instanceof IFlexoOntologyObject) {
 			return ((IFlexoOntologyObject) o).getURI();
 		}
@@ -218,7 +218,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
+			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}

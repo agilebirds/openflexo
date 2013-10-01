@@ -4,25 +4,24 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.toolbox.StringUtils;
 
-public class OWLModelSlotInstanceConfiguration extends TypeSafeModelSlotInstanceConfiguration<OWLOntology, OWLOntology, OWLModelSlot> {
+public class OWLModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanceConfiguration<OWLOntology, OWLOntology, OWLModelSlot> {
 
-	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstanceConfiguration.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypeAwareModelSlotInstanceConfiguration.class.getPackage().getName());
 
 	protected OWLModelSlotInstanceConfiguration(OWLModelSlot ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
 	}
-	
+
 	@Override
-	protected TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> configureModelSlotInstance(
-			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance) {
+	protected TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> configureModelSlotInstance(
+			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance) {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
 			if (modelResource != null) {
@@ -32,17 +31,17 @@ public class OWLModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}
 			return msInstance;
-		}
-		else{
+		} else {
 			return super.configureModelSlotInstance(msInstance);
 		}
 	}
 
-	private FlexoModelResource<OWLOntology, OWLOntology> createSharedEmptyModel(TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance, OWLModelSlot modelSlot) {
+	private FlexoModelResource<OWLOntology, OWLOntology> createSharedEmptyModel(
+			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance, OWLModelSlot modelSlot) {
 		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
-	
+
 	@Override
 	public void setOption(org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption option) {
 		super.setOption(option);
@@ -60,13 +59,17 @@ public class OWLModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 	@Override
 	public boolean isValidConfiguration() {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
-			return getResourceCenter() != null && getResourceCenter() instanceof FileSystemBasedResourceCenter && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
+			return getResourceCenter() != null && getResourceCenter() instanceof FileSystemBasedResourceCenter
+					&& StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
-		}
-		else{
+		} else {
 			return super.isValidConfiguration();
-		}	
+		}
 	}
 
-	
+	@Override
+	public boolean isURIEditable() {
+		return true;
+	}
+
 }

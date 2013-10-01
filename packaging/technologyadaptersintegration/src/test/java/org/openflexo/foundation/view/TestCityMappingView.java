@@ -39,7 +39,7 @@ import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -214,7 +214,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		createVirtualModelInstance.setVirtualModel(cityMappingVM);
 
 		ModelSlot emfModelSlot1 = cityMappingVM.getModelSlots().get(0);
-		TypeSafeModelSlotInstanceConfiguration emfModelSlotConfiguration1 = (TypeSafeModelSlotInstanceConfiguration) createVirtualModelInstance
+		TypeAwareModelSlotInstanceConfiguration emfModelSlotConfiguration1 = (TypeAwareModelSlotInstanceConfiguration) createVirtualModelInstance
 				.getModelSlotInstanceConfiguration(emfModelSlot1);
 		emfModelSlotConfiguration1.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		File modelFile1 = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city1/my.city1");
@@ -228,7 +228,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		assertTrue(emfModelSlotConfiguration1.isValidConfiguration());
 
 		ModelSlot emfModelSlot2 = cityMappingVM.getModelSlots().get(1);
-		TypeSafeModelSlotInstanceConfiguration emfModelSlotConfiguration2 = (TypeSafeModelSlotInstanceConfiguration) createVirtualModelInstance
+		TypeAwareModelSlotInstanceConfiguration emfModelSlotConfiguration2 = (TypeAwareModelSlotInstanceConfiguration) createVirtualModelInstance
 				.getModelSlotInstanceConfiguration(emfModelSlot2);
 		emfModelSlotConfiguration2.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		File modelFile2 = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city2/first.city2");

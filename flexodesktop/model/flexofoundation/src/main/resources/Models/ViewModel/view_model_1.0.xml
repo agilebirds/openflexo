@@ -39,7 +39,7 @@
 		<property name="modelSlotName" xmlTag="modelSlotName" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.TypeSafeModelSlotInstance" xmlTag="TypeSafeModelSlotInstance">
+	<entity name="org.openflexo.foundation.view.TypeAwareModelSlotInstance" xmlTag="TypeAwareModelSlotInstance">
 		<property name="modelURI" xmlTag="modelURI" attribute="YES" />
 	</entity>
 
