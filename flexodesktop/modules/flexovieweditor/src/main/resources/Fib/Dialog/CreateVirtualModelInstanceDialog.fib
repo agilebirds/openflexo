@@ -24,7 +24,7 @@
     </RowSplit>
     <Browser root="data.viewpoint" iteratorClassName="org.openflexo.foundation.viewpoint.VirtualModel" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.virtualModel" showFooter="false" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" name="VirtualModelBrowser" index="3" constraints="split(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;splitIdentifier=browser;weightX=1.0;weightY=1.0)">
       <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.ViewPoint" label="viewPoint.name" icon="controller.iconForObject(viewPoint)" isEditable="false" filtered="false" defaultVisible="true" name="viewPoint">
-        <Children data="viewPoint.virtualModels" name="virtualModels" />
+        <Children data="viewPoint.plainVirtualModels" name="virtualModels" />
       </BrowserElement>
       <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" label="virtualModel.name" icon="controller.iconForObject(virtualModel)" isEditable="false" filtered="false" defaultVisible="true" name="virtualModel" />
     </Browser>
