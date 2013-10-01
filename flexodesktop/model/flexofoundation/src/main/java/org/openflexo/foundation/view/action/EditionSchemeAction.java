@@ -214,7 +214,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 						(ViewConnector) performedActions.get(action));
 			}
 			if (action instanceof org.openflexo.foundation.viewpoint.AddDiagram) {
-				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action, (View) performedActions.get(action));
+				finalizePerformAddDiagram((org.openflexo.foundation.viewpoint.AddDiagram) action,
+						(ViewDefinition) performedActions.get(action));
 			}
 		}
 
@@ -457,7 +458,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return null;
 	}
 
-	protected View finalizePerformAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action, View newShema) {
+	protected ViewDefinition finalizePerformAddDiagram(org.openflexo.foundation.viewpoint.AddDiagram action, ViewDefinition newShema) {
 		return newShema;
 	}
 
@@ -714,7 +715,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		logger.info("Perform performAddEditionPattern " + action);
 		ViewDefinition view = action.getView(this);
 		logger.info("View: " + view);
-		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view, null, this);
+		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(view.getView(), null, this);
 		creationSchemeAction.setCreationScheme(action.getCreationScheme());
 		for (AddEditionPatternParameter p : action.getParameters()) {
 			EditionSchemeParameter param = p.getParam();

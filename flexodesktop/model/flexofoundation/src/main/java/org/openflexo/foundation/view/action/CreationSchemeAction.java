@@ -70,6 +70,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	static {
 		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
 		FlexoModelObject.addActionForClass(actionType, ViewLibrary.class);
+		FlexoModelObject.addActionForClass(actionType, ViewDefinition.class);
 	}
 
 	private View _view;
