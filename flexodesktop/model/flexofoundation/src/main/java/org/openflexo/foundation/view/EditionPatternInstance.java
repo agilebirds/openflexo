@@ -121,6 +121,21 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
+		// Pragmatic attempt to fix "inheritance issue...."
+		EditionPattern parentEP = this.getEditionPattern().getParentEditionPattern();
+		while (actorReference == null && parentEP != null ){
+			if (parentEP != null){
+				PatternRole ppPatternRole = parentEP.getPatternRole(patternRole.getName());
+				if (ppPatternRole == patternRole){
+					patternRole = this.getEditionPattern().getPatternRole(ppPatternRole.getName());
+					actorReference = (ActorReference<T>) actors.get(patternRole);
+				}
+			}
+			if (actorReference == null) {
+				parentEP = parentEP.getParentEditionPattern();
+			}
+
+		}
 		if (actorReference != null) {
 			return actorReference.retrieveObject();
 		}
@@ -244,7 +259,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	{
 		return "GET string value for "+inspectorEntryKey;
 	}
-	
+
 	public void setStringValue(String inspectorEntryKey, String value)
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
@@ -471,7 +486,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		for(EditionAction editionAction : deletionScheme.getActions()){
 			if(editionAction instanceof DeleteAction){
 				DeleteAction deleteAction = (DeleteAction)editionAction;
-				
+
 				returned.add((FlexoModelObject) getPatternActor(deleteAction.getPatternRole()));
 			}
 		}
