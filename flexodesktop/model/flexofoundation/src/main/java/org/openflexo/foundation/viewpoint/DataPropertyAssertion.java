@@ -55,7 +55,7 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public OntologyProperty getOntologyProperty() {
-		if (getViewPoint().getViewpointOntology() != null) {
+		if (getViewPoint() != null && getViewPoint().getViewpointOntology() != null) {
 			return getViewPoint().getViewpointOntology().getProperty(_getDataPropertyURI());
 		}
 		return null;
