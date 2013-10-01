@@ -626,7 +626,11 @@ public class FIBInspector extends FIBPanel {
 			// properly work.
 			// dd.setName(listEntry.getName());
 			if (listEntry.getFormat() != null && listEntry.getFormat().isValid()) {
-				dd.setFormat(new DataBinding(listEntry.getFormat().toString()) {
+				String format = listEntry.getFormat().toString();
+				if (listEntry.getListType() == ListType.Individual) {
+					format = "object.getFormattedValue(\"" + format + "\")";
+				}
+				dd.setFormat(new DataBinding(format) {
 					@Override
 					public BindingFactory getBindingFactory() {
 						return listEntry.getBindingFactory();

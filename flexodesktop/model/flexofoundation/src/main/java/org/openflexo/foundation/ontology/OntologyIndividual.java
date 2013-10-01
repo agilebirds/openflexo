@@ -13,4 +13,6 @@ public interface OntologyIndividual extends OntologyObject {
 	 */
 	public Object addType(OntologyClass type);
 
+	public String getFormattedValue(String binding);
+
 }

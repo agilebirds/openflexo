@@ -37,6 +37,7 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
@@ -138,14 +139,23 @@ public class ListInspectorEntry extends InspectorEntry {
 			return formatterBindingModel;
 		}
 
+		public void resetBindingModel() {
+			formatterBindingModel = null;
+		}
+
 		private void createFormatterBindingModel() {
 			formatterBindingModel = new BindingModel(ListInspectorEntry.this.getBindingModel());
-			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
-				@Override
-				public Type getType() {
-					return ListInspectorEntry.this.getType();
-				}
-			});
+			if (getListType() == ListType.Individual && getConcept() != null) {
+				formatterBindingModel.addToBindingVariables(new OntologyIndividualPathElement("object", getConcept(), null, getConcept()
+						.getFlexoOntology()));
+			} else {
+				formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
+					@Override
+					public Type getType() {
+						return ListInspectorEntry.this.getType();
+					}
+				});
+			}
 		}
 
 		@Override
@@ -293,6 +303,9 @@ public class ListInspectorEntry extends InspectorEntry {
 
 	public void _setConceptURI(String conceptURI) {
 		this.conceptURI = conceptURI;
+		if (formatter != null) {
+			formatter.resetBindingModel();
+		}
 	}
 
 	public OntologyClass getConcept() {
@@ -315,6 +328,9 @@ public class ListInspectorEntry extends InspectorEntry {
 
 	public void setListType(ListType listType) {
 		if (listType != this.listType && listType != null) {
+			if (formatter != null) {
+				formatter.resetBindingModel();
+			}
 			this.listType = listType;
 			setChanged();
 			notifyChange("listType", null, listType);

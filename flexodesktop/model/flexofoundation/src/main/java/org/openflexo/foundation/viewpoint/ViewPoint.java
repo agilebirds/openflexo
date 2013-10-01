@@ -813,7 +813,7 @@ public class ViewPoint extends ViewPointObject {
 		return EDITION_PATTERN_BINDING_FACTORY;
 	}
 
-	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+	public static final EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
 	@Override
 	public String getLanguageRepresentation() {

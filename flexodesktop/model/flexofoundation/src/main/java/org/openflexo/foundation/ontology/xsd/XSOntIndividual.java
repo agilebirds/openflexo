@@ -25,6 +25,11 @@ public class XSOntIndividual extends AbstractXSOntObject implements OntologyIndi
 		super(ontology, name, uri);
 	}
 
+	@Override
+	public String getFormattedValue(String binding) {
+		return null;
+	}
+
 	public XSOntClass getType() {
 		return type;
 	}

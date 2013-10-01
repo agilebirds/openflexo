@@ -26,23 +26,37 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.binding.OntologyObjectPathElement.OntologyIndividualPathElement;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class OWLIndividual extends OWLObject<Individual> implements OntologyIndividual, Comparable<OntologyIndividual> {
+public class OWLIndividual extends OWLObject<Individual> implements OntologyIndividual, Comparable<OntologyIndividual>, Bindable {
 
 	private static final Logger logger = Logger.getLogger(OntologyIndividual.class.getPackage().getName());
 
 	private Individual individual;
 
 	private final Vector<OWLClass> types;
+
+	private BindingModel bindingModel;
 
 	protected OWLIndividual(Individual anIndividual, OWLOntology ontology) {
 		super(anIndividual, ontology);
@@ -65,6 +79,45 @@ public class OWLIndividual extends OWLObject<Individual> implements OntologyIndi
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
+	}
+
+	private LoadingCache<String, DataBinding<String>> formatBindingCache = CacheBuilder.newBuilder().build(
+			new CacheLoader<String, DataBinding<String>>() {
+				@Override
+				public DataBinding<String> load(String binding) throws Exception {
+					return new DataBinding<String>(binding, OWLIndividual.this, String.class, BindingDefinitionType.GET);
+				}
+			});
+
+	@Override
+	public String getFormattedValue(String binding) {
+		DataBinding<String> dataBinding = formatBindingCache.getUnchecked(binding);
+		return dataBinding.getBindingValue(new BindingEvaluationContext() {
+
+			@Override
+			public Object getValue(BindingVariable variable) {
+				if ("project".equals(variable.getVariableName())) {
+					return getProject();
+				} else {
+					return OWLIndividual.this;
+				}
+			}
+		});
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() {
+		return ViewPoint.EDITION_PATTERN_BINDING_FACTORY;
+	}
+
+	@Override
+	public BindingModel getBindingModel() {
+		if (bindingModel == null) {
+			bindingModel = new BindingModel();
+			bindingModel.addToBindingVariables(new OntologyIndividualPathElement("object", getTypes().size() > 0 ? getTypes().get(0)
+					: getOntology().getThingConcept(), null, getOntology()));
+		}
+		return bindingModel;
 	}
 
 	/**
