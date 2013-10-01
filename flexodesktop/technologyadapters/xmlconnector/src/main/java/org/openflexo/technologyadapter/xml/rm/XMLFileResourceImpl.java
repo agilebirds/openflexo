@@ -23,8 +23,10 @@ package org.openflexo.technologyadapter.xml.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -165,8 +167,9 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	private void writeToFile() throws SaveResourceException {
 
-		FileWriter out = null;
+		OutputStreamWriter out = null;
 		try {
+			out = new OutputStreamWriter(new FileOutputStream(getFile()),"UTF-8");
 			out = new FileWriter(getFile());
 			XMLWriter<XMLFileResource, XMLModel> writer = new XMLWriter<XMLFileResource, XMLModel>(this , out);
 

@@ -43,7 +43,9 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.CloningScheme;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
@@ -465,7 +467,15 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
 	public List<FlexoModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
-		return null;
+		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+		for(EditionAction editionAction : deletionScheme.getActions()){
+			if(editionAction instanceof DeleteAction){
+				DeleteAction deleteAction = (DeleteAction)editionAction;
+				
+				returned.add((FlexoModelObject) getPatternActor(deleteAction.getPatternRole()));
+			}
+		}
+		return returned;
 	}
 
 	/*@Override

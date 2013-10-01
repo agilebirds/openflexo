@@ -89,25 +89,25 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 				myWriter.setPrefix(NSPrefix, NSURI);
 			}
 
-		}
-		if (myWriter != null) {
-			myWriter.writeStartDocument("UTF-8","1.0");
-			myWriter.writeCharacters(LINE_SEP);
-		}
+			if (myWriter != null) {
+				myWriter.writeStartDocument("UTF-8","1.0");
+				myWriter.writeCharacters(LINE_SEP);
 
-		IXMLIndividual<?,?> rootIndiv = ((IXMLModel) taRes.getResourceData(null)).getRoot();
 
-		if (rootIndiv != null ){
-			writeRootElement(rootIndiv,NSURI, NSPrefix);
-			myWriter.writeCharacters(LINE_SEP);
-		}
+				IXMLIndividual<?,?> rootIndiv = ((IXMLModel) taRes.getResourceData(null)).getRoot();
 
-		if (myWriter != null) {
-			myWriter.writeEndDocument();
-			myWriter.flush();
-			myWriter.close();
+				if (rootIndiv != null ){
+					writeRootElement(rootIndiv,NSURI, NSPrefix);
+					myWriter.writeCharacters(LINE_SEP);
+				}
+
+				myWriter.writeEndDocument();
+				myWriter.flush();
+				myWriter.close();
+
+				myWriter = null;
+			}
 		}
-		myWriter = null;
 	}
 
 
