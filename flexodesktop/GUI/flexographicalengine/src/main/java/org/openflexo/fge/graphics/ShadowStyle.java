@@ -19,7 +19,9 @@
  */
 package org.openflexo.fge.graphics;
 
+import java.lang.reflect.Field;
 import java.util.Observable;
+import java.util.Vector;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
@@ -115,7 +117,25 @@ public class ShadowStyle extends Observable implements XMLSerializable, Cloneabl
 	@Override
 	public ShadowStyle clone() {
 		try {
-			return (ShadowStyle) super.clone();
+			ShadowStyle returned = (ShadowStyle) super.clone();
+			try {
+				Field field = Observable.class.getDeclaredField("obs");
+				field.setAccessible(true);
+				field.set(returned, new Vector());
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen, we are clonable
 			e.printStackTrace();
