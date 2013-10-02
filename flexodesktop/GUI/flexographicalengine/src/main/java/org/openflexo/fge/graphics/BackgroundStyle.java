@@ -21,7 +21,9 @@ package org.openflexo.fge.graphics;
 
 import java.awt.Paint;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Observable;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -40,21 +42,7 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
 	public static enum Parameters implements GRParameter {
-		color,
-		color1,
-		color2,
-		direction,
-		textureType,
-		imageFile,
-		deltaX,
-		deltaY,
-		imageBackgroundType,
-		scaleX,
-		scaleY,
-		fitToShape,
-		imageBackgroundColor,
-		transparencyLevel,
-		useTransparency;
+		color, color1, color2, direction, textureType, imageFile, deltaX, deltaY, imageBackgroundType, scaleX, scaleY, fitToShape, imageBackgroundColor, transparencyLevel, useTransparency;
 	}
 
 	public static BackgroundStyle makeEmptyBackground() {
@@ -152,6 +140,23 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 	public BackgroundStyle clone() {
 		try {
 			BackgroundStyle returned = (BackgroundStyle) super.clone();
+			try {
+				Field field = Observable.class.getDeclaredField("obs");
+				field.setAccessible(true);
+				field.set(returned, new Vector());
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			returned.graphicalRepresentation = null;
 			return returned;
 		} catch (CloneNotSupportedException e) {

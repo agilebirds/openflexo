@@ -1885,6 +1885,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public ForegroundStyle getSelectedForeground() {
 		if (selectedForeground == null) {
 			selectedForeground = foreground.clone();
+			selectedForeground.addObserver(this);
 		}
 		return selectedForeground;
 	}
@@ -1914,6 +1915,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public ForegroundStyle getFocusedForeground() {
 		if (focusedForeground == null) {
 			focusedForeground = foreground.clone();
+			focusedForeground.addObserver(this);
 		}
 		return focusedForeground;
 	}
@@ -1981,6 +1983,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public BackgroundStyle getSelectedBackground() {
 		if (selectedBackground == null) {
 			selectedBackground = background.clone();
+			selectedBackground.addObserver(this);
 		}
 		return selectedBackground;
 	}
@@ -2012,6 +2015,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public BackgroundStyle getFocusedBackground() {
 		if (focusedBackground == null) {
 			focusedBackground = background.clone();
+			focusedBackground.addObserver(this);
 		}
 		return focusedBackground;
 	}

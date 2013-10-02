@@ -21,7 +21,9 @@ package org.openflexo.fge.graphics;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.lang.reflect.Field;
 import java.util.Observable;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
@@ -130,7 +132,25 @@ public class TextStyle extends Observable implements XMLSerializable, Cloneable 
 	@Override
 	public TextStyle clone() {
 		try {
-			return (TextStyle) super.clone();
+			TextStyle returned = (TextStyle) super.clone();
+			try {
+				Field field = Observable.class.getDeclaredField("obs");
+				field.setAccessible(true);
+				field.set(returned, new Vector());
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
 			e.printStackTrace();
