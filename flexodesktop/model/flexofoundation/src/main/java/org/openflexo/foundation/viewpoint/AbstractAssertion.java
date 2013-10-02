@@ -57,7 +57,10 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 	}
 
 	public EditionScheme getScheme() {
-		return getAction().getScheme();
+		if (getAction() != null) {
+			return getAction().getScheme();
+		}
+		return null;
 	}
 
 	@Override

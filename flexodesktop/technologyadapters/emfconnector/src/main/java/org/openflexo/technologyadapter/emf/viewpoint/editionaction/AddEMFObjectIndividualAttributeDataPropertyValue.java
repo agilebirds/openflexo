@@ -39,7 +39,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -180,7 +180,7 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
+		TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		EMFModel model = modelSlotInstance.getResourceData();
 		// // Add Attribute in EMF
 		getSubject(action).getObject().eSet(((EMFAttributeDataProperty) getDataProperty()).getObject(), getValue(action));

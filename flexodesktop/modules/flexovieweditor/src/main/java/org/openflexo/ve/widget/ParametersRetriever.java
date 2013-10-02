@@ -68,7 +68,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -275,9 +275,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
+				if (msInstance instanceof TypeAwareModelSlotInstance && ((TypeAwareModelSlotInstance) msInstance).getModel() != null) {
 					individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding(
-							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance)
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeAwareModelSlotInstance) msInstance)
 							.getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
@@ -313,9 +313,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
+				if (msInstance instanceof TypeAwareModelSlotInstance && ((TypeAwareModelSlotInstance) msInstance).getModel() != null) {
 					classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
-							new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance).getModel().getURI() + '"'), true));
+							new DataBinding<Object>('"' + ((TypeAwareModelSlotInstance) msInstance).getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
 				}
@@ -354,9 +354,9 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			if (action.getVirtualModelInstance() != null) {
 				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
 						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance instanceof TypeSafeModelSlotInstance && ((TypeSafeModelSlotInstance) msInstance).getModel() != null) {
+				if (msInstance instanceof TypeAwareModelSlotInstance && ((TypeAwareModelSlotInstance) msInstance).getModel() != null) {
 					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
-							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeSafeModelSlotInstance) msInstance)
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + ((TypeAwareModelSlotInstance) msInstance)
 							.getModel().getURI() + '"'), true));
 				} else {
 					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());

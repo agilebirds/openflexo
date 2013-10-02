@@ -143,7 +143,7 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 	 */
 	private File getModelSlotInstanceConfigurationFIB(Class modelSlotClass) {
 		if (TypeAwareModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return VECst.CONFIGURE_TYPESAFE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+			return VECst.CONFIGURE_TYPE_AWARE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
 		}
 		if (FreeModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB;

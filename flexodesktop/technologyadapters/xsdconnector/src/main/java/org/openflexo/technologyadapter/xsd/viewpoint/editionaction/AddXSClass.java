@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -81,8 +81,8 @@ public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 	}
 
 	@Override
-	public TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
+	public TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

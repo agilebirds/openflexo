@@ -33,7 +33,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -118,7 +118,7 @@ public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
+			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
 			Object o) {
 		// TODO Auto-generated method stub
 		return null;
@@ -126,7 +126,7 @@ public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
+			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
 			String objectURI) {
 		// TODO Auto-generated method stub
 		return null;

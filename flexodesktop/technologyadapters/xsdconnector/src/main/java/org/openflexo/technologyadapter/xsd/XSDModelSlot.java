@@ -36,7 +36,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -188,14 +188,14 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, Object o) {
+			TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, Object o) {
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
 		XSOntClass lClass = ((XSOntClass) xsO.getType());
 		XSURIProcessor mapParams = retrieveURIProcessorForType(lClass);
 
 		if (mapParams != null){
-			return mapParams.getURIForObject((TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
+			return mapParams.getURIForObject((TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
 		}
 		else {
 			logger.warning("XSDModelSlot: unable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
@@ -229,7 +229,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
+	public Object retrieveObjectWithURI(TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
 		String typeUri = XSURIProcessor.retrieveTypeURI(msInstance, objectURI);
 		XMLXSDModel model = msInstance.getModel();
 		XSURIProcessor mapParams =  uriProcessorsMap.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));

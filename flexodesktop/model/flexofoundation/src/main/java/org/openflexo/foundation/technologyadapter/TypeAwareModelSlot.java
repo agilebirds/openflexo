@@ -7,7 +7,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -83,7 +83,7 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURI(TypeSafeModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURI(TypeAwareModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return null;
 		}
@@ -98,14 +98,14 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
 		return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
 	}
 
-	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName, String uriPrefix) {
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName, String uriPrefix) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
@@ -179,17 +179,17 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 
 	@Override
 	public final String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		return getURIForObject((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, o);
+		return getURIForObject((TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, o);
 	}
 
 	@Override
 	public final Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return retrieveObjectWithURI((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, objectURI);
+		return retrieveObjectWithURI((TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, objectURI);
 	}
 
-	public abstract String getURIForObject(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance, Object o);
+	public abstract String getURIForObject(TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance, Object o);
 
-	public abstract Object retrieveObjectWithURI(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance,
+	public abstract Object retrieveObjectWithURI(TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance,
 			String objectURI);
 
 	/**

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -37,10 +37,10 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
+public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
 		extends ModelSlotInstanceConfiguration<MS, M> {
 
-	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstanceConfiguration.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypeAwareModelSlotInstanceConfiguration.class.getPackage().getName());
 
 	protected List<ModelSlotInstanceConfigurationOption> options;
 
@@ -50,7 +50,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 	protected String relativePath;
 	protected String filename;
 
-	protected TypeSafeModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
+	protected TypeAwareModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		resourceCenter = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager().getResourceCenterService()
 				.getUserResourceCenter();
@@ -79,13 +79,13 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 	}
 
 	@Override
-	public TypeSafeModelSlotInstance<M, MM, MS> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
-		TypeSafeModelSlotInstance<M, MM, MS> returned = new TypeSafeModelSlotInstance<M, MM, MS>(vmInstance, getModelSlot());
+	public TypeAwareModelSlotInstance<M, MM, MS> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		TypeAwareModelSlotInstance<M, MM, MS> returned = new TypeAwareModelSlotInstance<M, MM, MS>(vmInstance, getModelSlot());
 		configureModelSlotInstance(returned);
 		return returned;
 	}
 
-	protected TypeSafeModelSlotInstance<M, MM, MS> configureModelSlotInstance(TypeSafeModelSlotInstance<M, MM, MS> msInstance) {
+	protected TypeAwareModelSlotInstance<M, MM, MS> configureModelSlotInstance(TypeAwareModelSlotInstance<M, MM, MS> msInstance) {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
@@ -119,12 +119,12 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 		return null;
 	}
 
-	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
+	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(TypeAwareModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createProjectSpecificEmptyModel(msInstance.getView(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
 
-	/*private FlexoModelResource<M, MM> createSharedEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
+	/*private FlexoModelResource<M, MM> createSharedEmptyModel(TypeAwareModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}*/
@@ -193,4 +193,6 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 		}*/
 		return false;
 	}
+	
+	public abstract boolean isURIEditable();
 }

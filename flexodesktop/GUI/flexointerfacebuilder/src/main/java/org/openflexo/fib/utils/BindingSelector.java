@@ -776,6 +776,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 			activateCompoundBindingMode();
 		}
 		if (_selectorPanel != null) {
+			//logger.info("Updating custom panel with " + editedObject.getExpression());
 			_selectorPanel.update();
 		}
 		if (editedObject != null) {
@@ -785,7 +786,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					getLabel().setIcon(UtilsIconLibrary.OK_ICON);
 				} else {
 					Bindable owner = editedObject.getOwner();
-					logger.info("Hop: Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
+					logger.info("Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
 					/*if (editedObject.isBindingValue()) {
 						BindingValue bv = (BindingValue) (editedObject.getExpression());
 						System.out.println("BV=" + bv);

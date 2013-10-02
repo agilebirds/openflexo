@@ -130,7 +130,10 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 
 	public void setEndShape(DiagramShape endShape) {
 		this.endShape = endShape;
-		endShape.addToIncomingConnectors(this);
+		// NPE Protection
+		if (endShape != null) {
+			endShape.addToIncomingConnectors(this);
+		}
 	}
 
 	public DiagramShape getStartShape() {

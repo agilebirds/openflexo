@@ -40,10 +40,10 @@ import org.openflexo.toolbox.StringUtils;
  * @see TypeAwareModelSlot
  * 
  */
-public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
+public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
 		extends ModelSlotInstance<MS, M> {
 
-	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstance.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypeAwareModelSlotInstance.class.getPackage().getName());
 
 	// Serialization/deserialization only, do not use
 	private String modelURI;
@@ -52,7 +52,7 @@ public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends F
 	 * Constructor invoked during deserialization
 	 * 
 	 */
-	public TypeSafeModelSlotInstance(ViewBuilder builder) {
+	public TypeAwareModelSlotInstance(ViewBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}
@@ -61,16 +61,16 @@ public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends F
 	 * Constructor invoked during deserialization
 	 * 
 	 */
-	public TypeSafeModelSlotInstance(VirtualModelInstanceBuilder builder) {
+	public TypeAwareModelSlotInstance(VirtualModelInstanceBuilder builder) {
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}
 
-	public TypeSafeModelSlotInstance(View view, MS modelSlot) {
+	public TypeAwareModelSlotInstance(View view, MS modelSlot) {
 		super(view, modelSlot);
 	}
 
-	public TypeSafeModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, MS modelSlot) {
+	public TypeAwareModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, MS modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 
