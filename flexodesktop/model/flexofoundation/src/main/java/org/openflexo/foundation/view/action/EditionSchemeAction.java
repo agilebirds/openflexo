@@ -43,6 +43,7 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -309,7 +310,12 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 			return getVirtualModelInstance();
 		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
 			return getVirtualModelInstance();
+		}else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			if(getVirtualModelInstance() instanceof Diagram){
+				return ((Diagram)getVirtualModelInstance()).getRootPane();
+			}
 		}
+		
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
 			return getVirtualModelInstance().getValueForVariable(variable);
