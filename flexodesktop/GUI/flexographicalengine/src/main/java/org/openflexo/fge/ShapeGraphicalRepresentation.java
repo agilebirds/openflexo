@@ -38,6 +38,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -2534,6 +2535,13 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	@Override
+	public void setTranparency(Double transparency) {
+		background.setUseTransparency(true);
+		background.setTransparencyLevel(transparency.floatValue());
+		//super.setTranparency(transparency);
+	}
+	
 	@Override
 	public Point getLabelLocation(double scale) {
 		Point point;

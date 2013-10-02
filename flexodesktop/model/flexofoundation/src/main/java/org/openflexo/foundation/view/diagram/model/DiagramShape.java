@@ -80,10 +80,10 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> i
 	public void resetGraphicalRepresentation() {
 		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
 				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
-				GraphicalRepresentation.Parameters.absoluteTextY, ShapeGraphicalRepresentation.Parameters.x,
-				ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
-				ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
-				ShapeGraphicalRepresentation.Parameters.relativeTextY);
+				GraphicalRepresentation.Parameters.absoluteTextY,GraphicalRepresentation.Parameters.transparency, 
+				ShapeGraphicalRepresentation.Parameters.x,ShapeGraphicalRepresentation.Parameters.y, 
+				ShapeGraphicalRepresentation.Parameters.width, ShapeGraphicalRepresentation.Parameters.height,
+				ShapeGraphicalRepresentation.Parameters.relativeTextX,ShapeGraphicalRepresentation.Parameters.relativeTextY);
 		refreshGraphicalRepresentation();
 	}
 

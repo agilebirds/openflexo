@@ -296,7 +296,20 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 		}
 	};
 
-	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE };
+	public static GraphicalFeature<Double, GraphicalRepresentation<?>> TRANSPARENCY_FEATURE = new GraphicalFeature<Double, GraphicalRepresentation<?>>(
+			"transparency", GraphicalRepresentation.Parameters.transparency, Double.class) {
+		@Override
+		public Double retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+			return gr.getTransparency();
+		}
+
+		@Override
+		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, Double value) {
+			gr.setTranparency(value);
+		}
+	};
+	
+	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE, TRANSPARENCY_FEATURE };
 
 	@Override
 	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternInstance epi) {
