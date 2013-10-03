@@ -22,6 +22,7 @@ import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGECubicCurve;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeneralShape;
 import org.openflexo.fge.geom.FGEGeneralShape.GeneralShapePathElement;
@@ -51,7 +52,8 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 	protected List<ControlPoint> _controlPoints;
 
-	protected GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
+	// TODO: change to protected
+	public GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEGeometricGraphics(this);
@@ -833,8 +835,18 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 	}
 
 	@Override
+	public boolean hasContainedLabel() {
+		return false;
+	}
+
+	@Override
 	public boolean hasFloatingLabel() {
 		return hasText();
+	}
+
+	@Override
+	public FGEDimension getRequiredLabelSize() {
+		return null;
 	}
 
 }

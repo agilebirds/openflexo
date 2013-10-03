@@ -17,6 +17,7 @@ import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
@@ -40,6 +41,16 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
 		}
 		return bgStyle;
+	}
+
+	/**
+	 * Return bounds relative to parent container
+	 * 
+	 * @return
+	 */
+	@Override
+	public FGERectangle getBounds() {
+		return new FGERectangle(0, 0, getWidth(), getHeight());
 	}
 
 	@Override
@@ -176,4 +187,18 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 		return false;
 	}
 
+	@Override
+	public boolean hasContainedLabel() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return false;
+	}
+
+	@Override
+	public FGEDimension getRequiredLabelSize() {
+		return null;
+	}
 }

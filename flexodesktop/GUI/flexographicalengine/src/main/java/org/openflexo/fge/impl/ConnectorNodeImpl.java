@@ -25,6 +25,7 @@ import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -526,4 +527,18 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 				+ (getEndNode() != null ? "[Shape-" + getEndNode().getIndex() + "]" : "[???]") + ":" + getDrawable();
 	}
 
+	@Override
+	public boolean hasContainedLabel() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFloatingLabel() {
+		return hasText();
+	}
+
+	@Override
+	public FGEDimension getRequiredLabelSize() {
+		return null;
+	}
 }

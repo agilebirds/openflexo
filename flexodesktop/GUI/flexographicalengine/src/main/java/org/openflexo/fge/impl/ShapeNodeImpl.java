@@ -68,10 +68,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	// private double x = 0;
 	// private double y = 0;
-	private double width = 0;
-	private double height = 0;
+	// private double width = 0;
+	// private double height = 0;
 
-	private boolean isResizing = false;
 	private boolean isMoving = false;
 
 	private boolean observeParentGRBecauseMyLocationReferToIt = false;
@@ -87,8 +86,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEShapeGraphics(this);
-		width = getGraphicalRepresentation().getMinimalWidth();
-		height = getGraphicalRepresentation().getMinimalHeight();
+		// width = getGraphicalRepresentation().getMinimalWidth();
+		// height = getGraphicalRepresentation().getMinimalHeight();
 	}
 
 	@Override
@@ -313,24 +312,24 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			FGENotification notif = (FGENotification) notification;
 
 			if (notif.getParameter() == GraphicalRepresentation.TEXT) {
-				checkAndUpdateDimensionBoundsIfRequired();
+				checkAndUpdateDimensionIfRequired();
 			} else if (notif.getParameter() == GraphicalRepresentation.TEXT_STYLE) {
-				checkAndUpdateDimensionBoundsIfRequired();
+				checkAndUpdateDimensionIfRequired();
 			} else if (notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT
 					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH
 					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT
 					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH) {
-				checkAndUpdateDimensionBoundsIfRequired();
+				checkAndUpdateDimensionIfRequired();
 			} else if (notif.getParameter() == ContainerGraphicalRepresentation.WIDTH
 					|| notif.getParameter() == ContainerGraphicalRepresentation.HEIGHT
 					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_HEIGHT
 					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_WIDTH
 					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_HEIGHT
 					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_WIDTH) {
-				checkAndUpdateDimensionBoundsIfRequired();
+				checkAndUpdateDimensionIfRequired();
 			} else if (notif.getParameter() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT
 					|| notif.getParameter() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT) {
-				checkAndUpdateDimensionBoundsIfRequired();
+				checkAndUpdateDimensionIfRequired();
 			} else if (notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINTS
 					|| notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINED_AREA
 					|| notif.getParameter() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINT_STEP
@@ -390,74 +389,12 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		}
 	}
 
-	/*public void extendParentBoundsToHostThisShape2() {
-		// System.out.println("parent=" + getParentGraphicalRepresentation());
-		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
-
-			// parent.updateRequiredBoundsForChildGRLocation(this, new FGEPoint(x, y));
-
-			boolean parentNeedsResize = false;
-			FGEDimension newDimension = new FGEDimension(parent.getWidth(), parent.getHeight());
-			boolean parentNeedsRelocate = false;
-			FGEPoint newPosition = new FGEPoint(parent.getX(), parent.getY());
-			double deltaX = 0;
-			double deltaY = 0;
-			if (x < 0) {
-				newPosition.x = newPosition.x + x;
-				parentNeedsRelocate = true;
-				deltaX = -x;
-			}
-			if (y < 0) {
-				newPosition.y = newPosition.y + y;
-				parentNeedsRelocate = true;
-				deltaY = -y;
-			}
-			if (parentNeedsRelocate) {
-				parent.setLocation(newPosition);
-				setLocation(new FGEPoint(getX() - deltaX, getY() - deltaY));
-				parentNeedsResize = true;
-				newDimension = new FGEDimension(parent.getWidth() + deltaX, parent.getHeight() + deltaY);
-			}
-
-			if (x + getWidth() > parent.getWidth()) {
-				newDimension.width = x + getWidth();
-				parentNeedsResize = true;
-			}
-			if (y + getHeight() > parent.getHeight()) {
-				newDimension.height = y + getHeight();
-				parentNeedsResize = true;
-			}
-			if (parentNeedsResize) {
-				parent.setSize(newDimension);
-			}
-
-			if (parentNeedsRelocate) {
-				for (GraphicalRepresentation child : parent.getContainedGraphicalRepresentations()) {
-					if (child instanceof ShapeGraphicalRepresentation && child != this) {
-						ShapeGraphicalRepresentation c = (ShapeGraphicalRepresentation) child;
-						c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
-					}
-				}
-			}
-
-			if (parentNeedsRelocate || parentNeedsResize) {
-				FGEPoint oldLocation = new FGEPoint(x, y);
-				notifyObjectMoved(oldLocation);
-				notifyAttributeChanged(ShapeParameters.x, oldLocation.x, getX());
-				notifyAttributeChanged(ShapeParameters.y, oldLocation.y, getY());
-			}
-		}
-	}*/
-
 	/**
 	 * Check and eventually relocate and resize current graphical representation in order to all all contained shape graphical
 	 * representations. Contained graphical representations may substantically be relocated.
 	 */
 	@Override
 	public void extendBoundsToHostContents() {
-
-		// logger.info("Hop: extendBoundsToHostContents");
 
 		boolean needsResize = false;
 		FGEDimension newDimension = new FGEDimension(getWidth(), getHeight());
@@ -531,34 +468,18 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	}
 
+	// ********************************************
+	// Location management
+	// ********************************************
+
 	@Override
 	public double getX() {
 		return getPropertyValue(ShapeGraphicalRepresentation.X);
-		/*if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.X)) {
-			try {
-				return getDynamicPropertyValue(ShapeGraphicalRepresentation.X);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-		return getGraphicalRepresentation().getX();*/
 	}
 
 	@Override
 	public final void setX(double aValue) {
 		if (aValue != getX()) {
-			/*FGEPoint oldLocation = getLocation();
-			if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
-				try {
-					setDynamicPropertyValue(ShapeGraphicalRepresentation.X, aValue);
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-					setXNoNotification(aValue);
-				}
-			} else {
-				setXNoNotification(aValue);
-			}
-			notifyObjectMoved(oldLocation);*/
 			FGEPoint newLocation = new FGEPoint(aValue, getY());
 			updateLocation(newLocation);
 		}
@@ -566,27 +487,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	protected void setXNoNotification(double aValue) {
 		setPropertyValue(ShapeGraphicalRepresentation.X, aValue);
-		/*if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.X)) {
-			try {
-				setDynamicPropertyValue(ShapeGraphicalRepresentation.X, aValue);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}*/
-		// getGraphicalRepresentation().setX(aValue);
 	}
 
 	@Override
 	public double getY() {
 		return getPropertyValue(ShapeGraphicalRepresentation.Y);
-		/*if (hasDynamicPropertyValue(ShapeGraphicalRepresentation.Y)) {
-			try {
-				return getDynamicPropertyValue(ShapeGraphicalRepresentation.Y);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-		return getGraphicalRepresentation().getY();*/
 	}
 
 	@Override
@@ -595,24 +500,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 			FGEPoint newLocation = new FGEPoint(getX(), aValue);
 			updateLocation(newLocation);
-
-			/*FGEPoint oldLocation = getLocation();
-			setYNoNotification(aValue);
-			notifyObjectMoved(oldLocation);*/
 		}
 	}
 
 	protected void setYNoNotification(double aValue) {
 		setPropertyValue(ShapeGraphicalRepresentation.Y, aValue);
-
-		/*if (hasDynamicSettablePropertyValue(ShapeGraphicalRepresentation.Y)) {
-			try {
-				setDynamicPropertyValue(ShapeGraphicalRepresentation.Y, aValue);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}*/
-		// getGraphicalRepresentation().setY(aValue);
 	}
 
 	/**
@@ -720,32 +612,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public void setLocation(FGEPoint newLocation) {
-
 		updateLocation(newLocation);
-
-		/*if (newLocation == null) {
-			return;
-		}
-		newLocation = computeConstrainedLocation(newLocation);
-		FGEPoint oldLocation = getLocation();
-		if (!newLocation.equals(oldLocation)) {
-			double oldX = getX();
-			double oldY = getY();
-			if (isParentLayoutedAsContainer()) {
-				setLocationForContainerLayout(newLocation);
-			} else {
-				setXNoNotification(newLocation.x);
-				setYNoNotification(newLocation.y);
-			}
-			notifyObjectMoved(oldLocation);
-			notifyAttributeChanged(ShapeGraphicalRepresentation.X, oldX, getX());
-			notifyAttributeChanged(ShapeGraphicalRepresentation.Y, oldY, getY());
-			if (!isFullyContainedInContainer()) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("setLocation() lead shape going outside it's parent view");
-				}
-			}
-		}*/
 	}
 
 	@Override
@@ -763,137 +630,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			ShapeNodeImpl<?> container = (ShapeNodeImpl<?>) getParentNode();
 			container.updateRequiredBoundsForChildGRLocation(this, newLocation);
 		}
-	}
-
-	private void updateRequiredBoundsForChildGRLocation(ShapeNode<?> child, FGEPoint newChildLocation) {
-		FGERectangle oldBounds = getBounds();
-		FGERectangle newBounds = getRequiredBoundsForChildGRLocation(child, newChildLocation);
-		// System.out.println("oldBounds= "+oldBounds+" newBounds="+newBounds);
-		double deltaX = -newBounds.x + oldBounds.x;
-		double deltaY = -newBounds.y + oldBounds.y;
-		AffineTransform translation = AffineTransform.getTranslateInstance(deltaX, deltaY);
-		for (DrawingTreeNode gr : getChildNodes()) {
-			if (gr instanceof ShapeNode) {
-				ShapeNodeImpl<?> shapeGR = (ShapeNodeImpl<?>) gr;
-				if (shapeGR == child) {
-					shapeGR.setLocationNoCheckNorNotification(newChildLocation.transform(translation));
-				} else {
-					// FGEPoint oldLocationInParent = new FGEPoint(oldBounds.x+shapeGR.getLocation().x,oldBounds.y+shapeGR.getLocation().y);
-					// FGEPoint newLocationInParent = new
-					// FGEPoint(newBounds.x+shapeGR.getLocation().transform(translation).x,newBounds.y+shapeGR.getLocation().transform(translation).y);
-					// logger.info("Opposite was: "+shapeGR.getLocation()+" now "+shapeGR.getLocation().transform(translation)+" parent was: "+oldLocationInParent+" now "+newLocationInParent);
-					shapeGR.setLocationNoCheckNorNotification(shapeGR.getLocation().transform(translation));
-				}
-				shapeGR.notifyObjectMoved();
-			}
-		}
-		setLocation(new FGEPoint(newBounds.x, newBounds.y));
-		setSize(new FGEDimension(newBounds.width, newBounds.height));
-	}
-
-	@Override
-	public Dimension getNormalizedLabelSize() {
-		if (labelMetricsProvider != null) {
-			return labelMetricsProvider.getScaledPreferredDimension(1.0);
-		} else {
-			return new Dimension(0, 0);
-		}
-	}
-
-	@Override
-	public Rectangle getNormalizedLabelBounds() {
-		Dimension normalizedLabelSize = getNormalizedLabelSize();
-		Rectangle r = new Rectangle(getLabelLocation(1.0), normalizedLabelSize);
-		return r;
-	}
-
-	@Override
-	public FGERectangle getRequiredBoundsForContents() {
-		FGERectangle requiredBounds = null;
-		if (getChildNodes() == null) {
-			return new FGERectangle(getGraphicalRepresentation().getMinimalWidth() / 2,
-					getGraphicalRepresentation().getMinimalHeight() / 2, getGraphicalRepresentation().getMinimalWidth(),
-					getGraphicalRepresentation().getMinimalHeight());
-		}
-		for (DrawingTreeNode<?, ?> gr : getChildNodes()) {
-			if (gr instanceof ShapeNode) {
-				ShapeNodeImpl<?> shapeGR = (ShapeNodeImpl<?>) gr;
-				FGERectangle bounds = shapeGR.getBoundsNoBorder();
-				if (shapeGR.hasText()) {
-					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
-					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
-					bounds = bounds.rectangleUnion(labelBounds2);
-				}
-
-				if (requiredBounds == null) {
-					requiredBounds = bounds;
-				} else {
-					requiredBounds = requiredBounds.rectangleUnion(bounds);
-				}
-			}
-		}
-		if (requiredBounds == null) {
-			requiredBounds = new FGERectangle(getGraphicalRepresentation().getMinimalWidth() / 2, getGraphicalRepresentation()
-					.getMinimalHeight() / 2, getGraphicalRepresentation().getMinimalWidth(), getGraphicalRepresentation()
-					.getMinimalHeight());
-		} else {
-			if (requiredBounds.width < getGraphicalRepresentation().getMinimalWidth()) {
-				requiredBounds.x = requiredBounds.x - (int) ((getGraphicalRepresentation().getMinimalWidth() - requiredBounds.width) / 2.0);
-				requiredBounds.width = getGraphicalRepresentation().getMinimalWidth();
-			}
-			if (requiredBounds.height < getGraphicalRepresentation().getMinimalHeight()) {
-				requiredBounds.y = requiredBounds.y
-						- (int) ((getGraphicalRepresentation().getMinimalHeight() - requiredBounds.height) / 2.0);
-				requiredBounds.height = getGraphicalRepresentation().getMinimalHeight();
-			}
-		}
-
-		requiredBounds.x = requiredBounds.x - getGraphicalRepresentation().getBorder().getLeft();
-		requiredBounds.y = requiredBounds.y - getGraphicalRepresentation().getBorder().getTop();
-
-		return requiredBounds;
-	}
-
-	private FGERectangle getRequiredBoundsForChildGRLocation(DrawingTreeNode<?, ?> child, FGEPoint newChildLocation) {
-		FGERectangle requiredBounds = null;
-		for (DrawingTreeNode<?, ?> gr : getChildNodes()) {
-			if (gr instanceof ShapeNode) {
-				ShapeNode shapeGR = (ShapeNode) gr;
-				FGERectangle bounds = shapeGR.getBounds();
-				if (shapeGR == child) {
-					bounds.x = newChildLocation.x;
-					bounds.y = newChildLocation.y;
-				}
-				if (shapeGR.hasText()) {
-					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
-					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
-					bounds = bounds.rectangleUnion(labelBounds2);
-				}
-
-				if (requiredBounds == null) {
-					requiredBounds = bounds;
-				} else {
-					requiredBounds = requiredBounds.rectangleUnion(bounds);
-				}
-			}
-		}
-		if (requiredBounds == null) {
-			requiredBounds = new FGERectangle(getX(), getY(), getGraphicalRepresentation().getMinimalWidth(), getGraphicalRepresentation()
-					.getMinimalHeight());
-		} else {
-			requiredBounds.x = requiredBounds.x + getX();
-			requiredBounds.y = requiredBounds.y + getY();
-			if (requiredBounds.width < getGraphicalRepresentation().getMinimalWidth()) {
-				requiredBounds.x = requiredBounds.x - (int) ((getGraphicalRepresentation().getMinimalWidth() - requiredBounds.width) / 2.0);
-				requiredBounds.width = getGraphicalRepresentation().getMinimalWidth();
-			}
-			if (requiredBounds.height < getGraphicalRepresentation().getMinimalHeight()) {
-				requiredBounds.y = requiredBounds.y
-						- (int) ((getGraphicalRepresentation().getMinimalHeight() - requiredBounds.height) / 2.0);
-				requiredBounds.height = getGraphicalRepresentation().getMinimalHeight();
-			}
-		}
-		return requiredBounds;
 	}
 
 	/**
@@ -915,34 +651,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}
 	}
-
-	/*protected FGEPoint computeConstrainedLocation(FGEPoint newLocation) {
-		if (isParentLayoutedAsContainer()) {
-			return newLocation;
-		}
-		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.FREELY_MOVABLE) {
-			return newLocation.clone();
-		}
-		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.CONTAINED_IN_SHAPE) {
-			DrawingTreeNode<?, ?> parent = getParentNode();
-			if (parent instanceof ShapeNode) {
-				ShapeNode container = (ShapeNode) parent;
-				FGEPoint center = new FGEPoint(container.getWidth() / 2, container.getHeight() / 2);
-				double authorizedRatio = getMoveAuthorizedRatio(newLocation, center);
-				return new FGEPoint(center.x + (newLocation.x - center.x) * authorizedRatio, center.y + (newLocation.y - center.y)
-						* authorizedRatio);
-			}
-		}
-		if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.AREA_CONSTRAINED) {
-			if (getGraphicalRepresentation().getLocationConstrainedArea() == null) {
-				// logger.warning("No location constrained are defined");
-				return newLocation;
-			} else {
-				return getGraphicalRepresentation().getLocationConstrainedArea().getNearestPoint(newLocation);
-			}
-		}
-		return newLocation;
-	}*/
 
 	@Override
 	public boolean isFullyContainedInContainer() {
@@ -977,13 +685,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}
 		return isFullyContained;
-	}
-
-	@Override
-	public boolean isParentLayoutedAsContainer() {
-		return getParentNode() != null
-				&& getParentNode() instanceof ShapeNode
-				&& ((ShapeNode<?>) getParentNode()).getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONTAINER;
 	}
 
 	@Override
@@ -1059,339 +760,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			returnedAuthorizedRatio = 0;
 		}
 		return returnedAuthorizedRatio;
-	}
-
-	@Override
-	public final void setWidth(double aValue) {
-		if (aValue != width) {
-			FGEDimension oldSize = getSize();
-			setWidthNoNotification(aValue);
-			notifyObjectResized(oldSize);
-		}
-	}
-
-	protected void setWidthNoNotification(double aValue) {
-		width = aValue;
-	}
-
-	@Override
-	public final void setHeight(double aValue) {
-		if (aValue != height) {
-			FGEDimension oldSize = getSize();
-			setHeightNoNotification(aValue);
-			notifyObjectResized(oldSize);
-		}
-	}
-
-	public void setHeightNoNotification(double aValue) {
-		height = aValue;
-	}
-
-	@Override
-	public FGEDimension getSize() {
-		return new FGEDimension(getWidth(), getHeight());
-	}
-
-	@Override
-	public void setSize(FGEDimension newSize) {
-		if (newSize == null) {
-			return;
-		}
-		// Preventing size from being negative or equals to 0
-		if (newSize.width <= 0) {
-			newSize.width = FGEGeometricObject.EPSILON;
-		}
-		if (newSize.height <= 0) {
-			newSize.height = FGEGeometricObject.EPSILON;
-		}
-		FGEDimension oldSize = getSize();
-		if (!newSize.equals(oldSize)) {
-			double oldWidth = getWidth();
-			double oldHeight = getHeight();
-			setWidthNoNotification(newSize.width);
-			setHeightNoNotification(newSize.height);
-			if (hasFloatingLabel()) {
-				if (getGraphicalRepresentation().getAbsoluteTextX() >= 0) {
-					if (getGraphicalRepresentation().getAbsoluteTextX() < getWidth()) {
-						getGraphicalRepresentation().setAbsoluteTextX(
-								getGraphicalRepresentation().getAbsoluteTextX() / oldSize.width * getWidth());
-					} else {
-						getGraphicalRepresentation().setAbsoluteTextX(
-								getGraphicalRepresentation().getAbsoluteTextX() + getWidth() - oldSize.width);
-					}
-				}
-				if (getGraphicalRepresentation().getAbsoluteTextY() >= 0) {
-					if (getGraphicalRepresentation().getAbsoluteTextY() < getHeight()) {
-						getGraphicalRepresentation().setAbsoluteTextY(
-								getGraphicalRepresentation().getAbsoluteTextY() / oldSize.height * getHeight());
-					} else {
-						getGraphicalRepresentation().setAbsoluteTextY(
-								getGraphicalRepresentation().getAbsoluteTextY() + getHeight() - oldSize.height);
-					}
-				}
-			}
-			checkAndUpdateDimensionBoundsIfRequired();
-			if (isParentLayoutedAsContainer()) {
-				((ShapeNodeImpl<?>) getParentNode()).checkAndUpdateDimensionIfRequired();
-			}
-			notifyObjectResized(oldSize);
-			notifyAttributeChanged(ContainerGraphicalRepresentation.WIDTH, oldWidth, getWidth());
-			notifyAttributeChanged(ContainerGraphicalRepresentation.HEIGHT, oldHeight, getHeight());
-			// getGraphicalRepresentation().getShape().notifyObjectResized();
-		}
-	}
-
-	/**
-	 * Calling this method forces FGE to check (and eventually update) dimension of current graphical representation according defined
-	 * dimension constraints
-	 */
-	protected void checkAndUpdateDimensionIfRequired() {
-		if (getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONTAINER) {
-			List<DrawingTreeNodeImpl<?, ?>> childs = getChildNodes();
-			if (childs != null && childs.size() > 0) {
-				ShapeNode<?> first = (ShapeNode<?>) childs.get(0);
-				updateRequiredBoundsForChildGRLocation(first, first.getLocation());
-			}
-		} else {
-			checkAndUpdateDimensionBoundsIfRequired();
-		}
-	}
-
-	/**
-	 * Return required width of shape, giving computed width of current label (useful for auto-layout, when
-	 * 
-	 * <pre>
-	 * adjustMinimalWidthToLabelWidth
-	 * </pre>
-	 * 
-	 * is set to true). Override this method to implement custom layout
-	 * 
-	 * @param labelWidth
-	 * @return
-	 */
-	public double getRequiredWidth(double labelWidth) {
-		return labelWidth;
-	}
-
-	/**
-	 * Return required height of shape, giving computed height of current label (usefull for auto-layout, when
-	 * 
-	 * <pre>
-	 * adjustMinimalHeightToLabelHeight
-	 * </pre>
-	 * 
-	 * is set to true). Override this method to implement custom layout
-	 * 
-	 * @param labelHeight
-	 * @return
-	 */
-	public double getRequiredHeight(double labelHeight) {
-		return labelHeight;
-	}
-
-	private boolean isCheckingDimensionConstraints = false;
-
-	private void checkAndUpdateDimensionBoundsIfRequired() {
-
-		if (isCheckingDimensionConstraints || labelMetricsProvider == null) {
-			return;
-		}
-
-		try {
-
-			// if (getAdaptBoundsToContents()) {
-			// extendBoundsToHostContents();
-			// }
-
-			isCheckingDimensionConstraints = true;
-
-			// FGERectangle requiredBounds = getRequiredBoundsForContents();
-
-			boolean changed = false;
-			FGEDimension newDimension = getSize();
-			// double minWidth = (getAdaptBoundsToContents() ? Math.max(getMinimalWidth(), requiredBounds.width) : getMinimalWidth());
-			// double minHeight = (getAdaptBoundsToContents() ? Math.max(getMinimalHeight(), requiredBounds.height) : getMinimalHeight());
-			double minWidth = getGraphicalRepresentation().getMinimalWidth();
-			double minHeight = getGraphicalRepresentation().getMinimalHeight();
-			double maxWidth = getGraphicalRepresentation().getMaximalWidth();
-			double maxHeight = getGraphicalRepresentation().getMaximalHeight();
-			if (hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
-				Dimension normalizedLabelSize = getNormalizedLabelSize();
-				int labelWidth = normalizedLabelSize.width;
-				int labelHeight = normalizedLabelSize.height;
-				double requiredWidth = getRequiredWidth(labelWidth);
-				double requiredHeight = getRequiredHeight(labelHeight);
-				double rh = 0, rw = 0;
-				FGEPoint rp = new FGEPoint(getGraphicalRepresentation().getRelativeTextX(), getGraphicalRepresentation().getRelativeTextY());
-				switch (getGraphicalRepresentation().getVerticalTextAlignment()) {
-				case BOTTOM:
-					if (FGEUtils.doubleEquals(rp.y, 0.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle BOTTOM alignement with relative y position set to 0!");
-						}
-					} else {
-						rh = labelHeight / rp.y;
-					}
-					break;
-				case MIDDLE:
-					if (FGEUtils.doubleEquals(rp.y, 0.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 0");
-						}
-					} else if (FGEUtils.doubleEquals(rp.y, 1.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 1");
-						}
-					} else {
-						if (rp.y > 0.5) {
-							rh = labelHeight / (2 * (1 - rp.y));
-						} else {
-							rh = labelHeight / (2 * rp.y);
-						}
-					}
-					break;
-				case TOP:
-					if (FGEUtils.doubleEquals(rp.x, 1.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle TOP alignement with relative y position set to 1!");
-						}
-					} else {
-						rh = labelHeight / (1 - rp.y);
-					}
-					break;
-
-				}
-
-				switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
-				case RIGHT:
-					if (FGEUtils.doubleEquals(rp.x, 0.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
-						}
-					} else {
-						rw = labelWidth / rp.x;
-					}
-				case CENTER:
-					if (FGEUtils.doubleEquals(rp.x, 0.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
-						}
-					} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
-						}
-					} else {
-						if (rp.x > 0.5) {
-							rw = labelWidth / (2 * (1 - rp.x));
-						} else {
-							rw = labelWidth / (2 * rp.x);
-						}
-					}
-					break;
-				case LEFT:
-					if (FGEUtils.doubleEquals(rp.x, 1.0)) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Impossible to handle LEFT alignement with relative x position set to 1!");
-						}
-					} else {
-						rw = labelWidth / (1 - rp.x);
-					}
-					break;
-				}
-
-				requiredWidth = Math.max(rw, requiredWidth);
-				requiredHeight = Math.max(rh, requiredHeight);
-
-				if (getGraphicalRepresentation().getAdjustMinimalWidthToLabelWidth()) {
-					minWidth = Math.max(requiredWidth, minWidth);
-					if (getWidth() < minWidth) {
-						newDimension.width = minWidth;
-						changed = true;
-					}
-				}
-
-				if (getGraphicalRepresentation().getAdjustMinimalHeightToLabelHeight()) {
-					minHeight = Math.max(requiredHeight, minHeight);
-					if (getHeight() < minHeight) {
-						newDimension.height = minHeight;
-						changed = true;
-					}
-				}
-
-				if (getGraphicalRepresentation().getAdjustMaximalWidthToLabelWidth()) {
-					maxWidth = Math.min(requiredWidth, maxWidth);
-					if (getWidth() > maxWidth) {
-						newDimension.width = maxWidth;
-						changed = true;
-					}
-				}
-
-				if (getGraphicalRepresentation().getAdjustMaximalHeightToLabelHeight()) {
-					maxHeight = Math.min(requiredHeight, maxHeight);
-					if (getHeight() > maxHeight) {
-						newDimension.height = maxHeight;
-						changed = true;
-					}
-				}
-			}
-			if (getGraphicalRepresentation().getMinimalWidth() > getGraphicalRepresentation().getMaximalWidth()) {
-				logger.warning("Minimal width > maximal width, cannot proceed");
-			} else {
-				if (getWidth() < minWidth) {
-					newDimension.width = minWidth;
-					changed = true;
-				}
-				if (getWidth() > maxWidth) {
-					newDimension.width = maxWidth;
-					changed = true;
-				}
-			}
-			if (getGraphicalRepresentation().getMinimalHeight() > getGraphicalRepresentation().getMaximalHeight()) {
-				logger.warning("Minimal height > maximal height, cannot proceed");
-			} else {
-				if (getHeight() < minHeight) {
-					newDimension.height = minHeight;
-					changed = true;
-				}
-				if (getHeight() > maxHeight) {
-					newDimension.height = maxHeight;
-					changed = true;
-				}
-			}
-			boolean useStepDimensionConstraints = getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED
-					&& getGraphicalRepresentation().getDimensionConstraintStep() != null;
-			if (useStepDimensionConstraints && hasText() && !getGraphicalRepresentation().getIsFloatingLabel()) {
-				if (getGraphicalRepresentation().getAdjustMinimalWidthToLabelWidth()
-						&& getGraphicalRepresentation().getAdjustMaximalWidthToLabelWidth()) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Too many constraints on width! Cannot proceed.");
-					}
-					useStepDimensionConstraints = false;
-				}
-				if (getGraphicalRepresentation().getAdjustMinimalHeightToLabelHeight()
-						&& getGraphicalRepresentation().getAdjustMaximalHeightToLabelHeight()) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Too many constraints on height! Cannot proceed.");
-					}
-					useStepDimensionConstraints = false;
-				}
-			}
-
-			if (useStepDimensionConstraints) {
-				FGEDimension d = getGraphicalRepresentation().getDimensionConstraintStep().getNearestDimension(newDimension, minWidth,
-						maxWidth, minHeight, maxHeight);
-				if (!d.equals(newDimension)) {
-					newDimension = d;
-					changed = true;
-				}
-			}
-			if (changed) {
-				setSize(newDimension);
-				checkAndUpdateLocationIfRequired();
-			}
-		} finally {
-			isCheckingDimensionConstraints = false;
-		}
 	}
 
 	@Override
@@ -1806,52 +1174,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	 * Notify that the object just resized
 	 */
 	@Override
-	public void notifyObjectResized() {
-		notifyObjectResized(null);
-	}
-
-	/**
-	 * Notify that the object just resized
-	 */
-	@Override
 	public void notifyObjectResized(FGEDimension oldSize) {
-		/*if (getGraphicalRepresentation().getShape() != null) {
-			getGraphicalRepresentation().getShape().notifyObjectResized();
-		}*/
 		getShape().notifyObjectResized();
-		setChanged();
-		notifyObservers(new ObjectResized(oldSize, getSize()));
-	}
-
-	/**
-	 * Notify that the object will be resized
-	 */
-	@Override
-	public void notifyObjectWillResize() {
-		isResizing = true;
-		setChanged();
-		notifyObservers(new ObjectWillResize());
-	}
-
-	/**
-	 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
-	 * resizing: use notifyObjectResize() instead)
-	 */
-	@Override
-	public void notifyObjectHasResized() {
-		isResizing = false;
-		for (DrawingTreeNode<?, ?> gr : getChildNodes()) {
-			if (gr instanceof ShapeNodeImpl) {
-				((ShapeNodeImpl<?>) gr).checkAndUpdateLocationIfRequired();
-			}
-		}
-		setChanged();
-		notifyObservers(new ObjectHasResized());
-	}
-
-	@Override
-	public boolean isResizing() {
-		return isResizing;
+		super.notifyObjectResized(oldSize);
 	}
 
 	@Override
@@ -1928,8 +1253,194 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
+	public boolean hasContainedLabel() {
+		return hasText() && !getGraphicalRepresentation().getIsFloatingLabel();
+	}
+
+	@Override
 	public boolean hasFloatingLabel() {
 		return hasText() && getGraphicalRepresentation().getIsFloatingLabel();
+	}
+
+	@Override
+	public FGEDimension getRequiredLabelSize() {
+		Dimension normalizedLabelSize = getNormalizedLabelSize();
+		int labelWidth = normalizedLabelSize.width;
+		int labelHeight = normalizedLabelSize.height;
+		double rh = 0, rw = 0;
+		FGEPoint rp = new FGEPoint(getGraphicalRepresentation().getRelativeTextX(), getGraphicalRepresentation().getRelativeTextY());
+		switch (getGraphicalRepresentation().getVerticalTextAlignment()) {
+		case BOTTOM:
+			if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle BOTTOM alignement with relative y position set to 0!");
+				}
+			} else {
+				rh = labelHeight / rp.y;
+			}
+			break;
+		case MIDDLE:
+			if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 0");
+				}
+			} else if (FGEUtils.doubleEquals(rp.y, 1.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 1");
+				}
+			} else {
+				if (rp.y > 0.5) {
+					rh = labelHeight / (2 * (1 - rp.y));
+				} else {
+					rh = labelHeight / (2 * rp.y);
+				}
+			}
+			break;
+		case TOP:
+			if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle TOP alignement with relative y position set to 1!");
+				}
+			} else {
+				rh = labelHeight / (1 - rp.y);
+			}
+			break;
+
+		}
+
+		switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
+		case RIGHT:
+			if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
+				}
+			} else {
+				rw = labelWidth / rp.x;
+			}
+		case CENTER:
+			if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
+				}
+			} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
+				}
+			} else {
+				if (rp.x > 0.5) {
+					rw = labelWidth / (2 * (1 - rp.x));
+				} else {
+					rw = labelWidth / (2 * rp.x);
+				}
+			}
+			break;
+		case LEFT:
+			if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Impossible to handle LEFT alignement with relative x position set to 1!");
+				}
+			} else {
+				rw = labelWidth / (1 - rp.x);
+			}
+			break;
+		}
+
+		return new FGEDimension(rw, rh);
+	}
+
+	protected void updateRequiredBoundsForChildGRLocation(ShapeNode<?> child, FGEPoint newChildLocation) {
+		FGERectangle oldBounds = getBounds();
+		FGERectangle newBounds = getRequiredBoundsForChildGRLocation(child, newChildLocation);
+		// System.out.println("oldBounds= "+oldBounds+" newBounds="+newBounds);
+		double deltaX = -newBounds.x + oldBounds.x;
+		double deltaY = -newBounds.y + oldBounds.y;
+		AffineTransform translation = AffineTransform.getTranslateInstance(deltaX, deltaY);
+		for (DrawingTreeNode childNode : getChildNodes()) {
+			if (childNode instanceof ShapeNode) {
+				ShapeNodeImpl<?> shapeNode = (ShapeNodeImpl<?>) childNode;
+				if (shapeNode == child) {
+					FGEPoint newPoint = newChildLocation.transform(translation);
+					shapeNode.setXNoNotification(newPoint.x);
+					shapeNode.setYNoNotification(newPoint.y);
+				} else {
+					FGEPoint newPoint = shapeNode.getLocation().transform(translation);
+					shapeNode.setXNoNotification(newPoint.x);
+					shapeNode.setYNoNotification(newPoint.y);
+				}
+				shapeNode.notifyObjectMoved();
+			}
+		}
+		setLocation(new FGEPoint(newBounds.x, newBounds.y));
+		setSize(new FGEDimension(newBounds.width, newBounds.height));
+	}
+
+	protected FGERectangle getRequiredBoundsForChildGRLocation(DrawingTreeNode<?, ?> child, FGEPoint newChildLocation) {
+		FGERectangle requiredBounds = null;
+		for (DrawingTreeNode<?, ?> gr : getChildNodes()) {
+			if (gr instanceof ShapeNode) {
+				ShapeNode shapeGR = (ShapeNode) gr;
+				FGERectangle bounds = shapeGR.getBounds();
+				if (shapeGR == child) {
+					bounds.x = newChildLocation.x;
+					bounds.y = newChildLocation.y;
+				}
+				if (shapeGR.hasText()) {
+					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
+					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
+					bounds = bounds.rectangleUnion(labelBounds2);
+				}
+
+				if (requiredBounds == null) {
+					requiredBounds = bounds;
+				} else {
+					requiredBounds = requiredBounds.rectangleUnion(bounds);
+				}
+			}
+		}
+		if (requiredBounds == null) {
+			requiredBounds = new FGERectangle(getX(), getY(), getGraphicalRepresentation().getMinimalWidth(), getGraphicalRepresentation()
+					.getMinimalHeight());
+		} else {
+			requiredBounds.x = requiredBounds.x + getX();
+			requiredBounds.y = requiredBounds.y + getY();
+			if (requiredBounds.width < getGraphicalRepresentation().getMinimalWidth()) {
+				requiredBounds.x = requiredBounds.x - (int) ((getGraphicalRepresentation().getMinimalWidth() - requiredBounds.width) / 2.0);
+				requiredBounds.width = getGraphicalRepresentation().getMinimalWidth();
+			}
+			if (requiredBounds.height < getGraphicalRepresentation().getMinimalHeight()) {
+				requiredBounds.y = requiredBounds.y
+						- (int) ((getGraphicalRepresentation().getMinimalHeight() - requiredBounds.height) / 2.0);
+				requiredBounds.height = getGraphicalRepresentation().getMinimalHeight();
+			}
+		}
+		return requiredBounds;
+	}
+
+	@Override
+	public FGERectangle getRequiredBoundsForContents() {
+		FGERectangle requiredBounds = super.getRequiredBoundsForContents();
+
+		requiredBounds.x = requiredBounds.x - getGraphicalRepresentation().getBorder().getLeft();
+		requiredBounds.y = requiredBounds.y - getGraphicalRepresentation().getBorder().getTop();
+
+		return requiredBounds;
+	}
+
+	/**
+	 * Calling this method forces FGE to check (and eventually update) dimension of current graphical representation according defined
+	 * dimension constraints
+	 */
+	@Override
+	protected void checkAndUpdateDimensionIfRequired() {
+		if (getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONTAINER) {
+			List<DrawingTreeNodeImpl<?, ?>> childs = getChildNodes();
+			if (childs != null && childs.size() > 0) {
+				ShapeNode<?> first = (ShapeNode<?>) childs.get(0);
+				updateRequiredBoundsForChildGRLocation(first, first.getLocation());
+			}
+		} else {
+			setSize(getSize());
+		}
 	}
 
 }

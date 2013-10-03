@@ -368,7 +368,29 @@ public interface Drawing<M> {
 
 		public void setText(String text);
 
+		/**
+		 * Return flag indicating is this node has a floating label
+		 * 
+		 * @return
+		 */
 		public boolean hasFloatingLabel();
+
+		/**
+		 * Return flag indicating is this node should display an inside label
+		 * 
+		 * @return
+		 */
+		public boolean hasContainedLabel();
+
+		/**
+		 * Returned required dimension for label (null when hasContainedLabel() return false)
+		 * 
+		 * @return
+		 */
+		public FGEDimension getRequiredLabelSize();
+
+		public boolean isParentLayoutedAsContainer();
+
 	}
 
 	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {
@@ -380,6 +402,10 @@ public interface Drawing<M> {
 		public double getHeight();
 
 		public void setHeight(double aValue);
+
+		public FGEDimension getSize();
+
+		public void setSize(FGEDimension newSize);
 
 		public List<? extends DrawingTreeNode<?, ?>> getChildNodes();
 
@@ -402,6 +428,37 @@ public interface Drawing<M> {
 		public <O2> boolean hasConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable);
 
 		public <O2> ConnectorNode<O2> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable);
+
+		/**
+		 * Notify that the object just resized
+		 */
+		public void notifyObjectResized();
+
+		/**
+		 * Notify that the object just resized
+		 */
+		public void notifyObjectResized(FGEDimension oldSize);
+
+		/**
+		 * Notify that the object will be resized
+		 */
+		public void notifyObjectWillResize();
+
+		/**
+		 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
+		 * resizing: use notifyObjectResize() instead)
+		 */
+		public void notifyObjectHasResized();
+
+		public boolean isResizing();
+
+		public Dimension getNormalizedLabelSize();
+
+		public Rectangle getNormalizedLabelBounds();
+
+		public FGERectangle getRequiredBoundsForContents();
+
+		public FGERectangle getBounds();
 
 	}
 
@@ -430,6 +487,7 @@ public interface Drawing<M> {
 		 * 
 		 * @return
 		 */
+		@Override
 		public FGERectangle getBounds();
 
 		/**
@@ -476,29 +534,6 @@ public interface Drawing<M> {
 
 		public boolean isMoving();
 
-		/**
-		 * Notify that the object just resized
-		 */
-		public void notifyObjectResized();
-
-		/**
-		 * Notify that the object just resized
-		 */
-		public void notifyObjectResized(FGEDimension oldSize);
-
-		/**
-		 * Notify that the object will be resized
-		 */
-		public void notifyObjectWillResize();
-
-		/**
-		 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
-		 * resizing: use notifyObjectResize() instead)
-		 */
-		public void notifyObjectHasResized();
-
-		public boolean isResizing();
-
 		public void extendParentBoundsToHostThisShape();
 
 		/**
@@ -521,21 +556,9 @@ public interface Drawing<M> {
 
 		public FGEPoint getLocationInDrawing();
 
-		public Dimension getNormalizedLabelSize();
-
-		public Rectangle getNormalizedLabelBounds();
-
-		public FGERectangle getRequiredBoundsForContents();
-
 		public boolean isFullyContainedInContainer();
 
-		public boolean isParentLayoutedAsContainer();
-
 		public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
-
-		public FGEDimension getSize();
-
-		public void setSize(FGEDimension newSize);
 
 		@Override
 		public int getAvailableLabelWidth(double scale);

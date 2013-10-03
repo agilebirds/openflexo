@@ -24,7 +24,6 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
@@ -56,30 +55,10 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	public static final String X_KEY = "x";
 	@PropertyIdentifier(type = Double.class)
 	public static final String Y_KEY = "y";
-	@PropertyIdentifier(type = Double.class)
-	public static final String MINIMAL_WIDTH_KEY = "minimalWidth";
-	@PropertyIdentifier(type = Double.class)
-	public static final String MINIMAL_HEIGHT_KEY = "minimalHeight";
-	@PropertyIdentifier(type = Double.class)
-	public static final String MAXIMAL_WIDTH_KEY = "maximalWidth";
-	@PropertyIdentifier(type = Double.class)
-	public static final String MAXIMAL_HEIGHT_KEY = "maximalHeight";
-	@PropertyIdentifier(type = FGESteppedDimensionConstraint.class)
-	public static final String DIMENSION_CONSTRAINT_STEP_KEY = "dimensionConstraintStep";
 	@PropertyIdentifier(type = LocationConstraints.class)
 	public static final String LOCATION_CONSTRAINTS_KEY = "locationConstraints";
 	@PropertyIdentifier(type = FGEArea.class)
 	public static final String LOCATION_CONSTRAINED_AREA_KEY = "locationConstrainedArea";
-	@PropertyIdentifier(type = DimensionConstraints.class)
-	public static final String DIMENSION_CONSTRAINTS_KEY = "dimensionConstraints";
-	@PropertyIdentifier(type = Boolean.class)
-	public static final String ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY = "adjustMinimalWidthToLabelWidth";
-	@PropertyIdentifier(type = Boolean.class)
-	public static final String ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY = "adjustMinimalHeightToLabelHeight";
-	@PropertyIdentifier(type = Boolean.class)
-	public static final String ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY = "adjustMaximalWidthToLabelWidth";
-	@PropertyIdentifier(type = Boolean.class)
-	public static final String ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY = "adjustMaximalHeightToLabelHeight";
 	@PropertyIdentifier(type = ForegroundStyle.class)
 	public static final String FOREGROUND_KEY = "foreground";
 	@PropertyIdentifier(type = BackgroundStyle.class)
@@ -260,30 +239,10 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 			SELECTED_BACKGROUND_KEY, BackgroundStyle.class);
 	public static GRParameter<ShadowStyle> SHADOW_STYLE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHADOW_STYLE_KEY,
 			ShadowStyle.class);
-	public static GRParameter<Boolean> ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT = GRParameter.getGRParameter(
-			ShapeGraphicalRepresentation.class, ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, Boolean.class);
-	public static GRParameter<Boolean> ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
-			ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY, Boolean.class);
-	public static GRParameter<Boolean> ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT = GRParameter.getGRParameter(
-			ShapeGraphicalRepresentation.class, ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, Boolean.class);
-	public static GRParameter<Boolean> ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
-			ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY, Boolean.class);
-	public static GRParameter<Double> MINIMAL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MINIMAL_WIDTH_KEY,
-			Double.class);
-	public static GRParameter<Double> MINIMAL_HEIGHT = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MINIMAL_HEIGHT_KEY,
-			Double.class);
-	public static GRParameter<Double> MAXIMAL_WIDTH = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MAXIMAL_WIDTH_KEY,
-			Double.class);
-	public static GRParameter<Double> MAXIMAL_HEIGHT = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, MAXIMAL_HEIGHT_KEY,
-			Double.class);
 	public static GRParameter<LocationConstraints> LOCATION_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
 			LOCATION_CONSTRAINTS_KEY, LocationConstraints.class);
 	public static GRParameter<FGEArea> LOCATION_CONSTRAINED_AREA = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
 			LOCATION_CONSTRAINED_AREA_KEY, FGEArea.class);
-	public static GRParameter<DimensionConstraints> DIMENSION_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
-			DIMENSION_CONSTRAINTS_KEY, DimensionConstraints.class);
-	public static GRParameter<FGESteppedDimensionConstraint> DIMENSION_CONSTRAINT_STEP = GRParameter.getGRParameter(
-			ShapeGraphicalRepresentation.class, DIMENSION_CONSTRAINT_STEP_KEY, FGESteppedDimensionConstraint.class);
 	public static GRParameter<Boolean> IS_FLOATING_LABEL = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
 			IS_FLOATING_LABEL_KEY, Boolean.class);
 	public static GRParameter<Boolean> ADAPT_BOUNDS_TO_CONTENTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
@@ -341,41 +300,6 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	@XMLAttribute
 	public double getHeight();
 	*/
-	@Getter(value = MINIMAL_WIDTH_KEY, defaultValue = "0.0")
-	@XMLAttribute
-	public double getMinimalWidth();
-
-	@Setter(value = MINIMAL_WIDTH_KEY)
-	public void setMinimalWidth(double minimalWidth);
-
-	@Getter(value = MINIMAL_HEIGHT_KEY, defaultValue = "0.0")
-	@XMLAttribute
-	public double getMinimalHeight();
-
-	@Setter(value = MINIMAL_HEIGHT_KEY)
-	public void setMinimalHeight(double minimalHeight);
-
-	@Getter(value = MAXIMAL_HEIGHT_KEY, defaultValue = "POSITIVE_INFINITY")
-	@XMLAttribute
-	public double getMaximalHeight();
-
-	@Setter(value = MAXIMAL_HEIGHT_KEY)
-	public void setMaximalHeight(double maximalHeight);
-
-	@Getter(value = MAXIMAL_WIDTH_KEY, defaultValue = "POSITIVE_INFINITY")
-	@XMLAttribute
-	public double getMaximalWidth();
-
-	@Setter(value = MAXIMAL_WIDTH_KEY)
-	public void setMaximalWidth(double maximalWidth);
-
-	@Getter(value = DIMENSION_CONSTRAINT_STEP_KEY, isStringConvertable = true)
-	@XMLAttribute
-	public FGESteppedDimensionConstraint getDimensionConstraintStep();
-
-	@Setter(value = DIMENSION_CONSTRAINT_STEP_KEY)
-	public void setDimensionConstraintStep(FGESteppedDimensionConstraint dimensionConstraintStep);
-
 	@Getter(value = LOCATION_CONSTRAINTS_KEY)
 	@XMLAttribute
 	public LocationConstraints getLocationConstraints();
@@ -388,41 +312,6 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Setter(value = LOCATION_CONSTRAINED_AREA_KEY)
 	public void setLocationConstrainedArea(FGEArea locationConstrainedArea);
-
-	@Getter(value = DIMENSION_CONSTRAINTS_KEY)
-	@XMLAttribute
-	public DimensionConstraints getDimensionConstraints();
-
-	@Setter(value = DIMENSION_CONSTRAINTS_KEY)
-	public void setDimensionConstraints(DimensionConstraints dimensionConstraints);
-
-	@Getter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY, defaultValue = "true")
-	@XMLAttribute
-	public boolean getAdjustMinimalWidthToLabelWidth();
-
-	@Setter(value = ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH_KEY)
-	public void setAdjustMinimalWidthToLabelWidth(boolean adjustMinimalWidthToLabelWidth);
-
-	@Getter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, defaultValue = "true")
-	@XMLAttribute
-	public boolean getAdjustMinimalHeightToLabelHeight();
-
-	@Setter(value = ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY)
-	public void setAdjustMinimalHeightToLabelHeight(boolean adjustMinimalHeightToLabelHeight);
-
-	@Getter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY, defaultValue = "false")
-	@XMLAttribute
-	public boolean getAdjustMaximalWidthToLabelWidth();
-
-	@Setter(value = ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH_KEY)
-	public void setAdjustMaximalWidthToLabelWidth(boolean adjustMaximalWidthToLabelWidth);
-
-	@Getter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, defaultValue = "false")
-	@XMLAttribute
-	public boolean getAdjustMaximalHeightToLabelHeight();
-
-	@Setter(value = ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY)
-	public void setAdjustMaximalHeightToLabelHeight(boolean adjustMaximalHeightToLabelHeight);
 
 	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
