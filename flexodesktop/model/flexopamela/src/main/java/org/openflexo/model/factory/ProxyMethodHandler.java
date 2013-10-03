@@ -732,8 +732,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			((AccessibleProxyObject) getObject()).setModified(modified);
 		} else {
 			internallyInvokeSetModified(modified);
-						}
-					}
+		}
+	}
 
 	private void invokeSetterForListCardinality(ModelProperty<? super I> property, Object value) {
 		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting) {
@@ -1529,6 +1529,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private String internallyInvokeToString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(getModelEntity().getImplementedInterface().getSimpleName() + "[");
 		List<String> variables = new ArrayList<String>(values.keySet());
 		Collections.sort(variables);
 		for (String var : variables) {
@@ -1544,6 +1545,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			}
 			sb.append(var).append("=").append(s).append('\n');
 		}
+		sb.append("]");
 		return sb.toString();
 	}
 

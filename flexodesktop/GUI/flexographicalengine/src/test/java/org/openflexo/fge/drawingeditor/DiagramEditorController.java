@@ -131,6 +131,7 @@ public class DiagramEditorController extends DrawingController<Diagram> {
 		return _palette;
 	}
 
+	@Deprecated
 	public void addNewShape(Shape aShape, DiagramElement father) {
 		father.addToShapes(aShape);
 		// aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
@@ -138,6 +139,7 @@ public class DiagramEditorController extends DrawingController<Diagram> {
 		// contextualMenuInvoker.getDrawable());
 	}
 
+	@Deprecated
 	public void addNewConnector(Connector aConnector, DiagramElement father) {
 		// ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
 		// ShapeGraphicalRepresentation endObject = aConnector.getEndObject();

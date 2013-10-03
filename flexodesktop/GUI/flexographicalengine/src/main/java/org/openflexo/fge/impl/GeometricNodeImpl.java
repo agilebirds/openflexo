@@ -51,7 +51,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 	protected List<ControlPoint> _controlPoints;
 
-	public GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
+	protected GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEGeometricGraphics(this);

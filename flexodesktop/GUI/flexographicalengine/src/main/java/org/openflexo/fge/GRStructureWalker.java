@@ -145,7 +145,7 @@ public abstract class GRStructureWalker<R> {
 			return returned;
 		} else {
 			System.out.println("Nouveau noeud, " + parent.getChildNodes());
-			ShapeNode<O> returned = drawing.createNewShape(parent, binding, drawable);
+			ShapeNode<O> returned = drawing.createNewShapeNode(parent, binding, drawable);
 			createdNodes.add(returned);
 			return returned;
 		}
@@ -335,7 +335,7 @@ public abstract class GRStructureWalker<R> {
 			if (returned.getStartNode() != fromNode || returned.getEndNode() != toNode) {
 				// the structure is incorrect
 				deletedNodes.add(returned);
-				returned = drawing.createNewConnector(parent, binding, drawable, fromNode, toNode);
+				returned = drawing.createNewConnectorNode(parent, binding, drawable, fromNode, toNode);
 				createdNodes.add(returned);
 			} else {
 				updatedNodes.add(returned);
@@ -343,7 +343,7 @@ public abstract class GRStructureWalker<R> {
 			return returned;
 		} else {
 			System.out.println("Nouveau noeud, " + parent.getChildNodes());
-			ConnectorNode<O> returned = drawing.createNewConnector(parent, binding, drawable, fromNode, toNode);
+			ConnectorNode<O> returned = drawing.createNewConnectorNode(parent, binding, drawable, fromNode, toNode);
 			createdNodes.add(returned);
 			return returned;
 		}

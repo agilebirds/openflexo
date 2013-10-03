@@ -46,7 +46,7 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 		Observer, AccessibleProxyObject, CloneableProxyObject {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
-	public static final String DRAWING = "drawing";
+	public static final String DIAGRAM = "diagram";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
 
@@ -82,11 +82,11 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Remover(CONNECTORS)
 	public void removeFromConnectors(Connector aConnector);
 
-	@Getter(value = DRAWING)
+	@Getter(value = DIAGRAM)
 	public Diagram getDiagram();
 
-	@Setter(value = DRAWING)
-	public void setDrawing(Diagram drawing);
+	@Setter(value = DIAGRAM)
+	public void setDiagram(Diagram diagram);
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@XMLElement

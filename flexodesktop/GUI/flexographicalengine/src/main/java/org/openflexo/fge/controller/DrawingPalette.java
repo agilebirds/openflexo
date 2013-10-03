@@ -170,7 +170,6 @@ public class DrawingPalette {
 		if (paletteController == null) {
 			makePalettePanel();
 		}
-		System.out.println(">>>>>>>>> Returning " + paletteController.getDrawingView());
 		return paletteController.getDrawingView();
 	}
 
@@ -223,7 +222,7 @@ public class DrawingPalette {
 			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
-			gr.setBackgroundColor(Color.RED);
+			gr.setBackgroundColor(Color.WHITE);
 			gr.setDrawWorkingArea(true);
 			setEditable(true);
 		}
@@ -554,7 +553,7 @@ public class DrawingPalette {
 							if (element.elementDragged(focused, modelLocation)) {
 								e.acceptDrop(acceptableActions);
 								e.dropComplete(true);
-								// logger.info("OK, valid drop, proceed");
+								logger.info("OK, valid drop, proceed");
 								return;
 							} else {
 								e.rejectDrop();

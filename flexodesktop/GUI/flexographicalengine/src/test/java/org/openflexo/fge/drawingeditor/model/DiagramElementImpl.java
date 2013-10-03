@@ -56,6 +56,9 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	@Override
 	public void addToShapes(Shape aShape) {
 		shapes.add(aShape);
+		setChanged();
+		notifyObservers();
+
 		// System.out.println("Add "+aShape+" isDeserializing="+isDeserializing());
 		/*if (!isDeserializing()) {
 			getDiagram().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
@@ -97,7 +100,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	}
 
 	@Override
-	public void setDrawing(Diagram drawing) {
+	public void setDiagram(Diagram drawing) {
 		diagram = drawing;
 	}
 

@@ -50,7 +50,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	private Connector<?> connector;
 
-	public ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
+	protected ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEConnectorGraphics(this);

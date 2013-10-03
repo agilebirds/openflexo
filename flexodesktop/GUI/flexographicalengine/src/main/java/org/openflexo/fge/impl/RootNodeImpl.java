@@ -28,10 +28,11 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	private FGEDrawingDecorationGraphics decorationGraphics;
 	private BackgroundStyle bgStyle;
 
-	public RootNodeImpl(DrawingImpl<M> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding) {
+	protected RootNodeImpl(DrawingImpl<M> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding) {
 		super(drawing, drawable, grBinding, null);
 		graphics = new FGEDrawingGraphics(this);
 		decorationGraphics = new FGEDrawingDecorationGraphics(this);
+		startDrawableObserving();
 	}
 
 	private BackgroundStyle getBGStyle() {

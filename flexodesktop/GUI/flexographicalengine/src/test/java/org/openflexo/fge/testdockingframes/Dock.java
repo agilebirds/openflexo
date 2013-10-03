@@ -1,4 +1,4 @@
-package org.openflexo.fge.drawingeditor;
+package org.openflexo.fge.testdockingframes;
 
 import java.awt.Color;
 
@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
+import bibliothek.extension.gui.dock.theme.EclipseTheme;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CGrid;
 import bibliothek.gui.dock.common.CLocation;
@@ -18,6 +19,7 @@ public class Dock {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Demo");
 		CControl control = new CControl(frame);
+		control.getController().setTheme(new EclipseTheme());
 
 		frame.add(control.getContentArea());
 

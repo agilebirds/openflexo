@@ -123,9 +123,9 @@ public class DiagramEditor {
 		System.out.println("Saving " + file);
 
 		try {
-			factory.serialize(this, new FileOutputStream(file));
+			factory.serialize(diagram, new FileOutputStream(file));
 			System.out.println("Saved " + file.getAbsolutePath());
-			System.out.println(factory.stringRepresentation(this));
+			System.out.println(factory.stringRepresentation(diagram));
 			return true;
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();

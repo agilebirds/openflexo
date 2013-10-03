@@ -34,6 +34,7 @@ import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
+import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.logging.FlexoLogger;
@@ -202,10 +203,19 @@ public class DiagramEditorPalette extends DrawingPalette {
 
 			@Override
 			public boolean elementDragged(DrawingTreeNode<?, ?> target, FGEPoint dropLocation) {
+
 				DiagramElement<?, ?> container = (DiagramElement<?, ?>) target.getDrawable();
+
+				logger.info("dragging " + this + " in " + container);
+
 				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
-				ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
+
+				Shape newShape = getController().getFactory().makeNewShape(getGraphicalRepresentation(), dropLocation,
+						getController().getDrawing());
+
+				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
+
 				if (applyCurrentForeground) {
 					shapeGR.setForeground(getController().getCurrentForegroundStyle());
 				}
@@ -218,7 +228,10 @@ public class DiagramEditorPalette extends DrawingPalette {
 				if (applyCurrentShadowStyle) {
 					shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
 				}
-				getController().addNewShape(editorFactory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
+
+				container.addToShapes(newShape);
+
+				// getController().addNewShape(editorFactory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
 			}
 

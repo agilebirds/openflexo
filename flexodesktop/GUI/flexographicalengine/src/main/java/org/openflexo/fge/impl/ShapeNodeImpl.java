@@ -83,7 +83,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	private Shape<?> shape;
 
-	public ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
+	protected ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEShapeGraphics(this);

@@ -34,7 +34,7 @@ public class DiagramFactory extends FGEModelFactory {
 
 	public Connector makeNewConnector(Shape from, Shape to, DiagramDrawing drawing) {
 		Connector returned = newInstance(Connector.class);
-		returned.setDrawing(drawing.getModel());
+		returned.setDiagram(drawing.getModel());
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE, returned, drawing));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
@@ -43,8 +43,8 @@ public class DiagramFactory extends FGEModelFactory {
 
 	public Shape makeNewShape(ShapeType shape, FGEPoint p, DiagramDrawing drawing) {
 		Shape returned = newInstance(Shape.class);
-		returned.setDrawing(drawing.getModel());
-		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape, returned, drawing);
+		returned.setDiagram(drawing.getModel());
+		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape, drawing);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setWidth(80);
 			gr.setHeight(80);
@@ -60,8 +60,8 @@ public class DiagramFactory extends FGEModelFactory {
 
 	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, DiagramDrawing drawing) {
 		Shape returned = newInstance(Shape.class);
-		returned.setDrawing(drawing.getModel());
-		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR, returned, drawing);
+		returned.setDiagram(drawing.getModel());
+		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR, drawing);
 		gr.setX(p.x);
 		gr.setY(p.y);
 		returned.setGraphicalRepresentation(gr);
@@ -75,7 +75,7 @@ public class DiagramFactory extends FGEModelFactory {
 		return returned;
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, Shape aDrawable, DiagramDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, /*Shape aDrawable,*/DiagramDrawing aDrawing) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);
@@ -88,7 +88,7 @@ public class DiagramFactory extends FGEModelFactory {
 
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR, Shape aDrawable, DiagramDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR,/* Shape aDrawable,*/DiagramDrawing aDrawing) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		returned.setDrawing(aDrawing);

@@ -35,13 +35,13 @@ public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends
 	// Called for LOAD
 	public GeometricObjectGraphicalRepresentation(GeomEditBuilder builder) {
 		super();
-		setDrawing(builder.drawing);
+		setDiagram(builder.drawing);
 		initializeDeserialization();
 	}
 
 	public GeometricObjectGraphicalRepresentation(G object, GeometricDrawing aDrawing) {
 		super();
-		setDrawing(aDrawing);
+		setDiagram(aDrawing);
 		setDrawable(object);
 		setBackground(aDrawing.getController().getFactory().makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE));
 		addToMouseClickControls(new ShowContextualMenuControl());

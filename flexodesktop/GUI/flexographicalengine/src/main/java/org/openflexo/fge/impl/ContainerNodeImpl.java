@@ -27,7 +27,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 
 	private List<DrawingTreeNodeImpl<?, ?>> childNodes;
 
-	public ContainerNodeImpl(DrawingImpl<?> drawing, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
+	protected ContainerNodeImpl(DrawingImpl<?> drawing, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		super(drawing, drawable, grBinding, parentNode);
 		childNodes = new ArrayList<DrawingTreeNodeImpl<?, ?>>();
 	}

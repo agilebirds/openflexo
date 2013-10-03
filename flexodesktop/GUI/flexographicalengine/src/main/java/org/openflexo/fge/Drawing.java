@@ -24,6 +24,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Observer;
 
@@ -112,7 +113,8 @@ public interface Drawing<M> {
 	 * @param <GR>
 	 *            Type of GraphicalRepresentation represented by this node
 	 */
-	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer, IObservable {
+	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer,
+			PropertyChangeListener, IObservable {
 
 		public static GRParameter<Boolean> IS_FOCUSED = GRParameter.getGRParameter(DrawingTreeNode.class, DrawingTreeNode.IS_FOCUSED_KEY,
 				Boolean.class);
@@ -651,6 +653,39 @@ public interface Drawing<M> {
 
 	public RootNode<M> getRoot();
 
+	/**
+	 * Update the whole tree of graphical object hierarchy<br>
+	 * Recursively navigate in the tree to find invalidated nodes. Only invalidated nodes are recomputed (and eventually rebuild if the
+	 * graphical object hierarchy structure has changed)
+	 * 
+	 */
+	public void updateGraphicalObjectsHierarchy();
+
+	/**
+	 * Update of all DrawingTreeNode representing supplied drawable<br>
+	 * Recursively navigate in the tree to find invalidated nodes. Only invalidated nodes are recomputed (and eventually rebuild if the
+	 * graphical object hierarchy structure has changed)
+	 * 
+	 * @param drawable
+	 */
+	public <O> void updateGraphicalObjectsHierarchy(O drawable);
+
+	/**
+	 * Invalidate the whole hierarchy.<br>
+	 * All nodes of drawing tree are invalidated, which means that a complete recomputing of the whole tree will be performed during next
+	 * updateGraphicalHierarchy() call<br>
+	 * Existing graphical representation are kept.
+	 */
+	public void invalidateGraphicalObjectsHierarchy();
+
+	/**
+	 * Invalidate the graphical object hierarchy under all nodes where supplied object is represented.<br>
+	 * All nodes of drawing tree under supplied node are invalidated, which means that a recomputing of the whole tree under one (or many)
+	 * node (the nodes representing supplied drawable) will be performed during next updateGraphicalObjectHierarchy() call.<br>
+	 * 
+	 */
+	public <O> void invalidateGraphicalObjectsHierarchy(O drawable);
+
 	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name, DrawingGRProvider<M> grProvider);
 
 	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRProvider<R> grProvider);
@@ -671,9 +706,9 @@ public interface Drawing<M> {
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider);
 
-	public <O> ShapeNode<O> createNewShape(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
+	public <O> ShapeNode<O> createNewShapeNode(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
 
-	public <O> ConnectorNode<O> createNewConnector(ContainerNode<?, ?> parent, ConnectorGRBinding<O> binding, O representable,
+	public <O> ConnectorNode<O> createNewConnectorNode(ContainerNode<?, ?> parent, ConnectorGRBinding<O> binding, O representable,
 			ShapeNode<?> fromNode, ShapeNode<?> toNode);
 
 	public <O> boolean hasPendingConnector(ConnectorGRBinding<O> binding, O drawable, DrawingTreeNodeIdentifier<?> parentNodeIdentifier,

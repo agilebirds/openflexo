@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> extends Observable implements DrawingTreeNode<O, GR> {
 
@@ -79,7 +81,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	 */
 	private Map<GRParameter, Object> propertyValues = new HashMap<GRParameter, Object>();
 
-	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
+	protected DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		this.drawing = drawingImpl;
 		// logger.info("New DrawingTreeNode for "+aDrawable+" under "+aParentDrawable+" (is "+this+")");
 		this.drawable = drawable;
@@ -386,12 +388,41 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		temporaryIgnoredObservables.remove(observable);
 	}
 
+	protected void startDrawableObserving() {
+		// Now start to observe drawable for drawing structural modifications
+		if (drawable instanceof Observable) {
+			((Observable) drawable).addObserver(this);
+		} else if (drawable instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) drawable).getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
+	}
+
+	protected void stopDrawableObserving() {
+		// Now start to observe drawable for drawing structural modifications
+		if (drawable instanceof Observable) {
+			((Observable) drawable).deleteObserver(this);
+		} else if (drawable instanceof HasPropertyChangeSupport) {
+			((HasPropertyChangeSupport) drawable).getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		logger.warning("NOT IMPLEMENTED: received: " + evt);
+	}
+
 	@Override
 	public void update(Observable observable, Object notification) {
 
 		if (temporaryIgnoredObservables.contains(observable)) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
+		}
+
+		if (observable == getDrawable()) {
+			logger.info("Received a notification from my drawable that something change: " + notification);
+			getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
+			getDrawing().updateGraphicalObjectsHierarchy(drawable);
 		}
 
 		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {

@@ -90,8 +90,8 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		if (getPoints() != null && getPoints().size() > 0) {
 			return new FGEPolygon(Filling.FILLED, getPoints());
-		} else if (npoints > 2) {
-			return new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
+		} else if (getNPoints() > 2) {
+			return new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, getNPoints(), startAngle);
 		}
 		return null;
 	}

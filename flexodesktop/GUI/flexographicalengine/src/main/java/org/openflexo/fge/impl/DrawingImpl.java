@@ -302,7 +302,10 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return dtnList.elements();
 	}*/
 
-	private boolean isUpdatingObjectHierarchy = false;
+	/**
+	 * This flag indicates that object hierarchy rebuilding has been started somewhere
+	 */
+	// private boolean isUpdatingObjectHierarchy = false;
 
 	// private Vector<DrawingTreeNode<?>> nodesToUpdate;
 	// private Vector<DrawingTreeNode<?>> nodesToNotifyAdding;
@@ -321,70 +324,69 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		isGraphicalHierarchyEnabled = false;
 	}*/
 
-	public final void updateGraphicalObjectsHierarchy() {
-
-		/*if (!isGraphicalHierarchyEnabled) {
-			isGraphicalHierarchyDirty = true;
-			return;
-		}*/
-		if (isUpdatingObjectHierarchy) {
-			return;
-		}
-
-		getRoot().invalidate();
-
-		// logger.info("******************** BEGIN updateGraphicalObjectsHierarchy() ");
+	private void fireGraphicalObjectHierarchyRebuildStarted() {
 		setChanged();
 		notifyObservers(new DrawingTreeNodeHierarchyRebuildStarted(this));
-		// beginUpdateObjectHierarchy();
+	}
 
-		updateGraphicalObjectsHierarchy(getRoot());
-
-		// buildGraphicalObjectsHierarchy(model);
-
-		// endUpdateObjectHierarchy();
-
-		// isGraphicalHierarchyDirty = false;
-
+	private void fireGraphicalObjectHierarchyRebuildEnded() {
 		setChanged();
 		notifyObservers(new DrawingTreeNodeHierarchyRebuildEnded(this));
-		// logger.info("******************** END updateGraphicalObjectsHierarchy() ");
+	}
+
+	/**
+	 * Update the whole tree of graphical object hierarchy<br>
+	 * Recursively navigate in the tree to find invalidated nodes. Only invalidated nodes are recomputed (and eventually rebuild if the
+	 * graphical object hierarchy structure has changed)
+	 * 
+	 */
+	@Override
+	public final void updateGraphicalObjectsHierarchy() {
+
+		fireGraphicalObjectHierarchyRebuildStarted();
+		updateGraphicalObjectsHierarchy(getRoot());
+		fireGraphicalObjectHierarchyRebuildEnded();
 
 	}
 
 	/**
-	 * Invalidate the whole hierarchy. All nodes of drawing tree are invalidated, which means that a complete recomputing of the whole tree
-	 * will be performed during next updateGraphicalHierarchy() call<br>
+	 * Update of all DrawingTreeNode representing supplied drawable<br>
+	 * Recursively navigate in the tree to find invalidated nodes. Only invalidated nodes are recomputed (and eventually rebuild if the
+	 * graphical object hierarchy structure has changed)
+	 * 
+	 * @param drawable
+	 */
+	@Override
+	public final <O> void updateGraphicalObjectsHierarchy(O drawable) {
+		fireGraphicalObjectHierarchyRebuildStarted();
+		for (DrawingTreeNode<O, ?> dtn : getDrawingTreeNodes(drawable)) {
+			// dtn.invalidate();
+			updateGraphicalObjectsHierarchy(dtn);
+		}
+		fireGraphicalObjectHierarchyRebuildEnded();
+	}
+
+	/**
+	 * Invalidate the whole hierarchy.<br>
+	 * All nodes of drawing tree are invalidated, which means that a complete recomputing of the whole tree will be performed during next
+	 * updateGraphicalHierarchy() call<br>
 	 * Existing graphical representation are kept.
 	 */
+	@Override
 	public void invalidateGraphicalObjectsHierarchy() {
 		invalidateGraphicalObjectsHierarchy(getModel());
 	}
 
 	/**
-	 * Invalidate the whole hierarchy under current node designated by supplied object All nodes of drawing tree under supplied node are
-	 * invalidated, which means that a recomputing of the whole tree under supplied node will be performed during next
-	 * updateGraphicalHierarchy() call.<br>
-	 * If flag deleteGraphicalRepresentation is set to true, associated graphical representation will be deleted and nullified, and then new
-	 * graphical representations will be instanciated during next update request.
+	 * Invalidate the graphical object hierarchy under all nodes where supplied object is represented.<br>
+	 * All nodes of drawing tree under supplied node are invalidated, which means that a recomputing of the whole tree under one (or many)
+	 * node (the nodes representing supplied drawable) will be performed during next updateGraphicalObjectHierarchy() call.<br>
 	 * 
-	 * @param deleteGraphicalRepresentation
 	 */
+	@Override
 	public <O> void invalidateGraphicalObjectsHierarchy(O drawable) {
 		for (DrawingTreeNode<O, ?> dtn : getDrawingTreeNodes(drawable)) {
 			dtn.invalidate();
-		}
-	}
-
-	/**
-	 * Force updating of all DrawingTreeNode representing supplied drawable
-	 * 
-	 * @param drawable
-	 */
-	public final <O> void updateGraphicalObjectsHierarchy(O drawable) {
-		for (DrawingTreeNode<O, ?> dtn : getDrawingTreeNodes(drawable)) {
-			dtn.invalidate();
-			updateGraphicalObjectsHierarchy(dtn);
 		}
 	}
 
@@ -455,6 +457,11 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		updateGraphicalObjectsHierarchy(getRoot());
 	}*/
 
+	/**
+	 * Internally called to update graphical object hierarchy at a given node
+	 * 
+	 * @param dtn
+	 */
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 		if (dtn.isInvalidated()) {
 			System.out.println("Updating " + dtn);
@@ -466,6 +473,12 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 			List<DrawingTreeNode<?, ?>> createdNodes = new ArrayList<DrawingTreeNode<?, ?>>();
 			List<DrawingTreeNode<?, ?>> deletedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
 			List<DrawingTreeNode<?, ?>> updatedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
+
+			// boolean wasUpdatingObjectHierarchy = isUpdatingObjectHierarchy;
+
+			/*if (!wasUpdatingObjectHierarchy) {
+				isUpdatingObjectHierarchy = true;
+			}*/
 
 			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
 				walker.startWalking(dtn);
@@ -499,6 +512,16 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 			}
 
 			((DrawingTreeNodeImpl<?, ?>) dtn).validate();
+
+			/*if (!wasUpdatingObjectHierarchy) {
+				isUpdatingObjectHierarchy = false;
+			}*/
+		} else {
+			if (dtn instanceof ContainerNode) {
+				for (DrawingTreeNode<?, ?> child : ((ContainerNode<?, ?>) dtn).getChildNodes()) {
+					updateGraphicalObjectsHierarchy(child);
+				}
+			}
 		}
 	}
 
@@ -537,9 +560,10 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	@Override
-	public <O> ShapeNode<O> createNewShape(ContainerNode<?, ?> parentNode, ShapeGRBinding<O> binding, O drawable) {
+	public <O> ShapeNode<O> createNewShapeNode(ContainerNode<?, ?> parentNode, ShapeGRBinding<O> binding, O drawable) {
 
-		System.out.println("draw shape with " + binding + " drawable=" + drawable + " parent=" + parentNode);
+		System.out.println("draw shape with " + binding + " drawable=" + drawable + " parent=" + parentNode /*+ " isUpdatingObjectHierarchy="
+																											+ isUpdatingObjectHierarchy*/);
 
 		if (parentNode == null) {
 			logger.warning("Cannot register drawable above null parent");
@@ -548,9 +572,13 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 		ShapeNodeImpl<O> returned = new ShapeNodeImpl<O>(this, drawable, binding, (ContainerNodeImpl<?, ?>) parentNode);
 		parentNode.addChild(returned);
-		if (isUpdatingObjectHierarchy) {
-			notifyNodeAdded(returned, parentNode);
-		}
+
+		// Now start to observe drawable for drawing structural modifications
+		returned.startDrawableObserving();
+
+		// if (isUpdatingObjectHierarchy) {
+		notifyNodeAdded(returned, parentNode);
+		// }
 		return returned;
 
 		/*if (parentNode.childs.contains(aDrawable)) {
@@ -590,7 +618,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	@Override
-	public <O> ConnectorNode<O> createNewConnector(ContainerNode<?, ?> parentNode, ConnectorGRBinding<O> binding, O drawable,
+	public <O> ConnectorNode<O> createNewConnectorNode(ContainerNode<?, ?> parentNode, ConnectorGRBinding<O> binding, O drawable,
 			ShapeNode<?> fromNode, ShapeNode<?> toNode) {
 
 		System.out.println("draw connector with " + binding + " drawable=" + drawable + " parent=" + parentNode + " fromNode=" + fromNode
@@ -604,10 +632,14 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		ConnectorNodeImpl<O> returned = new ConnectorNodeImpl<O>(this, drawable, binding, (ContainerNodeImpl<?, ?>) parentNode);
 		returned.setStartNode((ShapeNodeImpl<?>) fromNode);
 		returned.setEndNode((ShapeNodeImpl<?>) toNode);
+
+		// Now start to observe drawable for drawing structural modifications
+		returned.startDrawableObserving();
+
 		parentNode.addChild(returned);
-		if (isUpdatingObjectHierarchy) {
-			notifyNodeAdded(returned, parentNode);
-		}
+		// if (isUpdatingObjectHierarchy) {
+		notifyNodeAdded(returned, parentNode);
+		// }
 		return returned;
 
 	}
