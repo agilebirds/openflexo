@@ -27,6 +27,7 @@ import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -40,6 +41,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
+@FIBPanel("Fib/SelectEditionPatternInstancePanel.fib")
 public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectEditionPatternInstance.class.getPackage().getName());
@@ -64,11 +66,6 @@ public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModel
 			out.append(")", context);
 		}
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.SelectEditionPatternInstance;
 	}
 
 	@Override

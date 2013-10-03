@@ -24,9 +24,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -50,7 +52,8 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (getColumnModel().getAction().isSet() && getColumnModel().getAction().isValid()) {
+				DataBinding<Object> action = getColumnModel().getAction();
+				if (action.isSet() && action.isValid()) {
 					iteratorObject = elementAt(buttonTableColumn.getClickedRow());
 					try {
 						getColumnModel().getAction().execute(ButtonColumn.this);
@@ -63,7 +66,30 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 					}
 				}
 			}
-		});
+
+		}) {
+			@Override
+			public boolean isEnabled(JTable table, Object value, int row, int column) {
+				if (getColumnModel().getEnabled().isSet() && getColumnModel().getEnabled().isValid()) {
+					iteratorObject = elementAt(row);
+					Object enabled = null;
+					try {
+						enabled = getColumnModel().getEnabled().getBindingValue(ButtonColumn.this);
+					} catch (TypeMismatchException e) {
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						e.printStackTrace();
+						return false;
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					if (enabled instanceof Boolean) {
+						return (Boolean) enabled;
+					}
+				}
+				return super.isEnabled(table, value, row, column);
+			}
+		};
 	}
 
 	@Override

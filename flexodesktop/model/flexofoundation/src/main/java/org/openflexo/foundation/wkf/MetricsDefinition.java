@@ -58,9 +58,9 @@ public class MetricsDefinition extends WorkflowModelObject implements Inspectabl
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getWorkflow().removeFromMetricsDefinition(this);
-		super.delete();
+		return super.delete();
 	}
 
 	@Override

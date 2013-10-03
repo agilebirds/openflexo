@@ -74,8 +74,11 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		if (!isLoaded()) {
 			return;
 		}
-		saveResourceData(true);
-		resourceData.clearIsModified(false);
+		if (!isDeleted) {
+			saveResourceData(true);
+			resourceData.clearIsModified(false);
+		}
+
 	}
 
 	/**

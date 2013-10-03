@@ -1,107 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.drawingeditor.FIBInspector" layout="border" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab">
-      <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
-       <CheckBox selected="false" localize="true" name="IsSelectable" data="data.isSelectable"  useScrollBar="false" />
-        <CheckBox data="data.hasSelectedForeground" enable="data.isSelectable" selected="true" localize="true" constraints="flow(index=1)" />
-        <Label label="use" localize="true" enable="data.isSelectable" constraints="flow(index=2;location=east)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isSelectable &amp;&amp; data.hasSelectedForeground" data="data.selectedForeground" constraints="flow(index=3)" />
-        <CheckBox data="data.hasSelectedBackground" enable="data.isSelectable" selected="true" localize="true" constraints="flow(index=4)" />
-        <Label label="use" localize="true" enable="data.isSelectable" constraints="flow(index=5)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" enable="data.isSelectable &amp;&amp; data.hasSelectedBackground" data="data.selectedBackground" constraints="flow(index=6)" />
-        <Label label="cp" enable="data.isSelectable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-        <CheckBox selected="false" enable="data.isSelectable" localize="true" data="data.drawControlPointsWhenSelected" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+<Panel className="org.openflexo.fge.drawingeditor.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" index="0" constraints="border(index=0;location=center)">
+    <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+      <Label label="is_selectable" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="IsSelectableLabel" localize="true" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <CheckBox selected="false" data="data.isSelectable" constraints="flow()" name="IsSelectable" localize="true" />
+        <CheckBox selected="true" index="1" data="data.hasSelectedForeground" constraints="flow(index=1)" localize="true" enable="data.isSelectable" />
+        <Label label="use" index="2" constraints="flow(index=2;location=east)" localize="true" enable="data.isSelectable" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" enable="(data.isSelectable &amp; data.hasSelectedForeground)" manageDynamicModel="true" index="3" data="data.selectedForeground" constraints="flow(index=3)" />
+        <CheckBox selected="true" index="4" data="data.hasSelectedBackground" constraints="flow(index=4)" localize="true" enable="data.isSelectable" />
+        <Label label="use" index="5" constraints="flow(index=5)" localize="true" enable="data.isSelectable" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" enable="(data.isSelectable &amp; data.hasSelectedBackground)" manageDynamicModel="true" index="6" data="data.selectedBackground" constraints="flow(index=6)" />
+        <Label label="cp" index="10" constraints="flow(expandHorizontally=false;expandVertically=false;index=10;location=left)" localize="true" enable="data.isSelectable" />
+        <CheckBox selected="false" index="11" data="data.drawControlPointsWhenSelected" constraints="flow(expandHorizontally=false;expandVertically=false;index=11;location=right)" localize="true" enable="data.isSelectable" />
       </Panel>
-      <Label label="is_focusable" localize="true" name="IsFocusableLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
-        <CheckBox selected="false" localize="true" name="IsFocusable" data="data.isFocusable" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
-        <CheckBox data="data.hasFocusedForeground" selected="true" localize="true" enable="data.isFocusable" constraints="flow(index=1)" />
-        <Label label="use" localize="true" enable="data.isFocusable" constraints="flow(index=2;location=east)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isFocusable &amp;&amp; data.hasFocusedForeground" data="data.focusedForeground" constraints="flow(index=3)" />
-        <CheckBox data="data.hasFocusedBackground" selected="true" localize="true" enable="data.isFocusable" constraints="flow(index=4)" />
-        <Label label="use" localize="true" enable="data.isFocusable" constraints="flow(index=5)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" enable="data.isFocusable &amp;&amp; data.hasFocusedBackground" data="data.focusedBackground" constraints="flow(index=6)" />
-        <Label label="cp" enable="data.isFocusable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-        <CheckBox selected="false" enable="data.isFocusable" localize="true" data="data.drawControlPointsWhenFocused" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Label label="is_focusable" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="IsFocusableLabel" localize="true" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <CheckBox selected="false" index="0" data="data.isFocusable" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="IsFocusable" localize="true" />
+        <CheckBox selected="true" index="1" data="data.hasFocusedForeground" constraints="flow(index=1)" localize="true" enable="data.isFocusable" />
+        <Label label="use" index="2" constraints="flow(index=2;location=east)" localize="true" enable="data.isFocusable" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" enable="(data.isFocusable &amp; data.hasFocusedForeground)" manageDynamicModel="true" index="3" data="data.focusedForeground" constraints="flow(index=3)" />
+        <CheckBox selected="true" index="4" data="data.hasFocusedBackground" constraints="flow(index=4)" localize="true" enable="data.isFocusable" />
+        <Label label="use" index="5" constraints="flow(index=5)" localize="true" enable="data.isFocusable" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" enable="(data.isFocusable &amp; data.hasFocusedBackground)" manageDynamicModel="true" index="6" data="data.focusedBackground" constraints="flow(index=6)" />
+        <Label label="cp" index="10" constraints="flow(expandHorizontally=false;expandVertically=false;index=10;location=left)" localize="true" enable="data.isFocusable" />
+        <CheckBox selected="false" index="11" data="data.drawControlPointsWhenFocused" constraints="flow(expandHorizontally=false;expandVertically=false;index=11;location=right)" localize="true" enable="data.isFocusable" />
       </Panel>
     </Tab>
-    <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" name="LocationSizeTab">
-      <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" />
-      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="10" data="data.layer" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" name="Layer" localize="true" />
-      <Label label="position" localize="true" name="PositionLabel" constraints="twocols(location=left;index=2;expandVertically=false;expandHorizontally=false)" />
-      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=3;expandVertically=false;expandHorizontally=true)">
-        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="data.x" constraints="flow(index=0)" name="X" localize="true" />
-        <Label label=";" name="Space" constraints="flow(index=1)" />
-        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="data.y" constraints="flow(index=2)" name="Y" localize="true" />
+    <Tab title="Location/Size" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LocationSizeTab">
+      <Label label="layer" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="LayerLabel" localize="true" />
+      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="10" index="1" data="data.layer" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Layer" localize="true" />
+      <Label label="position" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="PositionLabel" localize="true" />
+      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)">
+        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="0" data="data.x" constraints="flow(index=0)" name="X" localize="true" />
+        <Label label=";" index="1" constraints="flow(index=1)" name="Space" localize="true" />
+        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="2" data="data.y" constraints="flow(index=2)" name="Y" localize="true" />
       </Panel>
-      <Label label="location_constraints" localize="true" name="LocationConstraintsLabel" constraints="twocols(location=left;index=4;expandVertically=false;expandHorizontally=false)" />
-      <DropDown format="object.name.toLowerCase" localize="true" name="LocationConstraints" data="data.locationConstraints" constraints="twocols(location=right;index=5;expandVertically=false;expandHorizontally=false)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$LocationConstraints" />
-      <Label label="dimensions" localize="true" name="DimensionLabel" constraints="twocols(location=left;index=6;expandVertically=false;expandHorizontally=false)" />
-      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=7;expandVertically=false;expandHorizontally=true)">
-        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="data.width" constraints="flow(index=0)" name="Width" localize="true" />
-        <Label label="x" name="X" constraints="flow(index=1)" />
-        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" data="data.height" constraints="flow(index=2)" name="Height" localize="true" />
+      <Label label="location_constraints" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="LocationConstraintsLabel" localize="true" />
+      <DropDown index="5" data="data.locationConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" width="150" name="LocationConstraints" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$LocationConstraints" autoSelectFirstRow="false" />
+      <Label label="dimensions" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="DimensionLabel" localize="true" />
+      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)">
+        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="0" data="data.width" constraints="flow(index=0)" name="Width" localize="true" />
+        <Label label="x" index="1" constraints="flow(index=1)" name="X" localize="true" />
+        <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="2" data="data.height" constraints="flow(index=2)" name="Height" localize="true" />
       </Panel>
-      <Label label="dimensions_constraints" localize="true" name="DimensionConstraintsLabel" constraints="twocols(location=left;index=8;expandVertically=false;expandHorizontally=false)" />
-      <DropDown format="object.name.toLowerCase" localize="true" name="DimensionConstraints" data="data.dimensionConstraints" constraints="twocols(location=right;index=9;expandVertically=false;expandHorizontally=false)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" />
-      <Label label="x_constraints" localize="true" constraints="twocols(location=left;index=10;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.xConstraints" constraints="twocols(location=right;index=11;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.xConstraints)">
+      <Label label="dimensions_constraints" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="DimensionConstraintsLabel" localize="true" />
+      <DropDown index="9" data="data.dimensionConstraints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" width="150" name="DimensionConstraints" format="object.name.toLowerCase" localize="true" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" autoSelectFirstRow="false" />
+      <Label label="x_constraints" index="10" constraints="twocols(expandVertically=false;index=10;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.xConstraints)" index="11" data="data.xConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;location=right)">
         <Assignment variable="component.bindable" value="data" />
       </Custom>
-      <Label label="y_constraints" localize="true" constraints="twocols(location=left;index=12;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.yConstraints" constraints="twocols(location=right;index=13;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.yConstraints)">
-        <Assignment variable="component.bindable" value="data" />
-       </Custom>
-      <Label label="width_constraints" localize="true" constraints="twocols(location=left;index=14;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.widthConstraints" constraints="twocols(location=right;index=15;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.widthConstraints)">
+      <Label label="y_constraints" index="12" constraints="twocols(expandVertically=false;index=12;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.yConstraints)" index="13" data="data.yConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)">
         <Assignment variable="component.bindable" value="data" />
       </Custom>
-      <Label label="height_constraints" localize="true" constraints="twocols(location=left;index=16;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="data.heightConstraints" constraints="twocols(location=right;index=17;expandVertically=false;expandHorizontally=true)" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.heightConstraints)">
+      <Label label="width_constraints" index="14" constraints="twocols(expandVertically=false;index=14;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.widthConstraints)" index="15" data="data.widthConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;location=right)">
         <Assignment variable="component.bindable" value="data" />
       </Custom>
-      <Label label="border" localize="true" name="BorderLabel" constraints="twocols(location=left;index=18;expandVertically=false;expandHorizontally=false)" />
-      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=right;index=19;expandVertically=false;expandHorizontally=true)">
-        <Label label="top" localize="true" name="BorderTopLabel" constraints="flow(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="data.border.top" constraints="flow(location=right;index=1;expandHorizontally=false;expandVertically=false)" name="Bordertop" localize="true" />
-        <Label label="bottom" localize="true" name="BorderBottomLabel" constraints="flow(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="data.border.bottom" constraints="flow(location=right;index=3;expandHorizontally=false;expandVertically=false)" name="Borderbottom" localize="true" />
-        <Label label="left" localize="true" name="BorderLeftLabel" constraints="flow(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="data.border.left" constraints="flow(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="Borderleft" localize="true" />
-        <Label label="right" localize="true" name="BorderRightLabel" constraints="flow(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" data="data.border.right" constraints="flow(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="Borderright" localize="true" />
+      <Label label="height_constraints" index="16" constraints="twocols(expandVertically=false;index=16;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.constraintChanged(data.heightConstraints)" index="17" data="data.heightConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+      </Custom>
+      <Label label="border" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;location=left)" name="BorderLabel" localize="true" />
+      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;location=right)">
+        <Label label="top" index="0" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="BorderTopLabel" localize="true" />
+        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="1" data="data.border.top" constraints="flow(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="Bordertop" localize="true" />
+        <Label label="bottom" index="2" constraints="flow(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="BorderBottomLabel" localize="true" />
+        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="3" data="data.border.bottom" constraints="flow(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="Borderbottom" localize="true" />
+        <Label label="left" index="4" constraints="flow(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="BorderLeftLabel" localize="true" />
+        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="5" data="data.border.left" constraints="flow(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Borderleft" localize="true" />
+        <Label label="right" index="6" constraints="flow(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="BorderRightLabel" localize="true" />
+        <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="2" index="7" data="data.border.right" constraints="flow(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="Borderright" localize="true" />
       </Panel>
-      <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandVertically=false;expandHorizontally=false)" />
-      <CheckBox selected="false" localize="true" name="IsVisible" data="data.isVisible" constraints="twocols(location=right;index=21;expandVertically=false;expandHorizontally=false)" />
-      <Label label="allows_to_leave_bounds" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
-      <CheckBox selected="true" localize="true" name="checkbox" data="data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-      <Label label="adapt_bounds_to_host_contents" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
-      <CheckBox selected="true" localize="true" name="checkbox" data="data.adaptBoundsToContents" constraints="twocols(expandHorizontally=true;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-      <Label label="index" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
-      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
+      <Label label="is_visible" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;location=left)" name="IsVisibleLabel" localize="true" />
+      <CheckBox selected="false" index="21" data="data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;location=right)" name="IsVisible" localize="true" />
+      <Label label="allows_to_leave_bounds" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <CheckBox selected="true" index="23" data="data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" />
+      <Label label="adapt_bounds_to_host_contents" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <CheckBox selected="true" index="25" data="data.adaptBoundsToContents" constraints="twocols(expandHorizontally=true;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" />
+      <Label label="index" index="26" constraints="twocols(expandHorizontally=true;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" index="27" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
     </Tab>
-    <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" name="TextTab">
-      <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=false)" />
-      <CheckBox selected="false" localize="true" name="IsFloatingLabel" data="data.isFloatingLabel" constraints="twocols(location=right;index=15;expandVertically=false;expandHorizontally=false)" />
-      <Label label="line_wrap" localize="true" constraints="twocols(location=left;index=16;expandVertically=false;expandHorizontally=false)" />
-      <CheckBox selected="false" localize="true" name="LineWrap" data="data.lineWrap" constraints="twocols(location=right;index=17;expandVertically=false;expandHorizontally=false)" />
-      <Label label="absolute_text_x" localize="true" name="AbsoluteTextXLabel" constraints="twocols(location=left;index=18;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = true)" />
-      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextX" constraints="twocols(location=right;index=19;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
-      <Label label="absolute_text_y" localize="true" name="AbsoluteTextYLabel" constraints="twocols(location=left;index=20;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = true)" />
-      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" data="data.absoluteTextY" constraints="twocols(location=right;index=21;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
-      <Label label="relative_text_x" localize="true" name="RelativeTextXLabel" constraints="twocols(location=left;index=22;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = false)" />
-      <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="data.relativeTextX" constraints="twocols(location=right;index=23;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
-      <Label label="relative_text_y" localize="true" name="RelativeTextYLabel" constraints="twocols(location=left;index=24;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = false)" />
-      <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" data="data.relativeTextY" constraints="twocols(location=right;index=25;expandVertically=false;expandHorizontally=false)" visible="(data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
-      <CheckBox selected="false" localize="true" name="AdjustMinimalWidthToLabelWidth" data="data.adjustMinimalWidthToLabelWidth" constraints="twocols(location=left;index=26;expandVertically=false;expandHorizontally=false)" />
-      <Label label="adjust_minimal_width_to_label_width" localize="true" name="AdjustMinimalWidthToLabelWidthLabel" constraints="twocols(location=right;index=27;expandVertically=false;expandHorizontally=false)" />
-      <CheckBox selected="false" localize="true" name="AdjustMinimalHeightToLabelHeight" data="data.adjustMinimalHeightToLabelHeight" constraints="twocols(location=left;index=28;expandVertically=false;expandHorizontally=false)" />
-      <Label label="adjust_minimal_height_to_label_height" localize="true" name="AdjustMinimalHeightToLabelHeightLabel" constraints="twocols(location=right;index=29;expandVertically=false;expandHorizontally=false)" />
+    <Tab title="Text" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="TextTab">
+      <Label label="floating_label" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;location=left)" name="IsFloatingLabelLabel" localize="true" />
+      <CheckBox selected="false" index="15" data="data.isFloatingLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;location=right)" name="IsFloatingLabel" localize="true" />
+      <Label label="line_wrap" index="16" constraints="twocols(expandHorizontally=false;expandVertically=false;index=16;location=left)" localize="true" />
+      <CheckBox selected="false" index="17" data="data.lineWrap" constraints="twocols(expandHorizontally=false;expandVertically=false;index=17;location=right)" name="LineWrap" localize="true" />
+      <Label label="absolute_text_x" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;location=left)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextXLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="19" data="data.absoluteTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;location=right)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextX" localize="true" />
+      <Label label="absolute_text_y" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;location=left)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextYLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" index="21" data="data.absoluteTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;location=right)" visible="(data.isFloatingLabel = true)" name="AbsoluteTextY" localize="true" />
+      <Label label="relative_text_x" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=22;location=left)" visible="(data.isFloatingLabel = false)" name="RelativeTextXLabel" localize="true" />
+      <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" index="23" data="data.relativeTextX" constraints="twocols(expandHorizontally=false;expandVertically=false;index=23;location=right)" visible="(data.isFloatingLabel = false)" name="RelativeTextX" localize="true" />
+      <Label label="relative_text_y" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=24;location=left)" visible="(data.isFloatingLabel = false)" name="RelativeTextYLabel" localize="true" />
+      <Number minValue="-1.0" maxValue="1.0" increment="0.01" numberType="DoubleType" index="25" data="data.relativeTextY" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;location=right)" visible="(data.isFloatingLabel = false)" name="RelativeTextY" localize="true" />
+      <CheckBox selected="false" index="26" data="data.adjustMinimalWidthToLabelWidth" constraints="twocols(expandHorizontally=false;expandVertically=false;index=26;location=left)" name="AdjustMinimalWidthToLabelWidth" localize="true" />
+      <Label label="adjust_minimal_width_to_label_width" index="27" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;location=right)" name="AdjustMinimalWidthToLabelWidthLabel" localize="true" />
+      <CheckBox selected="false" index="28" data="data.adjustMinimalHeightToLabelHeight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=28;location=left)" name="AdjustMinimalHeightToLabelHeight" localize="true" />
+      <Label label="adjust_minimal_height_to_label_height" index="29" constraints="twocols(expandHorizontally=false;expandVertically=false;index=29;location=right)" name="AdjustMinimalHeightToLabelHeightLabel" localize="true" />
     </Tab>
-    <Tab index="0" title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" font="SansSerif,0,11" name="ShapeTab">
-      <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" data="data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" manageDynamicModel="true">
+    <Tab title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ShapeTab">
+      <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" localize="true" manageDynamicModel="true" index="0" data="data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
         <Assignment variable="component.panelWidth" value="120" />
         <Assignment variable="component.panelHeight" value="80" />
         <Assignment variable="component.foregroundStyle" value="data.foreground" />
@@ -112,15 +112,15 @@
         <Dependancy componentName="ShadowStyleSelector" />
         <Dependancy componentName="ShapeSelector" />
       </Custom>
-      <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" constraints="gridbag(anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=10;padY=10;weightX=0.0;weightY=0.0)">
-        <Label label="foreground" localize="true" name="ForegroundLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" data="data.foreground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ForegroundSelector" localize="true" manageDynamicModel="true" />
-        <Label label="background" localize="true" name="BackgroundLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" data="data.background" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BackgroundSelector" localize="true" manageDynamicModel="true" />
-        <Label label="shadow" localize="true" name="ShadowStyleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBShadowStyleSelector" data="data.shadowStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ShadowStyleSelector" localize="true" manageDynamicModel="true" />
-        <Label label="shape" localize="true" name="ShapeTypeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
-        <Custom componentClassName="org.openflexo.fge.view.widget.FIBShapeSelector" data="data.shape" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ShapeSelector" localize="true" manageDynamicModel="true" />
+      <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="1" constraints="gridbag(anchor=center;expandHorizontally=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=10;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=10;padY=10;weightX=0.0;weightY=0.0)">
+        <Label label="foreground" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=10;insetsRight=2;insetsTop=5;location=left)" name="ForegroundLabel" localize="true" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" localize="true" manageDynamicModel="true" name="ForegroundSelector" index="1" data="data.foreground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+        <Label label="background" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BackgroundLabel" localize="true" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" localize="true" manageDynamicModel="true" name="BackgroundSelector" index="3" data="data.background" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+        <Label label="shadow" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ShadowStyleLabel" localize="true" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBShadowStyleSelector" localize="true" manageDynamicModel="true" name="ShadowStyleSelector" index="5" data="data.shadowStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+        <Label label="shape" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ShapeTypeLabel" localize="true" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBShapeSelector" localize="true" manageDynamicModel="true" name="ShapeSelector" index="7" data="data.shape" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
       </Panel>
     </Tab>
   </TabPanel>
@@ -281,4 +281,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Shape" />
 </Panel>
-

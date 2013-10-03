@@ -129,12 +129,12 @@ public class DeprecatedAddTOCEntryInitializer extends ActionInitializer {
 
 					@Override
 					public boolean isSelectable(FlexoProcess process) {
-						return !process.isImported();
+						return true;
 					}
 
 					@Override
 					public boolean isSelectable(ProcessFolder folder) {
-						return !folder.isImported();
+						return true;
 					}
 
 				});

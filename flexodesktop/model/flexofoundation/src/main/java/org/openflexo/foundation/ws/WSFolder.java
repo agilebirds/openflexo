@@ -47,8 +47,8 @@ public abstract class WSFolder extends WSObject {
 	public abstract String getLocalizedDescription();
 
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean delete() {
+		return super.delete();
 	}
 
 	// ==========================================================================

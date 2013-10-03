@@ -956,6 +956,7 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		}
 	}
 
+	@Override
 	public FlexoVersion latestVersion() {
 		return getXmlMappings().getLatestVersionForClass(getResourceDataClass());
 	}
@@ -1232,6 +1233,14 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		}
 		logger.warning("Sorry, XMLSerializationService not registered, cannot proceed");
 		return null;
+	}
+
+	@Override
+	public void unloadResourceData() {
+		if (isLoaded()) {
+			getResourceData().delete();
+			_resourceData = null;
+		}
 	}
 
 }

@@ -29,7 +29,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/NavigationSchemePanel.fib")
 public class NavigationScheme extends AbstractActionScheme implements DiagramEditionScheme {
 
 	private DataBinding<Object> targetObject;

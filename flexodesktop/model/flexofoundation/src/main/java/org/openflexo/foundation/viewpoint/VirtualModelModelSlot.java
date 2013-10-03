@@ -91,6 +91,13 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return null;
 	}
 
+	public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern) {
+		EditionPatternInstancePatternRole returned = makePatternRole(EditionPatternInstancePatternRole.class);
+		returned.setEditionPatternType(editionPattern);
+		returned.setModelSlot(this);
+		return returned;
+	}
+
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
 		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -126,9 +133,11 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	private String virtualModelURI;
 
 	public VirtualModelResource<?> getVirtualModelResource() {
-		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI)) {
-			virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
-			logger.info("Looked-up " + virtualModelResource);
+		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI) && getViewPoint() != null) {
+			if (getViewPoint().getVirtualModelNamed(virtualModelURI) != null) {
+				virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
+				logger.info("Looked-up " + virtualModelResource);
+			}
 		}
 		return virtualModelResource;
 	}
@@ -142,14 +151,14 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return EditionPatternInstanceType.getEditionPatternInstanceType(getAddressedVirtualModel());
 	}
 
-	public String getMetaModelURI() {
+	public String getVirtualModelURI() {
 		if (virtualModelResource != null) {
 			return virtualModelResource.getURI();
 		}
 		return virtualModelURI;
 	}
 
-	public void setMetaModelURI(String metaModelURI) {
+	public void setVirtualModelURI(String metaModelURI) {
 		this.virtualModelURI = metaModelURI;
 	}
 
@@ -159,8 +168,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	 * @return
 	 */
 	public VirtualModel getAddressedVirtualModel() {
-		if (getViewPoint() != null && StringUtils.isNotEmpty(virtualModelURI)) {
-			return getViewPoint().getVirtualModelNamed(virtualModelURI);
+		if (getViewPoint() != null && StringUtils.isNotEmpty(getVirtualModelURI())) {
+			return getViewPoint().getVirtualModelNamed(getVirtualModelURI());
 		}
 		return null;
 	}
@@ -171,7 +180,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	 * @return
 	 */
 	public boolean isReflexiveModelSlot() {
-		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
+		return getName() != null && getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME)
+				&& getVirtualModelResource() == getVirtualModel().getResource();
 	}
 
 	/**
@@ -196,4 +206,10 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		logger.warning("This method should be refined by child classes");
 		return null;
 	}
+
+	@Override
+	public String getModelSlotDescription() {
+		return "Virtual Model conform to " + getVirtualModelURI() + (isReflexiveModelSlot() ? " [reflexive]" : "");
+	}
+
 }

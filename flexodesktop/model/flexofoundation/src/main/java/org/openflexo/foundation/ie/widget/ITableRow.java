@@ -44,7 +44,7 @@ public interface ITableRow extends IWidget {
 	public TRCSSType getTRCssType();
 
 	@Override
-	public void delete();
+	public boolean delete();
 
 	public IESequenceTR getSequenceTR();
 

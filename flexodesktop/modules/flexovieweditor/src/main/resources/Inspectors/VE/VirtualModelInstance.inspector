@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.VirtualModelInstance" controllerClassName="org.openflexo.inspector.FIBInspectorController" visible="" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" data="" constraints="border(location=center)" visible="">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" data="" visible="" font="SansSerif,0,11" name="BasicTab">
-      <Label label="model_slots" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-      <Table iteratorClassName="org.openflexo.foundation.view.ModelSlotInstance" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="data.modelSlotInstances" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
-        <TextFieldColumn isEditable="" data="iterator.modelSlot.name" format="" title="slot_name" columnWidth="40" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
-        <TextFieldColumn isEditable="" data="iterator.modelURI" format="" title="model" columnWidth="60" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.VirtualModelInstance" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="model_slots" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=left)" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.view.ModelSlotInstance" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="0" data="data.modelSlotInstances" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <TextFieldColumn data="iterator.modelSlot.name" title="slot_name" columnWidth="40" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.bindingDescription" title="model" columnWidth="60" resizable="true" displayTitle="true" />
       </Table>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" data="" visible="" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary />
   <Parameter name="title" value="Virtual model instance" />

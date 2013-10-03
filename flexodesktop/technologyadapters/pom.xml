@@ -12,16 +12,17 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>owlconnector</module>
-		<module>owlconnector-ui</module>
 		<module>xsdconnector</module>
-		<module>xsdconnector-ui</module>
 		<module>emfconnector</module>
-		<module>emfconnector-ui</module>
-		<module>mdtumlconnector</module>
-		<module>mdtumlconnector-ui</module>
+		
 		<module>csvconnector</module>
-		<module>csvconnector-ui</module>
+		<module>xmlconnector</module>
 		<module>excelconnector</module>
+		<module>owlconnector-ui</module>
+		<module>xsdconnector-ui</module>
+		<module>emfconnector-ui</module>
+		
+		<module>csvconnector-ui</module>
 		<module>excelconnector-ui</module>
 	</modules>
 	<build>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.drm.DocItemFolder" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" />
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab" />
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="identifier" localize="true" name="IdentifierLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
-      <TextField passwd="false" index="1" data="data.identifier" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Identifier" readOnly="true" localize="true" />
-      <Label label="representing_item" localize="true" name="PrimaryDocItemLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.identifier" localize="true" name="PrimaryDocItem" index="3" data="data.primaryDocItem" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" list="data.items" iteratorClassName="org.openflexo.drm.DocItem" autoSelectFirstRow="false" />
-      <Label label="description" localize="true" name="DescriptionLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab" />
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DocTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="identifier" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IdentifierLabel" localize="true" />
+      <TextField index="1" data="data.identifier" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Identifier" readOnly="true" localize="true" />
+      <Label label="representing_item" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="PrimaryDocItemLabel" localize="true" />
+      <DropDown showReset="true" index="3" data="data.primaryDocItem" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" name="PrimaryDocItem" format="object.identifier" localize="true" list="data.items" iteratorClassName="org.openflexo.drm.DocItem" autoSelectFirstRow="false" />
+      <Label label="description" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="DescriptionLabel" localize="true" />
       <TextArea rows="10" index="5" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
-      <Label label="docFormat" localize="true" name="DocFormatLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
-      <DropDown showReset="true" format="object.name" tooltipText="Select a specific language if you used it explicitly in your description, otherwise leave this unset" localize="true" name="DocFormat" index="7" data="data.docFormat" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" list="data.docFormat.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoDocFormat" autoSelectFirstRow="false" />
+      <Label label="docFormat" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="DocFormatLabel" localize="true" />
+      <DropDown showReset="true" index="7" data="data.docFormat" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="DocFormat" format="object.name" tooltipText="Select a specific language if you used it explicitly in your description, otherwise leave this unset" localize="true" list="data.docFormat.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoDocFormat" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -34,4 +34,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="DocItemFolder" />
 </Panel>
-

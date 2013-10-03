@@ -19,9 +19,7 @@
  */
 package org.openflexo.components.browser.wkf;
 
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.naming.InvalidNameException;
 import javax.swing.Icon;
@@ -32,7 +30,6 @@ import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
@@ -44,7 +41,6 @@ import org.openflexo.foundation.wkf.dm.ProcessNodeInserted;
 import org.openflexo.foundation.wkf.dm.ProcessNodeRemoved;
 import org.openflexo.foundation.wkf.dm.ProcessRemovedFromFolder;
 import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
 
@@ -66,14 +62,6 @@ public class FlexoProcessNodeElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		if (isImported()) {
-			Vector<FlexoModelObject> processes = new Vector<FlexoModelObject>(getFlexoProcess().getProcessNode().getSubProcesses());
-			Collections.sort(processes, FlexoModelObject.NAME_COMPARATOR);
-			for (FlexoModelObject process : processes) {
-				addToChilds(((FlexoProcessNode) process).getProcess());
-			}
-			return;
-		}
 
 		for (Enumeration<ProcessFolder> en = getProcessNode().getSortedFolders(); en.hasMoreElements();) {
 			addToChilds(en.nextElement());
@@ -81,10 +69,6 @@ public class FlexoProcessNodeElement extends BrowserElement {
 		for (Enumeration<FlexoProcessNode> en = getProcessNode().getSortedOrphanSubprocesses(); en.hasMoreElements();) {
 			addToChilds(en.nextElement().getProcess());
 		}
-	}
-
-	private boolean isImported() {
-		return getProcessNode().isImported();
 	}
 
 	@Override
@@ -118,24 +102,14 @@ public class FlexoProcessNodeElement extends BrowserElement {
 
 	private IconMarker[] getIconMarkers() {
 		int count = 0;
-		if (isImported()) {
-			count++;
-			if (getFlexoProcess().isDeletedOnServer()) {
-				count++;
-			}
-		} else if (getFlexoProcess().getIsWebService()) {
+		if (getFlexoProcess().getIsWebService()) {
 			count++;
 		}
 		IconMarker[] markers = null;
 		if (count > 0) {
 			markers = new IconMarker[count];
 		}
-		if (isImported()) {
-			markers[0] = IconLibrary.IMPORT;
-			if (getFlexoProcess().isDeletedOnServer()) {
-				markers[1] = IconLibrary.WARNING;
-			}
-		} else if (getFlexoProcess().getIsWebService()) {
+		if (getFlexoProcess().getIsWebService()) {
 			markers[0] = WKFIconLibrary.WS_MARKER;
 		}
 		return markers;

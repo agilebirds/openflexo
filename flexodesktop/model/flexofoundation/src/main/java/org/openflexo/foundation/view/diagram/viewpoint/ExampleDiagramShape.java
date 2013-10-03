@@ -23,8 +23,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRShapeTemplate;
 
-public class ExampleDiagramShape extends ExampleDiagramObject {
+public class ExampleDiagramShape extends ExampleDiagramObject implements GRShapeTemplate {
 
 	private static final Logger logger = Logger.getLogger(ExampleDiagramShape.class.getPackage().getName());
 
@@ -46,7 +47,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -58,6 +59,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override
@@ -114,6 +116,11 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 			return getParent().isContainedIn(o);
 		}
 		return false;
+	}
+
+	@Override
+	public DiagramSpecification getDiagramSpecification() {
+		return getExampleDiagram().getDiagramSpecification();
 	}
 
 }

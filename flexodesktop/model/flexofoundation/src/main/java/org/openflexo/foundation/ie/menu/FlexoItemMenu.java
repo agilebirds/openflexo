@@ -147,12 +147,12 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (isRootMenu()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Root menu cannot be deleted");
 			}
-			return;
+			return false;
 		}
 		removeTabComponentInstance();
 		if (logger.isLoggable(Level.FINE)) {
@@ -168,6 +168,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override
@@ -484,10 +485,6 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		getNavigationMenu().getFlexoResource().rebuildDependancies();
 		setChanged();
 		notifyObservers(new DisplayProcessSet(old, displayProcess));
-	}
-
-	public boolean isAcceptableAsDisplayProcess(FlexoProcess process) {
-		return process != null && !process.isImported();
 	}
 
 	public long getOperationFlexoID() {

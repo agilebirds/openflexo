@@ -28,7 +28,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.axis.encoding.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.FlexoProperties;
@@ -158,7 +158,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 		String base64 = _preferences.getProperty(key);
 		if (base64 != null) {
 			try {
-				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decode(base64), "UTF-8")), -2);
+				String decoded = StringUtils.circularOffset(StringUtils.reverse(new String(Base64.decodeBase64(base64), "UTF-8")), -2);
 				if (decoded.length() < CHEESE.length()) {
 					return "";
 				}
@@ -175,7 +175,8 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	public void setPasswordProperty(String key, String value) {
 		if (value != null) {
 			try {
-				value = new String(Base64.encode(StringUtils.reverse(StringUtils.circularOffset(CHEESE + value, 2)).getBytes("UTF-8")));
+				value = new String(Base64.encodeBase64String(StringUtils.reverse(StringUtils.circularOffset(CHEESE + value, 2)).getBytes(
+						"UTF-8")));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
@@ -378,28 +377,24 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
-		// tests on this deleted object
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("delete: View " + getName());
-		}
-		if (getResource() != null) {
-			getResource().delete();
+	public final boolean delete() {
+
+		logger.info("Deleting view " + this);
+
+		// Delete the view resource from the view library
+		// Dereference the resource
+		if (getProject() != null && getProject().getViewLibrary() != null && resource != null) {
+			getProject().getViewLibrary().unregisterResource(resource);
+			resource = null;
 		}
 
-		if (getResource() != null) {
-			getResource().delete();
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("View " + getName() + " has no ViewDefinition associated!");
-			}
-		}
-
+		// Delete view
 		super.delete();
 
-		setChanged();
-		notifyObservers(new ViewDeleted(this));
+		// Delete observers
 		deleteObservers();
+
+		return true;
 	}
 
 	public ViewLibrary getViewLibrary() {

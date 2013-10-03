@@ -985,7 +985,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Vector<DMProperty> propertiesToDelete = new Vector<DMProperty>();
 		propertiesToDelete.addAll(getOrderedProperties());
 		for (Enumeration en = propertiesToDelete.elements(); en.hasMoreElements();) {
@@ -1025,6 +1025,7 @@ public class DMEntity extends DMObject implements DMGenericDeclaration, DMTypeOw
 		entityClassName = null;
 		_parentType = null;
 		repository = null;
+		return true;
 	}
 
 	public DMProperty getDMProperty(String aPropertyName) {

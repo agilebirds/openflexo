@@ -71,9 +71,10 @@ public class SingleInstanceSubProcessNode extends SubProcessNode {
 	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
 	 */
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

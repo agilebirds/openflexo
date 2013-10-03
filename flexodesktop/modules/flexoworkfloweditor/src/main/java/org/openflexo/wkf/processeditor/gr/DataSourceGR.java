@@ -31,6 +31,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.WKFDataSource;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class DataSourceGR extends ArtefactGR<WKFDataSource> {
@@ -58,7 +59,7 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 				g.fillRect(0, height / 2, 1, 1 - height);
 				g.fillCircle(0, 0, 1, height);
 				g.fillArc(0, 1 - height, 1, height, 180, 180);
-				g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
+				g.useForegroundStyle(ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR));
 				g.drawCircle(0, 0, 1, height);
 				g.drawArc(0, 1 - height, 1, height, 180, 180);
 				g.drawArc(0, 0.075, 1, height, 180, 180);

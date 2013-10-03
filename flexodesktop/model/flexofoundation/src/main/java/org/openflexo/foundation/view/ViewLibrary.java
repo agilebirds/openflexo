@@ -99,7 +99,7 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 		return views;
 	}
 
-	public void delete(ViewResource vr) {
+	/*public void delete(ViewResource vr) {
 		logger.info("Remove view " + vr);
 		unregisterResource(vr);
 		vr.delete();
@@ -107,7 +107,7 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 
 	public void delete(View v) {
 		delete(v.getResource());
-	}
+	}*/
 
 	public boolean isValidForANewViewName(String value) {
 		if (value == null) {

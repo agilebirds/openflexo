@@ -2,16 +2,11 @@
 #subTocEntries($entry)
 #end
 \hypertarget{ROLELIST}{}
-#if(${object.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+#if(${object.getRoleList().getRoles().size()}>0)
 #if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Roles: \emph{${object.getRootProcess().getName()}}}
 \par{The following roles are defined for this process:}
 \begin{flexoroles}
     #foreach($role in ${object.getSortedRoles()})
-        #if(!$role.getDontGenerate())
-\flexorole{#format($role $role.getName())}{#description($role)}
-        #end
-    #end ## end of foreach roles
-    #foreach($role in ${object.getImportedRoleList().getSortedRoles()})
         #if(!$role.getDontGenerate())
 \flexorole{#format($role $role.getName())}{#description($role)}
         #end
@@ -25,23 +20,3 @@
 % process $process.getName() is not generated
     #end ## end of if dont generate
 #end ## end of foreach sorted processes
-#set($importedProcesses = $generator.getNewVector())
-#foreach($importedProcess in $project.getWorkflow().getSortedImportedProcesses())
-   #if(!$importedProcess.getDontGenerate())
-      #empty($importedProcesses.add($importedProcess))
-   #end
-#end
-#if($importedProcesses.size()>0)
-    #if($entry)#adaptiveTitleLevel($entry 1)#else\subsubsection#end{Referenced processes}
-    #if(!$entry)\begin{itemize}#end
-    #foreach($importedProcess in $importedProcesses)
-        #if(!$importedProcess.getDontGenerate())
-    		\hypertarget{$generator.getReference($importedProcess)}{}
-    		#if(!$entry)\item #else #adaptiveTitleLevel($entry 2) #end{$importedProcess.getName()}
-\label{$generator.getReference($importedProcess)}
-    			#description($importedProcess)
-        #end
-    #end ## end of foreach sorted processes
-    #if(!$entry)\end{itemize}#end
-#end
-    

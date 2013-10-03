@@ -17,10 +17,10 @@ import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.gui.XMLModelBrowserModel;
 import org.openflexo.technologyadapter.xsd.gui.XSDIconLibrary;
 import org.openflexo.technologyadapter.xsd.gui.XSDMetaModelBrowserModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -112,7 +112,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (XSClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForTechnologyObject(XSOntClass.class);
 		} else if (XSIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -128,7 +128,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(XSOntIndividual.class), IconLibrary.DUPLICATE);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
@@ -141,8 +141,8 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
 		if (context instanceof XSDMetaModel) {
 			return new XSDMetaModelBrowserModel((XSDMetaModel) context);
-		} else if (context instanceof XMLModel) {
-			return new XMLModelBrowserModel((XMLModel) context);
+		} else if (context instanceof XMLXSDModel) {
+			return new XMLModelBrowserModel((XMLXSDModel) context);
 		} else {
 			logger.warning("Unexpected " + context);
 			return null;
@@ -150,15 +150,26 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof XSDMetaModel || object instanceof XMLModel;
+	public boolean hasModuleViewForObject(TechnologyObject object) {
+		return object instanceof XSDMetaModel || object instanceof XMLXSDModel;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof XMLXSDModel) {
+			return ((XMLXSDModel) object).getName();
+		}
+		if (object instanceof XSDMetaModel) {
+			return ((XSDMetaModel) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override
 	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective) {
-		if (object instanceof XMLModel) {
-			OntologyView<XMLModel> returned = new OntologyView<XMLModel>((XMLModel) object, controller, perspective);
+		if (object instanceof XMLXSDModel) {
+			OntologyView<XMLXSDModel> returned = new OntologyView<XMLXSDModel>((XMLXSDModel) object, controller, perspective);
 			returned.setShowClasses(false);
 			returned.setShowDataProperties(false);
 			returned.setShowObjectProperties(false);

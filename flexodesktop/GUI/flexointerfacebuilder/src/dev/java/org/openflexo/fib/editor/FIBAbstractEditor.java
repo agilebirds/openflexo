@@ -25,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
@@ -37,6 +39,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -174,7 +177,13 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		palette.setVisible(true);
 
 		frame.setTitle("Flexo Interface Builder Editor");
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				quit();
+			}
+		});
 		// mainPanel = new JPanel();
 
 		JMenuBar mb = new JMenuBar();
@@ -383,6 +392,19 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	}
 
+	protected boolean confirmExit() {
+		int ret = JOptionPane.showOptionDialog(frame,
+				FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "would_you_like_to_save_before_quit?"),
+				FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "Exit dialog"), JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+		if (ret == JOptionPane.YES_OPTION) {
+			return saveFIB();
+		} else if (ret == JOptionPane.NO_OPTION) {
+			return true;
+		}
+		return false;
+	}
+
 	public abstract Object[] getData();
 
 	public abstract File getFIBFile();
@@ -415,10 +437,15 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			throw new RuntimeException("Fib component not found ! Path: '" + fibFile.getAbsolutePath() + "'");
 		}
 
+		Object dataObject = null;
+		Object[] data = getData();
+		if (data != null && data.length > 0) {
+			dataObject = data[0];
+		}
 		if (getController() != null) {
-			editorController = new FIBEditorController(fibComponent, this, getData()[0], getController());
+			editorController = new FIBEditorController(fibComponent, this, dataObject, getController());
 		} else {
-			editorController = new FIBEditorController(fibComponent, this, getData()[0]);
+			editorController = new FIBEditorController(fibComponent, this, dataObject);
 		}
 		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());
@@ -431,9 +458,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		editorController.setDataObject(data);
 	}
 
-	public void saveFIB() {
+	public boolean saveFIB() {
 		logger.info("Save to file " + fibFile.getAbsolutePath());
-		FIBLibrary.save(fibComponent, fibFile);
+		return FIBLibrary.save(fibComponent, fibFile);
 	}
 
 	public void testFIB() {
@@ -486,7 +513,13 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public void quit() {
 		frame.dispose();
-		System.exit(0);
+		if (confirmExit() && exitOnDispose()) {
+			System.exit(0);
+		}
+	}
+
+	public boolean exitOnDispose() {
+		return true;
 	}
 
 	@Deprecated
@@ -525,6 +558,11 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public boolean showExitMenuItem() {
 		return true;
+	}
+
+	@Override
+	public File getEditedComponentFile() {
+		return getFIBFile();
 	}
 
 	public static <T extends FIBAbstractEditor> void init(T abstractEditor) {

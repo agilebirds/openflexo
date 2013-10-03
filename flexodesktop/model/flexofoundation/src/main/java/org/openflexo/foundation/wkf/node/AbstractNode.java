@@ -277,7 +277,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 	// ==========================================================================
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Enumeration<FlexoPostCondition> en = new Vector<FlexoPostCondition>(_incomingPostConditions).elements();
 		while (en.hasMoreElements()) {
 			en.nextElement().delete();
@@ -288,7 +288,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 		}
 		setChanged();
 		notifyObservers(new NodeRemoved(this));
-		super.delete();
+		return super.delete();
 	}
 
 	/**

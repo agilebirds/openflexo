@@ -53,8 +53,8 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 		return false;
 	}
 
-	@Override
-	public abstract EditionActionType getEditionActionType();
+	/*@Override
+	public abstract EditionActionType getEditionActionType();*/
 
 	public abstract Type getAssignableType();
 

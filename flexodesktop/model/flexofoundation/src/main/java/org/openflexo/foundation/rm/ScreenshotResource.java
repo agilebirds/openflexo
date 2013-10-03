@@ -540,13 +540,13 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	 * Delete this resource. Delete file is flag deleteFile is true.
 	 */
 	@Override
-	public synchronized void delete(boolean deleteFile) {
+	public synchronized boolean delete(boolean deleteFile) {
 		willBeDeleted = true;
+		stopObserving();
 		if (sourceReference != null) {
 			sourceReference.delete(false);
 		}
-		stopObserving();
-		super.delete(deleteFile);
+		return super.delete(deleteFile);
 	}
 
 	/**

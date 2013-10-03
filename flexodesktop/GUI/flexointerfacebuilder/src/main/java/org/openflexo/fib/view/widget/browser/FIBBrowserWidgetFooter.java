@@ -244,7 +244,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	}
 
 	public void delete() {
-		if (_widget.getComponent() != null) {
+		if (_widget != null && _widget.getComponent() != null) {
 			for (FIBBrowserElement element : _widget.getComponent().getElements()) {
 				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions != null ? _addActions.get(element) : null;
 				if (hashtable != null) {

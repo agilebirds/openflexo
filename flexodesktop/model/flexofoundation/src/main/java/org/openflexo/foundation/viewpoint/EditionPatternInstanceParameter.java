@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 
 public class EditionPatternInstanceParameter extends InnerModelSlotParameter<VirtualModelModelSlot<?, ?>> {
@@ -84,7 +85,24 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter<Vir
 	}
 
 	public VirtualModel<?> getModelSlotVirtualModel() {
-		return getModelSlot().getVirtualModelResource().getVirtualModel();
+		if (getModelSlot() != null && getModelSlot().getVirtualModelResource() != null) {
+			return getModelSlot().getVirtualModelResource().getVirtualModel();
+		}
+		return null;
+	}
+	
+	@Override
+	public VirtualModelModelSlot<?, ?> getModelSlot() {
+		if (super.getModelSlot() instanceof VirtualModelModelSlot) {
+			VirtualModelModelSlot<?, ?> returned = super.getModelSlot();
+			if (returned == null) {
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
+				}
+			}
+			return returned;
+		}
+		return null;
 	}
 
 }

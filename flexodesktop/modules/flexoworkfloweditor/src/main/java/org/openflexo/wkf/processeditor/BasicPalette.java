@@ -243,6 +243,7 @@ public class BasicPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement makeOROperatorElement(int x, int y) {
 		final OROperator operator = new OROperator((FlexoProcess) null);
+		operator.setName(operator.getDefaultName());
 		operator.setIsResizable(true, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		operator.setIsResizable(true, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		operator.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);

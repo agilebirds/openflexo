@@ -162,7 +162,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void delete() {
 		if (!deleted) {
-			getRootView().delete();
+			if (getRootView() != null) {
+				getRootView().delete();
+			}
 			// Next for-block should not be necessary because deletion is recursive, but just to be sure
 			for (FIBView<?, ?> view : new ArrayList<FIBView<?, ?>>(views.values())) {
 				view.delete();
@@ -583,6 +585,10 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		}
 	}
 
+	public String getLocalizedForKey(String key) {
+		return getLocalizer().getLocalizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
+	}
+
 	/**
 	 * Return parent localizer for component localizer
 	 * 
@@ -663,8 +669,23 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		return focusedWidget == widget;
 	}
 
+	/**
+	 * Called from the passed widget.<br>
+	 * This means that the widget has a new selection and notifies the FIBController of that.<br>
+	 * If the caller (the widget) is the selection leader, then the new selection is reflected all over the whole component.<br>
+	 * 
+	 * @param widget
+	 * @param oldSelection
+	 * @param newSelection
+	 */
 	public void updateSelection(FIBSelectable widget, List<Object> oldSelection, List<Object> newSelection) {
+
+		//logger.info("updateSelection() dans FIBController with " + newSelection);
+		//logger.info("widget=" + widget);
+		//logger.info("selectionLeader=" + selectionLeader);
+
 		if (widget == selectionLeader) {
+			// The caller widget is the selection leader, and should fire selection change event all over the world !
 			fireSelectionChanged(widget);
 			List<Object> objectsToRemoveFromSelection = new Vector<Object>();
 			List<Object> objectsToAddToSelection = new Vector<Object>();
@@ -699,6 +720,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	}
 
 	public void objectAddedToSelection(Object o) {
+
+		//logger.info("objectAddedToSelection() dans FIBController with " + o);
+
 		logger.fine("FIBController: objectAddedToSelection(): " + o);
 		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
@@ -706,8 +730,13 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			if (v.isSelectableComponent() && v.getSelectableComponent().synchronizedWithSelection()) {
 				if (v.getSelectableComponent().mayRepresent(o)) {
 					v.getSelectableComponent().objectAddedToSelection(o);
-					selectionLeader = v.getSelectableComponent();
-					lastFocusedSelectable = selectionLeader;
+					if (selectionLeader == null) {
+						selectionLeader = v.getSelectableComponent();
+						logger.info("Selection LEADER is now (2) " + selectionLeader);
+					}
+					if (lastFocusedSelectable == null) {
+						lastFocusedSelectable = selectionLeader;
+					}
 				}
 			}
 		}
@@ -715,6 +744,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	}
 
 	public void objectRemovedFromSelection(Object o) {
+
+		//logger.info("objectRemovedFromSelection() dans FIBController with " + o);
+
 		logger.fine("FIBController: objectRemovedFromSelection(): " + o);
 		Enumeration<FIBView<?, ?>> en = getViews();
 		while (en.hasMoreElements()) {
@@ -738,6 +770,12 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		}
 	}
 
+	/**
+	 * Called when a selection leader (a widget managing a selection and declared as the selection leader) has a new selection.<br>
+	 * Notify the while world of this new selection (well, use the FIBSelectionListener scheme ;-) ).
+	 * 
+	 * @param leader
+	 */
 	private void fireSelectionChanged(FIBSelectable leader) {
 		// External synchronization
 		for (FIBSelectionListener l : selectionListeners) {

@@ -98,7 +98,7 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 				return false;
 			}
 			if (focusedObject instanceof FlexoProcess) {
-				return _type.concernProcess() && !((FlexoProcess) focusedObject).isImported();
+				return _type.concernProcess();
 			}
 			if (focusedObject instanceof AbstractActivityNode) {
 				return _type.concernActivity() && ((AbstractActivityNode) focusedObject).mightHaveOperationPetriGraph();
@@ -165,7 +165,7 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 	@Override
 	protected void doAction(Object context) throws InvalidArgumentException {
 		FlexoPetriGraph pg = null;
-		if (getFocusedObject() instanceof FlexoProcess && !((FlexoProcess) getFocusedObject()).isImported()) {
+		if (getFocusedObject() instanceof FlexoProcess) {
 			pg = ((FlexoProcess) getFocusedObject()).getActivityPetriGraph();
 			if (pg == null) {
 				throw new InvalidArgumentException("process_without_petri_graph");

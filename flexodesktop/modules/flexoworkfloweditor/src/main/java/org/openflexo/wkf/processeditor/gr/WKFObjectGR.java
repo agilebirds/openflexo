@@ -50,7 +50,7 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new ProcessEditorController.ShowContextualMenuControl(true));
 		}
-
+		setContinuousTextEditing(false);
 		updatePropertiesFromWKFPreferences();
 	}
 

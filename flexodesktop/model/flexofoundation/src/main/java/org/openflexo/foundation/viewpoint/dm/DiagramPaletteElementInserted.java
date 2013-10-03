@@ -33,7 +33,8 @@ public class DiagramPaletteElementInserted extends ViewPointDataModification {
 	private DiagramPalette _parent;
 
 	public DiagramPaletteElementInserted(DiagramPaletteElement element, DiagramPalette parent) {
-		super(null, element);
+		// super(null, element);
+		super("elements", null, element);
 		_parent = parent;
 	}
 

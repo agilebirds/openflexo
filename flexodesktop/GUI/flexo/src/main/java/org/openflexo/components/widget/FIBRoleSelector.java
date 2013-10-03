@@ -35,9 +35,6 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.wkf.Role;
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.toolbox.FileResource;
 
@@ -106,32 +103,7 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 			if (customIcon == null) {
 				customIcon = buildCustomIcon(aRole);
 			}
-			IconMarker[] markers = getIconMarkers(aRole);
-			if (markers != null) {
-				return IconFactory.getImageIcon(customIcon, markers);
-			}
 			return decorateIcon(aRole, customIcon);
-		}
-
-		private IconMarker[] getIconMarkers(Role aRole) {
-			int count = 0;
-			if (aRole.isImported()) {
-				count++;
-				if (aRole.isDeletedOnServer()) {
-					count++;
-				}
-			}
-			IconMarker[] markers = null;
-			if (count > 0) {
-				markers = new IconMarker[count];
-			}
-			if (aRole.isImported()) {
-				markers[0] = IconLibrary.IMPORT;
-				if (aRole.isDeletedOnServer()) {
-					markers[1] = IconLibrary.WARNING;
-				}
-			}
-			return markers;
 		}
 
 		private ImageIcon buildCustomIcon(Role aRole) {

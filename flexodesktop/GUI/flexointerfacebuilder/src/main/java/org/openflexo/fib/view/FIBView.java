@@ -144,15 +144,23 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return controller;
 	}
 
+	/**
+	 * Return the BindingEvaluationContext valid in the context of current widget.<br>
+	 * Note that embedded component (components used in the context of FIBReferencedComponent) should point to the BindingEvaluationContext
+	 * of their embedding component
+	 * 
+	 * @return
+	 */
 	public BindingEvaluationContext getBindingEvaluationContext() {
 		if (getParentView() != null) {
 			return getParentView().getBindingEvaluationContext();
 		}
+		/*
 		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
 			if (getEmbeddingComponent() == null) {
 				System.out.println("for DropSchemePanel embedding component is " + getEmbeddingComponent());
 			}
-		}
+		}*/
 		/*if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemeWidget")) {
 			System.out.println("for DropSchemeWidget embedding component is " + getEmbeddingComponent());
 		}*/
@@ -351,8 +359,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public FIBView<?, ?> getParentView() {
-		if (getComponent().getParent() != null) {
-			return getController().viewForComponent(getComponent().getParent());
+		if (getComponent() != null) {
+			if (getComponent().getParent() != null) {
+				return getController().viewForComponent(getComponent().getParent());
+			}
 		}
 		return null;
 	}
@@ -475,9 +485,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public void setEmbeddingComponent(FIBReferencedComponentWidget embeddingComponent) {
-		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+		/* if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
 			System.out.println("Set emmbedding component for DropSchemePanel with " + embeddingComponent);
-		}
+		}*/
 		this.embeddingComponent = embeddingComponent;
 	}
 }

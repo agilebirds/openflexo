@@ -110,7 +110,7 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Enumeration en = ((Vector) childFolders.clone()).elements();
 		while (en.hasMoreElements()) {
 			DocItemFolder f = (DocItemFolder) en.nextElement();
@@ -125,7 +125,7 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 			parentFolder.removeFromChildFolders(this);
 		}
 		itemCache = null;
-		super.delete();
+		return super.delete();
 	}
 
 	private File directory;

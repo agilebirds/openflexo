@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -40,6 +39,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
@@ -93,7 +93,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 						}
 					}
 					if (drawLeft) {
-						g.setDefaultForeground(ForegroundStyle.makeStyle(Color.darkGray));
+						g.setDefaultForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR));
 						g.useDefaultForegroundStyle();
 						for (int i = 0; i < INCOMING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = INCOMING_ANNOTATION_BORDER[i];
@@ -102,7 +102,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 						}
 					}
 					if (drawRight) {
-						g.setDefaultForeground(ForegroundStyle.makeStyle(Color.darkGray));
+						g.setDefaultForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR));
 						g.useDefaultForegroundStyle();
 						for (int i = 0; i < OUTGOING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = OUTGOING_ANNOTATION_BORDER[i];

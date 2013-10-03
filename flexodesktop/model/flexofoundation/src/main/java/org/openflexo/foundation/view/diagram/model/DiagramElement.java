@@ -38,6 +38,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -54,6 +55,7 @@ import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRTemplate;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.FlexoLocalization;
@@ -62,8 +64,8 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class DiagramElement<GR extends GraphicalRepresentation> extends VirtualModelInstanceObject implements Bindable,
-		PropertyChangeListener, Observer {
+public abstract class DiagramElement<GR extends GraphicalRepresentation> extends VirtualModelInstanceObject implements GRTemplate,
+		Bindable, PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());
 
@@ -105,6 +107,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 		return diagram.getFactory();
 	}
 
+	@Override
 	public DiagramSpecification getDiagramSpecification() {
 		return getDiagram().getDiagramSpecification();
 	}
@@ -290,13 +293,17 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
 			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
-		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+		// Vincent: I remove this lines because if the delete is called from a deletion scheme of the edition pattern instance,
+		// then the edition pattern instance id still not marked to deleted at this point.
+		// The the next lines cause an infinite loop!!
+		// It might be a possibility to have a "deleting" status.
+		/*if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
-		}
+		}*/
 		for (TargetObject o : dependingObjects) {
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
@@ -308,9 +315,10 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 			}
 		}
 		dependingObjects.clear();
-		super.delete();
+		return super.delete();
 	}
 
+	@Override
 	public GR getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
@@ -328,6 +336,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 		update();
 	}
 
+	@Override
 	public DiagramElement<?> getParent() {
 		return parent;
 	}
@@ -579,8 +588,8 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 		if (evt.getSource() == getGraphicalRepresentation()) {
 			// We just want here to track events such as object moving, just to flag the resource as modified
 			// Ignore focused or selected events, because goal here is to mark resource as modified
-			if (!evt.getPropertyName().equals(GraphicalRepresentation.Parameters.isFocused.name())
-					&& !evt.getPropertyName().equals(GraphicalRepresentation.Parameters.isSelected.name())) {
+			if (!evt.getPropertyName().equals(DrawingTreeNode.IS_FOCUSED.getName())
+					&& !evt.getPropertyName().equals(DrawingTreeNode.IS_SELECTED.getName())) {
 				// System.out.println("setChanged() because of " + evt.getPropertyName() + " evt=" + evt);
 				setChanged();
 			}
@@ -663,6 +672,26 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+	}
+
+	private List<DiagramElement<?>> descendants;
+
+	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
+		descendants.add(current);
+		for (DiagramElement<?> child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
+	}
+
+	@Override
+	public List<DiagramElement<?>> getDescendants() {
+		if (descendants == null) {
+			descendants = new ArrayList<DiagramElement<?>>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
 	}
 
 }

@@ -33,7 +33,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 public interface InnerBlocWidgetInterface extends XMLSerializable, IWidget {
 
 	@Override
-	public void delete();
+	public boolean delete();
 
 	@Override
 	public IEObject getParent();

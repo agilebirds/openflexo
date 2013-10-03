@@ -29,8 +29,10 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/FetchRequestIterationActionPanel.fib")
 public class FetchRequestIterationAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(FetchRequestIterationAction.class.getPackage().getName());
@@ -57,11 +59,6 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 
 		out.append("}", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.FetchRequestIteration;
 	}
 
 	public String getIteratorName() {

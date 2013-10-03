@@ -214,8 +214,9 @@ public class DiagramRepresentation extends DrawingImpl<DiagramRootPane> implemen
 		}*/
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			DiagramShapeGR graphicalRepresentation = new DiagramShapeGR(shape, this);
-			graphicalRepresentation.setsWith((GraphicalRepresentation) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
+			graphicalRepresentation.setsWith(shape.getGraphicalRepresentation(),
+					shape.getPatternRole() != null ? new GraphicalRepresentation.GRParameter[] { GraphicalRepresentation.Parameters.text } /*, ShapeGraphicalRepresentation.Parameters.border*/
+					: new GraphicalRepresentation.GRParameter[] {});
 			if (!screenshotOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);
 			}

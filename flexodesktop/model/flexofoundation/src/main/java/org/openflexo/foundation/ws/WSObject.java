@@ -149,7 +149,7 @@ public abstract class WSObject extends FlexoModelObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		try {
 			setName(null);
 		} catch (DuplicateWSObjectException e) {
@@ -161,6 +161,7 @@ public abstract class WSObject extends FlexoModelObject {
 		// several null pointers exception
 		// setProject(null);
 		setWSLibrary(null);
+		return true;
 	}
 
 	public abstract Vector<? extends FlexoModelObject> getOrderedChildren();

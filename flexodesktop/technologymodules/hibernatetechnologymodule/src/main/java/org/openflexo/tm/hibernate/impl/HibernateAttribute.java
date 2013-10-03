@@ -129,7 +129,7 @@ public class HibernateAttribute extends TechnologyModelObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getHibernateEntity() != null) {
 			getHibernateEntity().removeFromAttributes(this);
 		}
@@ -138,6 +138,7 @@ public class HibernateAttribute extends TechnologyModelObject {
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

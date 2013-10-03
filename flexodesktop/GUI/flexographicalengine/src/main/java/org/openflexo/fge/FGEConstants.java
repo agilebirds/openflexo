@@ -49,7 +49,7 @@ public interface FGEConstants {
 	public static final int DEFAULT_ROUNDED_RECTANGLE_ARC_SIZE = 30; // pixels
 
 	public static final int DEFAULT_RECT_POLYLIN_PIXEL_OVERLAP = 20; // overlap expressed in pixels relative to 1.0 scale
-	public static final int DEFAULT_ROUNDED_RECT_POLYLIN_ARC_SIZE = 10; // pixels
+	public static final int DEFAULT_ROUNDED_RECT_POLYLIN_ARC_SIZE = 5; // pixels
 
 	public static final int DEFAULT_BORDER_SIZE = 20; // pixels
 

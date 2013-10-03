@@ -1,1295 +1,942 @@
-<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:OrganizationalUnitScopeDefinition="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.agilebirds.com/ontologies/bdn#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:FlexoConceptsOntology="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.agilebirds.com/ontologies/bdn">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl"/>
+    <owl:imports rdf:resource="/openflexo/ontologies/FlexoConceptsOntology.owl"/>
+    <owl:versionIRI rdf:resource="bdn/0.1"/>
+    <rdfs:comment xml:lang="en">Benefit realisation management ontology including the description of hte Benefit Dependency Network (BDN).</rdfs:comment>
+    <rdfs:label xml:lang="en">BDN</rdfs:label>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Objective">
+    <rdfs:comment>A set of statements that describe what the organization is seeking to achieve from its investments. They should be a description of what the situation would be on successful completion of the investment.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="DriverTypeValue"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasDriverType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass>
+          <owl:Class rdf:ID="OriginType"/>
+        </owl:onClass>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasOrigin"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:ID="Benefit"/>
+              <owl:Class rdf:ID="BusinesssChange"/>
+              <owl:Class rdf:about="#Objective"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isBDNLinkedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BDNElements"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BDNConceptWithOwner"/>
+    </rdfs:subClassOf>
+    <rdfs:label>Objective</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess"/>
+  <owl:Class rdf:ID="EnablingChange">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BDNElements"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BDNConceptWithOwner"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#isBDNLinkedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasConsequence"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label>Enabling Change</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasPrerequisite"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment>Changes that are prerequisites for achieving the business changes or that are essential to bring the system into effective operation within the organization. Enabling changes are usually 'one-off' activities rather than ongoing ways of working.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass>
+          <owl:Class rdf:ID="BenefitChangeTypeValue"/>
+        </owl:onClass>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasBenefitChangeType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#BenefitChangeTypeValue">
+    <rdfs:comment>The benefits expected to arise from achievement of each of the objectives should be classified in terms of the main type of change that cill be needed to realize it (Doing new things, Doing things better, Stop doing things).</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BDNValue"/>
+    </rdfs:subClassOf>
+    <rdfs:label>Benefit Change Type Value</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#BDNElements">
+    <rdfs:comment>Elements that are drawen in the BDN.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BDNConceptsFromProject"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Person">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#BDNConceptWithOwner"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:InverseFunctionalProperty rdf:ID="isOwnerOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#BDNConceptWithOwner"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isStakeholderOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#BDNConceptWithOwner"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isSponsorOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BDNConcepts"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Enabler">
+    <rdfs:comment>The information systems and technology required to support the realization of indentified benefits and to enable the necessary changes to be undertaken.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#Enabler"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#isBDNLinkedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNElements"/>
+    <rdfs:label>Enabler</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#BDNConceptWithOwner">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#Person"/>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="hasOwner"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#Person"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasSponsor"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#Person"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasStakeholder"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BDNConcepts"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#OriginType">
+    <dc:creator>Dom</dc:creator>
+    <rdfs:comment>Drivers can be both internal or external.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BDNValue"/>
+    </rdfs:subClassOf>
+    <rdfs:label>Origin Type Value</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Measure">
+    <rdfs:comment>Measurement associated with benefits.</rdfs:comment>
+    <dc:creator>Dom</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Benefit"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isMeasureOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Project"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:ID="isFromProject"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#BDNConceptsFromProject"/>
+    </rdfs:subClassOf>
+    <rdfs:label>Measure</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#BDNValue">
+    <rdfs:subClassOf rdf:resource="/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept"/>
+  </owl:Class>
+  <owl:Class rdf:about="#BDNConcepts">
+    <rdfs:subClassOf rdf:resource="/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept"/>
+  </owl:Class>
+  <owl:Class rdf:about="#BDNConceptsFromProject">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Project"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="#isFromProject"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNConcepts"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DriverTypeValue">
+    <rdfs:comment>The importance of the investment portfolios for the current and future business is categorised according to Key operational, strategic, support or high potential.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#BDNValue"/>
+    <rdfs:label>Driver Type</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="StrengthValue">
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf rdf:resource="#BDNValue"/>
+    <rdfs:label>Strength Value</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Portfolio">
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>A set of related and unrelated projects and programmes that compete for an organisation's resources and funds.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Project"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="#isFromProject"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNConceptsFromProject"/>
+    <rdfs:subClassOf rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:label>Portfolio</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#Benefit">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#Benefit"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#isBDNLinkedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#DriverTypeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasDriverType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:label>Benefit</rdfs:label>
+    <rdfs:comment>An advantage on behalf of a particular stakeholder or group of stakeholders. This implies that the benefits are 'owned' by the individuals or groups who want to obtain value form the investment.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass>
+          <owl:Class rdf:ID="BenefitContributionTypeValue"/>
+        </owl:onClass>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasBenefitContributionType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:subClassOf rdf:resource="#BDNElements"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Measure"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasMeasure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Driver">
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Issues which executive and senior managers agree mean the organization needs to make changes - and the timescales for those changes. Drivers can be both external and internal but are specific to the context in which the organization operates.
 
-
-<!DOCTYPE rdf:RDF [
-    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
-    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
-    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
-    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
-    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#" >
-    <!ENTITY OrganizationalUnitScopeDefinition "http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#" >
-]>
-
-
-<rdf:RDF xmlns="http://www.agilebirds.com/ontologies/bdn#"
-     xml:base="http://www.agilebirds.com/ontologies/bdn"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:owl="http://www.w3.org/2002/07/owl#"
-     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:OrganizationalUnitScopeDefinition="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#"
-     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#">
-    <owl:Ontology rdf:about="http://www.agilebirds.com/ontologies/bdn">
-        <rdfs:label xml:lang="en">BDN</rdfs:label>
-        <rdfs:comment xml:lang="en">Benefit realisation management ontology including the description of hte Benefit Dependency Network (BDN).</rdfs:comment>
-        <owl:versionIRI rdf:resource="http://www.agilebirds.com/ontologies/bdn/0.1"/>
-        <owl:imports rdf:resource="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl"/>
-        <owl:imports rdf:resource="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl"/>
-    </owl:Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <owl:AnnotationProperty rdf:about="&dc;creator"/>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Object Properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNRelations -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasBDNItem -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasBDNItem">
-        <rdfs:comment>Domain: Project
-Range: Objective or Benefit or Driver or Portfolio or Enabler or &apos;Enabling Change&apos; or Measure or Programme or &apos;Business Change&apos;</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasBenefitChangeType -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasBenefitChangeType">
-        <rdfs:comment>Domain: Business Change or Enabling Change
-Ranfe: Benefit Change Type Value</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasBenefitContributionType -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasBenefitContributionType">
-        <rdfs:comment>Domain Benefit
-Range: Benefit Contribution Type Value</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasConsequence -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasConsequence">
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Domain: Business Change or Enabling Change
-Range: Business Change or Enabling Change</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#isConsequenceOf"/>
-        <rdfs:range>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:range>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasDriverType -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasDriverType">
-        <rdfs:comment>Domain: Benefit or Business Change or Driver or Objective
-Range: Driver Type</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Driver"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasMeasure -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasMeasure">
-        <rdfs:comment>Domain: Benefit
-Range Measure</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#Measure"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#isMeasureOf"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasOrigin -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasOrigin">
-        <rdfs:comment>Domain: Driver or Objective
+Domaine normal: Drive or Objective
+mais on a restreint à Objective car le to n'admet pas encore de Union</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#Objective"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isDriverOf"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#OriginType"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasOrigin"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#DriverTypeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasDriverType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNElements"/>
+    <rdfs:label>Driver</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#BusinesssChange">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+        >1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="#BenefitChangeTypeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasBenefitChangeType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label>Business Change</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasConsequence"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#DriverTypeValue"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasDriverType"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:subClassOf rdf:resource="#BDNElements"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Benefit"/>
+              <owl:Class rdf:about="#BusinesssChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#isBDNLinkedTo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>The new ways of working that are required to ensure that the desired benefits are realized. These will be the new ongoing ways of working in the organization - at least until the next change initiative.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isAssociatedWithProcess"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#BusinesssChange"/>
+              <owl:Class rdf:about="#EnablingChange"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#hasPrerequisite"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#BenefitContributionTypeValue">
+    <rdfs:comment>Classifying the benefits by explicitness of the contribution according to values: observable, measurable,quantifiable or financial.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf rdf:resource="#BDNValue"/>
+    <rdfs:label>Benefit Contribution Type Value</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Programme">
+    <rdfs:comment>A dynalic collection of related projects and activities that, in combination, achieve agreed organizational objectives and emergent outcomes, including the creation of new capabilities.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#Project"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:FunctionalProperty rdf:about="#isFromProject"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BDNConceptsFromProject"/>
+    <rdfs:subClassOf rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:label>Programme</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#Project">
+    <rdfs:comment>A pre-defined scope of work delivered using existing capabilities to achieve agreed outputs in accordance with an authorized business case.</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:subClassOf rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:label>Project</rdfs:label>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#hasStakeholder">
+    <rdfs:range rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="BDNRelations"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="#BDNConceptWithOwner"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Domain : BDNConceptWithOwner</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasOrigin">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Driver"/>
+          <owl:Class rdf:about="#Objective"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#OriginType"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: Driver or Objective
 Range : Origin type Vaue</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#OriginType"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Driver"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:ObjectProperty>
-    
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasBDNItem">
+    <rdfs:domain rdf:resource="#Project"/>
+    <rdfs:range rdf:resource="#BDNConceptsFromProject"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Domain: Project
+Range: Objective or Benefit or Driver or Portfolio or Enabler or 'Enabling Change' or Measure or Programme or 'Business Change'</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isStakeholderOf">
+    <rdfs:domain rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <owl:inverseOf rdf:resource="#hasStakeholder"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:range rdf:resource="#BDNConceptWithOwner"/>
+    <dc:creator>Dom Snyers</dc:creator>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasBenefitChangeType">
+    <rdfs:range rdf:resource="#BenefitChangeTypeValue"/>
+    <rdfs:domain rdf:resource="#Benefit"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: Business Change or Enabling Change
+Ranfe: Benefit Change Type Value</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isAssociatedWithProcess">
+    <rdfs:range rdf:resource="/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess"/>
+    <rdfs:domain rdf:resource="#BusinesssChange"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: 'Business Change'
+Range: 'FlexoProcess'</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isDriverOf">
+    <rdfs:range rdf:resource="#Objective"/>
+    <rdfs:domain rdf:resource="#Driver"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Diver or Objecjtive</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDriverType">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Benefit"/>
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#Driver"/>
+          <owl:Class rdf:about="#Objective"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#DriverTypeValue"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: Benefit or Business Change or Driver or Objective
+Range: Driver Type</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasStrength">
+    <rdfs:range rdf:resource="#StrengthValue"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isConsequenceOf">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Domain: 'Business Change'
+ or 'Enabling Change'
 
+Range: 'Business Change'
+ or 'Enabling Change'</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasConsequence">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf rdf:resource="#isConsequenceOf"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: Business Change or Enabling Change
+Range: Business Change or Enabling Change</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasMeasure">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#isMeasureOf"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Measure"/>
+    <rdfs:domain rdf:resource="#Benefit"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdfs:comment>Domain: Benefit
+Range Measure</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasBenefitContributionType">
+    <rdfs:range rdf:resource="#BenefitContributionTypeValue"/>
+    <rdfs:domain rdf:resource="#Benefit"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain Benefit
+Range: Benefit Contribution Type Value</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isMeasureOf">
+    <rdfs:domain rdf:resource="#Measure"/>
+    <rdfs:range rdf:resource="#Benefit"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <dc:creator>Dom Snyers</dc:creator>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isPrerequisiteOf">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#hasPrerequisite"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: 'Business Change'
+ or 'Enabling Change'
 
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasOwner -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasOwner">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Domain: Benefit
- or &apos;Business Change&apos;
- or &apos;Enabling Change&apos;
+Range: 'Business Change'
+ or 'Enabling Change'</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPrerequisite">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:comment>Domain: 'Business Change'
+ or 'Enabling Change'
+Range: 'Business Change'
+ or 'Enabling Change'</rdfs:comment>
+    <dc:creator>Dom Snyers</dc:creator>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasSponsor">
+    <rdfs:range rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#isSponsorOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:domain rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:comment>Domain: Portfolio or Programme or Objective or Project or 'Business Change' or 'Enabling Change' or Benefit</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isBDNLinkedTo">
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:domain rdf:resource="#BDNElements"/>
+    <rdfs:range rdf:resource="#BDNElements"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isSponsorOf">
+    <rdfs:domain rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:range rdf:resource="#BDNConceptWithOwner"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="dueDate">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Benefit"/>
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+          <owl:Class rdf:about="#Objective"/>
+          <owl:Class rdf:about="#Project"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Domain: 'Business Change' or  'Enabling Change' or Objective or  Benefit or Project</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="requiredResource">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Domain: Business Change or Enabling Change</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="description">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#BDNConcepts"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasEvidenceOfCompletion">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#BusinesssChange"/>
+          <owl:Class rdf:about="#EnablingChange"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Domain: Business Change or Enabling Change</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasExpectedValue">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Benefit"/>
+          <owl:Class rdf:about="#Measure"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="name">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#BDNConcepts"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasMeasureString">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Benefit"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="bdnID">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#BDNConcepts"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="creationDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#BDNConcepts"/>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:about="#hasOwner">
+    <rdfs:range rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="#isOwnerOf"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:domain rdf:resource="#BDNConceptWithOwner"/>
+    <rdfs:comment>Domain: Benefit
+ or 'Business Change'
+ or 'Enabling Change'
  or Portfolio
  or Programme
  or Project
 Range:</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#isOwnerOf"/>
-        <rdfs:range rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasPrerequisite -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasPrerequisite">
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Domain: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;
-Range: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-        <rdfs:range>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:range>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasSponsor -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasSponsor">
-        <rdfs:comment>Domain: Portfolio or Programme or Objective or Project or &apos;Business Change&apos; or &apos;Enabling Change&apos; or Benefit</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#isSponsorOf"/>
-        <rdfs:range rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasStakeholder -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasStakeholder">
-        <rdfs:comment>Domain : BDNConceptWithOwner</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasStrength -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasStrength">
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#StrengthValue"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isAssociatedWithProcess -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isAssociatedWithProcess">
-        <rdfs:comment>Domain: &apos;Business Change&apos;
-Range: &apos;FlexoProcess&apos;</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-        <rdfs:range rdf:resource="&FlexoConceptsOntology;FlexoProcess"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo">
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isConsequenceOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isConsequenceOf">
-        <rdfs:comment>Domain: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;
-
-Range: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-        <rdfs:range>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:range>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isDriverOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isDriverOf">
-        <rdfs:comment>Diver or Objecjtive</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Driver"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isFromProject -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isFromProject">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isMeasureOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isMeasureOf">
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Measure"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isOwnerOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isOwnerOf">
-        <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isPrerequisiteOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isPrerequisiteOf">
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Domain: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;
-
-Range: &apos;Business Change&apos;
- or &apos;Enabling Change&apos;</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasPrerequisite"/>
-        <rdfs:range>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:range>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isSponsorOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isSponsorOf">
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <rdfs:domain rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#isStakeholderOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#isStakeholderOf">
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:range rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNRelations"/>
-        <owl:inverseOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasStakeholder"/>
-        <rdfs:domain rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Data properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#bdnID -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#bdnID">
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#creationDate -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#creationDate">
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:range rdf:resource="&xsd;dateTime"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#description -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#description">
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#dueDate -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#dueDate">
-        <rdfs:comment>Domain: &apos;Business Change&apos; or  &apos;Enabling Change&apos; or Objective or  Benefit or Project</rdfs:comment>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Project"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasEvidenceOfCompletion -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasEvidenceOfCompletion">
-        <rdfs:comment>Domain: Business Change or Enabling Change</rdfs:comment>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasExpectedValue -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasExpectedValue">
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Measure"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#hasMeasureString -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#hasMeasureString">
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#name -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#name">
-        <rdfs:domain rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#requiredResource -->
-
-    <owl:DatatypeProperty rdf:about="http://www.agilebirds.com/ontologies/bdn#requiredResource">
-        <rdfs:comment>Domain: Business Change or Enabling Change</rdfs:comment>
-        <rdfs:range rdf:resource="&xsd;string"/>
-        <rdfs:subPropertyOf rdf:resource="&owl;topDataProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                    <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Classes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner">
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasStakeholder"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#Person"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasSponsor"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#Person"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasOwner"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#Person"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNConcepts -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNConcepts">
-        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject">
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isFromProject"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNElements -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNElements">
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:comment>Elements that are drawen in the BDN.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BDNValue -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BDNValue">
-        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Benefit -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit">
-        <rdfs:label>Benefit</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo"/>
-                <owl:allValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasDriverType"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasMeasure"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Measure"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasBenefitContributionType"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>An advantage on behalf of a particular stakeholder or group of stakeholders. This implies that the benefits are &apos;owned&apos; by the individuals or groups who want to obtain value form the investment.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue">
-        <rdfs:label>Benefit Change Type Value</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNValue"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>The benefits expected to arise from achievement of each of the objectives should be classified in terms of the main type of change that cill be needed to realize it (Doing new things, Doing things better, Stop doing things).</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue">
-        <rdfs:label>Benefit Contribution Type Value</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNValue"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Classifying the benefits by explicitness of the contribution according to values: observable, measurable,quantifiable or financial.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#BusinesssChange -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange">
-        <rdfs:label>Business Change</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isAssociatedWithProcess"/>
-                <owl:someValuesFrom rdf:resource="&FlexoConceptsOntology;FlexoProcess"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasPrerequisite"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasConsequence"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasDriverType"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasBenefitChangeType"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>The new ways of working that are required to ensure that the desired benefits are realized. These will be the new ongoing ways of working in the organization - at least until the next change initiative.</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Driver -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Driver">
-        <rdfs:label>Driver</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasDriverType"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasOrigin"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#OriginType"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isDriverOf"/>
-                <owl:allValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>Issues which executive and senior managers agree mean the organization needs to make changes - and the timescales for those changes. Drivers can be both external and internal but are specific to the context in which the organization operates.
-
-Domaine normal: Drive or Objective
-mais on a restreint à Objective car le to n&apos;admet pas encore de Union</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#DriverTypeValue -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue">
-        <rdfs:label>Driver Type</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNValue"/>
-        <rdfs:comment>The importance of the investment portfolios for the current and future business is categorised according to Key operational, strategic, support or high potential.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Enabler -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Enabler">
-        <rdfs:label>Enabler</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Enabler"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>The information systems and technology required to support the realization of indentified benefits and to enable the necessary changes to be undertaken.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#EnablingChange -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange">
-        <rdfs:label>Enabling Change</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasConsequence"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasBenefitChangeType"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasPrerequisite"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#EnablingChange"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>Changes that are prerequisites for achieving the business changes or that are essential to bring the system into effective operation within the organization. Enabling changes are usually &apos;one-off&apos; activities rather than ongoing ways of working.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Measure -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Measure">
-        <rdfs:label>Measure</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isFromProject"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isMeasureOf"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom</dc:creator>
-        <rdfs:comment>Measurement associated with benefits.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Objective -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Objective">
-        <rdfs:label>Objective</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNElements"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isBDNLinkedTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Benefit"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#BusinesssChange"/>
-                            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Objective"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasOrigin"/>
-                <owl:onClass rdf:resource="http://www.agilebirds.com/ontologies/bdn#OriginType"/>
-                <owl:maxQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxQualifiedCardinality>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#hasDriverType"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>A set of statements that describe what the organization is seeking to achieve from its investments. They should be a description of what the situation would be on successful completion of the investment.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#OriginType -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#OriginType">
-        <rdfs:label>Origin Type Value</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNValue"/>
-        <rdfs:comment>Drivers can be both internal or external.</rdfs:comment>
-        <dc:creator>Dom</dc:creator>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Person -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Person">
-        <owl:equivalentClass rdf:resource="&OrganizationalUnitScopeDefinition;Actor"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConcepts"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isSponsorOf"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isStakeholderOf"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isOwnerOf"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Portfolio -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Portfolio">
-        <rdfs:label>Portfolio</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isFromProject"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>A set of related and unrelated projects and programmes that compete for an organisation&apos;s resources and funds.</rdfs:comment>
-        <dc:creator>Dom Snyers</dc:creator>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Programme -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Programme">
-        <rdfs:label>Programme</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptsFromProject"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.agilebirds.com/ontologies/bdn#isFromProject"/>
-                <owl:someValuesFrom rdf:resource="http://www.agilebirds.com/ontologies/bdn#Project"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>A dynalic collection of related projects and activities that, in combination, achieve agreed organizational objectives and emergent outcomes, including the creation of new capabilities.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Project -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#Project">
-        <rdfs:label>Project</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNConceptWithOwner"/>
-        <dc:creator>Dom Snyers</dc:creator>
-        <rdfs:comment>A pre-defined scope of work delivered using existing capabilities to achieve agreed outputs in accordance with an authorized business case.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#StrengthValue -->
-
-    <owl:Class rdf:about="http://www.agilebirds.com/ontologies/bdn#StrengthValue">
-        <rdfs:label>Strength Value</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.agilebirds.com/ontologies/bdn#BDNValue"/>
-        <dc:creator>Dom Snyers</dc:creator>
-    </owl:Class>
-    
-
-
-    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess -->
-
-    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoProcess"/>
-    
-
-
-    <!-- http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor -->
-
-    <rdf:Description rdf:about="&OrganizationalUnitScopeDefinition;Actor"/>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Individuals
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#DoingNewThings -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#DoingNewThings">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#DoingThingsBetter -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#DoingThingsBetter">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#External -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#External">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#OriginType"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Financial -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Financial">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#High -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#High">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#StrengthValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#HighPotential -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#HighPotential">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Internal -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Internal">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#OriginType"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#KeyOperational -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#KeyOperational">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Low -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Low">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#StrengthValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Measurable -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Measurable">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Med -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Med">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#StrengthValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Observable -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Observable">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Quantifiable -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Quantifiable">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitContributionTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#StopDoingThings -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#StopDoingThings">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#BenefitChangeTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Strategic -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Strategic">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.agilebirds.com/ontologies/bdn#Support -->
-
-    <owl:NamedIndividual rdf:about="http://www.agilebirds.com/ontologies/bdn#Support">
-        <rdf:type rdf:resource="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // General axioms
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#KeyOperational"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Strategic"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#High"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Med"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#High"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Low"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Strategic"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Support"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#HighPotential"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#KeyOperational"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#HighPotential"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Support"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Low"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Med"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#KeyOperational"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Support"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Financial"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Measurable"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Observable"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Quantifiable"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#DoingNewThings"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#DoingThingsBetter"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#StopDoingThings"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#HighPotential"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Strategic"/>
-        </owl:distinctMembers>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#External"/>
-            <rdf:Description rdf:about="http://www.agilebirds.com/ontologies/bdn#Internal"/>
-        </owl:distinctMembers>
-    </rdf:Description>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="#isFromProject">
+    <rdfs:range rdf:resource="#Project"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:domain rdf:resource="#BDNConceptsFromProject"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:InverseFunctionalProperty rdf:about="#isOwnerOf">
+    <rdfs:domain rdf:resource="/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor"/>
+    <rdfs:subPropertyOf rdf:resource="#BDNRelations"/>
+    <rdfs:range rdf:resource="#BDNConceptWithOwner"/>
+    <dc:creator>Dom Snyers</dc:creator>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:InverseFunctionalProperty>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:ID="KeyOperational">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </DriverTypeValue>
+      <DriverTypeValue rdf:ID="Strategic">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </DriverTypeValue>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <BenefitContributionTypeValue rdf:ID="Financial">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitContributionTypeValue>
+      <BenefitContributionTypeValue rdf:ID="Measurable">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitContributionTypeValue>
+      <BenefitContributionTypeValue rdf:ID="Observable">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitContributionTypeValue>
+      <BenefitContributionTypeValue rdf:ID="Quantifiable">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitContributionTypeValue>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <StrengthValue rdf:ID="Low">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </StrengthValue>
+      <StrengthValue rdf:ID="Med">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </StrengthValue>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <StrengthValue rdf:ID="High">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </StrengthValue>
+      <StrengthValue rdf:about="#Med"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:ID="HighPotential">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </DriverTypeValue>
+      <DriverTypeValue rdf:ID="Support">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </DriverTypeValue>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:about="#Strategic"/>
+      <DriverTypeValue rdf:about="#Support"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:about="#HighPotential"/>
+      <DriverTypeValue rdf:about="#Strategic"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:about="#HighPotential"/>
+      <DriverTypeValue rdf:about="#KeyOperational"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <BenefitChangeTypeValue rdf:ID="DoingNewThings">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitChangeTypeValue>
+      <BenefitChangeTypeValue rdf:ID="DoingThingsBetter">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitChangeTypeValue>
+      <BenefitChangeTypeValue rdf:ID="StopDoingThings">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </BenefitChangeTypeValue>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <StrengthValue rdf:about="#High"/>
+      <StrengthValue rdf:about="#Low"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <OriginType rdf:ID="External">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </OriginType>
+      <OriginType rdf:ID="Internal">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+      </OriginType>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <DriverTypeValue rdf:about="#KeyOperational"/>
+      <DriverTypeValue rdf:about="#Support"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
 </rdf:RDF>
-
-
-
-<!-- Generated by the OWL API (version 3.3.1957) http://owlapi.sourceforge.net -->
-

@@ -19,12 +19,15 @@
  */
 package org.openflexo.fib.view.widget;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
@@ -32,6 +35,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBReferencedComponentDynamicModel;
 import org.openflexo.fib.controller.FIBViewFactory;
@@ -55,14 +59,17 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponentWidget.class.getPackage().getName());
 
+	private FIBComponent referencedComponent = null;
 	private FIBView<FIBComponent, JComponent> referencedComponentView;
 	private FIBViewFactory factory;
+	private boolean isComponentLoading = false;
 
-	private final JLabel NOT_FOUND_LABEL = new JLabel("<Not found component>");
+	private JLabel NOT_FOUND_LABEL;
 
 	public FIBReferencedComponentWidget(FIBReferencedComponent model, FIBController controller, FIBViewFactory factory) {
 		super(model, controller);
 		this.factory = factory;
+		NOT_FOUND_LABEL = new JLabel(""/*"<" + model.getName() + ": not found component>"*/);
 		updateFont();
 	}
 
@@ -74,17 +81,89 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		return false;
 	}
 
-	private boolean isComponentLoading = false;
+	public FIBComponent getReferencedComponent() {
+		return referencedComponent;
+	}
+
+	private FIBComponent retrieveReferencedComponent() {
+
+		if (getWidget().getDynamicComponentFile() != null && getWidget().getDynamicComponentFile().isSet()
+				&& getWidget().getDynamicComponentFile().isValid()) {
+			// The component file is dynamically defined, use it
+			File componentFile;
+			try {
+				componentFile = getWidget().getDynamicComponentFile().getBindingValue(getBindingEvaluationContext());
+				if (componentFile != null) {
+					return FIBLibrary.instance().retrieveFIBComponent(componentFile);
+				}
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+
+		else if (getWidget().getComponentFile() != null) {
+			// The component file is statically defined, use it
+			return FIBLibrary.instance().retrieveFIBComponent(getWidget().getComponentFile());
+		}
+
+		return null;
+	}
+
+	@Override
+	public final void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
+		// super.updateDataObject(dataObject);
+		updateDynamicallyReferencedComponentWhenRequired();
+		super.updateDataObject(dataObject);
+	}
+
+	/**
+	 * Called whenever the referenced component may have changed
+	 */
+	private boolean updateDynamicallyReferencedComponentWhenRequired() {
+		// We now check that the referenced component is still valid
+		if (referencedComponent != retrieveReferencedComponent()) {
+			// We have detected that referenced component has changed
+			// We reset internal values and call updateLayout on the container
+			referencedComponent = retrieveReferencedComponent();
+			if (referencedComponentView != null) {
+				referencedComponentView.delete();
+				referencedComponentView = null;
+			}
+			((FIBContainerView<?, ?>) getParentView()).updateLayout();
+			return true;
+		}
+		// Otherwise referenced component has not changed
+		return false;
+	}
 
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
 			// System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
-			if (getWidget().getComponent() instanceof FIBWidget) {
-				referencedComponentView = factory.makeWidget((FIBWidget) getWidget().getComponent());
+
+			FIBComponent loaded = getReferencedComponent();
+
+			if (loaded instanceof FIBWidget) {
+				referencedComponentView = factory.makeWidget((FIBWidget) loaded);
 				referencedComponentView.setEmbeddingComponent(this);
-			} else if (getWidget().getComponent() instanceof FIBContainer) {
-				referencedComponentView = factory.makeContainer((FIBContainer) getWidget().getComponent());
+			} else if (loaded instanceof FIBContainer) {
+				referencedComponentView = factory.makeContainer((FIBContainer) loaded);
 				referencedComponentView.setEmbeddingComponent(this);
 			}
 			isComponentLoading = false;
@@ -96,6 +175,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public synchronized JComponent getJComponent() {
 		if (getReferencedComponentView() != null) {
 			JComponent returned = getReferencedComponentView().getJComponent();
+			/*if (returned != null && getWidget().getOpaque() != null) {
+				returned.setOpaque(getWidget().getOpaque());
+			}*/
 			return returned;
 		}
 		return NOT_FOUND_LABEL;
@@ -133,6 +215,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	@Override
 	public boolean updateWidgetFromModel() {
+
+		updateDynamicallyReferencedComponentWhenRequired();
+
 		// We need here to "force" update while some assignments may be required
 
 		// if (notEquals(getValue(), customComponent.getEditedObject())) {
@@ -162,15 +247,24 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			/*if (getWidget().getName() != null && getWidget().getName().equals("DropSchemePanel")) {
 				System.out.println("Returns data for DropSchemePanel as " + referencedComponentView.getDynamicModel().getData());
 			}
-			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("DropSchemeWidget")) {
-				System.out.println("Returns data for DropSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
+			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("EditionSchemeWidget")) {
+				System.out.println("Returns data for EditionSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
 			}*/
-			return referencedComponentView.getDynamicModel().getData();
+			if (referencedComponentView != null) {
+				return referencedComponentView.getDynamicModel().getData();
+			}
+			return null;
 		}
 		if (variable.getVariableName().equals("component")) {
 			return referencedComponentView.getComponent();
 		}
-		return getBindingEvaluationContext().getValue(variable);
+		BindingEvaluationContext evCtxt = getBindingEvaluationContext();
+		// NPE Protection
+		if (evCtxt != null && variable != null) {
+			return getBindingEvaluationContext().getValue(variable);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -192,7 +286,11 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	@Override
 	public String toString() {
-		return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
-				+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
+		if (referencedComponentView != null) {
+			return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
+					+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
+		} else {
+			return super.toString();
+		}
 	}
 }

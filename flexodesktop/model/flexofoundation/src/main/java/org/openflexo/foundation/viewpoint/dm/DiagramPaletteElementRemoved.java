@@ -33,7 +33,8 @@ public class DiagramPaletteElementRemoved extends ViewPointDataModification {
 	private DiagramPalette _parent;
 
 	public DiagramPaletteElementRemoved(DiagramPaletteElement element, DiagramPalette parent) {
-		super(element, null);
+		// super(element, null);
+		super("elements", element, null);
 		_parent = parent;
 	}
 

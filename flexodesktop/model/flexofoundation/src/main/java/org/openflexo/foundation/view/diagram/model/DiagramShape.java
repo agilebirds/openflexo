@@ -22,17 +22,17 @@ package org.openflexo.foundation.view.diagram.model;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRShapeTemplate;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.DiagramBuilder;
 
-public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
+public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> implements GRShapeTemplate {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
@@ -68,19 +68,16 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 		super.setDescription(description);
 	}
 
-	@Override
-	public ShapeGraphicalRepresentation<DiagramShape> getGraphicalRepresentation() {
-		return super.getGraphicalRepresentation();
-	}
-
 	/**
 	 * Reset graphical representation to be the one defined in related pattern role
 	 */
 	@Override
 	public void resetGraphicalRepresentation() {
-		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), Parameters.text, Parameters.isVisible,
-				Parameters.absoluteTextX, Parameters.absoluteTextY, ShapeParameters.x, ShapeParameters.y, ShapeParameters.width,
-				ShapeParameters.height, ShapeParameters.relativeTextX, ShapeParameters.relativeTextY);
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.TEXT,
+				GraphicalRepresentation.IS_VISIBLE, GraphicalRepresentation.TRANSPARENCY, GraphicalRepresentation.ABSOLUTE_TEXT_X,
+				GraphicalRepresentation.ABSOLUTE_TEXT_Y, ShapeGraphicalRepresentation.X, ShapeGraphicalRepresentation.Y,
+				ShapeGraphicalRepresentation.WIDTH, ShapeGraphicalRepresentation.HEIGHT, ShapeGraphicalRepresentation.RELATIVE_TEXT_X,
+				ShapeGraphicalRepresentation.RELATIVE_TEXT_Y);
 		refreshGraphicalRepresentation();
 	}
 
@@ -96,7 +93,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -108,6 +105,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

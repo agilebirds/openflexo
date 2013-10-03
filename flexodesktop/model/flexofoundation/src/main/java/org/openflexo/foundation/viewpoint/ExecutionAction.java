@@ -31,7 +31,9 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/ExecutionActionPanel.fib")
 public class ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<MS, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(ExecutionAction.class.getPackage().getName());
@@ -47,11 +49,6 @@ public class ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<M
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append((getAssignation().isSet() ? getAssignation().toString() + " = " : "") + getExecution().toString() + ";", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Execution;
 	}
 
 	public DataBinding<Object> getExecution() {

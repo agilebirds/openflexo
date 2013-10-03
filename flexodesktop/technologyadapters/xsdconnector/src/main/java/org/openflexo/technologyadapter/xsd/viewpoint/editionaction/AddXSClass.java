@@ -25,14 +25,14 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 
 public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 
@@ -70,7 +70,9 @@ public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 		XSOntClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getResourceData().createOntologyClass(newClassName, father);
+			// FIXME : Something wrong here!
+			// newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
+			newClass = ((XMLXSDModel) getModelSlotInstance(action).getResourceData()).getMetaModel().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();
@@ -79,8 +81,8 @@ public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 	}
 
 	@Override
-	public TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
+	public TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

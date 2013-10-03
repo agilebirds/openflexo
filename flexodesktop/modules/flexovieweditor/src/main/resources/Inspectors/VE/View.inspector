@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.View" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.View" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" validateOnReturn="true" passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" readOnly="true" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
-      <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.viewPoint.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-      <Label label="version" localize="true" name="ViewpointVersionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewpointVersion" data="data.viewPoint.version" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
-      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="IntegerType" columns="5" data="data.index" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="title" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" name="TitleLabel" localize="true" />
+      <TextField index="1" data="data.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Title" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" name="NameLabel" localize="true" />
+      <TextField index="3" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="Name" readOnly="true" localize="true" columns="10" />
+      <Label label="viewpoint" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="ViewpointnameLabel" localize="true" />
+      <TextField index="5" data="data.viewPoint.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="Viewpointname" readOnly="true" localize="true" columns="10" />
+      <Label label="version" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" name="ViewpointVersionLabel" localize="true" />
+      <TextField index="7" data="data.viewPoint.version.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="ViewpointVersion" readOnly="true" localize="true" columns="10" />
+      <!--  <Label label="index" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" name="IndexLabel" localize="true" />
+      <Number numberType="IntegerType" columns="5" index="9" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" name="Index" localize="true" />-->
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Graphics" lang="French">Graphisme</Localized>
@@ -59,4 +58,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="View" />
 </Panel>
-

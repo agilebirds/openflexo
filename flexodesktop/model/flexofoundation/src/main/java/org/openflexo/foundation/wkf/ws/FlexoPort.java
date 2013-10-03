@@ -157,12 +157,13 @@ public abstract class FlexoPort extends AbstractNode implements Sortable {
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		getPortRegistery().removeFromPorts(this);
 		super.delete();
 		setChanged();
 		notifyObservers(new PortRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	/**

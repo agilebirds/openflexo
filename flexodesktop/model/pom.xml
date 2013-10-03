@@ -12,10 +12,10 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>flexofoundation</module>
+		<module>flexodiagram</module>
 		<module>flexoinspector</module>
 		<module>flexopamela</module>
 		<module>flexoutils</module>
-		<module>flexowsclient</module>
 		<module>flexoxmlcode</module>
 	</modules>
 </project>

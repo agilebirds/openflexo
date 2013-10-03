@@ -250,7 +250,7 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoProgress progress, FlexoEditorFactory editorFactory,
-			FlexoProjectReferenceLoader projectReferenceLoader, FlexoServiceManager serviceManager) {
+			FlexoProjectReferenceLoader projectReferenceLoader, FlexoServiceManager serviceManager) throws ProjectInitializerException {
 		if (!aProjectDirectory.exists()) {
 			aProjectDirectory.mkdirs();
 		}
@@ -266,7 +266,7 @@ public class FlexoResourceManager {
 	}
 
 	public static FlexoEditor initializeNewProject(File aProjectDirectory, FlexoEditorFactory editorFactory,
-			FlexoServiceManager serviceManager) {
+			FlexoServiceManager serviceManager) throws ProjectInitializerException {
 		return initializeNewProject(aProjectDirectory, null, editorFactory, null, serviceManager);
 	}
 

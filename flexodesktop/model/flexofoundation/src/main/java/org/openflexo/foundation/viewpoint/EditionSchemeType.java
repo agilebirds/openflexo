@@ -29,6 +29,10 @@ public class EditionSchemeType implements CustomType {
 		return editionScheme;
 	}
 
+	public static String getName() {
+		return EditionSchemeType.class.getSimpleName();
+	}
+	
 	@Override
 	public Class getBaseClass() {
 		return EditionScheme.class;

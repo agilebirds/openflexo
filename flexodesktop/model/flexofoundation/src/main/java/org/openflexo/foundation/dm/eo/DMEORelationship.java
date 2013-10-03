@@ -191,7 +191,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getEORelationship() != null) {
 			resetJoins();
 			try {
@@ -211,6 +211,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		}
 		super.delete();
 		_eoRelationship = null;
+		return true;
 	}
 
 	/**

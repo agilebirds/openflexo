@@ -156,7 +156,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Enumeration en = ((Vector) embeddingChildItems.clone()).elements();
 		while (en.hasMoreElements()) {
 			DocItem it = (DocItem) en.nextElement();
@@ -181,7 +181,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 		if (folder != null) {
 			folder.removeFromItems(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	@Override

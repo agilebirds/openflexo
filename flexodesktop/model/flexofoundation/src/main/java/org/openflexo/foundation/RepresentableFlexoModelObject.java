@@ -330,6 +330,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setX(double x, String context) {
+		x = Math.round(x);
 		Point2D oldLocation = getLocation(context);
 		if (x != getX(context)) {
 			_setGraphicalPropertyForKey(x, POSX + "_" + context);
@@ -347,6 +348,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setY(double y, String context) {
+		y = Math.round(y);
 		Point2D oldLocation = getLocation(context);
 		if (y != getY(context)) {
 			_setGraphicalPropertyForKey(y, POSY + "_" + context);

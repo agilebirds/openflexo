@@ -7,6 +7,16 @@ import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.gui.ExcelIconLibrary;
+import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.view.ExcelWorkbookView;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -23,8 +33,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
-		// TODO Auto-generated method stub
-
+		actionInitializer.getController().getModuleInspectorController().loadDirectory(new FileResource("Inspectors/Excel"));
 	}
 
 	@Override
@@ -54,21 +63,44 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 	}
 
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
-		// TODO Auto-generated method stub
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
+		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelWorkbook.class);
+		}
+		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelSheet.class);
+		}
+		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelCell.class);
+		}
+		if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelRow.class);
+		}
 		return null;
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
-		// TODO
+	public boolean hasModuleViewForObject(TechnologyObject object) {
+		if (object instanceof ExcelWorkbook) {
+			return true;
+		}
 		return false;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof ExcelWorkbook) {
+			return ((ExcelWorkbook) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override
 	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective) {
-		// TODO
+		if (object instanceof ExcelWorkbook) {
+			return (ModuleView<T>) new ExcelWorkbookView((ExcelWorkbook) object, controller, perspective);
+		}
 		return new EmptyPanel<T>(controller, perspective, object);
 	}
 

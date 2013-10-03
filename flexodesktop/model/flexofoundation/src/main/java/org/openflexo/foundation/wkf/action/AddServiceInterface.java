@@ -55,7 +55,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof WKFObject && !((WKFObject) object).getProcess().isImported();
+			return object instanceof WKFObject;
 		}
 
 	};
@@ -92,7 +92,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		logger.info("Add Service Interface");
-		if (getProcess() != null && !getProcess().isImported()) {
+		if (getProcess() != null) {
 			_serviceInterface = getProcess().addServiceInterface(getNewInterfaceName());
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("ServiceInterface created:" + _serviceInterface.getName());

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Library [
+  <!ENTITY rabbit "The Rabbit">
+]>
+<p:Library xmlns:p="http://www.example.org/Library" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/Library ../XSD/library.xsd ">
+  <p:name>A Library</p:name>
+  <p:books>
+   <p:title>toto</p:title>
+   <p:pages>35</p:pages>
+   <p:category>Mystery</p:category>
+   <p:author>&rabbit;</p:author>
+  </p:books> 
+</p:Library>

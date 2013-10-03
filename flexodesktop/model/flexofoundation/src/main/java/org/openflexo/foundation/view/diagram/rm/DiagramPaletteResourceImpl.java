@@ -14,12 +14,14 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImpl<DiagramPalette> implements DiagramPaletteResource {
+public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImpl<DiagramPalette> implements DiagramPaletteResource,
+		AccessibleProxyObject {
 
 	private RelativePathFileConverter relativePathFileConverter;
 
@@ -154,6 +156,11 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	@Override
 	public FlexoResourceTree update() {
 		return null;
+	}
+
+	@Override
+	public DiagramSpecificationResource getContainer() {
+		return (DiagramSpecificationResource) performSuperGetter(CONTAINER);
 	}
 
 }

@@ -32,9 +32,12 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -313,6 +316,29 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	private ModelSlot modelSlot;
+
+	public ModelSlot getModelSlot() {
+		return modelSlot;
+	}
+
+	public void setModelSlot(ModelSlot modelSlot) {
+		this.modelSlot = modelSlot;
+	}
+
+	/**
+	 * Return a metamodel adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public FlexoMetaModel getAdressedFlexoMetaModel() {
+		if (modelSlot instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot typeAwareModelSlot = (TypeAwareModelSlot) modelSlot;
+			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
+		}
+		return null;
+	}
+
 	/**
 	 * Build browser model Override this method when required
 	 * 
@@ -330,6 +356,9 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 			}
 		}
 		if (returned == null) {
+			if (getAdressedFlexoMetaModel() != null && getContext() == null) {
+				setContext((IFlexoOntology) getAdressedFlexoMetaModel());
+			}
 			// Use default
 			returned = new OntologyBrowserModel(getContext());
 		}

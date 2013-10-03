@@ -172,9 +172,9 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 	protected abstract void redoAction(Object context) throws FlexoException;
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		_modifiedResources.clear();
-		super.delete();
+		return super.delete();
 	}
 
 }

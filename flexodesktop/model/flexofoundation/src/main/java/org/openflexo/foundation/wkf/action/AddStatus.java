@@ -54,8 +54,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 
 		@Override
 		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return object != null
-					&& (object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof StatusList || object instanceof Status);
+			return object != null && (object instanceof FlexoProcess || object instanceof StatusList || object instanceof Status);
 		}
 
 	};
@@ -92,7 +91,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 	@Override
 	protected void doAction(Object context) throws DuplicateStatusException {
 		logger.info("Add status");
-		if (getProcess() != null && !getProcess().isImported() && getProcess().getStatusList() != null) {
+		if (getProcess() != null && getProcess().getStatusList() != null) {
 			StatusList statusList = getProcess().getStatusList();
 			statusList.addToStatus(_newStatus = new Status(getProcess(), getNewStatusName()));
 			if (getNewDescription() != null) {

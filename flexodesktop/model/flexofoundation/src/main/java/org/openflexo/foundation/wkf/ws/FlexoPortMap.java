@@ -350,13 +350,14 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (_operation != null) {
 			_operation.deleteObserver(this);
 		}
 		getPortMapRegistery().removeFromPortMaps(this);
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

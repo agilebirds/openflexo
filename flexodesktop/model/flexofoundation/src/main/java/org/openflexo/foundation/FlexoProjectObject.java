@@ -62,7 +62,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (FlexoModelObjectReference<EditionPatternInstance> ref : new ArrayList<FlexoModelObjectReference<EditionPatternInstance>>(
 				editionPatternReferences)) {
@@ -75,7 +75,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		editionPatternReferences.clear();
 		editionPatternReferences = null;
 
-		super.delete();
+		return super.delete();
 
 	}
 

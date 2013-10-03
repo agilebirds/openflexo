@@ -133,7 +133,7 @@ public abstract class WKFGroup extends WKFObject implements DeletableObject {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		logger.info("Called DELETE on WKFGroup");
 		FlexoPetriGraph parentPetriGraph = getParentPetriGraph();
 		Vector<PetriGraphNode> nodesInGroup = new Vector<PetriGraphNode>(getNodes());
@@ -145,6 +145,7 @@ public abstract class WKFGroup extends WKFObject implements DeletableObject {
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public final void ungroup() {

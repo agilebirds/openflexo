@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -394,7 +395,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	public ModelSlot getModelSlot(String modelSlotName) {
 		for (ModelSlot ms : getModelSlots()) {
-			if (ms.getName().equals(modelSlotName)) {
+			if (ms.getName() != null && ms.getName().equals(modelSlotName)) {
 				return ms;
 			}
 		}

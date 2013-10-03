@@ -38,8 +38,10 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.foundation.view.action.AddConnector;
+import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -129,6 +131,79 @@ public class DrawEdgeControl extends MouseDragControl {
 					}
 
 				}
+				
+				if (fromShape != null && toShape == null) {
+					// Lets look if we match a CalcPaletteConnector
+					final DiagramShape from = fromShape.getDrawable();
+					final DiagramShape to = null;
+					if (from.getDiagram().getViewPoint() != null && from.getEditionPattern() != null) {
+						for(LinkScheme availableConnector : from.getDiagramSpecification().getAllConnectors()){
+							if(availableConnector.getFromTargetEditionPattern().equals(from.getEditionPattern())){
+								availableConnectors.add(availableConnector);
+							}
+						}
+					}
+
+					if (availableConnectors.size() > 0) {
+						JPopupMenu popup = new JPopupMenu();
+						for (final LinkScheme linkScheme : availableConnectors) {
+							// final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
+							// System.out.println("Available: "+paletteConnector.getEditionPattern().getName());
+							JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel() != null ? linkScheme
+									.getLabel() : linkScheme.getName()));
+							menuItem.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									
+									if(linkScheme.getToTargetEditionPattern().getDropSchemes()!=null){
+										DropScheme dropScheme = (DropScheme)linkScheme.getToTargetEditionPattern().getDropSchemes().get(0);
+										DropSchemeAction actionDropScheme = DropSchemeAction.actionType.makeNewAction(from.getParent(), null,
+												((DiagramController) controller).getVEController().getEditor());
+										//actionDropScheme.dropLocation = 
+										//action.setPaletteElement(element);
+										actionDropScheme.setDropScheme(dropScheme);
+										actionDropScheme.doAction();
+										
+										
+										// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
+										LinkSchemeAction actionLinkScheme = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null,
+												((DiagramController) controller).getVEController().getEditor());
+										actionLinkScheme.setLinkScheme(linkScheme);
+										actionLinkScheme.setFromShape(from);
+										actionLinkScheme.setToShape(actionDropScheme.getPrimaryShape());
+										actionLinkScheme.doAction();
+									}
+									
+								}
+							});
+							menuItem.setToolTipText(linkScheme.getDescription());
+							popup.add(menuItem);
+						}
+						JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
+						menuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((DiagramController) controller)
+										.getVEController().getEditor());
+								action.setToShape(to);
+								action.setAutomaticallyCreateConnector(true);
+								action.doAction();
+							}
+						});
+						menuItem.setToolTipText(FlexoLocalization
+								.localizedForKey("draw_basic_graphical_connector_without_ontologic_semantic"));
+						popup.add(menuItem);
+						popup.show(event.getComponent(), event.getX(), event.getY());
+					} else {
+						AddConnector action = AddConnector.actionType.makeNewAction(from, null, ((DiagramController) controller)
+								.getVEController().getEditor());
+						action.setToShape(to);
+						action.setAutomaticallyCreateConnector(true);
+						action.doAction();
+					}
+
+				}
+				
 				drawEdge = false;
 				fromShape = null;
 				toShape = null;

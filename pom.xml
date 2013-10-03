@@ -13,20 +13,22 @@
 		<url>${organization.url}</url>
 	</organization>
 	<properties>
+		<ant.version>1.9.0</ant.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
-		<source.encoding>UTF-8</source.encoding>
-		<resource.encoding>UTF-8</resource.encoding>
+		<hibernate.version>4.2.3.Final</hibernate.version>
+		<jersey.version>1.17.1</jersey.version>
+		<organization.name>Openflexo</organization.name>
+		<organization.url>http://www.openflexo.org</organization.url>
+		<organization.logo>https://media.openflexo.org/images/OpenFlexo_Logo.png</organization.logo>
 		<!-- need this so that sonar run properly. don't know what the difference 
 			with source.encoding. todo : investigate difference between source.encoding 
 			and project.build.sourceEncoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<product.name>OpenFlexo</product.name>
-		<organization.name>AgileBirds</organization.name>
-		<organization.url>http://www.agilebirds.com/</organization.url>
-		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
+		<resource.encoding>UTF-8</resource.encoding>
+		<source.encoding>UTF-8</source.encoding>
 		<swingx.version>1.6.3</swingx.version>
-		<ant.version>1.9.0</ant.version>
 		<javahelp.version>2.0.05</javahelp.version>
 	</properties>
 	<scm>
@@ -40,16 +42,16 @@
 	</modules>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://jenkins.openflexo.com/</url>
+		<url>https://jenkins.openflexo.org/</url>
 	</ciManagement>
-	<url>http://www.openflexo.com</url>
+	<url>http://www.openflexo.org</url>
 	<description>Openflexo is the open source business architecture platform that supports collaborative agile missions by seamlessly
         transforming multi-facet enterprise models into business oriented deliverables.
     </description>
 	<repositories>
 		<repository>
 			<id>openflexo</id>
-			<url>https://maven.openflexo.com/artifactory/openflexo-deps/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-deps/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -63,12 +65,12 @@
 		<repository>
 			<id>openflexo-release</id>
 			<name>Open Flexo Releases</name>
-			<url>https://maven.openflexo.com/artifactory/openflexo-release/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-release/</url>
 		</repository>
 		<snapshotRepository>
 			<id>openflexo-snapshot</id>
 			<name>Open Flexo Snapshots</name>
-			<url>https://maven.openflexo.com/artifactory/openflexo-snapshot/</url>
+			<url>https://maven.openflexo.org/artifactory/openflexo-snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
@@ -91,11 +93,6 @@
 					<configuration>
 						<retryFailedDeploymentCount>3</retryFailedDeploymentCount>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>2.0.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -183,6 +180,19 @@
 										</configurator>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jvnet.ws.wadl</groupId>
+										<artifactId>wadl-client-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -199,6 +209,11 @@
 					<configuration>
 						<encoding>${resource.encoding}</encoding>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -271,11 +286,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexowsclient</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
 				<artifactId>flexointerfacebuilder</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -319,6 +329,24 @@
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexofoundation</artifactId>
+				<version>${project.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexodiagram</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexodiagram</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>flexodiagram</artifactId>
 				<version>${project.version}</version>
 				<classifier>tests</classifier>
 			</dependency>
@@ -744,6 +772,17 @@
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
+			</dependency><dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
@@ -785,6 +824,33 @@
 				<type>zip</type>
 			</dependency>
 
+			<!--  CSV -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>csvconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+
+			<!--  MDTUML -->
 
 			<!-- packaging -->
 			<dependency>
@@ -829,7 +895,26 @@
 				<version>${project.version}</version>
 				<type>pom</type>
 			</dependency>
-
+			<dependency>
+				<groupId>com.agilebirds.server</groupId>
+				<artifactId>flexoserver-model</artifactId>
+				<version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey.contribs</groupId>
+				<artifactId>jersey-multipart</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey</groupId>
+				<artifactId>jersey-json</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.openflexo.packaging</groupId>
 				<artifactId>flexolite</artifactId>
@@ -896,7 +981,12 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>1.4</version>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.8</version>
 			</dependency>
 			<dependency>
 				<groupId>jalopy</groupId>
@@ -932,11 +1022,6 @@
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>2.0.2</version>
-			</dependency>
-			<dependency>
-				<groupId>axis</groupId>
-				<artifactId>axis</artifactId>
-				<version>1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.mail</groupId>
@@ -992,6 +1077,26 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>1.3.173</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.help</groupId>
@@ -1079,11 +1184,6 @@
 				<version>13.0.1</version>
 			</dependency>
 			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>1.6</version>
-			</dependency>
-			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-all</artifactId>
 				<version>1.9.0</version>
@@ -1111,7 +1211,7 @@
 			<dependency>
 				<groupId>org.eclipse.emf</groupId>
 				<artifactId>common</artifactId>
-				<version>2.3.0-v200706262000</version>
+				<version>2.7.0.v20120127</version>
 			</dependency>
 			<dependency>
 				<groupId> org.eclipse.core</groupId>
@@ -1156,12 +1256,12 @@
 			<dependency>
 				<groupId>org.eclipse.emf</groupId>
 				<artifactId>ecore</artifactId>
-				<version>2.3.0-v200706262000</version>
+				<version>2.7.0.v20120127</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.emf</groupId>
 				<artifactId>ecore-xmi</artifactId>
-				<version>2.2.3</version>
+				<version>2.7.0.v20120127</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

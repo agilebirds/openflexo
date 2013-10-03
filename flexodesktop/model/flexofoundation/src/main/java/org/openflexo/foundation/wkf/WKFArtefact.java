@@ -125,12 +125,13 @@ public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getParentPetriGraph() != null) {
 			getParentPetriGraph().removeFromArtefacts(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

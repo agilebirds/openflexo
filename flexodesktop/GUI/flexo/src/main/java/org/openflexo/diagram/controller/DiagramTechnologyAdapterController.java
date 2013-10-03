@@ -19,6 +19,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -91,7 +92,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return VEIconLibrary.VIEW_ICON;
 		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -105,7 +106,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	}
 
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.VIEW_ICON, IconLibrary.DUPLICATE);
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
@@ -113,7 +114,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.CONNECTOR_ICON, IconLibrary.DUPLICATE);
 		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
-			return null;
+			return IconFactory.getImageIcon(VPMIconLibrary.GRAPHICAL_ACTION_ICON);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VEIconLibrary.DELETE_ICON;
 		}
@@ -121,9 +122,14 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		// TODO not applicable
 		return false;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		return object.toString();
 	}
 
 	@Override

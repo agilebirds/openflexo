@@ -70,7 +70,7 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		super.delete();
 		for (FlexoProcessNode node : new Vector<FlexoProcessNode>(getProcesses())) {
 			if (getParent() instanceof ProcessFolder) {
@@ -81,6 +81,7 @@ public class ProcessFolder extends FlexoFolderContainerNode implements Inspectab
 		}
 		setParent(null);
 		deleteObservers();
+		return true;
 	}
 
 	public FlexoFolderContainerNode getParent() {

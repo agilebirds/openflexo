@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -42,7 +43,9 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.CloningScheme;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
@@ -63,6 +66,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternInstance.class.getPackage().toString());
 
 	protected static final String DELETED_PROPERTY = "deleted";
+	protected static final String EMPTY_STRING = "<emtpy>";
 
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
@@ -117,6 +121,21 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
+		// Pragmatic attempt to fix "inheritance issue...."
+		EditionPattern parentEP = this.getEditionPattern().getParentEditionPattern();
+		while (actorReference == null && parentEP != null ){
+			if (parentEP != null){
+				PatternRole ppPatternRole = parentEP.getPatternRole(patternRole.getName());
+				if (ppPatternRole == patternRole){
+					patternRole = this.getEditionPattern().getPatternRole(ppPatternRole.getName());
+					actorReference = (ActorReference<T>) actors.get(patternRole);
+				}
+			}
+			if (actorReference == null) {
+				parentEP = parentEP.getParentEditionPattern();
+			}
+
+		}
 		if (actorReference != null) {
 			return actorReference.retrieveObject();
 		}
@@ -141,7 +160,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	public <T> void setObjectForPatternRole(T object, PatternRole<T> patternRole) {
-		logger.info(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(">>>>>>>> For patternRole: " + patternRole + " set " + object + " was " + getPatternActor(patternRole));
+		}
 		T oldObject = getPatternActor(patternRole);
 		if (object != oldObject) {
 			// Un-register last reference
@@ -238,7 +259,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	{
 		return "GET string value for "+inspectorEntryKey;
 	}
-	
+
 	public void setStringValue(String inspectorEntryKey, String value)
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
@@ -355,44 +376,44 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return null;
 	}
 
-	private boolean deleted = false;
+	// private boolean deleted = false;
 
-	public boolean deleted() {
+	/*public boolean deleted() {
 		return deleted;
 	}
 
 	@Override
 	public boolean isDeleted() {
 		return deleted();
-	}
+	}*/
 
 	/**
 	 * Delete this EditionPattern instance using default DeletionScheme
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// Also implement properly #getDeletedProperty()
 		if (getEditionPattern().getDefaultDeletionScheme() != null) {
-			delete(getEditionPattern().getDefaultDeletionScheme());
+			return delete(getEditionPattern().getDefaultDeletionScheme());
 		} else {
 			// Generate on-the-fly default deletion scheme
-			delete(getEditionPattern().generateDefaultDeletionScheme());
+			return delete(getEditionPattern().generateDefaultDeletionScheme());
 		}
 	}
 
 	/**
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
-	public void delete(DeletionScheme deletionScheme) {
+	public boolean delete(DeletionScheme deletionScheme) {
 		if (isDeleted()) {
-			return;
+			return false;
 		}
 		VirtualModelInstance container = getVirtualModelInstance();
 		if (container != null) {
 			container.removeFromEditionPatternInstancesList(this);
 		}
 		// logger.warning("EditionPatternInstance deletion !");
-		deleted = true;
+		// deleted = true;
 		if (getEditionPattern().getPrimaryRepresentationRole() != null) {
 			Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
 			if (primaryPatternActor instanceof FlexoModelObject) {
@@ -409,6 +430,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						+ primaryPatternActor);
 			}
 		}
+		return super.delete();
 	}
 
 	/**
@@ -460,15 +482,23 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
 	public List<FlexoModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
-		return null;
+		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+		for(EditionAction editionAction : deletionScheme.getActions()){
+			if(editionAction instanceof DeleteAction){
+				DeleteAction deleteAction = (DeleteAction)editionAction;
+
+				returned.add((FlexoModelObject) getPatternActor(deleteAction.getPatternRole()));
+			}
+		}
+		return returned;
 	}
 
-	@Override
+	/*@Override
 	public String getDeletedProperty() {
 		// when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
 		// property of that notification
 		return DELETED_PROPERTY;
-	}
+	}*/
 
 	@Override
 	public String getDisplayableName() {
@@ -530,7 +560,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		if (hasValidRenderer()) {
 			try {
 				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
-				return getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
+				Object obj = getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
 					@Override
 					public Object getValue(BindingVariable variable) {
 						if (variable.getVariableName().equals("instance")) {
@@ -540,6 +570,14 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 						return null;
 					}
 				});
+				if (obj instanceof String) {
+					return (String) obj;
+				} else {
+					if (obj != null) {
+						return obj.toString();
+					} else
+						return EMPTY_STRING;
+				}
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -556,7 +594,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		sb.append(getEditionPattern().getName() + ": ");
 		boolean isFirst = true;
 		for (ActorReference ref : actors.values()) {
-			sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + ref.retrieveObject().toString());
+			if (ref.retrieveObject() != null) {
+				sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + ref.retrieveObject().toString());
+			} else {
+				sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + "No object found");
+			}
 			isFirst = false;
 		}
 		return sb.toString();

@@ -14536,10 +14536,18 @@ forward to the next nodes.</description>
                   </RelatedToDocItem>
                 </InheritanceChildDocItem>
                 <InheritanceChildDocItem idref="WKFProjectModuleView" />
+                <InheritanceChildDocItem id="DefaultModuleView" identifier="DefaultModuleView" embedded="false" hidden="true">
+                  <description>No description</description>
+                  <RelatedToDocItem id="server_client_perspective" identifier="server_client_perspective" embedded="false" hidden="true">
+                    <description>No description</description>
+                    <RelatedToDocItem idref="DefaultModuleView" />
+                  </RelatedToDocItem>
+                </InheritanceChildDocItem>
                 <EmbeddingChildDocItem idref="process_edition" />
                 <EmbeddingChildDocItem idref="documentation" />
                 <EmbeddingChildDocItem idref="role_editor" />
                 <EmbeddingChildDocItem idref="swimming_lanes" />
+                <EmbeddingChildDocItem idref="server_client_perspective" />
                 <title key="ENGLISH">Workflow Panel Main</title>
                 <DocItemVersion id="wkf-main-pane_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
                 <DocItemAction id="SUBMITTED_ON_wkf-main-pane_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:26:39 11/06/2007" actionType="SUBMITTED">
@@ -15640,21 +15648,16 @@ forward to the next nodes.</description>
         <DocItem idref="oe" />
       </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsg" primaryDocItemId="sg" identifier="sg">
-        <description />
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-control-panel" primaryDocItemId="sg-control-panel" identifier="sg-control-panel">
-          <description />
           <DocItem idref="sg-control-panel" />
         </DocItemFolder>
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-left-view" primaryDocItemId="sg-left-view" identifier="sg-left-view">
-          <description />
           <DocItem idref="sg-left-view" />
         </DocItemFolder>
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-main-pane" primaryDocItemId="sg-main-pane" identifier="sg-main-pane">
-          <description />
           <DocItem idref="sg-main-pane" />
         </DocItemFolder>
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-right-view" primaryDocItemId="sg-right-view" identifier="sg-right-view">
-          <description />
           <DocItem idref="sg-right-view" />
         </DocItemFolder>
         <DocItem idref="sg" />
@@ -15788,6 +15791,14 @@ forward to the next nodes.</description>
               <DocItem idref="RoleEditorView" />
             </DocItemFolder>
             <DocItem idref="role_editor" />
+          </DocItemFolder>
+          <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneserver_client_perspective" primaryDocItemId="server_client_perspective" identifier="server_client_perspective">
+            <description>Documentation on that perspective</description>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneserver_client_perspectiveDefaultModuleView" primaryDocItemId="DefaultModuleView" identifier="DefaultModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="DefaultModuleView" />
+            </DocItemFolder>
+            <DocItem idref="server_client_perspective" />
           </DocItemFolder>
           <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneswimming_lanes" primaryDocItemId="swimming_lanes" identifier="swimming_lanes">
             <description>Documentation on that perspective</description>

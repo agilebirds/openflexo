@@ -214,6 +214,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 		}
 		if (getViewPointLibrary().getViewPointResource(getNewViewPointURI()) != null) {
 			errorMessage = "already_existing_viewpoint_uri";
+			return false;
 		}
 
 		return true;

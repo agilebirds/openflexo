@@ -29,7 +29,7 @@ import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.toolbox.StringUtils;
 
@@ -142,7 +142,7 @@ public class URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, 
 			TypeAwareModelSlot modelSlot = getModelSlot();
 
 			return modelSlot.generateUniqueURIName(
-					(TypeSafeModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
+					(TypeAwareModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
 
 			/*baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;

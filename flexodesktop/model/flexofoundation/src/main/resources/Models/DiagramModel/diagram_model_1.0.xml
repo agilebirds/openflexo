@@ -38,11 +38,10 @@
 
 	<entity name="org.openflexo.foundation.view.ModelSlotInstance" abstract="yes">
 		<description>Binds a model slot to a model within a given view </description>
-		<property name="view" xmlTag="view" attribute="YES" />
 		<property name="modelSlotName" xmlTag="modelSlotName" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.TypeSafeModelSlotInstance" xmlTag="TypeSafeModelSlotInstance">
+	<entity name="org.openflexo.foundation.view.TypeAwareModelSlotInstance" xmlTag="TypeAwareModelSlotInstance">
 		<property name="modelURI" xmlTag="modelURI" attribute="YES" />
 	</entity>
 

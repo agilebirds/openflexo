@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.PredefinedSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector" opaque="false">
-  <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab" opaque="false">
-      <Label label="contents" localize="true" name="DocumentedDiagramLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <DropDown format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.PredefinedSection$PredefinedSectionType" data="data.type" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.toc.PredefinedSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" opaque="false" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="contents" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;location=left)" name="DocumentedDiagramLabel" localize="true" />
+      <DropDown index="13" data="data.type" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;location=right)" format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.PredefinedSection$PredefinedSectionType" autoSelectFirstRow="false" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -67,4 +67,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Pre-defined section" />
 </Panel>
-

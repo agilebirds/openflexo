@@ -226,7 +226,7 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		// getServiceOperation().setInputMessageBindings(null);
 		// getServiceOperation().setOutputMessageBindings()
@@ -245,6 +245,7 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 		setChanged();
 		// notifyObservers(new ServiceOperationRemoved(this));
 		deleteObservers();
+		return true;
 
 	}
 

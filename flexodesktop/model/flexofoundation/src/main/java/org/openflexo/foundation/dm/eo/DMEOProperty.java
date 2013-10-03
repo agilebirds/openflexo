@@ -105,11 +105,11 @@ public abstract class DMEOProperty extends DMProperty implements DMEOObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getDMEOEntity() != null) {
 			getDMEOEntity().removePropertyWithKey(getName());
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	public DMEORepository getDMEORepository() {

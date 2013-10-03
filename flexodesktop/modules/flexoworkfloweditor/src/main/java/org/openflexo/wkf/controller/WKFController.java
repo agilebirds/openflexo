@@ -65,6 +65,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
+import org.openflexo.rest.client.ServerRestClientPerspective;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
@@ -125,6 +126,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
 	public RolePerspective ROLE_EDITOR_PERSPECTIVE;
 	public DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
+	public ServerRestClientPerspective SERVER_PERSPECTIVE;
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
@@ -178,6 +180,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
+		addToPerspectives(SERVER_PERSPECTIVE = new ServerRestClientPerspective());
 	}
 
 	@Override
@@ -219,7 +222,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
-		getProcessBrowser().setRootObject(getProject());
 		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
 		SWIMMING_LANE_PERSPECTIVE.setProject(getProject());
@@ -347,13 +349,9 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public void setCurrentFlexoProcess(FlexoProcess process) {
 		if (getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE || getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE
 				|| getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE) {
-			if (process.isImported()) {
-				setCurrentImportedProcess(process);
-			} else {
 				setCurrentEditedObjectAsModuleView(process);
 			}
 		}
-	}
 
 	@Override
 	public void setCurrentEditedObjectAsModuleView(FlexoObject object) {
@@ -388,7 +386,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 				return;
 			}
 		}
-		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
+		if (object instanceof FlexoProcess) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
@@ -397,11 +395,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (object instanceof RoleList || object instanceof FlexoProcess) {
 			super.setCurrentEditedObjectAsModuleView(object, perspective);
 		}
-	}
-
-	public void setCurrentImportedProcess(FlexoProcess subProcess) {
-		// TODO Auto-generated method stub
-		System.out.println("WKFController.setCurrentImportedProcess : please implement something here !");
 	}
 
 	public FlexoProcess getCurrentFlexoProcess() {
@@ -604,6 +597,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			return FlexoLocalization.localizedForKeyWithParams("roles");
 		} else if (object instanceof FlexoWorkflow) {
 			return ((FlexoWorkflow) object).getProject().getDisplayableName();
+		} else if (object instanceof FlexoProject) {
+			return ((FlexoProject) object).getDisplayName();
 		}
 		return null;
 	}

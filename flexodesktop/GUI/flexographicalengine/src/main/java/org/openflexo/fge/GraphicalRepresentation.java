@@ -68,6 +68,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	@PropertyIdentifier(type = Integer.class)
 	public static final String LAYER_KEY = "layer";
 	// public static final String HAS_TEXT = "hasText";
+	@PropertyIdentifier(type = Double.class)
+	public static final String TRANSPARENCY_KEY = "transparency";
 	@PropertyIdentifier(type = String.class)
 	public static final String TEXT_KEY = "text";
 	@PropertyIdentifier(type = Boolean.class)
@@ -372,6 +374,13 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	@Setter(value = IS_VISIBLE_KEY)
 	public void setIsVisible(boolean isVisible);
+
+	@Getter(value = TRANSPARENCY_KEY, defaultValue = "1.0")
+	@XMLAttribute
+	public Double getTransparency();
+
+	@Setter(value = TRANSPARENCY_KEY)
+	public void setTranparency(Double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
 	public Vector<MouseClickControl> getMouseClickControls();

@@ -75,9 +75,9 @@ public abstract class TechnologyModuleImplementation extends TechnologyModelObje
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getImplementationModel().removeFromTechnologyModules(this);
-		super.delete();
+		return super.delete();
 	}
 
 	/**

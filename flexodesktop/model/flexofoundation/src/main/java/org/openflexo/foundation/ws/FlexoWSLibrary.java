@@ -477,13 +477,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData<F
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// euh, delete the entire library??
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete : FlexoWSLibrary");
 		}
 		getInternalWSFolder().delete();
 		getExternalWSFolder().delete();
+		return true;
 	}
 
 	public boolean isDeclaredAsWS(FlexoProcess aProcess) {

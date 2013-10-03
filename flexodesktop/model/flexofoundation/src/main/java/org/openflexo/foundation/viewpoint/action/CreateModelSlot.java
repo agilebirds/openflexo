@@ -23,6 +23,7 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -30,13 +31,16 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.VirtualModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
+import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -90,6 +94,17 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add model slot");
+
+		if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			VirtualModelTechnologyAdapter virtualModelTechnologyAdapter = (VirtualModelTechnologyAdapter) technologyAdapter;
+			newModelSlot = virtualModelTechnologyAdapter.makeModelSlot(VirtualModelModelSlot.class, getFocusedObject());
+			newModelSlot.setName(modelSlotName);
+			((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+			newModelSlot.setIsRequired(required);
+			newModelSlot.setIsReadOnly(readOnly);
+			newModelSlot.setDescription(description);
+			getFocusedObject().addToModelSlots(newModelSlot);
+		}
 
 		if (technologyAdapter != null && getModelSlotClass() != null) {
 			// if (getFocusedObject() instanceof VirtualModel) {
@@ -145,16 +160,27 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 			}*/else if (technologyAdapter == null) {
 			validityMessage = NO_TECHNOLOGY_ADAPTER;
 			return false;
-		} else if (getModelSlotClass() == null) {
-			validityMessage = NO_MODEL_SLOT_TYPE;
-			return false;
-		} else if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
-			validityMessage = NO_META_MODEL;
-			return true;
-		} else {
-			validityMessage = "";
-			return true;
+		} else if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			if (vmRes == null) {
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
+		} else if (!(technologyAdapter instanceof VirtualModelTechnologyAdapter)) {
+			if (getModelSlotClass() == null) {
+				validityMessage = NO_MODEL_SLOT_TYPE;
+				return false;
+			}
+			if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+				validityMessage = NO_META_MODEL;
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public Class<? extends ModelSlot<?>> getModelSlotClass() {
@@ -170,6 +196,32 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 
 	public boolean isTypeAwareModelSlot() {
 		return getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass());
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoModel<?, ?>> getModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoModel<?, ?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[0]);
+		}
+		return null;
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoMetaModel<?>> getMetaModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoMetaModel<?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[1]);
+		}
+		return null;
 	}
 
 }

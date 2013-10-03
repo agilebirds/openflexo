@@ -111,7 +111,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		ViewPoint viewpoint = new ViewPoint();
 		vpRes.setResourceData(viewpoint);
 		viewpoint.setResource(vpRes);
-
 		// And register it to the library
 		library.registerViewPoint(vpRes);
 
@@ -271,7 +270,47 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	/**
-	 * Return all {@link EditionPattern} defined in this {@link ViewPoint}
+	 * Return all VirtualModel of a given class.<br>
+	 * If onlyFinalInstances is set to true, only instances of supplied class (and not specialized classes) are retrieved
+	 * 
+	 * @return
+	 */
+	public <VM extends VirtualModel<?>> List<VM> getVirtualModels(Class<VM> virtualModelClass, boolean onlyFinalInstances) {
+		List<VM> returned = new ArrayList<VM>();
+		for (VirtualModel<?> vm : getVirtualModels()) {
+			if (onlyFinalInstances) {
+				if (virtualModelClass.equals(vm.getClass())) {
+					returned.add((VM) vm);
+				}
+			} else {
+				if (virtualModelClass.isAssignableFrom(vm.getClass())) {
+					returned.add((VM) vm);
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all "plain" {@link VirtualModel} defined in this {@link ViewPoint} (does NOT return subclasses of {@link VirtualModel})
+	 * 
+	 * @return
+	 */
+	public List<VirtualModel> getPlainVirtualModels() {
+		return getVirtualModels(VirtualModel.class, true);
+	}
+
+	/**
+	 * Return all {@link DiagramSpecification} defined in this {@link ViewPoint}
+	 * 
+	 * @return
+	 */
+	public List<DiagramSpecification> getDiagramSpecifications() {
+		return getVirtualModels(DiagramSpecification.class, true);
+	}
+
+	/**
+	 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
 	 * 
 	 * @return
 	 */
@@ -503,19 +542,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return modelSlots;
 	}*/
 
-	/*@Deprecated
-	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
-		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
-		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot instanceof TypeSafeModelSlot) {
-				if (((TypeSafeModelSlot) modelSlot).getMetaModelResource() != null) {
-					allMetaModels.add(((TypeSafeModelSlot) modelSlot).getMetaModelResource());
-				}
-			}
-		}
-		return allMetaModels;
-	}*/
-
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
@@ -585,6 +611,25 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		} catch (SaveResourceException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean delete() {
+
+		logger.info("Deleting ViewPoint " + this);
+
+		// Unregister the viewpoint resource from the viewpoint library
+		if (getResource() != null && getViewPointLibrary() != null) {
+			getViewPointLibrary().unregisterViewPoint(getResource());
+		}
+
+		// Delete viewpoint
+		super.delete();
+
+		// Delete observers
+		deleteObservers();
+
+		return true;
 	}
 
 	/**

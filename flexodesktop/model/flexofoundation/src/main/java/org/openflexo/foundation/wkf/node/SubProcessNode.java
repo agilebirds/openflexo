@@ -102,7 +102,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	 * @see org.openflexo.foundation.wkf.node.AbstractActivityNode#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		super.delete();
 		if (getServiceInterface() != null) {
 			setServiceInterface(null);
@@ -113,6 +113,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (_portMapRegistery != null) {
 			_portMapRegistery.delete();
 		}
+		return true;
 	}
 
 	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess) {
@@ -124,9 +125,6 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess, FlexoProcess parentProcess) {
-		if (parentProcess != null && parentProcess.isImported()) {
-			return false;
-		}
 		if (aProcess.isTopLevelProcess()) {
 			return true;
 		}
@@ -146,9 +144,6 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	public boolean isAcceptableAsSubProcess(FlexoProcessNode aProcess, FlexoProcessNode parentProcess) {
-		if (parentProcess != null && parentProcess.isImported()) {
-			return false;
-		}
 		if (aProcess.isTopLevelProcess()) {
 			return true;
 		}
@@ -395,7 +390,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	public PortMapRegistery getPortMapRegistery() {
-		if (_portMapRegistery == null && getSubProcess() != null && !getSubProcess().isImported()) {
+		if (_portMapRegistery == null && getSubProcess() != null) {
 			updatePortMapRegistery();
 		}
 		return _portMapRegistery;
@@ -432,7 +427,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updatePortMapRegistery()");
 		}
-		if (getSubProcess() != null && !getSubProcess().isImported()) {
+		if (getSubProcess() != null) {
 			if (_portMapRegistery == null) {
 				// constuctor of PortMapRegistery must check the serviceInterface
 				setPortMapRegistery(new PortMapRegistery(this));

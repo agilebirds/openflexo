@@ -58,6 +58,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
@@ -489,7 +490,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (ts.getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));
 		}
-		Font font = ts.getFont().deriveFont(at);
+		Font font = ts.getFont();
+		if (font == null) {
+			font = FGEConstants.DEFAULT_TEXT_FONT;
+		}
+		font = font.deriveFont(at);
 		textComponent.setFont(font);
 		SimpleAttributeSet set = new SimpleAttributeSet();
 		if (node.getGraphicalRepresentation().getParagraphAlignment() == ParagraphAlignment.CENTER) {
@@ -593,6 +598,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		getPaintManager().invalidate(node);
 		getPaintManager().addToTemporaryObjects(node);
 		repaint();
+		textComponent.selectAll();
+		textComponent.requestFocusInWindow();
 	}
 
 	public void stopEdition() {
@@ -784,6 +791,14 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			setEditable(false);
 			setAutoscrolls(false);
 			setFocusable(true);
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			if (getText().length() == 0) {
+				return new Dimension(30, getFont().getSize());
+			}
+			return super.getPreferredSize();
 		}
 
 		@Override

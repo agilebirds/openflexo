@@ -51,12 +51,12 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 
 		@Override
 		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return object != null && object.getClass().equals(EditionPattern.class);
 		}
 
 		@Override
 		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
-			return object != null;
+			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};

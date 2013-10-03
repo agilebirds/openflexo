@@ -11,7 +11,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -186,13 +186,13 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
+			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
 		return ((OWLObject) o).getURI();
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
+			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}
@@ -218,6 +218,19 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 			String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology> metaModelResource) {
 		return getTechnologyAdapter().createNewOntology((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(OWLOntologyResource) metaModelResource);
+	}
+
+	/**
+	 * OWL ontologies conformity is not strict (an ontology might import many other ontologies)
+	 */
+	@Override
+	public boolean isStrictMetaModelling() {
+		return false;
+	}
+
+	@Override
+	public String getModelSlotDescription() {
+		return "Ontology importing " + getMetaModelURI();
 	}
 
 }

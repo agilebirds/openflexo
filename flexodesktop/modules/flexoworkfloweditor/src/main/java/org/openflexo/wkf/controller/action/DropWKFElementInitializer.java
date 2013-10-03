@@ -142,25 +142,33 @@ public class DropWKFElementInitializer extends ActionInitializer {
 						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
 								|| spNode instanceof WSCallSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllDeletePortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						if (spNode instanceof WSCallSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						if (spNode instanceof MultipleInstanceSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						spNode.getPortMapRegistery().resetLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 						spNode.getPortMapRegistery().resetLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
 								|| spNode instanceof MultipleInstanceSubProcessNode) {
-							ShowHidePortmapRegistery.actionType.makeNewAction(spNode.getPortMapRegistery(), null, action.getEditor())
-									.doAction();
+							ShowHidePortmapRegistery hideAction = ShowHidePortmapRegistery.actionType.makeNewAction(
+									spNode.getPortMapRegistery(), null, action.getEditor());
+							hideAction.setVisibility(Boolean.FALSE);
+							hideAction.doAction();
 						}
 					}
 				}

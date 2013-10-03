@@ -95,7 +95,7 @@ public class FIBEditableTabView extends FIBTabView<FIBTab> implements FIBEditabl
 		if (!getComponent().getProtectContent()) {
 
 			// FlowLayout
-			if (getComponent().getLayout() == Layout.flow) {
+			if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.buttons) {
 				final FlowLayoutConstraints beginPlaceHolderConstraints = new FlowLayoutConstraints();
 				PlaceHolder beginPlaceHolder = new PlaceHolder(this, "<begin>") {
 					@Override

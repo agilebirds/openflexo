@@ -44,9 +44,6 @@ import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.ValidateProject;
-import org.openflexo.foundation.imported.action.RefreshImportedProcessAction;
-import org.openflexo.foundation.imported.action.RefreshImportedRoleAction;
-import org.openflexo.foundation.imported.action.UploadPrjAction;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -54,15 +51,14 @@ import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.print.PrintManagingController;
+import org.openflexo.rest.action.UploadProjectAction;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
-import org.openflexo.ws.client.PPMWebService.PPMWebServiceClient;
 
 /**
  * 'File' menu
@@ -199,8 +195,12 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent arg0) {
 			File projectDirectory = NewProjectComponent.getProjectDirectory();
 			if (projectDirectory != null) {
-				getController().getProjectLoader().newProject(projectDirectory);
-
+				try {
+					getController().getProjectLoader().newProject(projectDirectory);
+				} catch (ProjectInitializerException e) {
+					e.printStackTrace();
+					FlexoController.notify(e.getMessage());
+				}
 			}
 		}
 	}
@@ -383,12 +383,13 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			/*
 			boolean isOperationConfirmed = saveForServerPreprocessing();
 			if (!isOperationConfirmed) {
 				return;
 			}
-
-			UploadPrjAction refresh = UploadPrjAction.actionType.makeNewAction(getController().getProject(), null, getController()
+			 */
+			UploadProjectAction refresh = UploadProjectAction.actionType.makeNewAction(getController().getProject(), null, getController()
 					.getEditor());
 			refresh.doAction();
 		}
@@ -410,51 +411,6 @@ public class FileMenu extends FlexoMenu {
 
 	private boolean saveForServerPreprocessing() {
 		FlexoProject project = _controller.getProject();
-		if (project.getImportedProcessLibrary() != null && project.getImportedProcessLibrary().size() > 0
-				|| project.getImportedRoleList() != null && project.getImportedRoleList().size() > 0) {
-			int i = FlexoController.confirmYesNoCancel(FlexoLocalization
-					.localizedForKey("would_you_like_to_refresh_imported_objects_first") + "?");
-			switch (i) {
-			case JOptionPane.YES_OPTION:
-				PPMWebServiceClient client = getController().getWSClient();
-				if (client == null) {
-					break;
-				}
-				boolean goOn = true;
-				if (goOn && project.getImportedProcessLibrary() != null && project.getImportedProcessLibrary().size() > 0) {
-					RefreshImportedProcessAction refresh = RefreshImportedProcessAction.actionType.makeNewAction(
-							project.getImportedProcessLibrary(), null, getController().getEditor());
-					refresh.setWebService(client.getWebService_PortType());
-					refresh.setLogin(client.getLogin());
-					refresh.setMd5Password(client.getEncriptedPWD());
-					refresh.setAutomaticAction(true);
-					refresh.doAction();
-					goOn = refresh.hasActionExecutionSucceeded();
-				}
-				if (goOn && project.getImportedRoleList() != null && project.getImportedRoleList().size() > 0) {
-					RefreshImportedRoleAction refresh = RefreshImportedRoleAction.actionType.makeNewAction(project.getImportedRoleList(),
-							null, getController().getEditor());
-					refresh.setWebService(client.getWebService_PortType());
-					refresh.setLogin(client.getLogin());
-					refresh.setMd5Password(client.getEncriptedPWD());
-					refresh.setAutomaticAction(true);
-					refresh.doAction();
-					goOn = refresh.hasActionExecutionSucceeded();
-				}
-				if (goOn) {
-					ValidationReport report = project.getImportedObjectValidationModel().validate(project.getWorkflow());
-					if (report.getErrorNb() != 0 || report.getWarningNb() != 0) {
-						getController().getConsistencyCheckWindow(true).setValidationReport(report);
-						getController().getConsistencyCheckWindow(true).setModal(true);
-						getController().getConsistencyCheckWindow(true).setVisible(true);
-					}
-				}
-			case JOptionPane.NO_OPTION:
-				break;
-			default:
-				return false;
-			}
-		}
 
 		int i = FlexoController.confirmYesNoCancel(FlexoLocalization
 				.localizedForKey("would_you_like_to_check_your_project_consistency_first") + "?");
@@ -464,16 +420,16 @@ public class FileMenu extends FlexoMenu {
 			validate.doAction();
 			if (validate.getErrorsNb() > 0) {
 				StringBuilder sb = new StringBuilder();
-				if (validate.getIeValidationReport().getErrorNb() > 0) {
+				if (validate.getIeValidationReport() != null & validate.getIeValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_components") + "\n");
 				}
-				if (validate.getWkfValidationReport().getErrorNb() > 0) {
+				if (validate.getWkfValidationReport() != null && validate.getWkfValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_processes") + "\n");
 				}
-				if (validate.getDmValidationReport().getErrorNb() > 0) {
+				if (validate.getDmValidationReport() != null && validate.getDmValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_your_data_model") + "\n");
 				}
-				if (validate.getDkvValidationReport().getErrorNb() > 0) {
+				if (validate.getDkvValidationReport() != null && validate.getDkvValidationReport().getErrorNb() > 0) {
 					sb.append(FlexoLocalization.localizedForKey("there_are_errors_in_the_dkv") + "\n");
 				}
 				sb.append(FlexoLocalization.localizedForKey("would_you_like_to_continue_anyway") + "?");

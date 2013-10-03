@@ -25,11 +25,15 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
+import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -41,6 +45,11 @@ import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.hp.hpl.jena.graph.GraphMaker;
 import com.hp.hpl.jena.graph.impl.SimpleGraphMaker;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -61,7 +70,7 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author sylvain
  * 
  */
-public class OWLOntologyLibrary extends TechnologyContextManager implements ModelMaker {
+public class OWLOntologyLibrary extends TechnologyContextManager implements ModelMaker, RemovalListener<OWLOntology, Set<OWLOntology>> {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
 
@@ -74,7 +83,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 
 	private SimpleGraphMaker graphMaker;
 
-	private Map<String, FlexoResource<OWLOntology>> ontologies;
+	private Map<String, TechnologyAdapterResource<OWLOntology>> ontologies;
 	private final Map<String, OWLDataType> dataTypes;
 
 	private OntologyObjectConverter ontologyObjectConverter;
@@ -97,7 +106,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
 
-		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
+		ontologies = new HashMap<String, TechnologyAdapterResource<OWLOntology>>();
 		dataTypes = new HashMap<String, OWLDataType>();
 
 		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
@@ -169,6 +178,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 
 	public void registerOntology(OWLOntologyResource ontologyResource) {
 		ontologies.put(ontologyResource.getURI(), ontologyResource);
+		clearAllImportedOntologiesCache();
 	}
 
 	/**
@@ -385,6 +395,40 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 		if (resource instanceof OWLOntologyResource) {
 			registerOntology((OWLOntologyResource) resource);
 		}
+	}
+
+	@Override
+	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+		return ontologies.get(uri);
+	}
+
+	private void clearAllImportedOntologiesCache() {
+		// TODO: this might be optimized
+		allImportedOntologiesMapCache.invalidateAll();
+	}
+
+	protected Set<OWLOntology> getAllImportedOntology(OWLOntology ontology) {
+		try {
+			return allImportedOntologiesMapCache.get(ontology);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * This cache stores all imported ontologies of a related ontology (transitiviy)
+	 */
+	private LoadingCache<OWLOntology, Set<OWLOntology>> allImportedOntologiesMapCache = CacheBuilder.newBuilder().maximumSize(10000)
+			.expireAfterWrite(10, TimeUnit.MINUTES).removalListener(this).build(new CacheLoader<OWLOntology, Set<OWLOntology>>() {
+				@Override
+				public Set<OWLOntology> load(OWLOntology ontology) {
+					return OntologyUtils.getAllImportedOntologies(ontology);
+				}
+			});
+
+	@Override
+	public void onRemoval(RemovalNotification<OWLOntology, Set<OWLOntology>> notification) {
 	}
 
 }

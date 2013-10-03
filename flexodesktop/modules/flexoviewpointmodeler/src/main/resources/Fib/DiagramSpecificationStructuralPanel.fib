@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" borderTitle="Panel" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="border(location=center)" visible="" name="VirtualModelStructuralPanel">
+<Panel opaque="false" layout="border" borderTitle="Panel" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="border(location=center)" visible="" name="VirtualModelStructuralPanel">
   <SplitPanel data="" constraints="border(location=center)" visible="">
     <ColSplit name="ColSplit" weight="0.0">
       <Leaf name="structural" weight="0.0" />

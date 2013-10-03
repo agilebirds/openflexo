@@ -45,6 +45,7 @@ import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -497,6 +498,16 @@ public class FIBInspector extends FIBPanel {
 						new DataBinding("data.project"), true));
 				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 				return actionSelector;
+			case Screen:
+				FIBCustom componentSelector = new FIBCustom();
+				componentSelector.setComponentClass(org.openflexo.components.widget.FIBComponentSelector.class);
+				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+
+				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.type"),
+						new DataBinding<String>("\"" + OperationComponentDefinition.class.getName() + "\""), true));
+				newTab.addToSubComponents(componentSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
+				return componentSelector;
 
 			default:
 				break;
@@ -543,6 +554,7 @@ public class FIBInspector extends FIBPanel {
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setLayout(Layout.twocols);
+		newTab.setUseScrollBar(true);
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));

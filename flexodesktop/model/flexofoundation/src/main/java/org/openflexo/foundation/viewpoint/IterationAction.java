@@ -34,8 +34,10 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.toolbox.StringUtils;
 
+@FIBPanel("Fib/IterationActionPanel.fib")
 public class IterationAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(IterationAction.class.getPackage().getName());
@@ -60,16 +62,6 @@ public class IterationAction extends ControlStructureAction {
 		out.append("}", context);
 		return out.toString();
 	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.Iteration;
-	}
-
-	/*@Override
-	public List<PatternRole> getAvailablePatternRoles() {
-		return getEditionPattern().getPatternRoles();
-	}*/
 
 	private DataBinding<List<?>> iteration;
 

@@ -44,7 +44,7 @@ public class ConfigureModelInstanceDialogEDITOR extends ProjectDialogEDITOR {
 
 	@Override
 	public File getFIBFile() {
-		return VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+		return VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

@@ -34,14 +34,13 @@ public class DeleteDiagramPalette extends FlexoAction<DeleteDiagramPalette, Diag
 	private static final Logger logger = Logger.getLogger(DeleteDiagramPalette.class.getPackage().getName());
 
 	public static FlexoActionType<DeleteDiagramPalette, DiagramPalette, ViewPointObject> actionType = new FlexoActionType<DeleteDiagramPalette, DiagramPalette, ViewPointObject>(
-			"delete_calc_palette", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+			"delete_diagram_palette", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteDiagramPalette makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection,
-				FlexoEditor editor) {
+		public DeleteDiagramPalette makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new DeleteDiagramPalette(focusedObject, globalSelection, editor);
 		}
 
@@ -67,9 +66,10 @@ public class DeleteDiagramPalette extends FlexoAction<DeleteDiagramPalette, Diag
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Delete calc palette");
-
-		getFocusedObject().delete();
+		logger.info("Delete diagram palette");
+		if (getFocusedObject().getResource() != null) {
+			getFocusedObject().getResource().delete();
+		}
 	}
 
 }

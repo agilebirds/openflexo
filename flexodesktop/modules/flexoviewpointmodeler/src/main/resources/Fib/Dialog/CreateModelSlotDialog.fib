@@ -12,19 +12,30 @@
   </TextField>
   <Label label="technology_adapter" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
   <DropDown index="4" data="data.technologyAdapter" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="TechnologyAdapterDD" format="object.name" icon="controller.getTechnologyAdapterController(object).technologyIcon" localize="true" list="data.focusedObject.viewPointLibrary.serviceManager.technologyAdapterService.technologyAdapters" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" autoSelectFirstRow="true" />
-  <Label label="model_slot_type" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-  <DropDown index="4" data="data.modelSlotClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="modelSlotTypeDD" format="object.simpleName" localize="true" list="data.technologyAdapter.availableModelSlotTypes" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
+  <Label label="model_slot_type" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;) &amp; (TechnologyAdapterDD.data.class.simpleName != &quot;DiagramTechnologyAdapter&quot;))" localize="true" />
+  <DropDown index="4" data="data.modelSlotClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName != &quot;VirtualModelTechnologyAdapter&quot;) &amp; (TechnologyAdapterDD.data.class.simpleName != &quot;DiagramTechnologyAdapter&quot;))" name="modelSlotTypeDD" format="object.simpleName" localize="true" list="data.technologyAdapter.availableModelSlotTypes" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
     <Dependancy componentName="TechnologyAdapterDD" />
   </DropDown>
-  <Label label="virtual_model" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)" name="VirtualModelLabel" localize="true" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" localize="true" manageDynamicModel="true" name="VirtualModelSelector" index="4" data="data.vmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)">
+  <Label label="metamodel" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot" localize="true">
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Label>
+  <Custom componentClassName="org.openflexo.components.widget.FIBResourceSelector" localize="true" manageDynamicModel="true" name="MMSelector" index="4" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot">
+    <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
+    <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
+    <Assignment variable="component.resourceDataClass" value="data.metaModelClass" />
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Custom>
+  <Label label="virtual_model" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;) | (TechnologyAdapterDD.data.class.simpleName = &quot;DiagramTechnologyAdapter&quot;))" name="VirtualModelLabel" localize="true" />
+  <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" localize="true" manageDynamicModel="true" name="VirtualModelSelector" index="4" data="data.vmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;) | (TechnologyAdapterDD.data.class.simpleName = &quot;DiagramTechnologyAdapter&quot;))">
     <Assignment variable="component.viewPoint" value="data.focusedObject.viewPoint.resource" />
   </Custom>
-  <Label label="metamodel" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot" localize="true">
+  <Label label="metamodel" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false" localize="true">
     <Dependancy componentName="modelSlotTypeDD" />
     <Dependancy componentName="TechnologyAdapterDD" />
   </Label>
-  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="6" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot">
+  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="6" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false">
     <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
     <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
     <Dependancy componentName="TechnologyAdapterDD" />
@@ -48,6 +59,7 @@
       <Dependancy componentName="ModelSlotName" />
       <Dependancy componentName="TechnologyAdapterDD" />
       <Dependancy componentName="MetaModelSelector" />
+      <Dependancy componentName="MMSelector" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
@@ -62,9 +74,9 @@
     <Localized key="validate" lang="Dutch">Validate</Localized>
     <Localized key="cancel" lang="Dutch">Cancel</Localized>
     <Localized key="shema_name" lang="English">Shema name</Localized>
-    <Localized key="shema_name" lang="French">Nom du schéma</Localized>
+    <Localized key="shema_name" lang="French">Nom du schÃ©ma</Localized>
     <Localized key="creates_model_slot" lang="English">Creates Model Slot</Localized>
-    <Localized key="creates_model_slot" lang="French">Créer un ModelSlot</Localized>
+    <Localized key="creates_model_slot" lang="French">CrÃ©er un ModelSlot</Localized>
     <Localized key="creates_model_slot" lang="Dutch">creates_model_slot</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
@@ -85,7 +97,7 @@
     <Localized key="XSD/XML technology adapter" lang="French">XSD/XML technology adapter</Localized>
     <Localized key="XSD/XML technology adapter" lang="Dutch">XSD/XML technology adapter</Localized>
     <Localized key="metamodel" lang="English">Metamodel</Localized>
-    <Localized key="metamodel" lang="French">Métamodèle</Localized>
+    <Localized key="metamodel" lang="French">MÃ©tamodÃ¨le</Localized>
     <Localized key="metamodel" lang="Dutch">metamodel</Localized>
     <Localized key="label" lang="English">Label</Localized>
     <Localized key="label" lang="French">Label</Localized>
@@ -97,7 +109,7 @@
     <Localized key="read_only" lang="French">Lecture seule</Localized>
     <Localized key="read_only" lang="Dutch">Read only</Localized>
     <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="English">This name is already used. Please choose an other one</Localized>
-    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="French">Ce nom est déjà utilisé</Localized>
+    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="French">Ce nom est dÃ©jÃ  utilisÃ©</Localized>
     <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="Dutch">this_name_is_already_used_please_choose_an_other_one</Localized>
     <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="English">ModelSlots must have a non-empty and unique name</Localized>
     <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="French">Le ModelSlot doit avoir un nom unique et non nul</Localized>
@@ -106,7 +118,7 @@
     <Localized key="please_choose_a_technology_adapter" lang="French">Veuillez choisir un connecteur technologique</Localized>
     <Localized key="please_choose_a_technology_adapter" lang="Dutch">please_choose_a_technology_adapter</Localized>
     <Localized key="please_choose_a_valid_metamodel" lang="English">Please choose a valid metamodel</Localized>
-    <Localized key="please_choose_a_valid_metamodel" lang="French">Veuillez choisir un métamodèle valide</Localized>
+    <Localized key="please_choose_a_valid_metamodel" lang="French">Veuillez choisir un mÃ©tamodÃ¨le valide</Localized>
     <Localized key="please_choose_a_valid_metamodel" lang="Dutch">please_choose_a_valid_metamodel</Localized>
     <Localized key="virtual_model" lang="English">Virtual model</Localized>
     <Localized key="virtual_model" lang="French">Virtual model</Localized>

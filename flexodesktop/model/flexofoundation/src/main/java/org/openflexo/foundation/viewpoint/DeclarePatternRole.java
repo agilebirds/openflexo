@@ -31,7 +31,9 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/DeclarePatternRolePanel.fib")
 public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
@@ -47,11 +49,6 @@ public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObje
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append(getAssignation().toString() + " = " + getObject().toString() + ";", context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.DeclarePatternRole;
 	}
 
 	@Override

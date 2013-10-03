@@ -35,11 +35,6 @@ public class TemporaryFlexoModelObject extends FlexoModelObject {
 	}
 
 	@Override
-	public boolean isDocEditable() {
-		return false;
-	}
-
-	@Override
 	public FlexoProject getProject() {
 		return null;
 	}

@@ -19,12 +19,18 @@
  */
 package org.openflexo.ve.diagram;
 
+import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
+import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.controller.MouseClickControlAction;
+import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -32,6 +38,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.ToolBox;
@@ -68,12 +75,33 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentationImpl imp
 	}
 
 	private void registerMouseClickControls() {
+		boolean doubleClickUsed = false;
 		if (getDrawable() != null) {
 			if (getDrawable().getPatternRole() != null) {
 				for (GraphicalElementAction.ActionMask mask : getDrawable().getPatternRole().getReferencedMasks()) {
 					addToMouseClickControls(new VEMouseClickControl(mask, getDrawable().getPatternRole()));
+					doubleClickUsed |= mask == ActionMask.DoubleClick;
 				}
 			}
+		}
+
+		if (!doubleClickUsed) {
+			addToMouseClickControls(new MouseClickControl("reset_layout", MouseButton.LEFT, 2, new MouseClickControlAction() {
+
+				@Override
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+						MouseEvent event) {
+					if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation<?>) {
+						getConnector().resetConnectorLayout();
+				}
+					return true;
+			}
+
+				@Override
+				public MouseClickControlActionType getActionType() {
+					return MouseClickControlActionType.CUSTOM;
+				}
+			}, false, false, false, false));
 		}
 	}
 

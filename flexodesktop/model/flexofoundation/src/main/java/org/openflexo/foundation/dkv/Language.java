@@ -125,11 +125,12 @@ public class Language extends DKVObject implements InspectableObject {
 	 * 
 	 */
 	@Override
-	public void delete() throws UnauthorizedActionException {
+	public boolean delete() throws UnauthorizedActionException {
 		if (getDkvModel().getLanguages().size() > 1) {
 			getDkvModel().removeFromLanguage(this);
 			super.delete();
 			this.deleteObservers();
+			return true;
 		} else {
 			throw new UnauthorizedActionException("There must always be at least one language in any application");
 		}

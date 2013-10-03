@@ -154,7 +154,7 @@ public class ContextualMenu {
 			public FIBModelObject performAction(FIBModelObject object) {
 				FIBReferencedComponent referencedComponent = (FIBReferencedComponent) object;
 				Object dataObject = ((FIBWidgetView) editorController.getController().viewForComponent(referencedComponent)).getValue();
-				System.out.println("dataObject=" + dataObject);
+				// We only manage statically defined component, until now
 				new FIBEmbeddedEditor(referencedComponent.getComponentFile(), dataObject);
 				return referencedComponent;
 			}
@@ -227,6 +227,11 @@ public class ContextualMenu {
 				reusableComponent.setVisible(null);
 				logger.info("Save to file " + params.reusableComponentFile.getAbsolutePath());
 				FIBLibrary.save(reusableComponent, params.reusableComponentFile);
+				// logger.info("Current directory = " + editorController.getEditor().getEditedComponentFile().getParentFile());
+				// RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(editorController.getEditor()
+				// .getEditedComponentFile().getParentFile());
+				// String relativeFilePath = relativePathFileConverter.convertToString(params.reusableComponentFile);
+				// logger.info("Relative file path: " + relativeFilePath);
 				FIBReferencedComponent widget = new FIBReferencedComponent();
 				widget.setComponentFile(params.reusableComponentFile);
 				widget.setData(params.data);

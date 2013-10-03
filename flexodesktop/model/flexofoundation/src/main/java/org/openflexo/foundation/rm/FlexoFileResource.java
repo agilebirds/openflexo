@@ -422,21 +422,24 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 	 * Delete this resource by deleting the file
 	 */
 	@Override
-	public synchronized void delete() {
-		delete(true);
+	public synchronized boolean delete() {
+		return delete(true);
 	}
 
 	/**
 	 * Delete this resource. Delete file is flag deleteFile is true.
 	 */
-	public synchronized void delete(boolean deleteFile) {
-		super.delete();
-		if (getFile() != null && getFile().exists() && deleteFile) {
-			getProject().addToFilesToDelete(getFile());
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
+	public synchronized boolean delete(boolean deleteFile) {
+		if (super.delete()) {
+			if (getFile() != null && getFile().exists() && deleteFile) {
+				getProject().addToFilesToDelete(getFile());
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
+				}
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public synchronized boolean hasWritePermission() {

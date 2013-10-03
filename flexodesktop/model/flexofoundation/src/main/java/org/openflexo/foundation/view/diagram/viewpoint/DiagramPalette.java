@@ -129,12 +129,13 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getVirtualModel() != null) {
 			getVirtualModel().removeFromPalettes(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

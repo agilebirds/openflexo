@@ -71,7 +71,6 @@ public class RoleBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.OE_SHEMA_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROCESS, BrowserFilterStatus.HIDE);
-		setFilterStatus(BrowserElementType.IMPORTED_PROCESS_LIBRARY, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 		setFilterStatus(BrowserElementType.WORKFLOW, BrowserFilterStatus.HIDE, true);
 	}

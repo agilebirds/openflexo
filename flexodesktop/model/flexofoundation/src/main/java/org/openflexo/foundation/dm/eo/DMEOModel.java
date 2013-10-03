@@ -167,8 +167,8 @@ public class DMEOModel extends DMObject implements DMEOObject {
 	}
 
 	@Override
-	public final void delete() {
-		delete(false);
+	public final boolean delete() {
+		return delete(false);
 	}
 
 	public String derivePackageName() {
@@ -176,7 +176,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 				+ ToolBox.convertStringToJavaString(getNameWithoutSuffix()).toLowerCase() + ".db";
 	}
 
-	public final void delete(boolean deleteFile) {
+	public final boolean delete(boolean deleteFile) {
 		if (getEOModel() != null) {
 			try {
 				if (logger.isLoggable(Level.INFO)) {
@@ -208,6 +208,7 @@ public class DMEOModel extends DMObject implements DMEOObject {
 		_eoModelResource = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

@@ -78,10 +78,11 @@
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBTab" xmlTag="Tab"> 
-     <property name="title" xmlTag="title" attribute="YES"/> 
+     <property name="title" xmlTag="title" attribute="YES"/>
   </entity>
    
-  <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel"> 
+  <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel">
+     <property name="restrictPreferredSizeToSelectedComponent" xmlTag="restrictPreferredSizeToSelectedComponent" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBSplitPanel" xmlTag="SplitPanel"> 
@@ -264,6 +265,7 @@
   
   <entity name="org.openflexo.fib.model.FIBReferencedComponent" xmlTag="FIBReferencedComponent"> 
     <property name="componentFile" xmlTag="componentFile" attribute="YES"/> 
+    <property name="dynamicComponentFile" xmlTag="dynamicComponentFile" attribute="YES"/> 
     <property name="assignments" xmlTag="ReferenceAssignment" type="vector"/> 
   </entity>
    
@@ -417,6 +419,7 @@
   
   <entity name="org.openflexo.fib.model.FIBButtonColumn" xmlTag="ButtonColumn"> 
       <property name="action" xmlTag="action" attribute="YES"/> 
+      <property name="enabled" xmlTag="enabled" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustomColumn" xmlTag="CustomColumn"> 

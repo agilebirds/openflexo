@@ -55,6 +55,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.AddToListAction;
 import org.openflexo.foundation.viewpoint.AssignationAction;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
@@ -79,6 +80,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.RemoveFromListAction;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -189,7 +191,7 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((PatternRole) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
+				return tac.getIconForPatternRole((Class<? extends PatternRole<?>>) object.getClass());
 			}
 		}
 		if (object instanceof ViewPoint) {
@@ -245,6 +247,10 @@ public class VPMIconLibrary extends IconLibrary {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.IMPORT);
 			} else if (object instanceof MatchEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.SYNC);
+			} else if (object instanceof AddToListAction) {
+				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.POSITIVE_MARKER);
+			} else if (object instanceof RemoveFromListAction) {
+				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.NEGATIVE_MARKER);
 			} else if (object instanceof CloneShape) {
 				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
@@ -278,7 +284,7 @@ public class VPMIconLibrary extends IconLibrary {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
 						.getTechnologyAdapter());
 				if (tac != null) {
-					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction<?, ?>>) object.getClass());
 					if (returned != null) {
 						return returned;
 					} else {
@@ -322,6 +328,8 @@ public class VPMIconLibrary extends IconLibrary {
 					return WKFIconLibrary.ACTIVITY_NODE_ICON;
 				case Operation:
 					return WKFIconLibrary.OPERATION_NODE_ICON;
+				case Screen:
+					return SEIconLibrary.SCREEN_COMPONENT_ICON;
 				case Action:
 					return WKFIconLibrary.ACTION_NODE_ICON;
 				case Event:

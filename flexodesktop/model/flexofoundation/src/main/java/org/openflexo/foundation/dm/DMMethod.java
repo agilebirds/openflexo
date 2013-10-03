@@ -327,7 +327,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		isDeleted = true;
 		setReturnType(null, false);
 		getEntity().unregisterMethod(this);
@@ -340,6 +340,7 @@ public class DMMethod extends DMObject implements Typed, DMGenericDeclaration, D
 		_parameters = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

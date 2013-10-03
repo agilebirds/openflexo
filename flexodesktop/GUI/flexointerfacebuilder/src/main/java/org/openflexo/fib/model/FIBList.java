@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.model.FIBTable.SelectionMode;
@@ -110,13 +109,13 @@ public class FIBList extends FIBMultipleValues {
 	public Type getDynamicAccessType() {
 		Type[] args = new Type[2];
 		args[0] = getDataType();
-		args[1] = getIteratorClass();
+		args[1] = getIteratorType();
 		return new ParameterizedTypeImpl(FIBListDynamicModel.class, args);
 	}
 
 	public DataBinding<Object> getSelected() {
 		if (selected == null) {
-			selected = new DataBinding<Object>(this, getIteratorClass(), DataBinding.BindingDefinitionType.GET_SET);
+			selected = new DataBinding<Object>(this, getIteratorType(), DataBinding.BindingDefinitionType.GET_SET);
 		}
 		return selected;
 	}
@@ -124,7 +123,7 @@ public class FIBList extends FIBMultipleValues {
 	public void setSelected(DataBinding<Object> selected) {
 		if (selected != null) {
 			selected.setOwner(this);
-			selected.setDeclaredType(getIteratorClass());
+			selected.setDeclaredType(getIteratorType());
 			selected.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
 		}
 		this.selected = selected;

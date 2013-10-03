@@ -214,6 +214,11 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) {
 			// logger.info("setBackgroundStyleType with " + backgroundStyleType);
 			BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
+
+			if (oldBackgroundStyleType == backgroundStyleType) {
+				return;
+			}
+
 			switch (getBackgroundStyleType()) {
 			case NONE:
 				break;
@@ -239,19 +244,19 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			switch (backgroundStyleType) {
 			case NONE:
-				backgroundStyle = fgeFactory.makeEmptyBackground();
+				setBackgroundStyle(fgeFactory.makeEmptyBackground());
 				break;
 			case COLOR:
-				backgroundStyle = fgeFactory.makeColoredBackground(color1);
+				setBackgroundStyle(fgeFactory.makeColoredBackground(color1));
 				break;
 			case COLOR_GRADIENT:
-				backgroundStyle = fgeFactory.makeColorGradientBackground(color1, color2, gradientDirection);
+				setBackgroundStyle(fgeFactory.makeColorGradientBackground(color1, color2, gradientDirection));
 				break;
 			case TEXTURE:
-				backgroundStyle = fgeFactory.makeTexturedBackground(textureType, color1, color2);
+				setBackgroundStyle(fgeFactory.makeTexturedBackground(textureType, color1, color2));
 				break;
 			case IMAGE:
-				backgroundStyle = fgeFactory.makeImageBackground(imageFile);
+				setBackgroundStyle(fgeFactory.makeImageBackground(imageFile));
 				break;
 			default:
 				break;

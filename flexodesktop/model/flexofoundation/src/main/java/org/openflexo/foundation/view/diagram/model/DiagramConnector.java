@@ -19,14 +19,17 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRConnectorTemplate;
 import org.openflexo.foundation.xml.DiagramBuilder;
 
-public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> {
+public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> implements GRConnectorTemplate {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
@@ -63,19 +66,14 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 		setEndShape(anEndShape);
 	}
 
-	@Override
-	public ConnectorGraphicalRepresentation<DiagramConnector> getGraphicalRepresentation() {
-		return super.getGraphicalRepresentation();
-	}
-
 	/**
 	 * Reset graphical representation to be the one defined in related pattern role
 	 */
 	@Override
 	public void resetGraphicalRepresentation() {
-		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
-				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
-				GraphicalRepresentation.Parameters.absoluteTextY);
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.TEXT,
+				GraphicalRepresentation.IS_VISIBLE, GraphicalRepresentation.TRANSPARENCY, GraphicalRepresentation.ABSOLUTE_TEXT_X,
+				GraphicalRepresentation.ABSOLUTE_TEXT_Y);
 		refreshGraphicalRepresentation();
 	}
 
@@ -89,16 +87,17 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/* @Override
-	 public AddShemaElementAction getEditionAction() 
+	 public AddSchemaElementAction getEditionAction() 
 	 {
 	 	return getAddConnectorAction();
 	 }
@@ -126,7 +125,10 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 
 	public void setEndShape(DiagramShape endShape) {
 		this.endShape = endShape;
-		endShape.addToIncomingConnectors(this);
+		// NPE Protection
+		if (endShape != null) {
+			endShape.addToIncomingConnectors(this);
+		}
 	}
 
 	public DiagramShape getStartShape() {
@@ -160,6 +162,26 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	@Override
 	public ConnectorPatternRole getPatternRole() {
 		return (ConnectorPatternRole) super.getPatternRole();
+	}
+
+	private List<DiagramElement<?>> descendants;
+
+	@Override
+	public List<DiagramElement<?>> getDescendants() {
+		if (descendants == null) {
+			descendants = new ArrayList<DiagramElement<?>>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
+	}
+
+	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
+		descendants.add(current);
+		for (DiagramElement<?> child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
 	}
 
 }

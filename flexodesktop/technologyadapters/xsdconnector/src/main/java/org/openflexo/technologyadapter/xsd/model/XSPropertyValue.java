@@ -20,8 +20,8 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-
 /**
  * Implementation of a Property value in XSD/XML technology
  * 

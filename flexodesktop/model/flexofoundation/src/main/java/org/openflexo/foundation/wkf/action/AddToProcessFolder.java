@@ -55,7 +55,7 @@ public class AddToProcessFolder extends FlexoAction<AddToProcessFolder, FlexoMod
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return getProcessNode(object) != null && !getProcessNode(object).isImported();
+			return getProcessNode(object) != null;
 		}
 
 	};

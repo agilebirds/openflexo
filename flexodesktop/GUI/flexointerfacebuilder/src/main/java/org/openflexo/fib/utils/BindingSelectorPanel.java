@@ -812,7 +812,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					if (selectedValue.getElement() instanceof FunctionPathElement) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
 						if (currentElement instanceof FunctionPathElement
-								&& (((FunctionPathElement) currentElement).getFunction() != null)
+								&& ((FunctionPathElement) currentElement).getFunction() != null
 								&& ((FunctionPathElement) currentElement).getFunction().equals(
 										((FunctionPathElement) selectedValue.getElement()).getFunction())) {
 							// logger.info("On y arrive");
@@ -908,7 +908,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 		// logger.info("Update in BindingSelectorPanel with binding " + binding);
 
-		if (binding == null || binding.isConstant()) {
+		if (binding == null || binding.isConstant() || binding.isUnset()) {
 			clearColumns();
 			if (binding == null) {
 				setEditStaticValue(false);
@@ -1130,21 +1130,21 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 		if (element == null) {
 			return EMPTY_MODEL;
 		}
-		if (TypeUtils.isResolved(element.getType())) {
-			Hashtable<Type, BindingColumnListModel> h = _listModels.get(element);
-			if (h == null) {
-				h = new Hashtable<Type, BindingColumnListModel>();
-				_listModels.put(element, h);
-			}
-			BindingColumnListModel returned = h.get(resultingType);
-			if (returned == null) {
-				returned = makeColumnListModel(element, resultingType);
-				h.put(resultingType, returned);
-			}
-			return returned;
-		} else {
-			return EMPTY_MODEL;
+		// if (TypeUtils.isResolved(element.getType())) {
+		Hashtable<Type, BindingColumnListModel> h = _listModels.get(element);
+		if (h == null) {
+			h = new Hashtable<Type, BindingColumnListModel>();
+			_listModels.put(element, h);
 		}
+		BindingColumnListModel returned = h.get(resultingType);
+		if (returned == null) {
+			returned = makeColumnListModel(element, resultingType);
+			h.put(resultingType, returned);
+		}
+		return returned;
+		/*} else {
+			return EMPTY_MODEL;
+		}*/
 	}
 
 	protected BindingColumnListModel makeColumnListModel(BindingPathElement element, Type resultingType) {
@@ -1553,9 +1553,11 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				}
 			}
 			_elements.clear();
+
 			if (TypeUtils.getBaseClass(_type) == null) {
 				return;
 			}
+
 			// _accessibleProperties.addAll(KeyValueLibrary.getAccessibleProperties(_type));
 			_accessibleProperties.addAll(bindingSelector.getBindable().getBindingFactory().getAccessibleSimplePathElements(_element));
 			// _accessibleProperties.addAll(_element.getAccessibleBindingPathElements());
@@ -1737,8 +1739,9 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 						} else if (columnElement.getResultingType() != null) {
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
-								if (bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleSimplePathElements(columnElement.getElement()) != null
+								if (bindingSelector.getBindable().getBindingFactory() != null
+										&& bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleSimplePathElements(columnElement.getElement()) != null
 										&& bindingSelector.getBindable().getBindingFactory()
 												.getAccessibleSimplePathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);

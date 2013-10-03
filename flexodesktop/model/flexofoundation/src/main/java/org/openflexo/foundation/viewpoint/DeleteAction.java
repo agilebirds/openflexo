@@ -30,7 +30,9 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
+@FIBPanel("Fib/DeletionActionPanel.fib")
 public class DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extends EditionAction<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
@@ -46,11 +48,6 @@ public class DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extend
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append("delete " + getObject().toString(), context);
 		return out.toString();
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.DeleteAction;
 	}
 
 	public Object getDeclaredObject(EditionSchemeAction action) {

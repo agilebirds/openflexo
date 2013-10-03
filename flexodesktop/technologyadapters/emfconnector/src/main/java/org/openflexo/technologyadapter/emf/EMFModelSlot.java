@@ -35,7 +35,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -71,23 +71,26 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
 		@DeclarePatternRole(FML = "EMFClassClass", patternRoleClass = EMFClassClassPatternRole.class),
 		@DeclarePatternRole(FML = "EMFEnumClass", patternRoleClass = EMFEnumClassPatternRole.class) })
 @DeclareEditionActions({ // All edition actions available through this model slot
-		@DeclareEditionAction(FML = "AddEMFObjectIndividual", editionActionClass = AddEMFObjectIndividual.class),
-		@DeclareEditionAction(FML = "AddDataPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeDataPropertyValue.class),
-		@DeclareEditionAction(FML = "AddObjectPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeObjectPropertyValue.class),
-		@DeclareEditionAction(
-				FML = "AddReferencePropertyValue",
-				editionActionClass = AddEMFObjectIndividualReferenceObjectPropertyValue.class),
-		@DeclareEditionAction(
-				FML = "RemoveDataPropertyValue",
-				editionActionClass = RemoveEMFObjectIndividualAttributeDataPropertyValue.class),
-		@DeclareEditionAction(
-				FML = "RemoveObjectPropertyValue",
-				editionActionClass = RemoveEMFObjectIndividualAttributeObjectPropertyValue.class),
-		@DeclareEditionAction(
-				FML = "RemoveReferencePropertyValue",
-				editionActionClass = RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) })
+		@DeclareEditionAction(FML = "AddEMFObjectIndividual", editionActionClass = AddEMFObjectIndividual.class)
+
+		// Removed because it is unusable
+//		@DeclareEditionAction(FML = "AddDataPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeDataPropertyValue.class),
+//		@DeclareEditionAction(FML = "AddObjectPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeObjectPropertyValue.class),
+//		@DeclareEditionAction(
+//				FML = "AddReferencePropertyValue",
+//				editionActionClass = AddEMFObjectIndividualReferenceObjectPropertyValue.class),
+//		@DeclareEditionAction(
+//				FML = "RemoveDataPropertyValue",
+//				editionActionClass = RemoveEMFObjectIndividualAttributeDataPropertyValue.class),
+//		@DeclareEditionAction(
+//				FML = "RemoveObjectPropertyValue",
+//				editionActionClass = RemoveEMFObjectIndividualAttributeObjectPropertyValue.class),
+//		@DeclareEditionAction(
+//				FML = "RemoveReferencePropertyValue",
+//				editionActionClass = RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) 
+})
 @DeclareFetchRequests({ // All requests available through this model slot
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectEMFObjectIndividual.class) })
+@DeclareFetchRequest(FML = "SelectEMFObjectIndividual", fetchRequestClass = SelectEMFObjectIndividual.class) })
 public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
@@ -206,7 +209,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
+			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
 		if (o instanceof IFlexoOntologyObject) {
 			return ((IFlexoOntologyObject) o).getURI();
 		}
@@ -215,7 +218,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
+			TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}
@@ -242,4 +245,10 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 		return getTechnologyAdapter().createNewEMFModel((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(EMFMetaModelResource) metaModelResource);
 	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
+	}
+
 }

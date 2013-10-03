@@ -127,10 +127,11 @@ public class DefaultServiceMessageDefinition extends ServiceMessageDefinition im
 	// ==========================================================================
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		portMessageDefinition.delete();
 		super.delete();
 		portMessageDefinition = null;
+		return true;
 	}
 
 }

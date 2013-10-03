@@ -2,11 +2,12 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -82,7 +83,7 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURI(TypeSafeModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURI(TypeAwareModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return null;
 		}
@@ -97,14 +98,14 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
 		return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
 	}
 
-	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName, String uriPrefix) {
+	public String generateUniqueURIName(TypeAwareModelSlotInstance msInstance, String proposedName, String uriPrefix) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
@@ -178,17 +179,53 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 
 	@Override
 	public final String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		return getURIForObject((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, o);
+		return getURIForObject((TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, o);
 	}
 
 	@Override
 	public final Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return retrieveObjectWithURI((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, objectURI);
+		return retrieveObjectWithURI((TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, objectURI);
 	}
 
-	public abstract String getURIForObject(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance, Object o);
+	public abstract String getURIForObject(TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance, Object o);
 
-	public abstract Object retrieveObjectWithURI(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance,
+	public abstract Object retrieveObjectWithURI(TypeAwareModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance,
 			String objectURI);
+
+	/**
+	 * Return class of models this slot gives access to
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public final Class<? extends FlexoModel<?, ?>> getModelClass() {
+		return (Class<? extends FlexoModel<?, ?>>) TypeUtils.getTypeArguments(getClass(), TypeAwareModelSlot.class).get(
+				TypeAwareModelSlot.class.getTypeParameters()[0]);
+	}
+
+	/**
+	 * Return class of models this slot gives access to
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public final Class<? extends FlexoMetaModel<?>> getMetaModelClass() {
+		return (Class<? extends FlexoMetaModel<?>>) TypeUtils.getTypeArguments(getClass(), TypeAwareModelSlot.class).get(
+				TypeAwareModelSlot.class.getTypeParameters()[1]);
+	}
+
+	/**
+	 * Return flag indicating if this model slot implements a strict meta-modelling contract (return true if and only if a model in this
+	 * technology can be conform to only one metamodel). Otherwise, this is simple metamodelling (a model is conform to exactely one
+	 * metamodel)
+	 * 
+	 * @return
+	 */
+	public abstract boolean isStrictMetaModelling();
+
+	@Override
+	public String getModelSlotDescription() {
+		return "Model conform to " + getMetaModelURI();
+	}
 
 }

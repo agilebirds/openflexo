@@ -74,13 +74,15 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
-	 * Sets {@link ResourceData} for this resource
+	 * Programmatically sets {@link ResourceData} for this resource<br>
+	 * The resource is then notified that it has been loaded
 	 * 
 	 * @param resourceData
 	 */
 	@Override
 	public void setResourceData(RD resourceData) {
 		this.resourceData = resourceData;
+		notifyResourceLoaded();
 	}
 
 	/**
@@ -117,14 +119,34 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
-	 * Called to notify that a resource has been added to contents TODO: integrate this in setContents() when this interface will extends
-	 * {@link AccessibleProxyObject}
+	 * Called to notify that a resource has been added to contents<br>
+	 * TODO: integrate this in setContents() when this interface will extends {@link AccessibleProxyObject}
+	 * 
+	 * @param resource
+	 *            : resource being added
 	 */
 	@Override
 	public void notifyContentsAdded(FlexoResource<?> resource) {
-		logger.info("notifyResourceLoaded(), resource=" + this);
+		logger.info("notifyContentsAdded(), resource=" + this);
 
 		ContentsAdded notification = new ContentsAdded(this, resource);
+		setChanged();
+		notifyObservers(notification);
+		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
+	}
+
+	/**
+	 * Called to notify that a resource has been remove to contents<br>
+	 * TODO: integrate this in setContents() when this interface will extends {@link AccessibleProxyObject}
+	 * 
+	 * @param resource
+	 *            : resource being removed
+	 */
+	@Override
+	public void notifyContentsRemoved(FlexoResource<?> resource) {
+		logger.info("notifyContentsRemoved(), resource=" + this);
+
+		ContentsRemoved notification = new ContentsRemoved(this, resource);
 		setChanged();
 		notifyObservers(notification);
 		getServiceManager().notify(getServiceManager().getResourceManager(), notification);
@@ -170,11 +192,55 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
-	 * Delete this resource by deleting the file
+	 * Indicates whether this resource can be edited or not. Returns <code>true</code> if the resource cannot be edited, else returns
+	 * <code>false</code>.<br>
+	 * This is here the default implementation, always returned false;
+	 * 
+	 * @return <code>true</code> if the resource cannot be edited, else returns <code>false</code>.
 	 */
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean isReadOnly() {
+		return false;
+	}
+
+	/**
+	 * Delete this resource<br>
+	 * Contents of this resource are deleted, and resource data is unloaded
+	 */
+	@Override
+	public boolean delete() {
+		if (isReadOnly()) {
+			logger.warning("Delete requested for READ-ONLY resource " + this);
+			return false;
+		} else {
+			logger.info("Deleting resource " + this);
+			if (getContainer() != null) {
+				FlexoResource<?> container = getContainer();
+				container.removeFromContents(this);
+				container.notifyContentsRemoved(this);
+			}
+			for (org.openflexo.foundation.resource.FlexoResource<?> r : new ArrayList<org.openflexo.foundation.resource.FlexoResource<?>>(
+					getContents())) {
+				r.delete();
+			}
+			super.delete();
+			if (isLoaded()) {
+				unloadResourceData();
+			}
+			return true;
+		}
+	}
+
+	/**
+	 * Delete (dereference) resource data if resource data is loaded<br>
+	 * Also delete the resource data
+	 */
+	@Override
+	public void unloadResourceData() {
+		if (isLoaded()) {
+			resourceData.delete();
+			resourceData = null;
+		}
 	}
 
 }

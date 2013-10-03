@@ -21,10 +21,13 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
+import org.openflexo.rest.client.ServerRestService;
 
 public abstract class ApplicationContext extends DefaultFlexoServiceManager implements FlexoEditorFactory {
 
 	private FlexoEditor applicationEditor;
+
+	private ServerRestService serverRestService;
 
 	public ApplicationContext() {
 		super();
@@ -61,6 +64,13 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	public final FlexoEditor getApplicationEditor() {
 		return applicationEditor;
+	}
+
+	public ServerRestService getServerRestService() {
+		if (serverRestService == null) {
+			serverRestService = new ServerRestService(getProjectLoader());
+		}
+		return serverRestService;
 	}
 
 	public boolean isAutoSaveServiceEnabled() {

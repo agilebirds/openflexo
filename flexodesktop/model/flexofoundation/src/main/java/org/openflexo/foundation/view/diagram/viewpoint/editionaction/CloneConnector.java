@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
  * This edition primitive addresses the duplication of a connector
@@ -31,17 +31,13 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  * @author sylvain
  * 
  */
+@FIBPanel("Fib/CloneConnectorPanel.fib")
 public class CloneConnector extends AddConnector {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
 	public CloneConnector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-	}
-
-	@Override
-	public EditionActionType getEditionActionType() {
-		return EditionActionType.CloneConnector;
 	}
 
 	@Override

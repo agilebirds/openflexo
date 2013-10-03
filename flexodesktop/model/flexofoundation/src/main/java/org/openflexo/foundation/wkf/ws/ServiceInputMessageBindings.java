@@ -144,11 +144,12 @@ public class ServiceInputMessageBindings extends ServiceMessageBindings implemen
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		getServiceOperation().setInputMessageBindings(null);
 		inputBindingModel = null;
 		super.delete();
+		return true;
 	}
 
 	/**

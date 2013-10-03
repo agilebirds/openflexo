@@ -57,7 +57,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	private ExecutionContext _executionContext;
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (_executionContext != null) {
 			_executionContext.delete();
 		}
@@ -71,6 +71,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		_globalSelection = null;
 		_focusedObject = null;
 		_actionType = null;
+		return true;
 	}
 
 	public enum ExecutionStatus {

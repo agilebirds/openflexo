@@ -19,6 +19,9 @@
  */
 package org.openflexo.view.controller;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -28,17 +31,22 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.AddToListAction;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
+import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.RemoveFromListAction;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
@@ -56,6 +64,8 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapterController.class.getPackage().getName());
 
 	private TechnologyAdapterControllerService technologyAdapterControllerService;
+
+	private Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
 
 	/**
 	 * Returns applicable {@link TechnologyAdapterService}
@@ -140,7 +150,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	 * @param object
 	 * @return
 	 */
-	public abstract ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass);
+	public abstract ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass);
 
 	/**
 	 * Return icon representing supplied edition action
@@ -148,7 +158,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	 * @param object
 	 * @return
 	 */
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
 		} else if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(editionActionClass)) {
@@ -159,6 +169,12 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
 		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.IMPORT);
+		} else if (MatchEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.EDITION_PATTERN_ICON, IconLibrary.SYNC);
+		} else if (AddToListAction.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.LIST_ICON, IconLibrary.POSITIVE_MARKER);
+		} else if (RemoveFromListAction.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.LIST_ICON, IconLibrary.NEGATIVE_MARKER);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DELETE_ICON;
 		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {
@@ -172,9 +188,42 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	}
 
-	public abstract boolean hasModuleViewForObject(FlexoObject object);
+	public abstract boolean hasModuleViewForObject(TechnologyObject object);
+
+	public abstract String getWindowTitleforObject(TechnologyObject object);
 
 	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective);
+
+	public File getFIBPanelForObject(Object anObject) {
+		if (anObject != null) {
+			return getFIBPanelForClass(anObject.getClass());
+		}
+		return null;
+	}
+
+	public File getFIBPanelForClass(Class<?> aClass) {
+		if (aClass == null) {
+			return null;
+		}
+		File returned = fibPanelsForClasses.get(aClass);
+		if (returned == null) {
+			if (aClass.getAnnotation(FIBPanel.class) != null) {
+				File fibPanel = new FileResource(aClass.getAnnotation(FIBPanel.class).value());
+				if (fibPanel.exists()) {
+					logger.info("Found " + fibPanel);
+					fibPanelsForClasses.put(aClass, fibPanel);
+					return fibPanel;
+				} else {
+					logger.warning("Not found " + fibPanel);
+					return null;
+				}
+			}
+			if (aClass.getSuperclass() != null) {
+				return getFIBPanelForClass(aClass.getSuperclass());
+			}
+		}
+		return returned;
+	}
 
 }

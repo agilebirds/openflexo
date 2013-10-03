@@ -380,7 +380,6 @@ public class DescriptionInspectorWidget extends CustomInspectorWidget<FlexoModel
 		descModel.setTabModel(model.getTabModel());
 		descModel.label = "description";
 		descModel.name = "description";
-		descModel.setValueForParameter("readOnly", "!isDocEditable");
 		descModel.setValueForParameter("widgetLayout", "1COL");
 		descModel.setValueForParameter("align", "CENTER");
 		defaultWidget = new WysiwygLightWidget(descModel, controller, useUltraLightWysiwyg());

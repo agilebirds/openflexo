@@ -21,6 +21,7 @@ package org.openflexo.fib.view.container;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
@@ -33,6 +34,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
@@ -45,6 +47,7 @@ import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
+import org.openflexo.swing.ButtonLayout;
 import org.openflexo.toolbox.StringUtils;
 
 public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel> {
@@ -129,6 +132,10 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		case gridbag:
 			panel.setLayout(new GridBagLayout());
 			break;
+		case buttons:
+			panel.setLayout(new ButtonLayout(getComponent().getFlowAlignment() != null ? getComponent().getFlowAlignment().getAlign() : -1,
+					getComponent().getHGap() != null ? getComponent().getHGap() : 5));
+			break;
 		default:
 			break;
 		}
@@ -169,17 +176,26 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 			@Override
 			public boolean getScrollableTracksViewportWidth() {
+				Container parent = getParent();
+				if (parent instanceof JViewport) {
+					return parent.getWidth() > getPreferredSize().width && FIBPanelView.this.getComponent().isTrackViewPortWidth();
+				}
 				return FIBPanelView.this.getComponent().isTrackViewPortWidth();
 			}
 
 			@Override
 			public boolean getScrollableTracksViewportHeight() {
+				Container parent = getParent();
+				if (parent instanceof JViewport) {
+					return parent.getHeight() > getPreferredSize().height && FIBPanelView.this.getComponent().isTrackViewPortHeight();
+				}
 				return FIBPanelView.this.getComponent().isTrackViewPortHeight();
 			}
 
 		}
 
 		panel = new ScrollablePanel();
+		panel.setOpaque(false);
 		updateGraphicalProperties();
 
 		_setPanelLayoutParameters();
@@ -212,7 +228,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		// Vector<FIBComponent> allSubComponents = getComponent().getSubComponents();
 
 		if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
-				|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
+				|| getComponent().getLayout() == Layout.buttons || getComponent().getLayout() == Layout.twocols
+				|| getComponent().getLayout() == Layout.gridbag) {
 
 			/*System.out.println("Apres le retrieve: ");
 			for (FIBComponent c : allSubComponents) {

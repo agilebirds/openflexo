@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -57,6 +58,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	private List<DiagramPalette> palettes;
 	private List<ExampleDiagram> exampleDiagrams;
+
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -151,12 +153,12 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			}
 		}
 	}
-
+	
 	@Override
 	public DiagramSpecificationResource getResource() {
 		return (DiagramSpecificationResource) super.getResource();
 	}
-
+	
 	@Override
 	public String toString() {
 		return "DiagramSpecification:" + getURI();
@@ -318,5 +320,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		super.finalizeDeserialization(builder);
 		updateBindingModel();
 	}
+
 
 }

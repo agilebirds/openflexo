@@ -61,6 +61,17 @@ public class DiagramView extends DrawingView<DiagramRepresentation> {
 		repaint();
 	}
 
+	/*private CircularFloatingPalette circularFloatingPalette;
+
+	public void setFloatingPalette(CircularFloatingPalette palette) {
+		circularFloatingPalette = palette;
+	}
+
+	public void resetCircularFloatingPalette() {
+		circularFloatingPalette = null;
+		repaint();
+	}*/
+
 	@Override
 	public void paint(Graphics g) {
 		boolean isBuffering = isBuffering();
@@ -71,6 +82,9 @@ public class DiagramView extends DrawingView<DiagramRepresentation> {
 		if (floatingPalette != null && !isBuffering) {
 			floatingPalette.paint(g, getController());
 		}
+		/*if (circularFloatingPalette != null && !isBuffering) {
+			circularFloatingPalette.paint(g, getController());
+		}*/
 	}
 
 }

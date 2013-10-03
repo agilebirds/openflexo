@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,6 +21,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
@@ -47,35 +49,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
-	public static enum EditionActionType {
-		AddClass,
-		AddIndividual,
-		AddObjectPropertyStatement,
-		AddDataPropertyStatement,
-		AddIsAStatement,
-		AddRestrictionStatement,
-		AddConnector,
-		AddShape,
-		AddDiagram,
-		AddEditionPatternInstance,
-		MatchEditionPatternInstance,
-		CloneShape,
-		CloneConnector,
-		CloneIndividual,
-		DeclarePatternRole,
-		Assignation,
-		Execution,
-		DeleteAction,
-		GraphicalAction,
-		GoToObject,
-		Iteration,
-		FetchRequestIteration,
-		Conditional,
-		FetchRequest,
-		SelectIndividual,
-		SelectEditionPatternInstance
-	}
-
 	private MS modelSlot;
 
 	private DataBinding<Boolean> conditional;
@@ -97,8 +70,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		return null;
 	}
-
-	public abstract EditionActionType getEditionActionType();
 
 	@Override
 	public EditionScheme getEditionScheme() {
@@ -240,6 +211,10 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 			return null;
 		}
 		return getScheme().getEditionPattern();
+	}
+
+	public Type getActionClass() {
+		return getClass();
 	}
 
 	public int getIndex() {

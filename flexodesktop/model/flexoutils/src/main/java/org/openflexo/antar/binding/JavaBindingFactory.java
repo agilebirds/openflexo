@@ -5,6 +5,7 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -22,6 +23,12 @@ public class JavaBindingFactory implements BindingFactory {
 			Type currentType = parent.getType();
 			if (currentType instanceof Class && ((Class) currentType).isPrimitive()) {
 				currentType = TypeUtils.fromPrimitive((Class) currentType);
+			}
+			if (currentType instanceof WildcardType) {
+				Type[] upperBounds = ((WildcardType) currentType).getUpperBounds();
+				if (upperBounds.length == 1) {
+					currentType = upperBounds[0];
+				}
 			}
 			List<JavaPropertyPathElement> returned = new ArrayList<JavaPropertyPathElement>();
 			for (KeyValueProperty p : KeyValueLibrary.getAccessibleProperties(currentType)) {

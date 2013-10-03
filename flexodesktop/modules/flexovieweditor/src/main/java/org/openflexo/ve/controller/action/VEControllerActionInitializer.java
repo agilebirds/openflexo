@@ -66,11 +66,15 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 		// View library perspective
 		new CreateViewInitializer(this);
+		new MoveViewInitializer(this);
+
 		new DeleteViewInitializer(this);
 		new CreateVirtualModelInstanceInitializer(this);
+		new DeleteVirtualModelInstanceInitializer(this);
 
 		// Diagram perspective
 		new CreateDiagramInitializer(this);
+		new DeleteDiagramInitializer(this);
 		new AddShapeInitializer(this);
 		new AddConnectorInitializer(this);
 		new DeleteDiagramElementsInitializer(this);
@@ -80,6 +84,9 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new SynchronizationSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
 		new ResetGraphicalRepresentationInitializer(this);
+		new DeclareShapeInEditionPatternInitializer(this);
+		new DeclareConnectorInEditionPatternInitializer(this);
+		new PushToPaletteInitializer(this);
 
 	}
 

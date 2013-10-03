@@ -76,12 +76,12 @@ public abstract class FatherNode extends FlexoNode {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (containedPetriGraph != null) {
 			containedPetriGraph.delete();
 		}
 		setChanged();
-		super.delete();
+		return super.delete();
 	}
 
 	/**

@@ -1,5 +1,7 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
  *
  * This file is part of OpenFlexo.
  *
@@ -39,8 +41,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -66,7 +69,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
+FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -307,7 +310,12 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			return getVirtualModelInstance();
 		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
 			return getVirtualModelInstance();
+		}else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			if(getVirtualModelInstance() instanceof Diagram){
+				return ((Diagram)getVirtualModelInstance()).getRootPane();
+			}
 		}
+
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
 			return getVirtualModelInstance().getValueForVariable(variable);
@@ -365,9 +373,14 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 					String newURI;
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
-						newURI = modelSlot.generateUniqueURIName((TypeSafeModelSlotInstance) getVirtualModelInstance()
+
+						newURI = modelSlot.generateUniqueURIName((TypeAwareModelSlotInstance) getVirtualModelInstance()
 								.getModelSlotInstance(modelSlot), newURI);
-						super.put(uriParam, newURI);
+						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
+						// NPE Protection
+						if (newURI != null) {
+							super.put(uriParam, newURI);
+						}
 					} catch (TypeMismatchException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -390,7 +403,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			URIParameter uriParam = (URIParameter) parameter;
 			if (uriParam.getModelSlot() instanceof TypeAwareModelSlot) {
 				TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
-				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
+				return modelSlot.generateUniqueURI((TypeAwareModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
 						(String) getParameterValue(parameter));
 			}
 		}

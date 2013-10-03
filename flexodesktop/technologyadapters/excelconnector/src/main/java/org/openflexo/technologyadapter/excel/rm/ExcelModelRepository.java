@@ -19,7 +19,6 @@
  */
 package org.openflexo.technologyadapter.excel.rm;
 
-
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
@@ -37,4 +36,5 @@ public class ExcelModelRepository extends ModelRepository<ExcelModelResource, Ex
 	public ExcelModelRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

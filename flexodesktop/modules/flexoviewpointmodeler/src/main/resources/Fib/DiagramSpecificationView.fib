@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" borderTitle="Panel" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" font="SansSerif,0,12" name="main">
+<Panel opaque="false" layout="border" borderTitle="Panel" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" font="SansSerif,0,12" name="main">
   <SplitPanel index="0" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)">
     <ColSplit name="ColSplit" weight="0.0">
       <Leaf name="top" weight="0.0" />
@@ -10,13 +10,13 @@
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
       <TextFieldColumn data="iterator.name" title="model_slot" columnWidth="80" resizable="true" displayTitle="true" />
       <LabelColumn data="iterator.technologyAdapter.name" title="technology" columnWidth="200" resizable="true" displayTitle="true" name="label" />
-      <LabelColumn data="iterator.metaModelURI" title="meta_model" columnWidth="500" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.modelSlotDescription" title="description" columnWidth="500" resizable="true" displayTitle="true" name="label" />
       <RemoveAction method="data.deleteModelSlot(selected)" name="delete" />
       <AddAction method="controller.createModelSlot(data)" name="createModelSlot" />
     </Table>
     <TabPanel name="MainTabPanel" index="1" constraints="split(index=1;location=center;splitIdentifier=bottom)">
       <Tab title="structural" layout="border" titleFont="SansSerif,0,12" darkLevel="0" index="0" name="StructuralTab">
-        <FIBReferencedComponent componentFile="DiagramSpecificationStructuralPanel.fib" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="DiagramSpecificationStructuralPanel.fib" localize="true" name="DiagramSpecificationStructuralWidget" manageDynamicModel="true" data="data" constraints="border(location=center)" />
       </Tab>
       <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" constraints="border(index=1;location=center)" name="BehaviouralTab">
         <SplitPanel index="0" constraints="border(index=0;location=center)">
@@ -65,6 +65,7 @@
                   <AddAction method="EditionSchemeTable.selected.createListParameter" name="add_list_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createEditionPatternInstanceParameter" name="add_edition_pattern_instance_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createPropertyParameter" name="add_property_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createTechnologyObjectParameter" name="add_technology_object" />
                 </Table>
                 <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" opaque="false" name="ParametersOrderingPanel">
                   <Button action="EditionSchemeTable.selected.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)">
@@ -92,7 +93,7 @@
         </SplitPanel>
       </Tab>
       <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
-        <FIBReferencedComponent componentFile="EditionPatternInspectorPanel.fib" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="Fib/EditionPatternInspectorPanel.fib" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
       </Tab>
       <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
         <FIBReferencedComponent componentFile="LocalizedDictionaryPanel.fib" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" />
@@ -144,7 +145,7 @@
     <Localized key="widget" lang="Dutch">widget</Localized>
     <Localized key="add_textfield_parameter" lang="English">Add a Textfield parameter</Localized>
     <Localized key="add_textfield_parameter" lang="French">Ajouter un paramètre TextField</Localized>
-    <Localized key="add_textfield_parameter" lang="Dutch">Add ta Textfield parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="Dutch">Add a Textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="English">Add a localized textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="French">Ajouter un paramètre textfield localisé</Localized>
     <Localized key="add_localized_textfield_parameter" lang="Dutch">Add a localized textfield parameter</Localized>

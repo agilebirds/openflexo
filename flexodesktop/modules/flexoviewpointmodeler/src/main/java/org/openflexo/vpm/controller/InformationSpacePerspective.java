@@ -19,6 +19,8 @@
  */
 package org.openflexo.vpm.controller;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -37,6 +39,8 @@ import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class InformationSpacePerspective extends FlexoPerspective {
+
+	static final Logger logger = Logger.getLogger(InformationSpacePerspective.class.getPackage().getName());
 
 	private final VPMController _controller;
 
@@ -100,7 +104,7 @@ public class InformationSpacePerspective extends FlexoPerspective {
 			TechnologyAdapter ta = ((TechnologyObject) object).getTechnologyAdapter();
 			TechnologyAdapterController<?> tac = _controller.getApplicationContext().getTechnologyAdapterControllerService()
 					.getTechnologyAdapterController(ta);
-			return tac.hasModuleViewForObject(object);
+			return tac.hasModuleViewForObject((TechnologyObject) object);
 		}
 		return false;
 	}
@@ -122,10 +126,20 @@ public class InformationSpacePerspective extends FlexoPerspective {
 	}
 
 	public String getWindowTitleforObject(FlexoObject object) {
+		if (object instanceof TechnologyObject) {
+			TechnologyAdapter ta = ((TechnologyObject) object).getTechnologyAdapter();
+			TechnologyAdapterController<?> tac = _controller.getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(ta);
+			return tac.getWindowTitleforObject((TechnologyObject) object);
+		}
 		if (object instanceof IFlexoOntologyObject) {
 			return ((IFlexoOntologyObject) object).getName();
 		}
-		return object.getFullyQualifiedName();
+		if (object != null) {
+			return object.getFullyQualifiedName();
+		}
+		logger.warning("Unexpected null object here");
+		return null;
 	}
 
 }

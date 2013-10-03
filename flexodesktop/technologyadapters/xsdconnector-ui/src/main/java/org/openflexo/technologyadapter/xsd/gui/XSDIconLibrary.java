@@ -23,12 +23,14 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-import org.openflexo.technologyadapter.xsd.model.XSOntProperty;
 import org.openflexo.toolbox.ImageIconResource;
 
 public class XSDIconLibrary {
@@ -42,18 +44,22 @@ public class XSDIconLibrary {
 	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("Icons/XSDClass.png");
 	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("Icons/XSDIndividual.png");
 	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("Icons/XSDProperty.png");
+	public static final ImageIconResource XSD_DATAPROPERTY_ICON = new ImageIconResource("Icons/XSDDataProperty.png");
+	public static final ImageIconResource XSD_OBJECTPROPERTY_ICON = new ImageIconResource("Icons/XSDObjectProperty.png");
 
 	public static ImageIcon iconForObject(Class<? extends AbstractXSOntObject> objectClass) {
 		if (XSDMetaModel.class.isAssignableFrom(objectClass)) {
 			return XSD_FILE_ICON;
-		} else if (XMLModel.class.isAssignableFrom(objectClass)) {
+		} else if (XMLXSDModel.class.isAssignableFrom(objectClass)) {
 			return XML_FILE_ICON;
 		} else if (XSOntClass.class.isAssignableFrom(objectClass)) {
 			return XSD_CLASS_ICON;
 		} else if (XSOntIndividual.class.isAssignableFrom(objectClass)) {
 			return XSD_INDIVIDUAL_ICON;
-		} else if (XSOntProperty.class.isAssignableFrom(objectClass)) {
-			return XSD_PROPERTY_ICON;
+		} else if (XSOntDataProperty.class.isAssignableFrom(objectClass)) {
+			return XSD_DATAPROPERTY_ICON;
+		}else if (XSOntObjectProperty.class.isAssignableFrom(objectClass)) {
+			return XSD_OBJECTPROPERTY_ICON;
 		}
 		logger.warning("No icon for " + objectClass);
 		return null;

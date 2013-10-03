@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.dm.eo.DMEORepository;
@@ -93,9 +92,9 @@ public class ExternalDatabaseRepository extends DMEORepository {
 	}
 
 	@Override
-	public void delete(boolean deleteEOModelFiles) {
+	public boolean delete(boolean deleteEOModelFiles) {
 		getDMModel().removeFromExternalDatabaseRepositories(this);
-		super.delete(deleteEOModelFiles);
+		return super.delete(deleteEOModelFiles);
 	}
 
 	/**

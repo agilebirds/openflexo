@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
@@ -38,6 +39,9 @@ import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepres
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.AddShape;
@@ -49,9 +53,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ContextualPalette extends DrawingPalette {
+public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(ContextualPalette.class.getPackage().getName());
 
@@ -63,6 +68,7 @@ public class ContextualPalette extends DrawingPalette {
 						.getName());
 
 		_calcPalette = viewPointPalette;
+		_calcPalette.addObserver(this);
 
 		for (DiagramPaletteElement element : viewPointPalette.getElements()) {
 			addElement(makePaletteElement(element));
@@ -127,7 +133,7 @@ public class ContextualPalette extends DrawingPalette {
 				return "";
 			}
 		};
-
+		gr.setValidated(true);
 		gr.setText(element.getName());
 
 		PaletteElement returned = new PaletteElement() {
@@ -237,4 +243,22 @@ public class ContextualPalette extends DrawingPalette {
 		gr.setDrawable(returned);
 		return returned;
 	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable == _calcPalette) {
+			if (dataModification instanceof DiagramPaletteElementInserted) {
+				logger.info("Notified new Palette Element added");
+				DiagramPaletteElementInserted dm = (DiagramPaletteElementInserted) dataModification;
+				PaletteElement e = makePaletteElement(dm.newValue());
+				addElement(e);
+				e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
+				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
+				updatePalette();
+				getController().updatePalette(_calcPalette, oldPaletteView);
+			}
+		}
+		logger.log(Level.INFO, "Viewpoint pallete has been updated");
+	}
+
 }

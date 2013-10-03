@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -28,6 +27,7 @@ import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extends AbstractActivityNodeGR<O> {
@@ -50,7 +50,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 		getShape().setIsRounded(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
 

@@ -227,9 +227,10 @@ public abstract class AbstractCGFileVersion extends CGObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 }

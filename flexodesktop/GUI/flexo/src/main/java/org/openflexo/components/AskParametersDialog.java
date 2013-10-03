@@ -21,8 +21,8 @@ package org.openflexo.components;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -210,7 +210,7 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		paramsPanel.performObserverSwitch(_parametersModel);
 
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
+		controlPanel.setLayout(new GridLayout(1, 0, 10, 10));
 		controlPanel.setOpaque(true);
 		JButton cancelButton = new JButton();
 		cancelButton.setOpaque(false);
@@ -251,10 +251,11 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		scrollpane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(scrollpane, BorderLayout.CENTER);
-		getContentPane().add(controlPanel, BorderLayout.SOUTH);
+		JPanel south = new JPanel();
+		south.add(controlPanel);
+		getContentPane().add(south, BorderLayout.SOUTH);
 		// setSize(new Dimension (400,200+parameters.length*30));
 		getRootPane().setDefaultButton(_validateButton);
-		validate();
 		pack();
 		// GPO: Forces width of dialog to be at least 250px
 		paramsPanel.requestFocusInFirstWidget();

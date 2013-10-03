@@ -201,11 +201,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	 * @see org.openflexo.foundation.FlexoModelObject#delete()
 	 */
 	@Override
-	public void delete() {
-		delete(true);
+	public boolean delete() {
+		return delete(true);
 	}
 
-	public void delete(boolean deleteDefinition) {
+	public boolean delete(boolean deleteDefinition) {
 		if (getFlexoResource() != null) {
 			getFlexoResource().delete();
 			_resource = null;
@@ -221,7 +221,9 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 			super.delete();
 			nameForWidgetMap.clear();
 			nameForWidgetMap = null;
+			return true;
 		}
+		return false;
 	}
 
 	@Override

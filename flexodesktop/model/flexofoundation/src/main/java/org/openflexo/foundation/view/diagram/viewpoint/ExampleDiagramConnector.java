@@ -22,8 +22,9 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRConnectorTemplate;
 
-public class ExampleDiagramConnector extends ExampleDiagramObject {
+public class ExampleDiagramConnector extends ExampleDiagramObject implements GRConnectorTemplate {
 
 	private static final Logger logger = Logger.getLogger(ExampleDiagramConnector.class.getPackage().getName());
 
@@ -51,12 +52,13 @@ public class ExampleDiagramConnector extends ExampleDiagramObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override
@@ -99,6 +101,11 @@ public class ExampleDiagramConnector extends ExampleDiagramObject {
 			return getParent().isContainedIn(o);
 		}
 		return false;
+	}
+
+	@Override
+	public DiagramSpecification getDiagramSpecification() {
+		return getExampleDiagram().getDiagramSpecification();
 	}
 
 }

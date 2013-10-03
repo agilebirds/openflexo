@@ -1,5 +1,7 @@
 /** Copyright (c) 2012, THALES SYSTEMES AEROPORTES - All Rights Reserved
  * Author : Gilles Besançon
+ * 
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *

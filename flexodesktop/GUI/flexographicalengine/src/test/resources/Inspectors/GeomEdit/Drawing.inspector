@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" dataClassName="org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="4" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab">
-      <Label label="selection_color" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.selectionColor" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="focus_color" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.focusColor" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="rectangle_selection_color" localize="true" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.rectangleSelectingSelectionColor" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" localize="true" />
+    <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+      <Label label="selection_color" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Color index="1" data="data.selectionColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+      <Label label="focus_color" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <Color index="3" data="data.focusColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
+      <Label label="rectangle_selection_color" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" localize="true" />
+      <Color index="5" data="data.rectangleSelectingSelectionColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" localize="true" />
     </Tab>
-    <Tab index="2" title="Background" layout="twocols" font="SansSerif,0,11" name="BackgroundTab">
-      <Label label="background_color" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Color data="data.backgroundColor" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
+    <Tab title="Background" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BackgroundTab">
+      <Label label="background_color" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Color index="1" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
     </Tab>
-    <Tab index="0" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="width" localize="true" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" data="data.width" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" localize="true" />
-      <Label label="height" localize="true" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" data="data.height" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" localize="true" />
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab">
+      <Label label="width" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="1" data="data.width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+      <Label label="height" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="3" data="data.height" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -42,4 +42,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="Drawing" />
 </Panel>
-

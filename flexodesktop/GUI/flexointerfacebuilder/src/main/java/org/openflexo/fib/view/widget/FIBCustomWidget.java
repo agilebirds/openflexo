@@ -50,7 +50,7 @@ import org.openflexo.swing.CustomPopup.ApplyCancelListener;
  * 
  */
 public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBCustom, J, T> implements ApplyCancelListener,
-		BindingEvaluationContext {
+BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(FIBCustomWidget.class.getPackage().getName());
 
@@ -155,18 +155,23 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 	public synchronized boolean updateModelFromWidget(boolean forceUpdate) {
 		if (forceUpdate || notEquals(getValue(), customComponent.getEditedObject())) {
 			setValue(customComponent.getEditedObject());
-			if (getWidget().getValueChangedAction().isValid()) {
-				try {
-					getWidget().getValueChangedAction().execute(getBindingEvaluationContext());
-				} catch (TypeMismatchException e) {
-					e.printStackTrace();
-				} catch (NullReferenceException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+			FIBCustom widget = getWidget();
+			// NPE Protection
+			if (widget != null) {
+				DataBinding<?> db = widget.getValueChangedAction();
+				if (db != null && db.isValid()) {
+					try {
+						db.execute(getBindingEvaluationContext());
+					} catch (TypeMismatchException e) {
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					return true;
 				}
 			}
-			return true;
 		}
 		return false;
 	}
@@ -227,7 +232,10 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			// performAssignments();
 
 			try {
-				customComponent.setEditedObject(getValue());
+				T val = getValue();
+				if (val != null){
+					customComponent.setEditedObject(getValue());
+				}
 			} catch (ClassCastException e) {
 				customComponent.setEditedObject(null);
 				logger.warning("Unexpected ClassCastException in " + customComponent + ": " + e.getMessage());

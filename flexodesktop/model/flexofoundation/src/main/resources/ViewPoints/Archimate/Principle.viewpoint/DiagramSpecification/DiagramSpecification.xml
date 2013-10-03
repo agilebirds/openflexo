@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DiagramSpecification id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl" owlFile="Principle.owl">
+  <OWLModelSlot id="1000" isRequired="true" isReadOnly="false" metaModelURI="http://www.bolton.ac.uk/archimate" name="owl" />
   <EditionPattern id="2" name="Goal" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/Archimate/Principle.owl#InfluenceElements">
     <DropScheme id="3" target="top" name="dropGoalAtTopLevel" label="dropGoalAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <URIParameter id="4" base="&quot;Goal&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />

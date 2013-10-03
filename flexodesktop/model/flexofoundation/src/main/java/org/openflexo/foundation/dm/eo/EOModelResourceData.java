@@ -213,4 +213,10 @@ public class EOModelResourceData extends FlexoObservable implements StorageResou
 		}
 	}
 
+	@Override
+	public boolean delete() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

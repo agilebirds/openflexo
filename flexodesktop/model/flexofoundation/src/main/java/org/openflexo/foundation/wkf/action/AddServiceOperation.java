@@ -117,7 +117,7 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		logger.info("Add Service Operation");
-		if (getProcess() != null && !getProcess().isImported()) {
+		if (getProcess() != null) {
 			if (getServiceInterface() != null && getRelatedPort() != null) {
 				_newServiceOperation = getServiceInterface().addServiceOperation(getNewOperationName(), getRelatedPort());
 			} else {

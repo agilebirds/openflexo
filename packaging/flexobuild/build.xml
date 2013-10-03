@@ -31,7 +31,7 @@
 		<property name="deploy" value="true" />
 		<property name="deployment.root.folder" value="~/downloads/openflexo"/>
 		<property name="deployment.user.name" value="${user.name}" />
-		<property name="deployment.server.name" value="downloads.openflexo.com" />
+		<property name="deployment.server.name" value="downloads.openflexo.org" />
 		<property name="ssh.private.keyfile" value="${user.home}/.ssh/id_dsa" />
 		<property name="ssh.passphrase" value="" />
 		<tstamp>

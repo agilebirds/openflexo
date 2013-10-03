@@ -21,6 +21,7 @@ package org.openflexo.vpm.view;
 
 import java.io.File;
 
+import org.openflexo.fib.view.container.FIBPanelView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
@@ -63,32 +64,58 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 		FIBTableWidget patternRoleTable = (FIBTableWidget) getFIBView("PatternRoleTable");
 		FIBTabPanelView mainTabPanel = (FIBTabPanelView) getFIBView("MainTabPanel");
 		FIBTableWidget editionSchemeTable = (FIBTableWidget) getFIBView("EditionSchemeTable");
-		FIBTabPanelView editionSchemePanel = (FIBTabPanelView) getFIBView("EditionSchemePanel");
+		FIBPanelView editionSchemePanel = (FIBPanelView) getFIBView("EditionSchemePanel");
 		FIBTableWidget parametersTable = (FIBTableWidget) getFIBView("ParametersTable");
 		FIBBrowserWidget editionActionBrowser = (FIBBrowserWidget) getFIBView("EditionActionBrowser");
 		FIBTableWidget inspectorPropertyTable = (FIBTableWidget) getFIBView("InspectorPropertyTable");
 		FIBTableWidget localizedTable = (FIBTableWidget) getFIBView("LocalizedTable");
 
 		if (object instanceof PatternRole) {
-			patternRoleTable.setSelectedObject(object);
+			if(patternRoleTable!=null){
+				patternRoleTable.setSelectedObject(object);
+			}	
 		} else if (object instanceof EditionScheme) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(object);
+			}	
 		} else if (object instanceof EditionSchemeParameter) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(0);
-			parametersTable.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());	
+			}
+			if(parametersTable!=null){
+				parametersTable.setSelectedObject(object);
+			}
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(0);
 		} else if (object instanceof EditionAction) {
-			mainTabPanel.setSelectedIndex(0);
-			editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
-			editionSchemePanel.setSelectedIndex(1);
-			editionActionBrowser.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(0);
+			}
+			if(editionSchemeTable!=null){
+				editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
+			}
+			// this is not a tab any more
+			// editionSchemePanel.setSelectedIndex(1);
+			if(editionActionBrowser!=null){
+				editionActionBrowser.setSelectedObject(object);
+			}
 		} else if (object instanceof EditionPatternInspector) {
-			mainTabPanel.setSelectedIndex(1);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(1);
+			}
 		} else if (object instanceof InspectorEntry) {
-			mainTabPanel.setSelectedIndex(1);
-			inspectorPropertyTable.setSelectedObject(object);
+			if(mainTabPanel!=null){
+				mainTabPanel.setSelectedIndex(1);
+			}
+			if(inspectorPropertyTable!=null){
+				inspectorPropertyTable.setSelectedObject(object);
+			}
 		}
 	}
 }

@@ -39,12 +39,13 @@ public class OWLObjectProperty extends OWLProperty implements IFlexoOntologyObje
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getFlexoOntology().removeObjectProperty(this);
 		getOntResource().remove();
 		getFlexoOntology().updateConceptsAndProperties();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

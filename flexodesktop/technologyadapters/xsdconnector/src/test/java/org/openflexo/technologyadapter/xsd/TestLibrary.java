@@ -2,26 +2,45 @@ package org.openflexo.technologyadapter.xsd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
+import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntAttributeRestriction;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
-import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
-import org.openflexo.technologyadapter.xsd.model.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
+import org.openflexo.toolbox.FileResource;
 
 public class TestLibrary extends FlexoTestCase {
 
 	private static final String FILE_NAME = "library";
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibrary.class.getPackage()
-			.getName());
+	protected static final Logger logger = Logger.getLogger(TestLibrary.class.getPackage().getName());
 
+	private static XSDTechnologyAdapter xsdAdapter;
+	private static XSDTechnologyContextManager xsdContextManager;
+	private static FlexoResourceCenter<?> resourceCenter;
+	private static XSDMetaModelRepository mmRepository;
+	private static XMLModelRepository modelRepository;
+	private static ApplicationContext testApplicationContext;
+
+	public TestLibrary(String name) {
+		super(name);
+	}
+
+	
 	public static File openTestXSD(String filename) throws FileNotFoundException {
 		// TODO Use resource manager?
 		// tip to do it, look at: LocalResourceCenterImpl.findOntologies
@@ -63,7 +82,7 @@ public class TestLibrary extends FlexoTestCase {
 		assertNotNull(lib.getDataProperties());
 		assertFalse(lib.getDataProperties().isEmpty());
 		buffer.append("Data properties\n");
-		for (XSOntDataProperty xsoDP : lib.getDataProperties()) {
+		for (XSOntDataProperty xsoDP : ((XSDMetaModel) lib).getDataProperties()) {
 			xsoObject(xsoDP, buffer);
 		}
 		buffer.append("\n");
@@ -79,36 +98,47 @@ public class TestLibrary extends FlexoTestCase {
 		buffer.append("\n");
 	}
 
-	public static void attributeRestrictionListing(XSOntology lib, StringBuffer buffer) {
-		buffer.append("Attribute restrictions\n");
-		for (XSOntClass xsoClass : lib.getClasses()) {
-			Set<XSOntAttributeRestriction> attributeRestrictions = new HashSet<XSOntAttributeRestriction>();
-			for (XSOntClass superClass : xsoClass.getSuperClasses()) {
-				if (superClass instanceof XSOntAttributeRestriction) {
-					attributeRestrictions.add((XSOntAttributeRestriction) superClass);
-				}
-			}
-			if (attributeRestrictions.isEmpty() == false) {
-				xsoObject(xsoClass, buffer);
-				for (XSOntAttributeRestriction restriction : attributeRestrictions) {
-					buffer.append("    ").append(restriction.getDisplayableDescription()).append("\n");
-				}
-			}
-		}
-	}
 
-	public void testLibrary() {
+
+	/**
+	 * Instanciate test ResourceCenter
+	 * @throws IOException 
+	 */
+	public void test0LoadTestResourceCenter() throws IOException {
+		log("test0LoadTestResourceCenter()");
+		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources/"));
+		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
+		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
+		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
+		xsdContextManager = xsdAdapter.getTechnologyContextManager();
+		mmRepository = (XSDMetaModelRepository) resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
+		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
+		((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
+		assertNotNull(modelRepository);
+		assertNotNull(mmRepository);
+		assertEquals(3, mmRepository.getAllResources().size());
+		assertTrue(modelRepository.getAllResources().size()>2);
+	}
+	
+	public void test1Library() {
 		StringBuffer buffer = new StringBuffer();
-		XSOntology lib = null;
+		XSDMetaModel lib = null;
+		XSDMetaModelResource libRes = null;
+		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		
 		try {
-			lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), null);
+			libRes = XSDMetaModelResourceImpl.makeXSDMetaModelResource(openTestXSD(FILE_NAME), "http://www.openflexo.org/test/XSD/library.owl", xsdContextManager);
+			lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), xsdAdapter);
+			lib.setResource(libRes);
+			libRes.setResourceData(lib);
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		}
 		assertNotNull(lib);
-		lib.loadWhenUnloaded();
-		assertTrue(lib.isLoaded());
-		if (lib.isLoaded() == false) {
+		((XSDMetaModelResourceImpl)((XSDMetaModel) lib).getResource()).loadWhenUnloaded();
+		assertTrue(((XSDMetaModel) lib).getResource().isLoaded());
+		if (((XSDMetaModel) lib).getResource().isLoaded() == false) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Failed to load.");
 				fail();
@@ -118,7 +148,6 @@ public class TestLibrary extends FlexoTestCase {
 			classListing(lib, buffer);
 			dataPropertyListing(lib, buffer);
 			objectPropertyListing(lib, buffer);
-			attributeRestrictionListing(lib, buffer);
 
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info(buffer.toString());

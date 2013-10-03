@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.io.File;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
@@ -242,6 +243,13 @@ public class TypeUtils {
 		return type.equals(Object.class);
 	}
 
+	public static boolean isFile(Type type) {
+		if (type == null) {
+			return false;
+		}
+		return type.equals(File.class);
+	}
+
 	public static boolean isShort(Type type) {
 		if (type == null) {
 			return false;
@@ -460,6 +468,19 @@ public class TypeUtils {
 			return true;
 		}
 
+		// In this case, the type is not fully resolved, we only consider the first upper bound
+		if (aType instanceof TypeVariable) {
+			TypeVariable tv = (TypeVariable) aType;
+			if (tv.getBounds() != null && tv.getBounds().length > 0 && tv.getBounds()[0] != null) {
+				return isTypeAssignableFrom(tv.getBounds()[0], anOtherType);
+			}
+		}
+
+		if (aType instanceof WildcardType) {
+			logger.warning("WildcardType not implemented yet !");
+		}
+
+		return org.apache.commons.lang3.reflect.TypeUtils.isAssignable(anOtherType, aType);
 		/*if (getBaseEntity() == type.getBaseEntity()) {
 			// Base entities are the same, let's analyse parameters
 		
@@ -505,7 +526,7 @@ public class TypeUtils {
 					return isAssignableFrom(parentType,permissive);
 				}*/
 
-		return false;
+		// return false;
 	}
 
 	public static String simpleRepresentation(Type aType) {
@@ -612,6 +633,29 @@ public class TypeUtils {
 	}
 
 	/**
+	 * Build a new type infering implicit typing constraints<br>
+	 * Raw classes are parameterized
+	 * 
+	 * @param aType
+	 * @return
+	 */
+	public static Type makeInferedType(Type aType) {
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (aType instanceof Class && ((Class) aType).getTypeParameters().length > 0) {
+			Type[] args = new Type[((Class) aType).getTypeParameters().length];
+			for (int i = 0; i < ((Class) aType).getTypeParameters().length; i++) {
+				args[i] = new WilcardTypeImpl(((Class) aType).getTypeParameters()[i].getBounds(), new Type[0]);
+			}
+			return new ParameterizedTypeImpl((Class) aType, args);
+		}
+		return aType;
+
+	}
+
+	/**
 	 * Build instanciated DMType considering supplied type is generic (contains TypeVariable definitions) Returns a clone of DMType where
 	 * all references to TypeVariable are replaced by values defined in context type. For example, given type=Enumeration<E> and
 	 * context=Vector<String>, returns Enumeration<String> If supplied type is not generic, return type value (without cloning!)
@@ -629,6 +673,14 @@ public class TypeUtils {
 
 		if (!isGeneric(type)) {
 			return type;
+		}
+
+		// We handle here the case where we ask to resolve a type in the context of an
+		// unresolved type (a class with generic arguments not specified)
+		// We make an indirection with an infered context computed with default bounds
+		// declared in generic type
+		if (context instanceof Class && ((Class) context).getTypeParameters().length > 0) {
+			return makeInstantiatedType(type, makeInferedType(context));
 		}
 
 		if (type instanceof ParameterizedType) {
@@ -661,6 +713,7 @@ public class TypeUtils {
 							} else {
 								logger.warning("Could not retrieve parameterized type " + tv + " with context "
 										+ simpleRepresentation(context));
+								// ((TypeVariable)type).getGenericDeclaration().g
 								return type;
 							}
 						}
@@ -901,21 +954,8 @@ public class TypeUtils {
 
 	public static void main(String[] args) {
 		System.out.println("Type Argument=" + getTypeArgument(MyVector.class, Vector.class, 0));
-		/*Class shouldSucceed = ShouldSucceed.class;
-		for (Method m : shouldSucceed.getMethods()) {
-			checkSucceed(m);
-		}
-		Class shouldFail = ShouldFail.class;
-		for (Method m : shouldFail.getMethods()) {
-			checkFail(m);
-		}
-		Class testSuperType = TestSuperType.class;
-		for (Method m : testSuperType.getMethods()) {
-			checkSuperType(m);
-		}*/
-		Class<Void> void1 = Void.TYPE;
-		System.err.println(isTypeAssignableFrom(Object.class, void1));
-		System.err.println(Object.class.isAssignableFrom(void1));
+		System.err.println(isTypeAssignableFrom(Number.class, Integer.class));
+		System.err.println(org.apache.commons.lang3.reflect.TypeUtils.isAssignable(Integer.class, Number.class));
 	}
 
 }

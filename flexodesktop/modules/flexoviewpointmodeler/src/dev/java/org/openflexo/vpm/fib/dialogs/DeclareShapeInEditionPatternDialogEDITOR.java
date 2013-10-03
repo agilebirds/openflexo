@@ -22,14 +22,14 @@ package org.openflexo.vpm.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.TestApplicationContext;
+import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareShapeInEditionPattern;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramShapeInEditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.VPMCst;
 
 public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor {
 
@@ -42,13 +42,14 @@ public class DeclareShapeInEditionPatternDialogEDITOR extends FIBAbstractEditor 
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Tests/BasicOrganizationTreeEditor.owl");
 		ExampleDiagram shema = calc1.getDefaultDiagramSpecification().getExampleDiagrams().get(0);
 		ExampleDiagramShape shape = (ExampleDiagramShape) shema.getChilds().firstElement();
-		DeclareShapeInEditionPattern action = DeclareShapeInEditionPattern.actionType.makeNewAction(shape, null, null);
+		DeclareExampleDiagramShapeInEditionPattern action = DeclareExampleDiagramShapeInEditionPattern.actionType.makeNewAction(shape,
+				null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VPMCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
+		return CommonFIB.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

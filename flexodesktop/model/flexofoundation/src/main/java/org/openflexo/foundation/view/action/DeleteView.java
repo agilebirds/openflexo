@@ -69,8 +69,9 @@ public class DeleteView extends FlexoAction<DeleteView, View, DiagramElement<?>>
 	protected void doAction(Object context) {
 		logger.info("Delete view");
 
-		getFocusedObject().delete();
-
+		if (getFocusedObject().getResource() != null) {
+			getFocusedObject().getResource().delete();
+		}
 	}
 
 	public FlexoProject getProject() {

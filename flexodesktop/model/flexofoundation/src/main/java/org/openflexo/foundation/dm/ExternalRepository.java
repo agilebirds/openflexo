@@ -200,11 +200,11 @@ public class ExternalRepository extends DMRepository {
 	}
 
 	@Override
-	public final void delete() {
-		delete(false);
+	public final boolean delete() {
+		return delete(false);
 	}
 
-	public final void delete(boolean deleteJarFile) {
+	public final boolean delete(boolean deleteJarFile) {
 		getDMModel().removeFromExternalRepositories(this);
 		super.delete();
 		if (getJarLoader() != null) {
@@ -215,6 +215,7 @@ public class ExternalRepository extends DMRepository {
 			getJarResource().delete(deleteJarFile);
 		}
 		deleteObservers();
+		return true;
 	}
 
 	/*public FlexoProjectFile getJarFile()

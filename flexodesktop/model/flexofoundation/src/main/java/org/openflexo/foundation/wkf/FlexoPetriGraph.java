@@ -657,7 +657,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		Enumeration<AbstractNode> en = new Vector<AbstractNode>(_nodes).elements();
 		while (en.hasMoreElements()) {
 			en.nextElement().delete();
@@ -669,6 +669,7 @@ public abstract class FlexoPetriGraph extends WKFObject implements LevelledObjec
 		super.delete();
 		deleteObservers();
 		_container = null;
+		return true;
 	}
 
 	/**

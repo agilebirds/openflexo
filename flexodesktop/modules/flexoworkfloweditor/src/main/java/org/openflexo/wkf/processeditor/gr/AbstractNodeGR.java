@@ -42,6 +42,7 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O> {
@@ -158,7 +159,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 				return;
 			}
 			// Uses a gray line
-			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
+			g.useForegroundStyle(ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR));
 
 			// Finds the bottomLeft in the view coordinates (we don't pass the scale here because it will be done by the graphics)
 			Point southWest = convertNormalizedPointToViewCoordinates(getShape().nearestOutlinePoint(bottomLeft), 1);

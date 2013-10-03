@@ -171,7 +171,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (_componentDefinition != null) {
 			_componentDefinition.removeFromComponentInstances(this);
 			_componentDefinition.deleteObserver(this);
@@ -183,6 +183,7 @@ public abstract class ComponentInstance extends IEObject implements Bindable, Fl
 		_knownBindings = null;
 		_componentDefinition = null;
 		xmlComponentName = null;
+		return true;
 	}
 
 	// ==========================================================================

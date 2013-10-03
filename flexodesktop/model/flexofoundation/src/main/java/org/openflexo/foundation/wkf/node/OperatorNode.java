@@ -153,9 +153,10 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

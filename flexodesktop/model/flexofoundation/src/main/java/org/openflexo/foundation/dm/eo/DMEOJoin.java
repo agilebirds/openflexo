@@ -241,8 +241,9 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		delete(true);
+		return true;
 	}
 
 	public void delete(boolean deleteEOJoin) {

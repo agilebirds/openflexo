@@ -52,6 +52,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 
 	protected ProcessGraphicalRepresentation(Drawing<FlexoProcess> drawing, FlexoProcess process) {
 		super(drawing);
+		setDrawWorkingArea(true);
 		this.process = process;
 		// addToMouseClickControls(new AnnotationMouseClickControl());
 		checkAndSetGrid();

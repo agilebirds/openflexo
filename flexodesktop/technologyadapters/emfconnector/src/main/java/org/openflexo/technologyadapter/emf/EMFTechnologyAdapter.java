@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -25,9 +26,12 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.ecore.impl.EcorePackageImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -61,7 +65,8 @@ import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
  */
 @DeclareModelSlots({ // ModelSlot(s) declaration
 @DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
-		@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
+// Removed because it is unusable
+// @DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
 })
 @DeclareRepositoryType({ EMFMetaModelRepository.class, EMFModelRepository.class })
 public class EMFTechnologyAdapter extends TechnologyAdapter {
@@ -69,6 +74,15 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	protected static final Logger logger = Logger.getLogger(EMFTechnologyAdapter.class.getPackage().getName());
 
 	private static final EMFBindingFactory BINDING_FACTORY = new EMFBindingFactory();
+
+	// Static references to ECORE properties
+
+	private static String ECORE_MM_NAME = "Ecore Metamodel";
+	private static String ECORE_MM_URI = "http://www.eclipse.org/emf/2002/Ecore";
+	private static String ECORE_MM_EXT = "ecore";
+	private static String ECORE_MM_PKGCLSNAME = EcorePackageImpl.class.getName();
+	private static String ECORE_MM_FACTORYCLSNAME = EcoreResourceFactoryImpl.class.getName();
+	private EMFMetaModelResource ecoreMetaModelResource = null;
 
 	/**
 	 * 
@@ -120,9 +134,16 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		EMFTechnologyContextManager technologyContextManager = (EMFTechnologyContextManager) getTechnologyAdapterService()
 				.getTechnologyContextManager(this);
 
+		// A single MM Repository for all ResourceCenters
+
 		EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
 		if (mmRepository == null) {
-			mmRepository = createMetaModelRepository(resourceCenter);
+			try {
+				mmRepository = createMetaModelRepository(resourceCenter);
+			} catch (ModelDefinitionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		EMFModelRepository modelRepository = resourceCenter.getRepository(EMFModelRepository.class, this);
@@ -157,12 +178,12 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
 		if (isValidMetaModelFile(candidateFile)) {
 			EMFMetaModelResource mmRes = retrieveMetaModelResource(candidateFile);
-			EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
+			EMFMetaModelRepository mmRepo = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
 			if (mmRes != null) {
 				RepositoryFolder<EMFMetaModelResource> folder;
 				try {
-					folder = mmRepository.getRepositoryFolder(candidateFile, true);
-					mmRepository.registerResource(mmRes, folder);
+					folder = mmRepo.getRepositoryFolder(candidateFile, true);
+					mmRepo.registerResource(mmRes, folder);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -185,27 +206,36 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
 		EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
 		EMFModelRepository modelRepository = resourceCenter.getRepository(EMFModelRepository.class, this);
-		for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
-			if (isValidModelFile(candidateFile, mmRes)) {
-				EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes);
-				if (mRes != null) {
-					RepositoryFolder<EMFModelResource> folder;
-					try {
-						folder = modelRepository.getRepositoryFolder(candidateFile, true);
-						modelRepository.registerResource(mRes, folder);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					// Also register the resource in the ResourceCenter seen as a ResourceRepository
-					if (resourceCenter instanceof ResourceRepository) {
-						try {
-							((ResourceRepository) resourceCenter).registerResource(mmRes,
-									((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
-						} catch (IOException e) {
-							e.printStackTrace();
+
+		List<FlexoResourceCenter> rscCenters = technologyContextManager.getResourceCenterService().getResourceCenters();
+
+		for (FlexoResourceCenter<?> rscCenter : rscCenters) {
+			mmRepository = rscCenter.getRepository(EMFMetaModelRepository.class, this);
+			if (mmRepository != null) {
+
+				for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
+					if (isValidModelFile(candidateFile, mmRes)) {
+						EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes);
+						if (mRes != null) {
+							RepositoryFolder<EMFModelResource> folder;
+							try {
+								folder = modelRepository.getRepositoryFolder(candidateFile, true);
+								modelRepository.registerResource(mRes, folder);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							// Also register the resource in the ResourceCenter seen as a ResourceRepository
+							if (resourceCenter instanceof ResourceRepository) {
+								try {
+									((ResourceRepository) resourceCenter).registerResource(mmRes,
+											((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+							return mRes;
 						}
 					}
-					return mRes;
 				}
 			}
 		}
@@ -241,12 +271,35 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * 
 	 * Create a metamodel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
 	 * 
+	 * @throws ModelDefinitionException
+	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createMetaModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
-	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter<?> resourceCenter) {
-		EMFMetaModelRepository returned = new EMFMetaModelRepository(this, resourceCenter);
-		resourceCenter.registerRepository(returned, EMFMetaModelRepository.class, this);
-		return returned;
+	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter<?> resourceCenter) throws ModelDefinitionException {
+
+		EMFMetaModelRepository mmRepository = new EMFMetaModelRepository(this, resourceCenter);
+		if (ecoreMetaModelResource == null) {
+			// register ecore MM in every resource center
+			ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
+			ecoreMetaModelResource = factory.newInstance(EMFMetaModelResource.class);
+			ecoreMetaModelResource.setTechnologyAdapter(this);
+			ecoreMetaModelResource.setURI(ECORE_MM_URI);
+			ecoreMetaModelResource.setName(ECORE_MM_NAME);
+			ecoreMetaModelResource.setFile(null);
+			ecoreMetaModelResource.setModelFileExtension(ECORE_MM_EXT);
+			ecoreMetaModelResource.setPackageClassName(ECORE_MM_PKGCLSNAME);
+			ecoreMetaModelResource.setResourceFactoryClassName(ECORE_MM_FACTORYCLSNAME);
+			ecoreMetaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
+			getTechnologyContextManager().registerResource(ecoreMetaModelResource);
+		} else {
+
+			RepositoryFolder<EMFMetaModelResource> folder;
+			folder = mmRepository.getRootFolder();
+			mmRepository.registerResource(ecoreMetaModelResource, folder);
+		}
+		resourceCenter.registerRepository(mmRepository, EMFMetaModelRepository.class, this);
+
+		return mmRepository;
 	}
 
 	/**
@@ -507,7 +560,10 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	public String getExpectedModelExtension(EMFMetaModelResource metaModelResource) {
-		return "." + metaModelResource.getModelFileExtension();
+		if (metaModelResource != null) {
+			return "." + metaModelResource.getModelFileExtension();
+		}
+		return null;
 	}
 
 }

@@ -237,7 +237,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		// 1. remove from WS (while if there are many portTypes...)
 		while (isUsedInWebService()) {
@@ -260,6 +260,7 @@ public class ServiceInterface extends WKFObject implements InspectableObject, Le
 		_operations = null;
 		notifyObservers(new ServiceInterfaceRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	public static ServiceInterface copyPortsFromRegistry(ServiceInterface toInterface, PortRegistery fromReg) {

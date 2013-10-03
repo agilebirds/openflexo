@@ -20,10 +20,16 @@
 package org.openflexo.technologyadapter.excel.rm;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -33,8 +39,10 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.io.BasicExcelModelConverter;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
 import org.openflexo.toolbox.IProgress;
 
@@ -119,10 +127,32 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	 * @throws FlexoException
 	 */
 	@Override
-	public ExcelWorkbook loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
-		ExcelWorkbook resourceData = null; // TODO: insert loading code here
-		setResourceData(resourceData);
+	public ExcelWorkbook loadResourceData(IProgress progress) throws InvalidExcelFormatException {
+
+		ExcelWorkbook resourceData = null;
+
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(getFile());
+			HSSFWorkbook wbOpenned = new HSSFWorkbook(fis);
+			// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
+			BasicExcelModelConverter converter = new BasicExcelModelConverter();
+			resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
+			// TODO how to change this?
+			resourceData.setResource(this/*retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager())*/);
+			setResourceData(resourceData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (OfficeXmlFileException e) {
+			// TODO: load an XSSFWorkbook
+			throw new InvalidExcelFormatException(this, e);
+		} finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return resourceData;
 	}
 
@@ -158,7 +188,7 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 		}
 		if (resourceData != null) {
 			FileWritingLock lock = willWriteOnDisk();
-			writeToFile();
+			writeToFile(resourceData.getWorkbook());
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
 			resourceData.clearIsModified(false);
@@ -173,14 +203,26 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	 * 
 	 * @throws SaveResourceException
 	 */
-	private void writeToFile() throws SaveResourceException {
-		// TODO: insert saving code here
+	private void writeToFile(Workbook workbook) throws SaveResourceException {
 		logger.info("Wrote " + getFile());
+		FileOutputStream fileOut;
+
+		try {
+			fileOut = new FileOutputStream(getFile());
+			workbook.write(fileOut);
+			fileOut.close();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Class<ExcelWorkbook> getResourceDataClass() {
 		return ExcelWorkbook.class;
 	}
-
 }
