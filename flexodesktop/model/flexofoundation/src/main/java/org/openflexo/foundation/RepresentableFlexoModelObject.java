@@ -135,8 +135,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double _doubleGraphicalPropertyForKey(String key, double defaultValue) {
+		return _doubleGraphicalPropertyForKey(key, defaultValue, true);
+	}
+
+	public double _doubleGraphicalPropertyForKey(String key, double defaultValue, boolean storeDefaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
+			if (!storeDefaultValue) {
+				return defaultValue;
+			}
 			// logger.warning("Cannot retrieve value for "+key+". Using default value: "+defaultValue);
 			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
@@ -145,9 +152,16 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public int _integerGraphicalPropertyForKey(String key, int defaultValue) {
+		return _integerGraphicalPropertyForKey(key, defaultValue, true);
+	}
+
+	public int _integerGraphicalPropertyForKey(String key, int defaultValue, boolean storeDefaultValue) {
 		Object returned = _graphicalPropertyForKey(key);
 		if (returned == null) {
 			// logger.warning("Cannot retrieve value. Using default.");
+			if (!storeDefaultValue) {
+				return defaultValue;
+			}
 			_setGraphicalPropertyForKey(defaultValue, key);
 			returned = defaultValue;
 		}
@@ -263,11 +277,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public int getGridSize(String context) {
-		return getGridSize(context, 30);
+		return getGridSize(context, 30, false);
 	}
 
 	public int getGridSize(String context, int defaultValue) {
-		return _integerGraphicalPropertyForKey(GRID_SIZE + "_" + context, defaultValue);
+		return getGridSize(context, defaultValue, true);
+	}
+
+	public int getGridSize(String context, int defaultValue, boolean storeDefaultValue) {
+		return _integerGraphicalPropertyForKey(GRID_SIZE + "_" + context, defaultValue, storeDefaultValue);
 	}
 
 	public void setGridSize(int gridSize, String context) {
@@ -322,11 +340,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getX(String context) {
-		return getX(context, 0);
+		return getX(context, 0, false);
 	}
 
 	public double getX(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(POSX + "_" + context, defaultValue);
+		return getX(context, defaultValue, true);
+	}
+
+	public double getX(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(POSX + "_" + context, defaultValue, storeDefaultValue);
 	}
 
 	public void setX(double x, String context) {
@@ -340,11 +362,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getY(String context) {
-		return getY(context, 0);
+		return getY(context, 0, false);
 	}
 
 	public double getY(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(POSY + "_" + context, defaultValue);
+		return getY(context, defaultValue, true);
+	}
+
+	public double getY(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(POSY + "_" + context, defaultValue, storeDefaultValue);
 	}
 
 	public void setY(double y, String context) {
@@ -376,7 +402,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getWidth(String context) {
-		return getWidth(context, getDefaultWidth());
+		return getWidth(context, getDefaultWidth(), false);
 	}
 
 	protected int getDefaultWidth() {
@@ -384,7 +410,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getWidth(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(WIDTH + "_" + context, defaultValue);
+		return getWidth(context, defaultValue, true);
+	}
+
+	public double getWidth(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(WIDTH + "_" + context, defaultValue, storeDefaultValue);
 	}
 
 	public void setWidth(double width, String context) {
@@ -397,7 +427,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getHeight(String context) {
-		return getHeight(context, getDefaultHeight());
+		return getHeight(context, getDefaultHeight(), false);
 	}
 
 	protected int getDefaultHeight() {
@@ -405,7 +435,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getHeight(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(HEIGHT + "_" + context, defaultValue);
+		return getHeight(context, defaultValue, true);
+	}
+
+	public double getHeight(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(HEIGHT + "_" + context, defaultValue, storeDefaultValue);
 	}
 
 	public void setHeight(double height, String context) {
@@ -422,11 +456,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getLabelX(String context) {
-		return getLabelX(context, 0);
+		return getLabelX(context, 0, false);
 	}
 
 	public double getLabelX(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(getLabelXKeyForContext(context), defaultValue);
+		return getLabelX(context, defaultValue, true);
+	}
+
+	public double getLabelX(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(getLabelXKeyForContext(context), defaultValue, storeDefaultValue);
 	}
 
 	public void setLabelX(double x, String context) {
@@ -438,11 +476,15 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getLabelY(String context) {
-		return getLabelY(context, 0);
+		return getLabelY(context, 0, false);
 	}
 
 	public double getLabelY(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(getLabelYKeyForContext(context), defaultValue);
+		return getLabelY(context, defaultValue, true);
+	}
+
+	public double getLabelY(String context, double defaultValue, boolean storeDefaultValue) {
+		return _doubleGraphicalPropertyForKey(getLabelYKeyForContext(context), defaultValue, storeDefaultValue);
 	}
 
 	public void setLabelY(double y, String context) {
@@ -542,7 +584,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public int getIntegerParameter(String key, int defaultValue) {
-		return _integerGraphicalPropertyForKey(key, defaultValue);
+		return getIntegerParameter(key, defaultValue, true);
+	}
+
+	public int getIntegerParameter(String key, int defaultValue, boolean storeDefaultValue) {
+		return _integerGraphicalPropertyForKey(key, defaultValue, storeDefaultValue);
 	}
 
 	public void setIntegerParameter(int value, String key) {
