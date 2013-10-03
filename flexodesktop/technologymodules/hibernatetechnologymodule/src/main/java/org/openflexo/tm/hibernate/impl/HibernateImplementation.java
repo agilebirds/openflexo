@@ -112,7 +112,7 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		for (HibernateModel hibernateModel : new Vector<HibernateModel>(getModels())) {
 			hibernateModel.delete();
@@ -122,6 +122,7 @@ public class HibernateImplementation extends TechnologyModuleImplementation {
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

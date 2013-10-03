@@ -83,8 +83,8 @@ public abstract class OWLRestriction extends OWLClass implements IFlexoOntologyF
 	}
 
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean delete() {
+		return super.delete();
 	}
 
 	@Override

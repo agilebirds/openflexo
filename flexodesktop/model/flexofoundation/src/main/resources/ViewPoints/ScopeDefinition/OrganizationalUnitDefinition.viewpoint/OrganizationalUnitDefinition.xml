@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl" modelVersion="1.0">
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl" modelVersion="1.0" name="OrganizationalUnitDefinition.owl">
   <LocalizedDictionary id="2">
     <Localized id="3" key="position" lang="en">Position</Localized>
     <Localized id="4" key="Position" lang="en">Position</Localized>
@@ -18,8 +18,8 @@
     <Localized id="17" key="task_description" lang="en">Task description</Localized>
     <Localized id="18" key="RootOrganizationalUnit" lang="en">Top-level organization unit</Localized>
     <Localized id="19" key="OrganizationalUnit" lang="en">Organization unit</Localized>
-    <Localized id="20" key="DropOrganizationalUnitInTopLevel" lang="en">Create new organization unit</Localized>
-    <Localized id="21" key="DrawOrganizationalUnit" lang="en">Draw existing organization unit</Localized>
+    <Localized id="20" key="DropRootOrganizationalUnitAtTopLevel" lang="en">Create new top-level organization unit</Localized>
+    <Localized id="21" key="DrawRootOrganizationalUnitAtTopLevel" lang="en">Draw existing top-level organization unit</Localized>
     <Localized id="22" key="create_root_organization_unit" lang="en">Create root organization unit</Localized>
     <Localized id="23" key="choose_and_draw_root_organization_unit" lang="en">Choose and draw root organization unit</Localized>
     <Localized id="24" key="uri" lang="English">URI</Localized>

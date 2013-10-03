@@ -178,11 +178,12 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		removeTabComponentInstance();
 		// getParentPetriGraph().removeFromNodes(this);
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	// ==========================================================================

@@ -95,14 +95,14 @@ public abstract class FIBMultipleValues extends FIBWidget {
 
 	private Type getListBindingType() {
 		if (LIST_BINDING_TYPE == null) {
-			LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(getIteratorClass()));
+			LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(getIteratorType()));
 		}
 		return LIST_BINDING_TYPE;
 	}
 
 	private Type getArrayBindingType() {
 		if (ARRAY_BINDING_TYPE == null) {
-			ARRAY_BINDING_TYPE = new GenericArrayTypeImpl(new WilcardTypeImpl(getIteratorClass()));
+			ARRAY_BINDING_TYPE = new GenericArrayTypeImpl(new WilcardTypeImpl(getIteratorType()));
 		}
 		return ARRAY_BINDING_TYPE;
 	}
@@ -173,6 +173,19 @@ public abstract class FIBMultipleValues extends FIBWidget {
 			return true;
 		}
 		return false;
+	}
+
+	private Type iteratorType;
+
+	public Type getIteratorType() {
+		Class<?> iteratorClass = getIteratorClass();
+		if (iteratorClass.getTypeParameters().length > 0) {
+			if (iteratorType == null) {
+				iteratorType = TypeUtils.makeInferedType(iteratorClass);
+			}
+			return iteratorType;
+		}
+		return iteratorClass;
 	}
 
 	public Class getIteratorClass() {
@@ -322,7 +335,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	public Type getDynamicAccessType() {
 		Type[] args = new Type[2];
 		args[0] = getDataType();
-		args[1] = getIteratorClass();
+		args[1] = getIteratorType();
 		return new ParameterizedTypeImpl(FIBMultipleValuesDynamicModel.class, args);
 	}
 

@@ -340,4 +340,12 @@ public class FlexoEOModelResource extends FlexoStorageResource<EOModelResourceDa
 		dmEOModel.updateFromEOModel();
 	}
 
+	@Override
+	public void unloadResourceData() {
+		if (isLoaded()) {
+			getResourceData().delete();
+			_resourceData = null;
+		}
+	}
+
 }

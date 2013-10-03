@@ -70,8 +70,9 @@ public class DeleteViewpoint extends FlexoAction<DeleteViewpoint, ViewPoint, Vie
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Delete viewpoint");
-		getFocusedObject().delete();
-		getFocusedObject().getResource().getFile().delete();
+		if (getFocusedObject().getResource() != null) {
+			getFocusedObject().getResource().delete();
+		}
 	}
 
 }

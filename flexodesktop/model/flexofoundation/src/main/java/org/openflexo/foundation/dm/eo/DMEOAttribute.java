@@ -141,7 +141,7 @@ public class DMEOAttribute extends DMEOProperty {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		setPrototype(null);
 		if (getEOAttribute() != null) {
 			try {
@@ -161,6 +161,7 @@ public class DMEOAttribute extends DMEOProperty {
 		}
 		super.delete();
 		_eoAttribute = null;
+		return true;
 	}
 
 	/**

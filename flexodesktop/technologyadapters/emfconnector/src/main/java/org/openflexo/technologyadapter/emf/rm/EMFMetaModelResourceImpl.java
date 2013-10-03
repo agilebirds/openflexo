@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -21,14 +22,17 @@ package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
@@ -37,6 +41,7 @@ import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
 import org.openflexo.toolbox.IProgress;
+import org.openflexo.toolbox.JarInDirClassLoader;
 
 /**
  * EMF MetaModel Resource Implementation.
@@ -85,8 +90,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 
 		try {
 			if (f != null){
-				classLoader = new JarClassLoader(Collections.singletonList(getFile()));
+
+				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));				
 				ePackageClass = classLoader.loadClass(getPackageClassName());
+				
 			}
 			else {
 				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
@@ -95,15 +102,20 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 			if (ePackageClass != null) {
 				Field ePackageField = ePackageClass.getField("eINSTANCE");
 				if (ePackageField != null) {
-					setPackage((EPackage) ePackageField.get(null));
+					EPackage ePack = (EPackage) ePackageField.get(null);
+					setPackage(ePack);
+					EPackage.Registry.INSTANCE.put(ePack.getNsPrefix(), ePack);
 					Class<?> resourceFactoryClass = classLoader.loadClass(getResourceFactoryClassName());
 					if (resourceFactoryClass != null) {
 						setResourceFactory((Resource.Factory) resourceFactoryClass.newInstance());
+
+
 						if (getPackage() != null && getPackage().getNsURI().equalsIgnoreCase(getURI()) && getResourceFactory() != null) {
 
 							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
 							result = converter.convertMetaModel(getPackage());
 							result.setResource(this);
+							this.resourceData = result;
 						}
 					}
 				}

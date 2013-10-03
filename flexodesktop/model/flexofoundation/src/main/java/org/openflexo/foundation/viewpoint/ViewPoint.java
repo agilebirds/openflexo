@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdom2.Attribute;
@@ -50,7 +49,6 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
-import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
 import org.openflexo.toolbox.ChainedCollection;
@@ -272,7 +270,47 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	/**
-	 * Return all {@link EditionPattern} defined in this {@link ViewPoint}
+	 * Return all VirtualModel of a given class.<br>
+	 * If onlyFinalInstances is set to true, only instances of supplied class (and not specialized classes) are retrieved
+	 * 
+	 * @return
+	 */
+	public <VM extends VirtualModel<?>> List<VM> getVirtualModels(Class<VM> virtualModelClass, boolean onlyFinalInstances) {
+		List<VM> returned = new ArrayList<VM>();
+		for (VirtualModel<?> vm : getVirtualModels()) {
+			if (onlyFinalInstances) {
+				if (virtualModelClass.equals(vm.getClass())) {
+					returned.add((VM) vm);
+				}
+			} else {
+				if (virtualModelClass.isAssignableFrom(vm.getClass())) {
+					returned.add((VM) vm);
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return all "plain" {@link VirtualModel} defined in this {@link ViewPoint} (does NOT return subclasses of {@link VirtualModel})
+	 * 
+	 * @return
+	 */
+	public List<VirtualModel> getPlainVirtualModels() {
+		return getVirtualModels(VirtualModel.class, true);
+	}
+
+	/**
+	 * Return all {@link DiagramSpecification} defined in this {@link ViewPoint}
+	 * 
+	 * @return
+	 */
+	public List<DiagramSpecification> getDiagramSpecifications() {
+		return getVirtualModels(DiagramSpecification.class, true);
+	}
+
+	/**
+	 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
 	 * 
 	 * @return
 	 */
@@ -504,19 +542,6 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return modelSlots;
 	}*/
 
-	/*@Deprecated
-	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
-		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
-		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot instanceof TypeSafeModelSlot) {
-				if (((TypeSafeModelSlot) modelSlot).getMetaModelResource() != null) {
-					allMetaModels.add(((TypeSafeModelSlot) modelSlot).getMetaModelResource());
-				}
-			}
-		}
-		return allMetaModels;
-	}*/
-
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
@@ -589,34 +614,22 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	@Override
-	public void delete() {
-		// tests on this deleted object
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("delete: Viewpoint " + getName());
+	public boolean delete() {
+
+		logger.info("Deleting ViewPoint " + this);
+
+		// Unregister the viewpoint resource from the viewpoint library
+		if (getResource() != null && getViewPointLibrary() != null) {
+			getViewPointLibrary().unregisterViewPoint(getResource());
 		}
 
-		if (getResource() != null) {
-			// Set the file resource to be remove upon next save of the resource manager
-			getResource().delete();
-		}
-
-		// needed?
-		/*for (VirtualModel vm : getVirtualModels()) {
-			removeFromVirtualModels(vm);
-			vm.delete();
-		}*/
-
-		// Delete the viewpoint resource from the view library
-		getViewPointLibrary().delete(this);
-		setChanged();
-
-		// Notify observers that the view has been deleted
-		notifyObservers(new ViewPointDataModification("viewPoints", this, null));
-
-		// Set the current state of this view to deleted
+		// Delete viewpoint
 		super.delete();
 
+		// Delete observers
 		deleteObservers();
+
+		return true;
 	}
 
 	/**

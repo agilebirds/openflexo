@@ -20,6 +20,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
@@ -32,7 +33,7 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelInstance<VMI, ?>> extends FlexoXMLFileResourceImpl<VMI>
-		implements VirtualModelInstanceResource<VMI> {
+		implements VirtualModelInstanceResource<VMI>, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelInstanceResourceImpl.class.getPackage().getName());
 
@@ -192,6 +193,11 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	@Override
 	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
 		// Not applicable
+	}
+
+	@Override
+	public ViewResource getContainer() {
+		return (ViewResource) performSuperGetter(CONTAINER);
 	}
 
 }

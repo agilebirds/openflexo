@@ -186,23 +186,34 @@ public abstract class FlexoFileResourceImpl<RD extends ResourceData<RD>> extends
 	 * Delete this resource by deleting the file
 	 */
 	@Override
-	public void delete() {
-		delete(true);
+	public boolean delete() {
+		if (hasWritePermission()) {
+			return delete(true);
+		} else {
+			logger.warning("Delete requested for READ-ONLY file resource " + this);
+			return false;
+		}
 	}
 
 	/**
 	 * Delete this resource. Delete file is flag deleteFile is true.
 	 */
 	@Override
-	public void delete(boolean deleteFile) {
-		super.delete();
-		if (getFile() != null && getFile().exists() && deleteFile) {
-			if (this instanceof FlexoProjectResource) {
-				((FlexoProjectResource) this).getProject().addToFilesToDelete(getFile());
+	public boolean delete(boolean deleteFile) {
+		if (hasWritePermission()) {
+			if (super.delete()) {
+				if (getFile() != null && getFile().exists() && deleteFile) {
+					getServiceManager().getResourceManager().addToFilesToDelete(getFile());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
+					}
+				}
+				return true;
 			}
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
-			}
+			return false;
+		} else {
+			logger.warning("Delete requested for READ-ONLY file resource " + this);
+			return false;
 		}
 	}
 

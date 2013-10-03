@@ -35,11 +35,12 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/AddToListActionPanel.fib")
-public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableAction<MS, Object> {
+public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, Object> {
 
 	private static final Logger logger = Logger.getLogger(AddToListAction.class.getPackage().getName());
 
 	private DataBinding<Object> value;
+	private DataBinding<Object> list;
 
 	public AddToListAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -48,12 +49,16 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
+		out.append(getList().toString() + " .add( " + getValue().toString() + ");", context);
 		return out.toString();
 	}
 
-	@Override
-	public boolean isAssignationRequired() {
+	
+	public boolean isListRequired() {
+		return true;
+	}
+	
+	public boolean isValueRequired() {
 		return true;
 	}
 
@@ -69,6 +74,44 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		}
 		return null;
 	}
+	
+
+	public Type getListType() {
+		if (getValue().isSet() && getValue().isValid()) {
+			return  new ParameterizedTypeImpl(List.class, getValueType());
+		}
+		return new ParameterizedTypeImpl(List.class, Object.class);
+	}
+
+	public DataBinding<Object> getList() {
+
+		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
+		if (list == null) {
+			list = new DataBinding<Object>(this, new ParameterizedTypeImpl(List.class, Object.class), BindingDefinitionType.GET);
+			list.setBindingName("list");
+		}
+		return list;
+	}
+
+	public void setList(DataBinding<Object> list) {
+
+		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
+		if (list != null) {
+			list.setOwner(this);
+			list.setBindingName("list");
+			list.setDeclaredType(new ParameterizedTypeImpl(List.class, Object.class));
+			list.setBindingDefinitionType(BindingDefinitionType.GET);
+		}
+		this.list = list;
+	}
+
+	public Type getValueType() {
+		if (getValue().isSet() && getValue().isValid()) {
+			return getValue().getAnalyzedType();
+		}
+		return Object.class;
+	}
+
 
 	public DataBinding<Object> getValue() {
 		if (value == null) {
@@ -89,37 +132,28 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 	}
 
 	@Override
-	public Type getAssignableType() {
-		// TODO Xtof: when I will have found how to set same kind of Individual:<name> type in the XSD TA
-		/* if (getValue().isSet() && getValue().isValid()) {
-			return new ParameterizedTypeImpl(List.class,getValue().getAnalyzedType());
-		} */
-		return new ParameterizedTypeImpl(List.class, Object.class);
-	}
-
-	@Override
 	public Object performAction(EditionSchemeAction action) {
 		logger.info("performing AddToListAction");
 
-		DataBinding<Object> assignation = getAssignation();
+		DataBinding<Object> list = getList();
 		Object objToAdd = getDeclaredObject(action);
 
 		try {
 
-			if (assignation != null) {
-				Object assigObj = assignation.getBindingValue(action);
-				if (assigObj instanceof List) {
+			if (list != null) {
+				Object listObj = list.getBindingValue(action);
+				if (listObj instanceof List) {
 					if (objToAdd != null) {
-						((List) assigObj).add(objToAdd);
+						((List) listObj).add(objToAdd);
 					} else {
 						logger.warning("Won't add null object to list");
 
 					}
 				} else {
-					if (assigObj == null) {
-						logger.warning("Cannot add object to a null target : " + assignation.getUnparsedBinding());
+					if (listObj == null) {
+						logger.warning("Cannot add object to a null target : " + list.getUnparsedBinding());
 					} else {
-						logger.warning("Cannot add object to a non list target : " + assigObj.toString());
+						logger.warning("Cannot add object to a non list target : " + listObj.toString());
 					}
 					return null;
 				}
@@ -141,10 +175,21 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		return objToAdd;
 	}
 
+	protected void updateVariableValue() {
+		value = new DataBinding<Object>("value", this, getValueType(), BindingDefinitionType.GET_SET);
+	}
+	
+	protected void updateVariableList() {
+		list = new DataBinding<Object>("list", this, getListType(), BindingDefinitionType.GET_SET);
+	}
+	
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 		if (dataBinding == getValue()) {
-			updateVariableAssignation();
+			updateVariableValue();
+		}
+		if (dataBinding == getList()) {
+			updateVariableList();
 		}
 		super.notifiedBindingChanged(dataBinding);
 	}
@@ -160,5 +205,25 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends AssignableActio
 		}
 
 	}
+	
+	public static class ListBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
+		public ListBindingIsRequiredAndMustBeValid() {
+			super("'list'_binding_is_not_valid", AddToListAction.class);
+		}
+
+		@Override
+		public DataBinding<Object> getBinding(AddToListAction object) {
+			return object.getList();
+		}
+
+	}
+
+	@Override
+	public void finalizePerformAction(EditionSchemeAction action,
+			Object initialContext) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

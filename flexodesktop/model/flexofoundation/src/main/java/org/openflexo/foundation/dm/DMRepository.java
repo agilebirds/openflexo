@@ -307,7 +307,7 @@ public abstract class DMRepository extends DMObject {
 	 * @see org.openflexo.foundation.DeletableObject#delete()
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Vector<DMObject> entitiesToDelete = new Vector<DMObject>();
 		entitiesToDelete.addAll(getEntities().values());
 		for (Enumeration en = entitiesToDelete.elements(); en.hasMoreElements();) {
@@ -329,6 +329,7 @@ public abstract class DMRepository extends DMObject {
 		packages = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public boolean hasDiagrams() {

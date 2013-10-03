@@ -47,7 +47,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject implements GRShape
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
@@ -59,6 +59,7 @@ public class ExampleDiagramShape extends ExampleDiagramObject implements GRShape
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

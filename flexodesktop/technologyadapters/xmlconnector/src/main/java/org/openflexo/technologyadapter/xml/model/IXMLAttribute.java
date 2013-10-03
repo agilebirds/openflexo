@@ -36,6 +36,9 @@ import java.lang.reflect.Type;
 public interface IXMLAttribute {
 
 	 public boolean isSimpleAttribute();
+
+	 // return true if it is an Element translated as an attribute
+	 public boolean isElement();
 	 
 	 public void addValue(IXMLIndividual<?, ?> indiv, Object value);
 	 

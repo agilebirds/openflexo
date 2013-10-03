@@ -141,7 +141,7 @@ public class WSDLRepository extends XMLSchemaRepository {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		// 1. remove from WS (while if there are many portTypes...)
 		while (isUsedInWebService()) {
 			WSRepository rep = getProject().getFlexoWSLibrary().getWSRepositoryNamed(getName());
@@ -158,7 +158,7 @@ public class WSDLRepository extends XMLSchemaRepository {
 		}
 		wsdlFile = null;
 		getDMModel().removeFromWSDLRepositories(this);
-		super.delete();
+		return super.delete();
 	}
 
 	public FlexoProjectFile getWSDLFile() {

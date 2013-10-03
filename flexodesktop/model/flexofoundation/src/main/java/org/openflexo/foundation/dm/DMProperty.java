@@ -145,7 +145,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		// logger.info(">>> delete() called for property "+hashCode()+" (is "+_implementationType+")");
 
 		if (getEntity() != null) {
@@ -164,6 +164,7 @@ public class DMProperty extends DMObject implements Typed, BindingValue.BindingP
 		_implementationType = null;
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

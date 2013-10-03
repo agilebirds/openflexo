@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
@@ -86,8 +86,8 @@ public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends
 	}
 
 	@Override
-	public TypeSafeModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
-		return (TypeSafeModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
+	public TypeAwareModelSlotInstance<?, ?, MS> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeAwareModelSlotInstance<?, ?, MS>) super.getModelSlotInstance(action);
 	}
 
 }

@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.ecore.impl.EcorePackageImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -54,8 +56,6 @@ import org.openflexo.technologyadapter.emf.rm.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResourceImpl;
 import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
-import org.eclipse.emf.ecore.impl.EcorePackageImpl;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 /**
  * This class defines and implements the EMF technology adapter
@@ -64,8 +64,9 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  * 
  */
 @DeclareModelSlots({ // ModelSlot(s) declaration
-	@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
-	@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
+@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
+// Removed because it is unusable
+// @DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
 })
 @DeclareRepositoryType({ EMFMetaModelRepository.class, EMFModelRepository.class })
 public class EMFTechnologyAdapter extends TechnologyAdapter {
@@ -74,7 +75,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 
 	private static final EMFBindingFactory BINDING_FACTORY = new EMFBindingFactory();
 
-	//Static references to ECORE properties
+	// Static references to ECORE properties
 
 	private static String ECORE_MM_NAME = "Ecore Metamodel";
 	private static String ECORE_MM_URI = "http://www.eclipse.org/emf/2002/Ecore";
@@ -201,8 +202,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		return null;
 	}
 
-
-
 	protected EMFModelResource tryToLookupModel(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
 		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
 		EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
@@ -210,10 +209,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 
 		List<FlexoResourceCenter> rscCenters = technologyContextManager.getResourceCenterService().getResourceCenters();
 
-		for (FlexoResourceCenter<?> rscCenter : rscCenters){
-			mmRepository = (EMFMetaModelRepository) rscCenter.getRepository(EMFMetaModelRepository.class, this);
-			if (mmRepository != null){
-
+		for (FlexoResourceCenter<?> rscCenter : rscCenters) {
+			mmRepository = rscCenter.getRepository(EMFMetaModelRepository.class, this);
+			if (mmRepository != null) {
 
 				for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
 					if (isValidModelFile(candidateFile, mmRes)) {
@@ -265,21 +263,22 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
 		if (contents instanceof File) {
 			System.out
-			.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
+					.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
 		}
 	}
 
 	/**
 	 * 
 	 * Create a metamodel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
-	 * @throws ModelDefinitionException 
+	 * 
+	 * @throws ModelDefinitionException
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createMetaModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
 	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter<?> resourceCenter) throws ModelDefinitionException {
 
-		EMFMetaModelRepository	mmRepository = new EMFMetaModelRepository(this, resourceCenter);
-		if (ecoreMetaModelResource == null){
+		EMFMetaModelRepository mmRepository = new EMFMetaModelRepository(this, resourceCenter);
+		if (ecoreMetaModelResource == null) {
 			// register ecore MM in every resource center
 			ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
 			ecoreMetaModelResource = factory.newInstance(EMFMetaModelResource.class);
@@ -292,8 +291,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 			ecoreMetaModelResource.setResourceFactoryClassName(ECORE_MM_FACTORYCLSNAME);
 			ecoreMetaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 			getTechnologyContextManager().registerResource(ecoreMetaModelResource);
-		}
-		else {
+		} else {
 
 			RepositoryFolder<EMFMetaModelResource> folder;
 			folder = mmRepository.getRootFolder();
@@ -562,7 +560,10 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	public String getExpectedModelExtension(EMFMetaModelResource metaModelResource) {
-		return "." + metaModelResource.getModelFileExtension();
+		if (metaModelResource != null) {
+			return "." + metaModelResource.getModelFileExtension();
+		}
+		return null;
 	}
 
 }

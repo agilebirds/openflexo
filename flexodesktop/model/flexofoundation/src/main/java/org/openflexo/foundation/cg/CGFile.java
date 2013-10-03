@@ -406,11 +406,11 @@ public class CGFile extends CGObject implements CGPathElement {
 	}
 
 	@Override
-	public final void delete() {
-		delete(false);
+	public final boolean delete() {
+		return delete(false);
 	}
 
-	public final void delete(boolean deleteFiles) {
+	public final boolean delete(boolean deleteFiles) {
 		if (getRepository() != null) {
 			getRepository().removeFromFiles(this);
 		}
@@ -426,6 +426,7 @@ public class CGFile extends CGObject implements CGPathElement {
 		setChanged();
 		notifyObservers(new CGFileDeleted(this));
 		deleteObservers();
+		return true;
 	}
 
 	public void writeModifiedFile() throws SaveResourceException, FlexoException {

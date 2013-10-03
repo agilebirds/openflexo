@@ -309,7 +309,7 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete() in PortMapRegistery");
 		}
@@ -326,6 +326,7 @@ public final class PortMapRegistery extends WKFObject implements InspectableObje
 		}
 		setProcess(null);
 		deleteObservers();
+		return true;
 	}
 
 	@Override

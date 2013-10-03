@@ -64,10 +64,11 @@ public class Key extends DKVObject implements InspectableObject, Comparator, Sor
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		getDomain().removeFromKeys(this);
 		super.delete();
 		this.deleteObservers();
+		return true;
 	}
 
 	@Override

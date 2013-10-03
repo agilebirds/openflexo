@@ -24,16 +24,18 @@ import java.util.logging.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
+import org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFEnumIndividual;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -70,7 +72,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 	@Override
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		EMFObjectIndividual result = null;
-		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
+		TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
 		if (modelSlotInstance.getResourceData() != null) {
 			IFlexoOntologyClass aClass = getOntologyClass();
 			if (aClass instanceof EMFClassClass) {
@@ -102,7 +104,12 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							result.getObject().eSet(property.getObject(), value);
+							if (value instanceof AEMFMetaModelObjectImpl){
+								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
+							}
+							else {
+								result.getObject().eSet(property.getObject(), value);
+							}
 						} else if (objectPropertyAssertion.getOntologyProperty() instanceof EMFReferenceObjectProperty) {
 							EMFReferenceObjectProperty property = (EMFReferenceObjectProperty) objectPropertyAssertion
 									.getOntologyProperty();
@@ -110,7 +117,17 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							result.getObject().eSet(property.getObject(), value);
+							if (value instanceof AEMFMetaModelObjectImpl){
+								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
+							}
+							else {
+								if (value instanceof EMFObjectIndividual){
+									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+								}
+								else {
+									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), value);
+								}
+							}
 						} else {
 							logger.warning("Unexpected "
 									+ objectPropertyAssertion.getOntologyProperty()

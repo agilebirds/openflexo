@@ -200,9 +200,10 @@ public final class RoleCompound extends WorkflowModelObject {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public boolean isSingleRole() {

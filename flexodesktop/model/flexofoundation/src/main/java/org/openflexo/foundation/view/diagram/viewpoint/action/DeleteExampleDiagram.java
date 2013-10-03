@@ -34,14 +34,13 @@ public class DeleteExampleDiagram extends FlexoAction<DeleteExampleDiagram, Exam
 	private static final Logger logger = Logger.getLogger(DeleteExampleDiagram.class.getPackage().getName());
 
 	public static FlexoActionType<DeleteExampleDiagram, ExampleDiagram, ViewPointObject> actionType = new FlexoActionType<DeleteExampleDiagram, ExampleDiagram, ViewPointObject>(
-			"delete_calc_drawing_shema", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
+			"delete_example_diagram", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteExampleDiagram makeNewAction(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection,
-				FlexoEditor editor) {
+		public DeleteExampleDiagram makeNewAction(ExampleDiagram focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new DeleteExampleDiagram(focusedObject, globalSelection, editor);
 		}
 
@@ -67,9 +66,10 @@ public class DeleteExampleDiagram extends FlexoAction<DeleteExampleDiagram, Exam
 
 	@Override
 	protected void doAction(Object context) {
-		logger.info("Delete calc drawing view");
-
-		getFocusedObject().delete();
+		logger.info("Delete example diagram");
+		if (getFocusedObject().getResource() != null) {
+			getFocusedObject().getResource().delete();
+		}
 	}
 
 }

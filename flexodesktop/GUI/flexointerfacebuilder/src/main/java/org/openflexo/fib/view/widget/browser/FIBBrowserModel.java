@@ -292,9 +292,15 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 					add(new LoadingCell());
 				}
 
+				/*if (getBrowserElement().getName() != null && getBrowserElement().getName().equals("diagramSpecification")) {
+					logger.info("---------------> Created new DiagramSpecification browser element");
+				}*/
+
 				dependingObjects = new DependingObjects(this);
 				dependingObjects.refreshObserving(browserElementType);
+
 			}
+
 		}
 
 		@Override
@@ -625,6 +631,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		@Override
 		public void update(Observable o, Object arg) {
 			// logger.info("Object " + o + " received " + arg);
+
+			/*if (getBrowserElement().getName() != null && getBrowserElement().getName().equals("diagramSpecification")) {
+				logger.info("---------------> update() for DiagramSpecification browser element");
+			}*/
+
 			if (!isDeleted && o == getRepresentedObject()) {
 				update(false);
 			}
@@ -633,6 +644,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			// logger.info("Object " + representedObject + " received " + evt);
+
+			/*if (getBrowserElement().getName() != null && getBrowserElement().getName().equals("diagramSpecification")) {
+				logger.info("---------------> propertyChange() for DiagramSpecification browser element");
+			}*/
+
 			if (!isDeleted) {
 				// System.out.println("cell " + this + " propertyChanged " + evt.getPropertyName() + " for " + evt.getSource());
 				update(false);

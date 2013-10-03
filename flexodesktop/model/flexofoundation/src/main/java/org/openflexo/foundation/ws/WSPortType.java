@@ -191,7 +191,7 @@ public class WSPortType extends WSObject implements FlexoObserver {
 	 * FlexoProcess should be deleted.
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: WSPortType " + getName());
 		}
@@ -210,6 +210,7 @@ public class WSPortType extends WSObject implements FlexoObserver {
 		setChanged();
 		notifyObservers(new WSPortTypeRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	@Override

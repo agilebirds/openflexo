@@ -90,27 +90,23 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	}
 
 	private FIBCustomComponent<T, ?> makeCustomComponent(Class<FIBCustomComponent<T, ?>> customComponentClass, Class<T> dataClass) {
+		if (dataClass == null) {
+			return null;
+		}
+		if (customComponentClass == null) {
+			return null;
+		}
 		Class[] types = new Class[1];
 		types[0] = dataClass;
 		try {
-			boolean found = false;
 			Constructor<FIBCustomComponent<T, ?>> constructor = null;
-			while (!found && types[0] != null && customComponentClass != null) {
-				for (Constructor<?> c : customComponentClass.getConstructors()) {
-					if (c.getGenericParameterTypes().length == 1) {
-						if (TypeUtils.isTypeAssignableFrom(c.getGenericParameterTypes()[0],dataClass)) {
-							constructor = (Constructor<FIBCustomComponent<T, ?>>)c;
-							found = true;
-						}
+			for (Constructor<?> c : customComponentClass.getConstructors()) {
+				if (c.getGenericParameterTypes().length == 1) {
+					if (TypeUtils.isTypeAssignableFrom(c.getGenericParameterTypes()[0], dataClass)) {
+						constructor = (Constructor<FIBCustomComponent<T, ?>>) c;
+						break;
 					}
 				}
-				
-				/*try {
-					constructor = customComponentClass.getConstructor(types);
-					found = true;
-				} catch (NoSuchMethodException e) {
-					types[0] = types[0].getSuperclass();
-				}*/
 			}
 			if (constructor == null) {
 				logger.warning("Cound not instanciate class " + customComponentClass + " : no valid constructor found");

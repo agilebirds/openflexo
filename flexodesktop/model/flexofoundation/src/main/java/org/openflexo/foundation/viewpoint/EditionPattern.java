@@ -135,12 +135,13 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getVirtualModel() != null) {
 			getVirtualModel().removeFromEditionPatterns(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override
@@ -876,7 +877,7 @@ public class EditionPattern extends EditionPatternObject {
 
 		@Override
 		public ValidationIssue<EditionPatternShouldHaveRoles, EditionPattern> applyValidation(EditionPattern editionPattern) {
-			if (editionPattern.getPatternRoles().size() == 0) {
+			if (!(editionPattern instanceof VirtualModel) && editionPattern.getPatternRoles().size() == 0) {
 				return new ValidationWarning<EditionPatternShouldHaveRoles, EditionPattern>(this, editionPattern,
 						"edition_pattern_role_has_no_role");
 			}
@@ -885,7 +886,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public static class EditionPatternShouldHaveEditionSchemes extends
-	ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
+			ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
 		public EditionPatternShouldHaveEditionSchemes() {
 			super(EditionPattern.class, "edition_pattern_should_have_edition_scheme");
 		}
@@ -901,7 +902,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public static class EditionPatternShouldHaveDeletionScheme extends
-	ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+			ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
 		public EditionPatternShouldHaveDeletionScheme() {
 			super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
 		}

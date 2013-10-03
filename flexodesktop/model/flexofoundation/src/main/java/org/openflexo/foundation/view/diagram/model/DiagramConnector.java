@@ -92,12 +92,13 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParent() != null) {
 			getParent().removeFromChilds(this);
 		}
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/* @Override
@@ -129,7 +130,10 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 
 	public void setEndShape(DiagramShape endShape) {
 		this.endShape = endShape;
-		endShape.addToIncomingConnectors(this);
+		// NPE Protection
+		if (endShape != null) {
+			endShape.addToIncomingConnectors(this);
+		}
 	}
 
 	public DiagramShape getStartShape() {

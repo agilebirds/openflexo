@@ -987,7 +987,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		for (EventNode boundaryEvent : getAllBoundaryEvents()) {
 			boundaryEvent.delete();
 		}
@@ -1009,6 +1009,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		}
 		consultedRoles.clear();
 		super.delete();
+		return true;
 	}
 
 	@Override

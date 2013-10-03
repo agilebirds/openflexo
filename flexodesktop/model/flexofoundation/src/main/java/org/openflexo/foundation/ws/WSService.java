@@ -335,7 +335,7 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 
 		// remove wsdl file ?
 		if (wsdlFile != null && wsdlFile.getFile() != null) {
@@ -353,6 +353,7 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 		wsRepositoryList.delete();
 		wsRepositoryList = null;
 		super.delete();
+		return true;
 	}
 
 	// ==========================================================================

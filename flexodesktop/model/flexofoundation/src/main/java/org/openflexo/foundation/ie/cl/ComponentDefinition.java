@@ -300,7 +300,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getFolder() != null) {
 			getFolder().removeFromComponents(this);
 		}
@@ -317,6 +317,7 @@ public abstract class ComponentDefinition extends IECLObject implements Inspecta
 		notifyObservers(new ComponentDeleted(this));
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public abstract IEWOComponent createNewComponent();

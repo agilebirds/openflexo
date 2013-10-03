@@ -183,9 +183,10 @@ public class MonitoringComponentDefinition extends PartialComponentDefinition im
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	@Override

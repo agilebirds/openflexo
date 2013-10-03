@@ -186,9 +186,8 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public final class FlexoProcess extends WKFObject implements ApplicationHelpEntryPoint,
-		XMLStorageResourceData<FlexoProcess>, InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject,
-		ReferenceOwner {
+public final class FlexoProcess extends WKFObject implements ApplicationHelpEntryPoint, XMLStorageResourceData<FlexoProcess>,
+		InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject, ReferenceOwner {
 
 	public static final String VISIBLE_ROLES = "visibleRoles";
 
@@ -444,7 +443,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 
 		FlexoProcessNode newProcessNode = new FlexoProcessNode(processName, newProcess, workflow);
 		if (parentProcess == null) {
-				workflow.addToTopLevelNodeProcesses(newProcessNode);
+			workflow.addToTopLevelNodeProcesses(newProcessNode);
 		} else {
 
 			parentProcess.addToSubProcesses(newProcess);
@@ -476,7 +475,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 		}
 		if (processRes == null) {
 			throw new InvalidFileNameException(processResFile.getRelativePath());
-	}
+		}
 		return processRes;
 	}
 
@@ -947,15 +946,15 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 			if (newParentProcessNode != null) {
 				newParentProcessNode.addToSubProcesses(getProcessNode());
 			} else {
-					getWorkflow().addToTopLevelNodeProcesses(getProcessNode());
-				}
+				getWorkflow().addToTopLevelNodeProcesses(getProcessNode());
+			}
 
 			if (getProcessDMEntity() != null) {
 				getProcessDMEntity().updateParentProcessPropertyIfRequired();
 			}
-				validateAfterMoving();
-			}
+			validateAfterMoving();
 		}
+	}
 
 	public boolean isAcceptableAsParentProcess(FlexoProcess aProcess) {
 		return isProcessHierarchyValidForNewParentProcess(aProcess);
@@ -1330,11 +1329,11 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 				try {
 					getProject().renameResource(getFlexoResource(), newName);
 				} catch (DuplicateResourceException e) {
-						setChanged(false);
-						notifyObserversAsReentrantModification(new NameChanged(_name, _name));
-						throw e;
+					setChanged(false);
+					notifyObserversAsReentrantModification(new NameChanged(_name, _name));
+					throw e;
 
-					}
+				}
 				if (getProcessNode() != null) {
 					getProcessNode().setChanged();// Workflow needs to be saved
 					// again
@@ -1368,8 +1367,8 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 	}
 
 	public ProcessDMEntity createsProcessDMEntityIfRequired() {
-			return getProcessDMEntity();
-		}
+		return getProcessDMEntity();
+	}
 
 	private ProcessDMEntity _processDMEntity = null;
 
@@ -1908,7 +1907,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		// tests on this deleted object
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: FlexoProcess " + getName());
@@ -1952,6 +1951,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 		setChanged();
 		notifyObservers(new ProcessRemoved(this, parentProcess));
 		deleteObservers();
+		return true;
 	}
 
 	/**
@@ -2286,7 +2286,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 				if (logger.isLoggable(Level.FINE)) {
 					logger.finer("Finalize linking " + getName() + " with " + node.getSubProcess().getName());
 				}
-					node.getPortMapRegistery().lookupServiceInterface();
+				node.getPortMapRegistery().lookupServiceInterface();
 			} else if (node.getSubProcessName() != null) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Undefined sub-process " + node.getSubProcessName() + " referenced in process " + getName());

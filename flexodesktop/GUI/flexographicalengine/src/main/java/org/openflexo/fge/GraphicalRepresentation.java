@@ -123,6 +123,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		isFocusable,
 		isSelected,
 		isFocused,
+		transparency,
 		drawControlPointsWhenFocused,
 		drawControlPointsWhenSelected,
 		isReadOnly,
@@ -155,6 +156,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	private boolean drawControlPointsWhenSelected = true;
 
 	protected boolean isVisible = true;
+	protected Double transparency;
 	private boolean readOnly = false;
 	private boolean labelEditable = true;
 
@@ -1194,6 +1196,21 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			hasChanged(notification);
 		}
 	}
+	
+	public Double getTransparency() {
+		if (isDeserializing()) {
+			return transparency;
+		}
+		return transparency;
+	}
+
+	public void setTranparency(Double transparency) {
+		FGENotification notification = requireChange(Parameters.transparency, transparency);
+		if (notification != null) {
+			this.transparency = transparency;
+			hasChanged(notification);
+		}
+	}
 
 	public boolean hasText() {
 		return getText() != null && !getText().trim().equals("");
@@ -2211,7 +2228,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider) {
 		this.labelMetricsProvider = labelMetricsProvider;
 	}
-
+	
 	/**
 	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
 	 * 

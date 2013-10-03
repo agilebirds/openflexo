@@ -85,11 +85,11 @@ public abstract class PetriGraphNode extends Node implements Bindable, Sortable 
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParentPetriGraph() != null) {
 			getParentPetriGraph().removeFromNodes(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	@Override

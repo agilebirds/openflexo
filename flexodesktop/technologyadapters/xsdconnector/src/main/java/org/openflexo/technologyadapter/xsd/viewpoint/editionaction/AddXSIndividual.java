@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -73,7 +73,7 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 		XSOntIndividual newIndividual = null;
 		try {
 
-			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
+			TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
 			XMLXSDModel model = modelSlotInstance.getResourceData();
 			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
 
@@ -104,16 +104,19 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 			// and verify that there is no duplicate URIs
 
 			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
-			Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
-			if (o == null ) {
-				model.addIndividual(newIndividual);
-				modelSlotInstance.getResourceData().setIsModified();
-			}
-			else {
-				throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
-			}
+			if (processedURI != null) {
+				Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
+				if (o == null ) {
+					model.addIndividual(newIndividual);
+					modelSlotInstance.getResourceData().setIsModified();
+				}
+				else {
+					throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
+				}
 
-			return newIndividual;
+				return newIndividual;
+			}
+			else return null;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();
 			return null;

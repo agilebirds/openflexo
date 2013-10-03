@@ -377,7 +377,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getEOEntity() != null) {
 			try {
 				getDMEOModel().getEOModel().removeEntity(getEOEntity());
@@ -417,6 +417,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		_attributesForEOAttributes = null;
 		_relationshipsForEORelationships.clear();
 		_relationshipsForEORelationships = null;
+		return true;
 	}
 
 	/**

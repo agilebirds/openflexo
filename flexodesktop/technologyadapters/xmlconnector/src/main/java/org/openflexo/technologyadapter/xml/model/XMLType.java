@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 
-public class XMLType extends XMLObject implements Type {
+public class XMLType extends XMLObject implements Type, IXMLType {
 
 	
 	private XMLModel containerModel;

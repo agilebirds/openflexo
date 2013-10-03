@@ -11,6 +11,7 @@ import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.view.ExcelWorkbookView;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
@@ -79,15 +80,27 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
-		// TODO
+	public boolean hasModuleViewForObject(TechnologyObject object) {
+		if (object instanceof ExcelWorkbook) {
+			return true;
+		}
 		return false;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof ExcelWorkbook) {
+			return ((ExcelWorkbook) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override
 	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective) {
-		// TODO
+		if (object instanceof ExcelWorkbook) {
+			return (ModuleView<T>) new ExcelWorkbookView((ExcelWorkbook) object, controller, perspective);
+		}
 		return new EmptyPanel<T>(controller, perspective, object);
 	}
 

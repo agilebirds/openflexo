@@ -30,7 +30,7 @@ public class FIBFont extends FIBWidget {
 
 	private String sampleText = "Sample for this font";
 
-	private boolean allowsNull = true;
+	private boolean allowsNull = false;
 
 	public FIBFont() {
 	}

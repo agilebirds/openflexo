@@ -4,170 +4,193 @@
   <EditionPattern id="2" name="Concept">
     <description>Allows to define concept.</description>
     <DropScheme id="3" target="top" name="DropConceptAtTopLevel" label="DropConceptAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <TextFieldParameter id="4" name="conceptName" label="concept_name" defaultValue="&quot;concept&quot;" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false">
+      <TextFieldParameter id="4" name="conceptName" label="concept_name" defaultValue="&quot;concept&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
         <description>Allow to enter concept name while dropping concept</description>
       </TextFieldParameter>
-      <URIParameter id="5" base="parameters.conceptName" name="conceptURI" label="uri" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="true">
+      <URIParameter id="5" base="parameters.conceptName" name="conceptURI" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
         <description>Allow to enter (unique) name used in Ontology</description>
+        <AddressedOWLModelSlot id="6" isRequired="true" isReadOnly="false" name="basicOntology" metaModelURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl" />
       </URIParameter>
-      <AddShape id="6" container="topLevel" extendParentBoundsToHostThisShape="false" conditional="" assignation="shape" />
+      <AddShape id="7" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
+        <AddressedDiagramModelSlot idref="8" />
+      </AddShape>
+      <AddOWLIndividual id="9" assignation="individual" individualName="parameters.conceptURI">
+        <AddressedOWLModelSlot idref="6" />
+      </AddOWLIndividual>
     </DropScheme>
-    <ContainedShapePatternRole id="7" patternRole="shape" name="shape" exampleLabel="label">
-      <ShapeGraphicalRepresentation id="8" x="158.0" y="34.0" width="99.0" height="36.22950819672131" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="9" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="10" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="11" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="12" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="13" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="14" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
-        <Border id="15" top="5" bottom="5" left="5" right="5" />
-        <RectangleShape id="16" isRounded="true" arcSize="20.0" />
-        <ShadowStyle id="17" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="18" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedShapePatternRole id="10" patternRole="shape" name="shape" exampleLabel="label">
+      <ShapeGraphicalRepresentation id="11" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="158.0" y="34.0" width="99.0" height="36.22950819672131" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="12" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="13" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="14" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="15" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="16" noStroke="false" color="0,51,255" lineWidth="1.6" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="17" color="204,255,255" useTransparency="true" transparencyLevel="0.5" />
+        <Border id="18" top="5" bottom="5" left="5" right="5" />
+        <RectangleShape id="19" isRounded="true" arcSize="20.0" />
+        <ShadowStyle id="20" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="21" font="Lucida Sans,0,11" color="0,51,102" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
-      <GRSpec id="19" featureName="label" value="concept.uriName" readOnly="false" />
+      <AddressedDiagramModelSlot id="8" isRequired="true" isReadOnly="false" name="this" virtualModelURI="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl/DiagramSpecification" />
+      <GRSpec id="22" featureName="label" value="concept.uriName" readOnly="false" />
     </ContainedShapePatternRole>
-    <PrimaryRepresentationShapePatternRole idref="7" />
-    <Inspector id="20" inspectorTitle="Concept">
-      <TextField id="21" label="name" name="conceptName" readOnly="false" data="concept.uriName" conditional="" />
+    <ContainedOWLIndividualPatternRole id="23" name="individual" patternRole="individual" ontologicType="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#Concept">
+      <AddressedOWLModelSlot idref="6" />
+    </ContainedOWLIndividualPatternRole>
+    <PrimaryConceptOWLIndividualPatternRole idref="23" />
+    <PrimaryRepresentationShapePatternRole idref="10" />
+    <Inspector id="24" inspectorTitle="Concept">
+      <TextField id="25" name="conceptName" label="name" readOnly="false" data="concept.uriName" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="22" name="IsARelationship">
+  <EditionPattern id="26" name="IsARelationship">
     <description>Allows to define 'isA' link between two concepts</description>
-    <LinkScheme id="23" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="LinkTwoConceptByIsARelationShip" label="LinkTwoConceptByIsARelationShip" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <AddIsAPropertyStatement id="24" father="toTarget.concept" conditional="" assignation="isA" subject="fromTarget.concept" />
-      <AddConnector id="25" fromShape="fromTarget.shape" toShape="toTarget.shape" conditional="" assignation="connector" />
+    <LinkScheme id="27" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="LinkTwoConceptByIsARelationShip" label="LinkTwoConceptByIsARelationShip" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <AddConnector id="28" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector">
+        <AddressedDiagramModelSlot idref="8" />
+      </AddConnector>
     </LinkScheme>
-    <ContainedConnectorPatternRole id="26" patternRole="connector" name="connector" exampleLabel="label">
-      <ConnectorGraphicalRepresentation id="27" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="2.0" absoluteTextY="-13.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="28" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="29" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="30" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <LineConnector id="31" lineConnectorType="MINIMAL_LENGTH" />
-        <TextStyle id="32" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedConnectorPatternRole id="29" patternRole="connector" name="connector" exampleLabel="label">
+      <ConnectorGraphicalRepresentation id="30" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="2.0" absoluteTextY="-13.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="31" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="32" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="33" noStroke="false" color="0,102,0" lineWidth="1.2" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="34" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="87.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="35" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="36" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="37" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="38" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="39" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="40" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="41" top="5" bottom="5" left="5" right="5" />
+          <CircleShape id="42" />
+          <ShadowStyle id="43" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="44" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="45" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="352.0" y="47.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="46" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="47" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="48" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="49" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="50" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="51" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="52" top="5" bottom="5" left="5" right="5" />
+          <CircleShape idref="42" />
+          <ShadowStyle id="53" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="54" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <LineConnector id="55" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="56" font="Lucida Sans,0,10" color="0,153,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation id="33" x="87.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="34" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="35" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="36" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="37" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="38" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="39" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="40" top="5" bottom="5" left="5" right="5" />
-        <CircleShape id="41" />
-        <ShadowStyle id="42" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="43" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactFromShapeGraphicalRepresentation>
-      <ArtifactToShapeGraphicalRepresentation id="44" x="352.0" y="47.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="45" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ColorBackgroundStyle id="46" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="47" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="48" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="49" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="50" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="51" top="5" bottom="5" left="5" right="5" />
-        <CircleShape idref="41" />
-        <ShadowStyle id="52" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="53" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-      </ArtifactToShapeGraphicalRepresentation>
-      <GRSpec id="54" featureName="label" value="&quot;is a&quot;" readOnly="true" />
+      <ArtifactFromShapeGraphicalRepresentation idref="34" />
+      <ArtifactToShapeGraphicalRepresentation idref="45" />
+      <AddressedDiagramModelSlot idref="8" />
+      <GRSpec id="57" featureName="label" value="&quot;is a&quot;" readOnly="true" />
     </ContainedConnectorPatternRole>
-    <PrimaryRepresentationConnectorPatternRole idref="26" />
-    <Inspector id="55" inspectorTitle="&quot;Is A&quot; relationship">
-      <TextField id="56" label="child_concept" name="childConcept" readOnly="true" data="isA.subject.uriName" conditional="" />
-      <TextField id="57" label="parent_concept" name="parentConcept" readOnly="true" data="isA.parent.uriName" conditional="" />
+    <ContainedObjectPropertyStatementPatternRole id="58" objectProperty="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#semanticRelation" name="isA" patternRole="isA">
+      <AddressedOWLModelSlot idref="6" />
+    </ContainedObjectPropertyStatementPatternRole>
+    <PrimaryConceptObjectPropertyStatementPatternRole idref="58" />
+    <PrimaryRepresentationConnectorPatternRole idref="29" />
+    <Inspector id="59" inspectorTitle="&quot;Is A&quot; relationship">
+      <TextField id="60" name="childConcept" label="child_concept" readOnly="true" data="isA.subject.uriName" />
+      <TextField id="61" name="parentConcept" label="parent_concept" readOnly="true" data="isA.parent.uriName" />
     </Inspector>
   </EditionPattern>
-  <EditionPattern id="58" name="HasRelationship">
+  <EditionPattern id="62" name="HasRelationship">
     <description>Allows to define 'has' link between two concepts</description>
-    <LinkScheme id="59" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="LinkTwoConceptByHasRelationShip" label="LinkTwoConceptByHasRelationShip" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <DropDownParameter id="60" values="Some,Only,Exact,Min,Max" name="restrictionType" label="restriction_type" defaultValue="&quot;Some&quot;" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false">
-        <description>Kind of restriction</description>
-      </DropDownParameter>
-      <IntegerParameter id="61" name="cardinality" label="cardinality" defaultValue="1" usePaletteLabelAsDefaultValue="false" conditional="(((parameters.restrictionType = &quot;Exact&quot;) | (parameters.restrictionType = &quot;Min&quot;)) | (parameters.restrictionType = &quot;Max&quot;))" isRequired="false">
+    <LinkScheme id="63" fromTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" toTarget="http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl#Concept" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="LinkTwoConceptByHasRelationShip" label="LinkTwoConceptByHasRelationShip" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <IntegerParameter id="64" name="cardinality" label="cardinality" defaultValue="1" usePaletteLabelAsDefaultValue="false" conditional="(((parameters.restrictionType = &quot;Exact&quot;) | (parameters.restrictionType = &quot;Min&quot;)) | (parameters.restrictionType = &quot;Max&quot;))" isRequired="false">
         <description>Cardinality for restriction</description>
       </IntegerParameter>
-      <AddRestrictionStatement id="62" object="toTarget.concept" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" restrictionType="" cardinality="parameters.cardinality" conditional="" assignation="has" subject="fromTarget.concept" />
-      <AddConnector id="63" fromShape="fromTarget.shape" toShape="toTarget.shape" conditional="" assignation="connector" />
+      <AddRestrictionStatement id="65" object="toTarget.concept" propertyURI="http://www.agilebirds.com/openflexo/ViewPoints/BasicOntology.owl#has" cardinality="parameters.cardinality" assignation="has" subject="fromTarget.concept" />
+      <AddConnector id="66" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector">
+        <AddressedDiagramModelSlot idref="8" />
+      </AddConnector>
     </LinkScheme>
-    <ContainedRestrictionStatementPatternRole id="64" patternRole="has" name="has" />
-    <ContainedConnectorPatternRole id="65" patternRole="connector" name="connector" exampleLabel="label">
-      <ConnectorGraphicalRepresentation id="66" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="2.0" absoluteTextY="-11.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="67" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="68" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="69" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <StartShapeGraphicalRepresentation id="70" x="86.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="71" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="72" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedForegroundStyle id="73" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedColorBackgroundStyle id="74" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedForegroundStyle id="75" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedColorBackgroundStyle id="76" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="77" top="5" bottom="5" left="5" right="5" />
-          <CircleShape idref="41" />
-          <ShadowStyle id="78" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="79" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    <ContainedRestrictionStatementPatternRole id="67" name="has" patternRole="has">
+      <AddressedOWLModelSlot idref="6" />
+    </ContainedRestrictionStatementPatternRole>
+    <ContainedConnectorPatternRole id="68" patternRole="connector" name="connector" exampleLabel="label">
+      <ConnectorGraphicalRepresentation id="69" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="FILLED_ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" text="label" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="2.0" absoluteTextY="-11.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="70" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="71" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="72" noStroke="false" color="204,102,0" lineWidth="1.2000000000000002" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="73" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="86.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="74" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="75" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="76" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="77" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="78" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="79" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="80" top="5" bottom="5" left="5" right="5" />
+          <CircleShape idref="42" />
+          <ShadowStyle id="81" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="82" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         </StartShapeGraphicalRepresentation>
-        <EndShapeGraphicalRepresentation id="80" x="356.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-          <ForegroundStyle id="81" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <ColorBackgroundStyle id="82" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedForegroundStyle id="83" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <SelectedColorBackgroundStyle id="84" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedForegroundStyle id="85" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-          <FocusedColorBackgroundStyle id="86" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
-          <Border id="87" top="5" bottom="5" left="5" right="5" />
-          <CircleShape idref="41" />
-          <ShadowStyle id="88" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-          <TextStyle id="89" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <EndShapeGraphicalRepresentation id="83" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="356.0" y="45.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="84" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="85" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="86" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="87" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="88" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="89" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="90" top="5" bottom="5" left="5" right="5" />
+          <CircleShape idref="42" />
+          <ShadowStyle id="91" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="92" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
         </EndShapeGraphicalRepresentation>
-        <LineConnector id="90" lineConnectorType="MINIMAL_LENGTH" />
-        <TextStyle id="91" font="Lucida Sans,0,10" color="204,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <LineConnector id="93" lineConnectorType="MINIMAL_LENGTH" />
+        <TextStyle id="94" font="Lucida Sans,0,10" color="204,102,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
-      <ArtifactFromShapeGraphicalRepresentation idref="70" />
-      <ArtifactToShapeGraphicalRepresentation idref="80" />
-      <GRSpec id="92" featureName="label" value="&quot;has&quot;" readOnly="true" />
+      <ArtifactFromShapeGraphicalRepresentation idref="73" />
+      <ArtifactToShapeGraphicalRepresentation idref="83" />
+      <AddressedDiagramModelSlot idref="8" />
+      <GRSpec id="95" featureName="label" value="&quot;has&quot;" readOnly="true" />
     </ContainedConnectorPatternRole>
-    <PrimaryConceptRestrictionStatementPatternRole idref="64" />
-    <PrimaryRepresentationConnectorPatternRole idref="65" />
-    <Inspector id="93" inspectorTitle="&quot;Has&quot; relationship">
-      <TextField id="94" label="statement" name="statement" readOnly="true" data="has.displayableRepresentation" conditional="" />
-      <TextField id="95" label="owner" name="owner" readOnly="true" data="has.subject.uriName" conditional="" />
-      <TextField id="96" label="object" name="object" readOnly="true" data="has.object.uriName" conditional="" />
-      <TextField id="97" label="restriction_type" name="restrictionType" readOnly="true" data="&quot;TODO&quot;" conditional="" />
-      <TextField id="98" label="cardinality" name="textfield" readOnly="true" data="has.cardinality.toString" conditional="" />
-      <TextField id="99" label="property" name="textfield" readOnly="true" data="has.property.uri" conditional="" />
+    <PrimaryConceptRestrictionStatementPatternRole idref="67" />
+    <PrimaryRepresentationConnectorPatternRole idref="68" />
+    <Inspector id="96" inspectorTitle="&quot;Has&quot; relationship">
+      <TextField id="97" name="statement" label="statement" readOnly="true" data="has.displayableRepresentation" />
+      <TextField id="98" name="owner" label="owner" readOnly="true" data="has.subject.uriName" />
+      <TextField id="99" name="object" label="object" readOnly="true" data="has.object.uriName" />
+      <TextField id="100" name="restrictionType" label="restriction_type" readOnly="true" data="&quot;TODO&quot;" />
+      <TextField id="101" name="textfield" label="cardinality" readOnly="true" data="has.cardinality.toString" />
+      <TextField id="102" name="textfield" label="property" readOnly="true" data="has.property.uri" />
     </Inspector>
   </EditionPattern>
-  <LocalizedDictionary id="100">
-    <Localized id="101" key="concept_name" lang="en">Concept name</Localized>
-    <Localized id="102" key="IsARelationship" lang="en">'Is a' relationship</Localized>
-    <Localized id="103" key="HasRelationship" lang="en">'Has' relationship</Localized>
-    <Localized id="104" key="LinkTwoConceptByIsARelationShip" lang="en">'Is a' relationship</Localized>
-    <Localized id="105" key="LinkTwoConceptByHasRelationShip" lang="en">'Has' relationship</Localized>
-    <Localized id="106" key="uri" lang="English">URI</Localized>
-    <Localized id="107" key="semantic_statements" lang="English">Semantic statements</Localized>
-    <Localized id="108" key="cardinality" lang="English">Cardinality</Localized>
-    <Localized id="109" key="annotations" lang="English">Annotations</Localized>
-    <Localized id="110" key="restriction_type" lang="English">Restriction type</Localized>
-    <Localized id="111" key="DropConceptAtTopLevel" lang="English">Drop concept at top level</Localized>
-    <Localized id="112" key="DropConceptAtTopLevel" lang="French">Créer un concept</Localized>
-    <Localized id="113" key="concept_name" lang="French">Nom du concept</Localized>
-    <Localized id="114" key="annotations" lang="French">Annotations</Localized>
-    <Localized id="115" key="restriction_type" lang="French">Type de restriction</Localized>
-    <Localized id="116" key="IsARelationship" lang="French">Relation 'est un/une'</Localized>
-    <Localized id="117" key="LinkTwoConceptByHasRelationShip" lang="French">Relation 'a'</Localized>
-    <Localized id="118" key="LinkTwoConceptByIsARelationShip" lang="French">Relation 'est un/une'</Localized>
-    <Localized id="119" key="name" lang="English">Name</Localized>
-    <Localized id="120" key="object" lang="English">Object</Localized>
-    <Localized id="121" key="property" lang="English">Property</Localized>
-    <Localized id="122" key="child_concept" lang="English">Child concept</Localized>
-    <Localized id="123" key="parent_concept" lang="English">Parent concept</Localized>
-    <Localized id="124" key="owner" lang="English">Owner</Localized>
-    <Localized id="125" key="statement" lang="English">Statement</Localized>
-    <Localized id="126" key="child_concept" lang="French">Concept enfant</Localized>
-    <Localized id="127" key="parent_concept" lang="French">Concept parent</Localized>
-    <Localized id="128" key="owner" lang="French">Propriétaire</Localized>
-    <Localized id="129" key="statement" lang="French">Fait ontologique</Localized>
+  <LocalizedDictionary id="103">
+    <Localized id="104" key="concept_name" lang="en">Concept name</Localized>
+    <Localized id="105" key="IsARelationship" lang="en">'Is a' relationship</Localized>
+    <Localized id="106" key="HasRelationship" lang="en">'Has' relationship</Localized>
+    <Localized id="107" key="LinkTwoConceptByIsARelationShip" lang="en">'Is a' relationship</Localized>
+    <Localized id="108" key="LinkTwoConceptByHasRelationShip" lang="en">'Has' relationship</Localized>
+    <Localized id="109" key="uri" lang="English">URI</Localized>
+    <Localized id="110" key="semantic_statements" lang="English">Semantic statements</Localized>
+    <Localized id="111" key="cardinality" lang="English">Cardinality</Localized>
+    <Localized id="112" key="annotations" lang="English">Annotations</Localized>
+    <Localized id="113" key="restriction_type" lang="English">Restriction type</Localized>
+    <Localized id="114" key="DropConceptAtTopLevel" lang="English">Drop concept at top level</Localized>
+    <Localized id="115" key="DropConceptAtTopLevel" lang="French">Créer un concept</Localized>
+    <Localized id="116" key="concept_name" lang="French">Nom du concept</Localized>
+    <Localized id="117" key="annotations" lang="French">Annotations</Localized>
+    <Localized id="118" key="restriction_type" lang="French">Type de restriction</Localized>
+    <Localized id="119" key="IsARelationship" lang="French">Relation 'est un/une'</Localized>
+    <Localized id="120" key="LinkTwoConceptByHasRelationShip" lang="French">Relation 'a'</Localized>
+    <Localized id="121" key="LinkTwoConceptByIsARelationShip" lang="French">Relation 'est un/une'</Localized>
+    <Localized id="122" key="name" lang="English">Name</Localized>
+    <Localized id="123" key="object" lang="English">Object</Localized>
+    <Localized id="124" key="property" lang="English">Property</Localized>
+    <Localized id="125" key="child_concept" lang="English">Child concept</Localized>
+    <Localized id="126" key="parent_concept" lang="English">Parent concept</Localized>
+    <Localized id="127" key="owner" lang="English">Owner</Localized>
+    <Localized id="128" key="statement" lang="English">Statement</Localized>
+    <Localized id="129" key="child_concept" lang="French">Concept enfant</Localized>
+    <Localized id="130" key="parent_concept" lang="French">Concept parent</Localized>
+    <Localized id="131" key="owner" lang="French">Propriétaire</Localized>
+    <Localized id="132" key="statement" lang="French">Fait ontologique</Localized>
   </LocalizedDictionary>
-  <Inspector id="130" inspectorTitle="DiagramSpecification" />
+  <DiagramModelSlot idref="8" />
+  <OWLModelSlot idref="6" />
+  <Inspector id="133" inspectorTitle="DiagramSpecification" />
 </DiagramSpecification>

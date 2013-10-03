@@ -76,7 +76,7 @@ public class MessageDefinition extends AbstractMessageDefinition implements Insp
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (isInputMessageDefinition()) {
 			((AbstractInPort) getPort()).setInputMessageDefinition(null);
 		}
@@ -90,6 +90,7 @@ public class MessageDefinition extends AbstractMessageDefinition implements Insp
 		}
 		super.delete();
 		_port = null;
+		return true;
 
 	}
 

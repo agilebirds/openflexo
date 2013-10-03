@@ -87,15 +87,15 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 	}
 
 	@Override
-	public synchronized void delete() {
+	public synchronized boolean delete() {
 		resourceLoadingListeners.clear();
-		super.delete();
+		return super.delete();
 	}
 
 	@Override
-	public synchronized void delete(boolean deleteFile) {
+	public synchronized boolean delete(boolean deleteFile) {
 		resourceLoadingListeners.clear();
-		super.delete(deleteFile);
+		return super.delete(deleteFile);
 	}
 
 	public FlexoStorageResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
@@ -518,6 +518,11 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 
 	@Override
 	public void notifyContentsAdded(FlexoResource<?> resource) {
+		logger.warning("Not implemented yet");
+	}
+
+	@Override
+	public void notifyContentsRemoved(FlexoResource<?> resource) {
 		logger.warning("Not implemented yet");
 	}
 

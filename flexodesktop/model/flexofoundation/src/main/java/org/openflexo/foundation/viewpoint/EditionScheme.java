@@ -730,13 +730,21 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
+		// Si edition pattern est un diagram spec alors rajouter la varialble diagram
+		// Après faudra voir au runtime;
 		if (getEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
 					.getEditionPatternInstanceType(getEditionPattern())));
 			if (getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
 				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DIAGRAM, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
-			} else {
+			} 
+			if(getEditionPattern() instanceof DiagramSpecification){
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DIAGRAM, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getEditionPattern())));
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
+			}
+			else {
 				bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 			}

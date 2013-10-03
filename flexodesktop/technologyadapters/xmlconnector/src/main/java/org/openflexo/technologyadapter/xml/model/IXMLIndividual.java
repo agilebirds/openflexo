@@ -62,7 +62,9 @@ public interface IXMLIndividual<IC, AC extends IXMLAttribute > {
 	public abstract Collection<? extends AC> getAttributes();
 	
 	public abstract Object createAttribute(String attrLName, Type aType, String value);
-	
+
+	public abstract String getAttributeStringValue(IXMLAttribute a);
+		
 	public abstract void addChild(IXMLIndividual<IC,AC> anIndividual);
 
 	public abstract Set<IC> getChildren();
@@ -76,8 +78,6 @@ public interface IXMLIndividual<IC, AC extends IXMLAttribute > {
 	public abstract String getUUID();
 
 	public abstract Element toXML(Document doc);
-
-	public abstract String getAttributeStringValue(IXMLAttribute a);
 
 
 }

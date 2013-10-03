@@ -22,6 +22,7 @@
 package org.openflexo.technologyadapter.xml;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -33,6 +34,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
@@ -40,6 +43,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
+import org.openflexo.technologyadapter.xml.model.IXMLType;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.model.XMLType;
@@ -69,8 +73,8 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	// Properties actually used to calculate URis
 
 	// TODO Change to a common Type for XML & XMLXSD
-	private XMLType mappedClass;
-	private XMLModelSlot modelSlot;
+	private IXMLType mappedClass;
+	private TypeAwareModelSlot<?, ?> modelSlot;
 	private IXMLAttribute baseAttributeForURI;
 	
 	// Cache des URis Pour aller plus vite ??
@@ -78,8 +82,12 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	private Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
 
 
-	public void setModelSlot(XMLModelSlot xmlModelSlot) {
-		modelSlot = xmlModelSlot;
+	public void setModelSlot(ModelSlot aModelSlot) {
+		modelSlot = (TypeAwareModelSlot<?, ?>) aModelSlot;
+	}
+
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		return modelSlot;
 	}
 
 	// Serialized properties
@@ -119,6 +127,25 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 
 	public void _setAttributeName(String attributeName) {
 		this.attributeName = attributeName;
+	}
+
+	public IXMLAttribute getBaseAttributeForURI() {
+		return baseAttributeForURI;
+	}
+	
+	public void setBaseAttributeForURI(IXMLAttribute baseAttributeForURI) {
+		this.baseAttributeForURI = baseAttributeForURI;
+		if (this.baseAttributeForURI != null ){
+			this.attributeName = this.baseAttributeForURI.getName();
+		}
+	}
+
+	public IXMLType getMappedClass() {
+		return mappedClass;
+	}
+
+	public void setMappedClass(IXMLType mappedClass) {
+		this.mappedClass = mappedClass;
 	}
 
 	// Lifecycle management methods

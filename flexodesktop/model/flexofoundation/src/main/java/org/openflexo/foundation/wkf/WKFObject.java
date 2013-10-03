@@ -207,8 +207,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	}
 
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean delete() {
+		return super.delete();
 	}
 
 	// ==========================================================================

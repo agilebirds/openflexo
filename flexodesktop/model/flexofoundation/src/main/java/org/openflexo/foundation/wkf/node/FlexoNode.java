@@ -64,14 +64,14 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getAttachedPreCondition() != null) {
 			FlexoPreCondition pre = getAttachedPreCondition();
 			pre.setAttachedBeginNode(null);
 			pre.delete();
 		}
 		deletePreConditions();
-		super.delete();
+		return super.delete();
 	}
 
 	/**

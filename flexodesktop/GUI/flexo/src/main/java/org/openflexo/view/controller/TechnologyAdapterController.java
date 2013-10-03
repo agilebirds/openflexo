@@ -31,12 +31,15 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.AddToListAction;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
+import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.RemoveFromListAction;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.icon.IconFactory;
@@ -166,6 +169,12 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
 		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.IMPORT);
+		} else if (MatchEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.EDITION_PATTERN_ICON, IconLibrary.SYNC);
+		} else if (AddToListAction.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.LIST_ICON, IconLibrary.POSITIVE_MARKER);
+		} else if (RemoveFromListAction.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VPMIconLibrary.LIST_ICON, IconLibrary.NEGATIVE_MARKER);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DELETE_ICON;
 		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {
@@ -179,7 +188,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	}
 
-	public abstract boolean hasModuleViewForObject(FlexoObject object);
+	public abstract boolean hasModuleViewForObject(TechnologyObject object);
+
+	public abstract String getWindowTitleforObject(TechnologyObject object);
 
 	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective);

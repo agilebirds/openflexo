@@ -389,10 +389,11 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		_roles.clear();
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	// ===================================================================

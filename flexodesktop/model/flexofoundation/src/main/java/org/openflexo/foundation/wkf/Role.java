@@ -290,7 +290,7 @@ public final class Role extends WorkflowModelObject implements DataFlexoObserver
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		for (RoleSpecialization rs : (Vector<RoleSpecialization>) getRoleSpecializations().clone()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("1 Delete " + rs.getFullyQualifiedName());
@@ -310,6 +310,7 @@ public final class Role extends WorkflowModelObject implements DataFlexoObserver
 		setChanged();
 		notifyObservers(new RoleRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	/**

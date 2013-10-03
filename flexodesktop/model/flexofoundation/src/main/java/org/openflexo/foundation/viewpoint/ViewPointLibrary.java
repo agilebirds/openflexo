@@ -172,7 +172,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 		List<FlexoResourceCenter> resourceCenters = getResourceCenterService().getResourceCenters();
 		for (FlexoResourceCenter rc : resourceCenters) {
 			ViewPointRepository vpr = rc.getViewPointRepository();
-			if (vpr != null) {
+			if ((vpr != null) && (vpr.getAllResources().contains(vpRes))) {
 				vpr.unregisterResource(vpRes);
 			}
 		}
@@ -364,14 +364,9 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 		return VALIDATION_MODEL;
 	}
 
-	public void delete(ViewPointResource vr) {
-		logger.info("Remove viewpoint " + vr);
-		unregisterViewPoint(vr);
-		vr.delete();
-	}
-
-	public void delete(ViewPoint v) {
-		delete(v.getResource());
-	}
+	/*public void delete(ViewPoint viewPoint) {
+		logger.info("Remove viewpoint " + viewPoint);
+		unregisterViewPoint(viewPoint.getResource());
+	}*/
 
 }

@@ -37,7 +37,7 @@
           <Number numberType="IntegerType" columns="3" data="GridConstraints.data.y" constraints="flow()" name="gridConstraintsY" localize="true" />
         </Panel>
       </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="button_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.ButtonLayoutConstraints" constraints="twocols(expandHorizontally=true;location=center)" visible="(data.parent.layout = &quot;buttons&quot;)" name="ButtonConstraints" />
+      <Panel layout="twocols" border="titled" borderTitle="button_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="($org.openflexo.fib.model.ButtonLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.ButtonLayoutConstraints" constraints="twocols(expandHorizontally=true;location=center)" visible="(data.parent.layout = &quot;buttons&quot;)" name="ButtonConstraints" />
       <Panel layout="twocols" border="titled" borderTitle="box_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" constraints="twocols(expandHorizontally=true;location=center)" visible="((data.parent != null) &amp; (data.parent.layout = &quot;box&quot;))" opaque="false" name="BoxConstraints">
         <Label label="index" constraints="twocols(location=left)" localize="true" />
         <Number numberType="IntegerType" data="BoxConstraints.data.index" constraints="twocols(location=right)" name="boxConstraintsIndex" localize="true" />

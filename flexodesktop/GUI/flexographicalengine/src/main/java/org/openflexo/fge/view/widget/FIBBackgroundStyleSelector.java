@@ -202,6 +202,11 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) {
 			// logger.info("setBackgroundStyleType with " + backgroundStyleType);
 			BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
+
+			if (oldBackgroundStyleType == backgroundStyleType) {
+				return;
+			}
+
 			switch (getBackgroundStyleType()) {
 			case NONE:
 				break;
@@ -227,19 +232,19 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			switch (backgroundStyleType) {
 			case NONE:
-				backgroundStyle = BackgroundStyle.makeEmptyBackground();
+				setBackgroundStyle(BackgroundStyle.makeEmptyBackground());
 				break;
 			case COLOR:
-				backgroundStyle = BackgroundStyle.makeColoredBackground(color1);
+				setBackgroundStyle(BackgroundStyle.makeColoredBackground(color1));
 				break;
 			case COLOR_GRADIENT:
-				backgroundStyle = BackgroundStyle.makeColorGradientBackground(color1, color2, gradientDirection);
+				setBackgroundStyle(BackgroundStyle.makeColorGradientBackground(color1, color2, gradientDirection));
 				break;
 			case TEXTURE:
-				backgroundStyle = BackgroundStyle.makeTexturedBackground(textureType, color1, color2);
+				setBackgroundStyle(BackgroundStyle.makeTexturedBackground(textureType, color1, color2));
 				break;
 			case IMAGE:
-				backgroundStyle = BackgroundStyle.makeImageBackground(imageFile);
+				setBackgroundStyle(BackgroundStyle.makeImageBackground(imageFile));
 				break;
 			default:
 				break;
@@ -247,7 +252,6 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getBackgroundStyleType());
 		}
-
 	}
 
 	public class BackgroundStyleDetailsPanel extends ResizablePanel {

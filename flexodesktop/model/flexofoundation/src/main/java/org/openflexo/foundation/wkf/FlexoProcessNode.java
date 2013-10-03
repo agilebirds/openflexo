@@ -212,7 +212,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getParentFolder() != null) {
 			getParentFolder().removeFromProcesses(this);
 		}
@@ -223,7 +223,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		} else if (getWorkflow() != null) {
 			getWorkflow().removeFromTopLevelNodeProcesses(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	// Not serialized

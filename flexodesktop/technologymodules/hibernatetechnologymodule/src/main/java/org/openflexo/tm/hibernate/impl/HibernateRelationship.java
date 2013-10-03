@@ -141,7 +141,7 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getHibernateEntity() != null) {
 			getHibernateEntity().removeFromRelationships(this);
 		}
@@ -158,6 +158,7 @@ public class HibernateRelationship extends TechnologyModelObject implements Flex
 		notifyObservers(new SGObjectDeletedModification());
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	/**

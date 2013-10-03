@@ -1,12 +1,11 @@
 package org.openflexo.technologyadapter.xsd;
 
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
-import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
-public class XSDModelSlotInstanceConfiguration extends TypeSafeModelSlotInstanceConfiguration<XMLXSDModel, XSDMetaModel, XSDModelSlot> {
+public class XSDModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanceConfiguration<XMLXSDModel, XSDMetaModel, XSDModelSlot> {
 
 	protected XSDModelSlotInstanceConfiguration(XSDModelSlot ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
@@ -18,16 +17,19 @@ public class XSDModelSlotInstanceConfiguration extends TypeSafeModelSlotInstance
 		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myXMLFile";
 			relativePath = "/";
-			filename = "myXMLFile"
-					+ getModelSlot().getTechnologyAdapter().getExpectedModelExtension(
-							(XSDMetaModelResource) getModelSlot().getMetaModelResource());
-		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+			filename = "myXMLFile" + getModelSlot().getTechnologyAdapter().getExpectedModelExtension(getModelSlot().getMetaModelResource());
+		} /*else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelUri = "ResourceCenter/Models/";
 			relativePath = "/";
 			filename = "myXMLFile"
 					+ getModelSlot().getTechnologyAdapter().getExpectedModelExtension(
 							(XSDMetaModelResource) getModelSlot().getMetaModelResource());
-		}
+			}*/
+	}
+
+	@Override
+	public boolean isURIEditable() {
+		return false;
 	}
 
 }

@@ -63,7 +63,7 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * @see AccessibleProxyObject#delete()
 	 * @see AccessibleProxyObject#isDeleted()
 	 */
-	public void performSuperDelete();
+	public boolean performSuperDelete();
 
 	/**
 	 * Invokes the default deletion code handled by {@link ProxyMethodHandler} with the provided <code>context</code>.
@@ -75,7 +75,7 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * @see AccessibleProxyObject#delete()
 	 * @see AccessibleProxyObject#isDeleted()
 	 */
-	public void performSuperDelete(Object... context);
+	public boolean performSuperDelete(Object... context);
 
 	/**
 	 * Returns the super getter as defined by the model entity associated with the class <code>modelEntityInterface</code>. This method is
@@ -196,7 +196,7 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * @see Embedded#deletionConditions()
 	 * @see ComplexEmbedded#deletionConditions()
 	 */
-	public void delete();
+	public boolean delete();
 
 	/**
 	 * Deletes the current object and all its embedded properties as defined by the {@link Embedded} and {@link ComplexEmbedded}
@@ -210,7 +210,7 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 * @see Embedded#deletionConditions()
 	 * @see ComplexEmbedded#deletionConditions()
 	 */
-	public void delete(Object... context);
+	public boolean delete(Object... context);
 
 	/**
 	 * Returns whether this object has been deleted or not.

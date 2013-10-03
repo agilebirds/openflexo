@@ -93,7 +93,7 @@
         </SplitPanel>
       </Tab>
       <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
-        <FIBReferencedComponent componentFile=" &quot;Fib/EditionPatternInspectorPanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="Fib/EditionPatternInspectorPanel.fib" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
       </Tab>
       <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
         <FIBReferencedComponent componentFile="LocalizedDictionaryPanel.fib" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" />
@@ -145,7 +145,7 @@
     <Localized key="widget" lang="Dutch">widget</Localized>
     <Localized key="add_textfield_parameter" lang="English">Add a Textfield parameter</Localized>
     <Localized key="add_textfield_parameter" lang="French">Ajouter un paramètre TextField</Localized>
-    <Localized key="add_textfield_parameter" lang="Dutch">Add ta Textfield parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="Dutch">Add a Textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="English">Add a localized textfield parameter</Localized>
     <Localized key="add_localized_textfield_parameter" lang="French">Ajouter un paramètre textfield localisé</Localized>
     <Localized key="add_localized_textfield_parameter" lang="Dutch">Add a localized textfield parameter</Localized>

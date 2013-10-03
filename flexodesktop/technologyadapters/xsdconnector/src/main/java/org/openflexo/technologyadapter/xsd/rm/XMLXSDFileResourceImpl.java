@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +48,9 @@ import org.openflexo.toolbox.IProgress;
  * @author xtof
  *
  */
+
+// TODO : there is code to refactor to be able to merge XMLFileResourceImpl & XMLXSDFileResourceImpl
+
 public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXSDModel> implements XMLXSDFileResource  {
 
 	//Constants
@@ -96,11 +100,13 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas
 
-			if(!xmlFile.exists()){
-				returned.save(null);
-				returned.isLoaded = true;
+			if(xmlFile.exists()){
+				logger.warning("will load an existing File: " + xmlFile.getCanonicalPath());
+				returned.loadResourceData(null);
+			}else{
+			returned.save(null);
+			returned.isLoaded = true;
 			}
-
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,9 +158,9 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 	private void writeToFile() throws SaveResourceException {
 
-		FileWriter out = null;
+		OutputStreamWriter out = null;
 		try {
-			out = new FileWriter(getFile());
+			out = new OutputStreamWriter(new FileOutputStream(getFile()),"UTF-8");
 			XMLWriter<XMLXSDFileResource, XMLXSDModel> writer = new XMLWriter<XMLXSDFileResource, XMLXSDModel>(this , out);
 
 			writer.writeDocument();

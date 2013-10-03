@@ -70,9 +70,11 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 
 		new DeleteViewInitializer(this);
 		new CreateVirtualModelInstanceInitializer(this);
+		new DeleteVirtualModelInstanceInitializer(this);
 
 		// Diagram perspective
 		new CreateDiagramInitializer(this);
+		new DeleteDiagramInitializer(this);
 		new AddShapeInitializer(this);
 		new AddConnectorInitializer(this);
 		new DeleteDiagramElementsInitializer(this);

@@ -74,7 +74,12 @@ public class ObjectReferenceFeatureAssociationPathElement extends SimplePathElem
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
-			NullReferenceException {
-		((EMFObjectIndividual) target).getObject().eSet(objectProperty.getObject(), value);
+	NullReferenceException {
+		if (value instanceof EMFObjectIndividual){
+			((EMFObjectIndividual) target).getObject().eSet(objectProperty.getObject(), ((EMFObjectIndividual) value).getObject());
+		}
+		else {
+			((EMFObjectIndividual) target).getObject().eSet(objectProperty.getObject(), value);
+		}
 	}
 }

@@ -198,12 +198,12 @@ public class CGTemplateFile extends CGTemplate {
 	}
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getRepository().isApplicationRepository()) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Cannot delete an application template!: " + getTemplateFile().getAbsolutePath());
 			}
-			return;
+			return false;
 		}
 		if (getTemplateFile() != null && getTemplateFile().exists()) {
 			getTemplateFile().delete();
@@ -214,6 +214,7 @@ public class CGTemplateFile extends CGTemplate {
 		setChanged();
 		notifyObservers(new TemplateDeleted(this));
 		deleteObservers();
+		return true;
 	}
 
 }

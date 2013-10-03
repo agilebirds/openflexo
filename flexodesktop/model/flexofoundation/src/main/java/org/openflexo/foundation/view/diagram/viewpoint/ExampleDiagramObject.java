@@ -84,13 +84,14 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		Vector<ExampleDiagramObject> toRemove = new Vector<ExampleDiagramObject>(childs);
 		for (ExampleDiagramObject o : toRemove) {
 			o.delete();
 		}
 		super.delete();
 		childs.clear();
+		return true;
 	}
 
 	public ExampleDiagram getExampleDiagram() {
@@ -161,6 +162,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	private Vector<ExampleDiagramObject> ancestors;
 	private Vector<ExampleDiagramObject> descendants;
 
+	@Override
 	public ExampleDiagramObject getParent() {
 		return parent;
 	}

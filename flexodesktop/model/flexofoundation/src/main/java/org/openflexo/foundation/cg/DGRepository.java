@@ -113,11 +113,12 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getTocRepositoryRef() != null) {
 			getTocRepositoryRef().delete();
 		}
 		super.delete();
+		return true;
 	}
 
 	@Override

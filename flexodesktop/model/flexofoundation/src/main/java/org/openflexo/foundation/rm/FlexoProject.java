@@ -331,7 +331,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ModelSlotInstance> models;
-	private Map<View, Map<ModelSlot, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+	private Map<View, Map<ModelSlot, ModelSlotInstance>> modelsAssociationMap; // Do
+																				// not
+																				// serialize
+																				// this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -568,9 +571,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		saveModifiedResources(progress, true);
 
-		// Vincent: Not sure this is the right place, however the file deletion methods seems to be never called.
-		// It makes sens to delete the files which as to be deleted in the project when we save the project.
-		deleteFilesToBeDeleted();
+		getServiceManager().getResourceManager().deleteFilesToBeDeleted();
 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
@@ -781,7 +782,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 			if (useNewDirectoryFromNow) {
 				for (FlexoFileResource<? extends FlexoResourceData> fileResource : getFileResources()) {
-					fileResource.hasWrittenOnDisk(null);// We reset the known dates
+					fileResource.hasWrittenOnDisk(null);// We reset the known
+														// dates
 				}
 			} else {
 				for (FlexoFileResource<? extends FlexoResourceData> fileResource : getFileResources()) {
@@ -789,7 +791,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					if (date == null) {
 						date = FileUtils.getDiskLastModifiedDate(fileResource.getFile());
 					}
-					fileResource._setLastWrittenOnDisk(date);// We set the dates back to what they were
+					fileResource._setLastWrittenOnDisk(date);// We set the dates
+																// back to what
+																// they were
 					// so even if somebody has modified something during
 				}
 			}
@@ -923,9 +927,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 			for (org.openflexo.foundation.resource.FlexoResource<?> r : getServiceManager().getResourceManager().getUnsavedResources()) {
 				try {
-					// Temporary hack: we iterate on all resources known in the ResourceManager
+					// Temporary hack: we iterate on all resources known in the
+					// ResourceManager
 					if (r instanceof FlexoProjectResource && ((FlexoProjectResource) r).getProject() == this
-							&& r.getResourceData(null).isModified()) {
+							&& (r.isLoaded() && r.getResourceData(null).isModified())) {
 						if (progress != null) {
 							progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + r);
 						}
@@ -936,15 +941,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		} finally {
 			if (resourceSaved) {
-				// Revision is incremented only if a FlexoStorageResource has been changed. This is allows essentially to track if the
+				// Revision is incremented only if a FlexoStorageResource has
+				// been changed. This is allows essentially to track if the
 				// model of the project has changed.
 				setRevision(revision + 1);
 			}
 			if (resourceSaved || getFlexoRMResource().isModified()) {
-				// If at least one resource has been saved, let's try to save the RM so that the lastID is also saved, avoiding possible
+				// If at least one resource has been saved, let's try to save
+				// the RM so that the lastID is also saved, avoiding possible
 				// duplication of flexoID's.
 				writeDotVersion();
-				// We save RM at the end so that all dates are always up-to-date and we also save the lastID which may have changed!
+				// We save RM at the end so that all dates are always up-to-date
+				// and we also save the lastID which may have changed!
 				getFlexoRMResource().saveResourceData(clearModifiedStatus);
 			}
 		}
@@ -977,9 +985,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		for (org.openflexo.foundation.resource.FlexoResource<?> r : getServiceManager().getResourceManager().getUnsavedResources()) {
 			try {
-				// Temporary hack: we iterate on all resources known in the ResourceManager
+				// Temporary hack: we iterate on all resources known in the
+				// ResourceManager
 				if (r instanceof FlexoProjectResource && ((FlexoProjectResource) r).getProject() == this
-						&& r.getResourceData(null).isModified()) {
+						&& (r.isDeleted() || (r.isLoaded() && (r.getResourceData(null).isModified())))) {
 					return true;
 				}
 			} catch (Exception e) {
@@ -990,10 +999,13 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/*
-	 * GPO: The 2 following methods have a synchronized attributes to prevent 2 saves from deadlocking each-other. When the
-	 * saveModifiedResources is invoked, this also sends notification to Frames which will attempt to clear their modified status. To do so,
-	 * they call the second method. This methods invokes the isModified() method which is also synchronized. Therefore two threads trying to
-	 * perform a save of the project could end up in a deadlock
+	 * GPO: The 2 following methods have a synchronized attributes to prevent 2
+	 * saves from deadlocking each-other. When the saveModifiedResources is
+	 * invoked, this also sends notification to Frames which will attempt to
+	 * clear their modified status. To do so, they call the second method. This
+	 * methods invokes the isModified() method which is also synchronized.
+	 * Therefore two threads trying to perform a save of the project could end
+	 * up in a deadlock
 	 */
 
 	/**
@@ -1029,7 +1041,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		if (sortResources) {
 			DependencyAlgorithmScheme scheme = _dependancyScheme;
-			// Pessimistic dependency scheme is cheaper and is not intended for this situation
+			// Pessimistic dependency scheme is cheaper and is not intended for
+			// this situation
 			setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
 			FlexoResource.sortResourcesWithDependancies(returned);
 			setDependancyScheme(scheme);
@@ -1944,7 +1957,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				logger.fine("Getting this RM File:\n" + project.getFlexoRMResource().getResourceXMLRepresentation());
 			}
 			try {
-				// This needs to be called to ensure the consistency of the project
+				// This needs to be called to ensure the consistency of the
+				// project
 				project.setGenerateSnapshot(false);
 				project.save(progress);
 				project.setGenerateSnapshot(true);
@@ -2002,8 +2016,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			ImportImage importImage = ImportImage.actionType.makeNewAction(project, null, editor);
 			importImage.setFileToImport(file);
 			/*
-			 * if (file.getName().matches("[0-9]+_.*")) { importImage.setImageName(file.getName().substring(file.getName().indexOf('_')+1));
-			 * }
+			 * if (file.getName().matches("[0-9]+_.*")) {
+			 * importImage.setImageName
+			 * (file.getName().substring(file.getName().indexOf('_')+1)); }
 			 */
 			importImage.doAction();
 		}
@@ -2283,11 +2298,13 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/*
-	 * public synchronized void setIsModified() { super.setIsModified(); notifyObservers(); }
+	 * public synchronized void setIsModified() { super.setIsModified();
+	 * notifyObservers(); }
 	 */
 
 	/*
-	 * public synchronized void clearIsModified() { super.clearIsModified(); notifyObservers(); }
+	 * public synchronized void clearIsModified() { super.clearIsModified();
+	 * notifyObservers(); }
 	 */
 
 	@Override
@@ -2332,9 +2349,12 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		Vector<TabComponentDefinition> reply = new Vector<TabComponentDefinition>();
 
 		/*
-		 * for (OperationComponentDefinition opcd : getAllInstanciatedOperationComponentDefinition()) {
-		 * opcd.getWOComponent().getAllTabComponents(reply); } for (PopupComponentDefinition popcd :
-		 * getFlexoComponentLibrary().getPopupsComponentList()) { popcd.getWOComponent().getAllTabComponents(reply); }
+		 * for (OperationComponentDefinition opcd :
+		 * getAllInstanciatedOperationComponentDefinition()) {
+		 * opcd.getWOComponent().getAllTabComponents(reply); } for
+		 * (PopupComponentDefinition popcd :
+		 * getFlexoComponentLibrary().getPopupsComponentList()) {
+		 * popcd.getWOComponent().getAllTabComponents(reply); }
 		 */
 		for (TabComponentDefinition tcd : getFlexoComponentLibrary().getTabComponentList()) {
 			if (tcd.getComponentInstances().size() > 0) {
@@ -2655,7 +2675,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		DMType type = typeClass == null ? DMType.makeObjectDMType(widget.getProject()) : DMType.makeResolvedDMType(typeClass,
 				widget.getProject());
 
-		// DMEntity entityType = type==null?null:widget.getProject().getDataModel().getDMEntity(type,true);
+		// DMEntity entityType =
+		// type==null?null:widget.getProject().getDataModel().getDMEntity(type,true);
 		if (returned == null || returned.getType() == null || !returned.getType().equals(type)) {
 			returned = new WidgetBindingDefinition(name, type, widget, bindingType, mandatory);
 			bindingsForWidget.put(name, returned);
@@ -2738,19 +2759,16 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	/*public FlexoModelObject findObject(String objectUID, long objectFlexoID) {
-		if (allRegisteredObjects == null) {
-			return null;
-		}
-		for (FlexoModelObject temp : allRegisteredObjects) {
-			if (temp.getFlexoID() == objectFlexoID && temp.getUserIdentifier().equals(objectUID)) {
-				// logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : SUCCEEDED");
-				return temp;
-			}
-		}
-		// logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : FAILED");
-		return null;
-	}*/
+	/*
+	 * public FlexoModelObject findObject(String objectUID, long objectFlexoID)
+	 * { if (allRegisteredObjects == null) { return null; } for
+	 * (FlexoModelObject temp : allRegisteredObjects) { if (temp.getFlexoID() ==
+	 * objectFlexoID && temp.getUserIdentifier().equals(objectUID)) { //
+	 * logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : SUCCEEDED");
+	 * return temp; } } //
+	 * logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : FAILED");
+	 * return null; }
+	 */
 
 	public void clearRecentlyCreatedObjects() {
 		_recentlyCreatedObjects.clear();
@@ -2840,7 +2858,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @return
 	 */
 	/*
-	 * public EditionPatternConverter getEditionPatternConverter() { return editionPatternConverter; }
+	 * public EditionPatternConverter getEditionPatternConverter() { return
+	 * editionPatternConverter; }
 	 */
 
 	@Override
@@ -2985,11 +3004,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/*
-	 * public ImageFile getImageFileForName(String imageName) { ImageFile file = null; if (imageName != null) { File f =
-	 * WRLocator.locate(getProjectDirectory(), imageName, getCssSheet() == null ? FlexoCSS.CONTENTO.getName() : getCssSheet().getName()); if
-	 * (f==null || !f.exists()) {
+	 * public ImageFile getImageFileForName(String imageName) { ImageFile file =
+	 * null; if (imageName != null) { File f =
+	 * WRLocator.locate(getProjectDirectory(), imageName, getCssSheet() == null
+	 * ? FlexoCSS.CONTENTO.getName() : getCssSheet().getName()); if (f==null ||
+	 * !f.exists()) {
 	 * 
-	 * f = WRLocator.DENALI_LOGO; imageName = f.getName(); } file = new ImageFile(f); } return file; }
+	 * f = WRLocator.DENALI_LOGO; imageName = f.getName(); } file = new
+	 * ImageFile(f); } return file; }
 	 */private class ImageFileConverter extends Converter<ImageFile> {
 		public ImageFileConverter() {
 			super(ImageFile.class);
@@ -3200,21 +3222,24 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return _rebuildDependanciesIsRequired;
 	}
 
+	@Deprecated
 	public void addToFilesToDelete(File f) {
 		filesToDelete.add(f);
 	}
 
+	@Deprecated
 	public void removeFromFilesToDelete(File f) {
 		filesToDelete.remove(f);
 	}
 
+	@Deprecated
 	public void deleteFilesToBeDeleted() {
 		for (File f : filesToDelete) {
 			try {
 				if (FileUtils.recursiveDeleteFile(f)) {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Successfully deleted " + f.getAbsolutePath());
-						filesToDelete.remove(f);
+						// filesToDelete.remove(f);
 					}
 				} else if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not delete " + f.getAbsolutePath());
@@ -3365,7 +3390,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					return file2;
 				}
 			}
-			// If we get here, it means that there are no Frameworks dir, so let's create the default one
+			// If we get here, it means that there are no Frameworks dir, so
+			// let's create the default one
 			file.mkdir();
 			return file;
 		}
@@ -3759,7 +3785,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		public ValidationIssue<GeneratedResourcesMustHaveCGFile, FlexoProject> applyValidation(FlexoProject project) {
 			if (project.getGeneratedCodeResource(false) != null && !project.getGeneratedCodeResource(false).isLoaded()
 					|| project.getGeneratedDocResource(false) != null && !project.getGeneratedDocResource(false).isLoaded()) {
-				return null;// If the generated code or the generated doc resource is not loaded, then CGFiles have not yet been associated
+				return null;// If the generated code or the generated doc
+							// resource is not loaded, then CGFiles have not yet
+							// been associated
 				// with their resource!
 			}
 			for (Entry<String, FlexoResource<? extends FlexoResourceData>> e : project.getResources().entrySet()) {
@@ -4042,7 +4070,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			Date currentDate = new Date();
 			projectURI = ONTOLOGY_URI + "/" + (1900 + currentDate.getYear()) + "/" + (currentDate.getMonth() + 1) + "/" + getProjectName()
 					+ "_" + System.currentTimeMillis();
-			// projectURI= ONTOLOGY_URI+"/data/prj_"+getPrefix()+"_"+System.currentTimeMillis();
+			// projectURI=
+			// ONTOLOGY_URI+"/data/prj_"+getPrefix()+"_"+System.currentTimeMillis();
 		}
 		return projectURI;
 	}
@@ -4209,87 +4238,69 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/*
-	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource() {
-		return getFlexoProjectOntologyResource(true);
-	}
+	 * public FlexoStorageResource<? extends ProjectOntology>
+	 * getFlexoProjectOntologyResource() { return
+	 * getFlexoProjectOntologyResource(true); }
+	 * 
+	 * private ProjectOntology createProjectOntology() { // Temporary hack to
+	 * select the type of the project ontology // To be updated with model slots
+	 * return OWLModel.createNewOWLModel(this); // return
+	 * ProjectXSOntology.createNewProjectOntology(this); }
+	 * 
+	 * @SuppressWarnings("unchecked") public FlexoStorageResource<? extends
+	 * ProjectOntology> getFlexoProjectOntologyResource(boolean
+	 * createIfNotExist) { FlexoStorageResource<ProjectOntology> returned =
+	 * (FlexoStorageResource<ProjectOntology>) resourceForKey(
+	 * ResourceType.OWL_ONTOLOGY, getProjectName()); if (returned == null &&
+	 * createIfNotExist) { return createProjectOntology().getFlexoResource(); }
+	 * return returned; }
+	 * 
+	 * public ProjectOntology getProjectOntology() { return
+	 * getProjectOntology(true); }
+	 * 
+	 * public ProjectOntology getProjectOntology(boolean createIfNotExist) {
+	 * FlexoStorageResource<? extends ProjectOntology> resource =
+	 * getFlexoProjectOntologyResource(createIfNotExist); if (resource == null)
+	 * { return null; } return resource.getResourceData(); }
+	 */
 
-	private ProjectOntology createProjectOntology() {
-		// Temporary hack to select the type of the project ontology
-		// To be updated with model slots
-		return OWLModel.createNewOWLModel(this);
-		// return ProjectXSOntology.createNewProjectOntology(this);
-	}
-
-	@SuppressWarnings("unchecked")
-	public FlexoStorageResource<? extends ProjectOntology> getFlexoProjectOntologyResource(boolean createIfNotExist) {
-		FlexoStorageResource<ProjectOntology> returned = (FlexoStorageResource<ProjectOntology>) resourceForKey(
-				ResourceType.OWL_ONTOLOGY, getProjectName());
-		if (returned == null && createIfNotExist) {
-			return createProjectOntology().getFlexoResource();
-		}
-		return returned;
-	}
-
-	public ProjectOntology getProjectOntology() {
-		return getProjectOntology(true);
-	}
-
-	public ProjectOntology getProjectOntology(boolean createIfNotExist) {
-		FlexoStorageResource<? extends ProjectOntology> resource = getFlexoProjectOntologyResource(createIfNotExist);
-		if (resource == null) {
-			return null;
-		}
-		return resource.getResourceData();
-	}
-	*/
-
-	/*private ProjectOntologyLibrary ontologyLibrary = null;
-
-	public ProjectOntologyLibrary getProjectOntologyLibrary() {
-		return getProjectOntologyLibrary(true);
-	}
-
-	public ProjectOntologyLibrary getProjectOntologyLibrary(boolean createIfNotExist) {
-		if (ontologyLibrary == null) {
-			if (createIfNotExist) {
-				logger.info("resource center: " + getResourceCenter());
-				ontologyLibrary = new ProjectOntologyLibrary(getResourceCenter().getOpenFlexoResourceCenter(), this);
-				// ontologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
-				// ontologyLibrary.init();
-			} else {
-				return null;
-			}
-		}
-		return ontologyLibrary;
-	}*/
+	/*
+	 * private ProjectOntologyLibrary ontologyLibrary = null;
+	 * 
+	 * public ProjectOntologyLibrary getProjectOntologyLibrary() { return
+	 * getProjectOntologyLibrary(true); }
+	 * 
+	 * public ProjectOntologyLibrary getProjectOntologyLibrary(boolean
+	 * createIfNotExist) { if (ontologyLibrary == null) { if (createIfNotExist)
+	 * { logger.info("resource center: " + getResourceCenter()); ontologyLibrary
+	 * = new
+	 * ProjectOntologyLibrary(getResourceCenter().getOpenFlexoResourceCenter(),
+	 * this); // ontologyLibrary.getFlexoConceptOntology().loadWhenUnloaded();
+	 * // ontologyLibrary.init(); } else { return null; } } return
+	 * ontologyLibrary; }
+	 */
 
 	public boolean getIsLocalized() {
 		return getDKVModel(false) != null && getDKVModel().getLanguages().size() > 1;
 	}
 
-	/*public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {
-		if (reference == null) {
-			return null;
-		}
-		if (reference.getEditionPattern() == null) {
-			logger.warning("Found a reference to a null EP, please investigate");
-			return null;
-		}
-		if (_editionPatternInstances == null) {
-			_editionPatternInstances = new Hashtable<String, Map<Long, EditionPatternInstance>>();
-		}
-		Map<Long, EditionPatternInstance> hash = _editionPatternInstances.get(reference.getEditionPattern().getName());
-		if (hash == null) {
-			hash = new Hashtable<Long, EditionPatternInstance>();
-			_editionPatternInstances.put(reference.getEditionPattern().getName(), hash);
-		}
-		EditionPatternInstance returned = hash.get(reference.getInstanceId());
-		if (returned == null) {
-			returned = new EditionPatternInstance(reference);
-			hash.put(reference.getInstanceId(), returned);
-		}
-		return returned;
-	}*/
+	/*
+	 * public EditionPatternInstance
+	 * getEditionPatternInstance(EditionPatternReference reference) { if
+	 * (reference == null) { return null; } if (reference.getEditionPattern() ==
+	 * null) {
+	 * logger.warning("Found a reference to a null EP, please investigate");
+	 * return null; } if (_editionPatternInstances == null) {
+	 * _editionPatternInstances = new Hashtable<String, Map<Long,
+	 * EditionPatternInstance>>(); } Map<Long, EditionPatternInstance> hash =
+	 * _editionPatternInstances.get(reference.getEditionPattern().getName()); if
+	 * (hash == null) { hash = new Hashtable<Long, EditionPatternInstance>();
+	 * _editionPatternInstances.put(reference.getEditionPattern().getName(),
+	 * hash); } EditionPatternInstance returned =
+	 * hash.get(reference.getInstanceId()); if (returned == null) { returned =
+	 * new EditionPatternInstance(reference);
+	 * hash.put(reference.getInstanceId(), returned); } return returned; }
+	 */
 
 	public FlexoObjectIDManager getObjectIDManager() {
 		if (objectIDManager == null) {
@@ -4304,25 +4315,26 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public void setServiceManager(FlexoServiceManager serviceManager) {
-		/*if (resourceCenterService != null) {
-			if (resourceCenterService == this.resourceCenterService) {
-				logger.warning("Resource center is already set and the same as this new attempt. I will simply ignore the call.");
-				return;
-			}
-			logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " + resourceCenterService + " for project " + Integer.toHexString(hashCode()));
-			if (this.resourceCenterService != null) {
-				logger.warning("Changing resource center on project " + getProjectName() + ". This is likely to cause problems.");
-			}
-			this.resourceCenterService = resourceCenterService;
-			EditionPatternConverter editionPatternConverter = new EditionPatternConverter(
-					resourceCenterService.getOpenFlexoResourceCenter());
-			getStringEncoder()._addConverter(editionPatternConverter);
-		} else {
-			getResourceCenter();
-			logger.warning("#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
-					+ "I will try to find one.");
-			new Exception("Attempt to set a null resource center on project " + getProjectName()).printStackTrace();
-		}*/
+		/*
+		 * if (resourceCenterService != null) { if (resourceCenterService ==
+		 * this.resourceCenterService) { logger.warning(
+		 * "Resource center is already set and the same as this new attempt. I will simply ignore the call."
+		 * ); return; } logger.info(">>>>>>>>>>>>>>>>> setResourceCenter " +
+		 * resourceCenterService + " for project " +
+		 * Integer.toHexString(hashCode())); if (this.resourceCenterService !=
+		 * null) { logger.warning("Changing resource center on project " +
+		 * getProjectName() + ". This is likely to cause problems."); }
+		 * this.resourceCenterService = resourceCenterService;
+		 * EditionPatternConverter editionPatternConverter = new
+		 * EditionPatternConverter(
+		 * resourceCenterService.getOpenFlexoResourceCenter());
+		 * getStringEncoder()._addConverter(editionPatternConverter); } else {
+		 * getResourceCenter(); logger.warning(
+		 * "#@!#@!#@!#@! An attempt to set a null resource center was made. I will print a stacktrace to let you know where it came from but I am not setting the RC to null!\n"
+		 * + "I will try to find one."); new
+		 * Exception("Attempt to set a null resource center on project " +
+		 * getProjectName()).printStackTrace(); }
+		 */
 
 		this.serviceManager = serviceManager;
 	}
@@ -4342,54 +4354,55 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param conceptURI
 	 * @param actorReference
 	 */
-	/*public void _addToPendingEditionPatternReferences(String conceptURI, ConceptActorReference actorReference) {
-		logger.fine("Registering concept " + conceptURI + " as pending pattern object reference: " + actorReference);
-		List<ConceptActorReference> values = pendingEditionPatternReferences.get(conceptURI);
-		if (values == null) {
-			values = new Vector<ConceptActorReference>();
-			pendingEditionPatternReferences.put(conceptURI, values);
-		}
-		values.add(actorReference);
-	}*/
+	/*
+	 * public void _addToPendingEditionPatternReferences(String conceptURI,
+	 * ConceptActorReference actorReference) {
+	 * logger.fine("Registering concept " + conceptURI +
+	 * " as pending pattern object reference: " + actorReference);
+	 * List<ConceptActorReference> values =
+	 * pendingEditionPatternReferences.get(conceptURI); if (values == null) {
+	 * values = new Vector<ConceptActorReference>();
+	 * pendingEditionPatternReferences.put(conceptURI, values); }
+	 * values.add(actorReference); }
+	 */
 
-	// private Map<String, List<ConceptActorReference>> pendingEditionPatternReferences = new Hashtable<String,
+	// private Map<String, List<ConceptActorReference>>
+	// pendingEditionPatternReferences = new Hashtable<String,
 	// List<ConceptActorReference>>();
 
-	/*public void _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
-		List<ConceptActorReference> values = pendingEditionPatternReferences.get(object.getURI());
-		if (values == null) {
-			// No pending EditionPattern references for object
-			return;
-		} else {
-			List<ConceptActorReference> clonedValues = new ArrayList<ConceptActorReference>(values);
-			for (ConceptActorReference actorReference : clonedValues) {
-				EditionPatternInstance instance = actorReference.getPatternReference().getEditionPatternInstance();
-				if (instance == null) {
-					logger.warning("Found null EditionPatternInstance, please investigate");
-				} else if (actorReference.getPatternReference() == null) {
-					logger.warning("Found null actorReference.getPatternReference(), please investigate");
-				} else if (actorReference.getPatternReference().getEditionPattern() == null) {
-					logger.warning("Found null actorReference.getPatternReference().getEditionPattern(), please investigate");
-				} else if (object instanceof FlexoOntologyObjectImpl) {
-					PatternRole pr = actorReference.getPatternReference().getPatternRole();
-					logger.fine("Retrieve Edition Pattern Instance " + instance + " for " + object + " role=" + pr);
-					((FlexoOntologyObjectImpl) object).registerEditionPatternReference(instance, pr);
-				}
-			}
-			values.clear();
-		}
-	}
-
-	public void resolvePendingEditionPatternReferences() {
-		ArrayList<String> allKeys = new ArrayList<String>(pendingEditionPatternReferences.keySet());
-		for (String conceptURI : allKeys) {
-			logger.warning("Unresolved ontology object " + conceptURI);
-			//OntologyObject oo = getProjectOntology().getOntologyObject(conceptURI);
-			//if (oo != null) {
-			//	_retrievePendingEditionPatternReferences(oo);
-			//}
-		}
-	}*/
+	/*
+	 * public void
+	 * _retrievePendingEditionPatternReferences(IFlexoOntologyConcept object) {
+	 * List<ConceptActorReference> values =
+	 * pendingEditionPatternReferences.get(object.getURI()); if (values == null)
+	 * { // No pending EditionPattern references for object return; } else {
+	 * List<ConceptActorReference> clonedValues = new
+	 * ArrayList<ConceptActorReference>(values); for (ConceptActorReference
+	 * actorReference : clonedValues) { EditionPatternInstance instance =
+	 * actorReference.getPatternReference().getEditionPatternInstance(); if
+	 * (instance == null) {
+	 * logger.warning("Found null EditionPatternInstance, please investigate");
+	 * } else if (actorReference.getPatternReference() == null) {
+	 * logger.warning(
+	 * "Found null actorReference.getPatternReference(), please investigate"); }
+	 * else if (actorReference.getPatternReference().getEditionPattern() ==
+	 * null) { logger.warning(
+	 * "Found null actorReference.getPatternReference().getEditionPattern(), please investigate"
+	 * ); } else if (object instanceof FlexoOntologyObjectImpl) { PatternRole pr
+	 * = actorReference.getPatternReference().getPatternRole();
+	 * logger.fine("Retrieve Edition Pattern Instance " + instance + " for " +
+	 * object + " role=" + pr); ((FlexoOntologyObjectImpl)
+	 * object).registerEditionPatternReference(instance, pr); } }
+	 * values.clear(); } }
+	 * 
+	 * public void resolvePendingEditionPatternReferences() { ArrayList<String>
+	 * allKeys = new
+	 * ArrayList<String>(pendingEditionPatternReferences.keySet()); for (String
+	 * conceptURI : allKeys) { logger.warning("Unresolved ontology object " +
+	 * conceptURI); //OntologyObject oo =
+	 * getProjectOntology().getOntologyObject(conceptURI); //if (oo != null) {
+	 * // _retrievePendingEditionPatternReferences(oo); //} } }
+	 */
 
 	public IModuleLoader getModuleLoader() {
 		return moduleLoader;
@@ -4507,29 +4520,24 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	/** TODO Remove, because Project Ontology does not exist anymore */
-	/*	public Set<FlexoOntology> getAllMetaModels() {
-			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
-			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
-				allMetaModels.addAll(viewDefinition.getView().getAllMetaModels());
-			}
-			return allMetaModels;
-		}
-
-		public Set<ProjectOntology> getAllModels() {
-			Set<ProjectOntology> allModels = new HashSet<ProjectOntology>();
-			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
-				allModels.addAll(viewDefinition.getView().getAllModels());
-			}
-			return allModels;
-		}
-
-		public Set<FlexoOntology> getAllOntologies() {
-			// TODO cache
-			Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
-			allOntologies.addAll(getAllMetaModels());
-			allOntologies.addAll(getAllModels());
-			return allOntologies;
-		}*/
+	/*
+	 * public Set<FlexoOntology> getAllMetaModels() { Set<FlexoOntology>
+	 * allMetaModels = new HashSet<FlexoOntology>(); for (ViewDefinition
+	 * viewDefinition : getShemaLibrary().getAllShemaList()) {
+	 * allMetaModels.addAll(viewDefinition.getView().getAllMetaModels()); }
+	 * return allMetaModels; }
+	 * 
+	 * public Set<ProjectOntology> getAllModels() { Set<ProjectOntology>
+	 * allModels = new HashSet<ProjectOntology>(); for (ViewDefinition
+	 * viewDefinition : getShemaLibrary().getAllShemaList()) {
+	 * allModels.addAll(viewDefinition.getView().getAllModels()); } return
+	 * allModels; }
+	 * 
+	 * public Set<FlexoOntology> getAllOntologies() { // TODO cache
+	 * Set<FlexoOntology> allOntologies = new HashSet<FlexoOntology>();
+	 * allOntologies.addAll(getAllMetaModels());
+	 * allOntologies.addAll(getAllModels()); return allOntologies; }
+	 */
 
 	/**
 	 * Retrieve object referenced by its URI.<br>

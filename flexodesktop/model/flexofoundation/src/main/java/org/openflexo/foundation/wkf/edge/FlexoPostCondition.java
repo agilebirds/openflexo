@@ -180,7 +180,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 	 * Remove itself from the datastructure. Mark itself has deleted. Set status to changed.
 	 */
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		logger.info("delete() in FlexoPostCondition for " + this);
 		FlexoPreCondition pre = null;
 		if (getEndNode() instanceof FlexoPreCondition) {
@@ -193,6 +193,7 @@ public abstract class FlexoPostCondition<S extends AbstractNode, E extends Abstr
 		setChanged();
 		notifyObservers(new PostRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	@Override

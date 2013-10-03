@@ -133,9 +133,9 @@ public class DefaultServiceOperation extends ServiceOperation implements Inspect
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 
-		super.delete();
+		return super.delete();
 
 	}
 

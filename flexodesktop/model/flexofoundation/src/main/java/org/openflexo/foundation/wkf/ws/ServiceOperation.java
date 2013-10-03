@@ -341,7 +341,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 	// ==========================================================================
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (_inputMessageBindings != null) {
 			_inputMessageBindings.delete();
 		}
@@ -370,6 +370,7 @@ public class ServiceOperation extends WKFObject implements InspectableObject, Le
 		_name = null;
 		_interface = null;
 		_port = null;
+		return true;
 	}
 
 	/**

@@ -156,9 +156,9 @@ public class XMLSchemaRepository extends DMRepository {
 	}
 
 	@Override
-	public/*final */void delete() {
+	public/*final */boolean delete() {
 		getDMModel().removeFromXmlSchemaRepositories(this);
-		super.delete();
+		return super.delete();
 	}
 
 	public FlexoProjectFile getXMLSchemaFile() {

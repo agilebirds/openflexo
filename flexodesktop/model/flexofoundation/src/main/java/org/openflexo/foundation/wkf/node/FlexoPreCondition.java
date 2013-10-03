@@ -216,7 +216,7 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
+	public final boolean delete() {
 		if (getAttachedNode() != null) {
 			getAttachedNode().removeFromPreCondition(this);
 		}
@@ -227,6 +227,7 @@ public final class FlexoPreCondition extends Node implements InspectableObject, 
 		setChanged();
 		notifyObservers(new PreRemoved(this));
 		deleteObservers();
+		return true;
 	}
 
 	@Override

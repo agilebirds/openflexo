@@ -180,8 +180,19 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		return object instanceof EMFModel || object instanceof EMFMetaModel;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
+		if (object instanceof EMFModel) {
+			return ((EMFModel) object).getName();
+		}
+		if (object instanceof EMFMetaModel) {
+			return ((EMFMetaModel) object).getName();
+		}
+		return object.toString();
 	}
 
 	@Override

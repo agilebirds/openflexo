@@ -65,8 +65,12 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 		this.excelSheets = excelSheets;
 	}
 
-	public void addExcelSheet(ExcelSheet newExcelSheet) {
+	public void addToExcelSheets(ExcelSheet newExcelSheet) {
 		this.excelSheets.add(newExcelSheet);
+	}
+
+	public void removeFromExcelSheets(ExcelSheet deletedExcelSheet) {
+		this.excelSheets.remove(deletedExcelSheet);
 	}
 
 	@Override

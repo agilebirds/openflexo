@@ -372,4 +372,13 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		return getContents(VirtualModelResource.class);
 	}
 
+	@Override
+	public boolean delete() {
+		if (super.delete()) {
+			getServiceManager().getResourceManager().addToFilesToDelete(getDirectory());
+			return true;
+		}
+		return false;
+	}
+
 }

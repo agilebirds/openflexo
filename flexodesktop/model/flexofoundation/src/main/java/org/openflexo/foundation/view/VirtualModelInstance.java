@@ -28,7 +28,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
@@ -124,6 +123,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 		editionPatternInstances = new Hashtable<EditionPattern, Map<Long, EditionPatternInstance>>();
+		view.addToVirtualModelInstances(this);
 	}
 
 	@Override
@@ -498,28 +498,20 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	// ==========================================================================
 
 	@Override
-	public final void delete() {
-		// tests on this deleted object
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("delete: View " + getName());
-		}
-		if (getFlexoResource() != null) {
-			getFlexoResource().delete();
-		}
+	public final boolean delete() {
 
-		if (getFlexoResource() != null) {
-			getFlexoResource().delete();
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("View " + getName() + " has no ViewDefinition associated!");
-			}
+		logger.info("Deleting virtual model instance " + this);
+
+		// Dereference the resource
+		if (resource != null) {
+			resource = null;
 		}
 
 		super.delete();
 
-		setChanged();
-		notifyObservers(new VirtualModelInstanceDeleted(this));
 		deleteObservers();
+
+		return true;
 	}
 
 	// ==========================================================================

@@ -265,9 +265,10 @@ public class MessageBindings extends WKFObject implements InspectableObject, Bin
      */
 	@Override
 	// final is for deleteObservers()
-	public final void delete() {
+	public final boolean delete() {
 		super.delete();
 		deleteObservers();
+		return true;
 	}
 
 	public void deleteBinding(MessageEntryBinding meb) {

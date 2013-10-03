@@ -335,7 +335,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public void setConnectorType(ConnectorType connectorType) {
 		if (getConnectorType() != connectorType) {
-			setConnector(Connector.makeConnector(connectorType, this));
+			Connector connector = Connector.makeConnector(connectorType, this);
+			if(connector==null){
+				logger.warning("There is no implementation for the connector type " + connectorType);
+			}
+			else{
+				setConnector(connector);
+			}
 		}
 	}
 
@@ -877,7 +883,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	public List<? extends ControlArea> getControlAreas() {
-		return getConnector().getControlAreas();
+		if(connector!=null){
+			return getConnector().getControlAreas();
+		}
+		else{
+			logger.warning("Object: " + this + " has no connector");
+			return null;
+		}
 	}
 
 	/**

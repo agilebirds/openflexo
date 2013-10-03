@@ -56,12 +56,13 @@ public class CustomCGTemplateRepository extends CGTemplateRepository {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (_resource != null) {
 			_resource.delete();
 		}
 		super.delete();
 		getTemplates().update();
+		return true;
 	}
 
 	@Override

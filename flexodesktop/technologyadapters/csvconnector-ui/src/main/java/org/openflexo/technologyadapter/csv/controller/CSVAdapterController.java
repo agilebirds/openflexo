@@ -89,7 +89,7 @@ public class CSVAdapterController extends TechnologyAdapterController<CSVTechnol
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean hasModuleViewForObject(TechnologyObject object) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -97,6 +97,12 @@ public class CSVAdapterController extends TechnologyAdapterController<CSVTechnol
 	@Override
 	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
 			FlexoPerspective perspective) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getWindowTitleforObject(TechnologyObject object) {
 		// TODO Auto-generated method stub
 		return null;
 	}

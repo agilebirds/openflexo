@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ViewPoint id="1" uri="http://www.openflexo.org/ViewPoints/Tests/CityMapping" version="0.1" modelVersion="1.0" name="CityMapping">
-  <LocalizedDictionary id="2" />
-  <description>Demonstrate the mapping between two heterogenous models by model federation</description>
-</ViewPoint>

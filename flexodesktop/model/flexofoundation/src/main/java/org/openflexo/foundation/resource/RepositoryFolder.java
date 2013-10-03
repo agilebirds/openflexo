@@ -144,11 +144,12 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (getFile().exists()) {
 			getFile().delete();
 		}
 		super.delete();
+		return true;
 	}
 
 	@Override
