@@ -25,6 +25,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
@@ -32,6 +33,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -358,34 +360,54 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (DrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
-							ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
-							newShapePatternRole.setPatternRoleName(entry.patternRoleName);
-							/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
-								newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
-										+ mainPropertyDescriptor.property.getName()));
-							} else {*/
-							newShapePatternRole.setReadOnlyLabel(true);
-							if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
-								newShapePatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
+							if(entry.graphicalObject instanceof GRShapeTemplate){
+								GRShapeTemplate grShape = (GRShapeTemplate)entry.graphicalObject;
+								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
+								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
+								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
+									newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
+											+ mainPropertyDescriptor.property.getName()));
+								} else {*/
+								newShapePatternRole.setReadOnlyLabel(true);
+								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+									newShapePatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
+								}
+								// }
+								newShapePatternRole.setExampleLabel((grShape.getGraphicalRepresentation()).getText());
+								// We clone here the GR (fixed unfocusable GR bug)
+								newShapePatternRole.setGraphicalRepresentation((grShape.getGraphicalRepresentation()).clone());
+								// Forces GR to be displayed in view
+								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
+										.setAllowToLeaveBounds(false);
+								newEditionPattern.addToPatternRoles(newShapePatternRole);
+								if (entry.getParentEntry() != null) {
+									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles.get(entry
+											.getParentEntry()));
+								}
+								if (entry.isMainEntry()) {
+									primaryRepresentationRole = newShapePatternRole;
+								}
+								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
 							}
-							// }
-							newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
-									.getGraphicalRepresentation()).getText());
-							// We clone here the GR (fixed unfocusable GR bug)
-							newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
-									.getGraphicalRepresentation()).clone());
-							// Forces GR to be displayed in view
-							((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
-									.setAllowToLeaveBounds(false);
-							newEditionPattern.addToPatternRoles(newShapePatternRole);
-							if (entry.getParentEntry() != null) {
-								newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles.get(entry
-										.getParentEntry()));
+							if(entry.graphicalObject instanceof GRConnectorTemplate){
+								GRConnectorTemplate grConnector = (GRConnectorTemplate)entry.graphicalObject;
+								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(builder);
+								newConnectorPatternRole.setPatternRoleName(entry.patternRoleName);
+								newConnectorPatternRole.setReadOnlyLabel(true);
+								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+									newConnectorPatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
+								}
+								newConnectorPatternRole.setExampleLabel((grConnector.getGraphicalRepresentation()).getText());
+								newConnectorPatternRole.setGraphicalRepresentation((grConnector.getGraphicalRepresentation()).clone());
+								newEditionPattern.addToPatternRoles(newConnectorPatternRole);
+								// Set the source/target
+								//newConnectorPatternRole.setEndShapePatternRole(endShapePatternRole);
+								if (entry.isMainEntry()) {
+									primaryRepresentationRole = newConnectorPatternRole;
+								}
+								newGraphicalElementPatternRoles.put(entry, newConnectorPatternRole);
 							}
-							if (entry.isMainEntry()) {
-								primaryRepresentationRole = newShapePatternRole;
-							}
-							newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
+							
 						}
 					}
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);

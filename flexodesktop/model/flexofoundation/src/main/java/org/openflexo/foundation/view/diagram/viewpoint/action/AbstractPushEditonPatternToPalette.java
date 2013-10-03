@@ -114,6 +114,11 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 				}
 			}
 
+			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
+			_newPaletteElement.setEditionPattern(editionPattern);
+			_newPaletteElement.setDropScheme(dropScheme);
+			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
+			
 			if (overrideDefaultGraphicalRepresentations) {
 				for (DrawingObjectEntry entry : drawingObjectEntries) {
 					if (entry.getSelectThis()) {
@@ -128,16 +133,11 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 					}
 				}
 			}
-
 			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
 				((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
 				((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
 			}
 			
-			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
-			_newPaletteElement.setEditionPattern(editionPattern);
-			_newPaletteElement.setDropScheme(dropScheme);
-			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
 			
 		} else {
 			logger.warning("Focused role is null !");
