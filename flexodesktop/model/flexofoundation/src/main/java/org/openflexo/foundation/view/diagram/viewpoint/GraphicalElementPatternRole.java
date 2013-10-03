@@ -305,7 +305,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 
 		@Override
 		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, Double value) {
-			gr.setTranparency(value);
+			gr.setTransparency(value);
 		}
 	};
 	

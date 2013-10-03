@@ -162,6 +162,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	public static GRParameter<String> IDENTIFIER = GRParameter.getGRParameter(GraphicalRepresentation.class, IDENTIFIER_KEY, String.class);
 	public static GRParameter<Integer> LAYER = GRParameter.getGRParameter(GraphicalRepresentation.class, LAYER_KEY, Integer.class);
+	public static GRParameter<Double> TRANSPARENCY = GRParameter.getGRParameter(GraphicalRepresentation.class, TRANSPARENCY_KEY,
+			Double.class);
 	public static GRParameter<String> TEXT = GRParameter.getGRParameter(GraphicalRepresentation.class, TEXT_KEY, String.class);
 	public static GRParameter<TextStyle> TEXT_STYLE = GRParameter.getGRParameter(GraphicalRepresentation.class, TEXT_STYLE_KEY,
 			TextStyle.class);
@@ -380,7 +382,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public Double getTransparency();
 
 	@Setter(value = TRANSPARENCY_KEY)
-	public void setTranparency(Double transparency);
+	public void setTransparency(Double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
 	public Vector<MouseClickControl> getMouseClickControls();

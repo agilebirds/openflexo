@@ -50,6 +50,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	protected int layer;
 
+	protected double transparency = 1.0;
+
 	private TextStyle textStyle;
 	private String text;
 	private boolean multilineAllowed = false;
@@ -327,6 +329,20 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		FGENotification notification = requireChange(LAYER, layer);
 		if (notification != null) {
 			this.layer = layer;
+			hasChanged(notification);
+		}
+	}
+
+	@Override
+	public Double getTransparency() {
+		return transparency;
+	}
+
+	@Override
+	public void setTransparency(Double transparency) {
+		FGENotification notification = requireChange(TRANSPARENCY, transparency);
+		if (notification != null) {
+			this.transparency = transparency;
 			hasChanged(notification);
 		}
 	}
