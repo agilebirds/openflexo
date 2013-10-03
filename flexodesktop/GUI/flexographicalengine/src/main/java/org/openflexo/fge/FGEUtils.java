@@ -548,21 +548,21 @@ public class FGEUtils {
 		}
 		DrawingTreeNode<?, ?> current = source;
 		while (current != source.getDrawing().getRoot()) {
-			if (source.getGraphicalRepresentation() == null) {
+			if (current.getGraphicalRepresentation() == null) {
 				throw new IllegalArgumentException(
 						"DrawingTreeNode "
 								+ current
 								+ " has no graphical representation.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
-			if (source.getParentNode() == null) {
+			if (current.getParentNode() == null) {
 				throw new IllegalArgumentException(
 						"DrawingTreeNode "
 								+ current
 								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
-			tx += source.getViewX(scale);
-			ty += source.getViewY(scale);
-			current = source.getParentNode();
+			tx += current.getViewX(scale);
+			ty += current.getViewY(scale);
+			current = current.getParentNode();
 		}
 		return AffineTransform.getTranslateInstance(tx, ty);
 	}
@@ -599,15 +599,15 @@ public class FGEUtils {
 		}
 		DrawingTreeNode<?, ?> current = destination;
 		while (current != destination.getDrawing().getRoot()) {
-			if (destination.getParentNode() == null) {
+			if (current.getParentNode() == null) {
 				throw new IllegalArgumentException(
 						"DrawingTreeNode "
 								+ current
 								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
 			}
-			tx -= destination.getViewX(scale);
-			ty -= destination.getViewY(scale);
-			current = destination.getParentNode();
+			tx -= current.getViewX(scale);
+			ty -= current.getViewY(scale);
+			current = current.getParentNode();
 		}
 		return AffineTransform.getTranslateInstance(tx, ty);
 	}
