@@ -2614,7 +2614,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	@Override
 	public int getAvailableLabelWidth(double scale) {
-		if (getLineWrap()) {
+		if (getLineWrap() && !getIsFloatingLabel()) {
 			double rpx = getRelativeTextX();
 			switch (getHorizontalTextAlignment()) {
 			case RIGHT:
