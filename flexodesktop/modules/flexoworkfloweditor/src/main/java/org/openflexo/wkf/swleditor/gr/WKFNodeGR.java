@@ -104,8 +104,6 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 		getNode().setLabelY(posY, SWIMMING_LANE_EDITOR);
 	}
 
-	private boolean isAlreadyDoingLayout = true;
-
 	public WKFNodeGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(object, shapeType, aDrawing);
 		addToMouseDragControls(new SWLDrawEdgeControl());

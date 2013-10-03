@@ -1119,7 +1119,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 
 	@Override
 	public double getHeight(String context) {
-		return getHeight(context, 1000.0);
+		return getHeight(context, 1000.0, false);
 	}
 
 	public double getScale(String context, double defaultValue) {
