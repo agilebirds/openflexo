@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>GUI</artifactId>
-		<version>1.6.0-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexointerfacebuilder</artifactId>
 	<name>GUI :: FlexoInterfaceBuilder</name>
