@@ -55,6 +55,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumentRoot;
+import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.GetXMLDocumentRoot;
 
 /**
  * Implementation of the ModelSlot class for the XSD/XML technology adapter
@@ -68,7 +69,8 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumen
 	@DeclarePatternRole(FML = "XSClass", patternRoleClass = XSClassPatternRole.class), })
 @DeclareEditionActions({ // All edition actions available through this model slot
 	@DeclareEditionAction(FML = "AddXSIndividual", editionActionClass = AddXSIndividual.class),
-	@DeclareEditionAction(FML = "SetXMLDocumentRoot", editionActionClass = SetXMLDocumentRoot.class), // Sets the root instance of XML Document
+	@DeclareEditionAction(FML = "SetXMLDocumentRoot", editionActionClass = SetXMLDocumentRoot.class),
+	@DeclareEditionAction(FML = "GetXMLDocumentRoot", editionActionClass = GetXMLDocumentRoot.class), 
 	@DeclareEditionAction(FML = "AddXSClass", editionActionClass = AddXSClass.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
@@ -170,6 +172,8 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 			return (EA) new AddXSClass(null);
 		} else if (SetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new SetXMLDocumentRoot(null);
+		} else if (GetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new GetXMLDocumentRoot(null);
 		}else {
 			return null;
 		}

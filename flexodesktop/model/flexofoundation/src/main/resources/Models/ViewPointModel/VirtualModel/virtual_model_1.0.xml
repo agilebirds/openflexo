@@ -579,6 +579,10 @@
 		<property name="parameter" xmlTag="parameter" attribute="YES"/>
 	</entity>
 	
+    <entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.GetXMLDocumentRoot"
+		xmlTag="GetXMLDocumentRoot">
+	</entity>
+	
 	
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass"
 		xmlTag="AddXSClass">

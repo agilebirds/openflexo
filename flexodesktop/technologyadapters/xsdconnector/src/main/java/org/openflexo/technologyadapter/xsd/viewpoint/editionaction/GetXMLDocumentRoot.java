@@ -20,12 +20,16 @@
 package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.ProcedureAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
@@ -34,13 +38,14 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual> {
+@FIBPanel("Fib/GetXMLDocumentRoot.fib")
+public class GetXMLDocumentRoot extends AssignableAction<XSDModelSlot, XSOntIndividual> {
 
 
-	private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(GetXMLDocumentRoot.class.getPackage().getName());
 
 
-	public SetXMLDocumentRoot(VirtualModelBuilder builder) {
+	public GetXMLDocumentRoot(VirtualModelBuilder builder) {
 		super(builder);
 	}
 
@@ -50,36 +55,16 @@ public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndiv
 
 		ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
 		XMLXSDModel model = modelSlotInstance.getResourceData();
-		XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
-
-		XSOntIndividual rootIndiv = null;
 		
-		try {
-			Object o = getParameter().getBindingValue(action);
-			if (o instanceof XSOntIndividual){
-				rootIndiv = (XSOntIndividual) o;
-			}
-			else{
-				logger.warning("Invalid value in Binding :" + getParameter().getUnparsedBinding());
-			}
-		} catch (TypeMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (rootIndiv != null){
-			model.setRoot(rootIndiv);
-		}
+		XSOntIndividual rootIndiv = (XSOntIndividual) model.getRoot();
 		
 		return rootIndiv;
 	}
 
+	@Override
+	public Type getAssignableType() {
+		return Object.class;
+	}
 
 
 }

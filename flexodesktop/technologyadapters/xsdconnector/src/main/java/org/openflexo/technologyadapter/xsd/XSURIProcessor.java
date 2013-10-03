@@ -145,7 +145,14 @@ public class XSURIProcessor extends XMLURIProcessor {
 				XSOntProperty aProperty = ((XSOntClass) getMappedClass()).getPropertyByName(attributeName);
 				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);
 				try {
-					builtURI = URLEncoder.encode(value.toString(),"UTF-8");
+					// NPE protection
+					if (value != null){
+						builtURI = URLEncoder.encode(value.toString(),"UTF-8");
+					}
+					else {
+						XSDModelSlot.logger.severe("XSURI: unable to compute an URI for given object");
+						builtURI = null;
+					}
 				} catch (UnsupportedEncodingException e) {
 					XSDModelSlot.logger.warning("Cannot process URI - Unexpected encoding error");
 					e.printStackTrace();

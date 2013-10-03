@@ -315,7 +315,7 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 				return ((Diagram)getVirtualModelInstance()).getRootPane();
 			}
 		}
-		
+
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
 			return getVirtualModelInstance().getValueForVariable(variable);
@@ -377,7 +377,10 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 						newURI = modelSlot.generateUniqueURIName((TypeAwareModelSlotInstance) getVirtualModelInstance()
 								.getModelSlotInstance(modelSlot), newURI);
 						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
-						super.put(uriParam, newURI);
+						// NPE Protection
+						if (newURI != null) {
+							super.put(uriParam, newURI);
+						}
 					} catch (TypeMismatchException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
