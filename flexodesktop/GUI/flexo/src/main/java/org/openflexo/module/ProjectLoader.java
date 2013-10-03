@@ -200,7 +200,6 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		} finally {
 			ProgressWindow.hideProgressWindow();
 		}
-		ProgressWindow.hideProgressWindow();
 		return editor;
 	}
 

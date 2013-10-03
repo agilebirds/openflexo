@@ -19,41 +19,28 @@
  */
 package org.openflexo.action;
 
-import java.awt.HeadlessException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.EventObject;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openflexo.components.ProgressWindow;
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.action.UploadProjectAction;
-import org.openflexo.rest.client.ServerRestClient;
-import org.openflexo.rest.client.model.Project;
-import org.openflexo.rest.client.model.ProjectVersion;
-import org.openflexo.rest.client.model.User;
+import org.openflexo.rest.client.ServerRestClientModel;
+import org.openflexo.rest.client.ServerRestClientModel.NewProjectParameter;
+import org.openflexo.rest.client.model.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.multipart.FormDataMultiPart;
-import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
 public class UploadProjectInitializer extends ActionInitializer<UploadProjectAction, FlexoProject, FlexoProject> {
 
@@ -73,122 +60,37 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 		return new FlexoActionInitializer<UploadProjectAction>() {
 			@Override
 			public boolean run(EventObject event, UploadProjectAction action) {
-				boolean isFirst = true;
-				ServerRestClient client = null;
-				Integer projectId = null;
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("connecting_to_server"), -1);
-				User user = null;
-				try {
-					while (projectId == null) {
-						client = getController().getApplicationContext().getServerRestService().getWSClient(!isFirst);
-						isFirst = false;
-						if (client == null) {
-							return false;// Cancelled
-						}
-						try {
-							user = client.users().id(client.getUserName()).getAsUserXml();
-						} catch (Exception e) {
-							e.printStackTrace();
-							continue;
-						}
-						List<Project> projects = client.projects(
-								client.createClient(),
-								UriBuilder.fromUri(client.getBASE_URI())
-										.queryParam("projectUri", action.getFocusedObject().getProjectURI()).build()).getAsXml(
-								new GenericType<List<Project>>() {
-								});
-						if (projects.size() > 0) {
-							projectId = projects.get(0).getProjectId();
-						} /*else if (Arrays.asList(ROLE_ADMIN, ROLE_ACCOUNT_ADMIN).contains(user.getUsertype())) {
-							
-							}*/else {
+				FlexoProject project = action.getFocusedObject();
+				String version = project.getVersion();
+				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+				if (comment == null) {
+					return false;
+				}
+				ServerRestClientModel model = new ServerRestClientModel(getController(), project);
+				model.performOperationsInSwingWorker(true, true, model.new UpdateUserOperation(), model.new UpdateServerProject(false));
+				if (model.getServerProject() != null) {
+					model.performOperationsInSwingWorker(true, true, model.new SendProjectToServer(comment));
+				} else {
+					if (model.getUser() != null) {
+						if (model.getUser().getUserType() == UserType.ADMIN || model.getUser().getUserType() == UserType.CLIENT_ADMIN) {
+							NewProjectParameter data = model.new NewProjectParameter();
+							data.getProject().setName(project.getDisplayName());
+							data.setComment(FlexoLocalization.localizedForKey("first_import_of_project"));
+							FIBDialog<NewProjectParameter> dialog = FIBDialog.instanciateAndShowDialog(
+									ServerRestClientModel.NEW_SERVER_PROJECT_FIB_FILE, data, getController().getFlexoFrame(), true,
+									FlexoLocalization.getMainLocalizer());
+							if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
+								model.performOperationsInSwingWorker(true, true, model.new CreateProjectAndUploadFirstVersion(data));
+							}
+						} else {
 							FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
 							return false;
 						}
-
-					}
-				} finally {
-					ProgressWindow.hideProgressWindow();
-				}
-
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
-				File zipFile = null;
-				try {
-					zipFile = File.createTempFile(StringUtils.rightPad(action.getFocusedObject().getProjectName(), 3, '_'), ".zip");
-					zipFile.deleteOnExit();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-					FlexoController.showError(e2.getMessage());
-					return false;
-				}
-
-				try {
-					getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
-				} catch (SaveResourceException e1) {
-					FlexoController.showError(e1.getMessage());
-					e1.printStackTrace();
-					return false;
-				} finally {
-					ProgressWindow.hideProgressWindow();
-				}
-				final long length = zipFile.length();
-				final int numberOfStates = 1000; // We will display tenth of percent, hence 1000 states
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("sending_project"), numberOfStates);
-				try {
-					FileInputStream inputStream = new FileInputStream(zipFile) {
-
-						long progress = 0;
-						long lastUpdate = 0;
-						int stepSize = (int) (length / numberOfStates);
-
-						@Override
-						public int read() throws IOException {
-							progress++;
-							updateProgress();
-							return super.read();
-						}
-
-						private void updateProgress() {
-							double percent = progress * 100.0d / length;
-							if (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
-								ProgressWindow.instance().setProgress(
-										String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
-								lastUpdate = progress;
-							}
-						}
-					};
-					ProjectVersion version = new ProjectVersion();
-					version.setProject(projectId);
-					version.setCreator(user.getLogin());
-					String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-					if (s == null) {
+					} else {
 						return false;
 					}
-					version.setComment(s);
-					FormDataMultiPart mp = new FormDataMultiPart();
-					mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
-					mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
-					ProjectVersion response = client.projectsProjectIDVersions(projectId).postMultipartFormDataAsXml(mp,
-							ProjectVersion.class);
-					FlexoController.notify(FlexoLocalization.localizedForKey("successfully created version") + " "
-							+ response.getVersionNumber());
-					return true;
-				} catch (HeadlessException e) {
-					e.printStackTrace();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					try {
-						if (!getController().handleWSException(e)) {
-							return false;
-						}
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-				} finally {
-					ProgressWindow.hideProgressWindow();
 				}
-				return false;
+				return !StringUtils.equals(version, project.getVersion());
 			}
 		};
 	}
@@ -203,76 +105,18 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 				if (exception.getCause() != null) {
 					e = exception.getCause();
 				}
-				/*
-				if (e instanceof PPMWebServiceAuthentificationException) {
-					getController().handleWSException((PPMWebServiceAuthentificationException) e);
-				} else if (e instanceof RemoteException) {
-					getController().handleWSException((RemoteException) e);
-				} else {
-					FlexoController.notify(FlexoLocalization.localizedForKey("upload_project_failed") + ": " + e.getMessage());
-				}*/
 				return false;
 			}
 		};
 	}
 
-	/*
-	private CLProjectDescriptor selectTarget(CLProjectDescriptor[] targetProjects) throws ChangeServerException {
-		Arrays.sort(targetProjects, new Comparator<CLProjectDescriptor>() {
-			@Override
-			public int compare(CLProjectDescriptor o1, CLProjectDescriptor o2) {
-				if (o1.getProjectName() == null) {
-					if (o2.getProjectName() == null) {
-						return 0;
-					} else {
-						return -1;
-					}
-				} else if (o2.getProjectName() == null) {
-					return 1;
-				} else {
-					return o1.getProjectName().compareTo(o2.getProjectName());
-				}
-			}
-		});
-		if (targetProjects.length == 0) {
-			FlexoController.showError(FlexoLocalization.localizedForKey("sorry_but_there_is_no_projects_where_this_prj_can_be_uploaded"));
-			return null;
-		}
-		ParameterDefinition[] parameters = new ParameterDefinition[3];
-		LabelParameter info = new LabelParameter("info", "", "<html>"
-				+ FlexoLocalization.localizedForKey("selected_server")
-				+ " <b>"
-				+ FlexoServerInstanceManager.getInstance().getAddressBook().getInstanceWithID(AdvancedPrefs.getWebServiceInstance())
-						.getName() + "</b></html>", false);
-		info.setAlign("center");
-		RadioButtonListParameter<CLProjectDescriptor> p = new RadioButtonListParameter<CLProjectDescriptor>("selectedProject",
-				"choose_project", targetProjects[0], targetProjects);
-		p.setDepends("change");
-		p.setConditional("change=false");
-		CheckboxParameter changeServer = new CheckboxParameter("change", "change_server", false);
-		parameters[0] = info;
-		parameters[1] = p;
-		parameters[2] = changeServer;
-		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(),
-				FlexoLocalization.localizedForKey("import_processes"), FlexoLocalization.localizedForKey("select_project"), parameters);
-		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-			if (changeServer.getValue()) {
-				throw new ChangeServerException();
-			}
-			return p.getValue();
-		} else {
-			return null;
-		}
-	}
-	*/
 	@Override
 	protected FlexoActionFinalizer<UploadProjectAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UploadProjectAction>() {
 			@Override
 			public boolean run(EventObject e, UploadProjectAction action) {
-				/*if (action.getUploadReport() != null && action.getUploadReport().trim().length() > 0) {
-					FlexoController.notify(action.getUploadReport());
-				}*/
+				FlexoController.notify(FlexoLocalization.localizedForKey("successfully_created_version") + " "
+						+ action.getFocusedObject().getVersion());
 				return true;
 			}
 		};
