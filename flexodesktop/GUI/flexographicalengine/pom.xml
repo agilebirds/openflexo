@@ -34,6 +34,16 @@
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
+       <dependency>
+                <groupId>org.dockingframes</groupId>
+                <artifactId>docking-frames-common</artifactId>
+                <version>1.1.1</version>
+        </dependency>
+       <dependency>
+                <groupId>org.dockingframes</groupId>
+                <artifactId>docking-frames-demo-app</artifactId>
+                <version>1.1.0</version>
+        </dependency> 
 	</dependencies>
 </project>
 
