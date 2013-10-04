@@ -40,6 +40,7 @@ import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.RemoveImportedProject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -170,6 +171,10 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		} else {
 			return FlexoController.statelessIconForObject(object);
 		}
+	}
+
+	public ImageIcon getFolderIcon() {
+		return IconLibrary.FOLDER_ICON;
 	}
 
 	@Override

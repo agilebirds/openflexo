@@ -22,7 +22,7 @@ public class RelativePathFileConverter extends Converter<File> {
 	public File convertFromString(String value) {
 		File file = new File(relativePath, value);
 		if (!file.exists()) {
-			System.err.println("Shit: this does not exist: " + file.getAbsolutePath());
+			System.err.println("This file does not exists: " + file.getAbsolutePath());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("********* convertFromString " + value + " return " + file.getAbsolutePath());
