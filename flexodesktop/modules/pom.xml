@@ -18,7 +18,7 @@
 		<module>flexodocresourceeditor</module>
 		<module>flexoprjsharingmodule</module>
 		<module>flexoscreeneditor</module>
-		<module>flexosourcegeneratormodule</module>
+	    <!-- <module>flexosourcegeneratormodule</module> -->
 		<module>flexovieweditor</module>
 		<module>flexoviewpointmodeler</module>
 		<module>flexowebserviceeditor</module>
