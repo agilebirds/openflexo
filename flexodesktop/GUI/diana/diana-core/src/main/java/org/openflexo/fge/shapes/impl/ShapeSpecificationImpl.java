@@ -103,8 +103,8 @@ public abstract class ShapeSpecificationImpl extends FGEObjectImpl implements Sh
 	}
 
 	@Override
-	public Shape<?> makeShape(ShapeNode<?> node) {
-		Shape returned = new Shape(node);
+	public ShapeImpl<?> makeShape(ShapeNode<?> node) {
+		ShapeImpl returned = new ShapeImpl(node);
 		addObserver(returned);
 		return returned;
 	}

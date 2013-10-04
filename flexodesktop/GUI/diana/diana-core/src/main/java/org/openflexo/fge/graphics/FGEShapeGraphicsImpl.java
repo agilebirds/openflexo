@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.control.FGEShapeGraphics;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class FGEShapeGraphicsImpl extends FGEGraphicsImpl implements FGEShapeGraphics {

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.area.FGEArea;
 
+@SuppressWarnings("serial")
 public class FGEEllips extends FGEArc {
 
 	private static final Logger logger = Logger.getLogger(FGEEllips.class.getPackage().getName());
@@ -96,7 +97,7 @@ public class FGEEllips extends FGEArc {
 		FGEArea t_bounds = bounds.transform(t);
 
 		if (t_bounds instanceof FGEShape) {
-			FGERectangle boundingBox = ((FGEShape) t_bounds).getBoundingBox();
+			FGERectangle boundingBox = ((FGEShape<?>) t_bounds).getBoundingBox();
 			return new FGEEllips(newCenter, new FGEDimension(boundingBox.getWidth(), boundingBox.getHeight()), _filling);
 		}
 		logger.warning("Cannot compute transform for " + this + " with " + t);

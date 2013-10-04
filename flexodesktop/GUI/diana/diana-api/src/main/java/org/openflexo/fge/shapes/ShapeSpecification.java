@@ -23,9 +23,6 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.shapes.impl.Shape;
-import org.openflexo.fge.shapes.impl.ShapeSpecificationImpl;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
@@ -39,7 +36,6 @@ import org.openflexo.model.annotations.ModelEntity;
  * @author sylvain
  */
 @ModelEntity(isAbstract = true)
-@ImplementationClass(ShapeSpecificationImpl.class)
 @Imports({ @Import(Arc.class), @Import(Circle.class), @Import(Losange.class), @Import(Oval.class), @Import(Polygon.class),
 		@Import(Rectangle.class), @Import(RectangularOctogon.class), @Import(RegularPolygon.class), @Import(Square.class),
 		@Import(Star.class), @Import(Triangle.class) })

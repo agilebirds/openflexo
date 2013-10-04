@@ -17,7 +17,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class CurvedPolylinConnector extends Connector<CurvedPolylinConnectorSpecification> {
+public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnectorSpecification> {
 
 	private FGEPoint p1 = new FGEPoint();
 	private FGEPoint p2 = new FGEPoint();

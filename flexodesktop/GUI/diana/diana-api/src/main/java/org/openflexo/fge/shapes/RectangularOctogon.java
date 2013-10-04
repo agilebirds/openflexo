@@ -19,8 +19,6 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.shapes.impl.RectangularOctogonImpl;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
@@ -32,7 +30,6 @@ import org.openflexo.model.annotations.XMLElement;
  * @author sylvain
  */
 @ModelEntity
-@ImplementationClass(RectangularOctogonImpl.class)
 @XMLElement(xmlTag = "RectangularOctogonShape")
 public interface RectangularOctogon extends Polygon {
 

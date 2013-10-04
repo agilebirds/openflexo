@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
@@ -42,8 +42,9 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.graphics.FGEShapeGraphicsImpl;
+import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 
@@ -58,11 +59,11 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
  * @author sylvain
  * 
  */
-public class Shape<SS extends ShapeSpecification> implements Observer {
+public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape<SS> {
 
-	private static final Logger logger = Logger.getLogger(Shape.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ShapeImpl.class.getPackage().getName());
 
-	private static final FGEModelFactory SHADOW_FACTORY = FGEUtils.TOOLS_FACTORY;
+	private static final FGEModelFactory SHADOW_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
 	protected ShapeNode<?> shapeNode;
 
@@ -78,7 +79,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
 	 */
-	public Shape(ShapeNode<?> shapeNode) {
+	public ShapeImpl(ShapeNode<?> shapeNode) {
 		super();
 		this.shapeNode = shapeNode;
 		controlPoints = new ArrayList<ControlPoint>();
@@ -93,6 +94,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		controlPoints = null;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public SS getShapeSpecification() {
 		return (SS) shapeNode.getGraphicalRepresentation().getShape();
@@ -103,6 +105,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * 
 	 * @return
 	 */
+	@Override
 	public List<ControlPoint> getControlAreas() {
 		return controlPoints;
 	}
@@ -112,10 +115,12 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * 
 	 * @return
 	 */
+	@Override
 	public List<ControlPoint> getControlPoints() {
 		return controlPoints;
 	}
 
+	@Override
 	public FGEShape<?> getShape() {
 		if (shape == null) {
 			shape = makeShape();
@@ -124,6 +129,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		return shape;
 	}
 
+	@Override
 	public FGEShape<?> getOutline() {
 		if (outline == null) {
 			outline = makeOutline();
@@ -158,6 +164,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		return controlPoints;
 	}
 
+	@Override
 	public ShapeType getShapeType() {
 		return getShapeSpecification().getShapeType();
 	}
@@ -184,6 +191,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * @param aPoint
 	 * @return
 	 */
+	@Override
 	public FGEPoint nearestOutlinePoint(FGEPoint aPoint) {
 		return getShape().nearestOutlinePoint(aPoint);
 	}
@@ -195,6 +203,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * @param aPoint
 	 * @return
 	 */
+	@Override
 	public boolean isPointInsideShape(FGEPoint aPoint) {
 		return getShape().containsPoint(aPoint);
 	}
@@ -208,6 +217,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * @param from
 	 * @return
 	 */
+	@Override
 	public final FGEPoint outlineIntersect(FGELine line, FGEPoint from) {
 		FGEArea intersection = getShape().intersect(line);
 		return intersection.getNearestPoint(from);
@@ -224,11 +234,13 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	 * @param from
 	 * @return
 	 */
+	@Override
 	public final FGEPoint outlineIntersect(FGEPoint from) {
 		FGELine line = new FGELine(new FGEPoint(0.5, 0.5), from);
 		return outlineIntersect(line, from);
 	}
 
+	@Override
 	public FGEArea getAllowedHorizontalConnectorLocationFromEast() {
 		FGEHalfLine north = new FGEHalfLine(1, 0, 2, 0);
 		FGEHalfLine south = new FGEHalfLine(1, 1, 2, 1);
@@ -263,18 +275,21 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		return new FGEHalfBand(north, south);
 	}*/
 
+	@Override
 	public FGEArea getAllowedHorizontalConnectorLocationFromWest() {
 		FGEHalfLine north = new FGEHalfLine(0, 0, -1, 0);
 		FGEHalfLine south = new FGEHalfLine(0, 1, -1, 1);
 		return new FGEHalfBand(north, south);
 	}
 
+	@Override
 	public FGEArea getAllowedVerticalConnectorLocationFromNorth() {
 		FGEHalfLine east = new FGEHalfLine(1, 0, 1, -1);
 		FGEHalfLine west = new FGEHalfLine(0, 0, 0, -1);
 		return new FGEHalfBand(east, west);
 	}
 
+	@Override
 	public FGEArea getAllowedVerticalConnectorLocationFromSouth() {
 		FGEHalfLine east = new FGEHalfLine(1, 1, 1, 2);
 		FGEHalfLine west = new FGEHalfLine(0, 1, 0, 2);
@@ -285,7 +300,7 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 	// * Painting methods *
 	// *******************************************************************************
 
-	public void setPaintAttributes(FGEShapeGraphicsImpl g) {
+	public void setPaintAttributes(FGEShapeGraphics g) {
 
 		// Background
 		if (shapeNode.getIsSelected()) {
@@ -324,7 +339,8 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		g.setDefaultTextStyle(shapeNode.getGraphicalRepresentation().getTextStyle());
 	}
 
-	public final void paintShadow(FGEShapeGraphicsImpl g) {
+	@Override
+	public final void paintShadow(FGEShapeGraphics g) {
 		double deep = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowDepth();
 		int blur = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowBlur();
 		double viewWidth = shapeNode.getViewWidth(1.0);
@@ -363,16 +379,17 @@ public class Shape<SS extends ShapeSpecification> implements Observer {
 		g.releaseClonedGraphics(oldGraphics);
 	}
 
-	public final void paintShape(FGEShapeGraphicsImpl g) {
+	@Override
+	public final void paintShape(FGEShapeGraphics g) {
 		setPaintAttributes(g);
 		getShape().paint(g);
 		// drawLabel(g);
 	}
 
 	@Override
-	public Shape clone() {
+	public ShapeImpl clone() {
 		try {
-			Shape returned = (Shape) super.clone();
+			ShapeImpl returned = (ShapeImpl) super.clone();
 			// returned._controlPoints = null;
 			// returned.graphicalRepresentation = null;
 			// returned.updateShape();

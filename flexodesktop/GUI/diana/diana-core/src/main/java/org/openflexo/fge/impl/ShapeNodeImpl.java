@@ -60,7 +60,7 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.shapes.ShapeSpecification;
-import org.openflexo.fge.shapes.impl.Shape;
+import org.openflexo.fge.shapes.impl.ShapeImpl;
 
 public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalRepresentation> implements ShapeNode<O> {
 
@@ -80,7 +80,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	private ShapeDecorationPainter decorationPainter;
 	private ShapePainter shapePainter;
 
-	private Shape<?> shape;
+	private ShapeImpl<?> shape;
 
 	protected ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
@@ -99,7 +99,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public Shape<?> getShape() {
+	public ShapeImpl<?> getShape() {
 		if (shape == null && getGraphicalRepresentation() != null) {
 			shape = getGraphicalRepresentation().getShape().makeShape(this);
 		}

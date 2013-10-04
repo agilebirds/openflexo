@@ -23,8 +23,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.area.FGEUnionArea;
 
+@SuppressWarnings("serial")
 public class FGECircle extends FGEEllips {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGECircle.class.getPackage().getName());
 
 	public FGECircle() {

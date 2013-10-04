@@ -38,6 +38,7 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, FGEShape<FGEArc> {
 
 	private static final Logger logger = Logger.getLogger(FGEArc.class.getPackage().getName());
@@ -170,7 +171,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		System.out.println("intersect: " + s.intersect(hl));
 		// System.out.println("intersect: "+hl.intersect(s));
 
-		FGEArc arc = new FGEArc(new FGEPoint(0, 0), new FGEDimension(100, 100));
+		// FGEArc arc = new FGEArc(new FGEPoint(0, 0), new FGEDimension(100, 100));
 
 		/*Area area1 = new Area(arc);
 		Area area2 = new Area(line);
@@ -442,7 +443,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		}
 	}
 
-	private LineIntersectionResult _computeIntersection(FGEAbstractLine line) {
+	private LineIntersectionResult _computeIntersection(FGEAbstractLine<?> line) {
 		LineIntersectionResult result = new LineIntersectionResult();
 		double a, b, c;
 
@@ -487,7 +488,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		}
 	}
 
-	private FGEArea computeIntersection(FGEAbstractLine line) {
+	private FGEArea computeIntersection(FGEAbstractLine<?> line) {
 		FGEArea a = computeLineIntersection(new FGELine(line.getP1(), line.getP2()));
 		// logger.info("computeLineIntersection(): "+a+" line="+line+" intersect="+(a.intersect(line)));
 		return a.intersect(line);
@@ -767,7 +768,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeIntersection((FGEAbstractLine) area);
+			return computeIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGEArc && ((FGEArc) area).overlap(this)) {
 			return computeArcIntersection((FGEArc) area);
@@ -884,7 +885,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return containsPoint(l.getP1()) && containsPoint(l.getP2()) && l instanceof FGESegment;
 	}
 
@@ -1391,6 +1392,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		else if (result.solutionType == org.openflexo.fge.geom.FGEArc.LineIntersectionResult.SolutionType.TWO_SOLUTIONS) {
 			FGEPoint p1 = new FGEPoint(width / 2.0 * Math.cos(-result.alpha1) + x + width / 2.0, height / 2.0 * Math.sin(-result.alpha1)
 					+ y + height / 2.0);
+			@SuppressWarnings("unused")
 			FGEPoint p2 = new FGEPoint(width / 2.0 * Math.cos(-result.alpha2) + x + width / 2.0, height / 2.0 * Math.sin(-result.alpha2)
 					+ y + height / 2.0);
 			if (hl.containsPoint(p1)) {

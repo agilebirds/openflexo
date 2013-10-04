@@ -254,7 +254,7 @@ public class FGEPolylin implements FGEGeometricObject<FGEPolylin> {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (l instanceof FGESegment) {
 			for (FGESegment s : _segments) {
 				if (s.containsLine(l)) {
@@ -372,7 +372,7 @@ public class FGEPolylin implements FGEGeometricObject<FGEPolylin> {
 		return cumulated / getLength();
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		Vector<FGEPoint> crossed = new Vector<FGEPoint>();
 		for (FGESegment s : _segments) {
 			if (line.overlap(s)) {
@@ -425,7 +425,7 @@ public class FGEPolylin implements FGEGeometricObject<FGEPolylin> {
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGEPolylin) {
 			return computePolylinIntersection((FGEPolylin) area);

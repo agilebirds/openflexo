@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import org.openflexo.fge.geom.area.FGEArea;
 
-public interface FGEGeometricObject<O extends FGEGeometricObject> extends Cloneable, FGEArea {
+public interface FGEGeometricObject<O extends FGEGeometricObject<O>> extends Cloneable, FGEArea {
 
 	public static final double EPSILON = 1e-10;
 

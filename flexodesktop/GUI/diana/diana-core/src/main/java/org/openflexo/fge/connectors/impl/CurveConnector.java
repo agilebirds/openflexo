@@ -32,7 +32,7 @@ import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class CurveConnector extends Connector<CurveConnectorSpecification> {
+public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
 	private static final Logger logger = Logger.getLogger(CurveConnectorSpecification.class.getPackage().getName());
 

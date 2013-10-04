@@ -1,7 +1,6 @@
-package org.openflexo.fge.control;
+package org.openflexo.fge.graphics;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.FGEGraphics;
 
 public interface FGEShapeGraphics extends FGEGraphics {
 

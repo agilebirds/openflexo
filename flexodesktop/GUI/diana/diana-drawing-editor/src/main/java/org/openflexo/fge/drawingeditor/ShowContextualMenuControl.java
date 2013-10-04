@@ -25,9 +25,9 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.controller.MouseClickControlImpl;
 import org.openflexo.fge.view.FGEView;
 
 public class ShowContextualMenuControl extends MouseClickControlImpl {

@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openflexo</groupId>
-		<artifactId>GUI</artifactId>
-        <version>1.6-SNAPSHOT</version>
+		<artifactId>diana</artifactId>
+        <version>1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>diana-geomedit</artifactId>
 	<name>GUI :: Diana-GeomEdit</name>

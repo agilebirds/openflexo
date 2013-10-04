@@ -20,10 +20,8 @@
 package org.openflexo.fge.connectors;
 
 import org.openflexo.fge.GRParameter;
-import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -31,7 +29,6 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(CurveConnectorSpecificationImpl.class)
 @XMLElement(xmlTag = "ArcConnector")
 public interface CurveConnectorSpecification extends ConnectorSpecification {
 

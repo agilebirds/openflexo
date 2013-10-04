@@ -41,7 +41,7 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 
 	private static final Logger logger = Logger.getLogger(FGEGeneralShape.class.getPackage().getName());
 
-	private Vector<GeneralShapePathElement> pathElements;
+	private Vector<GeneralShapePathElement<?>> pathElements;
 	private Closure closure;
 	private GeneralPath _generalPath;
 	private FGEPoint currentPoint;
@@ -52,7 +52,7 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 		OPEN_NOT_FILLED, CLOSED_NOT_FILLED, OPEN_FILLED, CLOSED_FILLED;
 	}
 
-	public static interface GeneralShapePathElement<E extends GeneralShapePathElement> extends FGEGeometricObject<E> {
+	public static interface GeneralShapePathElement<E extends GeneralShapePathElement<E>> extends FGEGeometricObject<E> {
 		public FGEPoint getP1();
 
 		public FGEPoint getP2();
@@ -65,7 +65,7 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	public FGEGeneralShape(Closure aClosure) {
 		super();
 		closure = aClosure;
-		pathElements = new Vector<GeneralShapePathElement>();
+		pathElements = new Vector<GeneralShapePathElement<?>>();
 		_generalPath = new GeneralPath();
 		_controlPoints = new Vector<FGEPoint>();
 	}
@@ -75,18 +75,18 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 		logger.warning("FGEGeneralShape from generalPath not implemented yet");
 	}
 
-	public Vector<GeneralShapePathElement> getPathElements() {
+	public Vector<GeneralShapePathElement<?>> getPathElements() {
 		return pathElements;
 	}
 
-	public void setPathElements(Vector<GeneralShapePathElement> elements) {
+	public void setPathElements(Vector<GeneralShapePathElement<?>> elements) {
 		currentPoint = null;
-		for (GeneralShapePathElement e : elements) {
+		for (GeneralShapePathElement<?> e : elements) {
 			addToPathElements(e);
 		}
 	}
 
-	public void addToPathElements(GeneralShapePathElement element) {
+	public void addToPathElements(GeneralShapePathElement<?> element) {
 		if (element instanceof FGESegment) {
 			if (currentPoint == null) {
 				beginAtPoint(((FGESegment) element).getP1());
@@ -105,11 +105,11 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 		}
 	}
 
-	public void removeFromPathElements(GeneralShapePathElement element) {
+	public void removeFromPathElements(GeneralShapePathElement<?> element) {
 		logger.warning("Not implemented yet");
 	}
 
-	public GeneralShapePathElement getElementAt(int index) {
+	public GeneralShapePathElement<?> getElementAt(int index) {
 		return pathElements.get(index);
 	}
 
@@ -251,7 +251,7 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		/*if (l instanceof FGESegment) {
 			return containsPoint(((FGESegment)l).getP1()) && containsPoint(((FGESegment)l).getP2());
 		}*/
@@ -362,6 +362,7 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	 */
 	@Override
 	public FGEPoint nearestPointFrom(FGEPoint from, SimplifiedCardinalDirection orientation) {
+		@SuppressWarnings("unused")
 		FGEHalfLine hl = FGEHalfLine.makeHalfLine(from, orientation);
 
 		// TODO not implemented

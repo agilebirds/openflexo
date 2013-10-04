@@ -57,7 +57,7 @@ import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ConcatenedList;
 
-public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecification> {
+public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpecification> {
 
 	static final Logger logger = Logger.getLogger(RectPolylinConnectorSpecification.class.getPackage().getName());
 

@@ -37,9 +37,9 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
-public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.Double implements FGEGeometricObject<L> {
+@SuppressWarnings("serial")
+public abstract class FGEAbstractLine<L extends FGEAbstractLine<L>> extends Line2D.Double implements FGEGeometricObject<L> {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGEAbstractLine.class.getPackage().getName());
 
 	// Equation is a*x + b*y + c = 0
@@ -64,7 +64,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		super(p1, p2);
 	}
 
-	public FGEAbstractLine(FGEAbstractLine line) {
+	public FGEAbstractLine(FGEAbstractLine<?> line) {
 		super(line.getP1(), line.getP2());
 	}
 
@@ -181,7 +181,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		p2 = new FGEPoint(x2, y2);
 	}
 
-	public final boolean overlap(FGEAbstractLine anOtherLine) {
+	public final boolean overlap(FGEAbstractLine<?> anOtherLine) {
 		return isParallelTo(anOtherLine) && anOtherLine._containsPointIgnoreBounds(getP1());
 	}
 
@@ -216,7 +216,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	 *            point the returned line must cross
 	 * @return a new FGELine instance
 	 */
-	public static FGELine getOrthogonalLine(FGEAbstractLine reference, FGEPoint p) {
+	public static FGELine getOrthogonalLine(FGEAbstractLine<?> reference, FGEPoint p) {
 		return reference.getOrthogonalLine(p);
 	}
 
@@ -243,7 +243,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	 *            point the returned line must cross
 	 * @return a new FGELine instance
 	 */
-	public static FGELine getParallelLine(FGEAbstractLine reference, FGEPoint p) {
+	public static FGELine getParallelLine(FGEAbstractLine<?> reference, FGEPoint p) {
 		return reference.getParallelLine(p);
 	}
 
@@ -257,7 +257,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	 * @return a new FGELine instance
 	 */
 	public FGELine getRotatedLine(double angle, FGEPoint p) {
-		FGEAbstractLine l = transform(AffineTransform.getRotateInstance(Math.toRadians(angle)));
+		FGEAbstractLine<?> l = transform(AffineTransform.getRotateInstance(Math.toRadians(angle)));
 		return l.getParallelLine(p);
 	}
 
@@ -272,11 +272,11 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	 *            point the returned line must cross
 	 * @return a new FGELine instance
 	 */
-	public static FGELine getRotatedLine(FGEAbstractLine reference, double angle, FGEPoint p) {
+	public static FGELine getRotatedLine(FGEAbstractLine<?> reference, double angle, FGEPoint p) {
 		return reference.getRotatedLine(angle, p);
 	}
 
-	public FGEPoint getLineIntersection(FGEAbstractLine aLine) throws ParallelLinesException {
+	public FGEPoint getLineIntersection(FGEAbstractLine<?> aLine) throws ParallelLinesException {
 		double a1 = aLine.a;
 		double b1 = aLine.b;
 		double c1 = aLine.c;
@@ -314,7 +314,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public static FGEPoint getLineIntersection(FGEAbstractLine line1, FGEAbstractLine line2) throws ParallelLinesException {
+	public static FGEPoint getLineIntersection(FGEAbstractLine<?> line1, FGEAbstractLine<?> line2) throws ParallelLinesException {
 		return line1.getLineIntersection(line2);
 	}
 
@@ -349,7 +349,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public static FGEPoint getProjection(FGEPoint p, FGEAbstractLine line) {
+	public static FGEPoint getProjection(FGEPoint p, FGEAbstractLine<?> line) {
 		return line.getProjection(p);
 	}
 
@@ -387,7 +387,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		return GeomUtils.getSlope(getP1(), getP2());
 	}
 
-	public static FGEAbstractLine getNorthernLine(FGEAbstractLine source, FGEAbstractLine destination) {
+	public static FGEAbstractLine<?> getNorthernLine(FGEAbstractLine<?> source, FGEAbstractLine<?> destination) {
 		if (source.isParallelTo(destination)) {
 			FGELine orthogonalLine = source.getOrthogonalLine(source.getP1());
 			FGEPoint p1 = orthogonalLine.getLineIntersection(source);
@@ -398,7 +398,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public static FGEAbstractLine getSouthernLine(FGEAbstractLine source, FGEAbstractLine destination) {
+	public static FGEAbstractLine<?> getSouthernLine(FGEAbstractLine<?> source, FGEAbstractLine<?> destination) {
 		if (source.isParallelTo(destination)) {
 			FGELine orthogonalLine = source.getOrthogonalLine(source.getP1());
 			FGEPoint p1 = orthogonalLine.getLineIntersection(source);
@@ -409,7 +409,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public static FGEAbstractLine getEasternLine(FGEAbstractLine source, FGEAbstractLine destination) {
+	public static FGEAbstractLine<?> getEasternLine(FGEAbstractLine<?> source, FGEAbstractLine<?> destination) {
 		if (source.isParallelTo(destination)) {
 			FGELine orthogonalLine = source.getOrthogonalLine(source.getP1());
 			FGEPoint p1 = orthogonalLine.getLineIntersection(source);
@@ -420,7 +420,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public static FGEAbstractLine getWesternLine(FGEAbstractLine source, FGEAbstractLine destination) {
+	public static FGEAbstractLine<?> getWesternLine(FGEAbstractLine<?> source, FGEAbstractLine<?> destination) {
 		if (source.isParallelTo(destination)) {
 			FGELine orthogonalLine = source.getOrthogonalLine(source.getP1());
 			FGEPoint p1 = orthogonalLine.getLineIntersection(source);
@@ -431,7 +431,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	protected abstract FGEArea computeLineIntersection(FGEAbstractLine line);
+	protected abstract FGEArea computeLineIntersection(FGEAbstractLine<?> line);
 
 	/*
 	 * { logger.info("computeIntersection() between "+this+"\n and "+line+" overlap="+overlap(line)); if (overlap(line)) { if (this
@@ -467,7 +467,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 			}
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return ((FGERectangle) area).intersect(this);
@@ -521,7 +521,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	}
 
 	@Override
-	public abstract boolean containsLine(FGEAbstractLine l);
+	public abstract boolean containsLine(FGEAbstractLine<?> l);
 
 	@Override
 	public final boolean containsArea(FGEArea a) {
@@ -529,7 +529,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 			return containsPoint((FGEPoint) a);
 		}
 		if (a instanceof FGEAbstractLine) {
-			return containsLine((FGEAbstractLine) a);
+			return containsLine((FGEAbstractLine<?>) a);
 		}
 		return false;
 	}
@@ -538,7 +538,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	public abstract boolean equals(Object obj);
 
 	@Override
-	public abstract FGEAbstractLine transform(AffineTransform t);
+	public abstract FGEAbstractLine<?> transform(AffineTransform t);
 
 	@Override
 	public abstract String toString();

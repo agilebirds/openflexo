@@ -57,7 +57,7 @@ public interface FGEArea extends Cloneable {
 	 * @param l
 	 * @return
 	 */
-	public boolean containsLine(FGEAbstractLine l);
+	public boolean containsLine(FGEAbstractLine<?> l);
 
 	/**
 	 * Test if this area contains supplied point

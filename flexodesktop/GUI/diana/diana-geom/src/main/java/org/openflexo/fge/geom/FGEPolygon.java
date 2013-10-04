@@ -196,7 +196,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (l instanceof FGEHalfLine) {
 			return false;
 		}
@@ -402,7 +402,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		Vector<FGEPoint> crossed = new Vector<FGEPoint>();
 		for (FGESegment s : _segments) {
 			if (line.overlap(s)) {
@@ -456,7 +456,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return ((FGERectangle) area).intersect(this);

@@ -32,6 +32,7 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGEPoint extends Point2D.Double implements FGEGeometricObject<FGEPoint> {
 
 	public static final FGEPoint ORIGIN_POINT = new FGEPoint() {
@@ -119,7 +120,7 @@ public class FGEPoint extends Point2D.Double implements FGEGeometricObject<FGEPo
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return false;
 	}
 

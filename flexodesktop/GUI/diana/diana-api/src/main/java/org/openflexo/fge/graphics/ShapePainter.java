@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.graphics;
 
-import org.openflexo.fge.control.FGEShapeGraphics;
 
 public interface ShapePainter {
 

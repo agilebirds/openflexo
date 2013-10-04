@@ -5,6 +5,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.CurveConnectorSpecification;
+import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.LineConnectorSpecification;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.ConnectorSpecificationImpl;
+import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
+import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
+import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
+import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
@@ -30,6 +40,30 @@ import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.impl.TextureBackgroundStyleImpl;
+import org.openflexo.fge.shapes.Arc;
+import org.openflexo.fge.shapes.Circle;
+import org.openflexo.fge.shapes.Losange;
+import org.openflexo.fge.shapes.Oval;
+import org.openflexo.fge.shapes.Polygon;
+import org.openflexo.fge.shapes.Rectangle;
+import org.openflexo.fge.shapes.RectangularOctogon;
+import org.openflexo.fge.shapes.RegularPolygon;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.Square;
+import org.openflexo.fge.shapes.Star;
+import org.openflexo.fge.shapes.Triangle;
+import org.openflexo.fge.shapes.impl.ArcImpl;
+import org.openflexo.fge.shapes.impl.CircleImpl;
+import org.openflexo.fge.shapes.impl.LosangeImpl;
+import org.openflexo.fge.shapes.impl.OvalImpl;
+import org.openflexo.fge.shapes.impl.PolygonImpl;
+import org.openflexo.fge.shapes.impl.RectangleImpl;
+import org.openflexo.fge.shapes.impl.RectangularOctogonImpl;
+import org.openflexo.fge.shapes.impl.RegularPolygonImpl;
+import org.openflexo.fge.shapes.impl.ShapeSpecificationImpl;
+import org.openflexo.fge.shapes.impl.SquareImpl;
+import org.openflexo.fge.shapes.impl.StarImpl;
+import org.openflexo.fge.shapes.impl.TriangleImpl;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class FGEModelFactoryImpl extends FGEModelFactory {
@@ -64,22 +98,45 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 
 	@Override
 	public void installImplementingClasses() throws ModelDefinitionException {
+
 		setImplementingClassForInterface(GraphicalRepresentationImpl.class, GraphicalRepresentation.class);
 		setImplementingClassForInterface(ShapeGraphicalRepresentationImpl.class, ShapeGraphicalRepresentation.class);
 		setImplementingClassForInterface(ConnectorGraphicalRepresentationImpl.class, ConnectorGraphicalRepresentation.class);
 		setImplementingClassForInterface(DrawingGraphicalRepresentationImpl.class, DrawingGraphicalRepresentation.class);
 		setImplementingClassForInterface(ContainerGraphicalRepresentationImpl.class, ContainerGraphicalRepresentation.class);
+
 		setImplementingClassForInterface(ShapeBorderImpl.class, ShapeBorder.class);
+
+		setImplementingClassForInterface(FGEStyleImpl.class, FGEStyle.class);
+		setImplementingClassForInterface(ForegroundStyleImpl.class, ForegroundStyle.class);
+		setImplementingClassForInterface(ShadowStyleImpl.class, ShadowStyle.class);
+		setImplementingClassForInterface(TextStyleImpl.class, TextStyle.class);
 		setImplementingClassForInterface(BackgroundStyleImpl.class, BackgroundStyle.class);
 		setImplementingClassForInterface(NoneBackgroundStyleImpl.class, NoneBackgroundStyle.class);
 		setImplementingClassForInterface(ColorBackgroundStyleImpl.class, ColorBackgroundStyle.class);
 		setImplementingClassForInterface(ColorGradientBackgroundStyleImpl.class, ColorGradientBackgroundStyle.class);
 		setImplementingClassForInterface(TextureBackgroundStyleImpl.class, TextureBackgroundStyle.class);
 		setImplementingClassForInterface(BackgroundImageBackgroundStyleImpl.class, BackgroundImageBackgroundStyle.class);
-		setImplementingClassForInterface(ForegroundStyleImpl.class, ForegroundStyle.class);
-		setImplementingClassForInterface(ShadowStyleImpl.class, ShadowStyle.class);
-		setImplementingClassForInterface(TextStyleImpl.class, TextStyle.class);
-		setImplementingClassForInterface(FGEStyleImpl.class, FGEStyle.class);
+
+		setImplementingClassForInterface(ShapeSpecificationImpl.class, ShapeSpecification.class);
+		setImplementingClassForInterface(ArcImpl.class, Arc.class);
+		setImplementingClassForInterface(CircleImpl.class, Circle.class);
+		setImplementingClassForInterface(LosangeImpl.class, Losange.class);
+		setImplementingClassForInterface(OvalImpl.class, Oval.class);
+		setImplementingClassForInterface(PolygonImpl.class, Polygon.class);
+		setImplementingClassForInterface(RectangleImpl.class, Rectangle.class);
+		setImplementingClassForInterface(RectangularOctogonImpl.class, RectangularOctogon.class);
+		setImplementingClassForInterface(RegularPolygonImpl.class, RegularPolygon.class);
+		setImplementingClassForInterface(SquareImpl.class, Square.class);
+		setImplementingClassForInterface(StarImpl.class, Star.class);
+		setImplementingClassForInterface(TriangleImpl.class, Triangle.class);
+
+		setImplementingClassForInterface(ConnectorSpecificationImpl.class, ConnectorSpecification.class);
+		setImplementingClassForInterface(LineConnectorSpecificationImpl.class, LineConnectorSpecification.class);
+		setImplementingClassForInterface(CurveConnectorSpecificationImpl.class, CurveConnectorSpecification.class);
+		setImplementingClassForInterface(RectPolylinConnectorSpecificationImpl.class, RectPolylinConnectorSpecification.class);
+		setImplementingClassForInterface(CurvedPolylinConnectorSpecificationImpl.class, CurvedPolylinConnectorSpecification.class);
+
 	}
 
 	@Override

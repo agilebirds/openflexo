@@ -33,8 +33,10 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGECubicCurve extends Double implements FGEGeneralShape.GeneralShapePathElement<FGECubicCurve> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGECubicCurve.class.getPackage().getName());
 
 	public FGECubicCurve() {
@@ -119,7 +121,7 @@ public class FGECubicCurve extends Double implements FGEGeneralShape.GeneralShap
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return false;
 	}
 

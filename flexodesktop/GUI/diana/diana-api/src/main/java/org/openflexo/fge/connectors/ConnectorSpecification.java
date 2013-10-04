@@ -24,9 +24,6 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.FGEObject;
-import org.openflexo.fge.connectors.impl.Connector;
-import org.openflexo.fge.connectors.impl.ConnectorSpecificationImpl;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
@@ -39,7 +36,6 @@ import org.openflexo.model.annotations.ModelEntity;
  * 
  */
 @ModelEntity(isAbstract = true)
-@ImplementationClass(ConnectorSpecificationImpl.class)
 @Imports({ @Import(LineConnectorSpecification.class), @Import(CurveConnectorSpecification.class),
 		@Import(RectPolylinConnectorSpecification.class), @Import(CurvedPolylinConnectorSpecification.class) })
 public interface ConnectorSpecification extends FGEObject {

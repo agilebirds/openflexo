@@ -30,6 +30,7 @@ import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGELine extends FGEAbstractLine<FGELine> {
 
 	private static final Logger logger = Logger.getLogger(FGELine.class.getPackage().getName());
@@ -42,7 +43,7 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 		super(p1, p2);
 	}
 
-	public FGELine(FGEAbstractLine line) {
+	public FGELine(FGEAbstractLine<?> line) {
 		super(line.getP1(), line.getP2());
 	}
 
@@ -126,6 +127,7 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 		return (FGELine) super.clone();
 	}
 
+	@SuppressWarnings("unused")
 	private static FGEArea _compute_hl_hl_Intersection(FGEHalfLine hl1, FGEHalfLine hl2) {
 		FGEHalfPlane hp1 = hl1.getHalfPlane();
 		FGEHalfPlane hp2 = hl2.getHalfPlane();
@@ -151,7 +153,7 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 	}
 
 	@Override
-	protected FGEArea computeLineIntersection(FGEAbstractLine line) {
+	protected FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		logger.info("computeIntersection() between " + this + "\n and " + line + " overlap=" + overlap(line));
 		if (overlap(line)) {
 			return line.clone();
@@ -172,7 +174,7 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!overlap(l)) {
 			return false;
 		}

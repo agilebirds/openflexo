@@ -23,14 +23,12 @@ import java.util.List;
 
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.impl.PolygonImpl;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
@@ -45,7 +43,6 @@ import org.openflexo.model.annotations.XMLElement;
  * @author sylvain
  */
 @ModelEntity
-@ImplementationClass(PolygonImpl.class)
 @XMLElement(xmlTag = "CustomPolygonShape")
 public interface Polygon extends ShapeSpecification {
 

@@ -20,9 +20,7 @@
 package org.openflexo.fge.shapes;
 
 import org.openflexo.fge.GRParameter;
-import org.openflexo.fge.shapes.impl.RectangleImpl;
 import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
@@ -37,7 +35,6 @@ import org.openflexo.model.annotations.XMLElement;
  * @author sylvain
  */
 @ModelEntity
-@ImplementationClass(RectangleImpl.class)
 @XMLElement(xmlTag = "RectangleShape")
 public interface Rectangle extends ShapeSpecification {
 

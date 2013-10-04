@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils.HasIcon;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -34,15 +35,11 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.inspector.HasIcon;
 
 public interface ConnectorSymbol {
-
-	public static final FGEModelFactory CONNECTOR_SYMBOL_FACTORY = GeomUtils.TOOLS_FACTORY;
 
 	public static enum StartSymbolType implements ConnectorSymbol, HasIcon {
 		NONE,
@@ -127,48 +124,48 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == PLAIN_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == PLAIN_LONG_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == DEFAULT_FLOW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			}
 			return null;
 
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeNoneForegroundStyle();
+				return factory.makeNoneForegroundStyle();
 			} else if (this == ARROW) {
 				return fgStyle; // Use connector fg style
 			} else {
-				return CONNECTOR_SYMBOL_FACTORY.makeForegroundStyle(fgStyle.getColor());
+				return factory.makeForegroundStyle(fgStyle.getColor());
 			}
 		}
 
@@ -249,44 +246,44 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == PLAIN_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			}
 			return null;
 
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeNoneForegroundStyle();
+				return factory.makeNoneForegroundStyle();
 			} else if (this == ARROW) {
 				return fgStyle; // Use connector fg style
 			} else {
-				return CONNECTOR_SYMBOL_FACTORY.makeForegroundStyle(fgStyle.getColor());
+				return factory.makeForegroundStyle(fgStyle.getColor());
 			}
 		}
 
@@ -369,44 +366,44 @@ public interface ConnectorSymbol {
 		}
 
 		@Override
-		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor) {
+		public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeEmptyBackground();
+				return factory.makeEmptyBackground();
 			} else if (this == PLAIN_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DOUBLE_ARROW) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_CIRCLE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_SQUARE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			} else if (this == PLAIN_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(bgColor);
+				return factory.makeColoredBackground(bgColor);
 			} else if (this == FILLED_DIAMOND) {
-				return CONNECTOR_SYMBOL_FACTORY.makeColoredBackground(fgColor);
+				return factory.makeColoredBackground(fgColor);
 			}
 			return null;
 
 		}
 
 		@Override
-		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle) {
+		public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle, FGEModelFactory factory) {
 			if (this == NONE) {
-				return CONNECTOR_SYMBOL_FACTORY.makeNoneForegroundStyle();
+				return factory.makeNoneForegroundStyle();
 			} else if (this == ARROW) {
 				return fgStyle; // Use connector fg style
 			} else {
-				return CONNECTOR_SYMBOL_FACTORY.makeForegroundStyle(fgStyle.getColor());
+				return factory.makeForegroundStyle(fgStyle.getColor());
 			}
 		}
 
@@ -436,8 +433,8 @@ public interface ConnectorSymbol {
 
 	public FGEArea getSymbol();
 
-	public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor);
+	public BackgroundStyle getBackgroundStyle(Color fgColor, Color bgColor, FGEModelFactory factory);
 
-	public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle);
+	public ForegroundStyle getForegroundStyle(ForegroundStyle fgStyle, FGEModelFactory factory);
 
 }

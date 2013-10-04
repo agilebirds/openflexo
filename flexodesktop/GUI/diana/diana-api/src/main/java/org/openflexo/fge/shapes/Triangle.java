@@ -19,8 +19,6 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.shapes.impl.TriangleImpl;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
@@ -32,7 +30,6 @@ import org.openflexo.model.annotations.XMLElement;
  * @author sylvain
  */
 @ModelEntity
-@ImplementationClass(TriangleImpl.class)
 @XMLElement(xmlTag = "TriangleShape")
 public interface Triangle extends RegularPolygon {
 

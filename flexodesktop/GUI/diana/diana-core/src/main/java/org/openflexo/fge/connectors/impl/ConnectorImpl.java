@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.cp.ControlArea;
@@ -20,17 +21,17 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
-import org.openflexo.fge.shapes.impl.Shape;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.shapes.Shape;
 
 /**
- * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}. A {@link Connector} observes
- * its {@link ConnectorSpecification}
+ * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}. A {@link ConnectorImpl}
+ * observes its {@link ConnectorSpecification}
  * 
  * @author sylvain
  * 
  */
-public abstract class Connector<CS extends ConnectorSpecification> implements Observer {
+public abstract class ConnectorImpl<CS extends ConnectorSpecification> implements Observer, Connector<CS> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
@@ -50,7 +51,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	private FGEPoint endShapeLocation;
 	private FGERectangle knownConnectorUsedBounds;
 
-	public Connector(ConnectorNode<?> connectorNode) {
+	public ConnectorImpl(ConnectorNode<?> connectorNode) {
 		super();
 		this.connectorNode = connectorNode;
 	}
@@ -69,15 +70,18 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 		knownConnectorUsedBounds = null;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public CS getConnectorSpecification() {
 		return (CS) connectorNode.getGraphicalRepresentation().getConnector();
 	}
 
+	@Override
 	public ConnectorNode<?> getConnectorNode() {
 		return connectorNode;
 	}
 
+	@Override
 	public ShapeNode<?> getStartNode() {
 		if (connectorNode == null) {
 			return null;
@@ -85,6 +89,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 		return connectorNode.getStartNode();
 	}
 
+	@Override
 	public ShapeNode<?> getEndNode() {
 		if (connectorNode == null) {
 			return null;
@@ -92,6 +97,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 		return connectorNode.getEndNode();
 	}
 
+	@Override
 	public ConnectorType getConnectorType() {
 		return getConnectorSpecification().getConnectorType();
 	}
@@ -100,21 +106,26 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	// * Abstract Methods *
 	// *******************************************************************************
 
+	@Override
 	public abstract double getStartAngle();
 
+	@Override
 	public abstract double getEndAngle();
 
+	@Override
 	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
-	public abstract void drawConnector(FGEConnectorGraphicsImpl g);
+	public abstract void drawConnector(FGEConnectorGraphics g);
 
 	/**
 	 * Retrieve all control area used to manage this connector
 	 * 
 	 * @return
 	 */
+	@Override
 	public abstract List<? extends ControlArea<?>> getControlAreas();
 
+	@Override
 	public abstract FGEPoint getMiddleSymbolLocation();
 
 	/**
@@ -123,6 +134,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	 * 
 	 * @return
 	 */
+	@Override
 	public abstract FGERectangle getConnectorUsedBounds();
 
 	/**
@@ -130,6 +142,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	 * 
 	 * @return
 	 */
+	@Override
 	public abstract FGEPoint getStartLocation();
 
 	/**
@@ -137,6 +150,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	 * 
 	 * @return
 	 */
+	@Override
 	public abstract FGEPoint getEndLocation();
 
 	// *******************************************************************************
@@ -160,7 +174,7 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 
 	}
 
-	public void setPaintAttributes(FGEConnectorGraphicsImpl g) {
+	public void setPaintAttributes(FGEConnectorGraphics g) {
 
 		// Foreground
 		if (connectorNode.getIsSelected()) {
@@ -180,7 +194,8 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 		g.setDefaultTextStyle(connectorNode.getGraphicalRepresentation().getTextStyle());
 	}
 
-	public final void paintConnector(FGEConnectorGraphicsImpl g) {
+	@Override
+	public final void paintConnector(FGEConnectorGraphics g) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { drawCoveringAreas(g); }
 		 */

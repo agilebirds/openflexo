@@ -419,7 +419,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 					+ ((ShapeNode<?>) dtn).getWidth() + "x" + ((ShapeNode<?>) dtn).getHeight() + "][" + ((ShapeNode<?>) dtn).getFGEShape()
 					+ "]:" + dtn.getDrawable();
 		} else if (dtn instanceof ConnectorNode) {
-			nodePrettyPrint = "Connector-" + dtn.getIndex() + "[Shape-" + ((ConnectorNode<?>) dtn).getStartNode().getIndex() + "][Shape-"
+			nodePrettyPrint = "ConnectorImpl-" + dtn.getIndex() + "[Shape-" + ((ConnectorNode<?>) dtn).getStartNode().getIndex() + "][Shape-"
 					+ ((ConnectorNode<?>) dtn).getEndNode().getIndex() + "]:" + dtn.getDrawable();
 		}*/
 		logger.info(buildWhiteSpaceIndentation(level * 5) + " > " + nodePrettyPrint);
