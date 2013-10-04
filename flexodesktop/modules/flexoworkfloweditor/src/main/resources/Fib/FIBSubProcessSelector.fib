@@ -20,10 +20,12 @@
     <Assignment variable="component.project" value="data.project" />
     <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableParentProcessNode(ParentProcessSelector.customComponent.candidateValue)&quot;" />
   </Custom>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+  <Label label="role" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.isShowRoleSelector" name="roleLabel" localize="true" />
+  <DropDown showReset="true" data="data.associatedWithRole" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.isShowRoleSelector" name="associatedRole" format="data.subProcessNode.getRoleNameForInspector(object)" localize="false" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
+  <Panel layout="buttons" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="1" borderTitle="" darkLevel="0" constraints="flow()">
-      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" default="true" constraints="grid(x=0;y=0)" localize="true" enable="(data.errorMessage = null)" />
-      <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="grid(x=1;y=0)" localize="true" />
+      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" default="true" localize="true" enable="(data.errorMessage = null)" constraints="grid(x=0;y=0)" />
+      <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" constraints="grid(x=1;y=0)" />
     </Panel>
   </Panel>
   <LocalizedDictionary>
