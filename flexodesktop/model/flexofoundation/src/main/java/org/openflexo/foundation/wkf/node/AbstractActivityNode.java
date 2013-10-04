@@ -930,7 +930,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
-		if (!getProcess().getFlexoResource().isConverting()) {
+		if (getProcess() != null && getProcess().getFlexoResource() != null && !getProcess().getFlexoResource().isConverting()) {
 			if (role == reference) {
 				setRole(null);
 			} else if (roleA == reference) {
