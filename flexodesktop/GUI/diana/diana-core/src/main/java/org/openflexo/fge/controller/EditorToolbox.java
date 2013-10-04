@@ -29,11 +29,14 @@ import javax.swing.JToolBar;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBDialog;
 
 @SuppressWarnings("serial")
 public class EditorToolbox {
@@ -51,6 +54,8 @@ public class EditorToolbox {
 	private FIBShadowStyleSelector shadowStyleSelector;
 	private FIBShapeSelector shapeSelector;
 
+	private FIBDialog<ForegroundStyle> foregroundInspector;
+
 	private DrawingControllerImpl<?> controller;
 
 	private List<ShapeNode<?>> selectedShapes = new ArrayList<ShapeNode<?>>();
@@ -60,6 +65,15 @@ public class EditorToolbox {
 	public EditorToolbox(DrawingControllerImpl<?> controller) {
 		super();
 		this.controller = controller;
+
+	}
+
+	public FIBDialog<ForegroundStyle> getForegroundInspector() {
+		if (foregroundInspector == null) {
+			foregroundInspector = FIBDialog.instanciateAndShowDialog(
+					FIBLibrary.instance().retrieveFIBComponent(FIBForegroundStyleSelector.FIB_FILE), null, null, false);
+		}
+		return foregroundInspector;
 	}
 
 	public void delete() {
@@ -215,12 +229,21 @@ public class EditorToolbox {
 			textStyleSelector.setEditedObject(selection.get(0).getGraphicalRepresentation().getTextStyle());
 			if (selectedShapes.size() > 0) {
 				foregroundSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
+				if (foregroundInspector != null) {
+					foregroundInspector.setData(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
+				}
 			} else if (selectedConnectors.size() > 0) {
 				foregroundSelector.setEditedObject(selectedConnectors.get(0).getGraphicalRepresentation().getForeground());
+				if (foregroundInspector != null) {
+					foregroundInspector.setData(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
+				}
 			}
 		} else {
 			textStyleSelector.setEditedObject(controller.getCurrentTextStyle());
 			foregroundSelector.setEditedObject(controller.getCurrentForegroundStyle());
+			if (foregroundInspector != null) {
+				foregroundInspector.setData(controller.getCurrentForegroundStyle());
+			}
 		}
 		if (selectedShapes.size() > 0) {
 			shapeSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShapeSpecification());

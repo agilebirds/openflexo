@@ -1,5 +1,6 @@
 package org.openflexo.fib;
 
+import org.openflexo.fib.utils.FIBTestCase;
 import org.openflexo.toolbox.FileResource;
 
 public class TestCommonFlexoWidgetFibs extends FIBTestCase {

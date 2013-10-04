@@ -201,6 +201,7 @@ public class LaunchDiagramEditor {
 		// DrawingControllerImpl<DiagramDrawing> controller = new DrawingControllerImpl<DiagramDrawing>(aDrawing, factory)
 
 		tabbedPane.add(diagramEditor.getTitle(), new MyDrawingViewScrollPane(diagramEditor.getController().getDrawingView()));
+		diagramEditor.getController().getToolbox().getForegroundInspector().setVisible(true);
 		switchToDiagramEditor(diagramEditor);
 
 		/*frame.addKeyListener(new KeyAdapter() {

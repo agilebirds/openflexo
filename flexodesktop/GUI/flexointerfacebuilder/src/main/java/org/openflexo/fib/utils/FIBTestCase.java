@@ -1,10 +1,11 @@
-package org.openflexo.fib;
+package org.openflexo.fib.utils;
 
 import java.io.File;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.validation.ValidationError;
 import org.openflexo.fib.model.validation.ValidationReport;
