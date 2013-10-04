@@ -25,11 +25,12 @@ import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.ParallelLinesException;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
@@ -339,7 +340,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 	}
 
 	@Override
-	public void drawConnector(FGEConnectorGraphicsImpl g) {
+	public void drawConnector(FGEConnectorGraphics g) {
 		if (!firstUpdated) {
 			refreshConnector();
 		}
@@ -452,7 +453,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 	@Override
 	public double getStartAngle() {
 		if (cp1 != null) {
-			return FGEUtils.getSlope(FGEPoint.ORIGIN_POINT, cp1.getPoint());
+			return GeomUtils.getSlope(FGEPoint.ORIGIN_POINT, cp1.getPoint());
 		}
 		return 0;
 	}
@@ -460,7 +461,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 	@Override
 	public double getEndAngle() {
 		if (cp2 != null) {
-			return FGEUtils.getSlope(FGEPoint.ORIGIN_POINT, cp2.getPoint());
+			return GeomUtils.getSlope(FGEPoint.ORIGIN_POINT, cp2.getPoint());
 		}
 		return 0;
 	}
