@@ -94,6 +94,7 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents an abstract WOComponent
@@ -270,6 +271,11 @@ public abstract class IEWOComponent extends IEObject implements XMLStorageResour
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		return this;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getIEMapping();
 	}
 
 	public ComponentDefinition getComponentDefinition() {
