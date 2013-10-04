@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.Deflater;
@@ -42,9 +43,11 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.ws.jira.JIRAClient;
 import org.openflexo.ws.jira.JIRAClient.Method;
 import org.openflexo.ws.jira.JIRAClient.Progress;
+import org.openflexo.ws.jira.JIRAException;
 import org.openflexo.ws.jira.UnauthorizedJIRAAccessException;
 import org.openflexo.ws.jira.action.SubmitIssue;
 import org.openflexo.ws.jira.model.JIRAComponent;
+import org.openflexo.ws.jira.model.JIRAErrors;
 import org.openflexo.ws.jira.model.JIRAIssue;
 import org.openflexo.ws.jira.model.JIRAObject;
 import org.openflexo.ws.jira.model.JIRAPriority;
@@ -211,7 +214,28 @@ public class JIRAIssueReportDialog {
 						} else {
 							break;
 						}
-					} catch (IOException e1) {
+					} catch (JIRAException e1) {
+						StringBuilder sb = new StringBuilder();
+						JIRAErrors errors = e1.getErrors();
+						if (errors.getErrorMessages() != null) {
+							for (String s : errors.getErrorMessages()) {
+								if (sb.length() > 0) {
+									sb.append('\n');
+								}
+								sb.append(s);
+							}
+						}
+						if (errors.getErrors() != null) {
+							for (Entry<String, String> e2 : errors.getErrors().entrySet()) {
+								if (sb.length() > 0) {
+									sb.append('\n');
+								}
+								sb.append(FlexoLocalization.localizedForKey("field") + " " + FlexoLocalization.localizedForKey(e2.getKey())
+										+ " : " + FlexoLocalization.localizedForKey(e2.getValue()));
+							}
+						}
+						FlexoController.notify(FlexoLocalization.localizedForKey("could_not_send_bug_report") + ":\n" + sb.toString());
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				} else {
@@ -279,7 +303,7 @@ public class JIRAIssueReportDialog {
 		this.issue = issue;
 	}
 
-	public boolean send() throws IOException {
+	public boolean send() throws Exception {
 		JIRAClient client = new JIRAClient(AdvancedPrefs.getBugReportUrl(), AdvancedPrefs.getBugReportUser(),
 				AdvancedPrefs.getBugReportPassword());
 		final SubmitIssueReport report = new SubmitIssueReport();
@@ -315,7 +339,7 @@ public class JIRAIssueReportDialog {
 	private class SubmitIssueToJIRA implements Runnable {
 
 		private SubmitIssueReport report;
-		private IOException exception;
+		private Exception exception;
 
 		private final JIRAClient client;
 
@@ -496,13 +520,16 @@ public class JIRAIssueReportDialog {
 			} catch (IOException e) {
 				e.printStackTrace();
 				this.exception = e;
+			} catch (JIRAException e) {
+				e.printStackTrace();
+				this.exception = e;
 			} finally {
 				getIssue().<JIRAObject> replaceMembersByOriginalMembers();
 			}
 
 		}
 
-		public IOException getException() {
+		public Exception getException() {
 			return exception;
 		}
 	}
