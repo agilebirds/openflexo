@@ -29,6 +29,9 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry.ListType;
+import org.openflexo.foundation.viewpoint.inspector.ListInspectorEntry.StringHolder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
@@ -304,6 +307,14 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 				}
 				for (InspectorEntry entry : ep.getInspector().getEntries()) {
 					checkAndRegisterLocalized(entry.getLabel());
+					if (entry instanceof ListInspectorEntry) {
+						ListInspectorEntry list = (ListInspectorEntry) entry;
+						if (list.getListType() == ListType.String) {
+							for (StringHolder s : list.getStaticList()) {
+								checkAndRegisterLocalized(s.get());
+							}
+						}
+					}
 				}
 			}
 		}
