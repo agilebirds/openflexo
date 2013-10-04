@@ -73,7 +73,12 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
-				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
+				String[] locationChoices;
+				if (templates.getCustomCodeRepositoriesVector().size() > 0) {
+					locationChoices = new String[] { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
+				} else {
+					locationChoices = new String[] { CREATE_NEW_REPOSITORY };
+				}
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
 						templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
 						locationChoices);
@@ -87,9 +92,11 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						templates.getCustomCodeRepositoriesVector(),
 						getControllerActionInitializer().getGeneratorController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getGeneratorController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null);
+								: templates.getCustomCodeRepositoriesVector().size() > 0 ? templates.getCustomCodeRepositoriesVector().get(
+										0) : null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
+				customRepositoryParam.setShowReset(false);
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
 				String COMMON = FlexoLocalization.localizedForKey("redefine_in_common_context");
 				String SPECIFIC_TARGET = FlexoLocalization.localizedForKey("redefine_for_a_specific_target");
@@ -114,9 +121,18 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 								newRepositoryNameParam.getValue()));
 						addDirectory.setRepositoryType(TemplateRepositoryType.Code);
 						addDirectory.doAction();
+						if (addDirectory.getNewCustomTemplatesRepository() == null) {
+							return false;
+						}
 						action.setRepository(addDirectory.getNewCustomTemplatesRepository());
 					} else if (repositoryChoiceParam.getValue().equals(CHOOSE_EXISTING_REPOSITORY)) {
+						if (customRepositoryParam.getValue() == null) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("please_choose_a_template_repository"));
+							return false;
+						}
 						action.setRepository(customRepositoryParam.getValue());
+					} else {
+						return false;
 					}
 					if (contextChoiceParam.getValue().equals(SPECIFIC_TARGET)) {
 						action.setTarget(targetTypeParam.getValue());
