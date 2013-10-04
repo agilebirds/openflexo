@@ -476,7 +476,12 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		}
 
 		for (Enumeration<FlexoModule> en = loadedModules(); en.hasMoreElements();) {
-			en.nextElement().closeWithoutConfirmation(false);
+			try {
+				en.nextElement().closeWithoutConfirmation(false);
+			} catch (Exception e) {
+				// OK, unexpected error occurred during closing of the module, but let's go on anyway.
+				e.printStackTrace();
+			}
 		}
 		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
 			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
