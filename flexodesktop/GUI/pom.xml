@@ -13,10 +13,10 @@
 	<modules>
 		<module>flexo</module>
 		<module>flexodoceditor</module>
-		<module>flexographicalengine</module>
 		<module>flexographicutils</module>
 		<module>flexointerfacebuilder</module>
 		<module>flexowysiwyg</module>
+		<module>diana</module>
     </modules>
 </project>
 

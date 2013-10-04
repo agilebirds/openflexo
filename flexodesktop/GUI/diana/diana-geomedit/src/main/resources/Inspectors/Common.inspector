@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fge.geomedit.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.fge.GraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
+      <Label label="read_only" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <CheckBox selected="false" index="1" data="data.isReadOnly" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" localize="true" />
+      <Label label="is_selectable" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;location=left)" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isSelectable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" localize="true" />
+      <Label label="is_selected" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" localize="true" />
+      <CheckBox selected="false" index="5" data="data.isSelected" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" readOnly="true" localize="true" />
+      <Label label="is_focusable" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=left)" localize="true" />
+      <CheckBox selected="false" index="7" data="data.isFocusable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" localize="true" />
+      <Label label="is_focused" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=left)" localize="true" />
+      <CheckBox selected="false" index="9" data="data.isFocused" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;location=right)" readOnly="true" localize="true" />
+      <Label label="mouse_click_controls" align="center" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;location=center)" localize="true" />
+      <Table iteratorClassName="org.openflexo.fge.control.MouseClickControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="11" data="data.mouseClickControls" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;location=right)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="false" displayTitle="true" />
+        <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
+        <NumberColumn numberType="IntegerType" data="iterator.clickCount" title="click_count" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
+        <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.createMouseClickControl" name="new" />
+        <RemoveAction method="data.deleteMouseClickControl(selected)" isAvailable="data.isMouseClickControlDeletable(selected)" name="delete" />
+      </Table>
+      <Label label="mouse_drag_controls" align="center" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;location=center)" localize="true" />
+      <Table iteratorClassName="org.openflexo.fge.control.MouseDragControl" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="13" data="data.mouseDragControls" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;location=right)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="150" resizable="false" displayTitle="true" />
+        <DropDownColumn data="iterator.button" title="button" columnWidth="80" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.shiftPressed" title="shift" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.ctrlPressed" title="ctrl" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.metaPressed" title="meta" columnWidth="50" resizable="false" displayTitle="true" />
+        <CheckBoxColumn data="iterator.altPressed" title="alt" columnWidth="50" resizable="false" displayTitle="true" />
+        <DropDownColumn data="iterator.actionType" title="action" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.createMouseDragControl" name="new" />
+        <RemoveAction method="data.deleteMouseDragControl(selected)" isAvailable="data.isMouseDragControlDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="GraphicsTab">
+      <Label label="text_style" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fge.view.widget.FIBTextStyleSelector" localize="true" manageDynamicModel="true" index="1" data="data.textStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" />
+    </Tab>
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="DataTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="read_only" lang="English">Read only</Localized>
+    <Localized key="read_only" lang="French">Lecture seule</Localized>
+    <Localized key="read_only" lang="Dutch">Read only</Localized>
+    <Localized key="is_selectable" lang="English">Is selectable</Localized>
+    <Localized key="is_selectable" lang="French">Sélectionnable</Localized>
+    <Localized key="is_selectable" lang="Dutch">Is selectable</Localized>
+    <Localized key="is_selected" lang="English">Is selected</Localized>
+    <Localized key="is_selected" lang="French">Sélectionné ?</Localized>
+    <Localized key="is_selected" lang="Dutch">Is selected</Localized>
+    <Localized key="is_focusable" lang="English">Is focusable</Localized>
+    <Localized key="is_focusable" lang="French">Focusable</Localized>
+    <Localized key="is_focusable" lang="Dutch">Is focusable</Localized>
+    <Localized key="is_focused" lang="English">Is focused</Localized>
+    <Localized key="is_focused" lang="French">A le focus</Localized>
+    <Localized key="is_focused" lang="Dutch">Is focused</Localized>
+    <Localized key="mouse_click_controls" lang="English">Mouse click controls</Localized>
+    <Localized key="mouse_click_controls" lang="French">Contrôle des clicks de souris</Localized>
+    <Localized key="mouse_click_controls" lang="Dutch">Mouse click controls</Localized>
+    <Localized key="mouse_drag_controls" lang="English">Mouse drag controls</Localized>
+    <Localized key="mouse_drag_controls" lang="French">Contrôle des 'drag' de souris</Localized>
+    <Localized key="mouse_drag_controls" lang="Dutch">Mouse drag controls</Localized>
+    <Localized key="text_style" lang="English">Text style</Localized>
+    <Localized key="text_style" lang="French">Style de texte</Localized>
+    <Localized key="text_style" lang="Dutch">Text style</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Common" />
+</Panel>
