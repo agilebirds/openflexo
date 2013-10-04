@@ -134,14 +134,14 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 	@Override
 	public void applyBasicControls(DrawingGraphicalRepresentation drawingGraphicalRepresentation) {
 		super.applyBasicControls(drawingGraphicalRepresentation);
-		drawingGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl());
+		drawingGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl(this));
 		drawingGraphicalRepresentation.addToMouseDragControls(new DrawEdgeControl(this));
 	}
 
 	@Override
 	public void applyBasicControls(ShapeGraphicalRepresentation shapeGraphicalRepresentation) {
 		super.applyBasicControls(shapeGraphicalRepresentation);
-		shapeGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl());
+		shapeGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl(this));
 		shapeGraphicalRepresentation.addToMouseDragControls(new DrawEdgeControl(this));
 	}
 

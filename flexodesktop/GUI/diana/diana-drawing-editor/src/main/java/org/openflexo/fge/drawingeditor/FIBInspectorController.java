@@ -58,7 +58,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		inspectors = new Hashtable<Class, FIBInspector>();
 		inspectorViews = new Hashtable<FIBInspector, FIBView>();
 
-		File dir = new FileResource("Inspectors/DrawingEditor");
+		File dir = new FileResource("Inspectors");
 
 		for (File f : dir.listFiles(new FilenameFilter() {
 			@Override

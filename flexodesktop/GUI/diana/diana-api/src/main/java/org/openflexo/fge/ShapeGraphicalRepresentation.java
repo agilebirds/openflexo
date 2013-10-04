@@ -80,7 +80,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	@PropertyIdentifier(type = ShapeType.class)
 	public static final String SHAPE_TYPE_KEY = "shapeType";
 	@PropertyIdentifier(type = ShapeSpecification.class)
-	public static final String SHAPE_KEY = "shape";
+	public static final String SHAPE_SPECIFICATION_KEY = "shapeSpecification";
 	@PropertyIdentifier(type = ShadowStyle.class)
 	public static final String SHADOW_STYLE_KEY = "shadowStyle";
 	@PropertyIdentifier(type = Boolean.class)
@@ -250,8 +250,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 			Double.class);
 	public static GRParameter<ShapeBorder> BORDER = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, BORDER_KEY,
 			ShapeBorder.class);
-	public static GRParameter<ShapeSpecification> SHAPE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHAPE_KEY,
-			ShapeSpecification.class);
+	public static GRParameter<ShapeSpecification> SHAPE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
+			SHAPE_SPECIFICATION_KEY, ShapeSpecification.class);
 	public static GRParameter<ShapeType> SHAPE_TYPE = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, SHAPE_TYPE_KEY,
 			ShapeType.class);
 	public static GRParameter<DataBinding> X_CONSTRAINTS = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class,
@@ -385,11 +385,11 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	@Setter(value = BORDER_KEY)
 	public void setBorder(ShapeBorder border);
 
-	@Getter(value = SHAPE_KEY)
+	@Getter(value = SHAPE_SPECIFICATION_KEY)
 	@XMLElement
 	public ShapeSpecification getShapeSpecification();
 
-	@Setter(value = SHAPE_KEY)
+	@Setter(value = SHAPE_SPECIFICATION_KEY)
 	public void setShapeSpecification(ShapeSpecification aShape);
 
 	@Getter(value = SHADOW_STYLE_KEY)

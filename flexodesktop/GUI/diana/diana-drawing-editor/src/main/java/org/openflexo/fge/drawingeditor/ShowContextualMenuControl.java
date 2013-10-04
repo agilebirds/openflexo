@@ -28,11 +28,12 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.controller.MouseClickControlImpl;
+import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.view.FGEView;
 
 public class ShowContextualMenuControl extends MouseClickControlImpl {
 
-	public ShowContextualMenuControl() {
+	public ShowContextualMenuControl(DiagramFactory factory) {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
 			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DrawingControllerImpl<?> controller, java.awt.event.MouseEvent event) {
@@ -41,7 +42,7 @@ public class ShowContextualMenuControl extends MouseClickControlImpl {
 				((DiagramEditorController) controller).showContextualMenu(dtn, view, newPoint);
 				return false;
 			}
-		}, false, false, false, false);
+		}, false, false, false, false, factory);
 	}
 
 }

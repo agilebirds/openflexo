@@ -47,7 +47,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	// public static final String START_OBJECT = "startObject";
 	// public static final String END_OBJECT = "endObject";
 	@PropertyIdentifier(type = ConnectorSpecification.class)
-	public static final String CONNECTOR_KEY = "connector";
+	public static final String CONNECTOR_SPECIFICATION_KEY = "connectorSpecification";
 
 	@PropertyIdentifier(type = ForegroundStyle.class)
 	public static final String FOREGROUND_KEY = "foreground";
@@ -80,7 +80,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public static final String DEBUG_COVERING_AREA_KEY = "debugCoveringArea";
 
 	public static GRParameter<ConnectorSpecification> CONNECTOR = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.CONNECTOR_KEY, ConnectorSpecification.class);
+			ConnectorGraphicalRepresentation.CONNECTOR_SPECIFICATION_KEY, ConnectorSpecification.class);
 
 	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
 			ConnectorGraphicalRepresentation.FOREGROUND_KEY, ForegroundStyle.class);
@@ -145,11 +145,11 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	@Setter(value = END_OBJECT)
 	public void setEndObject(ShapeGraphicalRepresentation anEndObject);*/
 
-	@Getter(value = CONNECTOR_KEY)
+	@Getter(value = CONNECTOR_SPECIFICATION_KEY)
 	@XMLElement
 	public ConnectorSpecification getConnectorSpecification();
 
-	@Setter(value = CONNECTOR_KEY)
+	@Setter(value = CONNECTOR_SPECIFICATION_KEY)
 	public void setConnectorSpecification(ConnectorSpecification aConnector);
 
 	@Getter(value = FOREGROUND_KEY)

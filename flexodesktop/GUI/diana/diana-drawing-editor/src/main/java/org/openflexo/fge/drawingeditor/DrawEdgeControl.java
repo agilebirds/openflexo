@@ -47,7 +47,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 	private DiagramFactory factory;
 
 	public DrawEdgeControl(DiagramFactory factory) {
-		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
+		super("Draw edge", MouseButton.LEFT, false, true, false, false, factory); // CTRL DRAG
 		action = new DrawEdgeAction();
 		this.factory = factory;
 	}
