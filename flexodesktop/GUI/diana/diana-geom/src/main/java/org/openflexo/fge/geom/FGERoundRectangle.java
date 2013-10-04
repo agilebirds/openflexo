@@ -37,6 +37,7 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeometricObject<FGERoundRectangle>,
 		FGEShape<FGERoundRectangle> {
 
@@ -491,7 +492,8 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 		}
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line) {
+	@SuppressWarnings("unused")
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		FGERectangle rectangle = new FGERectangle(x, y, width, height, _filling);
 		FGEArea returned = rectangle.intersect(line);
 		if (returned instanceof FGEEmptyArea) {
@@ -660,7 +662,7 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERoundRectangle) {
 			return computeRectangleIntersection((FGERoundRectangle) area);
@@ -737,7 +739,7 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (l instanceof FGEHalfLine) {
 			return false;
 		}

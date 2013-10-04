@@ -154,7 +154,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return containsPoint(l.getP1()) && containsPoint(l.getP2());
 	}
 
@@ -167,7 +167,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 			return containsLine((FGELine) a);
 		}
 		if (a instanceof FGEShape) {
-			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape) a, this);
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
 		}
 		return false;
 	}
@@ -178,7 +178,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 		}
 
 		if (substractedArea instanceof FGEShape) {
-			return ((FGEShape) substractedArea).nearestOutlinePoint(testPoint).equals(testPoint);
+			return ((FGEShape<?>) substractedArea).nearestOutlinePoint(testPoint).equals(testPoint);
 		} else {
 			// Little hack
 			// Test with 4 points located juste near this point (at 2*EPSILON, which is the equals criteria)
@@ -247,7 +247,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 
 		// We have an other chance here !
 		if (substractedArea instanceof FGEShape && !isStrict()) {
-			FGEPoint outlinePoint = ((FGEShape) substractedArea).nearestOutlinePoint(aPoint);
+			FGEPoint outlinePoint = ((FGEShape<?>) substractedArea).nearestOutlinePoint(aPoint);
 			if (containsPoint(outlinePoint)) {
 				return outlinePoint;
 			}

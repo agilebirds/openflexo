@@ -36,8 +36,10 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShapePathElement<FGEQuadCurve> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGEQuadCurve.class.getPackage().getName());
 
 	/**
@@ -182,7 +184,7 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return false;
 	}
 

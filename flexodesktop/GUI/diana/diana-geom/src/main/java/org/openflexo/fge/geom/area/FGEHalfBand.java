@@ -106,7 +106,7 @@ public class FGEHalfBand implements FGEArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!embeddingBand.containsLine(l)) {
 			return false;
 		}
@@ -194,7 +194,7 @@ public class FGEHalfBand implements FGEArea {
 		return reply;
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine aLine) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> aLine) {
 		FGEArea returned = embeddingBand.intersect(aLine);
 		return returned.intersect(halfPlane);
 	}
@@ -321,7 +321,7 @@ public class FGEHalfBand implements FGEArea {
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return area.intersect(this);

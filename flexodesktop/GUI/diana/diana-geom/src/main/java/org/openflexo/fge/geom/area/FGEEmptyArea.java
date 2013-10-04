@@ -44,7 +44,7 @@ public class FGEEmptyArea implements FGEArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		return false;
 	}
 

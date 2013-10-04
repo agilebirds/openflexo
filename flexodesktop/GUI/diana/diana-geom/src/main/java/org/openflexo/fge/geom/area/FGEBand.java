@@ -90,7 +90,7 @@ public class FGEBand implements FGEArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!containsLineIgnoreBounds(l)) {
 			return false;
 		}
@@ -108,7 +108,7 @@ public class FGEBand implements FGEArea {
 		return false;
 	}
 
-	public boolean containsLineIgnoreBounds(FGEAbstractLine l) {
+	public boolean containsLineIgnoreBounds(FGEAbstractLine<?> l) {
 		return bandContainsPoint(l.getP1()) && bandContainsPoint(l.getP2());
 	}
 
@@ -146,7 +146,7 @@ public class FGEBand implements FGEArea {
 		// if (area.containsArea(this)) return this.clone();
 		// if (containsArea(area)) return area.clone();
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return area.intersect(this);
@@ -453,7 +453,7 @@ public class FGEBand implements FGEArea {
 		// return new FGEEmptyArea();
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine aLine) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> aLine) {
 		FGEHalfPlane hp1 = new FGEHalfPlane(line1, line2.getP1());
 		FGEArea a1 = hp1.intersect(aLine);
 		if (a1 instanceof FGEEmptyArea) {

@@ -244,7 +244,7 @@ public class FGEUnionArea extends FGEOperationArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		// TODO: what if Union of two objects contains the line ? Implement this...
 		for (FGEArea a : _objects) {
 			if (a.containsLine(l)) {
@@ -338,7 +338,7 @@ public class FGEUnionArea extends FGEOperationArea {
 			return containsPoint((FGEPoint) a);
 		}
 		if (a instanceof FGEAbstractLine) {
-			return containsLine((FGEAbstractLine) a);
+			return containsLine((FGEAbstractLine<?>) a);
 		}
 		if (a instanceof FGEPolylin) {
 			return containsPolylin((FGEPolylin) a);
@@ -347,7 +347,7 @@ public class FGEUnionArea extends FGEOperationArea {
 			return containsPolygon((FGEPolygon) a);
 		}
 		if (a instanceof FGEShape) {
-			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape) a, this);
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
 		}
 		return false;
 	}

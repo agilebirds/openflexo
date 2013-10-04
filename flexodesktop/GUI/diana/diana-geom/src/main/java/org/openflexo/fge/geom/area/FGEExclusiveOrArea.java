@@ -54,7 +54,7 @@ public class FGEExclusiveOrArea extends FGEOperationArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		// TODO: do it better
 		return containsPoint(l.getP1()) && containsPoint(l.getP2());
 	}

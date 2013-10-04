@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.geom;
 
+@SuppressWarnings("serial")
 public class ParallelLinesException extends RuntimeException {
 
 }

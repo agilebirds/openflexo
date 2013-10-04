@@ -28,6 +28,7 @@ import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGeneralShape.GeneralShapePathElement<FGESegment> {
 
 	private static final Logger logger = Logger.getLogger(FGESegment.class.getPackage().getName());
@@ -49,7 +50,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!overlap(l)) {
 			return false;
 		}
@@ -123,7 +124,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	 * @param line
 	 * @return
 	 */
-	public boolean intersectsInsideSegment(FGEAbstractLine line) {
+	public boolean intersectsInsideSegment(FGEAbstractLine<?> line) {
 		FGEPoint intersection;
 		try {
 			intersection = getLineIntersection(line);
@@ -140,7 +141,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	 * @param line
 	 * @return
 	 */
-	public boolean intersectsInsideSegment(FGEAbstractLine line, boolean insideOnly) {
+	public boolean intersectsInsideSegment(FGEAbstractLine<?> line, boolean insideOnly) {
 		FGEPoint intersection;
 		try {
 			intersection = getLineIntersection(line);
@@ -173,7 +174,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	 * @param line
 	 * @return
 	 */
-	public static boolean intersectsInsideSegment(FGESegment segment, FGEAbstractLine line) {
+	public static boolean intersectsInsideSegment(FGESegment segment, FGEAbstractLine<?> line) {
 		return segment.intersectsInsideSegment(line);
 	}
 
@@ -283,7 +284,7 @@ public class FGESegment extends FGEAbstractLine<FGESegment> implements FGEGenera
 	}
 
 	@Override
-	protected FGEArea computeLineIntersection(FGEAbstractLine line) {
+	protected FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		// logger.info("computeIntersection() between "+this+"\n and "+line+" overlap="+overlap(line));
 		if (overlap(line)) {
 			if (line instanceof FGEHalfLine) {

@@ -30,7 +30,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 
-public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObject<O>, Shape {
+public interface FGEShape<O extends FGEGeometricObject<O>> extends FGEGeometricObject<O>, Shape {
 
 	static final Logger logger = Logger.getLogger(FGEShape.class.getPackage().getName());
 
@@ -46,7 +46,7 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 
 	public static class AreaComputation {
 
-		public static <O extends FGEGeometricObject> boolean isShapeContainedInArea(FGEShape<O> shape, FGEArea area) {
+		public static <O extends FGEGeometricObject<O>> boolean isShapeContainedInArea(FGEShape<O> shape, FGEArea area) {
 			if (shape.getControlPoints().size() == 0) {
 				return false;
 			}
@@ -58,7 +58,7 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 			return true;
 		}
 
-		public static FGEArea computeShapeIntersection(FGEShape shape1, FGEShape shape2) {
+		public static FGEArea computeShapeIntersection(FGEShape<?> shape1, FGEShape<?> shape2) {
 			// System.out.println("computeShapeIntersection() with "+shape1+" and "+shape2);
 			Area area1 = new Area(shape1);
 			// System.out.println(">>> First shape: ");
@@ -102,6 +102,7 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 			while (!pathIterator.isDone()) {
 				double[] coords = new double[6];
 				int i = pathIterator.currentSegment(coords);
+				@SuppressWarnings("unused")
 				String pathType = "";
 				switch (i) {
 				case PathIterator.SEG_LINETO:
@@ -156,6 +157,7 @@ public interface FGEShape<O extends FGEGeometricObject> extends FGEGeometricObje
 
 		}
 
+		@SuppressWarnings("unused")
 		private static void debugPathIterator(PathIterator pi) {
 			while (!pi.isDone()) {
 				double[] coords = new double[6];

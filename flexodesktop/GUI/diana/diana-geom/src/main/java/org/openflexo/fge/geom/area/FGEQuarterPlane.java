@@ -108,7 +108,7 @@ public class FGEQuarterPlane implements FGEArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
 		}

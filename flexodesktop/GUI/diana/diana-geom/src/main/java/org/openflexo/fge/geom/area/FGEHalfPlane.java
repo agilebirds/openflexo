@@ -49,7 +49,7 @@ public class FGEHalfPlane implements FGEArea {
 		this.testPoint = testPoint;
 	}
 
-	public FGEHalfPlane(FGEAbstractLine line, FGEPoint testPoint) {
+	public FGEHalfPlane(FGEAbstractLine<?> line, FGEPoint testPoint) {
 		super();
 		this.line = new FGELine(line);
 		this.testPoint = testPoint;
@@ -92,7 +92,7 @@ public class FGEHalfPlane implements FGEArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!(containsPoint(l.getP1()) && containsPoint(l.getP2()))) {
 			return false;
 		}
@@ -125,7 +125,7 @@ public class FGEHalfPlane implements FGEArea {
 			return containsPoint((FGEPoint) a);
 		}
 		if (a instanceof FGEAbstractLine) {
-			return containsLine((FGEAbstractLine) a);
+			return containsLine((FGEAbstractLine<?>) a);
 		}
 		if (a instanceof FGEHalfBand) {
 			return containsHalfBand((FGEHalfBand) a);
@@ -162,7 +162,7 @@ public class FGEHalfPlane implements FGEArea {
 		return false;
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine aLine) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> aLine) {
 		if (aLine instanceof FGELine) {
 			if (aLine.equals(line)) {
 				return aLine.clone();
@@ -290,7 +290,7 @@ public class FGEHalfPlane implements FGEArea {
 		}
 	}
 
-	private FGEArea computeShapeIntersection(FGEShape shape) {
+	private FGEArea computeShapeIntersection(FGEShape<?> shape) {
 		FGEArea workingArea = intersect(shape.getBoundingBox());
 		if (workingArea instanceof FGEEmptyArea) {
 			return workingArea; // Empty area
@@ -317,7 +317,7 @@ public class FGEHalfPlane implements FGEArea {
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return area.intersect(this);
@@ -332,7 +332,7 @@ public class FGEHalfPlane implements FGEArea {
 			return computeHalfPlaneIntersection((FGEHalfPlane) area);
 		}
 		if (area instanceof FGEShape) {
-			return computeShapeIntersection((FGEShape) area);
+			return computeShapeIntersection((FGEShape<?>) area);
 		}
 
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);

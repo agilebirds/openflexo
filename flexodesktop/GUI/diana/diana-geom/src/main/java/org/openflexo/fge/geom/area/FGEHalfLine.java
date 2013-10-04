@@ -31,6 +31,7 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.ParallelLinesException;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 
 	private static final Logger logger = Logger.getLogger(FGEHalfLine.class.getPackage().getName());
@@ -78,7 +79,7 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (!overlap(l)) {
 			return false;
 		}
@@ -262,7 +263,7 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	}
 
 	@Override
-	protected FGEArea computeLineIntersection(FGEAbstractLine line) {
+	protected FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("computeIntersection() between " + this + "\n and " + line + " overlap=" + overlap(line));
 		}

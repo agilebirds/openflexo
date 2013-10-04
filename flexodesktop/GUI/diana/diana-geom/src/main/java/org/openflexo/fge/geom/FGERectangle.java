@@ -39,6 +39,7 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
+@SuppressWarnings("serial")
 public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObject<FGERectangle>, FGEShape<FGERectangle> {
 
 	private static final Logger logger = Logger.getLogger(FGERectangle.class.getPackage().getName());
@@ -555,7 +556,7 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		}
 	}
 
-	private FGEArea computeLineIntersection(FGEAbstractLine line) {
+	private FGEArea computeLineIntersection(FGEAbstractLine<?> line) {
 
 		FGESegment north = getNorth();
 		FGESegment south = getSouth();
@@ -692,7 +693,7 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 			return area.clone();
 		}
 		if (area instanceof FGEAbstractLine) {
-			return computeLineIntersection((FGEAbstractLine) area);
+			return computeLineIntersection((FGEAbstractLine<?>) area);
 		}
 		if (area instanceof FGERectangle) {
 			return computeRectangleIntersection((FGERectangle) area);
@@ -775,7 +776,7 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (l instanceof FGEHalfLine) {
 			return false;
 		}

@@ -118,12 +118,12 @@ public class FGERectPolylin extends FGEPolylin {
 		super();
 		this.startArea = aStartArea.clone();
 		if (startArea instanceof FGEShape) {
-			((FGEShape) startArea).setIsFilled(false);
+			((FGEShape<?>) startArea).setIsFilled(false);
 		}
 		this.startOrientation = startOrientation;
 		this.endArea = anEndArea.clone();
 		if (endArea instanceof FGEShape) {
-			((FGEShape) endArea).setIsFilled(false);
+			((FGEShape<?>) endArea).setIsFilled(false);
 		}
 		this.endOrientation = endOrientation;
 		this.straightWhenPossible = straightWhenPossible;
@@ -545,6 +545,7 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
+	@SuppressWarnings("unused")
 	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEArea startArea, FGEArea endArea, FGEPoint crossedPoint,
 			boolean straightWhenPossible, double overlapX, double overlapY, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
 			Vector<SimplifiedCardinalDirection> excludedEndOrientations) {
@@ -691,6 +692,7 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
+	@SuppressWarnings("unused")
 	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
 			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, FGEPoint crossedPoint, boolean straightWhenPossible,
 			double overlapX, double overlapY, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
@@ -1011,6 +1013,7 @@ public class FGERectPolylin extends FGEPolylin {
 		getMiddle().paint(g);
 	}*/
 
+	@SuppressWarnings("unused")
 	public void paintWithRounds(AbstractFGEGraphics g, int arcSize) {
 		g.useDefaultForegroundStyle();
 
@@ -1241,7 +1244,7 @@ public class FGERectPolylin extends FGEPolylin {
 			   logger.info("ShapeSpecification is "+intersect);*/
 
 			if (intersect instanceof FGEShape) {
-				center = ((FGEShape) intersect).getCenter();
+				center = ((FGEShape<?>) intersect).getCenter();
 			} else { // intersect is finite with non-null bounds
 				center = intersect.getEmbeddingBounds().getCenter();
 			}
@@ -1933,7 +1936,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return ((FGEArc) anchorArea).getMiddle();
 		}
 		if (anchorArea instanceof FGEShape) {
-			return getSignificativeAnchorAreaLocationFor(((FGEShape) anchorArea).getBoundingBox(), direction);
+			return getSignificativeAnchorAreaLocationFor(((FGEShape<?>) anchorArea).getBoundingBox(), direction);
 		}
 		if (anchorArea instanceof FGEUnionArea && ((FGEUnionArea) anchorArea).isUnionOfPoints()) {
 			return getSignificativeAnchorAreaLocationFor(((FGEUnionArea) anchorArea).getObjects().firstElement(), direction);
@@ -1953,7 +1956,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return Math.max(((FGESegment) a).getP1().x, ((FGESegment) a).getP2().x);
 		}
 		if (a instanceof FGEShape) {
-			return ((FGEShape) a).getBoundingBox().x + ((FGEShape) a).getBoundingBox().width;
+			return ((FGEShape<?>) a).getBoundingBox().x + ((FGEShape<?>) a).getBoundingBox().width;
 		}
 		if (a instanceof FGEPolylin) {
 			return ((FGEPolylin) a).getBoundingBox().x + ((FGEPolylin) a).getBoundingBox().width;
@@ -1986,7 +1989,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return Math.min(((FGESegment) a).getP1().x, ((FGESegment) a).getP2().x);
 		}
 		if (a instanceof FGEShape) {
-			return ((FGEShape) a).getBoundingBox().x;
+			return ((FGEShape<?>) a).getBoundingBox().x;
 		}
 		if (a instanceof FGEPolylin) {
 			return ((FGEPolylin) a).getBoundingBox().x;
@@ -2019,7 +2022,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return Math.max(((FGESegment) a).getP1().y, ((FGESegment) a).getP2().y);
 		}
 		if (a instanceof FGEShape) {
-			return ((FGEShape) a).getBoundingBox().y + ((FGEShape) a).getBoundingBox().height;
+			return ((FGEShape<?>) a).getBoundingBox().y + ((FGEShape<?>) a).getBoundingBox().height;
 		}
 		if (a instanceof FGEPolylin) {
 			return ((FGEPolylin) a).getBoundingBox().y + ((FGEPolylin) a).getBoundingBox().height;
@@ -2052,7 +2055,7 @@ public class FGERectPolylin extends FGEPolylin {
 			return Math.min(((FGESegment) a).getP1().y, ((FGESegment) a).getP2().y);
 		}
 		if (a instanceof FGEShape) {
-			return ((FGEShape) a).getBoundingBox().y;
+			return ((FGEShape<?>) a).getBoundingBox().y;
 		}
 		if (a instanceof FGEPolylin) {
 			return ((FGEPolylin) a).getBoundingBox().y;

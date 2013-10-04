@@ -208,7 +208,7 @@ public class FGEIntersectionArea extends FGEOperationArea {
 	}
 
 	@Override
-	public boolean containsLine(FGEAbstractLine l) {
+	public boolean containsLine(FGEAbstractLine<?> l) {
 		if (_objects.size() == 0) {
 			return false;
 		}
@@ -229,7 +229,7 @@ public class FGEIntersectionArea extends FGEOperationArea {
 			return containsLine((FGELine) a);
 		}
 		if (a instanceof FGEShape) {
-			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape) a, this);
+			return FGEShape.AreaComputation.isShapeContainedInArea((FGEShape<?>) a, this);
 		}
 		return false;
 	}
