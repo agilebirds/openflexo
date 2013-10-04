@@ -20,12 +20,17 @@
 package org.openflexo.fib.controller;
 
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
@@ -88,6 +93,14 @@ public class FIBDialog<T> extends JDialog {
 	}
 
 	public void initDialog(FIBComponent fibComponent, LocalizedDelegate localizer) {
+		getRootPane().registerKeyboardAction(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FIBDialog.this.dispose();
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
 		view = FIBController.makeView(fibComponent, localizer);
 		getContentPane().add(view.getResultingJComponent());
 		List<FIBButton> def = fibComponent.getDefaultButtons();
