@@ -265,7 +265,9 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 								@Override
 								public void propertyChange(PropertyChangeEvent evt) {
-									manager.delete();
+									if (manager != null) {
+										manager.delete();
+									}
 									manager = null;
 									if (role != null && role.getObject(true) != null) {
 										observedRole = role.getObject(true);
