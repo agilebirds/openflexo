@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -152,7 +152,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	}
 
 	@Override
-	public void startDragging(DrawingControllerImpl<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		retrieveInfos();
 	}
@@ -350,7 +350,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	}
 
 	@Override
-	public void stopDragging(DrawingControllerImpl<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
 		if (beforePreviousSegment != null && beforePreviousSegment.overlap(currentSegment)) {
 			getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index - 1);
 		}

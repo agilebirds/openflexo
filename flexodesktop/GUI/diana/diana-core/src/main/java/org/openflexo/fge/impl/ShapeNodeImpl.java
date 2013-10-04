@@ -32,6 +32,7 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -43,11 +44,12 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
-import org.openflexo.fge.graphics.ShapeDecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphicsImpl;
 import org.openflexo.fge.graphics.FGEShapeGraphicsImpl;
+import org.openflexo.fge.graphics.ShapeDecorationPainter;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
@@ -93,7 +95,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public ShapeSpecification getShapeSpecification() {
 		if (getGraphicalRepresentation() != null) {
-			return getGraphicalRepresentation().getShape();
+			return getGraphicalRepresentation().getShapeSpecification();
 		}
 		return null;
 	}
@@ -101,7 +103,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public ShapeImpl<?> getShape() {
 		if (shape == null && getGraphicalRepresentation() != null) {
-			shape = getGraphicalRepresentation().getShape().makeShape(this);
+			shape = (ShapeImpl<?>) getGraphicalRepresentation().getShapeSpecification().makeShape(this);
 		}
 		return shape;
 	}
@@ -930,18 +932,22 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl<?> controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		/*if (!getGraphicalRepresentation().isRegistered()) {
 			getGraphicalRepresentation().setRegistered(true);
 		}*/
 		super.paint(g, controller);
 
 		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
 
-		// If there is a decoration painter init its graphics
-		if (decorationPainter != null) {
-			decorationGraphics.createGraphics(g2, controller);
+		if (controller instanceof DrawingControllerImpl<?>) {
+			graphics.createGraphics(g2, (DrawingControllerImpl<?>) controller);
+			// If there is a decoration painter init its graphics
+			if (decorationPainter != null) {
+				decorationGraphics.createGraphics(g2, (DrawingControllerImpl<?>) controller);
+			}
+		} else {
+			logger.warning("Unsupported controller: " + controller);
 		}
 
 		// If there is a decoration painter and decoration should be painted BEFORE shape, do it now
@@ -963,7 +969,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}
 
-		if (getGraphicalRepresentation().getShape() != null && getGraphicalRepresentation().getShadowStyle() != null) {
+		if (getGraphicalRepresentation().getShapeSpecification() != null && getGraphicalRepresentation().getShadowStyle() != null) {
 			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
 				getShape().paintShadow(graphics);
 			}
@@ -1087,7 +1093,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			double rpx = getGraphicalRepresentation().getRelativeTextX();
 			switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
 			case RIGHT:
-				if (FGEUtils.doubleEquals(rpx, 0.0)) {
+				if (GeomUtils.doubleEquals(rpx, 0.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
 					}
@@ -1095,11 +1101,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 					return (int) (getWidth() * rpx * scale);
 				}
 			case CENTER:
-				if (FGEUtils.doubleEquals(rpx, 0.0)) {
+				if (GeomUtils.doubleEquals(rpx, 0.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
 					}
-				} else if (FGEUtils.doubleEquals(rpx, 1.0)) {
+				} else if (GeomUtils.doubleEquals(rpx, 1.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
 					}
@@ -1112,7 +1118,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				}
 				break;
 			case LEFT:
-				if (FGEUtils.doubleEquals(rpx, 1.0)) {
+				if (GeomUtils.doubleEquals(rpx, 1.0)) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Impossible to handle LEFT alignement with relative x position set to 1");
 					}
@@ -1126,7 +1132,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
+	public void addChild(DrawingTreeNode<?, ?> aChildNode) {
 		super.addChild(aChildNode);
 		if (getGraphicalRepresentation().getAdaptBoundsToContents()) {
 			extendBoundsToHostContents();
@@ -1271,7 +1277,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		FGEPoint rp = new FGEPoint(getGraphicalRepresentation().getRelativeTextX(), getGraphicalRepresentation().getRelativeTextY());
 		switch (getGraphicalRepresentation().getVerticalTextAlignment()) {
 		case BOTTOM:
-			if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+			if (GeomUtils.doubleEquals(rp.y, 0.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle BOTTOM alignement with relative y position set to 0!");
 				}
@@ -1280,11 +1286,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 			break;
 		case MIDDLE:
-			if (FGEUtils.doubleEquals(rp.y, 0.0)) {
+			if (GeomUtils.doubleEquals(rp.y, 0.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 0");
 				}
-			} else if (FGEUtils.doubleEquals(rp.y, 1.0)) {
+			} else if (GeomUtils.doubleEquals(rp.y, 1.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle MIDDLE alignement with relative y position set to 1");
 				}
@@ -1297,7 +1303,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 			break;
 		case TOP:
-			if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+			if (GeomUtils.doubleEquals(rp.x, 1.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle TOP alignement with relative y position set to 1!");
 				}
@@ -1310,7 +1316,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 		switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
 		case RIGHT:
-			if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+			if (GeomUtils.doubleEquals(rp.x, 0.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle RIGHT alignement with relative x position set to 0!");
 				}
@@ -1318,11 +1324,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				rw = labelWidth / rp.x;
 			}
 		case CENTER:
-			if (FGEUtils.doubleEquals(rp.x, 0.0)) {
+			if (GeomUtils.doubleEquals(rp.x, 0.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle CENTER alignement with relative x position set to 0");
 				}
-			} else if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+			} else if (GeomUtils.doubleEquals(rp.x, 1.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle CENTER alignement with relative x position set to 1");
 				}
@@ -1335,7 +1341,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 			break;
 		case LEFT:
-			if (FGEUtils.doubleEquals(rp.x, 1.0)) {
+			if (GeomUtils.doubleEquals(rp.x, 1.0)) {
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Impossible to handle LEFT alignement with relative x position set to 1!");
 				}

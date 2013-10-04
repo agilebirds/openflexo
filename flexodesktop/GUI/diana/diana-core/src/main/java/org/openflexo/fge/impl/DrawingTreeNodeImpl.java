@@ -39,7 +39,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -686,7 +686,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl<?> controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);

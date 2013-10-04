@@ -1,9 +1,11 @@
 package org.openflexo.fge;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.CurveConnectorSpecification;
@@ -22,8 +24,18 @@ import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
 import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.controller.CustomClickControlAction;
+import org.openflexo.fge.controller.CustomDragControlAction;
+import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.controller.MouseClickControlActionImpl;
 import org.openflexo.fge.controller.MouseClickControlImpl;
+import org.openflexo.fge.controller.MouseDragControlActionImpl;
 import org.openflexo.fge.controller.MouseDragControlImpl;
+import org.openflexo.fge.controller.MoveAction;
+import org.openflexo.fge.controller.MultipleSelectionAction;
+import org.openflexo.fge.controller.RectangleSelectingAction;
+import org.openflexo.fge.controller.SelectionAction;
+import org.openflexo.fge.controller.ZoomAction;
 import org.openflexo.fge.impl.BackgroundImageBackgroundStyleImpl;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.fge.impl.ColorBackgroundStyleImpl;
@@ -142,37 +154,98 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 	@Override
 	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
 			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseClickControlImpl(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
 	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
 			MouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseClickControlImpl(aName, button, clickCount, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action,
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?> action,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseClickControlImpl(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
 	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
 			boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseDragControlImpl(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
 	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlActionType actionType,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseDragControlImpl(aName, button, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed,
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction<?> action, boolean shiftPressed,
 			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed);
+		return new MouseDragControlImpl(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	public MouseDragControlAction<?> makeMouseDragControlAction(MouseDragControlActionType actionType) {
+		switch (actionType) {
+		case NONE:
+			return new MouseDragControlActionImpl.None();
+		case MOVE:
+			return new MoveAction();
+		case RECTANGLE_SELECTING:
+			return new RectangleSelectingAction();
+		case ZOOM:
+			return new ZoomAction();
+		case CUSTOM:
+			return new CustomDragControlAction() {
+
+				@Override
+				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+					logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlActionImpl");
+					return true;
+				}
+
+				@Override
+				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+					logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlActionImpl");
+					return false;
+				}
+
+				@Override
+				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event,
+						boolean isSignificativeDrag) {
+					logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlActionImpl");
+					return false;
+				}
+
+			};
+		default:
+			logger.warning("Unexpected actionType " + actionType);
+			return null;
+		}
+	}
+
+	public MouseClickControlAction<?> makeMouseClickControlAction(MouseClickControlActionType actionType) {
+		switch (actionType) {
+		case NONE:
+			return new MouseClickControlActionImpl.None();
+		case SELECTION:
+			return new SelectionAction();
+		case MULTIPLE_SELECTION:
+			return new MultipleSelectionAction();
+		case CUSTOM:
+			return new CustomClickControlAction() {
+				@Override
+				public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+					logger.info("Perform undefined CUSTOM MouseClickControlActionImpl");
+					return true;
+				}
+			};
+		default:
+			logger.warning("Unexpected actionType " + actionType);
+			return null;
+		}
 	}
 
 }

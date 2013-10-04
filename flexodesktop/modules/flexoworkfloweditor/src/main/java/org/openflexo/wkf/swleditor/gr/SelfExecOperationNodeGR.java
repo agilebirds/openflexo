@@ -76,7 +76,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	public class ExecutionPetriGraphOpener extends MouseClickControl {

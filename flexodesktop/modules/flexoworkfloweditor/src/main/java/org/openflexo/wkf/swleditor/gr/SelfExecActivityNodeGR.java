@@ -79,7 +79,7 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	public class ExecutionPetriGraphOpener extends MouseClickControl {

@@ -23,7 +23,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
 /**
@@ -48,7 +48,7 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void startDragging(DrawingControllerImpl<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 	}
 

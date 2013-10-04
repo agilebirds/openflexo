@@ -62,11 +62,11 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 
 		setTextStyle(propertyNameStyle);
 
-		getConnector().setIsRounded(true);
-		getConnector().setRectPolylinConstraints(RectPolylinConstraints.HORIZONTAL_LAYOUT);
-		getConnector().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
-		getConnector().setStraightLineWhenPossible(true);
-		getConnector().setPixelOverlap(30);
+		getConnectorSpecification().setIsRounded(true);
+		getConnectorSpecification().setRectPolylinConstraints(RectPolylinConstraints.HORIZONTAL_LAYOUT);
+		getConnectorSpecification().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
+		getConnectorSpecification().setStraightLineWhenPossible(true);
+		getConnectorSpecification().setPixelOverlap(30);
 
 		if (getProperty().getCardinality().isMultiple()) {
 			setEndSymbol(EndSymbolType.FILLED_DOUBLE_ARROW);
@@ -89,7 +89,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 		if (getProperty().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
 			ensurePolylinConverterIsRegistered();
 			polylinIWillBeAdustedTo = (FGERectPolylin) getProperty()._graphicalPropertyForKey(getStoredPolylinKey());
-			getConnector().setWasManuallyAdjusted(true);
+			getConnectorSpecification().setWasManuallyAdjusted(true);
 		}
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
@@ -106,7 +106,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	}
 
 	@Override
-	public RectPolylinConnectorSpecification getConnector() {
+	public RectPolylinConnectorSpecification getConnectorSpecification() {
 		return (RectPolylinConnectorSpecification) super.getConnectorSpecification();
 	}
 
@@ -148,7 +148,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	}
 
 	public void resetLayout() {
-		getConnector().setWasManuallyAdjusted(false);
+		getConnectorSpecification().setWasManuallyAdjusted(false);
 	}
 
 	private FGERectPolylin polylinIWillBeAdustedTo;
@@ -157,7 +157,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		if (polylinIWillBeAdustedTo != null && !getProperty().isDeleted()) {
-			getConnector().manuallySetPolylin(polylinIWillBeAdustedTo);
+			getConnectorSpecification().manuallySetPolylin(polylinIWillBeAdustedTo);
 			polylinIWillBeAdustedTo = null;
 			refreshConnector();
 		}
@@ -191,10 +191,10 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
-			if (getConnector().getWasManuallyAdjusted() && getConnector().getPolylin() != null) {
+			if (getConnectorSpecification().getWasManuallyAdjusted() && getConnectorSpecification().getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-					getProperty()._setGraphicalPropertyForKey(getConnector().getPolylin(), getStoredPolylinKey());
+					getProperty()._setGraphicalPropertyForKey(getConnectorSpecification().getPolylin(), getStoredPolylinKey());
 				}
 			} else {
 				if (getProperty().hasGraphicalPropertyForKey(getStoredPolylinKey())) {

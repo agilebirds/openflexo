@@ -79,7 +79,7 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	public DataObjectGR(WKFDataObject dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
-		((RegularPolygon) getShape()).setPoints(fileShape.getPoints());
+		((RegularPolygon) getShapeSpecification()).setPoints(fileShape.getPoints());
 		setIsFloatingLabel(true);
 		setForeground(FOREGROUND);
 		setBackground(BACKGROUND);

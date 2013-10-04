@@ -5,11 +5,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.controller.MouseClickControlActionImpl.MouseClickControlActionType;
-import org.openflexo.fge.controller.MouseDragControlActionImpl.MouseDragControlActionType;
+import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
@@ -22,6 +20,7 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 
 public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements DrawingGraphicalRepresentation {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DrawingGraphicalRepresentation.class.getPackage().getName());
 
 	private Color backgroundColor = Color.WHITE;
@@ -48,15 +47,16 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		// setDrawable(aDrawing != null ? aDrawing.getModel() : null);
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private DrawingGraphicalRepresentationImpl(Drawing<?> aDrawing, boolean initBasicControls) {
 		this(aDrawing);
 		if (initBasicControls) {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.SELECTION));
-			addToMouseDragControls(MouseDragControlImpl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
+			addToMouseDragControls(getFactory().makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
 					MouseDragControlActionType.RECTANGLE_SELECTING));
-			addToMouseDragControls(MouseDragControlImpl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+			addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
 		// width = FGEConstants.DEFAULT_DRAWING_WIDTH;
 		// height = FGEConstants.DEFAULT_DRAWING_HEIGHT;
@@ -156,34 +156,6 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		}
 	}
 
-	/*	@Override
-		public double getHeight() {
-			return height;
-		}
-
-		@Override
-		public void setHeight(double aValue) {
-			FGENotification notification = requireChange(DrawingParameters.height, aValue);
-			if (notification != null) {
-				height = aValue;
-				hasChanged(notification);
-			}
-		}
-
-		@Override
-		public double getWidth() {
-			return width;
-		}
-
-		@Override
-		public void setWidth(double aValue) {
-			FGENotification notification = requireChange(DrawingParameters.width, aValue);
-			if (notification != null) {
-				width = aValue;
-				hasChanged(notification);
-			}
-		}*/
-
 	@Override
 	public Color getFocusColor() {
 		return focusColor;
@@ -226,86 +198,6 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		}
 	}
 
-	/*@Override
-	public int getViewX(double scale) {
-		return 0;
-	}
-
-	@Override
-	public int getViewY(double scale) {
-		return 0;
-	}
-
-	@Override
-	public int getViewWidth(double scale) {
-		return (int) (getWidth() * scale);
-	}
-
-	@Override
-	public int getViewHeight(double scale) {
-		return (int) (getHeight() * scale);
-	}
-
-	@Override
-	public FGERectangle getNormalizedBounds() {
-		return new FGERectangle(0, 0, getWidth(), getHeight(), Filling.FILLED);
-	}*/
-
-	/*@Override
-	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
-		return false;
-	}*/
-
-	/*@Override
-	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
-		return AffineTransform.getScaleInstance(scale, scale);
-	}*/
-
-	/*@Override
-	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale) {
-		return AffineTransform.getScaleInstance(1 / scale, 1 / scale);
-
-	}*/
-
-	// *******************************************************************************
-	// * Methods *
-	// *******************************************************************************
-
-	/*@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
-		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
-		// If there is a decoration painter init its graphics
-		if (decorationPainter != null) {
-			decorationGraphics.createGraphics(g2, controller);
-		}
-
-		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
-		if (decorationPainter != null && decorationPainter.paintBeforeDrawing()) {
-			decorationPainter.paintDecoration(decorationGraphics);
-		}
-
-		super.paint(g, controller);
-
-		if (!(bgStyle instanceof ColorBackgroundStyle) || !((ColorBackgroundStyle) bgStyle).getColor().equals(getBackgroundColor())) {
-			bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
-		}
-
-		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
-
-		graphics.setDefaultForeground(fgStyle);
-		graphics.setDefaultBackground(bgStyle);
-		if (drawWorkingArea) {
-			getWorkingArea().paint(graphics);
-		}
-		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
-		if (decorationPainter != null && !decorationPainter.paintBeforeDrawing()) {
-			decorationPainter.paintDecoration(decorationGraphics);
-		}
-
-		graphics.releaseGraphics();
-
-	}*/
 
 	@Override
 	public DrawingDecorationPainter getDecorationPainter() {
@@ -324,56 +216,9 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	}
 
 	@Override
-	public String getInspectorName() {
-		return "DrawingGraphicalRepresentation.inspector";
-	}
-
-	/*@Override
-	public GraphicalRepresentation getContainerGraphicalRepresentation() {
-		return null;
-	}
-
-	@Override
-	public final boolean shouldBeDisplayed() {
-		return true;
-	}*/
-
-	@Override
 	public boolean getIsVisible() {
 		return true;
 	}
-
-	/*@Override
-	public Vector<GraphicalRepresentation> allGraphicalRepresentations() {
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		_appendGraphicalRepresentations(returned, this);
-		return returned;
-	}
-
-	private static void _appendGraphicalRepresentations(Vector<GraphicalRepresentation> v, GraphicalRepresentation gr) {
-		v.add(gr);
-		List<? extends Object> containedObjects = gr.getContainedObjects();
-		if (containedObjects == null) {
-			return;
-		}
-		for (Object drawable : containedObjects) {
-			GraphicalRepresentation next = gr.getGraphicalRepresentation(drawable);
-			_appendGraphicalRepresentations(v, next);
-		}
-	}*/
-
-	/*@Override
-	public void finalizeDeserialization()
-	{
-		logger.info("ICI ???");
-		super.finalizeDeserialization();
-		for (GraphicalRepresentation gr : allGraphicalRepresentations()) {
-			logger.info("gr="+gr);
-			if (gr instanceof ConnectorGraphicalRepresentation) {
-				((ConnectorGraphicalRepresentation)gr).observeRelevantObjects();
-			}
-		}
-	}*/
 
 	@Override
 	public boolean getDrawWorkingArea() {
@@ -404,15 +249,6 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 			hasChanged(notification);
 		}
 	}
-
-	/*@Override
-	public void startConnectorObserving() {
-		for (GraphicalRepresentation gr : allGraphicalRepresentations()) {
-			if (gr instanceof ConnectorGraphicalRepresentation) {
-				((ConnectorGraphicalRepresentation) gr).observeRelevantObjects();
-			}
-		}
-	}*/
 
 	@Override
 	public FGEDimension getSize() {
@@ -453,75 +289,10 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		notifyObservers(new DrawingNeedsToBeRedrawn());
 	}
 
-	/*@Override
-	public FGEDrawingGraphicsImpl getGraphics() {
-		return graphics;
-	}*/
-
-	/*@Override
-	public ShapeGraphicalRepresentation getTopLevelShapeGraphicalRepresentation(FGEPoint p) {
-		return getTopLevelShapeGraphicalRepresentation(this, p);
-	}
-
-	private ShapeGraphicalRepresentation getTopLevelShapeGraphicalRepresentation(GraphicalRepresentation container, FGEPoint p) {
-
-		List<ShapeGraphicalRepresentation> enclosingShapes = new ArrayList<ShapeGraphicalRepresentation>();
-
-		for (GraphicalRepresentation gr : container.getContainedGraphicalRepresentations()) {
-			if (gr instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation child = (ShapeGraphicalRepresentation) gr;
-				if (child.getShape().getShape().containsPoint(convertNormalizedPoint(this, p, child))) {
-					enclosingShapes.add(child);
-				} else {
-					// Look if we are not contained in a child shape outside current shape
-					GraphicalRepresentation insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
-					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
-						enclosingShapes.add((ShapeGraphicalRepresentation) insideFocusedShape);
-					}
-				}
-			}
-		}
-
-		if (enclosingShapes.size() > 0) {
-
-			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation>() {
-				@Override
-				public int compare(ShapeGraphicalRepresentation o1, ShapeGraphicalRepresentation o2) {
-					if (o2.getLayer() == o1.getLayer() && o1.getParentGraphicalRepresentation() != null
-							&& o1.getParentGraphicalRepresentation() == o2.getParentGraphicalRepresentation()) {
-						return o1.getParentGraphicalRepresentation().getOrder(o1, o2);
-					}
-					return o2.getLayer() - o1.getLayer();
-				}
-			});
-
-			ShapeGraphicalRepresentation focusedShape = enclosingShapes.get(0);
-
-			ShapeGraphicalRepresentation insideFocusedShape = getTopLevelShapeGraphicalRepresentation(focusedShape, p);
-
-			if (insideFocusedShape != null) {
-				return insideFocusedShape;
-			} else {
-				return focusedShape;
-			}
-		}
-
-		return null;
-
-	}*/
 
 	// *******************************************************************************
 	// * Layout *
 	// *******************************************************************************
 
-	/*@Override
-	public void performRandomLayout() {
-		performRandomLayout(getWidth(), getHeight());
-	}
-
-	@Override
-	public void performAutoLayout() {
-		performAutoLayout(getWidth(), getHeight());
-	}*/
 
 }

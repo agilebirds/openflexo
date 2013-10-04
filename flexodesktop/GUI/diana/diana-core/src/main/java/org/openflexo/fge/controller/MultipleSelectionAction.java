@@ -33,10 +33,11 @@ public class MultipleSelectionAction extends MouseClickControlActionImpl {
 	public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
 		if (node.getGraphicalRepresentation().getIsSelectable()) {
 			MouseClickControlActionImpl.logger.info("Multiple select " + node);
-			controller.toggleSelection(node);
+			((DrawingControllerImpl<?>)controller).toggleSelection(node);
 			return true;
 		} else {
 			return false;
 		}
+
 	}
 }

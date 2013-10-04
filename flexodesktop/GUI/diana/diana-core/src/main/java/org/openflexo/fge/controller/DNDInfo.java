@@ -79,14 +79,14 @@ public class DNDInfo {
 	private int dragAction = DnDConstants.ACTION_MOVE;
 	private DragGestureRecognizer dgr;
 	private DragSourceContext dragSourceContext;
-	private DrawingControllerImpl<?> _controller;
+	private DrawingControllerImpl<?> controller;
 	private ShapeNode<?> draggedObject;
 
 	private Hashtable<FGEView<?>, DropTarget> dropTargets;
 
 	public DNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DrawingControllerImpl<?> controller, final MouseEvent initialEvent) {
 		_moveAction = moveAction;
-		_controller = controller;
+		this.controller = controller;
 		draggedObject = shapeNode;
 
 		logger.info("DnD gesture recognized, starting DnD");
@@ -142,8 +142,8 @@ public class DNDInfo {
 		}
 		dropTargets = new Hashtable<FGEView<?>, DropTarget>();
 
-		for (DrawingTreeNode<?, ?> node : _controller.getContents().keySet()) {
-			FGEView<?> view = _controller.getContents().get(node);
+		for (DrawingTreeNode<?, ?> node : controller.getContents().keySet()) {
+			FGEView<?> view = controller.getContents().get(node);
 			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
 			}
@@ -192,7 +192,7 @@ public class DNDInfo {
 			try {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(DragSource.DefaultCopyNoDrop, transferable, dsListener);
-				_controller.getDrawingView().captureDraggedNode(shapeView, e);
+				controller.getDrawingView().captureDraggedNode(shapeView, e);
 			} catch (Exception idoe) {
 				logger.warning("Unexpected exception " + idoe);
 			}
@@ -234,7 +234,7 @@ public class DNDInfo {
 					// setName("");
 				}
 			} finally {
-				_controller.getDrawingView().resetCapturedNode();
+				controller.getDrawingView().resetCapturedNode();
 				disableDragging();
 			}
 		}
@@ -409,7 +409,7 @@ public class DNDInfo {
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				_controller.getDrawingView().updateCapturedDraggedNodeImagePosition(e, _controller.getDrawingView());
+				controller.getDrawingView().updateCapturedDraggedNodeImagePosition(e, controller.getDrawingView());
 			}
 			if (!isDragOk(e)) {
 				if (dragSourceContext == null) {

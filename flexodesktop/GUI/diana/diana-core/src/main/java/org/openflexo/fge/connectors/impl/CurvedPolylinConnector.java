@@ -14,7 +14,8 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
+import org.openflexo.fge.geom.GeomUtils;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnectorSpecification> {
@@ -55,7 +56,7 @@ public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnector
 	}
 
 	@Override
-	public void drawConnector(FGEConnectorGraphicsImpl g) {
+	public void drawConnector(FGEConnectorGraphics g) {
 		updateControlPoints();
 
 		g.drawLine(p1.x, p1.y, p2.x, p2.y);
@@ -64,12 +65,12 @@ public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnector
 
 	@Override
 	public double getStartAngle() {
-		return FGEUtils.getSlope(p1, p2);
+		return GeomUtils.getSlope(p1, p2);
 	}
 
 	@Override
 	public double getEndAngle() {
-		return FGEUtils.getSlope(p2, p1);
+		return GeomUtils.getSlope(p2, p1);
 	}
 
 	@Override

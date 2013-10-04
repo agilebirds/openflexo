@@ -387,10 +387,10 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SHAPE_KEY)
 	@XMLElement
-	public ShapeSpecification getShape();
+	public ShapeSpecification getShapeSpecification();
 
 	@Setter(value = SHAPE_KEY)
-	public void setShape(ShapeSpecification aShape);
+	public void setShapeSpecification(ShapeSpecification aShape);
 
 	@Getter(value = SHADOW_STYLE_KEY)
 	@XMLElement

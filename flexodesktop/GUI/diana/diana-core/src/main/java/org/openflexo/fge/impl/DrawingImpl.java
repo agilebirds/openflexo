@@ -129,6 +129,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return hash;
 	}
 
+	@SuppressWarnings("unused")
 	private DrawingTreeNode<?, ?> retrieveDrawingTreeNode(GRBinding<?, ?> grBinding, Object drawable) {
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(grBinding);
 		return hash.get(drawable);
@@ -193,6 +194,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	 * @param aDrawable
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O drawable) {
 		for (GRBinding grBinding : nodes.keySet()) {
@@ -390,6 +392,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	private <O> List<DrawingTreeNode<O, ?>> getDrawingTreeNodes(O drawable) {
 		List<DrawingTreeNode<O, ?>> returned = new ArrayList<DrawingTreeNode<O, ?>>();
 		for (GRBinding<?, ?> grBinding : nodes.keySet()) {
@@ -650,6 +653,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return getPendingConnector(binding, drawable, parentNodeIdentifier, startNodeIdentifier, endNodeIdentifier) != null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <O> PendingConnector<O> getPendingConnector(ConnectorGRBinding<O> binding, O drawable,
 			DrawingTreeNodeIdentifier<?> parentNodeIdentifier, DrawingTreeNodeIdentifier<?> startNodeIdentifier,
@@ -848,6 +852,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return "Drawing of " + model;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void delete() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("deleting " + this);

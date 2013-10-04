@@ -155,7 +155,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 			returned.setX(boundingBox.getX() - FGEConstants.DEFAULT_BORDER_SIZE);
 			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
 		}
-		returned.setShape(getController().getFactory().makePolygon(normalizedPolygon));
+		returned.setShapeSpecification(getController().getFactory().makePolygon(normalizedPolygon));
 		return returned;
 	}
 }

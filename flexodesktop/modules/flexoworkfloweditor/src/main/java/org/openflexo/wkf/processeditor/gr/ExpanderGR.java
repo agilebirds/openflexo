@@ -77,7 +77,7 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		super(ConnectorType.CUSTOM, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(expander.getFatherNode()),
 				(ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(expander.getPetriGraph()), expander, aDrawing);
 
-		setConnector(new ExpanderConnector());
+		setConnectorSpecification(new ExpanderConnector());
 
 		emptyBackground = BackgroundStyle.makeEmptyBackground();
 
@@ -156,31 +156,31 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 			FGEPoint newStartP1, newStartP2, newEndP1, newEndP2;
 
 			if (orientation == SimplifiedCardinalDirection.NORTH) {
-				newStartP1 = getStartObject().getShape().getShape().getBoundingBox().getNorthWestPt();
-				newStartP2 = getStartObject().getShape().getShape().getBoundingBox().getNorthEastPt();
-				newEndP1 = getEndObject().getShape().getShape().getBoundingBox().getSouthWestPt();
-				newEndP2 = getEndObject().getShape().getShape().getBoundingBox().getSouthEastPt();
+				newStartP1 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthWestPt();
+				newStartP2 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthEastPt();
+				newEndP1 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthWestPt();
+				newEndP2 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthEastPt();
 			} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
-				newStartP1 = getStartObject().getShape().getShape().getBoundingBox().getSouthWestPt();
-				newStartP2 = getStartObject().getShape().getShape().getBoundingBox().getSouthEastPt();
-				newEndP1 = getEndObject().getShape().getShape().getBoundingBox().getNorthWestPt();
-				newEndP2 = getEndObject().getShape().getShape().getBoundingBox().getNorthEastPt();
+				newStartP1 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthWestPt();
+				newStartP2 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthEastPt();
+				newEndP1 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthWestPt();
+				newEndP2 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthEastPt();
 			} else if (orientation == SimplifiedCardinalDirection.WEST) {
-				newStartP1 = getStartObject().getShape().getShape().getBoundingBox().getNorthWestPt();
-				newStartP2 = getStartObject().getShape().getShape().getBoundingBox().getSouthWestPt();
-				newEndP1 = getEndObject().getShape().getShape().getBoundingBox().getNorthEastPt();
-				newEndP2 = getEndObject().getShape().getShape().getBoundingBox().getSouthEastPt();
+				newStartP1 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthWestPt();
+				newStartP2 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthWestPt();
+				newEndP1 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthEastPt();
+				newEndP2 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthEastPt();
 			} else /* if (orientation == SimplifiedCardinalDirection.EAST) */{
-				newStartP1 = getStartObject().getShape().getShape().getBoundingBox().getNorthEastPt();
-				newStartP2 = getStartObject().getShape().getShape().getBoundingBox().getSouthEastPt();
-				newEndP1 = getEndObject().getShape().getShape().getBoundingBox().getNorthWestPt();
-				newEndP2 = getEndObject().getShape().getShape().getBoundingBox().getSouthWestPt();
+				newStartP1 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthEastPt();
+				newStartP2 = getStartObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthEastPt();
+				newEndP1 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getNorthWestPt();
+				newEndP2 = getEndObject().getShapeSpecification().getShapeSpecification().getBoundingBox().getSouthWestPt();
 			}
 
-			newStartP1 = getStartObject().getShape().outlineIntersect(newStartP1);
-			newStartP2 = getStartObject().getShape().outlineIntersect(newStartP2);
-			newEndP1 = getEndObject().getShape().outlineIntersect(newEndP1);
-			newEndP2 = getEndObject().getShape().outlineIntersect(newEndP2);
+			newStartP1 = getStartObject().getShapeSpecification().outlineIntersect(newStartP1);
+			newStartP2 = getStartObject().getShapeSpecification().outlineIntersect(newStartP2);
+			newEndP1 = getEndObject().getShapeSpecification().outlineIntersect(newEndP1);
+			newEndP2 = getEndObject().getShapeSpecification().outlineIntersect(newEndP2);
 
 			newStartP1 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), newStartP1, getGraphicalRepresentation());
 			newStartP2 = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), newStartP2, getGraphicalRepresentation());

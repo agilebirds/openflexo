@@ -1,7 +1,10 @@
 package org.openflexo.fge.impl;
 
+import java.awt.Paint;
+
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.notifications.FGENotification;
 
 
 public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
@@ -57,5 +60,4 @@ public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements Col
 		return !oldObject.equals(newObject);
 	}
 
-}
 }

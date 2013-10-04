@@ -25,9 +25,10 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
@@ -412,7 +413,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	}
 
 	@Override
-	public void drawConnector(FGEConnectorGraphicsImpl g) {
+	public void drawConnector(FGEConnectorGraphics g) {
 		if (!firstUpdated) {
 			refreshConnector();
 		}
@@ -461,12 +462,12 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 
 	@Override
 	public double getStartAngle() {
-		return FGEUtils.getSlope(cp1.getPoint(), cp2.getPoint());
+		return GeomUtils.getSlope(cp1.getPoint(), cp2.getPoint());
 	}
 
 	@Override
 	public double getEndAngle() {
-		return FGEUtils.getSlope(cp2.getPoint(), cp1.getPoint());
+		return GeomUtils.getSlope(cp2.getPoint(), cp1.getPoint());
 	}
 
 	@Override

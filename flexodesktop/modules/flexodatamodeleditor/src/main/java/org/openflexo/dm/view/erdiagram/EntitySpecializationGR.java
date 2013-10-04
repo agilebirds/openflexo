@@ -61,11 +61,11 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 
 		setTextStyle(propertyNameStyle);
 
-		getConnector().setIsRounded(true);
-		getConnector().setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
-		getConnector().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
-		getConnector().setStraightLineWhenPossible(true);
-		getConnector().setPixelOverlap(30);
+		getConnectorSpecification().setIsRounded(true);
+		getConnectorSpecification().setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
+		getConnectorSpecification().setAdjustability(RectPolylinAdjustability.FULLY_ADJUSTABLE);
+		getConnectorSpecification().setStraightLineWhenPossible(true);
+		getConnectorSpecification().setPixelOverlap(30);
 
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		setEndSymbolSize(15);
@@ -73,7 +73,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 		if (getSpecializedEntity().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
 			ensurePolylinConverterIsRegistered();
 			polylinIWillBeAdustedTo = (FGERectPolylin) getSpecializedEntity()._graphicalPropertyForKey(getStoredPolylinKey());
-			getConnector().setWasManuallyAdjusted(true);
+			getConnectorSpecification().setWasManuallyAdjusted(true);
 		}
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
@@ -90,7 +90,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	}
 
 	@Override
-	public RectPolylinConnectorSpecification getConnector() {
+	public RectPolylinConnectorSpecification getConnectorSpecification() {
 		return (RectPolylinConnectorSpecification) super.getConnectorSpecification();
 	}
 
@@ -132,7 +132,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	}
 
 	public void resetLayout() {
-		getConnector().setWasManuallyAdjusted(false);
+		getConnectorSpecification().setWasManuallyAdjusted(false);
 	}
 
 	private FGERectPolylin polylinIWillBeAdustedTo;
@@ -141,7 +141,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		if (polylinIWillBeAdustedTo != null && !getSpecializedEntity().isDeleted()) {
-			getConnector().manuallySetPolylin(polylinIWillBeAdustedTo);
+			getConnectorSpecification().manuallySetPolylin(polylinIWillBeAdustedTo);
 			polylinIWillBeAdustedTo = null;
 			refreshConnector();
 		}
@@ -193,10 +193,10 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
-			if (getConnector().getWasManuallyAdjusted() && getConnector().getPolylin() != null) {
+			if (getConnectorSpecification().getWasManuallyAdjusted() && getConnectorSpecification().getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-					getSpecializedEntity()._setGraphicalPropertyForKey(getConnector().getPolylin(), getStoredPolylinKey());
+					getSpecializedEntity()._setGraphicalPropertyForKey(getConnectorSpecification().getPolylin(), getStoredPolylinKey());
 				}
 			} else {
 				if (getSpecializedEntity().hasGraphicalPropertyForKey(getStoredPolylinKey())) {
@@ -251,12 +251,12 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 
 	// Override to implement defaut automatic layout
 	public double getDefaultLabelX() {
-		return Math.sin(getConnector().getMiddleSymbolAngle()) * 10;
+		return Math.sin(getConnectorSpecification().getMiddleSymbolAngle()) * 10;
 	}
 
 	// Override to implement defaut automatic layout
 	public double getDefaultLabelY() {
-		return Math.cos(getConnector().getMiddleSymbolAngle()) * 10;
+		return Math.cos(getConnectorSpecification().getMiddleSymbolAngle()) * 10;
 	}
 
 }

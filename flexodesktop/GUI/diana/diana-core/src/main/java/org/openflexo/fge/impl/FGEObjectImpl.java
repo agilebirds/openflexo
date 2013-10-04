@@ -20,15 +20,16 @@
 package org.openflexo.fge.impl;
 
 import java.beans.PropertyChangeSupport;
-import java.util.Observable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.kvc.KVCObservableObject;
 
-public abstract class FGEObjectImpl extends Observable implements FGEObject {
+public abstract class FGEObjectImpl extends KVCObservableObject implements FGEObject {
 	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
 
 	private FGEModelFactory factory;
@@ -169,6 +170,7 @@ public abstract class FGEObjectImpl extends Observable implements FGEObject {
 	 * @param parameter
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected <T> T valueForParameter(GRParameter<T> parameter) {
 		Class<?> type = getTypeForKey(parameter.getName());
 		T returned = null;

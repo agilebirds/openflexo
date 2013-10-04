@@ -97,7 +97,7 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShapeSpecification().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
 				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(

@@ -105,7 +105,7 @@ public class CircularFloatingPalette extends ControlArea<FGEArea> implements Obs
 
 	public void paint(Graphics g, DiagramController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
-			FGEShape<?> fgeShape = shapeGR.getShape().getOutline();
+			FGEShape<?> fgeShape = shapeGR.getShapeSpecification().getOutline();
 			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(

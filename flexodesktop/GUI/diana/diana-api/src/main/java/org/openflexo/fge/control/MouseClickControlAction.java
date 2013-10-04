@@ -4,34 +4,17 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEModelFactory;
 
-public interface MouseClickControlAction extends MouseControlAction {
+public interface MouseClickControlAction<C extends DrawingController<?>> extends MouseControlAction<C> {
 
 	public static final Logger logger = Logger.getLogger(MouseClickControlAction.class.getPackage().getName());
 
 	public static enum MouseClickControlActionType {
 		NONE, SELECTION, MULTIPLE_SELECTION, CONTINUOUS_SELECTION, CUSTOM;
 
-		protected MouseClickControlAction makeAction() {
-			/*if (this == NONE) {
-				return new None();
-			} else if (this == SELECTION) {
-				return new SelectionAction();
-			} else if (this == MULTIPLE_SELECTION) {
-				return new MultipleSelectionAction();
-			} else if (this == CONTINUOUS_SELECTION) {
-				return new ContinuousSelectionAction();
-			} else if (this == CUSTOM) {
-				return new CustomClickControlAction() {
-					@Override
-					public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
-						logger.info("Perform undefined CUSTOM MouseClickControlActionImpl");
-						return true;
-					}
-				};
-			}*/
-			logger.warning("Not implemented !!!");
-			return null;
+		public MouseClickControlAction<?> makeAction(FGEModelFactory factory) {
+			return factory.makeMouseClickControlAction(this);
 		}
 	}
 
@@ -48,6 +31,6 @@ public interface MouseClickControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, C controller, MouseEvent event);
 
 }

@@ -80,7 +80,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	/**

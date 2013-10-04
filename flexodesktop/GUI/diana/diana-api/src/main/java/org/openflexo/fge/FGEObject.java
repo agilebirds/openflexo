@@ -1,10 +1,11 @@
 package org.openflexo.fge;
 
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cloneable, IObservable/*, KeyValueCoding*/, FGEConstants,
+public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cloneable, IObservable, KeyValueCoding, FGEConstants,
 		HasPropertyChangeSupport {
 
 	public FGEModelFactory getFactory();

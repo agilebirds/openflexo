@@ -16,6 +16,7 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
@@ -40,6 +41,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
+import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.graphics.FGEGeometricGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
@@ -159,7 +161,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		/*if (!isRegistered()) {
 			setRegistered(true);
 		}*/
@@ -167,7 +169,11 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		super.paint(g, controller);
 
 		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
+		if (controller instanceof DrawingControllerImpl<?>) {
+			graphics.createGraphics(g2, (DrawingControllerImpl<?>) controller);
+		} else {
+			logger.warning("Unsupported controller: " + controller);
+		}
 
 		graphics.setDefaultBackground(getGraphicalRepresentation().getBackground());
 		graphics.setDefaultForeground(getGraphicalRepresentation().getForeground());
@@ -208,7 +214,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 	}
 
 	@Override
-	public void paintGeometricObject(FGEGeometricGraphicsImpl graphics) {
+	public void paintGeometricObject(FGEGeometricGraphics graphics) {
 		getGraphicalRepresentation().getGeometricObject().paint(graphics);
 	}
 
@@ -540,7 +546,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGraphicalRepresentation()
@@ -572,7 +578,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGraphicalRepresentation()
@@ -603,7 +609,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGraphicalRepresentation()
@@ -634,7 +640,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGraphicalRepresentation().getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGraphicalRepresentation()

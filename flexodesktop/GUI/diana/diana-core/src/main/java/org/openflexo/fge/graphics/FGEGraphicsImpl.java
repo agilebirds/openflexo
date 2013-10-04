@@ -130,7 +130,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	 * @param controller
 	 */
 
-	public void createGraphics(Graphics2D graphics2D, DrawingControllerImpl controller) {
+	public void createGraphics(Graphics2D graphics2D, DrawingControllerImpl<?> controller) {
 		g2d = (Graphics2D) graphics2D.create();
 		_controller = controller;
 	}

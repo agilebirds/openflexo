@@ -92,7 +92,7 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentationImpl imp
 				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 						MouseEvent event) {
 					if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation<?>) {
-						getConnector().resetConnectorLayout();
+						getConnectorSpecification().resetConnectorLayout();
 				}
 					return true;
 			}

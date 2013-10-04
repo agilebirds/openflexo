@@ -154,11 +154,11 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 						grid.origin.x -= gr.getBorder().left;
 						grid.origin.y -= gr.getBorder().top;
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().x > 0) {
-						grid.origin.x -= gr.getShape().getShape().getEmbeddingBounds().x * gr.getWidth();
+					if (gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().x > 0) {
+						grid.origin.x -= gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().x * gr.getWidth();
 					}
-					if (gr.getShape().getShape().getEmbeddingBounds().y > 0) {
-						grid.origin.y -= gr.getShape().getShape().getEmbeddingBounds().y * gr.getHeight();
+					if (gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().y > 0) {
+						grid.origin.y -= gr.getShapeSpecification().getShapeSpecification().getEmbeddingBounds().y * gr.getHeight();
 					}
 					/*if (gr.getShadowStyle()!=null) {
 						grid.origin.x-=gr.getShadowStyle().getShadowDeep();

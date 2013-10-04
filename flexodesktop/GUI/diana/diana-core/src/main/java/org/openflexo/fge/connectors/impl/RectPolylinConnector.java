@@ -1,6 +1,5 @@
 package org.openflexo.fge.connectors.impl;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -14,10 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
@@ -53,7 +49,7 @@ import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ConcatenedList;
 
@@ -88,9 +84,9 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 
 	private FGERectPolylin _deserializedPolylin;
 
-	private static final FGEModelFactory DEBUG_FACTORY = FGEUtils.TOOLS_FACTORY;
-	private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
-	private static final ForegroundStyle DEBUG_BLACK_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE);
+	//private static final FGEModelFactory DEBUG_FACTORY = FGECoreUtils.TOOLS_FACTORY;
+	//private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
+	//private static final ForegroundStyle DEBUG_BLACK_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE);
 
 	// *******************************************************************************
 	// * Constructor *
@@ -131,7 +127,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 	private ConcatenedList<ControlArea<?>> allControlAreas;
 
 	@Override
-	public void drawConnector(FGEConnectorGraphicsImpl g) {
+	public void drawConnector(FGEConnectorGraphics g) {
 		if (!firstUpdated) {
 			refreshConnector();
 		}
@@ -141,7 +137,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 		 * debugPolylin.paint(g); }
 		 */
 
-		if (getDebug()) {
+		/*if (getDebug()) {
 			g.setDefaultForeground(DEBUG_GRAY_STROKE);
 			for (FGERectPolylin p : potentialPolylin) {
 				p.paint(g);
@@ -150,7 +146,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 			if (polylin != null) {
 				polylin.debugPaint(g);
 			}
-		} else {
+		} else {*/
 			g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getForeground());
 			if (polylin != null) {
 				if (getConnectorSpecification().getIsRounded()) {
@@ -159,7 +155,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 					polylin.paint(g);
 				}
 			}
-		}
+		//}
 
 		/*
 		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1.0f, DashStyle.PLAIN_STROKE));

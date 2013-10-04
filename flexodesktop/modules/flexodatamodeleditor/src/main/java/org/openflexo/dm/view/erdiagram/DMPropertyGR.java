@@ -61,7 +61,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 		super(ShapeType.RECTANGLE, aDMProperty, aDrawing);
 		// setText(getRole().getName());
 		setIsFloatingLabel(false);
-		getShape().setIsRounded(false);
+		getShapeSpecification().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		updateStyles();
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(10, 10, 10, 10));
@@ -155,8 +155,8 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 	}
 
 	@Override
-	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+	public Rectangle getShapeSpecification() {
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

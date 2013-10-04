@@ -148,7 +148,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShapeSpecification().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
 						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
 				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation) parent).getBorder();

@@ -23,10 +23,9 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.control.MouseClickControlAction;
 
-public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements MouseClickControlAction {
+public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements MouseClickControlAction<DrawingControllerImpl<?>> {
 
 	static final Logger logger = Logger.getLogger(MouseClickControlActionImpl.class.getPackage().getName());
 
@@ -45,7 +44,7 @@ public abstract class MouseClickControlActionImpl extends MouseControlActionImpl
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event);
 
 	public static class None extends MouseClickControlActionImpl {
 		@Override
@@ -54,7 +53,7 @@ public abstract class MouseClickControlActionImpl extends MouseControlActionImpl
 		}
 
 		@Override
-		public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
+		public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
 			// No action
 			return true;
 		}

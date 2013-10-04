@@ -44,7 +44,6 @@ public class FGEConnectorGraphicsImpl extends FGEGraphicsImpl implements FGEConn
 	}
 
 	@Override
-	@Override
 	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
@@ -93,12 +92,12 @@ public class FGEConnectorGraphicsImpl extends FGEGraphicsImpl implements FGEConn
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 
 		if (getGraphicalRepresentation().getApplyForegroundToSymbols()) {
-			symbolGraphics.setDefaultForeground(symbol.getForegroundStyle(getGraphicalRepresentation().getForeground()));
+			symbolGraphics.setDefaultForeground(symbol.getForegroundStyle(getGraphicalRepresentation().getForeground(), getFactory()));
 		}
 
 		Color fgColor = getGraphicalRepresentation().getForeground().getColor();
 		Color bgColor = Color.WHITE;
-		symbolGraphics.setDefaultBackground(symbol.getBackgroundStyle(fgColor, bgColor));
+		symbolGraphics.setDefaultBackground(symbol.getBackgroundStyle(fgColor, bgColor, getFactory()));
 
 		FGEArea symbolShape = symbol.getSymbol();
 

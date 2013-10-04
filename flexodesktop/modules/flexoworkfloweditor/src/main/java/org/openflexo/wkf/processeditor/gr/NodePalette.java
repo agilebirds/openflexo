@@ -151,7 +151,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 
 	public void paint(Graphics g, ProcessEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
-			FGEShape<?> fgeShape = nodeGR.getShape().getOutline();
+			FGEShape<?> fgeShape = nodeGR.getShapeSpecification().getOutline();
 			DrawingGraphicalRepresentation drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(

@@ -71,7 +71,7 @@ public abstract class AbstractActionNodeGR extends FlexoNodeGR<ActionNode> {
 
 	@Override
 	public Circle getShape() {
-		return (Circle) super.getShape();
+		return (Circle) super.getShapeSpecification();
 	}
 
 	/**

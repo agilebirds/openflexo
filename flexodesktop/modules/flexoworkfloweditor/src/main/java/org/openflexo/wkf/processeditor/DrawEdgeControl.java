@@ -182,7 +182,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point fromPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						from.getShape().getShape().getCenter(), from, controller.getScale());
+						from.getShapeSpecification().getShapeSpecification().getCenter(), from, controller.getScale());
 				Point toPoint = currentDraggingLocationInDrawingView;
 				if (to != null) {
 					/*toPoint = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(

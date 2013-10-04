@@ -22,6 +22,7 @@ package org.openflexo.fge.controller;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
@@ -33,20 +34,20 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 	private DrawingTreeNode<?, ?> initialNode;
 
 	public MouseDragControlImpl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
-			boolean altPressed) {
-		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button);
-		action = MouseDragControlActionType.NONE.makeAction();
+			boolean altPressed, FGEModelFactory factory) {
+		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
+		action = MouseDragControlActionType.NONE.makeAction(factory);
 	}
 
 	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed) {
-		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed);
+			boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		this.action = action;
 	}
 
 	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlActionType actionType, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed);
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		setActionType(actionType);
 	}
 
@@ -131,9 +132,9 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 
 	public void setActionType(MouseDragControlActionType actionType) {
 		if (actionType != null) {
-			action = actionType.makeAction();
+			action = actionType.makeAction(getFactory());
 		} else {
-			action = MouseDragControlActionType.NONE.makeAction();
+			action = MouseDragControlActionType.NONE.makeAction(getFactory());
 		}
 	}
 

@@ -100,11 +100,11 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						fromRole.getShape().getShape().getCenter(), fromRole, controller.getScale());
+						fromRole.getShape().getShapeSpecification().getCenter(), fromRole, controller.getScale());
 				Point to = currentDraggingLocationInDrawingView;
 				if (toRole != null) {
 					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-							toRole.getShape().getShape().getCenter(), toRole, controller.getScale());
+							toRole.getShape().getShapeSpecification().getCenter(), toRole, controller.getScale());
 					g.setColor(WKFCst.OK);
 				} else {
 					g.setColor(Color.RED);

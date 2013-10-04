@@ -34,7 +34,6 @@ public class FGEGeometricGraphicsImpl extends FGEGraphicsImpl implements FGEGeom
 	}
 
 	@Override
-	@Override
 	public GeometricGraphicalRepresentation getGraphicalRepresentation() {
 		return (GeometricGraphicalRepresentation) super.getGraphicalRepresentation();
 	}

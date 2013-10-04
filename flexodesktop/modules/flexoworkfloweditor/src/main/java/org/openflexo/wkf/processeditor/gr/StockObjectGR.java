@@ -86,8 +86,8 @@ public class StockObjectGR extends ArtefactGR<WKFStockObject> {
 			FGESteppedDimensionConstraint constraint = getDrawing().getDrawingGraphicalRepresentation().getDimensionConstraintsForObject(
 					this);
 			if (constraint != null) {
-				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep() / getShape().getShape().getEmbeddingBounds().width,
-						constraint.getVerticalStep() / getShape().getShape().getEmbeddingBounds().height);
+				return new FGESteppedDimensionConstraint(constraint.getHorizontalStep() / getShapeSpecification().getShapeSpecification().getEmbeddingBounds().width,
+						constraint.getVerticalStep() / getShapeSpecification().getShapeSpecification().getEmbeddingBounds().height);
 			}
 			return constraint;
 		}

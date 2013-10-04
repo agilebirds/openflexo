@@ -61,8 +61,8 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.controller.DrawingControllerImpl.EditorTool;
@@ -71,6 +71,7 @@ import org.openflexo.fge.controller.RectangleSelectingAction;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.impl.RootNodeImpl;
 import org.openflexo.fge.notifications.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
@@ -106,7 +107,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	protected FGEDrawingGraphics graphics;
 
-	private static final FGEModelFactory PAINT_FACTORY = FGEUtils.TOOLS_FACTORY;
+	private static final FGEModelFactory PAINT_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
 	private Rectangle drawnRectangle = new Rectangle();
 	private BufferedImage capturedDraggedNodeImage;
@@ -554,7 +555,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 		if (!isBuffering) {
 
-			FGEDrawingGraphicsImpl graphics = drawing.getRoot().getGraphics();
+			FGEDrawingGraphicsImpl graphics = ((RootNodeImpl<?>) drawing.getRoot()).getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
 			graphics.createGraphics(g2, getController());
 

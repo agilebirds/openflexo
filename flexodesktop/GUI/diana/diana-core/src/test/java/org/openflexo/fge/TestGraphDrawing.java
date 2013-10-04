@@ -23,7 +23,7 @@ public class TestGraphDrawing {
 
 	@BeforeClass
 	public static void beforeClass() throws ModelDefinitionException {
-		FACTORY = new FGEModelFactory();
+		FACTORY = new FGEModelFactoryImpl();
 	}
 
 	@AfterClass

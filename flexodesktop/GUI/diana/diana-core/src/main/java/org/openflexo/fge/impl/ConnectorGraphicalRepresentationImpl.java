@@ -16,7 +16,6 @@ import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.controller.MouseClickControlImpl;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
@@ -83,13 +82,13 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
-		addToMouseClickControls(MouseClickControlImpl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
@@ -149,12 +148,12 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// *******************************************************************************
 
 	@Override
-	public ConnectorSpecification getConnector() {
+	public ConnectorSpecification getConnectorSpecification() {
 		return connector;
 	}
 
 	@Override
-	public void setConnector(ConnectorSpecification aConnector) {
+	public void setConnectorSpecification(ConnectorSpecification aConnector) {
 		if (connector != aConnector) {
 			if (connector != null) {
 				connector.deleteObserver(this);
@@ -286,7 +285,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	@Override
 	public void setConnectorType(ConnectorType connectorType) {
 		if (getConnectorType() != connectorType) {
-			setConnector(getFactory().makeConnector(connectorType, this));
+			setConnectorSpecification(getFactory().makeConnector(connectorType, this));
 		}
 	}
 
@@ -618,11 +617,6 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	public boolean hasFloatingLabel() {
 		return hasText();
 	}*/
-
-	@Override
-	public String getInspectorName() {
-		return "ConnectorGraphicalRepresentation.inspector";
-	}
 
 	@Override
 	public void update(Observable observable, Object notification) {

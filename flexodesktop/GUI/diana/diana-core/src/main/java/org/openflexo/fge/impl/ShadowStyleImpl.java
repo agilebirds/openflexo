@@ -17,6 +17,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private static ShadowStyleImpl makeNone() {
 		ShadowStyleImpl returned = new ShadowStyleImpl();
@@ -25,6 +26,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		return returned;
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private static ShadowStyleImpl makeDefault() {
 		return new ShadowStyleImpl();

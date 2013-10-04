@@ -31,6 +31,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -96,11 +97,13 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void startDragging(DrawingControllerImpl<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().addToTemporaryObjects(getNode());
-			controller.getPaintManager().invalidate(getNode());
+		if (controller instanceof DrawingControllerImpl) {
+			if (((DrawingControllerImpl<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
+				((DrawingControllerImpl<?>)controller).getPaintManager().addToTemporaryObjects(getNode());
+				((DrawingControllerImpl<?>)controller).getPaintManager().invalidate(getNode());
+			}
 		}
 		initialPolylin = getPolylin().clone();
 		// getConnector().setWasManuallyAdjusted(true);
@@ -108,12 +111,14 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void stopDragging(DrawingControllerImpl<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
 		super.stopDragging(controller, focused);
-		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().removeFromTemporaryObjects(getNode());
-			controller.getPaintManager().invalidate(getNode());
-			controller.getPaintManager().repaint(controller.getDrawingView());
+		if (controller instanceof DrawingControllerImpl) {
+		if (((DrawingControllerImpl<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
+			((DrawingControllerImpl<?>)controller).getPaintManager().removeFromTemporaryObjects(getNode());
+			((DrawingControllerImpl<?>)controller).getPaintManager().invalidate(getNode());
+			((DrawingControllerImpl<?>)controller).getPaintManager().repaint(((DrawingControllerImpl<?>)controller).getDrawingView());
+		}
 		}
 		// getConnector().setWasManuallyAdjusted(true);
 	}

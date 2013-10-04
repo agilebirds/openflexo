@@ -130,7 +130,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

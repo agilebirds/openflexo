@@ -21,6 +21,6 @@ package org.openflexo.fge.controller;
 
 import org.openflexo.fge.control.MouseControlAction;
 
-public abstract class MouseControlActionImpl implements MouseControlAction {
+public abstract class MouseControlActionImpl implements MouseControlAction<DrawingControllerImpl<?>> {
 
 }

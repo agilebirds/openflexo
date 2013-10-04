@@ -214,7 +214,7 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			g.useForegroundStyle(ForegroundStyle.makeStyle(Color.gray));
 
 			// Finds the bottomLeft in the view coordinates (we don't pass the scale here because it will be done by the graphics)
-			Point southWest = convertNormalizedPointToViewCoordinates(getShape().nearestOutlinePoint(bottomLeft), 1);
+			Point southWest = convertNormalizedPointToViewCoordinates(getShapeSpecification().nearestOutlinePoint(bottomLeft), 1);
 			southWest.y -= 1.5 * size;
 			southWest.x += size / 2;
 			g.drawCircle(new FGEPoint(southWest), dimension);

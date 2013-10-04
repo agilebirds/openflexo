@@ -163,7 +163,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

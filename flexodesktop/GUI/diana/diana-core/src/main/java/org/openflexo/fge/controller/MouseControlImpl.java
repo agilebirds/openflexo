@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.control.MouseControl;
 
@@ -38,6 +39,24 @@ public abstract class MouseControlImpl implements MouseControl {
 	public MouseButton button;
 
 	private boolean modelEditionAction = true;
+
+	private FGEModelFactory factory;
+
+	protected MouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed,
+			MouseButton button, FGEModelFactory factory) {
+		super();
+		name = aName;
+		this.shiftPressed = shiftPressed;
+		this.ctrlPressed = ctrlPressed;
+		this.metaPressed = metaPressed;
+		this.altPressed = altPressed;
+		this.button = button;
+		this.factory = factory;
+	}
+
+	public FGEModelFactory getFactory() {
+		return factory;
+	}
 
 	@Override
 	public boolean isApplicable(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent e) {
@@ -101,17 +120,6 @@ public abstract class MouseControlImpl implements MouseControl {
 	@Override
 	public boolean isModelEditionAction() {
 		return modelEditionAction;
-	}
-
-	protected MouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed,
-			MouseButton button) {
-		super();
-		name = aName;
-		this.shiftPressed = shiftPressed;
-		this.ctrlPressed = ctrlPressed;
-		this.metaPressed = metaPressed;
-		this.altPressed = altPressed;
-		this.button = button;
 	}
 
 	protected String getModifiersAsString() {

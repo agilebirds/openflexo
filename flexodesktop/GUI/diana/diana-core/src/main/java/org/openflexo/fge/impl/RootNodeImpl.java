@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
@@ -15,6 +16,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -24,6 +26,8 @@ import org.openflexo.fge.graphics.FGEDrawingDecorationGraphicsImpl;
 import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
 
 public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepresentation> implements RootNode<M> {
+
+	private static final Logger logger = Logger.getLogger(RootNodeImpl.class.getPackage().getName());
 
 	protected FGEDrawingGraphicsImpl graphics;
 	private FGEDrawingDecorationGraphicsImpl decorationGraphics;
@@ -105,14 +109,19 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl<?> controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
+		if (controller instanceof DrawingControllerImpl<?>) {
+		graphics.createGraphics(g2, (DrawingControllerImpl<?>)controller);
 		// If there is a decoration painter init its graphics
 		if (getGraphicalRepresentation().getDecorationPainter() != null) {
-			decorationGraphics.createGraphics(g2, controller);
+			decorationGraphics.createGraphics(g2, (DrawingControllerImpl<?>)controller);
 		}
-
+		}
+		else {
+			logger.warning("Unsupported controller: "+controller);
+		}
+		
 		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
 		if (getGraphicalRepresentation().getDecorationPainter() != null
 				&& getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {

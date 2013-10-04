@@ -13,11 +13,9 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.controller.MouseClickControlActionImpl.MouseClickControlActionType;
-import org.openflexo.fge.controller.MouseDragControlActionImpl.MouseDragControlActionType;
+import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
@@ -29,6 +27,7 @@ import org.openflexo.toolbox.ToolBox;
 
 public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShapeGraphicalRepresentation.class.getPackage().getName());
 
 	private double x = 0;
@@ -116,6 +115,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		init();
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation aGR, Object aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
@@ -129,18 +129,18 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 		// graphics = new FGEShapeGraphicsImpl(this);
 
-		addToMouseClickControls(MouseClickControlImpl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
-		addToMouseDragControls(MouseDragControlImpl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(MouseDragControlImpl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
-		addToMouseDragControls(MouseDragControlImpl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
+		addToMouseDragControls(getFactory().makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
+		addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+		addToMouseDragControls(getFactory().makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
 				MouseDragControlActionType.RECTANGLE_SELECTING));
 
 	}
@@ -445,7 +445,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	public final void setX(double aValue) {
 		FGENotification notification = requireChange(X, aValue);
 		if (notification != null) {
-			FGEPoint oldLocation = getLocation();
+			//FGEPoint oldLocation = getLocation();
 			x = aValue;
 			hasChanged(notification);
 			// notifyObjectMoved(oldLocation);
@@ -481,7 +481,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	public final void setY(double aValue) {
 		FGENotification notification = requireChange(Y, aValue);
 		if (notification != null) {
-			FGEPoint oldLocation = getLocation();
+			//FGEPoint oldLocation = getLocation();
 			y = aValue;
 			hasChanged(notification);
 			// notifyObjectMoved(oldLocation);
@@ -1737,12 +1737,12 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	}*/
 
 	@Override
-	public ShapeSpecification getShape() {
+	public ShapeSpecification getShapeSpecification() {
 		return shape;
 	}
 
 	@Override
-	public void setShape(ShapeSpecification aShape) {
+	public void setShapeSpecification(ShapeSpecification aShape) {
 		if (shape != aShape) {
 			if (shape != null) {
 				shape.deleteObserver(this);
@@ -1772,8 +1772,8 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	@Override
 	public void setShapeType(ShapeType shapeType) {
 		if (getShapeType() != shapeType) {
-			setShape(getFactory().makeShape(shapeType/*, this*/));
-			if (getShape().areDimensionConstrained()) {
+			setShapeSpecification(getFactory().makeShape(shapeType/*, this*/));
+			if (getShapeSpecification().areDimensionConstrained()) {
 				double newSize = Math.max(getWidth(), getHeight());
 				setWidth(newSize);
 				setHeight(newSize);

@@ -40,8 +40,8 @@ import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
@@ -178,7 +178,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			}
 			if (fgeFactory == null) {
 				logger.warning("Could not find any FGE factory, creating a default one");
-				fgeFactory = FGEUtils.TOOLS_FACTORY;
+				fgeFactory = FGECoreUtils.TOOLS_FACTORY;
 			}
 		}
 
@@ -420,7 +420,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
 
-			factory = FGEUtils.TOOLS_FACTORY;
+			factory = FGECoreUtils.TOOLS_FACTORY;
 
 			drawing = new DrawingImpl<BackgroundStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override

@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.FGEStyle;
 
 public abstract class FGEStyleImpl extends FGEObjectImpl implements FGEStyle {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGEStyleImpl.class.getPackage().getName());
 
 }

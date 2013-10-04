@@ -179,9 +179,10 @@ public class ResourceLocator {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
 				if (f.getName().startsWith("flexo") || f.getName().contains("connector")
-						|| f.getName().equals("technologyadaptersintegration")) {
+						|| f.getName().equals("technologyadaptersintegration") || f.getName().startsWith("diana")) {
 					addProjectResourceDirs(files, f);
-				} else if (f.isDirectory()) {
+				}
+				if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);
 				}
 			}

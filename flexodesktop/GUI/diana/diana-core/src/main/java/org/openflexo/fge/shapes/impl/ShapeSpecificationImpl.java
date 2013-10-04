@@ -22,8 +22,6 @@ package org.openflexo.fge.shapes.impl;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.impl.FGEObjectImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 
@@ -41,7 +39,7 @@ public abstract class ShapeSpecificationImpl extends FGEObjectImpl implements Sh
 
 	// private transient Vector<ControlPoint> _controlPoints = null;
 
-	private static final FGEModelFactory SHADOW_FACTORY = FGEUtils.TOOLS_FACTORY;
+	// private static final FGEModelFactory SHADOW_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
 	// *******************************************************************************
 	// * Constructor *

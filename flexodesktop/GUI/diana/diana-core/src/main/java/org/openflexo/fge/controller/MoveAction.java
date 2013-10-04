@@ -68,21 +68,21 @@ public class MoveAction extends MouseDragControlActionImpl {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on MOVE MouseDragControlActionImpl");
 		}
-		if (currentMove != null) {
-			Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-					controller.getDrawingView());
+			if (currentMove != null) {
+				Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						((DrawingControllerImpl<?>)controller).getDrawingView());
 
-			if (node instanceof ShapeNode
-					&& ((ShapeNode<?>) node).getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainer()
-					&& currentMove.isDnDPattern(newPointLocation, event) && currentDND == null) {
-				currentMove.stopDragging();
-				currentMove = null;
-				currentDND = new DNDInfo(this, (ShapeNode<?>) node, controller, event);
-			} else {
-				currentMove.moveTo(newPointLocation);
+				if (node instanceof ShapeNode
+						&& ((ShapeNode<?>) node).getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainer()
+						&& currentMove.isDnDPattern(newPointLocation, event) && currentDND == null) {
+					currentMove.stopDragging();
+					currentMove = null;
+					currentDND = new DNDInfo(this, (ShapeNode<?>) node, ((DrawingControllerImpl<?>)controller), event);
+				} else {
+					currentMove.moveTo(newPointLocation);
+				}
+				return true;
 			}
-			return true;
-		}
 		return false;
 	}
 
@@ -91,13 +91,13 @@ public class MoveAction extends MouseDragControlActionImpl {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse PRESSED on MOVE MouseDragControlActionImpl");
 		}
-		FGEView<?> view = controller.getDrawingView().viewForNode(node);
+		FGEView<?> view = ((DrawingControllerImpl<?>)controller).getDrawingView().viewForNode(node);
 		initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
 		if (node instanceof ShapeNode && !node.getGraphicalRepresentation().getIsReadOnly() && node.getDrawing().isEditable()
 				&& ((ShapeNode<?>) node).getGraphicalRepresentation().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 			// Let's go for a move
-			currentMove = new MoveInfo((ShapeNode<?>) node, event, view, controller);
-			controller.notifyWillMove(currentMove);
+			currentMove = new MoveInfo((ShapeNode<?>) node, event, view, ((DrawingControllerImpl<?>)controller));
+			((DrawingControllerImpl<?>)controller).notifyWillMove(currentMove);
 			return true;
 		}
 		return false;
@@ -113,7 +113,7 @@ public class MoveAction extends MouseDragControlActionImpl {
 			if (isSignificativeDrag) {
 				currentMove.stopDragging();
 			}
-			controller.notifyHasMoved(currentMove);
+			((DrawingControllerImpl<?>)controller).notifyHasMoved(currentMove);
 			currentMove = null;
 			return true;
 		}

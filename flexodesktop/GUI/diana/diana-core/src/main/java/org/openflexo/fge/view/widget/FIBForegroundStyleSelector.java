@@ -32,8 +32,8 @@ import javax.swing.JPanel;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -279,7 +279,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
 
-			factory = FGEUtils.TOOLS_FACTORY;
+			factory = FGECoreUtils.TOOLS_FACTORY;
 
 			drawing = new DrawingImpl<ForegroundStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override

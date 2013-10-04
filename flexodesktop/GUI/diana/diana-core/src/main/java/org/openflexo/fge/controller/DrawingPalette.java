@@ -49,6 +49,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -111,7 +112,7 @@ public class DrawingPalette {
 
 	public DrawingPalette(int width, int height, String title) {
 		try {
-			factory = new FGEModelFactory();
+			factory = new FGEModelFactoryImpl();
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}

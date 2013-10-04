@@ -104,7 +104,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 	}
 
 	@Override
-	public void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
+	public void addChild(DrawingTreeNode<?, ?> aChildNode) {
 		if (aChildNode == null) {
 			logger.warning("Cannot add null node");
 			return;
@@ -112,8 +112,8 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		if (childNodes.contains(aChildNode)) {
 			logger.warning("Node already present");
 		} else {
-			aChildNode.setParentNode(this);
-			childNodes.add(aChildNode);
+			((DrawingTreeNodeImpl<?,?>)aChildNode).setParentNode(this);
+			childNodes.add((DrawingTreeNodeImpl<?,?>)aChildNode);
 		}
 	}
 
@@ -186,6 +186,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		return getShapeFor(binding, aDrawable) != null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <O2> ShapeNode<O2> getShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable) {
 		for (DrawingTreeNode<?, ?> child : childNodes) {
@@ -201,6 +202,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		return getConnectorFor(binding, aDrawable) != null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <O2> ConnectorNode<O2> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable) {
 		for (DrawingTreeNode<?, ?> child : childNodes) {

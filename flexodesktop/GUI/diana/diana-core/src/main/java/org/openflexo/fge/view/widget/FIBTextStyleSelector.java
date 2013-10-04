@@ -31,8 +31,8 @@ import javax.swing.JPanel;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
@@ -270,7 +270,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			// setBackground(Color.WHITE);
 			setMinimumSize(new Dimension(40, 19));
 
-			factory = FGEUtils.TOOLS_FACTORY;
+			factory = FGECoreUtils.TOOLS_FACTORY;
 
 			drawing = new DrawingImpl<TextStylePreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
 				@Override
@@ -311,7 +311,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setHeight(20);
 			textGR.setX(0);
 			textGR.setY(0);
-			textGR.setText(FlexoLocalization.localizedForKey(FGEUtils.LOCALIZATION, "no_font_selected"));
+			textGR.setText(FlexoLocalization.localizedForKey(FGECoreUtils.LOCALIZATION, "no_font_selected"));
 			textGR.setIsFloatingLabel(false);
 			textGR.setRelativeTextX(0.5);
 			textGR.setRelativeTextY(0.35);

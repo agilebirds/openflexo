@@ -152,7 +152,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	public void paint(Graphics g, SwimmingLaneEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
-			FGEShape<?> fgeShape = nodeGR.getShape().getOutline();
+			FGEShape<?> fgeShape = nodeGR.getShapeSpecification().getOutline();
 			DrawingGraphicalRepresentation drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(

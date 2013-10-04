@@ -35,7 +35,6 @@ public class FGEDrawingGraphicsImpl extends FGEGraphicsImpl implements FGEDrawin
 	}
 
 	@Override
-	@Override
 	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return (DrawingGraphicalRepresentation) super.getGraphicalRepresentation();
 	}

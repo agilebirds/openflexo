@@ -22,6 +22,8 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.impl.ConnectorImpl;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -29,6 +31,7 @@ import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
@@ -86,7 +89,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	@Override
 	public ConnectorSpecification getConnectorSpecification() {
 		if (getGraphicalRepresentation() != null) {
-			return getGraphicalRepresentation().getConnector();
+			return getGraphicalRepresentation().getConnectorSpecification();
 		}
 		return null;
 	}
@@ -94,7 +97,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	@Override
 	public Connector<?> getConnector() {
 		if (connector == null && getGraphicalRepresentation() != null) {
-			connector = getGraphicalRepresentation().getConnector().makeConnector(this);
+			connector = getGraphicalRepresentation().getConnectorSpecification().makeConnector(this);
 		}
 		return connector;
 	}
@@ -240,8 +243,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	private void checkViewBounds() {
 		FGERectangle r = getConnector().getConnectorUsedBounds();
-		if (FGEUtils.checkDoubleIsAValue(r.getMinX()) && FGEUtils.checkDoubleIsAValue(r.getMinY())
-				&& FGEUtils.checkDoubleIsAValue(r.getMaxX()) && FGEUtils.checkDoubleIsAValue(r.getMaxY())) {
+		if (GeomUtils.checkDoubleIsAValue(r.getMinX()) && GeomUtils.checkDoubleIsAValue(r.getMinY())
+				&& GeomUtils.checkDoubleIsAValue(r.getMaxX()) && GeomUtils.checkDoubleIsAValue(r.getMaxY())) {
 			minX = Math.min(r.getMinX(), 0.0);
 			minY = Math.min(r.getMinY(), 0.0);
 			maxX = Math.max(r.getMaxX(), 1.0);
@@ -355,7 +358,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		/*if (!isRegistered()) {
 			setRegistered(true);
 		}*/
@@ -373,14 +376,18 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
-		graphics.createGraphics(g2, controller);
+		if (controller instanceof DrawingControllerImpl<?>) {
+			graphics.createGraphics(g2, (DrawingControllerImpl<?>) controller);
+		} else {
+			logger.warning("Unsupported controller: " + controller);
+		}
 
 		if (FGEConstants.DEBUG) {
 			g2.setColor(Color.PINK);
 			g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
 		}
 
-		if (getGraphicalRepresentation().getConnector() != null) {
+		if (getGraphicalRepresentation().getConnectorSpecification() != null) {
 
 			if (!isValidated()) {
 				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
@@ -429,16 +436,16 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 		if (notification instanceof FGENotification) {
 			// Those notifications are forwarded by my graphical representation
-			FGENotification notif = (FGENotification) notification;
+			// FGENotification notif = (FGENotification) notification;
 
 			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
-				getConnector().connectorWillBeModified();
+				((ConnectorImpl<?>) getConnector()).connectorWillBeModified();
 				// Propagate notification to views
 				setChanged();
 				notifyObservers(notification);
 			}
 			if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
-				getConnector().connectorHasBeenModified();
+				((ConnectorImpl<?>) getConnector()).connectorHasBeenModified();
 				// Propagate notification to views
 				setChanged();
 				notifyObservers(notification);
@@ -480,8 +487,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			return;
 		}
 		try {
-			if (forceRefresh || getConnector().needsRefresh()) {
-				getConnector().refreshConnector(forceRefresh);
+			if (forceRefresh || ((ConnectorImpl<?>) getConnector()).needsRefresh()) {
+				((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
 				checkViewBounds();
 				notifyConnectorModified();
 			}

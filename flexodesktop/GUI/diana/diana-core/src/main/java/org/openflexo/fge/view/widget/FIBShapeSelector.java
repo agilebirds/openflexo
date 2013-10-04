@@ -27,8 +27,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
@@ -66,7 +66,7 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
 
-	private static final FGEModelFactory SHAPE_FACTORY = FGEUtils.TOOLS_FACTORY;
+	private static final FGEModelFactory SHAPE_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
 	private ShapeSpecification _revertValue;
 

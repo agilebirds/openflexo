@@ -55,7 +55,7 @@ public class MessageGR extends ArtefactGR<WKFMessageArtifact> {
 
 	public MessageGR(WKFMessageArtifact dataSource, SwimmingLaneRepresentation aDrawing) {
 		super(dataSource, ShapeType.RECTANGLE, aDrawing);
-		((Rectangle) getShape()).setIsRounded(false);
+		((Rectangle) getShapeSpecification()).setIsRounded(false);
 		setIsFloatingLabel(true);
 		setForeground(FOREGROUND);
 		if (dataSource.isInitiating()) {

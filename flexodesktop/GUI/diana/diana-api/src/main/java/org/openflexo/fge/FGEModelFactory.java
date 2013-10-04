@@ -428,7 +428,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 	public LineConnectorSpecification makeLineConnector(ConnectorGraphicalRepresentation aGR) {
 		LineConnectorSpecification returned = newInstance(LineConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnector(returned);
+		aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -442,7 +442,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 	public CurveConnectorSpecification makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
 		CurveConnectorSpecification returned = newInstance(CurveConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnector(returned);
+		aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -456,7 +456,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 	public RectPolylinConnectorSpecification makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		RectPolylinConnectorSpecification returned = newInstance(RectPolylinConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnector(returned);
+		aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -470,7 +470,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 	public CurvedPolylinConnectorSpecification makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		CurvedPolylinConnectorSpecification returned = newInstance(CurvedPolylinConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnector(returned);
+		aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -915,7 +915,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 		return makeMouseClickControl(aName, button, clickCount, false, false, false, false);
 	}
 
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action) {
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?> action) {
 		return makeMouseClickControl(aName, button, clickCount, action, false, false, false, false);
 	}
 
@@ -966,7 +966,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 			MouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
 	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			MouseClickControlAction action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+			MouseClickControlAction<?> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
 	public MouseDragControl makeMouseDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, false, false, false, false);
@@ -1014,7 +1014,10 @@ public abstract class FGEModelFactory extends ModelFactory {
 	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlActionType actionType,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
-	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action,
+	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction<?> action,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
+	public abstract MouseDragControlAction<?> makeMouseDragControlAction(MouseDragControlActionType actionType);
+
+	public abstract MouseClickControlAction<?> makeMouseClickControlAction(MouseClickControlActionType actionType);
 }

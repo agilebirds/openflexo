@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.DrawingController;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
@@ -36,25 +37,24 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 	public MouseClickControlAction action;
 
 	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed) {
-		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button);
+			boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
 		this.clickCount = clickCount;
-		action = org.openflexo.fge.control.MouseClickControlActionType.NONE.makeAction();
+		action = MouseClickControlActionType.NONE.makeAction(factory);
 	}
 
-	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlAction action, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed);
+	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?> action, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		this.action = action;
 	}
 
 	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlActionType actionType,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed);
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		setActionType(actionType);
 	}
 
-	@Override
 	@Override
 	public boolean isApplicable(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent e) {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -91,7 +91,6 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 	}
 
 	@Override
-	@Override
 	public boolean isModelEditionAction() {
 		return getActionType() != MouseClickControlActionType.SELECTION
 				&& getActionType() != MouseClickControlActionType.MULTIPLE_SELECTION
@@ -110,9 +109,9 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 	@Override
 	public void setActionType(MouseClickControlActionType actionType) {
 		if (actionType != null) {
-			action = actionType.makeAction();
+			action = actionType.makeAction(getFactory());
 		} else {
-			action = MouseClickControlActionType.NONE.makeAction();
+			action = MouseClickControlActionType.NONE.makeAction(getFactory());
 		}
 	}
 

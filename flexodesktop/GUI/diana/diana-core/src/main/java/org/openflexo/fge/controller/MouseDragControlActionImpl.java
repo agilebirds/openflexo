@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.MouseDragControlAction;
 
-public abstract class MouseDragControlActionImpl extends MouseControlActionImpl implements MouseDragControlAction {
+public abstract class MouseDragControlActionImpl extends MouseControlActionImpl implements MouseDragControlAction<DrawingControllerImpl<?>> {
 
 	static final Logger logger = Logger.getLogger(MouseDragControlActionImpl.class.getPackage().getName());
 

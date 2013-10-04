@@ -39,6 +39,7 @@ import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.controller.DrawingControllerImpl;
 import org.openflexo.fge.controller.DrawingControllerImpl.EditorTool;
+import org.openflexo.fge.controller.MouseDragControlImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -140,7 +141,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 
 			// We have now performed all low-level possible actions, let's go for the registered mouse controls
-			for (MouseClickControlImpl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
+			for (MouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
 				if ((editable || !mouseClickControl.isModelEditionAction())
 						&& mouseClickControl.isApplicable(focusedObject, getController(), e)) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -346,8 +347,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
-		List<MouseDragControlImpl> applicableMouseDragControls = new ArrayList<MouseDragControlImpl>();
-		for (MouseDragControlImpl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
+		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
+		for (MouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
 			if ((editable || !mouseDragControl.isModelEditionAction()) && mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
 				if (logger.isLoggable(Level.FINE)) {
@@ -371,14 +372,14 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// Apply applicable mouse drag control
-		MouseDragControlImpl currentMouseDrag = applicableMouseDragControls.get(0);
+		MouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}
 		if (currentMouseDrag.handleMousePressed(focusedObject, getController(), e)) {
 			// Everything OK
 			if (getController() != null) {
-				getController().setCurrentMouseDrag(currentMouseDrag);
+				getController().setCurrentMouseDrag((MouseDragControlImpl) currentMouseDrag);
 			}
 		} else {
 			// Something failed, abort this drag

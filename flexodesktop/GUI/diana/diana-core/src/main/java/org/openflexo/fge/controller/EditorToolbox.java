@@ -166,7 +166,7 @@ public class EditorToolbox {
 					super.apply();
 					if (selectedShapes.size() > 0) {
 						for (ShapeNode<?> shape : selectedShapes) {
-							shape.getGraphicalRepresentation().setShape(getEditedObject().clone());
+							shape.getGraphicalRepresentation().setShapeSpecification(getEditedObject().clone());
 						}
 
 					} else {
@@ -223,7 +223,7 @@ public class EditorToolbox {
 			foregroundSelector.setEditedObject(controller.getCurrentForegroundStyle());
 		}
 		if (selectedShapes.size() > 0) {
-			shapeSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShape());
+			shapeSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShapeSpecification());
 			backgroundSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getBackground());
 			shadowStyleSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {

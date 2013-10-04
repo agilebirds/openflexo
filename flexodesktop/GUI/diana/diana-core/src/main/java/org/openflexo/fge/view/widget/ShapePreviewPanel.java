@@ -11,8 +11,8 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -55,7 +55,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	public ShapePreviewPanel(ShapeSpecification aShape) {
 		super(new BorderLayout());
 
-		factory = FGEUtils.TOOLS_FACTORY;
+		factory = FGECoreUtils.TOOLS_FACTORY;
 
 		// representedDrawing = new RepresentedDrawing();
 		// representedShape = new RepresentedShape();
@@ -110,7 +110,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setForeground(getForegroundStyle());
 		shapeGR.setBackground(getBackgroundStyle());
 		shapeGR.setShadowStyle(getShadowStyle());
-		shapeGR.setShape(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE));
+		shapeGR.setShapeSpecification(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE));
 		shapeGR.setIsSelectable(false);
 		shapeGR.setIsFocusable(false);
 		shapeGR.setIsReadOnly(true);
@@ -210,7 +210,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 		// getShape().updateShape();
 
-		shapeGR.setShape(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE));
+		shapeGR.setShapeSpecification(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE));
 		shapeGR.notifyShapeChanged();
 
 		shapeGR.setX(getShapeX());
@@ -225,12 +225,12 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	}
 
 	public ShapeSpecification getShape() {
-		return shapeGR.getShape();
+		return shapeGR.getShapeSpecification();
 	}
 
 	public void setShape(ShapeSpecification shape) {
-		if (shape != null && (shape != shapeGR.getShape() || !shape.equals(shapeGR.getShape()))) {
-			shapeGR.setShape(shape.clone());
+		if (shape != null && (shape != shapeGR.getShapeSpecification() || !shape.equals(shapeGR.getShapeSpecification()))) {
+			shapeGR.setShapeSpecification(shape.clone());
 			/*
 			 * if (shape.getShapeType() == ShapeType.CUSTOM_POLYGON) {
 			 * System.out.println("Go to edition mode");

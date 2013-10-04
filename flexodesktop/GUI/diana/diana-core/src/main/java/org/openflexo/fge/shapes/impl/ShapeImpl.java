@@ -43,6 +43,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
+import org.openflexo.fge.graphics.FGEShapeGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.ShapeSpecification;
@@ -97,7 +98,7 @@ public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape
 	@Override
 	@SuppressWarnings("unchecked")
 	public SS getShapeSpecification() {
-		return (SS) shapeNode.getGraphicalRepresentation().getShape();
+		return (SS) shapeNode.getGraphicalRepresentation().getShapeSpecification();
 	}
 
 	/**
@@ -341,42 +342,49 @@ public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape
 
 	@Override
 	public final void paintShadow(FGEShapeGraphics g) {
-		double deep = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowDepth();
-		int blur = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowBlur();
-		double viewWidth = shapeNode.getViewWidth(1.0);
-		double viewHeight = shapeNode.getViewHeight(1.0);
-		AffineTransform shadowTranslation = AffineTransform.getTranslateInstance(deep / viewWidth, deep / viewHeight);
 
-		int darkness = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowDarkness();
+		if (g instanceof FGEShapeGraphicsImpl) {
 
-		Graphics2D oldGraphics = g.cloneGraphics();
+			double deep = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowDepth();
+			int blur = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowBlur();
+			double viewWidth = shapeNode.getViewWidth(1.0);
+			double viewHeight = shapeNode.getViewHeight(1.0);
+			AffineTransform shadowTranslation = AffineTransform.getTranslateInstance(deep / viewWidth, deep / viewHeight);
 
-		Area clipArea = new Area(new java.awt.Rectangle(0, 0, shapeNode.getViewWidth(g.getScale()), shapeNode.getViewHeight(g.getScale())));
-		Area a = new Area(getShape());
-		a.transform(shapeNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-		clipArea.subtract(a);
-		g.getGraphics().clip(clipArea);
+			int darkness = shapeNode.getGraphicalRepresentation().getShadowStyle().getShadowDarkness();
 
-		Color shadowColor = new Color(darkness, darkness, darkness);
-		ForegroundStyle foreground = SHADOW_FACTORY.makeForegroundStyle(shadowColor);
-		foreground.setUseTransparency(true);
-		foreground.setTransparencyLevel(0.5f);
-		BackgroundStyle background = SHADOW_FACTORY.makeColoredBackground(shadowColor);
-		background.setUseTransparency(true);
-		background.setTransparencyLevel(0.5f);
-		g.setDefaultForeground(foreground);
-		g.setDefaultBackground(background);
+			Graphics2D oldGraphics = ((FGEShapeGraphicsImpl) g).cloneGraphics();
 
-		for (int i = blur - 1; i >= 0; i--) {
-			float transparency = 0.4f - i * 0.4f / blur;
-			foreground.setTransparencyLevel(transparency);
-			background.setTransparencyLevel(transparency);
-			AffineTransform at = AffineTransform.getScaleInstance((i + 1 + viewWidth) / viewWidth, (i + 1 + viewHeight) / viewHeight);
-			at.concatenate(shadowTranslation);
-			getShape().transform(at).paint(g);
+			Area clipArea = new Area(new java.awt.Rectangle(0, 0, shapeNode.getViewWidth(g.getScale()), shapeNode.getViewHeight(g
+					.getScale())));
+			Area a = new Area(getShape());
+			a.transform(shapeNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+			clipArea.subtract(a);
+			((FGEShapeGraphicsImpl) g).getGraphics().clip(clipArea);
+
+			Color shadowColor = new Color(darkness, darkness, darkness);
+			ForegroundStyle foreground = SHADOW_FACTORY.makeForegroundStyle(shadowColor);
+			foreground.setUseTransparency(true);
+			foreground.setTransparencyLevel(0.5f);
+			BackgroundStyle background = SHADOW_FACTORY.makeColoredBackground(shadowColor);
+			background.setUseTransparency(true);
+			background.setTransparencyLevel(0.5f);
+			g.setDefaultForeground(foreground);
+			g.setDefaultBackground(background);
+
+			for (int i = blur - 1; i >= 0; i--) {
+				float transparency = 0.4f - i * 0.4f / blur;
+				foreground.setTransparencyLevel(transparency);
+				background.setTransparencyLevel(transparency);
+				AffineTransform at = AffineTransform.getScaleInstance((i + 1 + viewWidth) / viewWidth, (i + 1 + viewHeight) / viewHeight);
+				at.concatenate(shadowTranslation);
+				getShape().transform(at).paint(g);
+			}
+
+			((FGEShapeGraphicsImpl) g).releaseClonedGraphics(oldGraphics);
+		} else {
+			logger.warning("Not support FGEGraphics: " + g);
 		}
-
-		g.releaseClonedGraphics(oldGraphics);
 	}
 
 	@Override

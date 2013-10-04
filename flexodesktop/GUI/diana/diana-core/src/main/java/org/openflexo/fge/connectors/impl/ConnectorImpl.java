@@ -73,7 +73,7 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	@Override
 	@SuppressWarnings("unchecked")
 	public CS getConnectorSpecification() {
-		return (CS) connectorNode.getGraphicalRepresentation().getConnector();
+		return (CS) connectorNode.getGraphicalRepresentation().getConnectorSpecification();
 	}
 
 	@Override

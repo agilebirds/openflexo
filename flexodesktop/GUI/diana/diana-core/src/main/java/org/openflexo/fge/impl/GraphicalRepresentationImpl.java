@@ -17,14 +17,11 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
-import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
-import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.controller.MouseClickControlImpl;
-import org.openflexo.fge.controller.MouseDragControlImpl;
+import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GRDeleted;
@@ -77,8 +74,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	private boolean readOnly = false;
 	private boolean labelEditable = true;
 
-	private Vector<MouseClickControlImpl> mouseClickControls;
-	private Vector<MouseDragControlImpl> mouseDragControls;
+	private Vector<MouseClickControl> mouseClickControls;
+	private Vector<MouseDragControl> mouseDragControls;
 
 	private String toolTipText = null;
 
@@ -92,7 +89,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// private Vector<Object> ancestors;
 
 	// private boolean isRegistered = false;
-	private boolean hasText = true;
+	//private boolean hasText = true;
 
 	/*public static GRParameter<?> getParameter(String parameterName) {
 		return GRParameter.getGRParameter(GraphicalRepresentation.class, parameterName);
@@ -112,11 +109,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	public GraphicalRepresentationImpl() {
 		super();
 
-		mouseClickControls = new Vector<MouseClickControlImpl>();
-		mouseDragControls = new Vector<MouseDragControlImpl>();
+		mouseClickControls = new Vector<MouseClickControl>();
+		mouseDragControls = new Vector<MouseDragControl>();
 
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private GraphicalRepresentationImpl(Drawing<?> aDrawing) {
 		this();
@@ -182,6 +180,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected final void _setParameterValueWith(GRParameter<?> parameter, GraphicalRepresentation gr) {
 		Class<?> type = getTypeForKey(parameter.getName());
 		if (type.isPrimitive()) {
@@ -232,7 +231,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			// IMPORTANT !!!!!!
 			// Special case for DataBinding, just copy unparsed string, and let framework recompute the binding
 			if (type.equals(DataBinding.class)) {
-				value = new DataBinding(((DataBinding) value).toString());
+				value = new DataBinding<Object>(((DataBinding<Object>) value).toString());
 			}
 			Object currentValue = objectForKey(parameter.getName());
 			if (value != currentValue) {
@@ -1207,12 +1206,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}*/
 
 	@Override
-	public Vector<MouseClickControlImpl> getMouseClickControls() {
+	public Vector<MouseClickControl> getMouseClickControls() {
 		return mouseClickControls;
 	}
 
 	@Override
-	public void setMouseClickControls(Vector<MouseClickControlImpl> mouseClickControls) {
+	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls) {
 		FGENotification notification = requireChange(MOUSE_CLICK_CONTROLS, mouseClickControls);
 		if (notification != null) {
 			this.mouseClickControls.addAll(mouseClickControls);
@@ -1221,12 +1220,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void addToMouseClickControls(MouseClickControlImpl mouseClickControl) {
+	public void addToMouseClickControls(MouseClickControl mouseClickControl) {
 		addToMouseClickControls(mouseClickControl, false);
 	}
 
 	@Override
-	public void addToMouseClickControls(MouseClickControlImpl mouseClickControl, boolean isPrioritar) {
+	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar) {
 		if (isPrioritar) {
 			mouseClickControls.insertElementAt(mouseClickControl, 0);
 		} else {
@@ -1237,19 +1236,19 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void removeFromMouseClickControls(MouseClickControlImpl mouseClickControl) {
+	public void removeFromMouseClickControls(MouseClickControl mouseClickControl) {
 		mouseClickControls.remove(mouseClickControl);
 		setChanged();
 		notifyObservers(new FGENotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
 	}
 
 	@Override
-	public Vector<MouseDragControlImpl> getMouseDragControls() {
+	public Vector<MouseDragControl> getMouseDragControls() {
 		return mouseDragControls;
 	}
 
 	@Override
-	public void setMouseDragControls(Vector<MouseDragControlImpl> mouseDragControls) {
+	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls) {
 		FGENotification notification = requireChange(MOUSE_DRAG_CONTROLS, mouseDragControls);
 		if (notification != null) {
 			this.mouseDragControls.addAll(mouseDragControls);
@@ -1258,12 +1257,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void addToMouseDragControls(MouseDragControlImpl mouseDragControl) {
+	public void addToMouseDragControls(MouseDragControl mouseDragControl) {
 		addToMouseDragControls(mouseDragControl, false);
 	}
 
 	@Override
-	public void addToMouseDragControls(MouseDragControlImpl mouseDragControl, boolean isPrioritar) {
+	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar) {
 		if (isPrioritar) {
 			mouseDragControls.insertElementAt(mouseDragControl, 0);
 		} else {
@@ -1274,43 +1273,43 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void removeFromMouseDragControls(MouseDragControlImpl mouseDragControl) {
+	public void removeFromMouseDragControls(MouseDragControl mouseDragControl) {
 		mouseDragControls.remove(mouseDragControl);
 		setChanged();
 		notifyObservers(new FGENotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
 	}
 
 	@Override
-	public MouseClickControlImpl createMouseClickControl() {
-		MouseClickControlImpl returned = MouseClickControlImpl.makeMouseClickControl("Noname", MouseButton.LEFT, 1);
+	public MouseClickControl createMouseClickControl() {
+		MouseClickControl returned = getFactory().makeMouseClickControl("Noname", MouseButton.LEFT, 1);
 		addToMouseClickControls(returned);
 		return returned;
 	}
 
 	@Override
-	public void deleteMouseClickControl(MouseClickControlImpl mouseClickControl) {
+	public void deleteMouseClickControl(MouseClickControl mouseClickControl) {
 		removeFromMouseClickControls(mouseClickControl);
 	}
 
 	@Override
-	public boolean isMouseClickControlDeletable(MouseClickControlImpl mouseClickControl) {
+	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl) {
 		return true;
 	}
 
 	@Override
-	public MouseDragControlImpl createMouseDragControl() {
-		MouseDragControlImpl returned = MouseDragControlImpl.makeMouseDragControl("Noname", MouseButton.LEFT);
+	public MouseDragControl createMouseDragControl() {
+		MouseDragControl returned = getFactory().makeMouseDragControl("Noname", MouseButton.LEFT);
 		addToMouseDragControls(returned);
 		return returned;
 	}
 
 	@Override
-	public void deleteMouseDragControl(MouseDragControlImpl mouseDragControl) {
+	public void deleteMouseDragControl(MouseDragControl mouseDragControl) {
 		removeFromMouseDragControls(mouseDragControl);
 	}
 
 	@Override
-	public boolean isMouseDragControlDeletable(MouseDragControlImpl mouseDragControl) {
+	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl) {
 		return true;
 	}
 
@@ -1540,7 +1539,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void notifyBindingChanged(DataBinding binding) {
+	public void notifyBindingChanged(DataBinding<?> binding) {
 		logger.fine("notifyBindingChanged() for " + binding);
 	}
 

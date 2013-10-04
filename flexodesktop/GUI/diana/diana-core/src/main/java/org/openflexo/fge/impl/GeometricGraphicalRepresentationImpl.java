@@ -7,18 +7,17 @@ import java.util.logging.Logger;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.controller.MouseClickControlActionImpl.MouseClickControlActionType;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ToolBox;
 
 public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements GeometricGraphicalRepresentation {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeometricGraphicalRepresentation.class.getPackage().getName());
 
 	// *******************************************************************************
@@ -29,7 +28,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// * Fields *
 	// *******************************************************************************
 
-	private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
+	//private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
@@ -46,6 +45,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 		super();
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private GeometricGraphicalRepresentationImpl(FGEArea anObject, Object aDrawable, Drawing<?> aDrawing) {
 		this();
@@ -62,13 +62,13 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 		setGeometricObject(anObject);
 
-		addToMouseClickControls(MouseClickControlImpl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
+		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
-			addToMouseClickControls(MouseClickControlImpl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
+			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
@@ -183,11 +183,6 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// *******************************************************************************
 	// * Methods *
 	// *******************************************************************************
-
-	@Override
-	public String getInspectorName() {
-		return "GeometricGraphicalRepresentation.inspector";
-	}
 
 	@Override
 	public void update(Observable observable, Object notification) {

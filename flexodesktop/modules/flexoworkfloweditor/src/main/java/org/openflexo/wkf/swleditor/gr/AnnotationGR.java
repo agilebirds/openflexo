@@ -215,7 +215,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 				getAnnotation().setDashStyle(DashStyle.DOT_LINES_DASHES);
 			}
 			setForeground(ForegroundStyle.makeStyle(getAnnotation().getBorderColor(), 1.0f, getAnnotation().getDashStyle()));
-			((Rectangle) getShape()).setIsRounded(getAnnotation().getIsRounded());
+			((Rectangle) getShapeSpecification()).setIsRounded(getAnnotation().getIsRounded());
 			setIsFloatingLabel(true);
 			setAdjustMinimalWidthToLabelWidth(false);
 			setAdjustMinimalHeightToLabelHeight(false);

@@ -62,7 +62,7 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 	@Override
 	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 		super(ShapeType.RECTANGLE, aDMEntity, aDrawing);
 		// setText(getRole().getName());
 		setIsFloatingLabel(false);
-		getShape().setIsRounded(false);
+		getShapeSpecification().setIsRounded(false);
 		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		updateStyles();
 		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER, ENTITY_BORDER));
@@ -250,8 +250,8 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	}
 
 	@Override
-	public Rectangle getShape() {
-		return (Rectangle) super.getShape();
+	public Rectangle getShapeSpecification() {
+		return (Rectangle) super.getShapeSpecification();
 	}
 
 	@Override

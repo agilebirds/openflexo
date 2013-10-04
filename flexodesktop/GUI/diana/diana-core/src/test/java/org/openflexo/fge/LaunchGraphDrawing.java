@@ -129,7 +129,7 @@ public class LaunchGraphDrawing {
 
 		JPanel panel = new JPanel(new BorderLayout());
 
-		final TestInspector inspector = new TestInspector();
+		// final TestInspector inspector = new TestInspector();
 
 		final GraphDrawing1 d = makeDrawing();
 		final DrawingControllerImpl<Graph> dc = new TestDrawingController(d);
@@ -151,7 +151,7 @@ public class LaunchGraphDrawing {
 		inspectButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				inspector.getWindow().setVisible(true);
+				// inspector.getWindow().setVisible(true);
 			}
 		});
 
@@ -210,14 +210,14 @@ public class LaunchGraphDrawing {
 		dc2.getDrawingView().setName("[CACHE]");
 		dc2.enablePaintingCache();
 
-		dc.addObserver(inspector);
-		inspector.getWindow().setVisible(true);
+		// dc.addObserver(inspector);
+		// inspector.getWindow().setVisible(true);
 	}
 
 	public static GraphDrawing1 makeDrawing() {
 		FGEModelFactory factory = null;
 		try {
-			factory = new FGEModelFactory();
+			factory = new FGEModelFactoryImpl();
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}

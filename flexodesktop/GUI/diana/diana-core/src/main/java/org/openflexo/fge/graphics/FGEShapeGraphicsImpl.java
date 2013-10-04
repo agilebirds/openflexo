@@ -34,7 +34,6 @@ public class FGEShapeGraphicsImpl extends FGEGraphicsImpl implements FGEShapeGra
 	}
 
 	@Override
-	@Override
 	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 	}

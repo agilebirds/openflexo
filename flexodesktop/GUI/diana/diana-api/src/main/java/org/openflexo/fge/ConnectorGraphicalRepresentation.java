@@ -147,10 +147,10 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	@Getter(value = CONNECTOR_KEY)
 	@XMLElement
-	public ConnectorSpecification getConnector();
+	public ConnectorSpecification getConnectorSpecification();
 
 	@Setter(value = CONNECTOR_KEY)
-	public void setConnector(ConnectorSpecification aConnector);
+	public void setConnectorSpecification(ConnectorSpecification aConnector);
 
 	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
