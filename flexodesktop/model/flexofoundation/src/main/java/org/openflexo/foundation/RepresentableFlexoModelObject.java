@@ -353,8 +353,8 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 
 	public void setX(double x, String context) {
 		x = Math.round(x);
-		Point2D oldLocation = getLocation(context);
-		if (x != getX(context)) {
+		if (!hasLocationForContext(context) || x != getX(context)) {
+			Point2D oldLocation = getLocation(context);
 			_setGraphicalPropertyForKey(x, POSX + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectLocationChanged(oldLocation, getLocation(context), context));
@@ -375,8 +375,8 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 
 	public void setY(double y, String context) {
 		y = Math.round(y);
-		Point2D oldLocation = getLocation(context);
-		if (y != getY(context)) {
+		if (!hasLocationForContext(context) || y != getY(context)) {
+			Point2D oldLocation = getLocation(context);
 			_setGraphicalPropertyForKey(y, POSY + "_" + context);
 			setChanged();
 			notifyObservers(new ObjectLocationChanged(oldLocation, getLocation(context), context));
@@ -418,7 +418,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setWidth(double width, String context) {
-		if (width != getWidth(context)) {
+		if (!hasDimensionForContext(context) || width != getWidth(context)) {
 			Dimension2D oldDimension = getDimension(context);
 			_setGraphicalPropertyForKey(width, WIDTH + "_" + context);
 			setChanged();
@@ -443,7 +443,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setHeight(double height, String context) {
-		if (height != getHeight(context)) {
+		if (!hasDimensionForContext(context) || height != getHeight(context)) {
 			Dimension2D oldDimension = getDimension(context);
 			_setGraphicalPropertyForKey(height, HEIGHT + "_" + context);
 			setChanged();
@@ -468,7 +468,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setLabelX(double x, String context) {
-		if (x != getLabelX(context)) {
+		if (!hasLabelLocationForContext(context) || x != getLabelX(context)) {
 			_setGraphicalPropertyForKey(x, getLabelXKeyForContext(context));
 			setChanged();
 			notifyObservers(new LabelLocationChanged());
@@ -488,7 +488,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public void setLabelY(double y, String context) {
-		if (y != getLabelY(context)) {
+		if (!hasLabelLocationForContext(context) || y != getLabelY(context)) {
 			_setGraphicalPropertyForKey(y, getLabelYKeyForContext(context));
 			setChanged();
 			notifyObservers(new LabelLocationChanged());
