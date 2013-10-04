@@ -16,8 +16,11 @@ import javax.activation.FileTypeMap;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openflexo.ws.jira.action.JIRAAction;
+import org.openflexo.ws.jira.model.JIRAErrors;
 import org.openflexo.ws.jira.model.JIRAIssue;
 import org.openflexo.ws.jira.result.JIRAResult;
+
+import com.google.gson.JsonSyntaxException;
 
 public class JIRAClient {
 
@@ -63,11 +66,12 @@ public class JIRAClient {
 		this.password = password;
 	}
 
-	public <A extends JIRAAction<R>, R extends JIRAResult> R submit(A submit, Method method) throws IOException {
+	public <A extends JIRAAction<R>, R extends JIRAResult> R submit(A submit, Method method) throws IOException, JIRAException {
 		return submit(submit, method, null);
 	}
 
-	public <A extends JIRAAction<R>, R extends JIRAResult> R submit(A submit, Method method, Progress progress) throws IOException {
+	public <A extends JIRAAction<R>, R extends JIRAResult> R submit(A submit, Method method, Progress progress) throws IOException,
+			JIRAException {
 		URL url = new URL(jiraBaseURL, REST_API_ROOT + SUBMIT_ISSUE_REST_API);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setChunkedStreamingMode(4096);
@@ -108,7 +112,13 @@ public class JIRAClient {
 			}
 			String json2 = new String(baos.toByteArray(), "UTF-8");
 			if (isErrorStatus) {
-				throw new IOException(json2 + "\n(Status: " + connection.getResponseCode() + ")");
+				try {
+					JIRAErrors errors = JIRAGson.getInstance().fromJson(json2, JIRAErrors.class);
+					throw new JIRAException(errors);
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
+					throw new IOException(json2 + "\n(Status: " + connection.getResponseCode() + ")");
+				}
 			}
 			return JIRAGson.getInstance().fromJson(json2, submit.getResultClass());
 		} finally {
