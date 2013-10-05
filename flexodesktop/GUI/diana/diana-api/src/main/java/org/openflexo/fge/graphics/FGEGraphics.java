@@ -10,7 +10,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 
@@ -24,13 +24,13 @@ public interface FGEGraphics extends AbstractFGEGraphics {
 
 	public abstract GraphicalRepresentation getGraphicalRepresentation();
 
-	public abstract DrawingController<?> getController();
+	public abstract DianaEditor<?> getController();
 
 	public abstract double getScale();
 
 	public abstract void delete();
 
-	// public abstract void createGraphics(Graphics2D graphics2D, DrawingController<?> controller);
+	// public abstract void createGraphics(Graphics2D graphics2D, DianaEditor<?> controller);
 
 	// public abstract void releaseGraphics();
 

@@ -29,7 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.control.DrawingController;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 

@@ -25,9 +25,9 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.controller.CustomClickControlAction;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.MouseClickControlImpl;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.actions.CustomClickControlAction;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.view.FGEView;
 
@@ -36,13 +36,12 @@ public class ShowContextualMenuControl extends MouseClickControlImpl {
 	public ShowContextualMenuControl(DiagramFactory factory) {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DrawingControllerImpl<?> controller, java.awt.event.MouseEvent event) {
+			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DianaInteractiveViewer<?> controller, java.awt.event.MouseEvent event) {
 				FGEView view = controller.getDrawingView().viewForNode(dtn);
 				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-				((DiagramEditorController) controller).showContextualMenu(dtn, view, newPoint);
+				((DianaEditor) controller).showContextualMenu(dtn, view, newPoint);
 				return false;
 			}
 		}, false, false, false, false, factory);
 	}
-
 }

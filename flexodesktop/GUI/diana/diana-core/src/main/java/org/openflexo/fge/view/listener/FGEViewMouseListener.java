@@ -35,11 +35,11 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseDragControl;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingControllerImpl.EditorTool;
-import org.openflexo.fge.controller.MouseDragControlImpl;
+import org.openflexo.fge.control.AbstractDianaEditor.EditorTool;
+import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -432,7 +432,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
 		if (getController().getCurrentMouseDrag() != null) {
-			DrawingControllerImpl<?> controller = getController();
+			AbstractDianaEditor<?> controller = getController();
 			controller.getCurrentMouseDrag().handleMouseReleased(getController(), e);
 			controller.setCurrentMouseDrag(null);
 		}
@@ -601,7 +601,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 	}
 
-	public DrawingControllerImpl<?> getController() {
+	public AbstractDianaEditor<?> getController() {
 		return view.getController();
 	}
 

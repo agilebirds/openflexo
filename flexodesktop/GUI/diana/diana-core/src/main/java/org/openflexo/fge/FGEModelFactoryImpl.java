@@ -17,6 +17,7 @@ import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
@@ -24,18 +25,17 @@ import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
 import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
-import org.openflexo.fge.controller.CustomClickControlAction;
-import org.openflexo.fge.controller.CustomDragControlAction;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.MouseClickControlActionImpl;
-import org.openflexo.fge.controller.MouseClickControlImpl;
-import org.openflexo.fge.controller.MouseDragControlActionImpl;
-import org.openflexo.fge.controller.MouseDragControlImpl;
-import org.openflexo.fge.controller.MoveAction;
-import org.openflexo.fge.controller.MultipleSelectionAction;
-import org.openflexo.fge.controller.RectangleSelectingAction;
-import org.openflexo.fge.controller.SelectionAction;
-import org.openflexo.fge.controller.ZoomAction;
+import org.openflexo.fge.control.actions.CustomClickControlAction;
+import org.openflexo.fge.control.actions.CustomDragControlAction;
+import org.openflexo.fge.control.actions.MouseClickControlActionImpl;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
+import org.openflexo.fge.control.actions.MouseDragControlActionImpl;
+import org.openflexo.fge.control.actions.MouseDragControlImpl;
+import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.control.actions.MultipleSelectionAction;
+import org.openflexo.fge.control.actions.RectangleSelectingAction;
+import org.openflexo.fge.control.actions.SelectionAction;
+import org.openflexo.fge.control.actions.ZoomAction;
 import org.openflexo.fge.impl.BackgroundImageBackgroundStyleImpl;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.fge.impl.ColorBackgroundStyleImpl;
@@ -201,19 +201,19 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 			return new CustomDragControlAction() {
 
 				@Override
-				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
 					logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlActionImpl");
 					return true;
 				}
 
 				@Override
-				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
 					logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlActionImpl");
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event,
+				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
 						boolean isSignificativeDrag) {
 					logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlActionImpl");
 					return false;
@@ -237,7 +237,7 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		case CUSTOM:
 			return new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+				public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
 					logger.info("Perform undefined CUSTOM MouseClickControlActionImpl");
 					return true;
 				}

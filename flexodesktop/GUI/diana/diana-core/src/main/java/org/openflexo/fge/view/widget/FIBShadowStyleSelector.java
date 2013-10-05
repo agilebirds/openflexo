@@ -40,7 +40,8 @@ import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -256,7 +257,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	protected class ShadowStylePreviewPanel extends JPanel {
 		private Drawing<ShadowStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingControllerImpl<ShadowStylePreviewPanel> controller;
+		private AbstractDianaEditor<ShadowStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation shapeGR;
 
 		private FGEModelFactory factory;
@@ -320,7 +321,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 			update();
 
-			controller = new DrawingControllerImpl<ShadowStylePreviewPanel>(drawing, factory);
+			controller = new DianaViewer<ShadowStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 
 		}

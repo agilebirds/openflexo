@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
@@ -77,7 +77,7 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		retrieveInfos();
 		logger.info("Start dragging: " + draggingAuthorizedArea);
@@ -133,7 +133,7 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 	}
 
 	/*@Override
-	public void stopDragging(DrawingControllerImpl controller)
+	public void stopDragging(AbstractDianaEditor controller)
 	{
 		if (afterNextSegment != null && afterNextSegment.overlap(currentSegment)) {
 			getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(1);

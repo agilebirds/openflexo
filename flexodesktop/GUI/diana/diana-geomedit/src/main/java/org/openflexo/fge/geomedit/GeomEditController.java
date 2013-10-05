@@ -42,7 +42,7 @@ import javax.swing.tree.TreePath;
 
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geomedit.edition.CreateBandFromLines;
 import org.openflexo.fge.geomedit.edition.CreateCircleWithCenterAndPoint;
@@ -78,7 +78,7 @@ import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public class GeomEditController extends DrawingControllerImpl<GeometricDrawing> implements TreeSelectionListener {
+public class GeomEditController extends AbstractDianaEditor<GeometricDrawing> implements TreeSelectionListener {
 	private static final Logger logger = FlexoLogger.getLogger(GeomEditController.class.getPackage().getName());
 
 	private JPopupMenu contextualMenu;

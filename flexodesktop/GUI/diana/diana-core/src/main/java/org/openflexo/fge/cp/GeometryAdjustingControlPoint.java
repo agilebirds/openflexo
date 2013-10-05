@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
@@ -62,7 +62,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 	}
 
 	public abstract void update(O geometricObject);

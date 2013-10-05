@@ -21,7 +21,8 @@ import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
@@ -35,7 +36,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	private Drawing<ShapePreviewPanel> drawing;
 	private DrawingGraphicalRepresentation drawingGR;
-	private DrawingControllerImpl<ShapePreviewPanel> controller;
+	private AbstractDianaEditor<ShapePreviewPanel> controller;
 	// private RepresentedDrawing representedDrawing;
 	// private RepresentedShape representedShape;
 
@@ -116,7 +117,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setIsReadOnly(true);
 		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 
-		controller = new DrawingControllerImpl<ShapePreviewPanel>(drawing, factory);
+		controller = new DianaViewer<ShapePreviewPanel>(drawing, factory);
 		add(controller.getDrawingView());
 	}
 

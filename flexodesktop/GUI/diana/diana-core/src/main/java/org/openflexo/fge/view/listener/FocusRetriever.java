@@ -40,7 +40,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -83,7 +83,7 @@ public class FocusRetriever {
 		}
 	}
 
-	public DrawingControllerImpl<?> getController() {
+	public AbstractDianaEditor<?> getController() {
 		return drawingView.getController();
 	}
 
@@ -133,7 +133,7 @@ public class FocusRetriever {
 
 		FGEView<?> view = drawingView.viewForNode(node);
 		if (view == null) {
-			logger.warning("Unexpected null view for node " + node + " DrawingControllerImpl=" + getController() + " DrawingView="
+			logger.warning("Unexpected null view for node " + node + " AbstractDianaEditor=" + getController() + " DrawingView="
 					+ drawingView);
 			/*Map<DrawingTreeNode<?, ?>, FGEView<?>> contents = getController().getContents();
 			System.out.println("Pour node, j'ai:");

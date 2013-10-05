@@ -64,10 +64,12 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingControllerImpl.EditorTool;
-import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.controller.RectangleSelectingAction;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.actions.RectangleSelectingAction;
+import org.openflexo.fge.control.tools.DrawingPalette;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
@@ -78,13 +80,13 @@ import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
-import org.openflexo.fge.view.listener.DrawingViewMouseListener;
+import org.openflexo.fge.view.listener.FGEViewMouseListener;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.swing.MouseResizer;
 
 /**
  * The DrawingView is the SWING implementation of the root pane of a FGE graphical editor<br>
- * The managing of the DrawingView is performed by the {@link DrawingControllerImpl}.
+ * The managing of the DrawingView is performed by the {@link AbstractDianaEditor}.
  * 
  * @author sylvain
  * 
@@ -98,12 +100,12 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	private Drawing<M> drawing;
 	// private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
-	private DrawingControllerImpl<?> _controller;
+	private AbstractDianaEditor<M, ?, JComponent> controller;
 	private FocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
 
 	private MouseResizer resizer;
-	private DrawingViewMouseListener<M> mouseListener;
+	private FGEViewMouseListener mouseListener;
 
 	protected FGEDrawingGraphics graphics;
 
@@ -127,8 +129,8 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	private boolean isDeleted = false;
 
-	public DrawingView(DrawingControllerImpl<M> controller) {
-		_controller = controller;
+	public DrawingView(AbstractDianaEditor<M, ?, JComponent> controller) {
+		this.controller = controller;
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
 		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
@@ -137,7 +139,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
 		}
-		mouseListener = makeDrawingViewMouseListener();
+		mouseListener = controller.getDianaFactory().makeViewMouseListener(drawing.getRoot(), this, controller);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 		installKeyBindings();
@@ -150,9 +152,11 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			}
 		}
 
-		if (controller.getPalettes() != null) {
-			for (DrawingPalette p : controller.getPalettes()) {
-				registerPalette(p);
+		if (getController() instanceof DianaInteractiveEditor) {
+			if (((DianaInteractiveEditor<?, ?, ?>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, ?>) controller).getPalettes()) {
+					registerPalette(p);
+				}
 			}
 		}
 
@@ -174,38 +178,40 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	}
 
 	private void installKeyBindings() {
-		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "move_left");
-		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "move_right");
-		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "move_up");
-		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "move_down");
-		getActionMap().put("move_left", new AbstractAction() {
+		if (getController() instanceof DianaInteractiveViewer) {
+			getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "move_left");
+			getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "move_right");
+			getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "move_up");
+			getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "move_down");
+			getActionMap().put("move_left", new AbstractAction() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().leftKeyPressed();
-			}
-		});
-		getActionMap().put("move_right", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).leftKeyPressed();
+				}
+			});
+			getActionMap().put("move_right", new AbstractAction() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().rightKeyPressed();
-			}
-		});
-		getActionMap().put("move_up", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).rightKeyPressed();
+				}
+			});
+			getActionMap().put("move_up", new AbstractAction() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().upKeyPressed();
-			}
-		});
-		getActionMap().put("move_down", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).upKeyPressed();
+				}
+			});
+			getActionMap().put("move_down", new AbstractAction() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				getController().downKeyPressed();
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).downKeyPressed();
+				}
+			});
+		}
 	}
 
 	public Drawing<M> getDrawing() {
@@ -255,7 +261,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	@Override
 	public void rescale() {
-		for (FGEView<?> v : _controller.getContents().values()) {
+		for (FGEView<?, ?> v : controller.getContents().values()) {
 			if (!(v instanceof DrawingView)) {
 				v.rescale();
 			}
@@ -286,13 +292,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		}
 	}
 
-	protected DrawingViewMouseListener<M> makeDrawingViewMouseListener() {
-		return new DrawingViewMouseListener<M>(this);
-	}
-
 	@Override
-	public DrawingControllerImpl<?> getController() {
-		return _controller;
+	public AbstractDianaEditor<M, ?, JComponent> getController() {
+		return controller;
 	}
 
 	@Override
@@ -472,7 +474,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			if (node.shouldBeDisplayed()
 					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(node) || getPaintManager().containsTemporaryObject(
 							node))) {
-				FGEView<?> view = viewForNode(node);
+				FGEView<?, ?> view = viewForNode(node);
 				if (view == null) {
 					continue;
 				}
@@ -559,16 +561,20 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			Graphics2D g2 = (Graphics2D) g;
 			graphics.createGraphics(g2, getController());
 
-			// Don't paint those things in case of buffering
-			for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(getController().getFocusedObjects())) {
-				// logger.info("Paint focused " + o);
-				paintFocused(o, graphics);
-			}
+			if (getController() instanceof DianaInteractiveViewer) {
+				// Don't paint those things in case of buffering
+				for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(
+						((DianaInteractiveViewer<?, ?, ?>) getController()).getFocusedObjects())) {
+					// logger.info("Paint focused " + o);
+					paintFocused(o, graphics);
+				}
 
-			for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(getController().getSelectedObjects())) {
-				// logger.info("Paint selected " + o + "shouldBeDisplayed=" + o.shouldBeDisplayed());
-				if (o.shouldBeDisplayed()) {
-					paintSelected(o, graphics);
+				for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(
+						((DianaInteractiveViewer<?, ?, ?>) getController()).getSelectedObjects())) {
+					// logger.info("Paint selected " + o + "shouldBeDisplayed=" + o.shouldBeDisplayed());
+					if (o.shouldBeDisplayed()) {
+						paintSelected(o, graphics);
+					}
 				}
 			}
 
@@ -579,9 +585,11 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			 * (getController().getFocusedFloatingLabel(), g); }
 			 */
 
-			if (getController().getCurrentTool() == EditorTool.DrawShapeTool) {
-				// logger.info("Painting current edited shape");
-				paintCurrentEditedShape(graphics);
+			if (getController() instanceof DianaInteractiveEditor) {
+				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawShapeTool) {
+					// logger.info("Painting current edited shape");
+					paintCurrentEditedShape(graphics);
+				}
 			}
 
 			graphics.releaseGraphics();
@@ -635,7 +643,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		} else {
 			return;
 		}
-		FGEView<?> view = viewForNode(focusedFloatingLabel);
+		FGEView<?, ?> view = viewForNode(focusedFloatingLabel);
 		LabelView<?> labelView = view.getLabelView();
 		if (labelView != null) {
 			Point p1 = SwingUtilities.convertPoint(labelView, new Point(0, labelView.getHeight() / 2), this);
@@ -724,16 +732,20 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			return;
 		}*/
 
-		if (!getController().getDrawShapeToolController().editionHasBeenStarted()) {
+		if (!(getController() instanceof DianaInteractiveEditor)) {
 			return;
 		}
 
-		getController().getDrawShapeToolController().paintCurrentEditedShape(graphics);
+		if (!((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().editionHasBeenStarted()) {
+			return;
+		}
+
+		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().paintCurrentEditedShape(graphics);
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
 
-		for (ControlArea<?> ca : getController().getDrawShapeToolController().getControlAreas()) {
+		for (ControlArea<?> ca : ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getControlAreas()) {
 			paintControlArea(ca, graphics);
 		}
 
@@ -824,8 +836,8 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		return contents;
 	}*/
 
-	public <O> FGEView<?> viewForNode(DrawingTreeNode<?, ?> node) {
-		return _controller.viewForNode(node);
+	public <O> FGEView<?, ?> viewForNode(DrawingTreeNode<?, ?> node) {
+		return controller.viewForNode(node);
 	}
 
 	public ShapeView<?> shapeViewForNode(ShapeNode<?> node) {
@@ -840,7 +852,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		return _focusRetriever;
 	}
 
-	public DrawingViewMouseListener<M> getMouseListener() {
+	public FGEViewMouseListener getMouseListener() {
 		return mouseListener;
 	}
 
@@ -850,9 +862,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	public void registerPalette(DrawingPalette aPalette) {
 		// A palette is registered, listen to drag'n'drop events
 		logger.fine("Registering drop target");
-		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
+		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, controller), true));
 		activePalette = aPalette;
-		for (FGEView<?> v : _controller.getContents().values()) {
+		for (FGEView<?, ?> v : controller.getContents().values()) {
 			if (v != this) {
 				v.registerPalette(aPalette);
 			}
@@ -864,7 +876,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		return _paintManager;
 	}
 
-	public boolean contains(FGEView<?> view) {
+	public boolean contains(FGEView<?, ?> view) {
 		if (view == null) {
 			return false;
 		}
@@ -872,14 +884,17 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			return true;
 		}
 		if (((JComponent) view).getParent() != null && ((JComponent) view).getParent() instanceof FGEView) {
-			return contains((FGEView<?>) ((JComponent) view).getParent());
+			return contains((FGEView<?, ?>) ((JComponent) view).getParent());
 		}
 		return false;
 	}
 
 	@Override
 	public String getToolTipText(MouseEvent event) {
-		return getController().getToolTipText();
+		if (getController() instanceof DianaInteractiveViewer) {
+			return ((DianaInteractiveViewer<?, ?, ?>) getController()).getToolTipText();
+		}
+		return super.getToolTipText(event);
 	}
 
 	@Override
@@ -893,9 +908,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
 
-		List<FGEView<?>> views = new ArrayList<FGEView<?>>(_controller.getContents().values());
+		List<FGEView<?, ?>> views = new ArrayList<FGEView<?, ?>>(controller.getContents().values());
 
-		for (FGEView<?> v : views) {
+		for (FGEView<?, ?> v : views) {
 			v.delete();
 			// logger.info("Deleted view "+v);
 		}

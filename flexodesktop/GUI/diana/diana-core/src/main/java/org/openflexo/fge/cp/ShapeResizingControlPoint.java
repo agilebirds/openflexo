@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalDirection;
@@ -203,7 +203,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		if (!isDraggable()) {
 			return;
 		}
@@ -307,7 +307,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 		if (!isDraggable()) {
 			return;
 		}

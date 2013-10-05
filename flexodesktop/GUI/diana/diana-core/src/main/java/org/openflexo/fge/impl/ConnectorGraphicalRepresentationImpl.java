@@ -552,7 +552,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// *******************************************************************************
 
 	/*@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, AbstractDianaEditor controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
 		}
@@ -701,7 +701,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	// Override for a custom view management
 	/*@Override
-	public ConnectorView makeConnectorView(DrawingControllerImpl controller) {
+	public ConnectorView makeConnectorView(AbstractDianaEditor controller) {
 		return new ConnectorView(this, controller);
 	}*/
 

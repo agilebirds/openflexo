@@ -197,8 +197,8 @@ public class LaunchDiagramEditor {
 		}
 		diagramEditors.add(diagramEditor);
 
-		// DiagramEditorController controller = new DiagramEditorController(diagramEditor.getEditedDrawing(), diagramEditor.getFactory());
-		// DrawingControllerImpl<DiagramDrawing> controller = new DrawingControllerImpl<DiagramDrawing>(aDrawing, factory)
+		// DianaEditor controller = new DianaEditor(diagramEditor.getEditedDrawing(), diagramEditor.getFactory());
+		// AbstractDianaEditor<DiagramDrawing> controller = new AbstractDianaEditor<DiagramDrawing>(aDrawing, factory)
 
 		tabbedPane.add(diagramEditor.getTitle(), new MyDrawingViewScrollPane(diagramEditor.getController().getDrawingView()));
 		diagramEditor.getController().getToolbox().getForegroundInspector().setVisible(true);

@@ -604,7 +604,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	public void setShapePainter(ShapePainter aPainter);*/
 
 	// Override for a custom view management
-	// public ShapeView makeShapeView(DrawingController controller);
+	// public ShapeView makeShapeView(DianaEditor controller);
 
 	@Override
 	public String toString();

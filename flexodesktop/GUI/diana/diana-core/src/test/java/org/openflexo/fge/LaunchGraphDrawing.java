@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -61,7 +61,7 @@ public class LaunchGraphDrawing {
 		showPanel();
 	}
 
-	public static class TestDrawingController extends DrawingControllerImpl<Graph> {
+	public static class TestDrawingController extends AbstractDianaEditor<Graph> {
 		private JPopupMenu contextualMenu;
 
 		public TestDrawingController(GraphDrawing1 aDrawing) {
@@ -132,7 +132,7 @@ public class LaunchGraphDrawing {
 		// final TestInspector inspector = new TestInspector();
 
 		final GraphDrawing1 d = makeDrawing();
-		final DrawingControllerImpl<Graph> dc = new TestDrawingController(d);
+		final AbstractDianaEditor<Graph> dc = new TestDrawingController(d);
 		dc.disablePaintingCache();
 		dc.getDrawingView().setName("[NO_CACHE]");
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
@@ -199,7 +199,7 @@ public class LaunchGraphDrawing {
 
 		dialog.setVisible(true);
 
-		DrawingControllerImpl<Graph> dc2 = new DrawingControllerImpl<Graph>(d, d.getFactory());
+		AbstractDianaEditor<Graph> dc2 = new AbstractDianaEditor<Graph>(d, d.getFactory());
 		final JDialog dialog2 = new JDialog((Frame) null, false);
 		dialog2.getContentPane().add(new JScrollPane(dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));

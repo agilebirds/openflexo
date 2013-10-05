@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.ConnectorSymbol;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
@@ -54,7 +54,7 @@ public class FGEConnectorGraphicsImpl extends FGEGraphicsImpl implements FGEConn
 	 * @param controller
 	 */
 	@Override
-	public void createGraphics(Graphics2D graphics2D, DrawingControllerImpl controller) {
+	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor controller) {
 		super.createGraphics(graphics2D, controller);
 		symbolGraphics.createGraphics(graphics2D, controller);
 	}

@@ -37,8 +37,10 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingPalette;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.tools.DrawingPalette;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeDeleted;
@@ -48,7 +50,8 @@ import org.openflexo.fge.notifications.ObjectMove;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
-import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
+import org.openflexo.fge.view.listener.FGEViewMouseListener;
+import org.openflexo.xmlcode.TestParameteredKVCoding.C;
 
 /**
  * The ConnectorView is the SWING implementation of a panel showing a {@link ConnectorNode}
@@ -58,23 +61,23 @@ import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
  * @param <O>
  */
 @SuppressWarnings("serial")
-public class ConnectorView<O> extends JPanel implements FGEView<O> {
+public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorView.class.getPackage().getName());
 
 	private ConnectorNode<O> connectorNode;
-	private ConnectorViewMouseListener mouseListener;
-	private DrawingControllerImpl<?> _controller;
+	private FGEViewMouseListener mouseListener;
+	private AbstractDianaEditor<?, ?, ?> _controller;
 
 	private LabelView<O> labelView;
 
-	public ConnectorView(ConnectorNode<O> node, DrawingControllerImpl<?> controller) {
+	public ConnectorView(ConnectorNode<O> node, AbstractDianaEditor<?, ?, ?> controller) {
 		super();
 		_controller = controller;
 		this.connectorNode = node;
 		updateLabelView();
 		relocateAndResizeView();
-		mouseListener = makeConnectorViewMouseListener();
+		mouseListener = getController().getDianaFactory().makeViewMouseListener(connectorNode, this, getController());
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 		connectorNode.addObserver(this);
@@ -82,9 +85,11 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 		updateVisibility();
 
-		if (controller.getPalettes() != null) {
-			for (DrawingPalette p : controller.getPalettes()) {
-				registerPalette(p);
+		if (getController() instanceof DianaInteractiveEditor) {
+			if (((DianaInteractiveEditor<?, ?, C>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, C>) controller).getPalettes()) {
+					registerPalette(p);
+				}
 			}
 		}
 
@@ -245,7 +250,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			labelView.delete();
 			labelView = null;
 		} else if (connectorNode.hasText() && labelView == null) {
-			labelView = new LabelView<O>(connectorNode, getController(), this);
+			labelView = new LabelView<O, C>(connectorNode, getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView());
 			}
@@ -311,12 +316,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 		// getGraphicalRepresentation().paint(g,getController());
 	}
 
-	protected ConnectorViewMouseListener makeConnectorViewMouseListener() {
-		return new ConnectorViewMouseListener(connectorNode, this);
-	}
-
 	@Override
-	public DrawingControllerImpl<?> getController() {
+	public AbstractDianaEditor<?, ?, ?> getController() {
 		return _controller;
 	}
 
@@ -329,11 +330,13 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
 				deletedNode.getParentNode().removeChild(deletedNode);
 			}
-			if (getNode() != null && getController().getFocusedObjects().contains(getNode())) {
-				getController().removeFromFocusedObjects(getNode());
-			}
-			if (getNode() != null && getController().getSelectedObjects().contains(getNode())) {
-				getController().removeFromSelectedObjects(getNode());
+			if (getController() instanceof DianaInteractiveViewer) {
+				if (getNode() != null && ((DianaInteractiveViewer<?, ?, C>) getController()).getFocusedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, ?, C>) getController()).removeFromFocusedObjects(getNode());
+				}
+				if (getNode() != null && ((DianaInteractiveViewer<?, ?, C>) getController()).getSelectedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, ?, C>) getController()).removeFromSelectedObjects(getNode());
+				}
 			}
 			// Now delete the view
 			delete();
@@ -464,7 +467,10 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public String getToolTipText(MouseEvent event) {
-		return getController().getToolTipText();
+		if (getController() instanceof DianaInteractiveViewer) {
+			return ((DianaInteractiveViewer<?, ?, C>) getController()).getToolTipText();
+		}
+		return super.getToolTipText(event);
 	}
 
 }

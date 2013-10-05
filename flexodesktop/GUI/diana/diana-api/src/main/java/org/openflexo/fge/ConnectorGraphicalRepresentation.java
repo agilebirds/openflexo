@@ -284,7 +284,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	// public void refreshConnector();
 
 	// Override for a custom view management
-	// public ConnectorView makeConnectorView(DrawingController controller);
+	// public ConnectorView makeConnectorView(DianaEditor controller);
 
 	public boolean getDebugCoveringArea();
 

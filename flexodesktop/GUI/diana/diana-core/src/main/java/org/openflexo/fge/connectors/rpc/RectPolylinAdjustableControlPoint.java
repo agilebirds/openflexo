@@ -26,7 +26,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -62,14 +62,14 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		initialPolylin = getPolylin().clone();
 		getConnector().setWasManuallyAdjusted(true);
 	}
 
 	@Override
-	public final void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+	public final void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 		super.stopDragging(controller, focused);
 		getConnector().setWasManuallyAdjusted(true);
 		getConnector()._connectorChanged(false);

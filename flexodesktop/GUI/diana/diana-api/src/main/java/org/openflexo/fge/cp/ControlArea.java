@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
@@ -98,7 +98,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 	}
 
 	// Override when required
@@ -113,7 +113,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 	}
 
 	// Override when required

@@ -44,7 +44,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 
 public class FGEPaintManager {
 
@@ -92,7 +92,7 @@ public class FGEPaintManager {
 		return _drawingView;
 	}
 
-	public DrawingControllerImpl<?> getDrawingController() {
+	public AbstractDianaEditor<?, ?, ?> getDrawingController() {
 		return _drawingView.getController();
 	}
 
@@ -182,7 +182,7 @@ public class FGEPaintManager {
 
 	}
 
-	public void repaint(FGEView<?> view, Rectangle bounds) {
+	public void repaint(FGEView<?, ?> view, Rectangle bounds) {
 		if (!_drawingView.contains(view)) {
 			return;
 		}
@@ -199,7 +199,7 @@ public class FGEPaintManager {
 		repaintManager.addTemporaryRepaintArea(r, view);
 	}
 
-	public void repaint(final FGEView<?> view) {
+	public void repaint(final FGEView<?, ?> view) {
 		if (view.isDeleted()) {
 			return;
 		}
@@ -281,7 +281,7 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + node);
 		}
-		FGEView<?> view = _drawingView.viewForNode(node);
+		FGEView<?, ?> view = _drawingView.viewForNode(node);
 		if (view != null) {
 			repaint(view);
 		}

@@ -142,14 +142,14 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	/*@Override
-	public ShapeView<Role> makeShapeView(DrawingController controller)
+	public ShapeView<Role> makeShapeView(DianaEditor controller)
 	{
 		return new RoleContainerView(this,controller);
 	}
 
 	public class RoleContainerView extends ShapeView<Role>
 	{
-		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DrawingController controller)
+		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DianaEditor controller)
 		{
 			super(aGraphicalRepresentation,controller);
 			JButton plus = new JButton(IconLibrary.PLUS);

@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod;
 import org.openflexo.fge.notifications.NodeAdded;
@@ -43,7 +43,7 @@ public class GeometricDrawingView extends DrawingView<GeometricDrawing> {
 
 	private FGEPoint lastMouseLocation;
 
-	public GeometricDrawingView(GeometricDrawing drawing, DrawingControllerImpl<GeometricDrawing> controller) {
+	public GeometricDrawingView(GeometricDrawing drawing, AbstractDianaEditor<GeometricDrawing> controller) {
 		super(drawing, controller);
 		lastMouseLocation = new FGEPoint();
 		addMouseMotionListener(new MouseMotionAdapter() {

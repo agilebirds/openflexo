@@ -17,13 +17,14 @@ import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.controller.PaletteElement;
-import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.tools.DrawingPalette;
+import org.openflexo.fge.control.tools.PaletteElement;
+import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable;
 import org.openflexo.toolbox.ToolBox;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
@@ -41,9 +42,9 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	private DragGestureRecognizer labelDgr;
 
 	/* Local controller ONLY */
-	// private DrawingControllerImpl<DrawingPalette> paletteController;
+	// private AbstractDianaEditor<DrawingPalette> paletteController;
 
-	public PaletteElementView(ShapeNode<PaletteElement> node, DrawingControllerImpl<DrawingPalette> controller) {
+	public PaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, ?, ?> controller) {
 		super(node, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
@@ -61,8 +62,8 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public DrawingControllerImpl<DrawingPalette> getController() {
-		return (DrawingControllerImpl<DrawingPalette>) super.getController();
+	public AbstractDianaEditor<DrawingPalette, ?, JComponent> getController() {
+		return (AbstractDianaEditor<DrawingPalette, ?, JComponent>) super.getController();
 	}
 
 	private DragGestureRecognizer createDragGestureRecognizer() {

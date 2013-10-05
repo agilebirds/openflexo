@@ -43,8 +43,10 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingPalette;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.tools.DrawingPalette;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
@@ -56,7 +58,7 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
-import org.openflexo.fge.view.listener.ShapeViewMouseListener;
+import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
 /**
  * The {@link ShapeView} is the SWING implementation of a panel showing a {@link ShapeNode}
@@ -71,12 +73,12 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	private static final Logger logger = Logger.getLogger(ShapeView.class.getPackage().getName());
 
 	private ShapeNode<O> shapeNode;
-	private ShapeViewMouseListener mouseListener;
-	private DrawingControllerImpl<?> _controller;
+	private FGEViewMouseListener mouseListener;
+	private AbstractDianaEditor<?, ?, ?> _controller;
 
 	private LabelView<O> labelView;
 
-	public ShapeView(ShapeNode<O> node, DrawingControllerImpl<?> controller) {
+	public ShapeView(ShapeNode<O> node, AbstractDianaEditor<?, ?, ?> controller) {
 		super();
 		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + node);
 		_controller = controller;
@@ -86,7 +88,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		if (getController() != null) {
 			relocateAndResizeView();
 		}
-		mouseListener = makeShapeViewMouseListener();
+		mouseListener = getController().getDianaFactory().makeViewMouseListener(connectorNode, this, getController());
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 		shapeNode.addObserver(this);
@@ -94,9 +96,11 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		updateVisibility();
 		setFocusable(true);
 
-		if (controller.getPalettes() != null) {
-			for (DrawingPalette p : controller.getPalettes()) {
-				registerPalette(p);
+		if (getController() instanceof DianaInteractiveEditor) {
+			if (((DianaInteractiveEditor<?>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?>) controller).getPalettes()) {
+					registerPalette(p);
+				}
 			}
 		}
 		// logger.info("make ShapeView with "+aGraphicalRepresentation+" bounds="+getBounds());
@@ -322,7 +326,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public DrawingControllerImpl<?> getController() {
+	public AbstractDianaEditor<?, ?, ?> getController() {
 		return _controller;
 	}
 
@@ -457,7 +461,10 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	@Override
 	public String getToolTipText(MouseEvent event) {
-		return getController().getToolTipText();
+		if (getController() instanceof DianaInteractiveViewer) {
+			return ((DianaInteractiveViewer<?>) getController()).getToolTipText();
+		}
+		return super.getToolTipText(event);
 	}
 
 	private BufferedImage screenshot;

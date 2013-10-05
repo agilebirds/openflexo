@@ -16,8 +16,8 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.control.DrawingController;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -109,13 +109,13 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
+	public void paint(Graphics g, DianaEditor<?> controller) {
 		Graphics2D g2 = (Graphics2D) g;
-		if (controller instanceof DrawingControllerImpl<?>) {
-		graphics.createGraphics(g2, (DrawingControllerImpl<?>)controller);
+		if (controller instanceof AbstractDianaEditor<?>) {
+		graphics.createGraphics(g2, (AbstractDianaEditor<?>)controller);
 		// If there is a decoration painter init its graphics
 		if (getGraphicalRepresentation().getDecorationPainter() != null) {
-			decorationGraphics.createGraphics(g2, (DrawingControllerImpl<?>)controller);
+			decorationGraphics.createGraphics(g2, (AbstractDianaEditor<?>)controller);
 		}
 		}
 		else {

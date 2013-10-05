@@ -23,7 +23,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
@@ -46,7 +46,7 @@ public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalR
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, AbstractDianaEditor controller) {
 		// TODO: un petit @brutal pour avancer, il faudrait faire les choses plus proprement
 		rebuildControlPoints();
 		super.paint(g, controller);

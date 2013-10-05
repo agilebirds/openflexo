@@ -30,12 +30,13 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 
 @SuppressWarnings("serial")
-public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
+public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O, JLayeredPane> {
 
 	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
 
@@ -51,7 +52,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 	 * @param layer
 	 *            an int specifying the layer to set, where lower numbers are closer to the bottom
 	 */
-	public void setLayer(FGEView<?> c, int layer) {
+	public void setLayer(FGEView<?, ?> c, int layer) {
 		setLayer((Component) c, layer, -1);
 	}
 
@@ -62,7 +63,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 	 *            the Component to check
 	 * @return an int specifying the component's current layer
 	 */
-	public int getLayer(FGEView<?> c) {
+	public int getLayer(FGEView<?, ?> c) {
 		return super.getLayer((Component) c);
 	}
 
@@ -73,7 +74,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 	 *            the Component to move
 	 * @see #setPosition(Component, int)
 	 */
-	public void toFront(FGEView<?> c) {
+	public void toFront(FGEView<?, ?> c) {
 		super.moveToFront((Component) c);
 	}
 
@@ -84,15 +85,15 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 	 *            the Component to move
 	 * @see #setPosition(Component, int)
 	 */
-	public void toBack(FGEView<?> c) {
+	public void toBack(FGEView<?, ?> c) {
 		super.moveToBack((Component) c);
 	}
 
-	public List<FGEView<?>> getViewsInLayer(int layer) {
-		List<FGEView<?>> returned = new ArrayList<FGEView<?>>();
+	public List<FGEView<?, ?>> getViewsInLayer(int layer) {
+		List<FGEView<?, ?>> returned = new ArrayList<FGEView<?, ?>>();
 		for (Component c : super.getComponentsInLayer(layer)) {
 			if (c instanceof FGEView) {
-				returned.add((FGEView<?>) c);
+				returned.add((FGEView<?, ?>) c);
 			}
 		}
 		return returned;
@@ -120,7 +121,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}*/
 	}
 
-	public void add(ConnectorView<O> view) {
+	public void add(ConnectorView<O, ?> view) {
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);
@@ -131,7 +132,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}*/
 	}
 
-	public void remove(ConnectorView<O> view) {
+	public void remove(ConnectorView<O, ?> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}
@@ -154,7 +155,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			shapeNode.notifyShapeNeedsToBeRedrawn(); // TODO: is this necessary ?
 		} else if (newNode instanceof ConnectorNode) {
 			ConnectorNode<?> connectorNode = (ConnectorNode<?>) newNode;
-			ConnectorView<?> connectorView = getController().makeConnectorView(connectorNode);
+			ConnectorView<?, ?> connectorView = getController().makeConnectorView(connectorNode);
 			add(connectorView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
@@ -183,7 +184,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			}
 		} else if (removedNode instanceof ConnectorNode) {
 			ConnectorNode<?> removedConnectorNode = (ConnectorNode<?>) removedNode;
-			ConnectorView<?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
+			ConnectorView<?, ?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
 			if (view != null) {
 				remove(view);
 				revalidate();
@@ -209,11 +210,13 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 					&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
 				deletedNode.getParentNode().removeChild(deletedNode);
 			}
-			if (getNode() != null && getController().getFocusedObjects().contains(getNode())) {
-				getController().removeFromFocusedObjects(getNode());
-			}
-			if (getNode() != null && getController().getSelectedObjects().contains(getNode())) {
-				getController().removeFromSelectedObjects(getNode());
+			if (getController() instanceof DianaInteractiveViewer) {
+				if (getNode() != null && ((DianaInteractiveViewer<?, ?, ?>) getController()).getFocusedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).removeFromFocusedObjects(getNode());
+				}
+				if (getNode() != null && ((DianaInteractiveViewer<?, ?, ?>) getController()).getSelectedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, ?, ?>) getController()).removeFromSelectedObjects(getNode());
+				}
 			}
 			// Now delete the view
 			delete();

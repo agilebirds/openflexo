@@ -41,7 +41,7 @@ import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -329,7 +329,7 @@ public interface Drawing<M> {
 
 		public FGEGraphics getGraphics();
 
-		public void paint(Graphics g, DrawingController<?> controller);
+		public void paint(Graphics g, DianaEditor<?> controller);
 
 		public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 

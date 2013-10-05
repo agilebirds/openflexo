@@ -521,7 +521,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	public Rectangle getLabelBounds(double scale);
 
-	public void paint(Graphics g, DrawingController controller);*/
+	public void paint(Graphics g, DianaEditor controller);*/
 
 	/*public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
 

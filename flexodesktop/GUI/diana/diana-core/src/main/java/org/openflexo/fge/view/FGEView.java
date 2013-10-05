@@ -23,8 +23,8 @@ import java.util.Observer;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.DrawingPalette;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.tools.DrawingPalette;
 
 /**
  * Implemented by all views representing a DrawingTreeNode
@@ -33,9 +33,9 @@ import org.openflexo.fge.controller.DrawingPalette;
  * 
  * @param <O>
  */
-public interface FGEView<O> extends Observer, FGEConstants {
+public interface FGEView<O, C> extends Observer, FGEConstants {
 
-	public DrawingControllerImpl<?> getController();
+	public AbstractDianaEditor<?, ?, ? super C> getController();
 
 	public DrawingTreeNode<O, ?> getNode();
 

@@ -31,8 +31,8 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
-import org.openflexo.fge.control.DrawingController;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -97,12 +97,12 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		if (controller instanceof DrawingControllerImpl) {
-			if (((DrawingControllerImpl<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
-				((DrawingControllerImpl<?>)controller).getPaintManager().addToTemporaryObjects(getNode());
-				((DrawingControllerImpl<?>)controller).getPaintManager().invalidate(getNode());
+		if (controller instanceof AbstractDianaEditor) {
+			if (((AbstractDianaEditor<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
+				((AbstractDianaEditor<?>)controller).getPaintManager().addToTemporaryObjects(getNode());
+				((AbstractDianaEditor<?>)controller).getPaintManager().invalidate(getNode());
 			}
 		}
 		initialPolylin = getPolylin().clone();
@@ -111,13 +111,13 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 		super.stopDragging(controller, focused);
-		if (controller instanceof DrawingControllerImpl) {
-		if (((DrawingControllerImpl<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
-			((DrawingControllerImpl<?>)controller).getPaintManager().removeFromTemporaryObjects(getNode());
-			((DrawingControllerImpl<?>)controller).getPaintManager().invalidate(getNode());
-			((DrawingControllerImpl<?>)controller).getPaintManager().repaint(((DrawingControllerImpl<?>)controller).getDrawingView());
+		if (controller instanceof AbstractDianaEditor) {
+		if (((AbstractDianaEditor<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
+			((AbstractDianaEditor<?>)controller).getPaintManager().removeFromTemporaryObjects(getNode());
+			((AbstractDianaEditor<?>)controller).getPaintManager().invalidate(getNode());
+			((AbstractDianaEditor<?>)controller).getPaintManager().repaint(((AbstractDianaEditor<?>)controller).getDrawingView());
 		}
 		}
 		// getConnector().setWasManuallyAdjusted(true);

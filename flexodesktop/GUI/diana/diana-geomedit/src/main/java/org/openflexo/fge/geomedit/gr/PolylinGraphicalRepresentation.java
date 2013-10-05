@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolylin;
@@ -55,7 +55,7 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, AbstractDianaEditor controller) {
 		// TODO: un petit @brutal pour avancer, il faudrait faire les choses plus proprement
 		if (getGeometricObject() instanceof FGEPolylin) {
 			rebuildControlPoints();

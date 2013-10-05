@@ -41,7 +41,8 @@ import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -267,7 +268,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	protected class ForegroundStylePreviewPanel extends JPanel {
 		private Drawing<ForegroundStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingControllerImpl<ForegroundStylePreviewPanel> controller;
+		private AbstractDianaEditor<ForegroundStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation lineGR;
 
 		private FGEModelFactory factory;
@@ -329,7 +330,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(factory.makeShapeBorder(10, 10, 10, 10));
 
-			controller = new DrawingControllerImpl<ForegroundStylePreviewPanel>(drawing, factory);
+			controller = new DianaViewer<ForegroundStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 		}
 

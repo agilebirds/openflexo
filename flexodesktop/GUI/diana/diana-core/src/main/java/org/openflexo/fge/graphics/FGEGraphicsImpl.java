@@ -56,7 +56,7 @@ import org.openflexo.fge.NoneBackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.TextureBackgroundStyle;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeneralShape;
@@ -72,7 +72,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEGraphicsImpl.class.getPackage().getName());
 
-	private DrawingControllerImpl<?> _controller;
+	private AbstractDianaEditor<?> _controller;
 	private DrawingTreeNode<?, ?> dtn;
 	private Graphics2D g2d;
 
@@ -110,7 +110,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 		return dtn.getGraphicalRepresentation();
 	}
 
-	public DrawingControllerImpl<?> getController() {
+	public AbstractDianaEditor<?> getController() {
 		return _controller;
 	}
 
@@ -130,7 +130,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	 * @param controller
 	 */
 
-	public void createGraphics(Graphics2D graphics2D, DrawingControllerImpl<?> controller) {
+	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?> controller) {
 		g2d = (Graphics2D) graphics2D.create();
 		_controller = controller;
 	}

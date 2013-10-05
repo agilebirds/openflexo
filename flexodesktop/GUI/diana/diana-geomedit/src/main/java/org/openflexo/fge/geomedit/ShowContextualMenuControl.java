@@ -26,16 +26,16 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.controller.CustomClickControlAction;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.MouseClickControlImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.actions.CustomClickControlAction;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
 
 public class ShowContextualMenuControl extends MouseClickControlImpl {
 
 	public ShowContextualMenuControl() {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+			public boolean handleClick(DrawingTreeNode<?, ?> node, AbstractDianaEditor<?> controller, MouseEvent event) {
 				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
 				((GeomEditController) controller).showContextualMenu(node, newPoint);
 				return false;

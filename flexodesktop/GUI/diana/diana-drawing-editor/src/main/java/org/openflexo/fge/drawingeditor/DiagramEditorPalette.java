@@ -29,9 +29,9 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.controller.PaletteElement;
-import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
+import org.openflexo.fge.control.tools.DrawingPalette;
+import org.openflexo.fge.control.tools.PaletteElement;
+import org.openflexo.fge.control.tools.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
@@ -124,8 +124,8 @@ public class DiagramEditorPalette extends DrawingPalette {
 	}
 
 	@Override
-	public DiagramEditorController getController() {
-		return (DiagramEditorController) super.getController();
+	public DianaEditor getController() {
+		return (DianaEditor) super.getController();
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {

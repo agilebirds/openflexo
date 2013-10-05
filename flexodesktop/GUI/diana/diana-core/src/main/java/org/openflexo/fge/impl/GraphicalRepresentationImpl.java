@@ -1097,7 +1097,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, AbstractDianaEditor controller) {
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);

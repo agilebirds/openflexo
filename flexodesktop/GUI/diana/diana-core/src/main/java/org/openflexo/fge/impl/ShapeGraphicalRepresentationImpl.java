@@ -2069,7 +2069,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	}*/
 
 	/*@Override
-	public void paint(Graphics g, DrawingControllerImpl controller) {
+	public void paint(Graphics g, AbstractDianaEditor controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
 		}
@@ -2253,7 +2253,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	// Override for a custom view management
 	/*@Override
-	public ShapeView<Object> makeShapeView(DrawingControllerImpl controller) {
+	public ShapeView<Object> makeShapeView(AbstractDianaEditor controller) {
 		return new ShapeView<Object>(this, controller);
 	}*/
 

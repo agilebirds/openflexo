@@ -582,7 +582,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	/*@Override
-	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e)
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DianaEditor controller, MouseEvent e)
 	{
 		return super.isApplicable(graphicalRepresentation, controller, e)
 		&& (RoleContainerGR.isInsideRectangle(graphicalRepresentation, controller, e, upRect)

@@ -29,9 +29,9 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.CustomClickControlAction;
-import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.actions.CustomClickControlAction;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.foundation.FlexoObject;
@@ -39,7 +39,7 @@ import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.toolbox.ToolBox;
 
 /**
- * Default implementation for a DrawingController synchronized with a SelectionManager
+ * Default implementation for a DianaEditor synchronized with a SelectionManager
  * 
  * @author sylvain
  * 

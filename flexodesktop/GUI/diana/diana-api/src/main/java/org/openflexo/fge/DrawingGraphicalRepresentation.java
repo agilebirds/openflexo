@@ -133,7 +133,7 @@ public interface DrawingGraphicalRepresentation extends ContainerGraphicalRepres
 	public abstract FGERectangle getWorkingArea();
 
 	// @Override
-	// public abstract void paint(Graphics g, DrawingController<?> controller);
+	// public abstract void paint(Graphics g, DianaEditor<?> controller);
 
 	public abstract DrawingDecorationPainter getDecorationPainter();
 

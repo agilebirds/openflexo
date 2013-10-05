@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.CardinalQuadrant;
 import org.openflexo.fge.geom.FGEPoint;
@@ -78,7 +78,7 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				private double initialHeight;
 
 				@Override
-				public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+				public void startDragging(AbstractDianaEditor controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
 					initialWidth = getGeometricObject().width;
 					initialHeight = getGeometricObject().height;
@@ -121,7 +121,7 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				private double initialHeight;
 
 				@Override
-				public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+				public void startDragging(AbstractDianaEditor controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
 					initialWidth = getGeometricObject().width;
 					initialHeight = getGeometricObject().height;
@@ -167,7 +167,7 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				}
 
 				@Override
-				public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+				public void startDragging(AbstractDianaEditor controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
 					initialWidth = getGeometricObject().width;
 					initialHeight = getGeometricObject().height;
@@ -217,7 +217,7 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				}
 
 				@Override
-				public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+				public void startDragging(AbstractDianaEditor controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
 					initialWidth = getGeometricObject().width;
 					initialHeight = getGeometricObject().height;

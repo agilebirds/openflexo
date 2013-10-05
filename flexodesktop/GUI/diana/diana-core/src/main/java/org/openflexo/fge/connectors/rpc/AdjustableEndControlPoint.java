@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -42,7 +42,7 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		getConnectorSpecification().setIsStartingLocationFixed(true);
 	}

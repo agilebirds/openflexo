@@ -30,9 +30,10 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.controller.CustomDragControlAction;
-import org.openflexo.fge.controller.DrawingControllerImpl;
-import org.openflexo.fge.controller.MouseDragControlImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.actions.CustomDragControlAction;
+import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.drawingeditor.model.Connector;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
@@ -54,7 +55,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
 			if (node instanceof ShapeNode) {
 				drawEdge = true;
 				fromShape = (ShapeNode<Shape>) node;
@@ -65,7 +66,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event,
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
 				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
@@ -73,7 +74,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
 							(DiagramDrawing) controller.getDrawing());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
-					((DiagramEditorController) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
+					((DianaEditor) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
 				}
 				drawEdge = false;
 				fromShape = null;
@@ -85,7 +86,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingControllerImpl<?> controller, MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
 			if (drawEdge) {
 				DrawingTreeNode<?, ?> dtn = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (dtn instanceof ShapeNode && dtn != fromShape && !fromShape.getAncestors().contains(dtn)) {
@@ -101,7 +102,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingControllerImpl controller) {
+		public void paint(Graphics g, AbstractDianaEditor controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller
 						.getDrawing()

@@ -30,7 +30,7 @@ public class DiagramEditorView extends DrawingView<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(DiagramEditorView.class.getPackage().getName());
 
-	public DiagramEditorView(DiagramEditorController controller) {
+	public DiagramEditorView(DianaEditor controller) {
 		super(controller);
 	}
 
@@ -55,8 +55,8 @@ public class DiagramEditorView extends DrawingView<Diagram> {
 	}
 
 	/*@Override
-	public DiagramEditorController getController() {
-		return (DiagramEditorController) super.getController();
+	public DianaEditor getController() {
+		return (DianaEditor) super.getController();
 	}*/
 
 	/*@Override

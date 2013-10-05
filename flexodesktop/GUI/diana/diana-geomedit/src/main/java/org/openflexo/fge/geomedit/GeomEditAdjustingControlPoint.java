@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.DrawingControllerImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -48,7 +48,7 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 	}
 
 	@Override
-	public void startDragging(DrawingControllerImpl controller, FGEPoint startPoint) {
+	public void startDragging(AbstractDianaEditor controller, FGEPoint startPoint) {
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 	}
 
 	@Override
-	public void stopDragging(DrawingControllerImpl controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(AbstractDianaEditor controller, GraphicalRepresentation focusedGR) {
 		// TODO Auto-generated method stub
 	}
 
