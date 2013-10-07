@@ -34,10 +34,10 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod;
 import org.openflexo.fge.notifications.NodeAdded;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.JDrawingView;
 import org.openflexo.logging.FlexoLogger;
 
-public class GeometricDrawingView extends DrawingView<GeometricDrawing> {
+public class GeometricDrawingView extends JDrawingView<GeometricDrawing> {
 
 	private static final Logger logger = FlexoLogger.getLogger(GeometricDrawingView.class.getPackage().getName());
 

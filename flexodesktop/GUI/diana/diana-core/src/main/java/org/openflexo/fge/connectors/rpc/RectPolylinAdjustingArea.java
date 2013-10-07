@@ -160,7 +160,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		return returned;
 	}
 
-	/*private Rectangle paintPolylin(Graphics2D g, DrawingView<?> drawingView, Color mainColor, Color backColor, FGERectPolylin polylin)
+	/*private Rectangle paintPolylin(Graphics2D g, JDrawingView<?> drawingView, Color mainColor, Color backColor, FGERectPolylin polylin)
 	{
 		Rectangle r = new Rectangle();
 		Point lastLocation = drawingView.getGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(polylin.getFirstPoint(), getGraphicalRepresentation(), drawingView.getScale());

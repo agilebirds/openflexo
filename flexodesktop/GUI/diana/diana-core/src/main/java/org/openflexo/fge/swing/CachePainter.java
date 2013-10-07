@@ -1,4 +1,4 @@
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 //http://www.javaresearch.org/source/jdk150/javax/swing/plaf/metal/CachedPainter.java.html
 

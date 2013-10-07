@@ -38,6 +38,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.swing.JDrawingView;
 import org.openflexo.fge.view.FGEView;
 
 /**
@@ -92,7 +93,7 @@ public class MoveInfo {
 
 		this.view = view;
 		try {
-			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		} catch (Error ex) {
 			ex.printStackTrace();
 			logger.warning("OK, ca chie la");
@@ -104,6 +105,10 @@ public class MoveInfo {
 		}
 		currentLocationInDrawingView = new Point(startMovingLocationInDrawingView);
 
+	}
+
+	protected JDrawingView<?> getDrawingView() {
+		return (JDrawingView<?>) view.getDrawingView();
 	}
 
 	private void startDragging() {

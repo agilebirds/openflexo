@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -78,20 +78,21 @@ import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
+import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.listener.FGEViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
 
 /**
- * The {@link LabelView} is the SWING implementation of the panel displaying a floating label
+ * The {@link JLabelView} is the SWING implementation of the panel displaying a floating label
  * 
  * @author sylvain
  * 
  */
 @SuppressWarnings("serial")
-public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, LabelMetricsProvider {
+public class JLabelView<O> extends JScrollPane implements FGEView<O, JPanel>, LabelMetricsProvider {
 
-	private static final Logger logger = Logger.getLogger(LabelView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JLabelView.class.getPackage().getName());
 
 	private DrawingTreeNode<O, ?> node;
 	private FGEViewMouseListener mouseListener;
@@ -105,7 +106,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 
 	private boolean mouseInsideLabel = false;
 
-	public LabelView(final DrawingTreeNode<O, ?> node, AbstractDianaEditor<?, SwingFactory, JComponent> controller,
+	public JLabelView(final DrawingTreeNode<O, ?> node, AbstractDianaEditor<?, SwingFactory, JComponent> controller,
 			FGEView<O, ? extends JComponent> delegateView) {
 
 		setUI(new BasicScrollPaneUI());
@@ -220,14 +221,14 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 	@Override
 	public synchronized void delete() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Delete LabelView for " + node);
+			logger.fine("Delete JLabelView for " + node);
 		}
 		if (getController() instanceof DianaInteractiveViewer
 				&& ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getEditedLabel() == this) {
 			((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).resetEditedLabel(this);
 		}
 		removeFGEMouseListener();
-		FGELayeredView<?> parentView = getParentView();
+		JDianaLayeredView<?> parentView = getParentView();
 		if (parentView != null) {
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
@@ -260,24 +261,24 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 	}
 
 	@Override
-	public DrawingView<?> getDrawingView() {
+	public JDrawingView<?> getDrawingView() {
 		if (getController() != null) {
-			return getController().getDrawingView();
+			return (JDrawingView<?>) getController().getDrawingView();
 		}
 		return null;
 	}
 
 	@Override
-	public LabelView<O> getLabelView() {
+	public JLabelView<O> getLabelView() {
 		return this;
 	}
 
 	@Override
-	public FGELayeredView<?> getParent() {
-		return (FGELayeredView<?>) super.getParent();
+	public JDianaLayeredView<?> getParent() {
+		return (JDianaLayeredView<?>) super.getParent();
 	}
 
-	public FGELayeredView<?> getParentView() {
+	public JDianaLayeredView<?> getParentView() {
 		return getParent();
 	}
 
@@ -334,7 +335,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 				}
 			});
 		} else {
-			// System.out.println("Received event in LabelView: " + aNotification + " observers=" + o.countObservers());
+			// System.out.println("Received event in JLabelView: " + aNotification + " observers=" + o.countObservers());
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
@@ -381,7 +382,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 
 	protected void updateBounds() {
 		updateBounds(true);
-		// System.out.println("LabelView for " + getNode() + " for " + getNode().getDrawable() + " update bounds to " + getBounds());
+		// System.out.println("JLabelView for " + getNode() + " for " + getNode().getDrawable() + " update bounds to " + getBounds());
 	}
 
 	protected synchronized void updateBounds(final boolean repeat) {
@@ -397,7 +398,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 			});
 			return;
 		}
-		// System.out.println("LabelView " + Integer.toHexString(hashCode()) + " for " + node);
+		// System.out.println("JLabelView " + Integer.toHexString(hashCode()) + " for " + node);
 		Rectangle bounds = node.getLabelBounds(getScale());
 		if (bounds.isEmpty() || bounds.width < 5) {
 			bounds.width = 20;
@@ -597,7 +598,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 		textComponent.setEditable(true);
 		setDoubleBuffered(false);
 		if (getController() instanceof DianaInteractiveViewer) {
-			((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).setEditedLabel(LabelView.this);
+			((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).setEditedLabel(JLabelView.this);
 		}
 		node.notifyLabelWillBeEdited();
 		getPaintManager().invalidate(node);
@@ -627,7 +628,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O, JPanel>, Lab
 		textComponent.setEditable(false);
 		setDoubleBuffered(true);
 		if (getController() instanceof DianaInteractiveViewer) {
-			((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).resetEditedLabel(LabelView.this);
+			((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).resetEditedLabel(JLabelView.this);
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Stop edition of " + node);

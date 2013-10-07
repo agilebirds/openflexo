@@ -887,7 +887,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	/**
-	 * This hook is called whenever a drawing will be displayed (when a DrawingView will be build)
+	 * This hook is called whenever a drawing will be displayed (when a JDrawingView will be build)
 	 */
 	public void prepareVisualization() {
 	}

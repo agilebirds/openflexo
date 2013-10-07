@@ -30,6 +30,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.swing.JDrawingView;
 
 public class ZoomAction extends MouseDragControlActionImpl {
 
@@ -46,7 +47,7 @@ public class ZoomAction extends MouseDragControlActionImpl {
 	@Override
 	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		Point currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-				controller.getDrawingView());
+				((JDrawingView<?>) controller.getDrawingView()));
 		SimplifiedCardinalDirection card = FGEPoint.getSimplifiedOrientation(new FGEPoint(startPoint), new FGEPoint(
 				currentMousePositionInDrawingView));
 		boolean isPositive = true;
@@ -72,7 +73,8 @@ public class ZoomAction extends MouseDragControlActionImpl {
 
 	@Override
 	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-		startPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
+		startPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+				((JDrawingView<?>) controller.getDrawingView()));
 		// Virtual line that goes through the start point and its orientation is NORTH_EAST (or SOUTH_WEST, it's the same)
 		refLine = new FGELine(new FGEPoint(startPoint), new FGEPoint(startPoint.x + 1, startPoint.y - 1));
 		initialScale = controller.getScale();

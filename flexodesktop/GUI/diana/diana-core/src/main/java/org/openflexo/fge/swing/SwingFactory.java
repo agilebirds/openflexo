@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 import javax.swing.JComponent;
 
@@ -26,6 +26,8 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
 /**
@@ -55,36 +57,36 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	}
 
 	/**
-	 * Instantiate a new DrawingView<br>
+	 * Instantiate a new JDrawingView<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @return
 	 */
-	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
-		return new DrawingView<M>(controller);
+	public <M> JDrawingView<M> makeDrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
+		return new JDrawingView<M>(controller);
 	}
 
 	/**
-	 * Instantiate a new ShapeView for a shape node<br>
+	 * Instantiate a new JShapeView for a shape node<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
-		return new ShapeView<O>(shapeNode, controller);
+	public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+		return new JShapeView<O>(shapeNode, controller);
 	}
 
 	/**
-	 * Instantiate a new ConnectorView for a connector node<br>
+	 * Instantiate a new JConnectorView for a connector node<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode,
+	public <O> JConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode,
 			AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
-		return new ConnectorView<O>(connectorNode, controller);
+		return new JConnectorView<O>(connectorNode, controller);
 	}
 
 }

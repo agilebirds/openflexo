@@ -47,9 +47,9 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.JLabelView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.LabelView;
 
 /**
  * Utility class used in a general context to retrieve the focus owner in a graphical context.<br>
@@ -65,9 +65,9 @@ public class FocusRetriever {
 
 	private static final Logger logger = Logger.getLogger(FocusRetriever.class.getPackage().getName());
 
-	private DrawingView<?> drawingView;
+	private JDrawingView<?> drawingView;
 
-	public FocusRetriever(DrawingView<?> aDrawingView) {
+	public FocusRetriever(JDrawingView<?> aDrawingView) {
 		drawingView = aDrawingView;
 	}
 
@@ -132,7 +132,7 @@ public class FocusRetriever {
 
 		FGEView<?, ?> view = drawingView.viewForNode(node);
 		if (view == null) {
-			logger.warning("Unexpected null view for node " + node + " AbstractDianaEditor=" + getController() + " DrawingView="
+			logger.warning("Unexpected null view for node " + node + " AbstractDianaEditor=" + getController() + " JDrawingView="
 					+ drawingView);
 			/*Map<DrawingTreeNode<?, ?>, FGEView<?,?>> contents = getController().getContents();
 			System.out.println("Pour node, j'ai:");
@@ -143,7 +143,7 @@ public class FocusRetriever {
 				.viewForNode(node.getParentNode());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) parenttView);
 		if (node.hasText()) {
-			LabelView<?> labelView = view.getLabelView();
+			JLabelView<?> labelView = view.getLabelView();
 			if (labelView != null) {
 				return labelView.getBounds().contains(p);
 			}

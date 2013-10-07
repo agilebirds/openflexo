@@ -78,8 +78,8 @@ public interface PaletteElement extends Serializable {
 		}
 
 		/*@Override
-		public ShapeView makeShapeView(AbstractDianaEditor controller) {
-			return new PaletteElementView(this, controller);
+		public JShapeView makeShapeView(AbstractDianaEditor controller) {
+			return new JPaletteElementView(this, controller);
 		}*/
 
 		@Override

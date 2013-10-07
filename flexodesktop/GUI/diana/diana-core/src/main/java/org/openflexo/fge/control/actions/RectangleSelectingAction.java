@@ -37,6 +37,7 @@ import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.swing.JDrawingView;
 
 public class RectangleSelectingAction extends MouseDragControlActionImpl {
 
@@ -54,12 +55,12 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlActionImpl");
 		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-				controller.getDrawingView());
+				(JDrawingView<?>) controller.getDrawingView());
 		currentMousePositionInDrawingView = rectangleSelectingOriginInDrawingView;
 		if (controller.getDrawingView() == null) {
 			return false;
 		}
-		controller.getDrawingView().setRectangleSelectingAction(this);
+		((JDrawingView<?>) controller.getDrawingView()).setRectangleSelectingAction(this);
 		return true;
 	}
 
@@ -73,7 +74,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 			if (controller.getDrawingView() == null) {
 				return false;
 			}
-			controller.getDrawingView().resetRectangleSelectingAction();
+			((JDrawingView<?>) controller.getDrawingView()).resetRectangleSelectingAction();
 		}
 		return true;
 	}
@@ -84,7 +85,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlActionImpl");
 		}
 		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-				controller.getDrawingView());
+				((JDrawingView<?>) controller.getDrawingView()));
 
 		List<DrawingTreeNode<?, ?>> newFocusSelection;
 		if (node instanceof ContainerNode) {

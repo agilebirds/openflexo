@@ -44,9 +44,10 @@ import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.view.FGEPaintManager;
+import org.openflexo.fge.swing.FGEPaintManager;
+import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.JLabelView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.LabelView;
 import org.openflexo.toolbox.ToolBox;
 
 public class FGEViewMouseListener implements MouseListener, MouseMotionListener {
@@ -64,6 +65,13 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	public DrawingTreeNode<?, ?> getNode() {
 		return node;
+	}
+
+	public JDrawingView<?> getDrawingView() {
+		if (getController() != null) {
+			return (JDrawingView<?>) getController().getDrawingView();
+		}
+		return null;
 	}
 
 	@Override
@@ -149,7 +157,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 							logger.fine("Click on control area " + ca);
 						}
 						Point clickedLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(),
-								view.getDrawingView());
+								getDrawingView());
 						FGEPoint clickedPoint = ca.getNode().convertRemoteViewCoordinatesToLocalNormalizedPoint(
 								clickedLocationInDrawingView, view.getDrawingView().getDrawing().getRoot(),
 								view.getDrawingView().getScale());
@@ -230,18 +238,17 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		private ControlAreaDrag(ControlArea<?> aControlArea, MouseEvent e) {
 			controlArea = aControlArea;
-			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 			logger.fine("ControlPointDrag: start pt = " + startMovingLocationInDrawingView);
 
 			FGEPoint relativeStartMovingPoint = controlArea.getNode().convertRemoteViewCoordinatesToLocalNormalizedPoint(
-					startMovingLocationInDrawingView, view.getDrawingView().getDrawing().getRoot(), view.getDrawingView().getScale());
+					startMovingLocationInDrawingView, getDrawingView().getDrawing().getRoot(), getDrawingView().getScale());
 			startMovingPoint = aControlArea.getArea().getNearestPoint(relativeStartMovingPoint);
-			Point clickedLocationInDrawingView = SwingUtilities
-					.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+			Point clickedLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 			aControlArea.startDragging(
 					getController(),
 					aControlArea.getNode().convertRemoteViewCoordinatesToLocalNormalizedPoint(clickedLocationInDrawingView,
-							view.getDrawingView().getDrawing().getRoot(), view.getDrawingView().getScale()));
+							getDrawingView().getDrawing().getRoot(), getDrawingView().getScale()));
 			if (controlArea.getNode().isConnectedToDrawing()) {
 				initialWidth = controlArea.getNode().getViewWidth(view.getScale());
 				initialHeight = controlArea.getNode().getViewHeight(view.getScale());
@@ -258,7 +265,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					+ (newLocationInDrawingView.x - startMovingLocationInDrawingView.x) / view.getScale(), startMovingPoint.y
 					+ (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / view.getScale());
 
-			FGEPoint newRelativeLocation = view.getDrawingView().getDrawing().getRoot()
+			FGEPoint newRelativeLocation = getDrawingView().getDrawing().getRoot()
 					.convertLocalViewCoordinatesToRemoteNormalizedPoint(newLocationInDrawingView, controlArea.getNode(), view.getScale());
 
 			FGEPoint pointRelativeToInitialConfiguration = new FGEPoint(startMovingPoint.x
@@ -318,7 +325,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			if (getPaintManager().isPaintingCacheEnabled()) {
 				getPaintManager().removeFromTemporaryObjects(node);
 				getPaintManager().invalidate(node);
-				getPaintManager().repaint(view.getDrawingView());
+				getPaintManager().repaint(getDrawingView());
 			}
 		}
 	}
@@ -346,7 +353,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			((DianaInteractiveViewer<?, ?, ?>) getController()).stopEditionOfEditedLabelIfAny();
 			if (focusedObject.hasFloatingLabel() && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
 				currentFloatingLabelDrag = new FloatingLabelDrag(focusedObject, SwingUtilities.convertPoint((Component) e.getSource(),
-						e.getPoint(), view.getDrawingView()));
+						e.getPoint(), getDrawingView()));
 				e.consume();
 				return;
 			} else {
@@ -482,13 +489,13 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}*/
 
 			if (currentFloatingLabelDrag != null) {
-				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 				currentFloatingLabelDrag.moveTo(newPointLocation);
 				e.consume();
 			}
 
 			if (currentControlAreaDrag != null) {
-				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view.getDrawingView());
+				Point newPointLocation = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 				boolean continueDragging = currentControlAreaDrag.moveTo(newPointLocation, e);
 				e.consume();
 				if (!continueDragging) {
@@ -571,7 +578,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (focusedObject == null || !focusedObject.getDrawing().isEditable() || !(getController() instanceof DianaInteractiveViewer)) {
 			return false;
 		}
-		LabelView<?> labelView = ((DianaInteractiveViewer<?, ?, ?>) getController()).getEditedLabel();
+		JLabelView<?> labelView = ((DianaInteractiveViewer<?, ?, ?>) getController()).getEditedLabel();
 		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
 		if (labelView.getNode() == focusedObject) {
 
@@ -614,7 +621,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		return false;
 	}
 
-	private void triggerMouseExitedIfNeeded(MouseEvent e, LabelView<?> labelView, Point pointRelativeToTextComponent) {
+	private void triggerMouseExitedIfNeeded(MouseEvent e, JLabelView<?> labelView, Point pointRelativeToTextComponent) {
 		if (labelView.isMouseInsideLabel()) {
 			MouseEvent newEvent = new MouseEvent(labelView.getTextComponent(), MouseEvent.MOUSE_EXITED, e.getWhen(), e.getModifiers(),
 					pointRelativeToTextComponent.x, pointRelativeToTextComponent.y, e.getClickCount(), e.isPopupTrigger());
@@ -627,7 +634,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	}
 
 	public FocusRetriever getFocusRetriever() {
-		return view.getDrawingView().getFocusRetriever();
+		return getDrawingView().getFocusRetriever();
 	}
 
 	public Object getDrawable() {

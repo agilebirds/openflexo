@@ -45,7 +45,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.view.SwingFactory;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -324,7 +324,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			update();
 
 			controller = new DianaViewer<ShadowStylePreviewPanel, SwingFactory, JComponent>(drawing, factory, new SwingFactory());
-			add(controller.getDrawingView());
+			add((JComponent) controller.getDrawingView());
 
 		}
 

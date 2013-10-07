@@ -56,8 +56,9 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.actions.MoveAction.ShapeNodeTransferable;
 import org.openflexo.fge.control.actions.MoveAction.TransferedShapeNode;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.JShapeView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.ShapeView;
 import org.openflexo.fge.view.listener.FocusRetriever;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
@@ -73,7 +74,7 @@ public class DNDInfo {
 	private static final Logger logger = Logger.getLogger(DNDInfo.class.getPackage().getName());
 
 	private final MoveAction _moveAction;
-	private ShapeView<?> shapeView;
+	private JShapeView<?> shapeView;
 	private DragSource dragSource;
 	private DragGestureListener dgListener;
 	private DragSourceListener dsListener;
@@ -96,7 +97,7 @@ public class DNDInfo {
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();
 
-		shapeView = controller.getDrawingView().shapeViewForNode(shapeNode);
+		shapeView = getDrawingView().shapeViewForNode(shapeNode);
 
 		// component, action, listener
 		dgr = this.dragSource.createDefaultDragGestureRecognizer(shapeView, this.dragAction, this.dgListener);
@@ -127,10 +128,14 @@ public class DNDInfo {
 			}
 		}
 		this.dragSource.startDrag(dge, MoveAction.dropKO, new MoveAction.ShapeNodeTransferable(shapeNode, initialPoint), dsListener);
-		controller.getDrawingView().captureDraggedNode(shapeView, dge);
+		getDrawingView().captureDraggedNode(shapeView, dge);
 
 		// gr.setIsVisible(false);
 
+	}
+
+	protected JDrawingView<?> getDrawingView() {
+		return (JDrawingView<?>) controller.getDrawingView();
 	}
 
 	protected void enableDragging() {
@@ -193,7 +198,7 @@ public class DNDInfo {
 			try {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(DragSource.DefaultCopyNoDrop, transferable, dsListener);
-				controller.getDrawingView().captureDraggedNode(shapeView, e);
+				getDrawingView().captureDraggedNode(shapeView, e);
 			} catch (Exception idoe) {
 				logger.warning("Unexpected exception " + idoe);
 			}
@@ -235,7 +240,7 @@ public class DNDInfo {
 					// setName("");
 				}
 			} finally {
-				controller.getDrawingView().resetCapturedNode();
+				getDrawingView().resetCapturedNode();
 				disableDragging();
 			}
 		}
@@ -410,7 +415,7 @@ public class DNDInfo {
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				controller.getDrawingView().updateCapturedDraggedNodeImagePosition(e, controller.getDrawingView());
+				getDrawingView().updateCapturedDraggedNodeImagePosition(e, getDrawingView());
 			}
 			if (!isDragOk(e)) {
 				if (dragSourceContext == null) {
@@ -576,7 +581,7 @@ public class DNDInfo {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView<?, ?>) _dropContainer).getDrawingView().getFocusRetriever();
+				return getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}

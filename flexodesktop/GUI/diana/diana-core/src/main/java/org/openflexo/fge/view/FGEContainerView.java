@@ -19,17 +19,10 @@
  */
 package org.openflexo.fge.view;
 
-import java.util.Observer;
-
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.tools.DrawingPalette;
-import org.openflexo.fge.swing.FGEPaintManager;
-import org.openflexo.fge.swing.JLabelView;
+import java.util.List;
 
 /**
- * Implemented by all views representing a DrawingTreeNode<br>
+ * Implemented by all views representing a DrawingTreeNode and which can contains some other FGEView<br>
  * The implementation of this interface is technology specific, and is guaranteed to be an instance of (or s subclass of) C
  * 
  * @author sylvain
@@ -39,29 +32,11 @@ import org.openflexo.fge.swing.JLabelView;
  * @param <C>
  *            type of component this view is beeing instance (technology-specific)
  */
-public interface FGEView<O, C> extends Observer, FGEConstants {
+public interface FGEContainerView<O, C> extends FGEView<O, C> {
 
-	public AbstractDianaEditor<?, ?, ? super C> getController();
+	public void addView(FGEView<?, ?> view);
 
-	public DrawingTreeNode<O, ?> getNode();
+	public void removeView(FGEView<?, ?> view);
 
-	public DrawingView<?, ?> getDrawingView();
-
-	public FGEContainerView<?, ?> getParentView();
-
-	public O getDrawable();
-
-	public JLabelView<O> getLabelView();
-
-	public double getScale();
-
-	public void registerPalette(DrawingPalette aPalette);
-
-	public FGEPaintManager getPaintManager();
-
-	public void delete();
-
-	public boolean isDeleted();
-
-	public void rescale();
+	public <RC> List<FGEView<?, ? extends RC>> getChildViews();
 }

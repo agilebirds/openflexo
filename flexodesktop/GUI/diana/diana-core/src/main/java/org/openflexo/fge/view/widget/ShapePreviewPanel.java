@@ -27,7 +27,7 @@ import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.view.SwingFactory;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
@@ -120,7 +120,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 
 		controller = new DianaViewer<ShapePreviewPanel, SwingFactory, JComponent>(drawing, factory, new SwingFactory());
-		add(controller.getDrawingView());
+		add((JComponent) controller.getDrawingView());
 	}
 
 	public float getRatio() {

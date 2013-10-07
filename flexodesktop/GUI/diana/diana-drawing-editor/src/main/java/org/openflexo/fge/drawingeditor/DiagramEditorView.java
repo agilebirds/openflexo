@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.drawingeditor.model.Diagram;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.JDrawingView;
 
-public class DiagramEditorView extends DrawingView<Diagram> {
+public class DiagramEditorView extends JDrawingView<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(DiagramEditorView.class.getPackage().getName());
 

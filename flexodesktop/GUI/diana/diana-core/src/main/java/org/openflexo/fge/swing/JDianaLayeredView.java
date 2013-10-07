@@ -17,13 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -34,14 +35,23 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
+import org.openflexo.fge.view.FGEContainerView;
+import org.openflexo.fge.view.FGEView;
 
 @SuppressWarnings("serial")
-public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O, JLayeredPane> {
+public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGEContainerView<O, JLayeredPane> {
 
-	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JDianaLayeredView.class.getPackage().getName());
+
+	private List<FGEView<?, ? extends JComponent>> childViews;
+
+	public JDianaLayeredView() {
+		super();
+		childViews = new ArrayList<FGEView<?, ? extends JComponent>>();
+	}
 
 	@Override
-	public abstract DrawingView<?> getDrawingView();
+	public abstract JDrawingView<?> getDrawingView();
 
 	/**
 	 * Sets the layer attribute on the specified component, making it the bottommost component in that layer. Should be called before adding
@@ -99,55 +109,49 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		return returned;
 	}
 
-	public void add(ShapeView<?> view) {
+	@Override
+	public void addView(FGEView<?, ?> view) {
 		logger.info("add view " + view + " under " + this);
-		view.setBackground(getBackground());
-		if (view.getLabelView() != null) {
-			add(view.getLabelView(), view.getLayer(), -1);
+		if (view instanceof JShapeView) {
+			((JShapeView<?>) view).setBackground(getBackground());
+			if (view.getLabelView() != null) {
+				add(view.getLabelView(), ((JShapeView<?>) view).getLayer(), -1);
+			}
+			add(((JShapeView<?>) view), ((JShapeView<?>) view).getLayer(), -1);
+			childViews.add((JShapeView<?>) view);
+		} else if (view instanceof JConnectorView) {
+			((JConnectorView<?>) view).setBackground(getBackground());
+			if (((JConnectorView<?>) view).getLabelView() != null) {
+				add(((JConnectorView<?>) view).getLabelView(), ((JConnectorView<?>) view).getLayer(), -1);
+			}
+			add(((JConnectorView<?>) view), ((JConnectorView<?>) view).getLayer(), -1);
+			childViews.add((JConnectorView<?>) view);
 		}
-		add(view, view.getLayer(), -1);
-		/*if (getDrawingView() != null) {
-			getDrawingView().getContents().put(view.getNode(), view);
-		}*/
 	}
 
-	public void remove(ShapeView<?> view) {
-		if (view.getLabelView() != null) {
-			remove(view.getLabelView());
+	public void removeView(FGEView<?, ?> view) {
+		logger.info("remove view " + view + " from " + this);
+		if (view instanceof JShapeView) {
+			if (view.getLabelView() != null) {
+				remove(view.getLabelView());
+			}
+			remove(((JShapeView<?>) view));
+			childViews.remove((JShapeView<?>) view);
+		} else if (view instanceof JConnectorView) {
+			if (((JConnectorView<?>) view).getLabelView() != null) {
+				remove(((JConnectorView<?>) view).getLabelView());
+			}
+			remove(((JConnectorView<?>) view));
+			childViews.remove((JConnectorView<?>) view);
 		}
-		remove((Component) view);
-		/*if (getDrawingView() != null) {
-			getDrawingView().getContents().remove(view.getNode());
-		}*/
-	}
-
-	public void add(ConnectorView<O> view) {
-		view.setBackground(getBackground());
-		if (view.getLabelView() != null) {
-			add(view.getLabelView(), view.getLayer(), -1);
-		}
-		add(view, view.getLayer(), -1);
-		/*if (getDrawingView() != null) {
-			getDrawingView().getContents().put(view.getNode(), view);
-		}*/
-	}
-
-	public void remove(ConnectorView<O> view) {
-		if (view.getLabelView() != null) {
-			remove(view.getLabelView());
-		}
-		remove((Component) view);
-		/*if (getDrawingView() != null) {
-			getDrawingView().getContents().remove(view.getNode());
-		}*/
 	}
 
 	protected void handleNodeAdded(NodeAdded notification) {
 		DrawingTreeNode<?, ?> newNode = notification.getAddedNode();
-		logger.fine("ShapeView: Received NodeAdded notification, creating view for " + newNode);
+		logger.fine("JShapeView: Received NodeAdded notification, creating view for " + newNode);
 		if (newNode instanceof ShapeNode) {
 			ShapeNode<?> shapeNode = (ShapeNode<?>) newNode;
-			ShapeView<?> shapeView = getController().makeShapeView(shapeNode);
+			JShapeView<?> shapeView = (JShapeView<?>) getController().makeShapeView(shapeNode);
 			add(shapeView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
@@ -155,7 +159,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			shapeNode.notifyShapeNeedsToBeRedrawn(); // TODO: is this necessary ?
 		} else if (newNode instanceof ConnectorNode) {
 			ConnectorNode<?> connectorNode = (ConnectorNode<?>) newNode;
-			ConnectorView<?> connectorView = getController().makeConnectorView(connectorNode);
+			JConnectorView<?> connectorView = (JConnectorView<?>) getController().makeConnectorView(connectorNode);
 			add(connectorView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
@@ -172,7 +176,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		DrawingTreeNode<?, ?> removedNode = notification.getRemovedNode();
 		if (removedNode instanceof ShapeNode) {
 			ShapeNode<?> removedShapeNode = (ShapeNode<?>) removedNode;
-			ShapeView<?> view = getDrawingView().shapeViewForNode(removedShapeNode);
+			JShapeView<?> view = (JShapeView<?>) getDrawingView().shapeViewForNode(removedShapeNode);
 			if (view != null) {
 				remove(view);
 				revalidate();
@@ -184,7 +188,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			}
 		} else if (removedNode instanceof ConnectorNode) {
 			ConnectorNode<?> removedConnectorNode = (ConnectorNode<?>) removedNode;
-			ConnectorView<?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
+			JConnectorView<?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
 			if (view != null) {
 				remove(view);
 				revalidate();
@@ -223,4 +227,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
+	public List<FGEView<?, ? extends JComponent>> getChildViews() {
+		return childViews;
+	}
 }

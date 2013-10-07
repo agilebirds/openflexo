@@ -40,6 +40,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.swing.JDrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.ToolBox;
@@ -72,7 +73,7 @@ public class MoveAction extends MouseDragControlActionImpl {
 		}
 		if (currentMove != null) {
 			Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-					((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView());
+					(JDrawingView<?>) ((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView());
 
 			if (node instanceof ShapeNode
 					&& ((ShapeNode<?>) node).getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainer()

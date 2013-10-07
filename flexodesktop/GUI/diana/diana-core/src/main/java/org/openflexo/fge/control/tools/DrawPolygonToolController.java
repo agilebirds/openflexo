@@ -39,6 +39,7 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
+import org.openflexo.fge.swing.JDrawingView;
 
 public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygon> {
 
@@ -50,9 +51,21 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 		super(controller, control);
 	}
 
+	/**
+	 * Return the DrawingView of the controller this tool is associated to
+	 * 
+	 * @return
+	 */
+	public JDrawingView<?> getDrawingView() {
+		if (getController() != null) {
+			return (JDrawingView<?>) getController().getDrawingView();
+		}
+		return null;
+	}
+
 	@Override
 	public FGEPolygon makeDefaultShape(MouseEvent e) {
-		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
+		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		FGEPoint newPoint = getController().getDrawing().getRoot()
 				.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(), getController().getScale());
 		return new FGEPolygon(Filling.NOT_FILLED, newPoint, new FGEPoint(newPoint));

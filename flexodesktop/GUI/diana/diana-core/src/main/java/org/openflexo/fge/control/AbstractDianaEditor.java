@@ -43,10 +43,10 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.impl.DrawingImpl;
+import org.openflexo.fge.swing.FGEPaintManager;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
 
@@ -67,7 +67,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	private static final Logger logger = Logger.getLogger(AbstractDianaEditor.class.getPackage().getName());
 
 	private Drawing<M> drawing;
-	protected DrawingView<M> drawingView;
+	protected DrawingView<M, ? extends C> drawingView;
 
 	private ScalePanel _scalePanel;
 
@@ -83,7 +83,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 */
 	private F dianaFactory;
 
-	protected Map<DrawingTreeNode<?, ?>, FGEView<?, ?>> contents;
+	protected Map<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>> contents;
 
 	public AbstractDianaEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
 		super();
@@ -91,7 +91,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		this.factory = factory;
 		this.dianaFactory = dianaFactory;
 
-		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?, ?>>();
+		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>>();
 
 		drawing = aDrawing;
 		if (drawing instanceof DrawingImpl<?>) {
@@ -112,7 +112,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		return dianaFactory;
 	}
 
-	public DrawingView<?> rebuildDrawingView() {
+	public DrawingView<M, ? extends C> rebuildDrawingView() {
 		if (drawingView != null) {
 			drawingView.delete();
 		}
@@ -120,72 +120,69 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		return drawingView;
 	}
 
-	private DrawingView<?> buildDrawingView() {
+	private DrawingView<M, ?> buildDrawingView() {
 		drawingView = makeDrawingView();
 		contents.put(drawing.getRoot(), drawingView);
 		logger.info("Controller " + this + " Register " + drawingView + " for " + drawing.getRoot());
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof ShapeNode) {
-				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
-				drawingView.add(v);
+				ShapeView<?, ?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
+				drawingView.addView(v);
 			} else if (dtn instanceof ConnectorNode) {
-				ConnectorView<?> v = makeConnectorView((ConnectorNode<?>) dtn);
-				drawingView.add(v);
+				ConnectorView<?, ?> v = makeConnectorView((ConnectorNode<?>) dtn);
+				drawingView.addView(v);
 			}
 		}
-		drawingView.revalidate();
-		System.out.println("Hop: " + drawingView.getPreferredSize());
-		System.out.println("Contents: " + drawingView.getComponentCount());
-		System.out.println("DrawingView: " + drawingView);
+		System.out.println("JDrawingView: " + drawingView);
 		return drawingView;
 	}
 
-	private <O> ShapeView<?> recursivelyBuildShapeView(ShapeNode<O> shapeNode) {
-		ShapeView<O> returned = makeShapeView(shapeNode);
+	private <O> ShapeView<O, ? extends C> recursivelyBuildShapeView(ShapeNode<O> shapeNode) {
+		ShapeView<O, ? extends C> returned = makeShapeView(shapeNode);
 		for (DrawingTreeNode<?, ?> dtn : shapeNode.getChildNodes()) {
 			if (dtn instanceof ShapeNode) {
-				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
-				returned.add(v);
+				ShapeView<?, ?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
+				returned.addView(v);
 			} else if (dtn instanceof ConnectorNode) {
-				ConnectorView<?> v = makeConnectorView((ConnectorNode<?>) dtn);
-				returned.add(v);
+				ConnectorView<?, ?> v = makeConnectorView((ConnectorNode<?>) dtn);
+				returned.addView(v);
 			}
 		}
 		return returned;
 	}
 
 	/**
-	 * Instantiate a new DrawingView<br>
+	 * Instantiate a new JDrawingView<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @return
 	 */
-	public DrawingView<M> makeDrawingView() {
+	public DrawingView<M, ? extends C> makeDrawingView() {
 		return getDianaFactory().makeDrawingView(this);
 	}
 
 	/**
-	 * Instantiate a new ShapeView for a shape node<br>
+	 * Instantiate a new JShapeView for a shape node<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
-		ShapeView<O> returned = getDianaFactory().makeShapeView(shapeNode, this);
+	public <O> ShapeView<O, ? extends C> makeShapeView(ShapeNode<O> shapeNode) {
+		ShapeView<O, ? extends C> returned = getDianaFactory().makeShapeView(shapeNode, this);
 		contents.put(shapeNode, returned);
 		return returned;
 	}
 
 	/**
-	 * Instantiate a new ConnectorView for a connector node<br>
+	 * Instantiate a new JConnectorView for a connector node<br>
 	 * You might override this method for a custom view managing
 	 * 
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode) {
-		ConnectorView<O> returned = getDianaFactory().makeConnectorView(connectorNode, this);
+	public <O> ConnectorView<O, ? extends C> makeConnectorView(ConnectorNode<O> connectorNode) {
+		ConnectorView<O, ? extends C> returned = getDianaFactory().makeConnectorView(connectorNode, this);
 		contents.put(connectorNode, returned);
 		return returned;
 	}
@@ -195,7 +192,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 * 
 	 * @return
 	 */
-	public Map<DrawingTreeNode<?, ?>, FGEView<?, ?>> getContents() {
+	public Map<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>> getContents() {
 		return contents;
 	}
 
@@ -205,7 +202,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 * @param node
 	 * @return
 	 */
-	public <O> FGEView<?, ?> viewForNode(DrawingTreeNode<?, ?> node) {
+	public <O> FGEView<?, ? extends C> viewForNode(DrawingTreeNode<?, ?> node) {
 		return contents.get(node);
 	}
 
@@ -215,8 +212,8 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 * @param node
 	 * @return
 	 */
-	public ShapeView<?> shapeViewForNode(ShapeNode<?> node) {
-		return (ShapeView<?>) viewForNode(node);
+	public ShapeView<?, ? extends C> shapeViewForNode(ShapeNode<?> node) {
+		return (ShapeView<?, ? extends C>) viewForNode(node);
 	}
 
 	/**
@@ -225,8 +222,8 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 * @param node
 	 * @return
 	 */
-	public ConnectorView<?> connectorViewForNode(ConnectorNode<?> node) {
-		return (ConnectorView<?>) viewForNode(node);
+	public ConnectorView<?, ? extends C> connectorViewForNode(ConnectorNode<?> node) {
+		return (ConnectorView<?, ? extends C>) viewForNode(node);
 	}
 
 	public double getScale() {
@@ -329,7 +326,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		return drawing;
 	}
 
-	public DrawingView<M> getDrawingView() {
+	public DrawingView<M, ? extends C> getDrawingView() {
 		return drawingView;
 	}
 

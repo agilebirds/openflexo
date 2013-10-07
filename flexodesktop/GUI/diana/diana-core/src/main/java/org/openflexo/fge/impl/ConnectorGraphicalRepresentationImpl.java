@@ -701,8 +701,8 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	// Override for a custom view management
 	/*@Override
-	public ConnectorView makeConnectorView(AbstractDianaEditor controller) {
-		return new ConnectorView(this, controller);
+	public JConnectorView makeConnectorView(AbstractDianaEditor controller) {
+		return new JConnectorView(this, controller);
 	}*/
 
 	@Override

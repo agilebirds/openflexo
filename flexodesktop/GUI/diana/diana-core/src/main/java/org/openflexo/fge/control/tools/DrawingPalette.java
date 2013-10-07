@@ -65,11 +65,11 @@ import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable
 import org.openflexo.fge.control.tools.PaletteElement.TransferedPaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.JPaletteElementView;
+import org.openflexo.fge.swing.JShapeView;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.PaletteElementView;
-import org.openflexo.fge.view.ShapeView;
-import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -171,11 +171,11 @@ public class DrawingPalette {
 		elements.remove(element);
 	}
 
-	public DrawingView<DrawingPalette> getPaletteView() {
+	public JDrawingView<DrawingPalette> getPaletteView() {
 		if (paletteController == null) {
 			makePalettePanel();
 		}
-		return paletteController.getDrawingView();
+		return (JDrawingView<DrawingPalette>) paletteController.getDrawingView();
 	}
 
 	private JScrollPane scrollPane;
@@ -200,9 +200,9 @@ public class DrawingPalette {
 		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory, new SwingFactory() {
 			@SuppressWarnings("unchecked")
 			@Override
-			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+			public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 				if (shapeNode.getDrawable() instanceof PaletteElement) {
-					return (ShapeView<O>) (new PaletteElementView((ShapeNode<PaletteElement>) shapeNode,
+					return (JShapeView<O>) (new JPaletteElementView((ShapeNode<PaletteElement>) shapeNode,
 							(AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent>) controller));
 				}
 				return super.makeShapeView(shapeNode, controller);
@@ -440,8 +440,7 @@ public class DrawingPalette {
 		@Override
 		public void dragOver(DropTargetDragEvent e) {
 			if (isDragFlavorSupported(e)) {
-				getController().getDrawingView().updateCapturedDraggedNodeImagePosition(e,
-						_controller.getDrawingView().getActivePalette().getPaletteView());
+				getDrawingView().updateCapturedDraggedNodeImagePosition(e, getDrawingView().getActivePalette().getPaletteView());
 			}
 			if (!isDragOk(e)) {
 				if (getDragSourceContext() == null) {
@@ -473,7 +472,7 @@ public class DrawingPalette {
 		@Override
 		public void dragExit(DropTargetEvent e) {
 			// interface method
-			getController().getDrawingView().resetCapturedNode();
+			getDrawingView().resetCapturedNode();
 		}
 
 		/**
@@ -582,13 +581,13 @@ public class DrawingPalette {
 				return;
 			} finally {
 				// Resets the screenshot stored by the editable drawing view (not the palette drawing view).
-				getController().getDrawingView().resetCapturedNode();
+				getDrawingView().resetCapturedNode();
 			}
 		}
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView<?, ?>) _dropContainer).getDrawingView().getFocusRetriever();
+				return getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
@@ -626,6 +625,18 @@ public class DrawingPalette {
 			return null;
 		}
 
+	}
+
+	/**
+	 * Return the DrawingView of the controller this palette is associated to
+	 * 
+	 * @return
+	 */
+	public JDrawingView<?> getDrawingView() {
+		if (getController() != null) {
+			return (JDrawingView<?>) getController().getDrawingView();
+		}
+		return null;
 	}
 
 	public DianaInteractiveEditor<?, ?, ?> getController() {

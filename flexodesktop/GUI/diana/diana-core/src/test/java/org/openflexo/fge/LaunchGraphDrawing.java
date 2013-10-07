@@ -40,7 +40,8 @@ import javax.swing.JScrollPane;
 
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.view.SwingFactory;
+import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -73,6 +74,11 @@ public class LaunchGraphDrawing {
 			super(aDrawing, aDrawing.getFactory(), SWING_FACTORY);
 			contextualMenu = new JPopupMenu();
 			contextualMenu.add(new JMenuItem("Item"));
+		}
+
+		@Override
+		public JDrawingView<Graph> getDrawingView() {
+			return (JDrawingView<Graph>) super.getDrawingView();
 		}
 
 		/*@Override
@@ -114,8 +120,8 @@ public class LaunchGraphDrawing {
 		*/
 
 		/*@Override
-		public DrawingView<Graph> makeDrawingView() {
-			DrawingView<Graph> returned = super.makeDrawingView();
+		public JDrawingView<Graph> makeDrawingView() {
+			JDrawingView<Graph> returned = super.makeDrawingView();
 			returned.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseReleased(MouseEvent e) {
@@ -207,13 +213,12 @@ public class LaunchGraphDrawing {
 		DianaInteractiveViewer<Graph, SwingFactory, JComponent> dc2 = new DianaInteractiveViewer<Graph, SwingFactory, JComponent>(d,
 				d.getFactory(), SWING_FACTORY);
 		final JDialog dialog2 = new JDialog((Frame) null, false);
-		dialog2.getContentPane().add(new JScrollPane(dc2.getDrawingView()));
+		dialog2.getContentPane().add(new JScrollPane((JComponent) dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));
 		dialog2.setLocation(800, 100);
 		dialog2.validate();
 		dialog2.pack();
 		dialog2.setVisible(true);
-		dc2.getDrawingView().setName("[CACHE]");
 		dc2.enablePaintingCache();
 
 		// dc.addObserver(inspector);

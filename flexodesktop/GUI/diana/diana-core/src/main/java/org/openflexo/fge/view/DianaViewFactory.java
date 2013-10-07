@@ -40,7 +40,7 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 * 
 	 * @return
 	 */
-	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<M, F, C> controller);
+	public <M> DrawingView<M, ? extends C> makeDrawingView(AbstractDianaEditor<M, F, C> controller);
 
 	/**
 	 * Instantiate a new ShapeView for a shape node<br>
@@ -49,7 +49,7 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, F, C> controller);
+	public <O> ShapeView<O, ? extends C> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, F, C> controller);
 
 	/**
 	 * Instantiate a new ConnectorView for a connector node<br>
@@ -58,7 +58,7 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
+	public <O> ConnectorView<O, ? extends C> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
 
 	/**
 	 * Build and return a MouseListener for supplied node and view<br>

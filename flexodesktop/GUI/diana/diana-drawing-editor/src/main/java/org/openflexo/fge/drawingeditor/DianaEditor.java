@@ -40,8 +40,8 @@ import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
@@ -195,7 +195,7 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingFactory, J
 	}
 
 	/*@Override
-	public DrawingView<DiagramDrawing> makeDrawingView() {
+	public JDrawingView<DiagramDrawing> makeDrawingView() {
 		return new DiagramEditorView(drawing, this);
 	}*/
 

@@ -2253,8 +2253,8 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	// Override for a custom view management
 	/*@Override
-	public ShapeView<Object> makeShapeView(AbstractDianaEditor controller) {
-		return new ShapeView<Object>(this, controller);
+	public JShapeView<Object> makeShapeView(AbstractDianaEditor controller) {
+		return new JShapeView<Object>(this, controller);
 	}*/
 
 	@Override

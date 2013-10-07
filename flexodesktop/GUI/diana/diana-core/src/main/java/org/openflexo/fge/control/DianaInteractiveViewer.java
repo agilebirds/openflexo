@@ -45,8 +45,8 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
+import org.openflexo.fge.swing.JLabelView;
 import org.openflexo.fge.view.DianaViewFactory;
-import org.openflexo.fge.view.LabelView;
 
 /**
  * Represents a basic viewer of a {@link Drawing}<br>
@@ -78,7 +78,7 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 	private List<DrawingTreeNode<?, ?>> focusedObjects;
 	private List<DrawingTreeNode<?, ?>> selectedObjects;
 
-	private LabelView<?> currentlyEditedLabel;
+	private JLabelView<?> currentlyEditedLabel;
 	private ControlArea<?> focusedControlArea;
 
 	private MouseDragControlImpl currentMouseDrag = null;
@@ -373,12 +373,12 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 		// Override when required
 	}
 
-	public void setEditedLabel(LabelView<?> aLabel) {
+	public void setEditedLabel(JLabelView<?> aLabel) {
 		stopEditionOfEditedLabelIfAny();
 		currentlyEditedLabel = aLabel;
 	}
 
-	public void resetEditedLabel(LabelView<?> editedLabel) {
+	public void resetEditedLabel(JLabelView<?> editedLabel) {
 		if (currentlyEditedLabel == editedLabel) {
 			currentlyEditedLabel = null;
 		}
@@ -388,7 +388,7 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 		return currentlyEditedLabel != null;
 	}
 
-	public LabelView<?> getEditedLabel() {
+	public JLabelView<?> getEditedLabel() {
 		return currentlyEditedLabel;
 	}
 

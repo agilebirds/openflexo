@@ -49,6 +49,7 @@ import org.openflexo.fge.impl.ContainerNodeImpl;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.GeometricNodeImpl;
 import org.openflexo.fge.notifications.GeometryModified;
+import org.openflexo.fge.swing.JDrawingView;
 
 public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Observable implements Observer {
 
@@ -75,9 +76,21 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		currentlyEditedForeground = controller.getFactory().makeForegroundStyle(Color.GREEN);
 	}
 
+	/**
+	 * Return the DrawingView of the controller this tool is associated to
+	 * 
+	 * @return
+	 */
+	public JDrawingView<?> getDrawingView() {
+		if (getController() != null) {
+			return (JDrawingView<?>) getController().getDrawingView();
+		}
+		return null;
+	}
+
 	protected void startMouseEdition(MouseEvent e) {
 		editionHasBeenStarted = true;
-		parentNode = getController().getDrawingView().getFocusRetriever().getFocusedObject(getController().getDrawing().getRoot(), e);
+		parentNode = getDrawingView().getFocusRetriever().getFocusedObject(getController().getDrawing().getRoot(), e);
 		shape = makeDefaultShape(e);
 		Class<S> shapeClass = (Class<S>) TypeUtils.getTypeArgument(getClass(), DrawShapeToolController.class, 0);
 		GeometricGRBinding<S> editedGeometricObjectBinding = getController().getDrawing().bindGeometric(shapeClass,
@@ -177,7 +190,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	}
 
 	protected FGEPoint getPoint(MouseEvent e) {
-		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), controller.getDrawingView());
+		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		return currentEditedShapeGeometricNode.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, controller.getDrawing().getRoot(),
 				controller.getScale());
 	}

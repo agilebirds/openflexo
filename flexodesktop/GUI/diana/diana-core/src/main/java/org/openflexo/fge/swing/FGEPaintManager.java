@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -45,6 +45,8 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.view.ShapeView;
 
 public class FGEPaintManager {
 
@@ -71,12 +73,12 @@ public class FGEPaintManager {
 		*/
 	}
 
-	private DrawingView<?> _drawingView;
+	private JDrawingView<?> _drawingView;
 
 	private BufferedImage _paintBuffer;
 	private HashSet<DrawingTreeNode<?, ?>> _temporaryObjects;
 
-	public FGEPaintManager(DrawingView<?> drawingView) {
+	public FGEPaintManager(JDrawingView<?> drawingView) {
 		super();
 		_drawingView = drawingView;
 		_paintBuffer = null;
@@ -88,7 +90,7 @@ public class FGEPaintManager {
 		}
 	}
 
-	public DrawingView<?> getDrawingView() {
+	public JDrawingView<?> getDrawingView() {
 		return _drawingView;
 	}
 
@@ -221,19 +223,19 @@ public class FGEPaintManager {
 		}
 		if (view == _drawingView) {
 			// clearTemporaryRepaintArea();
-			// paintRequestLogger.warning("Called repaint on whole DrawingView. Is it really necessary ?");
+			// paintRequestLogger.warning("Called repaint on whole JDrawingView. Is it really necessary ?");
 		}
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
 		if (view.getNode().hasFloatingLabel()) {
-			LabelView<?> label = view.getLabelView();
+			JLabelView<?> label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
 			}
 		}
 		// repaintManager.repaintTemporaryRepaintAreas((JComponent)view);
 
-		if (view instanceof ShapeView /*&& isPaintingCacheEnabled()*/) {
+		if (view instanceof ShapeView) {
 			Container parent = ((Component) view).getParent();
 			if (parent == null) {
 				return;
@@ -242,7 +244,7 @@ public class FGEPaintManager {
 			// Control points displayed focus or selection might changed, and to be refresh correctely
 			// we must assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
-			ShapeNode<?> shapeNode = ((ShapeView<?>) view).getNode();
+			ShapeNode<?> shapeNode = ((ShapeView<?, ?>) view).getNode();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
 			if (shapeNode.getGraphicalRepresentation().getBorder().getTop() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
@@ -293,7 +295,7 @@ public class FGEPaintManager {
 		Graphics2D g = bufferedImage.createGraphics();
 		view.print(g);
 		return bufferedImage;*/
-		FGEView<?,?> v = getDrawingView().viewForNode(node);
+		FGEView<?, ?> v = getDrawingView().viewForNode(node);
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {
@@ -306,7 +308,7 @@ public class FGEPaintManager {
 
 	private synchronized BufferedImage bufferDrawingView() {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
-			paintRequestLogger.fine("Buffering whole DrawingView. Is it really necessary ?");
+			paintRequestLogger.fine("Buffering whole JDrawingView. Is it really necessary ?");
 		}
 		Component view = getDrawingView();
 		GraphicsConfiguration gc = view.getGraphicsConfiguration();
@@ -345,7 +347,7 @@ public class FGEPaintManager {
 
 		public static final boolean MANAGE_DIRTY_REGIONS = true;
 
-		// For now temporary repaint areas are registered only for DrawingView !!!!!!
+		// For now temporary repaint areas are registered only for JDrawingView !!!!!!
 		// Later, we might extend this scheme to the whole view hierarchy
 		// Using for example Hashtable<JComponent,Vector<Rectangle>> structure
 		private WeakHashMap<JComponent, Vector<Rectangle>> temporaryRepaintAreas;
@@ -456,7 +458,7 @@ public class FGEPaintManager {
 		else {
 			// OK, we are in our bounds
 			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE))
-				FGEPaintManager.paintPrimitiveLogger.fine("DrawingView: use image buffer, copy area "+renderingBounds);
+				FGEPaintManager.paintPrimitiveLogger.fine("JDrawingView: use image buffer, copy area "+renderingBounds);
 			g.drawImage(buffer,
 					p1.x,p1.y,p2.x,p2.y,
 					p1.x,p1.y,p2.x,p2.y,
@@ -498,7 +500,7 @@ public class FGEPaintManager {
 		} else {
 			// OK, we are in our bounds
 			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-				FGEPaintManager.paintPrimitiveLogger.fine("DrawingView: use image buffer, copy area " + renderingBounds);
+				FGEPaintManager.paintPrimitiveLogger.fine("JDrawingView: use image buffer, copy area " + renderingBounds);
 			}
 
 			// Below was the previous implementation, using i think a too complex drawing primitive

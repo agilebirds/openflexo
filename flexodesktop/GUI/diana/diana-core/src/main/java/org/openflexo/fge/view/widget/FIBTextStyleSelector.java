@@ -45,7 +45,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.view.SwingFactory;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -328,7 +328,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 
 			controller = new DianaViewer<TextStylePreviewPanel, SwingFactory, JComponent>(drawing, factory, new SwingFactory());
-			add(controller.getDrawingView());
+			add((JComponent) controller.getDrawingView());
 
 			update();
 		}

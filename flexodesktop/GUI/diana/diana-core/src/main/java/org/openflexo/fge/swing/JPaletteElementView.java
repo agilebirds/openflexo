@@ -1,4 +1,4 @@
-package org.openflexo.fge.view;
+package org.openflexo.fge.swing;
 
 import java.awt.Point;
 import java.awt.dnd.DnDConstants;
@@ -30,9 +30,9 @@ import org.openflexo.toolbox.ToolBox;
 import sun.awt.dnd.SunDragSourceContextPeer;
 
 @SuppressWarnings("serial")
-public class PaletteElementView extends ShapeView<PaletteElement> {
+public class JPaletteElementView extends JShapeView<PaletteElement> {
 
-	private static final Logger logger = Logger.getLogger(PaletteElementView.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JPaletteElementView.class.getPackage().getName());
 
 	private DragSource dragSource;
 	private DragGestureListener dgListener;
@@ -44,7 +44,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	/* Local controller ONLY */
 	// private AbstractDianaEditor<DrawingPalette> paletteController;
 
-	public PaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> controller) {
+	public JPaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> controller) {
 		super(node, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
@@ -152,7 +152,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 				// DragLabel.this.getText() );
 			}
 
-			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), PaletteElementView.this);
+			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), JPaletteElementView.this);
 			PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), p);
 			if (ToolBox.isMacOS()) {
 				// Need to call this on MacOS.
@@ -178,7 +178,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(DrawingPalette.dropKO, transferable, dsListener);
 				logger.info("Starting drag for " + getNode());
-				getDrawingView().captureDraggedNode(PaletteElementView.this, e);
+				getDrawingView().captureDraggedNode(JPaletteElementView.this, e);
 			} catch (Exception idoe) {
 				logger.warning("Unexpected exception " + idoe);
 			}
