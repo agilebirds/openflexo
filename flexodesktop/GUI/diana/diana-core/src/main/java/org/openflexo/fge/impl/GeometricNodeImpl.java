@@ -16,8 +16,8 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEAbstractLine;
@@ -169,8 +169,8 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		super.paint(g, controller);
 
 		Graphics2D g2 = (Graphics2D) g;
-		if (controller instanceof AbstractDianaEditor<?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?>) controller);
+		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
+			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 		} else {
 			logger.warning("Unsupported controller: " + controller);
 		}

@@ -25,10 +25,9 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 
 public abstract class MouseDragControlActionImpl extends MouseControlActionImpl implements
-		MouseDragControlAction<DianaInteractiveViewer<?>> {
+		MouseDragControlAction<DianaInteractiveViewer<?, ?, ?>> {
 
 	static final Logger logger = Logger.getLogger(MouseDragControlActionImpl.class.getPackage().getName());
 
@@ -47,7 +46,7 @@ public abstract class MouseDragControlActionImpl extends MouseControlActionImpl 
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event);
+	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event);
 
 	/**
 	 * Handle mouse released event, by performing what is required here Return flag indicating if event has been correctely handled and
@@ -63,7 +62,7 @@ public abstract class MouseDragControlActionImpl extends MouseControlActionImpl 
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
+	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
 			boolean isSignificativeDrag);
 
 	/**
@@ -78,7 +77,7 @@ public abstract class MouseDragControlActionImpl extends MouseControlActionImpl 
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event);
+	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event);
 
 	public static class None extends MouseDragControlActionImpl {
 		@Override
@@ -87,17 +86,17 @@ public abstract class MouseDragControlActionImpl extends MouseControlActionImpl 
 		}
 
 		@Override
-		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 			return true;
 		}
 
 		@Override
-		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
 				boolean isSignificativeDrag) {
 			return false;
 		}

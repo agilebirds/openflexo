@@ -121,7 +121,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}*/
 	}
 
-	public void add(ConnectorView<O, ?> view) {
+	public void add(ConnectorView<O> view) {
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);
@@ -132,7 +132,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}*/
 	}
 
-	public void remove(ConnectorView<O, ?> view) {
+	public void remove(ConnectorView<O> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}
@@ -155,7 +155,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			shapeNode.notifyShapeNeedsToBeRedrawn(); // TODO: is this necessary ?
 		} else if (newNode instanceof ConnectorNode) {
 			ConnectorNode<?> connectorNode = (ConnectorNode<?>) newNode;
-			ConnectorView<?, ?> connectorView = getController().makeConnectorView(connectorNode);
+			ConnectorView<?> connectorView = getController().makeConnectorView(connectorNode);
 			add(connectorView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
@@ -184,7 +184,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 			}
 		} else if (removedNode instanceof ConnectorNode) {
 			ConnectorNode<?> removedConnectorNode = (ConnectorNode<?>) removedNode;
-			ConnectorView<?, ?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
+			ConnectorView<?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
 			if (view != null) {
 				remove(view);
 				revalidate();

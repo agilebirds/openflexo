@@ -31,7 +31,7 @@ public class ContinuousSelectionAction extends MouseClickControlActionImpl {
 	}
 
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		MouseClickControlActionImpl.logger.info("Continuous select " + node);
 
 		return true;

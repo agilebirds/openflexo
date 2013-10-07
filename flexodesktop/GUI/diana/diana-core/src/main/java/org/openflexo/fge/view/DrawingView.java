@@ -99,8 +99,8 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
 	private Drawing<M> drawing;
-	// private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
-	private AbstractDianaEditor<M, ?, JComponent> controller;
+	// private Map<DrawingTreeNode<?, ?>, FGEView<?,?>> contents;
+	private AbstractDianaEditor<M, SwingFactory, JComponent> controller;
 	private FocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
 
@@ -129,11 +129,11 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	private boolean isDeleted = false;
 
-	public DrawingView(AbstractDianaEditor<M, ?, JComponent> controller) {
+	public DrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
 		this.controller = controller;
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
-		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
+		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?,?>>();
 		graphics = new FGEDrawingGraphicsImpl(drawing.getRoot());
 		_focusRetriever = new FocusRetriever(this);
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
@@ -832,7 +832,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	 * FGEConstants.CONTROL_POINT_SIZE*2); } }
 	 */
 
-	/*public Map<DrawingTreeNode<?, ?>, FGEView<?>> getContents() {
+	/*public Map<DrawingTreeNode<?, ?>, FGEView<?,?>> getContents() {
 		return contents;
 	}*/
 

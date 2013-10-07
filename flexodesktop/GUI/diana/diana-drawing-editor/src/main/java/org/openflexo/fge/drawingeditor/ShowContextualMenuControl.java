@@ -36,7 +36,8 @@ public class ShowContextualMenuControl extends MouseClickControlImpl {
 	public ShowContextualMenuControl(DiagramFactory factory) {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DianaInteractiveViewer<?> controller, java.awt.event.MouseEvent event) {
+			public boolean handleClick(DrawingTreeNode<?, ?> dtn, DianaInteractiveViewer<?, ?, ?> controller,
+					java.awt.event.MouseEvent event) {
 				FGEView view = controller.getDrawingView().viewForNode(dtn);
 				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 				((DianaEditor) controller).showContextualMenu(dtn, view, newPoint);

@@ -22,7 +22,6 @@ package org.openflexo.fge.control.actions;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlAction;
 
-
-public abstract class MouseControlActionImpl implements MouseControlAction<DianaInteractiveViewer<?>> {
+public abstract class MouseControlActionImpl implements MouseControlAction<DianaInteractiveViewer<?, ?, ?>> {
 
 }

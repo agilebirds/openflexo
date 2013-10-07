@@ -31,13 +31,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -46,6 +49,8 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 public class LaunchGraphDrawing {
 
 	private static final Logger logger = FlexoLogger.getLogger(LaunchGraphDrawing.class.getPackage().getName());
+
+	private static final SwingFactory SWING_FACTORY = new SwingFactory();
 
 	public static void main(String[] args) {
 		try {
@@ -61,11 +66,11 @@ public class LaunchGraphDrawing {
 		showPanel();
 	}
 
-	public static class TestDrawingController extends AbstractDianaEditor<Graph> {
+	public static class TestDrawingController extends DianaInteractiveEditor<Graph, SwingFactory, JComponent> {
 		private JPopupMenu contextualMenu;
 
 		public TestDrawingController(GraphDrawing1 aDrawing) {
-			super(aDrawing, aDrawing.getFactory());
+			super(aDrawing, aDrawing.getFactory(), SWING_FACTORY);
 			contextualMenu = new JPopupMenu();
 			contextualMenu.add(new JMenuItem("Item"));
 		}
@@ -132,7 +137,7 @@ public class LaunchGraphDrawing {
 		// final TestInspector inspector = new TestInspector();
 
 		final GraphDrawing1 d = makeDrawing();
-		final AbstractDianaEditor<Graph> dc = new TestDrawingController(d);
+		final TestDrawingController dc = new TestDrawingController(d);
 		dc.disablePaintingCache();
 		dc.getDrawingView().setName("[NO_CACHE]");
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
@@ -199,7 +204,8 @@ public class LaunchGraphDrawing {
 
 		dialog.setVisible(true);
 
-		AbstractDianaEditor<Graph> dc2 = new AbstractDianaEditor<Graph>(d, d.getFactory());
+		DianaInteractiveViewer<Graph, SwingFactory, JComponent> dc2 = new DianaInteractiveViewer<Graph, SwingFactory, JComponent>(d,
+				d.getFactory(), SWING_FACTORY);
 		final JDialog dialog2 = new JDialog((Frame) null, false);
 		dialog2.getContentPane().add(new JScrollPane(dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));

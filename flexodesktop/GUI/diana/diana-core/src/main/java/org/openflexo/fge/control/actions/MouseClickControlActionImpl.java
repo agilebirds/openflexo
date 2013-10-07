@@ -25,10 +25,9 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 
 public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements
-		MouseClickControlAction<DianaInteractiveViewer<?>> {
+		MouseClickControlAction<DianaInteractiveViewer<?, ?, ?>> {
 
 	static final Logger logger = Logger.getLogger(MouseClickControlActionImpl.class.getPackage().getName());
 
@@ -47,7 +46,7 @@ public abstract class MouseClickControlActionImpl extends MouseControlActionImpl
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event);
 
 	public static class None extends MouseClickControlActionImpl {
 		@Override
@@ -56,7 +55,7 @@ public abstract class MouseClickControlActionImpl extends MouseControlActionImpl
 		}
 
 		@Override
-		public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+		public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 			// No action
 			return true;
 		}

@@ -201,20 +201,20 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 			return new CustomDragControlAction() {
 
 				@Override
-				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 					logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlActionImpl");
 					return true;
 				}
 
 				@Override
-				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 					logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlActionImpl");
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
-						boolean isSignificativeDrag) {
+				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller,
+						MouseEvent event, boolean isSignificativeDrag) {
 					logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlActionImpl");
 					return false;
 				}
@@ -237,7 +237,7 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		case CUSTOM:
 			return new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+				public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 					logger.info("Perform undefined CUSTOM MouseClickControlActionImpl");
 					return true;
 				}

@@ -40,7 +40,8 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -83,17 +84,15 @@ public class FocusRetriever {
 		}
 	}
 
-	public AbstractDianaEditor<?> getController() {
-		return drawingView.getController();
+	public DianaInteractiveViewer<?, ?, ?> getController() {
+		return (DianaInteractiveViewer<?, ?, ?>) drawingView.getController();
 	}
 
 	public void handleMouseMove(MouseEvent event) {
 		DrawingTreeNode<?, ?> newFocusedObject = getFocusedObject(event);
 
-		// System.out.println("Hop, je bouge et je suis focuse sur " + newFocusedObject);
-
 		if (newFocusedObject != null) {
-			drawingView.getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
+			getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
 			ControlArea<?> cp = getFocusedControlAreaForDrawable(newFocusedObject, event);
 			if (cp != null) {
 				if (cursoredComponent != null) {
@@ -107,15 +106,15 @@ public class FocusRetriever {
 				resetCursorIfRequired();
 			}
 		} else {
-			if (drawingView.getController().getFocusedFloatingLabel() != null) {
-				drawingView.getController().setFocusedFloatingLabel(null);
+			if (getController().getFocusedFloatingLabel() != null) {
+				getController().setFocusedFloatingLabel(null);
 			}
 			resetCursorIfRequired();
 		}
 
 		// if (newFocusedObject !=
 		// drawingView.getController().getFocusedObject()) {
-		drawingView.getController().setFocusedObject(newFocusedObject);
+		getController().setFocusedObject(newFocusedObject);
 		// }
 
 	}
@@ -131,16 +130,17 @@ public class FocusRetriever {
 			return false;
 		}
 
-		FGEView<?> view = drawingView.viewForNode(node);
+		FGEView<?, ?> view = drawingView.viewForNode(node);
 		if (view == null) {
 			logger.warning("Unexpected null view for node " + node + " AbstractDianaEditor=" + getController() + " DrawingView="
 					+ drawingView);
-			/*Map<DrawingTreeNode<?, ?>, FGEView<?>> contents = getController().getContents();
+			/*Map<DrawingTreeNode<?, ?>, FGEView<?,?>> contents = getController().getContents();
 			System.out.println("Pour node, j'ai:");
 			FGEView v = contents.get(node);
 			System.out.println("Prout");*/
 		}
-		FGEView<?> parenttView = node == drawingView.getDrawing().getRoot() ? drawingView : drawingView.viewForNode(node.getParentNode());
+		FGEView<?, ?> parenttView = node == drawingView.getDrawing().getRoot() ? drawingView : drawingView
+				.viewForNode(node.getParentNode());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) parenttView);
 		if (node.hasText()) {
 			LabelView<?> labelView = view.getLabelView();
@@ -185,9 +185,9 @@ public class FocusRetriever {
 			return returned;
 		}
 
-		FGEView<?> view = drawingView.viewForNode(container);
+		FGEView<?, ?> view = drawingView.viewForNode(container);
 		Point p = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-		FGEView<?> v = drawingView.viewForNode(node);
+		FGEView<?, ?> v = drawingView.viewForNode(node);
 		Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 		FGEPoint p3 = v.getNode().convertViewCoordinatesToNormalizedPoint(p2, getScale());
 
@@ -238,25 +238,21 @@ public class FocusRetriever {
 	}
 
 	public DrawingTreeNode<?, ?> getFocusedObject(MouseEvent event) {
-		switch (getController().getCurrentTool()) {
-		case SelectionTool:
-			DrawingTreeNode<?, ?> returned = getFocusedObject(drawingView.getDrawing().getRoot(), event);
-			/*
-			 * System.out.println("getFocusedObject(), return "+returned); if
-			 * (getController().getDrawing() instanceof DrawingImpl)
-			 * ((DrawingImpl
-			 * )getController().getDrawing()).printGraphicalObjectHierarchy();
-			 */
-			return returned;
-		case DrawShapeTool:
-			if (getController().getDrawShapeToolController() != null) {
-				return getController().getDrawShapeToolController().getCurrentEditedShape();
-			} else {
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case SelectionTool:
+				return getFocusedObject(drawingView.getDrawing().getRoot(), event);
+			case DrawShapeTool:
+				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController() != null) {
+					return ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getCurrentEditedShape();
+				} else {
+					return null;
+				}
+			default:
 				return null;
 			}
-		default:
-			return null;
 		}
+		return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 	}
 
 	public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDragEvent event) {
@@ -280,7 +276,7 @@ public class FocusRetriever {
 	}
 
 	private DrawingTreeNode<?, ?> getFocusedObject(ContainerNode<?, ?> node, Component eventSource, Point eventLocation) {
-		FGEView<?> view = drawingView.viewForNode(node);
+		FGEView<?, ?> view = drawingView.viewForNode(node);
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) view);
 		double distanceToNearestConnector = Double.POSITIVE_INFINITY;
 		double smallestDistanceToCPOfNearestConnector = Double.POSITIVE_INFINITY;
@@ -352,7 +348,7 @@ public class FocusRetriever {
 
 				else {
 
-					FGEView<?> v = drawingView.viewForNode(childNode);
+					FGEView<?, ?> v = drawingView.viewForNode(childNode);
 					Rectangle r = childNode.getViewBounds(getScale());
 
 					if (r.contains(p)) {
@@ -611,7 +607,7 @@ public class FocusRetriever {
 			if (shapesInSameLayer.size() > 1) {
 				double distance = Double.MAX_VALUE;
 				for (ShapeNode<?> gr : shapesInSameLayer) {
-					FGEView<?> v = drawingView.viewForNode(gr);
+					FGEView<?, ?> v = drawingView.viewForNode(gr);
 					Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 					FGEPoint p3 = gr.convertViewCoordinatesToNormalizedPoint(p2, getScale());
 					if (Double.isNaN(p3.getX()) && gr.getWidth() == 0) {

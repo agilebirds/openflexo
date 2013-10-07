@@ -55,7 +55,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 			if (node instanceof ShapeNode) {
 				drawEdge = true;
 				fromShape = (ShapeNode<Shape>) node;
@@ -66,7 +66,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
 				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
@@ -86,7 +86,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 			if (drawEdge) {
 				DrawingTreeNode<?, ?> dtn = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (dtn instanceof ShapeNode && dtn != fromShape && !fromShape.getAncestors().contains(dtn)) {

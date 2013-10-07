@@ -33,14 +33,14 @@ import org.openflexo.fge.view.listener.FGEViewMouseListener;
  * 
  * @param <C>
  */
-public interface DianaViewFactory<C> {
+public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 
 	/**
 	 * Instantiate a new DrawingView<br>
 	 * 
 	 * @return
 	 */
-	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<?, ?, C> controller);
+	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<M, F, C> controller);
 
 	/**
 	 * Instantiate a new ShapeView for a shape node<br>
@@ -49,7 +49,7 @@ public interface DianaViewFactory<C> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, ?, C> controller);
+	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, F, C> controller);
 
 	/**
 	 * Instantiate a new ConnectorView for a connector node<br>
@@ -58,7 +58,7 @@ public interface DianaViewFactory<C> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, ?, C> controller);
+	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
 
 	/**
 	 * Build and return a MouseListener for supplied node and view<br>
@@ -69,6 +69,6 @@ public interface DianaViewFactory<C> {
 	 * @return
 	 */
 	public <O> FGEViewMouseListener makeViewMouseListener(DrawingTreeNode<O, ?> node, FGEView<O, ? extends C> view,
-			AbstractDianaEditor<?, ?, C> controller);
+			AbstractDianaEditor<?, F, C> controller);
 
 }

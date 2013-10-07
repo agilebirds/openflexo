@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -26,6 +27,7 @@ import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
+import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
@@ -36,7 +38,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	private Drawing<ShapePreviewPanel> drawing;
 	private DrawingGraphicalRepresentation drawingGR;
-	private AbstractDianaEditor<ShapePreviewPanel> controller;
+	private AbstractDianaEditor<ShapePreviewPanel, SwingFactory, JComponent> controller;
 	// private RepresentedDrawing representedDrawing;
 	// private RepresentedShape representedShape;
 
@@ -117,7 +119,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setIsReadOnly(true);
 		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 
-		controller = new DianaViewer<ShapePreviewPanel>(drawing, factory);
+		controller = new DianaViewer<ShapePreviewPanel, SwingFactory, JComponent>(drawing, factory, new SwingFactory());
 		add(controller.getDrawingView());
 	}
 

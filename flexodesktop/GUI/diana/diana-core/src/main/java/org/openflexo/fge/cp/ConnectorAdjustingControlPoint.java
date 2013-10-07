@@ -24,8 +24,8 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 
 public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
@@ -53,10 +53,10 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		if (controller instanceof AbstractDianaEditor) {
-		if (((AbstractDianaEditor<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
-			((AbstractDianaEditor<?>)controller).getPaintManager().addToTemporaryObjects(getNode());
-			((AbstractDianaEditor<?>)controller).getPaintManager().invalidate(getNode());
-		}
+			if (((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().isPaintingCacheEnabled()) {
+				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().addToTemporaryObjects(getNode());
+				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().invalidate(getNode());
+			}
 		}
 	}
 
@@ -70,11 +70,12 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 		super.stopDragging(controller, focused);
 		if (controller instanceof AbstractDianaEditor) {
-		if (((AbstractDianaEditor<?>)controller).getPaintManager().isPaintingCacheEnabled()) {
-			((AbstractDianaEditor<?>)controller).getPaintManager().removeFromTemporaryObjects(getNode());
-			((AbstractDianaEditor<?>)controller).getPaintManager().invalidate(getNode());
-			((AbstractDianaEditor<?>)controller).getPaintManager().repaint(((AbstractDianaEditor<?>)controller).getDrawingView());
+			if (((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().isPaintingCacheEnabled()) {
+				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().removeFromTemporaryObjects(getNode());
+				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().invalidate(getNode());
+				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().repaint(
+						((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView());
+			}
 		}
-		}
-		}
+	}
 }

@@ -24,6 +24,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -40,11 +41,12 @@ import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
-public class DianaEditor extends DianaInteractiveEditor<Diagram> {
+public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingFactory, JComponent> {
 
 	private JPopupMenu contextualMenu;
 	private DrawingTreeNode<?, ?> contextualMenuInvoker;
@@ -53,7 +55,7 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram> {
 	// private Shape copiedShape;
 
 	public DianaEditor(final DiagramDrawing aDrawing, DiagramFactory factory) {
-		super(aDrawing, factory);
+		super(aDrawing, factory, new SwingFactory());
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override

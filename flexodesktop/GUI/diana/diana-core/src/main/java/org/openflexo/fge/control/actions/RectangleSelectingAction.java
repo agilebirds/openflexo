@@ -37,8 +37,6 @@ import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 
 public class RectangleSelectingAction extends MouseDragControlActionImpl {
 
@@ -53,7 +51,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlActionImpl");
 		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
@@ -66,7 +64,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
 			boolean isSignificativeDrag) {
 		// logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlActionImpl");
 		if (isSignificativeDrag && node instanceof ContainerNode) {
@@ -81,7 +79,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlActionImpl");
 		}
@@ -103,7 +101,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 		return true;
 	}
 
-	private List<DrawingTreeNode<?, ?>> buildCurrentSelection(ContainerNode<?, ?> node, AbstractDianaEditor<?> controller) {
+	private List<DrawingTreeNode<?, ?>> buildCurrentSelection(ContainerNode<?, ?> node, AbstractDianaEditor<?, ?, ?> controller) {
 		if (getRectangleSelection() == null) {
 			return null;
 		}
@@ -151,7 +149,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 		}
 	}
 
-	public void paint(Graphics g, AbstractDianaEditor<?> controller) {
+	public void paint(Graphics g, AbstractDianaEditor<?, ?, ?> controller) {
 		Rectangle selection = getRectangleSelection();
 		if (selection == null) {
 			return;

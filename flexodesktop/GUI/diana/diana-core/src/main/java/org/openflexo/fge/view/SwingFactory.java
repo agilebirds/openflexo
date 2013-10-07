@@ -34,7 +34,7 @@ import org.openflexo.fge.view.listener.FGEViewMouseListener;
  * @author sylvain
  * 
  */
-public class SwingFactory implements DianaViewFactory<JComponent> {
+public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> {
 
 	public SwingFactory() {
 
@@ -50,9 +50,8 @@ public class SwingFactory implements DianaViewFactory<JComponent> {
 	 */
 	@Override
 	public <O> FGEViewMouseListener makeViewMouseListener(DrawingTreeNode<O, ?> node, FGEView<O, ? extends JComponent> view,
-			AbstractDianaEditor<?, ?, JComponent> controller) {
-		// TODO Auto-generated method stub
-		return null;
+			AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+		return new FGEViewMouseListener(node, view);
 	}
 
 	/**
@@ -61,7 +60,7 @@ public class SwingFactory implements DianaViewFactory<JComponent> {
 	 * 
 	 * @return
 	 */
-	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<?, ?, JComponent> controller) {
+	public <M> DrawingView<M> makeDrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
 		return new DrawingView<M>(controller);
 	}
 
@@ -72,7 +71,7 @@ public class SwingFactory implements DianaViewFactory<JComponent> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, ?, JComponent> controller) {
+	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 		return new ShapeView<O>(shapeNode, controller);
 	}
 
@@ -83,7 +82,8 @@ public class SwingFactory implements DianaViewFactory<JComponent> {
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, ?, JComponent> controller) {
+	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode,
+			AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 		return new ConnectorView<O>(connectorNode, controller);
 	}
 

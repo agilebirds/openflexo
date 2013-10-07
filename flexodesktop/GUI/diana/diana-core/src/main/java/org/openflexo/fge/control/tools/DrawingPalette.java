@@ -198,27 +198,16 @@ public class DrawingPalette {
 		}*/
 		paletteDrawing.printGraphicalObjectHierarchy();
 		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory, new SwingFactory() {
+			@SuppressWarnings("unchecked")
 			@Override
-			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, ?, JComponent> controller) {
+			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 				if (shapeNode.getDrawable() instanceof PaletteElement) {
-					return new PaletteElementView((ShapeNode<PaletteElement>) shapeNode, controller);
+					return (ShapeView<O>) (new PaletteElementView((ShapeNode<PaletteElement>) shapeNode,
+							(AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent>) controller));
 				}
 				return super.makeShapeView(shapeNode, controller);
 			}
 		});
-
-		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory) {
-			@Override
-			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode,
-					AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> controller) {
-				if (shapeNode.getDrawable() instanceof PaletteElement) {
-					ShapeView<O> returned = (ShapeView<O>) new PaletteElementView((ShapeNode<PaletteElement>) shapeNode, this);
-					contents.put(shapeNode, returned);
-					return returned;
-				}
-				return super.makeShapeView(shapeNode);
-			}
-		};
 		/*for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}*/
@@ -331,7 +320,7 @@ public class DrawingPalette {
 		}
 	});*/
 
-	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?> controller) {
+	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?, ?, ?> controller) {
 		return new PaletteDropListener(dropContainer, controller);
 	}
 
@@ -345,9 +334,9 @@ public class DrawingPalette {
 
 		private final int acceptableActions = DnDConstants.ACTION_COPY;
 		private final JComponent _dropContainer;
-		private final AbstractDianaEditor<?> _controller;
+		private final AbstractDianaEditor<?, ?, ?> _controller;
 
-		public PaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?> controller) {
+		public PaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?, ?, ?> controller) {
 			super();
 			_dropContainer = dropContainer;
 			_controller = controller;
@@ -556,10 +545,10 @@ public class DrawingPalette {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getNode(), pt, focused,
-										((FGEView<?>) targetComponent).getScale());
-								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
-								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
+								pt = FGEUtils.convertPoint(((FGEView<?, ?>) targetComponent).getNode(), pt, focused,
+										((FGEView<?, ?>) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView<?, ?>) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView<?, ?>) targetComponent).getScale();
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
 								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							} else {
@@ -599,14 +588,14 @@ public class DrawingPalette {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView<?>) _dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView<?, ?>) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView<?> getFGEView() {
+		private FGEView<?, ?> getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return (FGEView<?>) _dropContainer;
+				return (FGEView<?, ?>) _dropContainer;
 			}
 			return null;
 		}
@@ -639,11 +628,11 @@ public class DrawingPalette {
 
 	}
 
-	public DianaInteractiveEditor<?> getController() {
+	public DianaInteractiveEditor<?, ?, ?> getController() {
 		return controller;
 	}
 
-	public void registerController(DianaInteractiveEditor<?> controller) {
+	public void registerController(DianaInteractiveEditor<?, ?, ?> controller) {
 		this.controller = controller;
 	}
 

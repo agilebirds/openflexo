@@ -66,13 +66,13 @@ public class MoveAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on MOVE MouseDragControlActionImpl");
 		}
 		if (currentMove != null) {
 			Point newPointLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-					((AbstractDianaEditor<?>) controller).getDrawingView());
+					((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView());
 
 			if (node instanceof ShapeNode
 					&& ((ShapeNode<?>) node).getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainer()
@@ -89,11 +89,11 @@ public class MoveAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse PRESSED on MOVE MouseDragControlActionImpl");
 		}
-		FGEView<?> view = ((AbstractDianaEditor<?>) controller).getDrawingView().viewForNode(node);
+		FGEView<?, ?> view = ((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView().viewForNode(node);
 		initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
 		if (node instanceof ShapeNode && !node.getGraphicalRepresentation().getIsReadOnly() && node.getDrawing().isEditable()
 				&& ((ShapeNode<?>) node).getGraphicalRepresentation().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
@@ -106,7 +106,7 @@ public class MoveAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event,
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
 			boolean isSignificativeDrag) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse RELEASED on MOVE MouseDragControlActionImpl");

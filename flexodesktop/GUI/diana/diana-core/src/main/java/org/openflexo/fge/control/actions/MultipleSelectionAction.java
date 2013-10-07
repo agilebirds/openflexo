@@ -23,8 +23,6 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 
 public class MultipleSelectionAction extends MouseClickControlActionImpl {
 	@Override
@@ -33,7 +31,7 @@ public class MultipleSelectionAction extends MouseClickControlActionImpl {
 	}
 
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		if (node.getGraphicalRepresentation().getIsSelectable()) {
 			MouseClickControlActionImpl.logger.info("Multiple select " + node);
 			controller.toggleSelection(node);

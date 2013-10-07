@@ -72,7 +72,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEGraphicsImpl.class.getPackage().getName());
 
-	private AbstractDianaEditor<?> _controller;
+	private AbstractDianaEditor<?, ?, ?> _controller;
 	private DrawingTreeNode<?, ?> dtn;
 	private Graphics2D g2d;
 
@@ -110,7 +110,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 		return dtn.getGraphicalRepresentation();
 	}
 
-	public AbstractDianaEditor<?> getController() {
+	public AbstractDianaEditor<?, ?, ?> getController() {
 		return _controller;
 	}
 
@@ -130,7 +130,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	 * @param controller
 	 */
 
-	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?> controller) {
+	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?, ?, ?> controller) {
 		g2d = (Graphics2D) graphics2D.create();
 		_controller = controller;
 	}

@@ -29,6 +29,7 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -51,7 +52,6 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.FGEViewMouseListener;
-import org.openflexo.xmlcode.TestParameteredKVCoding.C;
 
 /**
  * The ConnectorView is the SWING implementation of a panel showing a {@link ConnectorNode}
@@ -67,17 +67,17 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 
 	private ConnectorNode<O> connectorNode;
 	private FGEViewMouseListener mouseListener;
-	private AbstractDianaEditor<?, ?, ?> _controller;
+	private AbstractDianaEditor<?, SwingFactory, JComponent> controller;
 
 	private LabelView<O> labelView;
 
-	public ConnectorView(ConnectorNode<O> node, AbstractDianaEditor<?, ?, ?> controller) {
+	public ConnectorView(ConnectorNode<O> node, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 		super();
-		_controller = controller;
+		this.controller = controller;
 		this.connectorNode = node;
 		updateLabelView();
 		relocateAndResizeView();
-		mouseListener = getController().getDianaFactory().makeViewMouseListener(connectorNode, this, getController());
+		mouseListener = controller.getDianaFactory().makeViewMouseListener(connectorNode, this, controller);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 		connectorNode.addObserver(this);
@@ -86,8 +86,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 		updateVisibility();
 
 		if (getController() instanceof DianaInteractiveEditor) {
-			if (((DianaInteractiveEditor<?, ?, C>) controller).getPalettes() != null) {
-				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, C>) controller).getPalettes()) {
+			if (((DianaInteractiveEditor<?, ?, JComponent>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, JComponent>) controller).getPalettes()) {
 					registerPalette(p);
 				}
 			}
@@ -130,7 +130,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 			labelView.delete();
 		}
 		labelView = null;
-		_controller = null;
+		controller = null;
 		mouseListener = null;
 		connectorNode = null;
 		isDeleted = true;
@@ -250,7 +250,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 			labelView.delete();
 			labelView = null;
 		} else if (connectorNode.hasText() && labelView == null) {
-			labelView = new LabelView<O, C>(connectorNode, getController(), this);
+			labelView = new LabelView<O>(getNode(), getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView());
 			}
@@ -317,8 +317,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 	}
 
 	@Override
-	public AbstractDianaEditor<?, ?, ?> getController() {
-		return _controller;
+	public AbstractDianaEditor<?, SwingFactory, JComponent> getController() {
+		return controller;
 	}
 
 	protected void handleNodeDeleted(NodeDeleted notification) {
@@ -331,11 +331,13 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 				deletedNode.getParentNode().removeChild(deletedNode);
 			}
 			if (getController() instanceof DianaInteractiveViewer) {
-				if (getNode() != null && ((DianaInteractiveViewer<?, ?, C>) getController()).getFocusedObjects().contains(getNode())) {
-					((DianaInteractiveViewer<?, ?, C>) getController()).removeFromFocusedObjects(getNode());
+				if (getNode() != null
+						&& ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getFocusedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).removeFromFocusedObjects(getNode());
 				}
-				if (getNode() != null && ((DianaInteractiveViewer<?, ?, C>) getController()).getSelectedObjects().contains(getNode())) {
-					((DianaInteractiveViewer<?, ?, C>) getController()).removeFromSelectedObjects(getNode());
+				if (getNode() != null
+						&& ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getSelectedObjects().contains(getNode())) {
+					((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).removeFromSelectedObjects(getNode());
 				}
 			}
 			// Now delete the view
@@ -456,7 +458,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 	@Override
 	public void registerPalette(DrawingPalette aPalette) {
 		// A palette is registered, listen to drag'n'drop events
-		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
+		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, controller), true));
 
 	}
 
@@ -468,7 +470,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O, JPanel> {
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		if (getController() instanceof DianaInteractiveViewer) {
-			return ((DianaInteractiveViewer<?, ?, C>) getController()).getToolTipText();
+			return ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getToolTipText();
 		}
 		return super.getToolTipText(event);
 	}

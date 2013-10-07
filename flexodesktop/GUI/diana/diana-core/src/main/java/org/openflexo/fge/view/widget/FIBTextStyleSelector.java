@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openflexo.fge.Drawing;
@@ -44,6 +45,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaViewer;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
+import org.openflexo.fge.view.SwingFactory;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -259,7 +261,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	protected class TextStylePreviewPanel extends JPanel {
 		private Drawing<TextStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private AbstractDianaEditor<TextStylePreviewPanel> controller;
+		private AbstractDianaEditor<TextStylePreviewPanel, SwingFactory, JComponent> controller;
 		private ShapeGraphicalRepresentation textGR;
 		private FGEModelFactory factory;
 
@@ -325,7 +327,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setIsReadOnly(true);
 			textGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 
-			controller = new DianaViewer<TextStylePreviewPanel>(drawing, factory);
+			controller = new DianaViewer<TextStylePreviewPanel, SwingFactory, JComponent>(drawing, factory, new SwingFactory());
 			add(controller.getDrawingView());
 
 			update();

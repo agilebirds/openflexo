@@ -293,7 +293,7 @@ public class FGEPaintManager {
 		Graphics2D g = bufferedImage.createGraphics();
 		view.print(g);
 		return bufferedImage;*/
-		FGEView<?> v = getDrawingView().viewForNode(node);
+		FGEView<?,?> v = getDrawingView().viewForNode(node);
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {

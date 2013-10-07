@@ -36,7 +36,7 @@ import org.openflexo.fge.view.listener.FGEViewMouseListener;
  * 
  * @param <M>
  */
-public class DianaViewer<M, F extends DianaViewFactory<C>, C> extends AbstractDianaEditor<M, F, C> {
+public class DianaViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
 
 	public DianaViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
 		super(aDrawing, factory, dianaFactory);

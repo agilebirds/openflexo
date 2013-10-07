@@ -23,8 +23,8 @@ import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -376,8 +376,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
-		if (controller instanceof AbstractDianaEditor<?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?>) controller);
+		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
+			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 		} else {
 			logger.warning("Unsupported controller: " + controller);
 		}

@@ -80,12 +80,12 @@ public class DNDInfo {
 	private int dragAction = DnDConstants.ACTION_MOVE;
 	private DragGestureRecognizer dgr;
 	private DragSourceContext dragSourceContext;
-	private DianaInteractiveViewer<?> controller;
+	private DianaInteractiveViewer<?, ?, ?> controller;
 	private ShapeNode<?> draggedObject;
 
-	private Hashtable<FGEView<?>, DropTarget> dropTargets;
+	private Hashtable<FGEView<?, ?>, DropTarget> dropTargets;
 
-	public DNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?> controller, final MouseEvent initialEvent) {
+	public DNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller, final MouseEvent initialEvent) {
 		_moveAction = moveAction;
 		this.controller = controller;
 		draggedObject = shapeNode;
@@ -141,10 +141,10 @@ public class DNDInfo {
 		if (dropTargets != null) {
 			dropTargets.clear();
 		}
-		dropTargets = new Hashtable<FGEView<?>, DropTarget>();
+		dropTargets = new Hashtable<FGEView<?, ?>, DropTarget>();
 
 		for (DrawingTreeNode<?, ?> node : controller.getContents().keySet()) {
-			FGEView<?> view = controller.getContents().get(node);
+			FGEView<?, ?> view = controller.getContents().get(node);
 			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
 			}
@@ -154,7 +154,7 @@ public class DNDInfo {
 	}
 
 	protected void disableDragging() {
-		for (FGEView<?> v : dropTargets.keySet()) {
+		for (FGEView<?, ?> v : dropTargets.keySet()) {
 			((Component) v).setDropTarget(dropTargets.get(v));
 		}
 		dgr.setComponent(null);
@@ -532,10 +532,10 @@ public class DNDInfo {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getNode(), pt, focused,
-										((FGEView<?>) targetComponent).getScale());
-								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
-								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
+								pt = FGEUtils.convertPoint(((FGEView<?, ?>) targetComponent).getNode(), pt, focused,
+										((FGEView<?, ?>) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView<?, ?>) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView<?, ?>) targetComponent).getScale();
 								modelLocation.x -= ((TransferedShapeNode) data).getOffset().x;
 								modelLocation.y -= ((TransferedShapeNode) data).getOffset().y;
 							} else {
@@ -576,14 +576,14 @@ public class DNDInfo {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView<?>) _dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView<?, ?>) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView<?> getFGEView() {
+		private FGEView<?, ?> getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return (FGEView<?>) _dropContainer;
+				return (FGEView<?, ?>) _dropContainer;
 			}
 			return null;
 		}

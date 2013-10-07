@@ -49,7 +49,7 @@ import org.openflexo.fge.view.DianaViewFactory;
  * 
  * @param <M>
  */
-public class DianaInteractiveEditor<M, F extends DianaViewFactory<C>, C> extends DianaInteractiveViewer<M, F, C> {
+public class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>, C> extends DianaInteractiveViewer<M, F, C> {
 
 	private static final Logger logger = Logger.getLogger(DianaInteractiveEditor.class.getPackage().getName());
 

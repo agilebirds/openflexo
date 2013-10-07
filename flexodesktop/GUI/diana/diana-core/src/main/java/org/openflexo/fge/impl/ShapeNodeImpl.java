@@ -32,8 +32,8 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -940,11 +940,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 		Graphics2D g2 = (Graphics2D) g;
 
-		if (controller instanceof AbstractDianaEditor<?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?>) controller);
+		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
+			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 			// If there is a decoration painter init its graphics
 			if (decorationPainter != null) {
-				decorationGraphics.createGraphics(g2, (AbstractDianaEditor<?>) controller);
+				decorationGraphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 			}
 		} else {
 			logger.warning("Unsupported controller: " + controller);

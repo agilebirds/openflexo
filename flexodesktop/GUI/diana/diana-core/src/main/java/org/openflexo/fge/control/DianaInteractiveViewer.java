@@ -60,7 +60,7 @@ import org.openflexo.fge.view.LabelView;
  * 
  * @param <M>
  */
-public class DianaInteractiveViewer<M, F extends DianaViewFactory<C>, C> extends AbstractDianaEditor<M, F, C> {
+public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
 
 	private static final Logger logger = Logger.getLogger(DianaInteractiveViewer.class.getPackage().getName());
 

@@ -44,7 +44,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	/* Local controller ONLY */
 	// private AbstractDianaEditor<DrawingPalette> paletteController;
 
-	public PaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, ?, ?> controller) {
+	public PaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> controller) {
 		super(node, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
@@ -62,8 +62,8 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractDianaEditor<DrawingPalette, ?, JComponent> getController() {
-		return (AbstractDianaEditor<DrawingPalette, ?, JComponent>) super.getController();
+	public AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> getController() {
+		return (AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent>) super.getController();
 	}
 
 	private DragGestureRecognizer createDragGestureRecognizer() {

@@ -74,21 +74,21 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	private ShapeNode<O> shapeNode;
 	private FGEViewMouseListener mouseListener;
-	private AbstractDianaEditor<?, ?, ?> _controller;
+	private AbstractDianaEditor<?, SwingFactory, JComponent> controller;
 
 	private LabelView<O> labelView;
 
-	public ShapeView(ShapeNode<O> node, AbstractDianaEditor<?, ?, ?> controller) {
+	public ShapeView(ShapeNode<O> node, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
 		super();
 		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + node);
-		_controller = controller;
+		this.controller = controller;
 		this.shapeNode = node;
 		node.finalizeConstraints();
 		updateLabelView();
 		if (getController() != null) {
 			relocateAndResizeView();
 		}
-		mouseListener = getController().getDianaFactory().makeViewMouseListener(connectorNode, this, getController());
+		mouseListener = controller.getDianaFactory().makeViewMouseListener(node, this, controller);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 		shapeNode.addObserver(this);
@@ -97,8 +97,8 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		setFocusable(true);
 
 		if (getController() instanceof DianaInteractiveEditor) {
-			if (((DianaInteractiveEditor<?>) controller).getPalettes() != null) {
-				for (DrawingPalette p : ((DianaInteractiveEditor<?>) controller).getPalettes()) {
+			if (((DianaInteractiveEditor<?, SwingFactory, JComponent>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?, SwingFactory, JComponent>) controller).getPalettes()) {
 					registerPalette(p);
 				}
 			}
@@ -153,7 +153,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			labelView.delete();
 		}
 		labelView = null;
-		_controller = null;
+		controller = null;
 		mouseListener = null;
 		shapeNode = null;
 		isDeleted = true;
@@ -252,7 +252,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			labelView.delete();
 			labelView = null;
 		} else if (shapeNode.hasText() && labelView == null) {
-			labelView = new LabelView<O>(shapeNode, getController(), this);
+			labelView = new LabelView<O>(getNode(), getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView(), getLayer(), -1);
 			}
@@ -321,13 +321,9 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		super.paint(g);
 	}
 
-	protected ShapeViewMouseListener makeShapeViewMouseListener() {
-		return new ShapeViewMouseListener(shapeNode, this);
-	}
-
 	@Override
-	public AbstractDianaEditor<?, ?, ?> getController() {
-		return _controller;
+	public AbstractDianaEditor<?, SwingFactory, JComponent> getController() {
+		return controller;
 	}
 
 	@Override
@@ -450,7 +446,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	@Override
 	public void registerPalette(DrawingPalette aPalette) {
 		// A palette is registered, listen to drag'n'drop events
-		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
+		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, controller), true));
 
 	}
 
@@ -462,7 +458,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		if (getController() instanceof DianaInteractiveViewer) {
-			return ((DianaInteractiveViewer<?>) getController()).getToolTipText();
+			return ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getToolTipText();
 		}
 		return super.getToolTipText(event);
 	}

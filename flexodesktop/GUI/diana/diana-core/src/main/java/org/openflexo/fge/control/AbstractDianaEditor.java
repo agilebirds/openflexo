@@ -62,7 +62,7 @@ import org.openflexo.fge.view.ShapeView;
  * @param <C>
  *            type of components beeing managed as view (DianaView)
  */
-public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<C>, C> extends Observable implements DianaEditor<M>, Observer {
+public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C> extends Observable implements DianaEditor<M>, Observer {
 
 	private static final Logger logger = Logger.getLogger(AbstractDianaEditor.class.getPackage().getName());
 

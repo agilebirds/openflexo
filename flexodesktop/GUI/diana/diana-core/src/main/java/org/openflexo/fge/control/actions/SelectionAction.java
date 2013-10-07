@@ -28,8 +28,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
 
@@ -40,7 +38,7 @@ public class SelectionAction extends MouseClickControlActionImpl {
 	}
 
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?> controller, MouseEvent event) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
 		if (controller.getDrawingView() == null) {
 			return false;
 		}
@@ -53,7 +51,7 @@ public class SelectionAction extends MouseClickControlActionImpl {
 			if (controller.getDrawingView() == null) {
 				return false;
 			}
-			FGEView<?> view = controller.getDrawingView().viewForNode(node);
+			FGEView<?, ?> view = controller.getDrawingView().viewForNode(node);
 			Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 			controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 			controller.setLastSelectedGR(node);
