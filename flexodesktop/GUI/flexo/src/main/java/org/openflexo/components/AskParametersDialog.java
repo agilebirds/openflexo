@@ -23,6 +23,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -88,7 +89,7 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		if (FlexoFrame.getActiveFrame() != null) {
 			return new AskParametersDialog(FlexoFrame.getActiveFrame(), project, windowTitle, title, parameters);
 		} else if (ProgressWindow.hasInstance()) {
-			return new AskParametersDialog(ProgressWindow.instance().initOwner, project, windowTitle, title, parameters);
+			return new AskParametersDialog(ProgressWindow.instance(), project, windowTitle, title, parameters);
 		}
 		return new AskParametersDialog(null, project, windowTitle, title, parameters);
 	}
@@ -185,7 +186,7 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		protected AskParametersDialog dialog;
 	}
 
-	private AskParametersDialog(Frame owner, FlexoProject project, String windowTitle, String title, ParameterDefinition... parameters) {
+	private AskParametersDialog(Window owner, FlexoProject project, String windowTitle, String title, ParameterDefinition... parameters) {
 		super(owner, true);
 		initDialog(project, windowTitle, title, parameters);
 	}

@@ -145,7 +145,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		return false;
 	}
 
-	public static Frame getOwner(Frame owner) {
+	public static Window getOwner(Window owner) {
 		return owner != null ? owner : getActiveFrame();
 	}
 

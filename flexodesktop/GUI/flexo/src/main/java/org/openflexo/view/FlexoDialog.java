@@ -22,6 +22,7 @@ package org.openflexo.view;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.HeadlessException;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -32,46 +33,28 @@ import org.openflexo.swing.DialogFactory;
 public class FlexoDialog extends JDialog {
 
 	public FlexoDialog() throws HeadlessException {
-		this((Frame) null);
+		this(null);
 	}
 
-	public FlexoDialog(Frame owner) throws HeadlessException {
+	public FlexoDialog(Window owner) throws HeadlessException {
 		super(FlexoFrame.getOwner(owner));
 		init();
 	}
 
-	public FlexoDialog(Frame owner, boolean modal) throws HeadlessException {
-		super(FlexoFrame.getOwner(owner), modal);
+	public FlexoDialog(Window owner, boolean modal) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner));
+		setModal(modal);
 		init();
 	}
 
-	public FlexoDialog(Frame owner, String title) throws HeadlessException {
+	public FlexoDialog(Window owner, String title) throws HeadlessException {
 		super(FlexoFrame.getOwner(owner), title);
 		init();
 	}
 
-	public FlexoDialog(Frame owner, String title, boolean modal) throws HeadlessException {
-		super(FlexoFrame.getOwner(owner), title, modal);
-		init();
-	}
-
-	public FlexoDialog(Dialog owner) throws HeadlessException {
-		super(owner);
-		init();
-	}
-
-	public FlexoDialog(Dialog owner, boolean modal) throws HeadlessException {
-		super(owner, modal);
-		init();
-	}
-
-	public FlexoDialog(Dialog owner, String title) throws HeadlessException {
-		super(owner, title);
-		init();
-	}
-
-	public FlexoDialog(Dialog owner, String title, boolean modal) throws HeadlessException {
-		super(owner, title, modal);
+	public FlexoDialog(Window owner, String title, boolean modal) throws HeadlessException {
+		super(FlexoFrame.getOwner(owner), title);
+		setModal(modal);
 		init();
 	}
 

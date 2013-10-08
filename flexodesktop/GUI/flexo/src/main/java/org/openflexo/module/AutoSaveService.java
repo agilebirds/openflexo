@@ -192,8 +192,7 @@ public class AutoSaveService implements FlexoObserver {
 				if (autoSaveFile != null) {
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_that_you_want_to_revert_to_that_version?"))) {
 						try {
-							ProgressWindow.showProgressWindow(FlexoFrame.getActiveFrame(),
-									FlexoLocalization.localizedForKey("project_restoration"), 4);
+							ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("project_restoration"), 4);
 							restoreAutoSaveProject(autoSaveFile, ProgressWindow.instance());
 						} catch (IOException e1) {
 							e1.printStackTrace();
