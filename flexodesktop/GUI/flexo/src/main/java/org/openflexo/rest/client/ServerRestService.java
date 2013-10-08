@@ -2,6 +2,7 @@ package org.openflexo.rest.client;
 
 import java.awt.Desktop;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -163,7 +164,7 @@ public class ServerRestService implements HasPropertyChangeSupport {
 							.entity(message).build());
 				}
 				String fileName = uuid;
-				List<String> list = response.getHeaders().get("content-disposition");
+				List<String> list = response.getHeaders().get("Content-Disposition");
 				for (String string : list) {
 					int indexOf = string.toLowerCase().indexOf("filename");
 					if (indexOf > -1) {
@@ -188,7 +189,7 @@ public class ServerRestService implements HasPropertyChangeSupport {
 					saveToFile.getParentFile().mkdirs();
 					fos = new FileOutputStream(saveToFile);
 					input = response.getEntity(InputStream.class);
-					IOUtils.copy(input, fos);
+					IOUtils.copy(input, new BufferedOutputStream(fos));
 					if (watchedRemoteJob.isUnzip()) {
 						ZipUtils.unzip(saveToFile, saveToFolder);
 						Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);

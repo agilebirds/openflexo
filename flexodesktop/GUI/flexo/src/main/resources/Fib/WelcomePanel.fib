@@ -20,14 +20,37 @@
     </Table>
   </Panel>
   <Panel layout="border" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=south)">
-    <Panel layout="flow" hGap="5" vGap="10" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
-      <Panel layout="grid" hGap="5" vGap="5" cols="4" rows="1" flowAlignment="LEADING" darkLevel="0" constraints="flow()">
-        <Button action="controller.newProject(ModuleList.selected)" buttonType="Trigger" label="new_project" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" name="NewProjectButton" constraints="grid(x=0;y=0)" />
-        <Button action="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" buttonType="Trigger" label="open_project" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" name="OpenProjectButton" constraints="grid(x=1;y=0)" />
-        <Button action="controller.openModule(ModuleList.selected)" buttonType="Trigger" label="open_module" localize="true" enable="((ModuleList.selected != null) &amp; (!(ModuleList.selected.requireProject)))" name="OpenModuleButton" constraints="grid(x=2;y=0)" />
-        <Button action="controller.exit()" buttonType="Trigger" label="Exit" localize="true" name="ExitButton" constraints="grid(x=3;y=0)" />
-      </Panel>
+    <Panel layout="buttons" hGap="5" vGap="5" cols="4" rows="1" flowAlignment="CENTER" borderTop="0" borderBottom="10" borderLeft="0" borderRight="0" darkLevel="0" constraints="border(location=north)">
+      <Button action="controller.newProject(ModuleList.selected)" buttonType="Trigger" label="new_project" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" name="NewProjectButton" constraints="buttons()" />
+      <Button action="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" buttonType="Trigger" label="open_project" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" name="OpenProjectButton" constraints="buttons()" />
+      <Button action="controller.openServerProject(ModuleList.selected)" buttonType="Trigger" label="open_from_server..." localize="true" name="OpenFromServer" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" constraints="buttons()" />
+    </Panel>
+    <Panel layout="buttons" hGap="5" vGap="5" cols="4" rows="1" flowAlignment="CENTER" borderTop="10" borderBottom="10" borderLeft="0" borderRight="0" darkLevel="0" constraints="border(location=south)">
+      <Button action="controller.openModule(ModuleList.selected)" buttonType="Trigger" label="open_module" localize="true" enable="((ModuleList.selected != null) &amp; (!(ModuleList.selected.requireProject)))" name="OpenModuleButton" constraints="buttons()" />
+      <Button action="controller.exit()" buttonType="Trigger" label="Exit" localize="true" name="ExitButton" constraints="buttons()" />
     </Panel>
   </Panel>
-  <LocalizedDictionary />
+  <LocalizedDictionary>
+    <Localized key="project" lang="English">Project</Localized>
+    <Localized key="project" lang="French">Projet</Localized>
+    <Localized key="project" lang="Dutch">Project</Localized>
+    <Localized key="path" lang="English">Path</Localized>
+    <Localized key="path" lang="French">Emplacement</Localized>
+    <Localized key="path" lang="Dutch">Pad</Localized>
+    <Localized key="new_project" lang="English">New project</Localized>
+    <Localized key="new_project" lang="French">Nouveau projet</Localized>
+    <Localized key="new_project" lang="Dutch">Nieuw project</Localized>
+    <Localized key="open_project" lang="English">Open project</Localized>
+    <Localized key="open_project" lang="French">Ouvrir un projet</Localized>
+    <Localized key="open_project" lang="Dutch">Project openen</Localized>
+    <Localized key="open_from_server..." lang="English">Open from server...</Localized>
+    <Localized key="open_from_server..." lang="French">Ouvrir depuis le serveur...</Localized>
+    <Localized key="open_from_server..." lang="Dutch">Open van server;..</Localized>
+    <Localized key="open_module" lang="English">Load module</Localized>
+    <Localized key="open_module" lang="French">Charger le module</Localized>
+    <Localized key="open_module" lang="Dutch">Module laden</Localized>
+    <Localized key="Exit" lang="English">Exit</Localized>
+    <Localized key="Exit" lang="French">Exit</Localized>
+    <Localized key="Exit" lang="Dutch">Exit</Localized>
+  </LocalizedDictionary>
 </Panel>

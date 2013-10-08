@@ -84,7 +84,7 @@ public class FIBBrowserController extends FIBController implements Observer {
 	}
 
 	public void rightClick(FIBComponent component, MouseEvent event) {
-		editorController.getContextualMenu().displayPopupMenu(component, getRootView().getJComponent(), event);
+		editorController.getContextualMenu().displayPopupMenu(component, event.getComponent(), event);
 	}
 
 }

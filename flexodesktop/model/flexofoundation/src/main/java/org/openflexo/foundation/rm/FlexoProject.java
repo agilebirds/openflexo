@@ -2476,6 +2476,23 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return false;
 	}
 
+	public static File searchProjectDirectory(File folder) {
+		Collection<File> listFiles = org.apache.commons.io.FileUtils.listFiles(folder, new String[] { "rmxml" }, true);
+		if (listFiles.size() == 0) {
+			return null;
+		} else if (listFiles.size() == 1) {
+			return listFiles.iterator().next().getParentFile();
+		} else {
+			File returned = null;
+			for (File file : listFiles) {
+				if (returned == null || returned.getAbsolutePath().length() > file.getAbsolutePath().length()) {
+					returned = file;
+				}
+			}
+			return returned.getParentFile();
+		}
+	}
+
 	public List<FlexoEditor> getEditors() {
 		return editors;
 	}

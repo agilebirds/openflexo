@@ -1,12 +1,9 @@
 package org.openflexo.rest.client;
 
-import java.awt.Dialog.ModalityType;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
-import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -38,7 +33,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.Account;
 import org.openflexo.rest.client.model.DocFormat;
 import org.openflexo.rest.client.model.Job;
@@ -62,7 +56,7 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
-public class ServerRestClientModel implements HasPropertyChangeSupport {
+public class ServerRestClientModel extends AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
 	public static final File FIB_FILE = new FileResource("Fib/ServerClientModelView.fib");
 	public static final File DOC_GENERATION_CHOOSER_FIB_FILE = new FileResource("Fib/DocGenerationChooser.fib");
@@ -70,17 +64,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd/MM/yy hh:mm");
 
-	private static final String STATUS = "status";
-
 	private static final String AUTOMATICALLY_OPEN_FILE = "automaticallyOpenFile";
 	private static final String DOC_TYPE = "docType";
 	private static final String DOC_FORMAT = "docFormat";
 	private static final String FOLDER = "folder";
 	private static final String TOC_ENTRY = "tocEntry";
-
-	private interface Progress {
-		public void increment(String message);
-	}
 
 	public class DocGenerationChoice implements HasPropertyChangeSupport {
 		private final ProjectVersion version;
@@ -177,15 +165,15 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			project.setAvailableProtoToken(5);
 			project.setAvailableDocToken(5);
 			pcSupport = new PropertyChangeSupport(this);
-			if (user.getClientAccount() != null) {
+			if (getUser().getClientAccount() != null) {
 				Account account = new Account();
-				account.setClientAccountId(user.getClientAccount());
+				account.setClientAccountId(getUser().getClientAccount());
 				project.setClientAccount(account);
 			}
 		}
 
 		public List<Account> getAvailableAccounts() {
-			if (user.getUserType() == UserType.ADMIN) {
+			if (getUser().getUserType() == UserType.ADMIN) {
 				try {
 					return accountCache.get("");
 				} catch (ExecutionException e) {
@@ -232,61 +220,6 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		public ServerRestClientModel getServerRestClientModel() {
 			return ServerRestClientModel.this;
-		}
-
-	}
-
-	public interface ServerRestClientOperation {
-		/**
-		 * Performs the operation using the provided <code>client</code> and notifies the user through the provided <code>progress</code>.
-		 * 
-		 * @param client
-		 *            the REST client to use
-		 * @param progress
-		 *            the progress callback to notify of the operation progress
-		 * @throws IOException
-		 *             in case an IOException occurs (mainly SocketException, but could also be related to disk errors)
-		 * @throws WebApplicationException
-		 *             in case an error occurs during a remote operation.
-		 */
-		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException;
-
-		/**
-		 * The general title for this operation
-		 * 
-		 * @return the general title for this operation
-		 */
-		public String getLocalizedTitle();
-
-		/**
-		 * Number of steps required for this operation. It should match the number of times the method {@link Progress#increment(String)} is
-		 * called. If the value is negative or zero (preferably zero), the progress is indeterminate.
-		 * 
-		 * @return the number of steps required for this operation.
-		 */
-		public int getSteps();
-	}
-
-	public class UpdateUserOperation implements ServerRestClientOperation {
-		@Override
-		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			try {
-				setUser(client.users(client.createClient()).id(client.getUserName()).getAsUserXml());
-			} finally {
-				if (getUser() == null) {
-					setStatus(FlexoLocalization.localizedForKey("could_not_identify_user"));
-				}
-			}
-		}
-
-		@Override
-		public int getSteps() {
-			return 0;
-		}
-
-		@Override
-		public String getLocalizedTitle() {
-			return FlexoLocalization.localizedForKey("retrieving_user_information");
 		}
 
 	}
@@ -416,7 +349,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			if (user == null) {
+			if (getUser() == null) {
 				return;
 			}
 			if (serverProject == null) {
@@ -472,7 +405,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				};
 				ProjectVersion version = new ProjectVersion();
 				version.setProject(serverProject.getProjectId());
-				version.setCreator(user.getLogin());
+				version.setCreator(getUser().getLogin());
 				version.setComment(comment);
 				FormDataMultiPart mp = new FormDataMultiPart();
 				mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
@@ -754,30 +687,19 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
-	private static final String DELETED = "deleted";
-
 	private static final String SERVER_PROJECT = "serverProject";
-	private static final String USER = "user";
 	private static final String SESSION = "session";
 	private static final String VERSIONS = "versions";
-
-	private final FlexoController controller;
 
 	private final FlexoProject flexoProject;
 
 	private Project serverProject;
 
-	private User user;
-
 	private Session session;
 
 	private List<ProjectVersion> versions;
 
-	private String status;
-
 	private Map<ProjectVersion, Boolean> validationInProgress;
-
-	private PropertyChangeSupport pcSupport;
 
 	private int pageSize = 5;
 	private int page = 0;
@@ -785,13 +707,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private LoadingCache<String, List<Account>> accountCache;
 	private LoadingCache<String, List<User>> adminUserCache;
 	private LoadingCache<Account, List<User>> accountUserCache;
+	private FlexoController controller;
 
 	public ServerRestClientModel(FlexoController controller, FlexoProject flexoProject) {
-		super();
+		super(controller.getApplicationContext().getServerRestService(), controller.getFlexoFrame());
 		this.controller = controller;
 		this.flexoProject = flexoProject;
 		this.validationInProgress = new Hashtable<ProjectVersion, Boolean>();
-		this.pcSupport = new PropertyChangeSupport(this);
 		this.accountCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<Account>>() {
 			@Override
 			public List<Account> load(String key) throws Exception {
@@ -847,76 +769,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
-	private ServerRestClient getServerRestClient(boolean forceDialog) {
-		ServerRestClientParameter params = controller.getApplicationContext().getServerRestService()
-				.getServerRestClientParameter(forceDialog);
-		if (params == null) {
-			return null;
-		}
-		ServerRestClient client;
-		try {
-			client = new ServerRestClient(new URI(params.getWSURL()));
-			client.setUserName(params.getWSLogin());
-			client.setPassword(params.getWSPassword());
-			return client;
-		} catch (URISyntaxException e) {
-			// Should not happen
-			e.printStackTrace();
-			return null;
-		}
-	}
-
+	@Override
 	public void delete() {
-		pcSupport.firePropertyChange(DELETED, false, true);
 		if (validationJobChecker != null) {
 			validationJobChecker.cancel(true);
 			validationJobChecker = null;
 		}
-	}
-
-	private void performOperationsInSwingWorker(ServerRestClientOperation... operations) {
-		performOperationsInSwingWorker(true, false, operations);
-	}
-
-	public void performOperationsInSwingWorker(final boolean useProgressWindow, final boolean synchronous,
-			final ServerRestClientOperation... operations) {
-		if (useProgressWindow) {
-			ProgressWindow.makeProgressWindow("", operations.length);
-		}
-		final JDialog dialog = synchronous ? new JDialog(useProgressWindow ? ProgressWindow.instance() : controller.getFlexoFrame()) : null;
-		if (dialog != null) {
-			dialog.setUndecorated(true);
-			dialog.setSize(0, 0);
-			dialog.setModalityType(ModalityType.APPLICATION_MODAL);
-		}
-		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
-
-			@Override
-			protected Void doInBackground() throws Exception {
-				performOperations(useProgressWindow, operations);
-				return null;
-			}
-
-			@Override
-			protected void done() {
-				super.done();
-				if (dialog != null) {
-					dialog.setVisible(false);
-					dialog.dispose();
-				}
-				if (useProgressWindow) {
-					ProgressWindow.hideProgressWindow();
-				}
-			}
-		};
-		worker.execute();
-		if (dialog != null) {
-			dialog.setVisible(true);
-		}
-	}
-
-	public void goOnline() {
-		controller.getApplicationContext().getServerRestService().setOffline(false);
+		super.delete();
 	}
 
 	public void refresh() {
@@ -932,26 +791,12 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		performOperationsInSwingWorker(new UpdateVersions());
 	}
 
-	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		return pcSupport;
-	}
-
-	@Override
-	public String getDeletedProperty() {
-		return DELETED;
-	}
-
 	public FlexoProject getFlexoProject() {
 		return flexoProject;
 	}
 
 	public Project getServerProject() {
 		return serverProject;
-	}
-
-	public User getUser() {
-		return user;
 	}
 
 	public List<ProjectVersion> getVersions() {
@@ -967,11 +812,6 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		pcSupport.firePropertyChange(SERVER_PROJECT, null, serverProject);
 	}
 
-	private void setUser(User user) {
-		this.user = user;
-		pcSupport.firePropertyChange(USER, null, user);
-	}
-
 	private void setVersions(List<ProjectVersion> versions) {
 		this.versions = versions;
 		pcSupport.firePropertyChange(VERSIONS, null, versions);
@@ -980,15 +820,6 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private void setSession(Session session) {
 		this.session = session;
 		pcSupport.firePropertyChange(SESSION, null, session);
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-		pcSupport.firePropertyChange(STATUS, null, status);
 	}
 
 	public Icon getConsistencyIcon(ProjectVersion version) {
@@ -1069,7 +900,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public void createProject() {
-		if (user == null) {
+		if (getUser() == null) {
 			return;
 		}
 		if (serverProject != null) {
@@ -1084,63 +915,6 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
 			performOperationsInSwingWorker(new CreateProjectAndUploadFirstVersion(data));
 		}
-	}
-
-	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)
-			throws InterruptedException {
-		boolean firstAttempt = true;
-		try {
-			for (ServerRestClientOperation operation : operations) {
-				boolean done = false;
-				while (!done) {
-					ServerRestClient client = getServerRestClient(!firstAttempt);
-					if (client == null) {
-						return;
-					}
-					if (useProgressWindow) {
-						ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
-						int steps = operation.getSteps();
-						ProgressWindow.resetSecondaryProgressInstance(steps);
-					}
-					try {
-						operation.doOperation(client, new Progress() {
-							@Override
-							public void increment(String message) {
-								if (useProgressWindow) {
-									ProgressWindow.setSecondaryProgressInstance(message);
-								}
-							}
-						});
-						firstAttempt = true;
-						done = true;
-					} catch (WebApplicationException e) {
-						e.printStackTrace();
-						if (!controller.handleWSException(e)) {
-							return;
-						}
-						firstAttempt = false;
-					} catch (IOException e) {
-						e.printStackTrace();
-						if (!controller.handleWSException(e)) {
-							return;
-						}
-						firstAttempt = false;
-					} catch (RuntimeException e) {
-						e.printStackTrace();
-						if (!controller.handleWSException(e)) {
-							return;
-						}
-						firstAttempt = false;
-					}
-				}
-			}
-		} finally {
-			if (useProgressWindow) {
-				ProgressWindow.hideProgressWindow();
-			}
-		}
-
-		return;
 	}
 
 }

@@ -21,12 +21,17 @@ package org.openflexo;
 
 import java.awt.Rectangle;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -67,6 +72,8 @@ public final class GeneralPreferences extends ContextPreferences {
 	public static final String DEFAULT_DOC_FORMAT = "defaultDocFormat";
 
 	public static final String USER_IDENTIFIER_KEY = "userIdentifier";
+
+	public static final String LAST_SERVER_PROJECTS = "lastServerProjects";
 
 	public static final String LAST_OPENED_PROJECTS_1 = "lastProjects_1";
 
@@ -327,6 +334,42 @@ public final class GeneralPreferences extends ContextPreferences {
 		}
 		files.insertElementAt(project, 0);
 		setLastOpenedProjects(files);
+	}
+
+	public static List<String> getLastServerProjects() {
+		String s = getPreferences().getProperty(LAST_SERVER_PROJECTS);
+		if (s == null || s.length() == 0) {
+			return Collections.emptyList();
+		} else {
+			return Arrays.asList(StringUtils.split(s, '|'));
+		}
+	}
+
+	public static void setLastServerProjects(List<String> serverProjects) {
+		if (serverProjects.size() > 0) {
+			StringBuilder sb = new StringBuilder(serverProjects.size() * 75);
+			for (String string : serverProjects) {
+				if (sb.length() > 0) {
+					sb.append('|');
+				}
+				sb.append(string);
+			}
+			getPreferences().setProperty(LAST_SERVER_PROJECTS, sb.toString());
+		} else {
+			getPreferences().setProperty(LAST_SERVER_PROJECTS, null);
+		}
+	}
+
+	public static void addToLastServerProjects(String projectURI) {
+		List<String> list = new ArrayList<String>(getLastServerProjects());
+		while (list.remove(projectURI)) {
+			;
+		}
+		list.add(0, projectURI);
+		if (list.size() > 50) {
+			list = list.subList(0, 50);
+		}
+		setLastServerProjects(list);
 	}
 
 	public static boolean isValidationRuleEnabled(ValidationRule rule) {

@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.controller;
 
-import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -398,30 +397,26 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	}
 
 	public void show() {
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.setVisible(true);
 		}
 	}
 
 	public void hide() {
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.setVisible(false);
 		}
 	}
 
-	private Window retrieveWindow() {
-		Component c = SwingUtilities.getRoot(getRootView().getJComponent());
-		if (c instanceof Window) {
-			return (Window) c;
-		}
-		return null;
+	protected Window getWindow() {
+		return SwingUtilities.getWindowAncestor(getRootView().getJComponent());
 	}
 
 	public void validateAndDispose() {
 		status = Status.VALIDATED;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -429,7 +424,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void cancelAndDispose() {
 		status = Status.CANCELED;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -437,7 +432,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void abortAndDispose() {
 		status = Status.ABORTED;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -445,7 +440,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void resetAndDispose() {
 		status = Status.RESET;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -453,7 +448,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void chooseYesAndDispose() {
 		status = Status.YES;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -461,7 +456,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void chooseNoAndDispose() {
 		status = Status.NO;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}
@@ -469,7 +464,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void chooseQuitAndDispose() {
 		status = Status.QUIT;
-		Window w = retrieveWindow();
+		Window w = getWindow();
 		if (w != null) {
 			w.dispose();
 		}

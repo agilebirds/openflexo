@@ -1,10 +1,14 @@
 package org.openflexo.view.controller;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import org.openflexo.ApplicationData;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -14,6 +18,9 @@ import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
+import org.openflexo.rest.client.ServerRestProjectListModel;
+import org.openflexo.rest.client.model.Project;
+import org.openflexo.toolbox.FileUtils;
 
 public class WelcomePanelController extends FlexoFIBController {
 
@@ -101,4 +108,37 @@ public class WelcomePanelController extends FlexoFIBController {
 		}
 	}
 
+	public void openServerProject(Module module) {
+		final ServerRestProjectListModel model = new ServerRestProjectListModel(getDataObject().getApplicationContext()
+				.getServerRestService(), getWindow());
+
+		final FIBDialog<ServerRestProjectListModel> dialog = FIBDialog.instanciateDialog(ServerRestProjectListModel.FIB_FILE, model,
+				getWindow(), true, FlexoLocalization.getMainLocalizer());
+		dialog.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				dialog.removeWindowListener(this);
+				model.refresh();
+			}
+		});
+		dialog.setLocationRelativeTo(getWindow());
+		dialog.setVisible(true);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			Project project = model.getSelectedProject();
+			if (project == null) {
+				return;
+			}
+			try {
+				File downloadToFolder = model.downloadToFolder(project, new File(FileUtils.getDocumentDirectory(), "OpenFlexo Projects"));
+				if (downloadToFolder != null) {
+					openProject(downloadToFolder, module);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_download_project") + " " + project.getName() + " ("
+						+ e.getMessage() + ")");
+			}
+		}
+	}
 }
