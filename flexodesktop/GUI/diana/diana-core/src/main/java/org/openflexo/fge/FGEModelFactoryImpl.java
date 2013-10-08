@@ -1,11 +1,9 @@
 package org.openflexo.fge;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.CurveConnectorSpecification;
@@ -17,25 +15,6 @@ import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
-import org.openflexo.fge.control.MouseDragControl;
-import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
-import org.openflexo.fge.control.actions.CustomClickControlAction;
-import org.openflexo.fge.control.actions.CustomDragControlAction;
-import org.openflexo.fge.control.actions.MouseClickControlActionImpl;
-import org.openflexo.fge.control.actions.MouseClickControlImpl;
-import org.openflexo.fge.control.actions.MouseDragControlActionImpl;
-import org.openflexo.fge.control.actions.MouseDragControlImpl;
-import org.openflexo.fge.control.actions.MoveAction;
-import org.openflexo.fge.control.actions.MultipleSelectionAction;
-import org.openflexo.fge.control.actions.RectangleSelectingAction;
-import org.openflexo.fge.control.actions.SelectionAction;
-import org.openflexo.fge.control.actions.ZoomAction;
 import org.openflexo.fge.impl.BackgroundImageBackgroundStyleImpl;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.fge.impl.ColorBackgroundStyleImpl;
@@ -149,103 +128,6 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		setImplementingClassForInterface(RectPolylinConnectorSpecificationImpl.class, RectPolylinConnectorSpecification.class);
 		setImplementingClassForInterface(CurvedPolylinConnectorSpecificationImpl.class, CurvedPolylinConnectorSpecification.class);
 
-	}
-
-	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			MouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?> action,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlActionType actionType,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, actionType, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction<?> action, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	public MouseDragControlAction<?> makeMouseDragControlAction(MouseDragControlActionType actionType) {
-		switch (actionType) {
-		case NONE:
-			return new MouseDragControlActionImpl.None();
-		case MOVE:
-			return new MoveAction();
-		case RECTANGLE_SELECTING:
-			return new RectangleSelectingAction();
-		case ZOOM:
-			return new ZoomAction();
-		case CUSTOM:
-			return new CustomDragControlAction() {
-
-				@Override
-				public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-					logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlActionImpl");
-					return true;
-				}
-
-				@Override
-				public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-					logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlActionImpl");
-					return false;
-				}
-
-				@Override
-				public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller,
-						MouseEvent event, boolean isSignificativeDrag) {
-					logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlActionImpl");
-					return false;
-				}
-
-			};
-		default:
-			logger.warning("Unexpected actionType " + actionType);
-			return null;
-		}
-	}
-
-	public MouseClickControlAction<?> makeMouseClickControlAction(MouseClickControlActionType actionType) {
-		switch (actionType) {
-		case NONE:
-			return new MouseClickControlActionImpl.None();
-		case SELECTION:
-			return new SelectionAction();
-		case MULTIPLE_SELECTION:
-			return new MultipleSelectionAction();
-		case CUSTOM:
-			return new CustomClickControlAction() {
-				@Override
-				public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-					logger.info("Perform undefined CUSTOM MouseClickControlActionImpl");
-					return true;
-				}
-			};
-		default:
-			logger.warning("Unexpected actionType " + actionType);
-			return null;
-		}
 	}
 
 }

@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.actions;
+package org.openflexo.fge.swing.actions;
 
 import java.awt.Component;
 import java.awt.event.InputEvent;
@@ -26,32 +26,30 @@ import java.util.logging.Level;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.CustomMouseClickControl;
 import org.openflexo.fge.control.DianaEditor;
-import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseControl;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.toolbox.ToolBox;
 
-public class MouseClickControlImpl extends MouseControlImpl implements MouseClickControl {
+public class JCustomMouseClickControl extends AbstractJCustomMouseControlImpl implements CustomMouseClickControl<MouseEvent> {
 	public int clickCount = 1;
-	public MouseClickControlAction action;
+	public MouseClickControlAction<?, MouseEvent> action;
 
-	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, boolean shiftPressed, boolean ctrlPressed,
+	public JCustomMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed, boolean ctrlPressed,
 			boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
 		this.clickCount = clickCount;
 		action = MouseClickControlActionType.NONE.makeAction(factory);
 	}
 
-	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?> action, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+	public JCustomMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction<?, MouseEvent> action,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		this.action = action;
 	}
 
-	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlActionType actionType,
+	public JCustomMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlActionType actionType,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		this(aName, button, clickCount, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		setActionType(actionType);
@@ -119,7 +117,7 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 
 	@Override
 	public String toString() {
-		return "MouseClickControlImpl[" + name + "," + getModifiersAsString() + ",ACTION=" + getActionType().name() + "]";
+		return "JCustomMouseClickControl[" + name + "," + getModifiersAsString() + ",ACTION=" + getActionType().name() + "]";
 	}
 
 	@Override

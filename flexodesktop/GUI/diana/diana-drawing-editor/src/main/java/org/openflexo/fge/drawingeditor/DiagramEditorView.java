@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.drawingeditor.model.Diagram;
-import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.view.JDrawingView;
 
 public class DiagramEditorView extends JDrawingView<Diagram> {
 

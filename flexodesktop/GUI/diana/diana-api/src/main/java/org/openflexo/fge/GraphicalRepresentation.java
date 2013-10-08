@@ -30,8 +30,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.CustomMouseClickControl;
+import org.openflexo.fge.control.CustomMouseDragControl;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.Getter;
@@ -382,32 +382,32 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public void setTransparency(Double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<MouseClickControl> getMouseClickControls();
+	public Vector<CustomMouseClickControl> getMouseClickControls();
 
 	@Setter(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
+	public void setMouseClickControls(Vector<CustomMouseClickControl> mouseClickControls);
 
 	@Adder(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void addToMouseClickControls(MouseClickControl mouseClickControl);
+	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl);
 
-	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
+	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void removeFromMouseClickControls(MouseClickControl mouseClickControl);
+	public void removeFromMouseClickControls(CustomMouseClickControl mouseClickControl);
 
 	@Getter(value = MOUSE_DRAG_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<MouseDragControl> getMouseDragControls();
+	public Vector<CustomMouseDragControl> getMouseDragControls();
 
 	@Setter(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
+	public void setMouseDragControls(Vector<CustomMouseDragControl> mouseDragControls);
 
 	@Adder(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void addToMouseDragControls(MouseDragControl mouseDragControl);
+	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl);
 
-	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
+	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void removeFromMouseDragControls(MouseDragControl mouseDragControl);
+	public void removeFromMouseDragControls(CustomMouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT_KEY)
 	@XMLAttribute
@@ -577,17 +577,17 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public void setRegistered(boolean aFlag);
 
-	public MouseClickControl createMouseClickControl();
+	public CustomMouseClickControl createMouseClickControl();
 
-	public void deleteMouseClickControl(MouseClickControl mouseClickControl);
+	public void deleteMouseClickControl(CustomMouseClickControl mouseClickControl);
 
-	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl);
+	public boolean isMouseClickControlDeletable(CustomMouseClickControl mouseClickControl);
 
-	public MouseDragControl createMouseDragControl();
+	public CustomMouseDragControl createMouseDragControl();
 
-	public void deleteMouseDragControl(MouseDragControl mouseDragControl);
+	public void deleteMouseDragControl(CustomMouseDragControl mouseDragControl);
 
-	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
+	public boolean isMouseDragControlDeletable(CustomMouseDragControl mouseDragControl);
 
 	// public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 

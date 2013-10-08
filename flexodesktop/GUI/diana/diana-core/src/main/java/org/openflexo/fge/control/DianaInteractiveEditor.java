@@ -49,7 +49,7 @@ import org.openflexo.fge.view.DianaViewFactory;
  * 
  * @param <M>
  */
-public class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>, C> extends DianaInteractiveViewer<M, F, C> {
+public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>, C> extends DianaInteractiveViewer<M, F, C> {
 
 	private static final Logger logger = Logger.getLogger(DianaInteractiveEditor.class.getPackage().getName());
 
@@ -130,9 +130,6 @@ public class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>, C> exte
 			currentTool = aTool;
 			if (getToolbox() != null) {
 				getToolbox().getToolPanel().updateButtons();
-			}
-			if (getPaintManager() != null) {
-				getPaintManager().repaint(getDrawingView());
 			}
 		}
 	}

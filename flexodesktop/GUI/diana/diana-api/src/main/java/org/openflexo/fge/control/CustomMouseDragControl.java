@@ -20,11 +20,9 @@
 
 package org.openflexo.fge.control;
 
-import java.awt.event.MouseEvent;
-
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-public interface MouseDragControl extends MouseControl {
+public interface CustomMouseDragControl<CI> extends CustomMouseControl<CI> {
 
 	/**
 	 * Handle mouse pressed event, by performing what is required here If event has been correctely handled, consume it.
@@ -34,7 +32,7 @@ public interface MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseEvent event);
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
 
 	/**
 	 * Handle mouse released event, by performing what is required here If event has been correctely handled, consume it.
@@ -44,7 +42,7 @@ public interface MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseReleased(DianaEditor<?> controller, MouseEvent event);
+	public void handleMouseReleased(DianaEditor<?> controller, CI controlInfo);
 
 	/**
 	 * Handle mouse dragged event, by performing what is required here If event has been correctely handled, consume it.
@@ -54,6 +52,6 @@ public interface MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseDragged(DianaEditor<?> controller, MouseEvent event);
+	public void handleMouseDragged(DianaEditor<?> controller, CI controlInfo);
 
 }

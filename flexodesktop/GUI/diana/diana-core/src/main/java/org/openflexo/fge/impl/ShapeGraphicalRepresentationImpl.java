@@ -14,7 +14,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.CustomMouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;

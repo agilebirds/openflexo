@@ -15,7 +15,7 @@ import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.CustomMouseControl.MouseButton;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;

@@ -17,16 +17,27 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.actions;
 
-import java.util.logging.Logger;
+package org.openflexo.fge.control;
 
-public abstract class MoveAction<CI> extends AbstractMouseDragControlActionImpl<CI> {
-	private static final Logger logger = Logger.getLogger(MoveAction.class.getPackage().getName());
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-	@Override
-	public MouseDragControlActionType getActionType() {
-		return MouseDragControlActionType.MOVE;
+/**
+ * Abstract definition of a mouse control
+ * 
+ * @author sylvain
+ * 
+ * @param <CI>
+ *            type of information container managed for this control (eg MouseEvent for Swing)
+ */
+public interface CustomMouseControl<CI> {
+
+	public static enum MouseButton {
+		LEFT, RIGHT, CENTER
 	}
+
+	public abstract boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
+
+	public abstract boolean isModelEditionAction();
 
 }

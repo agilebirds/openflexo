@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.paint;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -45,6 +45,8 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.swing.view.JLabelView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
 

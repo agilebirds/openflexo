@@ -20,7 +20,6 @@
 
 package org.openflexo.fge.control;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,16 +27,11 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.control.actions.MouseDragControlImpl;
-import org.openflexo.fge.control.actions.MoveInfo;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
@@ -45,8 +39,9 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
-import org.openflexo.fge.swing.JLabelView;
+import org.openflexo.fge.swing.actions.CustomMouseDragControlImpl;
 import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.fge.view.FGEView;
 
 /**
  * Represents a basic viewer of a {@link Drawing}<br>
@@ -60,7 +55,7 @@ import org.openflexo.fge.view.DianaViewFactory;
  * 
  * @param <M>
  */
-public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
+public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
 
 	private static final Logger logger = Logger.getLogger(DianaInteractiveViewer.class.getPackage().getName());
 
@@ -78,10 +73,10 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 	private List<DrawingTreeNode<?, ?>> focusedObjects;
 	private List<DrawingTreeNode<?, ?>> selectedObjects;
 
-	private JLabelView<?> currentlyEditedLabel;
+	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
 
-	private MouseDragControlImpl currentMouseDrag = null;
+	private CustomMouseDragControlImpl currentMouseDrag = null;
 
 	private FGEPoint lastClickedPoint;
 	private DrawingTreeNode<?, ?> lastSelectedNode;
@@ -90,9 +85,6 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 	 * Stores selection as a persistent list of identified objects
 	 */
 	private List<DrawingTreeNodeIdentifier<?>> storedSelection;
-
-	private MoveInfo keyDrivenMovingSession;
-	private KeyDrivenMovingSessionTimer keyDrivenMovingSessionTimer = null;
 
 	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
 		this(aDrawing, factory, dianaFactory, true, false, true, true, true);
@@ -172,46 +164,16 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 	}
 
 	public void setFocusedFloatingLabel(DrawingTreeNode<?, ?> aFocusedlabel) {
-		// logger.info("setFocusedFloatingLabel() with "+aFocusedlabel);
-		if (focusedFloatingLabel == null) {
-			if (aFocusedlabel == null) {
-				return;
-			} else {
-				focusedFloatingLabel = aFocusedlabel;
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					// Just repaint connector
-					drawingView.getPaintManager().repaint(focusedFloatingLabel);
-				} else {
-					// @brutal mode
-					drawingView.getPaintManager().repaint(drawingView);
-				}
+		if (focusedFloatingLabel != aFocusedlabel) {
+			DrawingTreeNode<?, ?> oldFocusedFloatingLabel = this.focusedFloatingLabel;
+			this.focusedFloatingLabel = aFocusedlabel;
+			if (getDelegate() != null) {
+				getDelegate().focusedObjectChanged(oldFocusedFloatingLabel, focusedFloatingLabel);
 			}
-		} else {
-			DrawingTreeNode<?, ?> oldFocusedFloatingLabel = focusedFloatingLabel;
-			focusedFloatingLabel = aFocusedlabel;
-			if (aFocusedlabel == null || focusedFloatingLabel != aFocusedlabel) {
-				if (getPaintManager().isPaintingCacheEnabled()) {
-					// Just repaint old and eventual new connector
-					drawingView.getPaintManager().repaint(oldFocusedFloatingLabel);
-					if (aFocusedlabel != null) {
-						drawingView.getPaintManager().repaint(focusedFloatingLabel);
-					}
-				} else {
-					// @brutal mode
-					drawingView.getPaintManager().repaint(drawingView);
-				}
-			}
-			/*
-			 * if (aFocusedlabel == null) { focusedFloatingLabel = null;
-			 * drawingView.getPaintManager().repaint(drawingView); } else if
-			 * (focusedFloatingLabel != aFocusedlabel) { focusedFloatingLabel =
-			 * aFocusedlabel;
-			 * drawingView.getPaintManager().repaint(drawingView); }
-			 */
 		}
 	}
 
-	private ShapeNode<?> getFirstSelectedShape() {
+	public ShapeNode<?> getFirstSelectedShape() {
 		for (DrawingTreeNode<?, ?> node : getSelectedObjects()) {
 			if (node instanceof ShapeNode) {
 				return (ShapeNode<?>) node;
@@ -373,37 +335,37 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 		// Override when required
 	}
 
-	public void setEditedLabel(JLabelView<?> aLabel) {
+	public void setEditedLabel(FGEView<?, ?> aLabel) {
 		stopEditionOfEditedLabelIfAny();
-		currentlyEditedLabel = aLabel;
+		currentlyEditedLabelView = aLabel;
 	}
 
-	public void resetEditedLabel(JLabelView<?> editedLabel) {
-		if (currentlyEditedLabel == editedLabel) {
-			currentlyEditedLabel = null;
+	public void resetEditedLabel(FGEView<?, ?> editedLabel) {
+		if (currentlyEditedLabelView == editedLabel) {
+			currentlyEditedLabelView = null;
 		}
 	}
 
 	public boolean hasEditedLabel() {
-		return currentlyEditedLabel != null;
+		return currentlyEditedLabelView != null;
 	}
 
-	public JLabelView<?> getEditedLabel() {
-		return currentlyEditedLabel;
+	public FGEView<?, ?> getEditedLabel() {
+		return currentlyEditedLabelView;
 	}
 
 	public void stopEditionOfEditedLabelIfAny() {
-		if (currentlyEditedLabel != null) {
-			currentlyEditedLabel.stopEdition();
+		if (currentlyEditedLabelView != null) {
+			currentlyEditedLabelView.stopLabelEdition();
 		}
 
 	}
 
-	public MouseDragControlImpl getCurrentMouseDrag() {
+	public CustomMouseDragControlImpl getCurrentMouseDrag() {
 		return currentMouseDrag;
 	}
 
-	public void setCurrentMouseDrag(MouseDragControlImpl aMouseDrag) {
+	public void setCurrentMouseDrag(CustomMouseDragControlImpl aMouseDrag) {
 		currentMouseDrag = aMouseDrag;
 	}
 
@@ -522,127 +484,4 @@ public class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>, C> exte
 		}
 	}
 
-	// Override when required
-	public void notifyWillMove(MoveInfo currentMove) {
-	}
-
-	// Override when required
-	public void notifyHasMoved(MoveInfo currentMove) {
-	}
-
-	/**
-	 * Process 'UP' key pressed
-	 * 
-	 * @return boolean indicating if event was successfully processed
-	 */
-	public boolean upKeyPressed() {
-		// System.out.println("Up");
-		return getDrawing().isEditable() && keyDrivenMove(0, -1);
-	}
-
-	/**
-	 * Process 'DOWN' key pressed
-	 * 
-	 * @return boolean indicating if event was successfully processed
-	 */
-	public boolean downKeyPressed() {
-		// System.out.println("Down");
-		return getDrawing().isEditable() && keyDrivenMove(0, 1);
-	}
-
-	/**
-	 * Process 'LEFT' key pressed
-	 * 
-	 * @return boolean indicating if event was successfully processed
-	 */
-	public boolean leftKeyPressed() {
-		// System.out.println("Left");
-		return getDrawing().isEditable() && keyDrivenMove(-1, 0);
-	}
-
-	/**
-	 * Process 'RIGHT' key pressed
-	 * 
-	 * @return boolean indicating if event was successfully processed
-	 */
-	public boolean rightKeyPressed() {
-		// System.out.println("Right");
-		return getDrawing().isEditable() && keyDrivenMove(1, 0);
-	}
-
-	private synchronized boolean keyDrivenMove(int deltaX, int deltaY) {
-		if (keyDrivenMovingSessionTimer == null && getFirstSelectedShape() != null) {
-			// System.out.println("BEGIN to move with keyboard");
-			if (startKeyDrivenMovingSession()) {
-				doMoveInSession(deltaX, deltaY);
-				return true;
-			}
-			return false;
-		} else if (keyDrivenMovingSessionTimer != null) {
-			doMoveInSession(deltaX, deltaY);
-			return true;
-		}
-		return false;
-	}
-
-	public void doMoveInSession(int deltaX, int deltaY) {
-		keyDrivenMovingSessionTimer.typed();
-		Point newLocation = keyDrivenMovingSession.getCurrentLocationInDrawingView();
-		newLocation.x += deltaX;
-		newLocation.y += deltaY;
-		keyDrivenMovingSession.moveTo(newLocation);
-	}
-
-	private synchronized boolean startKeyDrivenMovingSession() {
-
-		if (getFirstSelectedShape().getGraphicalRepresentation().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
-
-			keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
-			keyDrivenMovingSessionTimer.start();
-			ShapeNode<?> movedObject = getFirstSelectedShape();
-			keyDrivenMovingSession = new MoveInfo(movedObject, this);
-			notifyWillMove(keyDrivenMovingSession);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private synchronized void stopKeyDrivenMovingSession() {
-		keyDrivenMovingSessionTimer = null;
-		notifyHasMoved(keyDrivenMovingSession);
-		keyDrivenMovingSession = null;
-	}
-
-	private class KeyDrivenMovingSessionTimer extends Thread {
-		volatile boolean typed = false;
-
-		public KeyDrivenMovingSessionTimer() {
-			typed = true;
-		}
-
-		@Override
-		public void run() {
-			while (typed) {
-				typed = false;
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					stopKeyDrivenMovingSession();
-				}
-			});
-		}
-
-		public synchronized void typed() {
-			typed = true;
-			// System.out.println("Tiens on retape sur le clavier");
-		}
-	}
 }

@@ -25,8 +25,6 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.DrawingPalette;
-import org.openflexo.fge.swing.FGEPaintManager;
-import org.openflexo.fge.swing.JLabelView;
 
 /**
  * Implemented by all views representing a DrawingTreeNode<br>
@@ -51,17 +49,15 @@ public interface FGEView<O, C> extends Observer, FGEConstants {
 
 	public O getDrawable();
 
-	public JLabelView<O> getLabelView();
-
 	public double getScale();
 
 	public void registerPalette(DrawingPalette aPalette);
-
-	public FGEPaintManager getPaintManager();
 
 	public void delete();
 
 	public boolean isDeleted();
 
 	public void rescale();
+
+	public void stopLabelEdition();
 }

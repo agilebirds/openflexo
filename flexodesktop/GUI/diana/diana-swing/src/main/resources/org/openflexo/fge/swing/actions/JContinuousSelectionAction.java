@@ -17,21 +17,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-package org.openflexo.fge.control;
+package org.openflexo.fge.swing.actions;
 
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.actions.ContinuousSelectionAction;
 
-public interface MouseControl {
-
-	public static enum MouseButton {
-		LEFT, RIGHT, CENTER
+public class JContinuousSelectionAction extends ContinuousSelectionAction<MouseEvent> {
+	@Override
+	public MouseClickControlActionType getActionType() {
+		return MouseClickControlActionType.CONTINUOUS_SELECTION;
 	}
 
-	public abstract boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseEvent e);
-
-	public abstract boolean isModelEditionAction();
-
+	@Override
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent mouseEvent) {
+		System.out.println("Continuous select " + node);
+		return true;
+	}
 }

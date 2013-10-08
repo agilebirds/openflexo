@@ -19,45 +19,10 @@
  */
 package org.openflexo.fge.control.actions;
 
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.util.logging.Level;
 
-import javax.swing.SwingUtilities;
-
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.view.FGEView;
-
-public class SelectionAction extends MouseClickControlActionImpl {
+public abstract class SelectionAction<CI> extends AbstractMouseClickControlActionImpl<CI> {
 	@Override
 	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.SELECTION;
-	}
-
-	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-		if (controller.getDrawingView() == null) {
-			return false;
-		}
-
-		if (node.getGraphicalRepresentation().getIsSelectable()) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Select " + node);
-			}
-			controller.setSelectedObject(node);
-			if (controller.getDrawingView() == null) {
-				return false;
-			}
-			FGEView<?, ?> view = controller.getDrawingView().viewForNode(node);
-			Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-			controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
-			controller.setLastSelectedGR(node);
-			return false;
-		} else {
-			return false;
-		}
 	}
 }

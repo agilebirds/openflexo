@@ -20,22 +20,16 @@
 
 package org.openflexo.fge.control;
 
-import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.FGEModelFactory;
 
-public interface MouseClickControlAction<C extends DianaEditor<?>> extends MouseControlAction<C> {
+public interface MouseClickControlAction<E extends DianaEditor<?>, CI> extends MouseControlAction<E> {
 
 	public static final Logger logger = Logger.getLogger(MouseClickControlAction.class.getPackage().getName());
 
 	public static enum MouseClickControlActionType {
 		NONE, SELECTION, MULTIPLE_SELECTION, CONTINUOUS_SELECTION, CUSTOM;
-
-		public MouseClickControlAction<?> makeAction(FGEModelFactory factory) {
-			return factory.makeMouseClickControlAction(this);
-		}
 	}
 
 	public abstract MouseClickControlActionType getActionType();
@@ -47,10 +41,10 @@ public interface MouseClickControlAction<C extends DianaEditor<?>> extends Mouse
 	 * @param graphicalRepresentation
 	 * @param controller
 	 *            TODO
-	 * @param event
+	 * @param controlInfo
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, C controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, E controller, CI controlInfo);
 
 }

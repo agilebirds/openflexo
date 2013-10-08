@@ -99,11 +99,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	@Override
 	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		if (controller instanceof AbstractDianaEditor) {
-			if (((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().isPaintingCacheEnabled()) {
-				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().addToTemporaryObjects(getNode());
-				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().invalidate(getNode());
-			}
+		if (controller instanceof AbstractDianaEditor && ((AbstractDianaEditor<?, ?, ?>) controller).getDelegate() != null) {
+			((AbstractDianaEditor<?, ?, ?>) controller).getDelegate().objectStartMoving(getNode());
 		}
 		initialPolylin = getPolylin().clone();
 		// getConnector().setWasManuallyAdjusted(true);
@@ -113,13 +110,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	@Override
 	public void stopDragging(DianaEditor<?> controller, DrawingTreeNode<?, ?> focused) {
 		super.stopDragging(controller, focused);
-		if (controller instanceof AbstractDianaEditor) {
-			if (((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().isPaintingCacheEnabled()) {
-				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().removeFromTemporaryObjects(getNode());
-				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().invalidate(getNode());
-				((AbstractDianaEditor<?, ?, ?>) controller).getPaintManager().repaint(
-						((AbstractDianaEditor<?, ?, ?>) controller).getDrawingView());
-			}
+		if (controller instanceof AbstractDianaEditor && ((AbstractDianaEditor<?, ?, ?>) controller).getDelegate() != null) {
+			((AbstractDianaEditor<?, ?, ?>) controller).getDelegate().objectStopMoving(getNode());
 		}
 		// getConnector().setWasManuallyAdjusted(true);
 	}

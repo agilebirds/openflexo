@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.CustomMouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;

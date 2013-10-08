@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.view;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -80,6 +80,8 @@ import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
+import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEContainerView;
 import org.openflexo.fge.view.FGEView;
@@ -1060,5 +1062,9 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	public FGEContainerView<?, ?> getParentView() {
 		return null;
 	};
+
+	public void stopLabelEdition() {
+		getLabelView().stopEdition();
+	}
 
 }

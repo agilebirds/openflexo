@@ -21,22 +21,22 @@ package org.openflexo.fge.geomedit;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.MouseControlInfo;
 import org.openflexo.fge.control.actions.CustomClickControlAction;
-import org.openflexo.fge.control.actions.MouseClickControlImpl;
+import org.openflexo.fge.swing.actions.JCustomMouseClickControl;
 
-public class ShowContextualMenuControl extends MouseClickControlImpl {
+public class ShowContextualMenuControl extends JCustomMouseClickControl {
 
 	public ShowContextualMenuControl() {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(DrawingTreeNode<?, ?> node, AbstractDianaEditor<?> controller, MouseEvent event) {
-				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
+			public boolean handleClick(DrawingTreeNode<?, ?> node, AbstractDianaEditor<?> controller, MouseControlInfo controlInfo) {
+				Point newPoint = SwingUtilities.convertPoint((Component) controlInfo.getSource(), controlInfo.getPoint(), controller.getDrawingView());
 				((GeomEditController) controller).showContextualMenu(node, newPoint);
 				return false;
 			}

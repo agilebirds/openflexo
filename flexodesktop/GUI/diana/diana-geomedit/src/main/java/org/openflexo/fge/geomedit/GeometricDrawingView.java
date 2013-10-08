@@ -34,7 +34,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod;
 import org.openflexo.fge.notifications.NodeAdded;
-import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.logging.FlexoLogger;
 
 public class GeometricDrawingView extends JDrawingView<GeometricDrawing> {

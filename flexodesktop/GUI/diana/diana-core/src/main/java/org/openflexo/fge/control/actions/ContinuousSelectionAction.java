@@ -19,21 +19,11 @@
  */
 package org.openflexo.fge.control.actions;
 
-import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-
-public class ContinuousSelectionAction extends MouseClickControlActionImpl {
+public abstract class ContinuousSelectionAction<CI> extends AbstractMouseClickControlActionImpl<CI> {
 	@Override
 	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.CONTINUOUS_SELECTION;
 	}
 
-	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-		MouseClickControlActionImpl.logger.info("Continuous select " + node);
-
-		return true;
-	}
 }

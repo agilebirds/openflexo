@@ -17,37 +17,35 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.actions;
+package org.openflexo.fge.swing.actions;
 
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.CustomMouseDragControl;
 import org.openflexo.fge.control.DianaEditor;
-import org.openflexo.fge.control.MouseControl;
-import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 
-public class MouseDragControlImpl extends MouseControlImpl implements MouseDragControl {
+public class JCustomMouseDragControl extends AbstractJCustomMouseControlImpl implements CustomMouseDragControl<MouseEvent> {
 	public MouseDragControlAction action;
 
 	private DrawingTreeNode<?, ?> initialNode;
 
-	public MouseDragControlImpl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+	public JCustomMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
 			boolean altPressed, FGEModelFactory factory) {
 		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
 		action = MouseDragControlActionType.NONE.makeAction(factory);
 	}
 
-	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+	public JCustomMouseDragControl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		this.action = action;
 	}
 
-	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlActionType actionType, boolean shiftPressed,
+	public JCustomMouseDragControl(String aName, MouseButton button, MouseDragControlActionType actionType, boolean shiftPressed,
 			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		this(aName, button, shiftPressed, ctrlPressed, metaPressed, altPressed, factory);
 		setActionType(actionType);
@@ -142,7 +140,7 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 
 	@Override
 	public String toString() {
-		return "MouseDragControlImpl[" + name + "," + getModifiersAsString() + ",ACTION=" + getActionType().name() + "]";
+		return "JCustomMouseDragControl[" + name + "," + getModifiersAsString() + ",ACTION=" + getActionType().name() + "]";
 	}
 
 	public MouseDragControlAction getAction() {

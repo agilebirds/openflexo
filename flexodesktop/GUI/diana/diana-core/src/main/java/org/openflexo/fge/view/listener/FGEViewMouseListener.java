@@ -39,14 +39,14 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.MouseDragControl;
-import org.openflexo.fge.control.actions.MouseDragControlImpl;
+import org.openflexo.fge.control.CustomMouseClickControl;
+import org.openflexo.fge.control.CustomMouseDragControl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.FGEPaintManager;
 import org.openflexo.fge.swing.JDrawingView;
 import org.openflexo.fge.swing.JLabelView;
+import org.openflexo.fge.swing.actions.CustomMouseDragControlImpl;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.toolbox.ToolBox;
 
@@ -175,7 +175,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 
 			// We have now performed all low-level possible actions, let's go for the registered mouse controls
-			for (MouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
+			for (CustomMouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
 				if ((editable || !mouseClickControl.isModelEditionAction())
 						&& mouseClickControl.isApplicable(focusedObject, getController(), e)) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -371,8 +371,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
-		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
-		for (MouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
+		List<CustomMouseDragControl> applicableMouseDragControls = new ArrayList<CustomMouseDragControl>();
+		for (CustomMouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
 			if ((editable || !mouseDragControl.isModelEditionAction()) && mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
 				if (logger.isLoggable(Level.FINE)) {
@@ -391,19 +391,19 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if (applicableMouseDragControls.size() > 1) {
-			logger.warning("More than one applicable MouseDragControlImpl for graphical representation: " + focusedObject
+			logger.warning("More than one applicable CustomMouseDragControlImpl for graphical representation: " + focusedObject
 					+ " Applying first and forgetting others...");
 		}
 
 		// Apply applicable mouse drag control
-		MouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
+		CustomMouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}
 		if (currentMouseDrag.handleMousePressed(focusedObject, getController(), e)) {
 			// Everything OK
 			if (getController() != null) {
-				((DianaInteractiveViewer<?, ?, ?>) getController()).setCurrentMouseDrag((MouseDragControlImpl) currentMouseDrag);
+				((DianaInteractiveViewer<?, ?, ?>) getController()).setCurrentMouseDrag((CustomMouseDragControlImpl) currentMouseDrag);
 			}
 		} else {
 			// Something failed, abort this drag

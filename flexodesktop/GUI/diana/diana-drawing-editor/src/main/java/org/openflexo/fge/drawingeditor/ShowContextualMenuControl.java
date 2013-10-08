@@ -27,11 +27,11 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.actions.CustomClickControlAction;
-import org.openflexo.fge.control.actions.MouseClickControlImpl;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
+import org.openflexo.fge.swing.actions.JCustomMouseClickControl;
 import org.openflexo.fge.view.FGEView;
 
-public class ShowContextualMenuControl extends MouseClickControlImpl {
+public class ShowContextualMenuControl extends JCustomMouseClickControl {
 
 	public ShowContextualMenuControl(DiagramFactory factory) {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {

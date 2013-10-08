@@ -19,17 +19,16 @@
  */
 package org.openflexo.fge.control.actions;
 
-import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseClickControlAction;
 
-public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements
-		MouseClickControlAction<DianaInteractiveViewer<?, ?, ?>> {
+public abstract class AbstractMouseClickControlActionImpl<CI> extends MouseControlActionImpl implements
+		MouseClickControlAction<DianaInteractiveViewer<?, ?, ?>, CI> {
 
-	static final Logger logger = Logger.getLogger(MouseClickControlActionImpl.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(AbstractMouseClickControlActionImpl.class.getPackage().getName());
 
 	@Override
 	public abstract MouseClickControlActionType getActionType();
@@ -46,16 +45,16 @@ public abstract class MouseClickControlActionImpl extends MouseControlActionImpl
 	 * @return
 	 */
 	@Override
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, CI controlInfo);
 
-	public static class None extends MouseClickControlActionImpl {
+	public static class None extends AbstractMouseClickControlActionImpl<Object> {
 		@Override
 		public MouseClickControlActionType getActionType() {
 			return MouseClickControlActionType.NONE;
 		}
 
 		@Override
-		public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
+		public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, Object controlInfo) {
 			// No action
 			return true;
 		}

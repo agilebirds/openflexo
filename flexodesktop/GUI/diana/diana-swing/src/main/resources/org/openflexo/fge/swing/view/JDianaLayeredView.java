@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.view;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -230,4 +230,5 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 	public List<FGEView<?, ? extends JComponent>> getChildViews() {
 		return childViews;
 	}
+
 }

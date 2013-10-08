@@ -20,6 +20,6 @@
 
 package org.openflexo.fge.control;
 
-public interface MouseControlAction<C extends DianaEditor<?>> {
+public interface MouseControlAction<E extends DianaEditor<?>> {
 
 }

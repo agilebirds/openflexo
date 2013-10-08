@@ -25,12 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.CustomMouseControl;
 import org.openflexo.fge.control.DianaEditor;
-import org.openflexo.fge.control.MouseControl;
-import org.openflexo.fge.control.MouseControl.MouseButton;
 
-public abstract class MouseControlImpl implements MouseControl {
-	static final Logger logger = Logger.getLogger(MouseControlImpl.class.getPackage().getName());
+public abstract class AbstractCustomMouseControlImpl<CI> implements CustomMouseControl<CI> {
+	static final Logger logger = Logger.getLogger(AbstractCustomMouseControlImpl.class.getPackage().getName());
 
 	public String name;
 	public boolean shiftPressed = false;
@@ -43,8 +42,8 @@ public abstract class MouseControlImpl implements MouseControl {
 
 	private FGEModelFactory factory;
 
-	protected MouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed,
-			MouseButton button, FGEModelFactory factory) {
+	protected AbstractCustomMouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed, MouseButton button, FGEModelFactory factory) {
 		super();
 		name = aName;
 		this.shiftPressed = shiftPressed;

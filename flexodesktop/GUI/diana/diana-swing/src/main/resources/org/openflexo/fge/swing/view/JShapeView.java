@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.view;
 
 import java.awt.AlphaComposite;
 import java.awt.Component;
@@ -58,6 +58,8 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
+import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
@@ -507,6 +509,10 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		} finally {
 			getController().enablePaintingCache();
 		}
+	}
+
+	public void stopLabelEdition() {
+		getLabelView().stopEdition();
 	}
 
 }

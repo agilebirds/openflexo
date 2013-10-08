@@ -19,26 +19,11 @@
  */
 package org.openflexo.fge.control.actions;
 
-import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-
-public class MultipleSelectionAction extends MouseClickControlActionImpl {
+public abstract class MultipleSelectionAction<CI> extends AbstractMouseClickControlActionImpl<CI> {
 	@Override
 	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.MULTIPLE_SELECTION;
 	}
 
-	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-		if (node.getGraphicalRepresentation().getIsSelectable()) {
-			MouseClickControlActionImpl.logger.info("Multiple select " + node);
-			controller.toggleSelection(node);
-			return true;
-		} else {
-			return false;
-		}
-
-	}
 }

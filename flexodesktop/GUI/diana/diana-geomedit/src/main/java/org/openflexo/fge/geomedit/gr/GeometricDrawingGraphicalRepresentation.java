@@ -41,8 +41,8 @@ public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRep
 		setWidth(10000);
 		setHeight(10000);
 
-		/*MouseClickControlImpl showContextualMenu 
-		= MouseClickControlImpl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,
+		/*JCustomMouseClickControl showContextualMenu 
+		= JCustomMouseClickControl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,
 				new CustomClickControlAction() {
 			@Override
 			public boolean handleClick(GraphicalRepresentation graphicalRepresentation, AbstractDianaEditor controller, java.awt.event.MouseEvent event)

@@ -10,7 +10,7 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.CustomMouseControl.MouseButton;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ToolBox;

@@ -1,4 +1,4 @@
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.view;
 
 import java.awt.Point;
 import java.awt.dnd.DnDConstants;
@@ -25,6 +25,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.DrawingPalette;
 import org.openflexo.fge.control.tools.PaletteElement;
 import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable;
+import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.toolbox.ToolBox;
 
 import sun.awt.dnd.SunDragSourceContextPeer;

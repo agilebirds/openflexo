@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.actions;
+package org.openflexo.fge.swing.actions;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -38,7 +38,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.fge.view.FGEView;
 
 /**

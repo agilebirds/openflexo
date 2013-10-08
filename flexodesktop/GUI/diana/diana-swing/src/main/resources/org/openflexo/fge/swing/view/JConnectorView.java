@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing;
+package org.openflexo.fge.swing.view;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -51,6 +51,8 @@ import org.openflexo.fge.notifications.ObjectMove;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
+import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
@@ -473,6 +475,10 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 			return ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getToolTipText();
 		}
 		return super.getToolTipText(event);
+	}
+
+	public void stopLabelEdition() {
+		getLabelView().stopEdition();
 	}
 
 }

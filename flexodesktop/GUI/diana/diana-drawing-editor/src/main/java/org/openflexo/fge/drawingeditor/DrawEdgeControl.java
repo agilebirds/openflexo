@@ -33,13 +33,13 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.actions.CustomDragControlAction;
-import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.drawingeditor.model.Connector;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
+import org.openflexo.fge.swing.actions.JCustomMouseDragControl;
 
-public class DrawEdgeControl extends MouseDragControlImpl {
+public class DrawEdgeControl extends JCustomMouseDragControl {
 
 	Point currentDraggingLocationInDrawingView = null;
 	boolean drawEdge = false;

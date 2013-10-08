@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.actions;
+package org.openflexo.fge.swing.actions;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -53,11 +53,11 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.actions.MoveAction.ShapeNodeTransferable;
-import org.openflexo.fge.control.actions.MoveAction.TransferedShapeNode;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.swing.JDrawingView;
-import org.openflexo.fge.swing.JShapeView;
+import org.openflexo.fge.swing.actions.JMoveAction.ShapeNodeTransferable;
+import org.openflexo.fge.swing.actions.JMoveAction.TransferedShapeNode;
+import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.listener.FocusRetriever;
 
@@ -73,7 +73,7 @@ public class DNDInfo {
 
 	private static final Logger logger = Logger.getLogger(DNDInfo.class.getPackage().getName());
 
-	private final MoveAction _moveAction;
+	private final JMoveAction _moveAction;
 	private JShapeView<?> shapeView;
 	private DragSource dragSource;
 	private DragGestureListener dgListener;
@@ -86,7 +86,7 @@ public class DNDInfo {
 
 	private Hashtable<FGEView<?, ?>, DropTarget> dropTargets;
 
-	public DNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller, final MouseEvent initialEvent) {
+	public DNDInfo(JMoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller, final MouseEvent initialEvent) {
 		_moveAction = moveAction;
 		this.controller = controller;
 		draggedObject = shapeNode;
@@ -127,7 +127,7 @@ public class DNDInfo {
 				SunDragSourceContextPeer.setDragDropInProgress(false);
 			}
 		}
-		this.dragSource.startDrag(dge, MoveAction.dropKO, new MoveAction.ShapeNodeTransferable(shapeNode, initialPoint), dsListener);
+		this.dragSource.startDrag(dge, JMoveAction.dropKO, new JMoveAction.ShapeNodeTransferable(shapeNode, initialPoint), dsListener);
 		getDrawingView().captureDraggedNode(shapeView, dge);
 
 		// gr.setIsVisible(false);
@@ -193,7 +193,7 @@ public class DNDInfo {
 				// DragLabel.this.getText() );
 			}
 
-			ShapeNodeTransferable transferable = new MoveAction.ShapeNodeTransferable(null, e.getDragOrigin());
+			ShapeNodeTransferable transferable = new JMoveAction.ShapeNodeTransferable(null, e.getDragOrigin());
 
 			try {
 				// initial cursor, transferrable, dsource listener
@@ -421,7 +421,7 @@ public class DNDInfo {
 				if (dragSourceContext == null) {
 					logger.warning("dragSourceContext should NOT be null");
 				} else {
-					dragSourceContext.setCursor(MoveAction.dropKO);
+					dragSourceContext.setCursor(JMoveAction.dropKO);
 				}
 				e.rejectDrag();
 				return;
@@ -429,7 +429,7 @@ public class DNDInfo {
 			if (dragSourceContext == null) {
 				logger.warning("dragSourceContext should NOT be null");
 			} else {
-				dragSourceContext.setCursor(MoveAction.dropOK);
+				dragSourceContext.setCursor(JMoveAction.dropOK);
 
 				/*try {
 					ShapeGraphicalRepresentation element = ((TransferedShapeNode)e.getTransferable().getTransferData(ShapeNodeTransferable.defaultFlavor())).getTransferedElement();

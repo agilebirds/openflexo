@@ -19,10 +19,8 @@
  */
 package org.openflexo.fge.control.actions;
 
-import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
 
-public abstract class CustomDragControlAction extends MouseDragControlActionImpl {
+public abstract class CustomDragControlAction extends AbstractMouseDragControlActionImpl {
 	@Override
 	public MouseDragControlActionType getActionType() {
 		return MouseDragControlActionType.CUSTOM;

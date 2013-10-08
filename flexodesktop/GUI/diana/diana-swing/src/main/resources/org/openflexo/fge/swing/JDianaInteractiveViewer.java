@@ -18,14 +18,17 @@
  *
  */
 
-package org.openflexo.fge.control;
+package org.openflexo.fge.swing;
+
+import javax.swing.JComponent;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.swing.view.JDrawingView;
 
 /**
- * Represents a basic read-only viewer of a {@link Drawing}<br>
+ * This is the SWING implementation of a basic read-only viewer of a {@link Drawing}<br>
  * 
  * The {@link Drawing} can only be viewed, without any editing possibility (shapes are all non-movable)
  * 
@@ -33,10 +36,22 @@ import org.openflexo.fge.view.DianaViewFactory;
  * 
  * @param <M>
  */
-public abstract class DianaViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
+public class JDianaInteractiveViewer<M> extends DianaInteractiveViewer<M, SwingFactory, JComponent> {
 
-	public DianaViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
-		super(aDrawing, factory, dianaFactory);
+	public JDianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory) {
+		super(aDrawing, factory, SwingFactory.INSTANCE);
+		setDelegate(new SwingEditorDelegate(this));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public JDrawingView<M> getDrawingView() {
+		return (JDrawingView<M>) super.getDrawingView();
+	}
+
+	@Override
+	public SwingEditorDelegate getDelegate() {
+		return (SwingEditorDelegate) super.getDelegate();
 	}
 
 }

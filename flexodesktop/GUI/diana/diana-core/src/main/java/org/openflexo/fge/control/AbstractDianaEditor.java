@@ -43,7 +43,6 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.fge.swing.FGEPaintManager;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.DrawingView;
@@ -68,6 +67,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	private Drawing<M> drawing;
 	protected DrawingView<M, ? extends C> drawingView;
+	private DianaEditorDelegate delegate;
 
 	private ScalePanel _scalePanel;
 
@@ -90,6 +90,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 		this.factory = factory;
 		this.dianaFactory = dianaFactory;
+		this.delegate = delegate;
 
 		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>>();
 
@@ -110,6 +111,14 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	public F getDianaFactory() {
 		return dianaFactory;
+	}
+
+	public DianaEditorDelegate getDelegate() {
+		return delegate;
+	}
+
+	protected void setDelegate(DianaEditorDelegate delegate) {
+		this.delegate = delegate;
 	}
 
 	public DrawingView<M, ? extends C> rebuildDrawingView() {
@@ -328,21 +337,6 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	public DrawingView<M, ? extends C> getDrawingView() {
 		return drawingView;
-	}
-
-	public FGEPaintManager getPaintManager() {
-		if (getDrawingView() != null) {
-			return getDrawingView().getPaintManager();
-		}
-		return null;
-	}
-
-	public void enablePaintingCache() {
-		getPaintManager().enablePaintingCache();
-	}
-
-	public void disablePaintingCache() {
-		getPaintManager().disablePaintingCache();
 	}
 
 	public void delete() {
