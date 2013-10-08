@@ -169,7 +169,6 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			ProgressWindow.hideProgressWindow();
 			throw new ProjectLoadingCancelledException(e.getMessage());
 		}
-
 		if (ProgressWindow.hasInstance()) {
 			ProgressWindow.hideProgressWindow();
 		}
@@ -189,6 +188,14 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 				}
 			}
 			if (editor == null) {
+				String projectURI = FlexoProjectUtil.getProjectURI(projectDirectory);
+				for (FlexoProject p : getRootProjects()) {
+					if (p.getProjectURI().equals(projectURI)) {
+						FlexoController.notify(FlexoLocalization.localizedForKey("project_with_URI") + " " + projectURI + " "
+								+ FlexoLocalization.localizedForKey("is_alread_opened"));
+						return null;
+					}
+				}
 				editor = FlexoResourceManager.initializeExistingProject(projectDirectory, ProgressWindow.instance(), applicationContext,
 						applicationContext.getProjectLoadingHandler(projectDirectory), applicationContext.getProjectReferenceLoader(),
 						applicationContext.getResourceCenterService());
@@ -252,6 +259,8 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 			}
 		}
 		editor.getProject().setModuleLoader(applicationContext.getModuleLoader());
+		GeneralPreferences.addToLastServerProjects(editor.getProject().getProjectURI());
+		GeneralPreferences.save();
 	}
 
 	public void closeProject(FlexoProject project) {

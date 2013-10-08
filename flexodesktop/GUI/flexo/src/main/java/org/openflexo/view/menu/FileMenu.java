@@ -23,9 +23,12 @@ import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -41,6 +44,8 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.ValidateProject;
@@ -56,6 +61,9 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.print.PrintManagingController;
 import org.openflexo.rest.action.UploadProjectAction;
+import org.openflexo.rest.client.ServerRestProjectListModel;
+import org.openflexo.rest.client.model.Project;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -87,6 +95,7 @@ public class FileMenu extends FlexoMenu {
 		if (insertCommonItems) {
 			add(new NewProjectItem());
 			add(new OpenProjectItem());
+			add(new OpenProjectFromServerItem());
 			add(recentProjectMenu = new JMenu());
 			recentProjectMenu.setText(FlexoLocalization.localizedForKey("recent_projects", recentProjectMenu));
 			add(new ImportProjectMenuItem());
@@ -229,6 +238,68 @@ public class FileMenu extends FlexoMenu {
 					e.printStackTrace();
 					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
 							+ projectDirectory.getAbsolutePath());
+				}
+			}
+		}
+	}
+
+	public class OpenProjectFromServerItem extends FlexoMenuItem {
+
+		public OpenProjectFromServerItem() {
+			super(new OpenProjectFromServerAction(), "open_project_from_server...", null, getController(), true);
+			setIcon(IconLibrary.OPEN_ICON);
+		}
+	}
+
+	public class OpenProjectFromServerAction extends AbstractAction {
+		public OpenProjectFromServerAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			final ServerRestProjectListModel model = new ServerRestProjectListModel(getController().getApplicationContext()
+					.getServerRestService(), getController().getFlexoFrame());
+
+			final FIBDialog<ServerRestProjectListModel> dialog = FIBDialog.instanciateDialog(ServerRestProjectListModel.FIB_FILE, model,
+					getController().getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
+			dialog.addWindowListener(new WindowAdapter() {
+
+				@Override
+				public void windowActivated(WindowEvent e) {
+					dialog.removeWindowListener(this);
+					model.refresh();
+				}
+			});
+			dialog.setLocationRelativeTo(getController().getFlexoFrame());
+			dialog.setVisible(true);
+			if (dialog.getStatus() == Status.VALIDATED) {
+				Project project = model.getSelectedProject();
+				if (project == null) {
+					return;
+				}
+				try {
+					File documentDirectory = FileUtils.getDocumentDirectory();
+					if (!documentDirectory.exists() || !documentDirectory.canWrite()) {
+						documentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
+					}
+					File projectDirectory = model.downloadToFolder(project, new File(documentDirectory, "OpenFlexo Projects"));
+					if (projectDirectory != null) {
+						if (projectDirectory != null) {
+							try {
+								getProjectLoader().loadProject(projectDirectory);
+							} catch (ProjectLoadingCancelledException e) {
+							} catch (ProjectInitializerException e) {
+								e.printStackTrace();
+								FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
+										+ projectDirectory.getAbsolutePath());
+							}
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_download_project") + " " + project.getName() + " ("
+							+ e.getMessage() + ")");
 				}
 			}
 		}

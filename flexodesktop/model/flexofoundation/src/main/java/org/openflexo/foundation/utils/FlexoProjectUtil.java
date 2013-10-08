@@ -23,12 +23,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
 import org.openflexo.foundation.xml.FlexoXMLMappings;
+import org.openflexo.foundation.xml.XMLUtils;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FlexoVersion;
+import org.w3c.dom.Document;
 
 public class FlexoProjectUtil {
 
@@ -48,6 +52,22 @@ public class FlexoProjectUtil {
 					FlexoLocalization.localizedForKey("current_flexo_version_is_smaller_than_last_used_to_open_this_project"));
 		}
 		return true;
+	}
+
+	public static String getProjectURI(File projectDirectory) {
+		Collection<File> files = FileUtils.listFiles(projectDirectory, new String[] { "rmxml" }, false);
+		if (files.size() == 0) {
+			return null;
+		} else {
+			File rmxml = files.iterator().next();
+			try {
+				Document projectXML = XMLUtils.parseXMLFile(rmxml);
+				return projectXML.getDocumentElement().getAttribute("projectURI");
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 
 	/**
