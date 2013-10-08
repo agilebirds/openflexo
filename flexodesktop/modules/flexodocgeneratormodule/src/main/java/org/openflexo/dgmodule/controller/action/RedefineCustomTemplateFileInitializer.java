@@ -73,7 +73,13 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
-				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
+				String[] locationChoices;
+				if (templates.getCustomDocRepositoriesVector().size() > 0) {
+					locationChoices = new String[] { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
+				} else {
+					locationChoices = new String[] { CREATE_NEW_REPOSITORY };
+				}
+
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
 						templates.getCustomDocRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
 						locationChoices);
@@ -87,9 +93,11 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						templates.getCustomDocRepositoriesVector(),
 						getControllerActionInitializer().getDGController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getDGController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null);
+								: templates.getCustomDocRepositoriesVector().size() > 0 ? templates.getCustomDocRepositoriesVector().get(0)
+										: null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
+				customRepositoryParam.setShowReset(false);
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');
 				String COMMON = FlexoLocalization.localizedForKey("redefine_in_common_context");
 				String SPECIFIC_TARGET = FlexoLocalization.localizedForKey("redefine_for_a_specific_target");
@@ -116,8 +124,17 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 						addDirectory.setRepositoryType(TemplateRepositoryType.Documentation);
 						addDirectory.doAction();
 						action.setRepository(addDirectory.getNewCustomTemplatesRepository());
+						if (addDirectory.getNewCustomTemplatesRepository() == null) {
+							return false;
+						}
 					} else if (repositoryChoiceParam.getValue().equals(CHOOSE_EXISTING_REPOSITORY)) {
+						if (customRepositoryParam.getValue() == null) {
+							FlexoController.notify(FlexoLocalization.localizedForKey("please_choose_a_template_repository"));
+							return false;
+						}
 						action.setRepository(customRepositoryParam.getValue());
+					} else {
+						return false;
 					}
 					if (contextChoiceParam.getValue().equals(SPECIFIC_TARGET)) {
 						action.setTarget(targetTypeParam.getValue());

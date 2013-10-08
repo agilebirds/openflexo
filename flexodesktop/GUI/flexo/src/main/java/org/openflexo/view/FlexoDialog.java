@@ -23,10 +23,13 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 
 import org.openflexo.swing.DialogFactory;
 
@@ -60,25 +63,13 @@ public class FlexoDialog extends JDialog {
 
 	private void init() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		addKeyListener(new KeyListener() {
+		getRootPane().registerKeyboardAction(new ActionListener() {
 
 			@Override
-			public void keyTyped(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					dispose();
-				}
+			public void actionPerformed(ActionEvent e) {
+				FlexoDialog.this.dispose();
 			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-			}
-		});
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		// (SGU) Very important !!!
 		// Don't put this flag to true again, as it lead to very severe issues
 		// while managing popup menu (see CustomPopup) which often appear below

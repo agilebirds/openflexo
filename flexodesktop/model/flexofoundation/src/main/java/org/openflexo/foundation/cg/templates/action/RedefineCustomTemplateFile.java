@@ -78,7 +78,11 @@ public class RedefineCustomTemplateFile extends FlexoAction<RedefineCustomTempla
 	@Override
 	protected void doAction(Object context) throws IOFlexoException {
 		logger.info("Redefine CustomTemplateFile " + getFocusedObject());
-		if (getFocusedObject() != null && _repository != null) {
+		if (_repository == null) {
+			logger.warning("No template repository was selected. Returning now.");
+			return;
+		}
+		if (getFocusedObject() != null) {
 			_newTemplateFile = redefineTemplate(getFocusedObject());
 		}
 		if (getGlobalSelection() != null) {

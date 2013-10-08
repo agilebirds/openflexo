@@ -35,7 +35,7 @@ public class TestJSon extends TestCase {
 		assertNotNull(submit.getFields().getIssuetype().getName());
 	}
 
-	public void testSubmitIssue() throws IOException {
+	public void testSubmitIssue() throws IOException, JIRAException {
 		if (true) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class TestJSon extends TestCase {
 		return new JIRAClient("https://bugs.openflexo.com", "", "");
 	}
 
-	public void testSubmitFromString() throws IOException {
+	public void testSubmitFromString() throws IOException, JIRAException {
 		if (true) {
 			return;
 		}

@@ -83,7 +83,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					node.setProcess(process);
 					if (node.getSubProcess(true) == null) {
 						return new SubProcessSelectorDialog(process.getProject(), getControllerActionInitializer(), node,
-								process.getProcessNode()).askAndSetSubProcess();
+								process.getProcessNode(), action.getRoleToAssociate()).askAndSetSubProcess();
 					}
 				}
 
