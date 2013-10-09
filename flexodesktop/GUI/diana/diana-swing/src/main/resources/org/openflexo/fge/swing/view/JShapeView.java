@@ -61,7 +61,6 @@ import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
 /**
  * The {@link JShapeView} is the SWING implementation of a panel showing a {@link ShapeNode}

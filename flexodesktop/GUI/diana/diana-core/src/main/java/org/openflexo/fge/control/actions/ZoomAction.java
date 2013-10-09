@@ -21,9 +21,15 @@ package org.openflexo.fge.control.actions;
 
 import java.awt.Point;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.MouseControlContext;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
+import org.openflexo.fge.geom.FGEPoint;
 
-public abstract class ZoomAction<CI> extends AbstractMouseDragControlActionImpl<CI> {
+public class ZoomAction extends MouseDragControlActionImpl {
 
 	private Point startPoint;
 	private double initialScale;
@@ -31,8 +37,58 @@ public abstract class ZoomAction<CI> extends AbstractMouseDragControlActionImpl<
 	private FGELine refLine;
 
 	@Override
-	public MouseDragControlActionType getActionType() {
-		return MouseDragControlActionType.ZOOM;
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+		if (editor instanceof DianaInteractiveViewer) {
+			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
+			Point currentMousePositionInDrawingView = getPointInDrawingView(controller, context);
+			SimplifiedCardinalDirection card = FGEPoint.getSimplifiedOrientation(new FGEPoint(startPoint), new FGEPoint(
+					currentMousePositionInDrawingView));
+			boolean isPositive = true;
+			double distance = 0.0;
+			switch (card) {
+			case NORTH:
+			case WEST:
+				isPositive = false;
+				break;
+			}
+			// We compute a distance to this refline instead of a distance to the start point so that that there is no gap when going from
+			// positive to negative
+			distance = refLine.ptLineDist(currentMousePositionInDrawingView);
+			double newScale = initialScale;
+			if (isPositive) {
+				newScale += distance * PIXEL_TO_PERCENT;
+			} else {
+				newScale -= distance * PIXEL_TO_PERCENT;
+			}
+			controller.setScale(newScale);
+			return true;
+		}
+		return false;
 	}
 
+	@Override
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+		if (editor instanceof DianaInteractiveViewer) {
+			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
+			startPoint = getPointInDrawingView(controller, context);
+			// Virtual line that goes through the start point and its orientation is NORTH_EAST (or SOUTH_WEST, it's the same)
+			refLine = new FGELine(new FGEPoint(startPoint), new FGEPoint(startPoint.x + 1, startPoint.y - 1));
+			initialScale = controller.getScale();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context,
+			boolean isSignificativeDrag) {
+		if (editor instanceof DianaInteractiveViewer) {
+			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
+			startPoint = null;
+			refLine = null;
+			initialScale = controller.getScale();
+			return true;
+		}
+		return false;
+	}
 }

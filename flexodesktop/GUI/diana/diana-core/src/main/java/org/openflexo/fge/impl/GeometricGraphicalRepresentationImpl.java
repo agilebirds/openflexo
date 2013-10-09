@@ -9,8 +9,8 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ToolBox;
@@ -63,13 +63,13 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 		setGeometricObject(anObject);
 
 		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
 

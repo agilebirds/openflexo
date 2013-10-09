@@ -14,8 +14,8 @@ import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
@@ -83,13 +83,13 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		foreground.addObserver(this);
 
 		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
 

@@ -98,8 +98,8 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentationImpl imp
 			}
 
 				@Override
-				public MouseClickControlActionType getActionType() {
-					return MouseClickControlActionType.CUSTOM;
+				public PredefinedMouseClickControlActionType getActionType() {
+					return PredefinedMouseClickControlActionType.CUSTOM;
 				}
 			}, false, false, false, false));
 		}

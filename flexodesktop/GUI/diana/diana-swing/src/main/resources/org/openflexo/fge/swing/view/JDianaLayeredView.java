@@ -39,7 +39,7 @@ import org.openflexo.fge.view.FGEContainerView;
 import org.openflexo.fge.view.FGEView;
 
 @SuppressWarnings("serial")
-public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGEContainerView<O, JLayeredPane> {
+public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGEContainerView<O, JLayeredPane>, JFGEView<O, JLayeredPane> {
 
 	private static final Logger logger = Logger.getLogger(JDianaLayeredView.class.getPackage().getName());
 

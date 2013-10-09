@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,6 +21,25 @@
 
 package org.openflexo.fge.control;
 
-public interface MouseControlAction<E extends DianaEditor<?>> {
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+
+/**
+ * A {@link MouseControlAction} is associated to a {@link MouseControl}<br>
+ * It is triggered by its {@link MouseControl}
+ * 
+ * @author sylvain
+ * 
+ */
+public interface MouseControlAction {
+
+	/**
+	 * Return boolean indicating if this control action is applicable in the current context
+	 * 
+	 * @param node
+	 * @param controller
+	 * @param context
+	 * @return
+	 */
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
 
 }

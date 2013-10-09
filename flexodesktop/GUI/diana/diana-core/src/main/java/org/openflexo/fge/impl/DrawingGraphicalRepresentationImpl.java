@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
@@ -53,10 +53,10 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		this(aDrawing);
 		if (initBasicControls) {
 			addToMouseClickControls(getFactory().makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.SELECTION));
+					PredefinedMouseClickControlActionType.SELECTION));
 			addToMouseDragControls(getFactory().makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
-					MouseDragControlActionType.RECTANGLE_SELECTING));
-			addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+					PredefinedMouseDragControlActionType.RECTANGLE_SELECTING));
+			addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, PredefinedMouseDragControlActionType.ZOOM));
 		}
 		// width = FGEConstants.DEFAULT_DRAWING_WIDTH;
 		// height = FGEConstants.DEFAULT_DRAWING_HEIGHT;

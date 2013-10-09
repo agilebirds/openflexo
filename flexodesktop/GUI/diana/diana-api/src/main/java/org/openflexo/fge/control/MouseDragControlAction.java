@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -24,56 +25,62 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-public interface MouseDragControlAction<E extends DianaEditor<?>, CI> extends MouseControlAction<E> {
+/**
+ * A {@link MouseDragControlAction} represents an action to be applied as a "Drag"-scheme.<br>
+ * It is associated to and triggered by a {@link MouseDragControl}
+ * 
+ * @author sylvain
+ * 
+ */
+public interface MouseDragControlAction extends MouseControlAction {
 
 	public static final Logger logger = Logger.getLogger(MouseDragControlAction.class.getPackage().getName());
 
-	public static enum MouseDragControlActionType {
-		NONE, MOVE, RECTANGLE_SELECTING, ZOOM, CUSTOM;
-
-	}
-
-	public abstract MouseDragControlActionType getActionType();
+	// public abstract PredefinedMouseDragControlActionType getActionType();
 
 	/**
 	 * Handle mouse pressed event, by performing what is required here Return flag indicating if event has been correctely handled and thus,
 	 * should be consumed.
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node on which this action applies
 	 * @param controller
-	 *            TODO
-	 * @param controlInfo
-	 *            TODO
+	 *            the editor
+	 * @param context
+	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @return
 	 */
-	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, E controller, CI controlInfo);
+	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
 
 	/**
 	 * Handle mouse released event, by performing what is required here Return flag indicating if event has been correctely handled and
 	 * thus, should be consumed.
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node on which this action applies
 	 * @param controller
-	 *            TODO
-	 * @param controlInfo
-	 *            TODO
+	 *            the editor
+	 * @param context
+	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @param isSignificativeDrag
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, E controller, CI controlInfo, boolean isSignificativeDrag);
+	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context,
+			boolean isSignificativeDrag);
 
 	/**
 	 * Handle mouse dragged event, by performing what is required here Return flag indicating if event has been correctely handled and thus,
 	 * should be consumed.
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node on which this action applies
 	 * @param controller
-	 *            TODO
-	 * @param controlInfo
-	 *            TODO
+	 *            the editor
+	 * @param context
+	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @return
 	 */
-	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, E controller, CI controlInfo);
+	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
 
 }

@@ -17,23 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing.actions;
+package org.openflexo.fge.control.actions;
 
-import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.actions.MultipleSelectionAction;
+import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.MouseClickControlAction;
+import org.openflexo.fge.control.MouseControlContext;
 
-public class JMultipleSelectionAction extends MultipleSelectionAction<MouseEvent> {
+public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements MouseClickControlAction {
+
+	static final Logger logger = Logger.getLogger(MouseClickControlActionImpl.class.getPackage().getName());
+
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
-		if (node.getGraphicalRepresentation().getIsSelectable()) {
-			controller.toggleSelection(node);
-			return true;
-		} else {
-			return false;
-		}
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
 
-	}
 }

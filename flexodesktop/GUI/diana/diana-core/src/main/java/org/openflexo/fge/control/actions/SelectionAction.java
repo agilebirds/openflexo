@@ -19,10 +19,36 @@
  */
 package org.openflexo.fge.control.actions;
 
+import java.awt.Point;
 
-public abstract class SelectionAction<CI> extends AbstractMouseClickControlActionImpl<CI> {
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.MouseControlContext;
+import org.openflexo.fge.geom.FGEPoint;
+
+public class SelectionAction extends MouseClickControlActionImpl {
+
 	@Override
-	public MouseClickControlActionType getActionType() {
-		return MouseClickControlActionType.SELECTION;
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+		if (editor instanceof DianaInteractiveViewer) {
+			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
+			if (controller.getDrawingView() == null) {
+				return false;
+			}
+
+			if (node.getGraphicalRepresentation().getIsSelectable()) {
+				controller.setSelectedObject(node);
+				if (controller.getDrawingView() == null) {
+					return false;
+				}
+				Point newPoint = getPointInView(node, controller, context);
+				controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
+				controller.setLastSelectedNode(node);
+				return false;
+			}
+		}
+		return false;
 	}
+
 }

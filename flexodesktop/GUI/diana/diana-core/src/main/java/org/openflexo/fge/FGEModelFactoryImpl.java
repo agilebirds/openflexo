@@ -15,6 +15,21 @@ import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseClickControlAction;
+import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.MouseDragControlAction;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
+import org.openflexo.fge.control.actions.ContinuousSelectionAction;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
+import org.openflexo.fge.control.actions.MouseDragControlImpl;
+import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.control.actions.MultipleSelectionAction;
+import org.openflexo.fge.control.actions.RectangleSelectingAction;
+import org.openflexo.fge.control.actions.SelectionAction;
+import org.openflexo.fge.control.actions.ZoomAction;
 import org.openflexo.fge.impl.BackgroundImageBackgroundStyleImpl;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.fge.impl.ColorBackgroundStyleImpl;
@@ -128,6 +143,73 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		setImplementingClassForInterface(RectPolylinConnectorSpecificationImpl.class, RectPolylinConnectorSpecification.class);
 		setImplementingClassForInterface(CurvedPolylinConnectorSpecificationImpl.class, CurvedPolylinConnectorSpecification.class);
 
+	}
+
+	@Override
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseClickControlImpl(aName, button, clickCount, null, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	@Override
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed) {
+		return new MouseClickControlImpl(aName, button, clickCount, makeMouseClickControlAction(actionType), shiftPressed, ctrlPressed,
+				metaPressed, altPressed, this);
+	}
+
+	@Override
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseClickControlImpl(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	@Override
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
+			boolean metaPressed, boolean altPressed) {
+		return new MouseDragControlImpl(aName, button, null, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	@Override
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseDragControlImpl(aName, button, makeMouseDragControlAction(actionType), shiftPressed, ctrlPressed, metaPressed,
+				altPressed, this);
+	}
+
+	@Override
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseDragControlImpl(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	public MouseDragControlAction makeMouseDragControlAction(PredefinedMouseDragControlActionType actionType) {
+		switch (actionType) {
+		case MOVE:
+			return new MoveAction();
+		case RECTANGLE_SELECTING:
+			return new RectangleSelectingAction();
+		case ZOOM:
+			return new ZoomAction();
+		default:
+			logger.warning("Unexpected actionType " + actionType);
+			return null;
+		}
+	}
+
+	public MouseClickControlAction makeMouseClickControlAction(PredefinedMouseClickControlActionType actionType) {
+		switch (actionType) {
+		case SELECTION:
+			return new SelectionAction();
+		case CONTINUOUS_SELECTION:
+			return new ContinuousSelectionAction();
+		case MULTIPLE_SELECTION:
+			return new MultipleSelectionAction();
+		default:
+			logger.warning("Unexpected actionType " + actionType);
+			return null;
+		}
 	}
 
 }

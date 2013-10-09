@@ -17,17 +17,13 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing.actions;
+package org.openflexo.fge.control.actions;
 
-import java.awt.Component;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
@@ -35,10 +31,11 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 
 /**
@@ -88,16 +85,17 @@ public class MoveInfo {
 
 	}
 
-	public MoveInfo(ShapeNode<?> shapeNode, MouseEvent e, FGEView<?, ?> view, DianaInteractiveViewer<?, ?, ?> controller) {
+	public MoveInfo(ShapeNode<?> shapeNode, MouseControlContext context, FGEView<?, ?> view, DianaInteractiveViewer<?, ?, ?> controller) {
 		this(shapeNode, controller);
 
 		this.view = view;
 		try {
-			startMovingLocationInDrawingView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
+			startMovingLocationInDrawingView = controller.getDelegate().getPointInView(context.getSource(), context.getPoint(),
+					getDrawingView());
 		} catch (Error ex) {
 			ex.printStackTrace();
-			logger.warning("OK, ca chie la");
-			logger.warning("e.getSource()=" + e.getSource());
+			logger.warning("Unexpected exception");
+			logger.warning("e.getSource()=" + context.getSource());
 			logger.warning("view " + Integer.toHexString(view.hashCode()));
 			logger.warning("view.isDeleted()=" + view.isDeleted());
 			logger.warning("view.getDrawingView()=" + view.getDrawingView());
@@ -107,8 +105,8 @@ public class MoveInfo {
 
 	}
 
-	protected JDrawingView<?> getDrawingView() {
-		return (JDrawingView<?>) view.getDrawingView();
+	protected DrawingView<?, ?> getDrawingView() {
+		return (DrawingView<?, ?>) view.getDrawingView();
 	}
 
 	private void startDragging() {
@@ -181,7 +179,7 @@ public class MoveInfo {
 		}
 	}
 
-	boolean isDnDPattern(Point newLocationInDrawingView, MouseEvent event) {
+	boolean isDnDPattern(Point newLocationInDrawingView, MouseControlContext context) {
 		if (movedObjects.size() != 1) {
 			return false;
 		}

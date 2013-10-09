@@ -19,9 +19,9 @@ import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.control.CustomMouseClickControl;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
-import org.openflexo.fge.control.CustomMouseDragControl;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GRDeleted;
@@ -74,8 +74,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	private boolean readOnly = false;
 	private boolean labelEditable = true;
 
-	private Vector<CustomMouseClickControl> mouseClickControls;
-	private Vector<CustomMouseDragControl> mouseDragControls;
+	private Vector<MouseClickControl> mouseClickControls;
+	private Vector<MouseDragControl> mouseDragControls;
 
 	private String toolTipText = null;
 
@@ -109,8 +109,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	public GraphicalRepresentationImpl() {
 		super();
 
-		mouseClickControls = new Vector<CustomMouseClickControl>();
-		mouseDragControls = new Vector<CustomMouseDragControl>();
+		mouseClickControls = new Vector<MouseClickControl>();
+		mouseDragControls = new Vector<MouseDragControl>();
 
 	}
 
@@ -1206,12 +1206,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}*/
 
 	@Override
-	public Vector<CustomMouseClickControl> getMouseClickControls() {
+	public Vector<MouseClickControl> getMouseClickControls() {
 		return mouseClickControls;
 	}
 
 	@Override
-	public void setMouseClickControls(Vector<CustomMouseClickControl> mouseClickControls) {
+	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls) {
 		FGENotification notification = requireChange(MOUSE_CLICK_CONTROLS, mouseClickControls);
 		if (notification != null) {
 			this.mouseClickControls.addAll(mouseClickControls);
@@ -1220,12 +1220,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl) {
+	public void addToMouseClickControls(MouseClickControl mouseClickControl) {
 		addToMouseClickControls(mouseClickControl, false);
 	}
 
 	@Override
-	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl, boolean isPrioritar) {
+	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar) {
 		if (isPrioritar) {
 			mouseClickControls.insertElementAt(mouseClickControl, 0);
 		} else {
@@ -1236,19 +1236,19 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void removeFromMouseClickControls(CustomMouseClickControl mouseClickControl) {
+	public void removeFromMouseClickControls(MouseClickControl mouseClickControl) {
 		mouseClickControls.remove(mouseClickControl);
 		setChanged();
 		notifyObservers(new FGENotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
 	}
 
 	@Override
-	public Vector<CustomMouseDragControl> getMouseDragControls() {
+	public Vector<MouseDragControl> getMouseDragControls() {
 		return mouseDragControls;
 	}
 
 	@Override
-	public void setMouseDragControls(Vector<CustomMouseDragControl> mouseDragControls) {
+	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls) {
 		FGENotification notification = requireChange(MOUSE_DRAG_CONTROLS, mouseDragControls);
 		if (notification != null) {
 			this.mouseDragControls.addAll(mouseDragControls);
@@ -1257,12 +1257,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl) {
+	public void addToMouseDragControls(MouseDragControl mouseDragControl) {
 		addToMouseDragControls(mouseDragControl, false);
 	}
 
 	@Override
-	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl, boolean isPrioritar) {
+	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar) {
 		if (isPrioritar) {
 			mouseDragControls.insertElementAt(mouseDragControl, 0);
 		} else {
@@ -1273,43 +1273,43 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public void removeFromMouseDragControls(CustomMouseDragControl mouseDragControl) {
+	public void removeFromMouseDragControls(MouseDragControl mouseDragControl) {
 		mouseDragControls.remove(mouseDragControl);
 		setChanged();
 		notifyObservers(new FGENotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
 	}
 
 	@Override
-	public CustomMouseClickControl createMouseClickControl() {
-		CustomMouseClickControl returned = getFactory().makeMouseClickControl("Noname", MouseButton.LEFT, 1);
+	public MouseClickControl createMouseClickControl() {
+		MouseClickControl returned = getFactory().makeMouseClickControl("Noname", MouseButton.LEFT, 1);
 		addToMouseClickControls(returned);
 		return returned;
 	}
 
 	@Override
-	public void deleteMouseClickControl(CustomMouseClickControl mouseClickControl) {
+	public void deleteMouseClickControl(MouseClickControl mouseClickControl) {
 		removeFromMouseClickControls(mouseClickControl);
 	}
 
 	@Override
-	public boolean isMouseClickControlDeletable(CustomMouseClickControl mouseClickControl) {
+	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl) {
 		return true;
 	}
 
 	@Override
-	public CustomMouseDragControl createMouseDragControl() {
-		CustomMouseDragControl returned = getFactory().makeMouseDragControl("Noname", MouseButton.LEFT);
+	public MouseDragControl createMouseDragControl() {
+		MouseDragControl returned = getFactory().makeMouseDragControl("Noname", MouseButton.LEFT);
 		addToMouseDragControls(returned);
 		return returned;
 	}
 
 	@Override
-	public void deleteMouseDragControl(CustomMouseDragControl mouseDragControl) {
+	public void deleteMouseDragControl(MouseDragControl mouseDragControl) {
 		removeFromMouseDragControls(mouseDragControl);
 	}
 
 	@Override
-	public boolean isMouseDragControlDeletable(CustomMouseDragControl mouseDragControl) {
+	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl) {
 		return true;
 	}
 

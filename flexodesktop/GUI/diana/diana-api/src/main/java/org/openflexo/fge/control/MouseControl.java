@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -23,21 +24,33 @@ package org.openflexo.fge.control;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 /**
- * Abstract definition of a mouse control
+ * Abstract definition of a mouse control<br>
+ * A {@link MouseControl} has a name, and some triggering options, such as mouse button which is pressed, and key modifiers.<br>
+ * A {@link MouseControl} is associated with a {@link MouseControlAction} which is triggered when relevant
  * 
  * @author sylvain
  * 
- * @param <CI>
- *            type of information container managed for this control (eg MouseEvent for Swing)
  */
-public interface CustomMouseControl<CI> {
+public interface MouseControl {
 
 	public static enum MouseButton {
 		LEFT, RIGHT, CENTER
 	}
 
-	public abstract boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
+	public MouseControlAction getControlAction();
 
-	public abstract boolean isModelEditionAction();
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+
+	public String getName();
+
+	public boolean isShiftPressed();
+
+	public boolean isCtrlPressed();
+
+	public boolean isMetaPressed();
+
+	public boolean isAltPressed();
+
+	public MouseButton getButton();
 
 }

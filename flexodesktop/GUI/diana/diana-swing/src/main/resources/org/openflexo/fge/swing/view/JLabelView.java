@@ -81,7 +81,6 @@ import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.listener.FGEViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
 

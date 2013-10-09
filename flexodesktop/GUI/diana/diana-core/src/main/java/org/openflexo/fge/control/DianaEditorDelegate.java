@@ -1,8 +1,10 @@
 package org.openflexo.fge.control;
 
+import java.awt.Point;
 import java.util.Set;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.view.FGEView;
 
 /**
  * This A.P.I defines an helper class used as a hook provider to implement technology-specific schemes<br>
@@ -24,4 +26,6 @@ public interface DianaEditorDelegate {
 	public void objectsStopMoving(Set<? extends DrawingTreeNode<?, ?>> nodes);
 
 	public void repaintAll();
+
+	public Point getPointInView(Object source, Point point, FGEView<?, ?> view);
 }

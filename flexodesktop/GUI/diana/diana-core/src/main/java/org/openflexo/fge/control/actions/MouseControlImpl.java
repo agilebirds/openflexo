@@ -19,31 +19,29 @@
  */
 package org.openflexo.fge.control.actions;
 
-import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.control.CustomMouseControl;
 import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.MouseControl;
+import org.openflexo.fge.control.MouseControlContext;
 
-public abstract class AbstractCustomMouseControlImpl<CI> implements CustomMouseControl<CI> {
-	static final Logger logger = Logger.getLogger(AbstractCustomMouseControlImpl.class.getPackage().getName());
+public abstract class MouseControlImpl implements MouseControl {
+	static final Logger logger = Logger.getLogger(MouseControlImpl.class.getPackage().getName());
 
-	public String name;
-	public boolean shiftPressed = false;
-	public boolean ctrlPressed = false;
-	public boolean metaPressed = false;
-	public boolean altPressed = false;
-	public MouseButton button;
-
-	private boolean modelEditionAction = true;
+	private String name;
+	private boolean shiftPressed = false;
+	private boolean ctrlPressed = false;
+	private boolean metaPressed = false;
+	private boolean altPressed = false;
+	private MouseButton button;
 
 	private FGEModelFactory factory;
 
-	protected AbstractCustomMouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
-			boolean altPressed, MouseButton button, FGEModelFactory factory) {
+	protected MouseControlImpl(String aName, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed,
+			MouseButton button, FGEModelFactory factory) {
 		super();
 		name = aName;
 		this.shiftPressed = shiftPressed;
@@ -59,34 +57,23 @@ public abstract class AbstractCustomMouseControlImpl<CI> implements CustomMouseC
 	}
 
 	@Override
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseEvent e) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
+			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + context);
 		}
 
-		if (e.isConsumed()) {
-			return false;
-		}
-
-		if (button == MouseButton.LEFT && e.getButton() != MouseEvent.BUTTON1) {
-			return false;
-		}
-		if (button == MouseButton.CENTER && e.getButton() != MouseEvent.BUTTON2) {
-			return false;
-		}
-		if (button == MouseButton.RIGHT && e.getButton() != MouseEvent.BUTTON3) {
+		if (context.isConsumed()) {
 			return false;
 		}
 
-		// logger.info("shiftPressed="+shiftPressed+" e.isShiftDown()="+e.isShiftDown());
-		// logger.info("ctrlPressed="+ctrlPressed+" e.isControlDown()="+e.isControlDown());
-		// logger.info("metaPressed="+metaPressed+" e.isMetaDown()="+e.isMetaDown());
-		// logger.info("altPressed="+altPressed+" e.isAltDown()="+e.isAltDown());
-
-		if (shiftPressed != e.isShiftDown()) {
+		if (button != context.getButton()) {
 			return false;
 		}
-		if (ctrlPressed != e.isControlDown()) {
+
+		if (shiftPressed != context.isShiftDown()) {
+			return false;
+		}
+		if (ctrlPressed != context.isControlDown()) {
 			return false;
 		}
 
@@ -103,28 +90,75 @@ public abstract class AbstractCustomMouseControlImpl<CI> implements CustomMouseC
 			// cannot distinguish both, so just skip this test
 			 */
 		} else {
-			if (metaPressed != e.isMetaDown()) {
+			if (metaPressed != context.isMetaDown()) {
 				return false;
 			}
 		}
-		if (button == MouseButton.CENTER) {
 
-		} else if (altPressed != e.isAltDown()) {
+		if (button == MouseButton.CENTER) {
+		} else if (altPressed != context.isAltDown()) {
 			return false;
 		}
 
-		// Everything seems ok, return true
-		return true;
-	}
-
-	@Override
-	public boolean isModelEditionAction() {
-		return modelEditionAction;
+		// Everything seems ok, now delegate this to the action
+		if (getControlAction() != null) {
+			return getControlAction().isApplicable(node, controller, context);
+		} else { // No action, return false
+			return false;
+		}
 	}
 
 	protected String getModifiersAsString() {
 		return button.name() + (shiftPressed ? ",SHIFT" : "") + (ctrlPressed ? ",CTRL" : "") + (metaPressed ? ",META" : "")
 				+ (altPressed ? ",ALT" : "");
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isShiftPressed() {
+		return shiftPressed;
+	}
+
+	public void setShiftPressed(boolean shiftPressed) {
+		this.shiftPressed = shiftPressed;
+	}
+
+	public boolean isCtrlPressed() {
+		return ctrlPressed;
+	}
+
+	public void setCtrlPressed(boolean ctrlPressed) {
+		this.ctrlPressed = ctrlPressed;
+	}
+
+	public boolean isMetaPressed() {
+		return metaPressed;
+	}
+
+	public void setMetaPressed(boolean metaPressed) {
+		this.metaPressed = metaPressed;
+	}
+
+	public boolean isAltPressed() {
+		return altPressed;
+	}
+
+	public void setAltPressed(boolean altPressed) {
+		this.altPressed = altPressed;
+	}
+
+	public MouseButton getButton() {
+		return button;
+	}
+
+	public void setButton(MouseButton button) {
+		this.button = button;
 	}
 
 }

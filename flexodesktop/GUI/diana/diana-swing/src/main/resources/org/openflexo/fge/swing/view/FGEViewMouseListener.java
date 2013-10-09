@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view.listener;
+package org.openflexo.fge.swing.view;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -39,8 +39,9 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.CustomMouseClickControl;
-import org.openflexo.fge.control.CustomMouseDragControl;
+import org.openflexo.fge.control.FocusRetriever;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.FGEPaintManager;
@@ -175,7 +176,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 
 			// We have now performed all low-level possible actions, let's go for the registered mouse controls
-			for (CustomMouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
+			for (MouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
 				if ((editable || !mouseClickControl.isModelEditionAction())
 						&& mouseClickControl.isApplicable(focusedObject, getController(), e)) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -371,8 +372,8 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
-		List<CustomMouseDragControl> applicableMouseDragControls = new ArrayList<CustomMouseDragControl>();
-		for (CustomMouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
+		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
+		for (MouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
 			if ((editable || !mouseDragControl.isModelEditionAction()) && mouseDragControl.isApplicable(focusedObject, getController(), e)) {
 				applicableMouseDragControls.add(mouseDragControl);
 				if (logger.isLoggable(Level.FINE)) {
@@ -396,7 +397,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		// Apply applicable mouse drag control
-		CustomMouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
+		MouseDragControl currentMouseDrag = applicableMouseDragControls.get(0);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}

@@ -24,9 +24,13 @@ import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseClickControlAction;
+import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.MouseDragControlAction;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -158,11 +162,11 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 */
 	public void applyBasicControls(DrawingGraphicalRepresentation drawingGraphicalRepresentation) {
 		drawingGraphicalRepresentation.addToMouseClickControls(makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		drawingGraphicalRepresentation.addToMouseDragControls(makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
+				PredefinedMouseDragControlActionType.RECTANGLE_SELECTING));
 		drawingGraphicalRepresentation.addToMouseDragControls(makeMouseDragControl("Zoom", MouseButton.RIGHT,
-				MouseDragControlActionType.ZOOM));
+				PredefinedMouseDragControlActionType.ZOOM));
 	}
 
 	/**
@@ -207,20 +211,20 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 */
 	public void applyBasicControls(ShapeGraphicalRepresentation shapeGraphicalRepresentation) {
 		shapeGraphicalRepresentation.addToMouseClickControls(makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			shapeGraphicalRepresentation.addToMouseClickControls(makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			shapeGraphicalRepresentation.addToMouseClickControls(makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
-		shapeGraphicalRepresentation
-				.addToMouseDragControls(makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		shapeGraphicalRepresentation
-				.addToMouseDragControls(makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+		shapeGraphicalRepresentation.addToMouseDragControls(makeMouseDragControl("Move", MouseButton.LEFT,
+				PredefinedMouseDragControlActionType.MOVE));
+		shapeGraphicalRepresentation.addToMouseDragControls(makeMouseDragControl("Zoom", MouseButton.RIGHT,
+				PredefinedMouseDragControlActionType.ZOOM));
 		shapeGraphicalRepresentation.addToMouseDragControls(makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
+				PredefinedMouseDragControlActionType.RECTANGLE_SELECTING));
 	}
 
 	/**
@@ -317,13 +321,13 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 */
 	public void applyBasicControls(ConnectorGraphicalRepresentation connectorGraphicalRepresentation) {
 		connectorGraphicalRepresentation.addToMouseClickControls(makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			connectorGraphicalRepresentation.addToMouseClickControls(makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			connectorGraphicalRepresentation.addToMouseClickControls(makeMouseControlClickControl("Multiple selection", MouseButton.LEFT,
-					1, MouseClickControlActionType.MULTIPLE_SELECTION));
+					1, PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
 
@@ -387,13 +391,13 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 */
 	public void applyBasicControls(GeometricGraphicalRepresentation geometricGraphicalRepresentation) {
 		geometricGraphicalRepresentation.addToMouseClickControls(makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			geometricGraphicalRepresentation.addToMouseClickControls(makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			geometricGraphicalRepresentation.addToMouseClickControls(makeMouseControlClickControl("Multiple selection", MouseButton.LEFT,
-					1, MouseClickControlActionType.MULTIPLE_SELECTION));
+					1, PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 	}
 
@@ -906,5 +910,118 @@ public abstract class FGEModelFactory extends ModelFactory {
 		}
 		return returned;
 	}
+
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount) {
+		return makeMouseClickControl(aName, button, clickCount, false, false, false, false);
+	}
+
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action) {
+		return makeMouseClickControl(aName, button, clickCount, action, false, false, false, false);
+	}
+
+	public MouseClickControl makeMouseShiftClickControl(String aName, MouseButton button, int clickCount) {
+		return makeMouseClickControl(aName, button, clickCount, true, false, false, false);
+	}
+
+	public MouseClickControl makeMouseControlClickControl(String aName, MouseButton button, int clickCount) {
+		return makeMouseClickControl(aName, button, clickCount, false, true, false, false);
+	}
+
+	public MouseClickControl makeMouseMetaClickControl(String aName, MouseButton button, int clickCount) {
+		return makeMouseClickControl(aName, button, clickCount, false, false, true, false);
+	}
+
+	public MouseClickControl makeMouseAltClickControl(String aName, MouseButton button, int clickCount) {
+		return makeMouseClickControl(aName, button, clickCount, false, false, false, true);
+	}
+
+	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType) {
+		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, false, false);
+	}
+
+	public MouseClickControl makeMouseShiftClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType) {
+		return makeMouseClickControl(aName, button, clickCount, actionType, true, false, false, false);
+	}
+
+	public MouseClickControl makeMouseControlClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType) {
+		return makeMouseClickControl(aName, button, clickCount, actionType, false, true, false, false);
+	}
+
+	public MouseClickControl makeMouseMetaClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType) {
+		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, true, false);
+	}
+
+	public MouseClickControl makeMouseAltClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType) {
+		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, false, true);
+	}
+
+	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+
+	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed);
+
+	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			MouseClickControlAction action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button) {
+		return makeMouseDragControl(aName, button, false, false, false, false);
+	}
+
+	public MouseDragControl makeMouseShiftDragControl(String aName, MouseButton button) {
+		return makeMouseDragControl(aName, button, true, false, false, false);
+	}
+
+	public MouseDragControl makeMouseControlDragControl(String aName, MouseButton button) {
+		return makeMouseDragControl(aName, button, false, true, false, false);
+	}
+
+	public MouseDragControl makeMouseMetaDragControl(String aName, MouseButton button) {
+		return makeMouseDragControl(aName, button, false, false, true, false);
+	}
+
+	public MouseDragControl makeMouseAltDragControl(String aName, MouseButton button) {
+		return makeMouseDragControl(aName, button, false, false, false, true);
+	}
+
+	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+		return makeMouseDragControl(aName, button, actionType, false, false, false, false);
+	}
+
+	public MouseDragControl makeMouseShiftDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+		return makeMouseDragControl(aName, button, actionType, true, false, false, false);
+	}
+
+	public MouseDragControl makeMouseControlDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+		return makeMouseDragControl(aName, button, actionType, false, true, false, false);
+	}
+
+	public MouseDragControl makeMouseMetaDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+		return makeMouseDragControl(aName, button, actionType, false, false, true, false);
+	}
+
+	public MouseDragControl makeMouseAltDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+		return makeMouseDragControl(aName, button, actionType, false, false, false, true);
+	}
+
+	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
+			boolean metaPressed, boolean altPressed);
+
+	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed);
+
+	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+
+	public abstract MouseDragControlAction makeMouseDragControlAction(PredefinedMouseDragControlActionType actionType);
+
+	public abstract MouseClickControlAction makeMouseClickControlAction(PredefinedMouseClickControlActionType actionType);
 
 }

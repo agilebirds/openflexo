@@ -32,8 +32,8 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 
 	private static final class CreateAnnotationAction extends MouseClickControlAction {
 		@Override
-		public MouseClickControlActionType getActionType() {
-			return MouseClickControlActionType.CUSTOM;
+		public PredefinedMouseClickControlActionType getActionType() {
+			return PredefinedMouseClickControlActionType.CUSTOM;
 		}
 
 		@Override

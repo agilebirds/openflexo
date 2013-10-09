@@ -54,7 +54,6 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.swing.SwingFactory;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ConnectorView;
-import org.openflexo.fge.view.listener.FGEViewMouseListener;
 
 /**
  * The JConnectorView is the SWING implementation of a panel showing a {@link ConnectorNode}
@@ -64,7 +63,7 @@ import org.openflexo.fge.view.listener.FGEViewMouseListener;
  * @param <O>
  */
 @SuppressWarnings("serial")
-public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel> {
+public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel>, JFGEView<O, JPanel> {
 
 	private static final Logger logger = Logger.getLogger(JConnectorView.class.getPackage().getName());
 

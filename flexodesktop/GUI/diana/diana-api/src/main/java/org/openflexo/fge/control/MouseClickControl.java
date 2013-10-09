@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,10 +21,11 @@
 
 package org.openflexo.fge.control;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
+public interface MouseClickControl extends MouseControl {
 
-public interface CustomMouseClickControl<CI> extends CustomMouseControl<CI> {
+	public MouseClickControlAction getControlAction();
+
+	public int getClickCount();
 
 	/**
 	 * Handle click event, by performing what is required here If event has been correctely handled, consume it.
@@ -31,10 +33,10 @@ public interface CustomMouseClickControl<CI> extends CustomMouseControl<CI> {
 	 * @param graphicalRepresentation
 	 * @param controller
 	 */
-	public abstract void handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
+	/*public abstract void handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
 
-	public abstract MouseClickControlActionType getActionType();
+	public abstract PredefinedMouseClickControlActionType getActionType();
 
-	public abstract void setActionType(MouseClickControlActionType actionType);
+	public abstract void setActionType(PredefinedMouseClickControlActionType actionType);*/
 
 }

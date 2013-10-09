@@ -13,9 +13,9 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
@@ -130,18 +130,18 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		// graphics = new FGEShapeGraphicsImpl(this);
 
 		addToMouseClickControls(getFactory().makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
+				PredefinedMouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			addToMouseClickControls(getFactory().makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		} else {
 			addToMouseClickControls(getFactory().makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
+					PredefinedMouseClickControlActionType.MULTIPLE_SELECTION));
 		}
-		addToMouseDragControls(getFactory().makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
+		addToMouseDragControls(getFactory().makeMouseDragControl("Move", MouseButton.LEFT, PredefinedMouseDragControlActionType.MOVE));
+		addToMouseDragControls(getFactory().makeMouseDragControl("Zoom", MouseButton.RIGHT, PredefinedMouseDragControlActionType.ZOOM));
 		addToMouseDragControls(getFactory().makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
+				PredefinedMouseDragControlActionType.RECTANGLE_SELECTING));
 
 	}
 

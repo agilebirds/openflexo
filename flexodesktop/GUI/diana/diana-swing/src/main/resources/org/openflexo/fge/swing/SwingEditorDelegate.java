@@ -1,5 +1,6 @@
 package org.openflexo.fge.swing;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.util.Set;
 
@@ -13,9 +14,10 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaEditorDelegate;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.swing.actions.MoveInfo;
+import org.openflexo.fge.control.actions.MoveInfo;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.view.FGEView;
 
 public class SwingEditorDelegate implements DianaEditorDelegate {
 
@@ -230,4 +232,8 @@ public class SwingEditorDelegate implements DianaEditorDelegate {
 		}
 	}
 
+	@Override
+	public Point getPointInView(Object source, Point point, FGEView<?, ?> view) {
+		return SwingUtilities.convertPoint((Component) source, point, (Component) view);
+	}
 }

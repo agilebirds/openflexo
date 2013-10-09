@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -30,8 +31,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fge.control.CustomMouseClickControl;
-import org.openflexo.fge.control.CustomMouseDragControl;
+import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.Getter;
@@ -382,32 +383,32 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public void setTransparency(Double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<CustomMouseClickControl> getMouseClickControls();
+	public Vector<MouseClickControl> getMouseClickControls();
 
 	@Setter(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void setMouseClickControls(Vector<CustomMouseClickControl> mouseClickControls);
+	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
 
 	@Adder(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl);
+	public void addToMouseClickControls(MouseClickControl mouseClickControl);
 
-	public void addToMouseClickControls(CustomMouseClickControl mouseClickControl, boolean isPrioritar);
+	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void removeFromMouseClickControls(CustomMouseClickControl mouseClickControl);
+	public void removeFromMouseClickControls(MouseClickControl mouseClickControl);
 
 	@Getter(value = MOUSE_DRAG_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<CustomMouseDragControl> getMouseDragControls();
+	public Vector<MouseDragControl> getMouseDragControls();
 
 	@Setter(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void setMouseDragControls(Vector<CustomMouseDragControl> mouseDragControls);
+	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
 
 	@Adder(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl);
+	public void addToMouseDragControls(MouseDragControl mouseDragControl);
 
-	public void addToMouseDragControls(CustomMouseDragControl mouseDragControl, boolean isPrioritar);
+	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void removeFromMouseDragControls(CustomMouseDragControl mouseDragControl);
+	public void removeFromMouseDragControls(MouseDragControl mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT_KEY)
 	@XMLAttribute
@@ -577,17 +578,17 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public void setRegistered(boolean aFlag);
 
-	public CustomMouseClickControl createMouseClickControl();
+	public MouseClickControl createMouseClickControl();
 
-	public void deleteMouseClickControl(CustomMouseClickControl mouseClickControl);
+	public void deleteMouseClickControl(MouseClickControl mouseClickControl);
 
-	public boolean isMouseClickControlDeletable(CustomMouseClickControl mouseClickControl);
+	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl);
 
-	public CustomMouseDragControl createMouseDragControl();
+	public MouseDragControl createMouseDragControl();
 
-	public void deleteMouseDragControl(CustomMouseDragControl mouseDragControl);
+	public void deleteMouseDragControl(MouseDragControl mouseDragControl);
 
-	public boolean isMouseDragControlDeletable(CustomMouseDragControl mouseDragControl);
+	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
 
 	// public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 

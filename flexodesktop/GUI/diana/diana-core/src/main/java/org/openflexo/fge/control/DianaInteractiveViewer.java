@@ -32,6 +32,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
@@ -39,7 +40,6 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
-import org.openflexo.fge.swing.actions.CustomMouseDragControlImpl;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.FGEView;
 
@@ -76,7 +76,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
 
-	private CustomMouseDragControlImpl currentMouseDrag = null;
+	private MouseDragControlImpl currentMouseDrag = null;
 
 	private FGEPoint lastClickedPoint;
 	private DrawingTreeNode<?, ?> lastSelectedNode;
@@ -361,11 +361,11 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 
 	}
 
-	public CustomMouseDragControlImpl getCurrentMouseDrag() {
+	public MouseDragControlImpl getCurrentMouseDrag() {
 		return currentMouseDrag;
 	}
 
-	public void setCurrentMouseDrag(CustomMouseDragControlImpl aMouseDrag) {
+	public void setCurrentMouseDrag(MouseDragControlImpl aMouseDrag) {
 		currentMouseDrag = aMouseDrag;
 	}
 
@@ -428,8 +428,8 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		return lastSelectedNode;
 	}
 
-	public void setLastSelectedGR(DrawingTreeNode<?, ?> lastSelectedGR) {
-		this.lastSelectedNode = lastSelectedGR;
+	public void setLastSelectedNode(DrawingTreeNode<?, ?> lastSelectedNode) {
+		this.lastSelectedNode = lastSelectedNode;
 	}
 
 	/**

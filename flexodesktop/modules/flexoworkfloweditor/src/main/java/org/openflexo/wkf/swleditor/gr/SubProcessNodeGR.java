@@ -230,8 +230,8 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 
 				@Override
-				public MouseClickControlActionType getActionType() {
-					return MouseClickControlActionType.CUSTOM;
+				public PredefinedMouseClickControlActionType getActionType() {
+					return PredefinedMouseClickControlActionType.CUSTOM;
 				}
 			}, false, false, false, false);
 		}

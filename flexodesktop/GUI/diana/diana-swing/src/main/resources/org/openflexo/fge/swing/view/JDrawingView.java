@@ -81,12 +81,11 @@ import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.control.JFocusRetriever;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEContainerView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.listener.FGEViewMouseListener;
-import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.swing.MouseResizer;
 
 /**
@@ -106,7 +105,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	private Drawing<M> drawing;
 	// private Map<DrawingTreeNode<?, ?>, FGEView<?,?>> contents;
 	private AbstractDianaEditor<M, SwingFactory, JComponent> controller;
-	private FocusRetriever _focusRetriever;
+	private JFocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
 
 	private MouseResizer resizer;
@@ -140,7 +139,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
 		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?,?>>();
 		graphics = new FGEDrawingGraphicsImpl(drawing.getRoot());
-		_focusRetriever = new FocusRetriever(this);
+		_focusRetriever = new JFocusRetriever(this);
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
 		}
@@ -814,8 +813,8 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	}
 
 	@Override
-	public <O> FGEView<?, ? extends JComponent> viewForNode(DrawingTreeNode<?, ?> node) {
-		return controller.viewForNode(node);
+	public <O> JFGEView<?, ? extends JComponent> viewForNode(DrawingTreeNode<?, ?> node) {
+		return (JFGEView<?, ? extends JComponent>) controller.viewForNode(node);
 	}
 
 	public JShapeView<?> shapeViewForNode(ShapeNode<?> node) {
@@ -827,7 +826,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		return (JConnectorView<?>) viewForNode(node);
 	}
 
-	public FocusRetriever getFocusRetriever() {
+	public JFocusRetriever getFocusRetriever() {
 		return _focusRetriever;
 	}
 

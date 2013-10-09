@@ -30,7 +30,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.control.DrawingController;
-import org.openflexo.fge.control.CustomMouseClickControl;
+import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.actions.CustomClickControlAction;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
@@ -142,7 +142,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 	}
 
-	public static class ShowContextualMenuControl extends CustomMouseClickControl {
+	public static class ShowContextualMenuControl extends MouseClickControl {
 
 		public ShowContextualMenuControl() {
 			this(false);

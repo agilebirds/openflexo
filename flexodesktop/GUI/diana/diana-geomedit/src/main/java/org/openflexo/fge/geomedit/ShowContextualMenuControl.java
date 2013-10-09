@@ -28,9 +28,9 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseControlInfo;
 import org.openflexo.fge.control.actions.CustomClickControlAction;
-import org.openflexo.fge.swing.actions.JCustomMouseClickControl;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
 
-public class ShowContextualMenuControl extends JCustomMouseClickControl {
+public class ShowContextualMenuControl extends MouseClickControlImpl {
 
 	public ShowContextualMenuControl() {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {

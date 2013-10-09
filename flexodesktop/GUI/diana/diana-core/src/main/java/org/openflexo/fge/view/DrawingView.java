@@ -5,6 +5,7 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.actions.RectangleSelectingAction;
 
 public interface DrawingView<M, C> extends FGEContainerView<M, C> {
 
@@ -23,5 +24,9 @@ public interface DrawingView<M, C> extends FGEContainerView<M, C> {
 	public abstract boolean contains(FGEView<?, ?> view);
 
 	public abstract void delete();
+
+	public void setRectangleSelectingAction(RectangleSelectingAction action);
+
+	public void resetRectangleSelectingAction();
 
 }

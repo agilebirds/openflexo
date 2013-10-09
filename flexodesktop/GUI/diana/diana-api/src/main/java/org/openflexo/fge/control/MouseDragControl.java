@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,9 +21,10 @@
 
 package org.openflexo.fge.control;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-public interface CustomMouseDragControl<CI> extends CustomMouseControl<CI> {
+public interface MouseDragControl extends MouseControl {
+
+	public MouseDragControlAction getControlAction();
 
 	/**
 	 * Handle mouse pressed event, by performing what is required here If event has been correctely handled, consume it.
@@ -32,7 +34,7 @@ public interface CustomMouseDragControl<CI> extends CustomMouseControl<CI> {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
+	// public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
 
 	/**
 	 * Handle mouse released event, by performing what is required here If event has been correctely handled, consume it.
@@ -42,7 +44,7 @@ public interface CustomMouseDragControl<CI> extends CustomMouseControl<CI> {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseReleased(DianaEditor<?> controller, CI controlInfo);
+	// public void handleMouseReleased(DianaEditor<?> controller, CI controlInfo);
 
 	/**
 	 * Handle mouse dragged event, by performing what is required here If event has been correctely handled, consume it.
@@ -52,6 +54,6 @@ public interface CustomMouseDragControl<CI> extends CustomMouseControl<CI> {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseDragged(DianaEditor<?> controller, CI controlInfo);
+	// public void handleMouseDragged(DianaEditor<?> controller, CI controlInfo);
 
 }

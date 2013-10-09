@@ -17,23 +17,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing.actions;
+package org.openflexo.fge.swing.view;
 
-import java.awt.event.MouseEvent;
+import javax.swing.JComponent;
 
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.actions.ContinuousSelectionAction;
+import org.openflexo.fge.view.FGEView;
 
-public class JContinuousSelectionAction extends ContinuousSelectionAction<MouseEvent> {
-	@Override
-	public MouseClickControlActionType getActionType() {
-		return MouseClickControlActionType.CONTINUOUS_SELECTION;
-	}
+/**
+ * Implemented by all Swing views
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ *            type of object beeing represented by this view
+ * @param <C>
+ *            type of component this view is beeing instance (at least a JComponent)
+ */
+public interface JFGEView<O, C extends JComponent> extends FGEView<O, C> {
 
-	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent mouseEvent) {
-		System.out.println("Continuous select " + node);
-		return true;
-	}
+	public JDrawingView<?> getDrawingView();
+
+	public JLabelView<O> getLabelView();
 }

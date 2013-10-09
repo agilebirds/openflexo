@@ -21,17 +21,12 @@
 package org.openflexo.fge.view;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.CustomMouseClickControl;
-import org.openflexo.fge.control.CustomMouseControl.MouseButton;
-import org.openflexo.fge.control.CustomMouseDragControl;
-import org.openflexo.fge.control.MouseClickControlAction;
-import org.openflexo.fge.control.MouseClickControlAction.MouseClickControlActionType;
-import org.openflexo.fge.control.MouseDragControlAction;
-import org.openflexo.fge.control.MouseDragControlAction.MouseDragControlActionType;
-import org.openflexo.fge.view.listener.FGEViewMouseListener;
+import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.MouseControlContext;
+import org.openflexo.fge.control.actions.DNDInfo;
+import org.openflexo.fge.control.actions.MoveAction;
 
 /**
  * Represent the view factory for a given technology (eg. Swing)
@@ -67,37 +62,6 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 */
 	public <O> ConnectorView<O, ? extends C> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
 
-	/**
-	 * Build and return a MouseListener for supplied node and view<br>
-	 * Here return null as a simple viewer doesn't allow any editing facility
-	 * 
-	 * @param node
-	 * @param view
-	 * @return
-	 */
-	public <O> FGEViewMouseListener makeViewMouseListener(DrawingTreeNode<O, ?> node, FGEView<O, ? extends C> view,
-			AbstractDianaEditor<?, F, C> controller);
-
-	public abstract CustomMouseClickControl<?> makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract CustomMouseClickControl<?> makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			MouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract CustomMouseClickControl<?> makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			MouseClickControlAction<?, ?> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract CustomMouseDragControl<?> makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract CustomMouseDragControl<?> makeMouseDragControl(String aName, MouseButton button, MouseDragControlActionType actionType,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract CustomMouseDragControl<?> makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction<?, ?> action,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
-
-	public abstract MouseDragControlAction<?, ?> makeMouseDragControlAction(MouseDragControlActionType actionType);
-
-	public abstract MouseClickControlAction<?, ?> makeMouseClickControlAction(MouseClickControlActionType actionType);
-
+	public DNDInfo makeDNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller,
+			final MouseControlContext initialContext);
 }
