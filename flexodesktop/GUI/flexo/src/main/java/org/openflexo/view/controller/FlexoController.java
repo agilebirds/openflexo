@@ -24,12 +24,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -906,17 +908,16 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		Container content = dialog.getContentPane();
 		JScrollPane scroll = new JScrollPane(content, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		dialog.setContentPane(scroll);
-		dialog.addKeyListener(new KeyAdapter() {
+		dialog.setContentPane(scroll);// Wraps the content pane in a scrollpane
+		// Upon pressing "Escape"
+		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
+
 			@Override
-			public void keyTyped(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					dialog.setVisible(false);
-				}
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 			}
-		});
-		dialog.validate();
-		dialog.pack();
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+		dialog.pack(); // Computes preferred size of the dialog
 		Window window = null;
 		if (parentComponent instanceof Window) {
 			window = (Window) parentComponent;
@@ -924,19 +925,19 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (window == null && parentComponent != null) {
 			window = SwingUtilities.getWindowAncestor(parentComponent);
 		}
-		Dimension maxDim;
+		GraphicsConfiguration c;
 		if (window != null && window.isVisible()) {
-			maxDim = new Dimension(Math.min(dialog.getWidth(), window.getGraphicsConfiguration().getDevice().getDefaultConfiguration()
-					.getBounds().width), Math.min(dialog.getHeight(), window.getGraphicsConfiguration().getDevice()
-					.getDefaultConfiguration().getBounds().height));
+			c = window.getGraphicsConfiguration();
 		} else {
-			maxDim = new Dimension(Math.min(dialog.getWidth(), Toolkit.getDefaultToolkit().getScreenSize().width), Math.min(
-					dialog.getHeight(), Toolkit.getDefaultToolkit().getScreenSize().height));
+			c = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
 		}
+		Insets i = Toolkit.getDefaultToolkit().getScreenInsets(c);
+		Dimension maxDim = new Dimension(Math.min(dialog.getWidth(), c.getBounds().width - i.left - i.right), Math.min(dialog.getHeight(),
+				c.getBounds().height - i.top - i.bottom));
 		dialog.setSize(maxDim);
-		dialog.setLocationRelativeTo(window);
+		dialog.setLocationRelativeTo(window); // Centering on owner window
+		dialog.setLocation(Math.max(i.left, dialog.getX()), Math.max(i.top, dialog.getY()));
 		dialog.setVisible(true);
-		// pane.selectInitialValue();
 		dialog.dispose();
 		Object selectedValue = pane.getValue();
 
