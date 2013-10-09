@@ -129,7 +129,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 		setForeground(ForegroundStyle.makeNone());
 		setBackground(BackgroundStyle.makeEmptyBackground());
 
-		// addToMouseDragControls(new ContainerCloser(), true);
+		addToMouseDragControls(new ContainerCloser(), true);
 		if (object instanceof FlexoPetriGraph && ((FlexoPetriGraph) object).getContainer() != null) {
 			// addToMouseClickControls(new AnnotationMouseClickControl());
 			((FlexoPetriGraph) object).getContainer().addObserver(this);

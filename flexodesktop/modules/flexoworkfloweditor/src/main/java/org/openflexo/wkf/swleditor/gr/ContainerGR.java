@@ -61,7 +61,6 @@ import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.wkf.WKFPreferences;
-import org.openflexo.wkf.swleditor.AnnotationMouseClickControl;
 import org.openflexo.wkf.swleditor.SwimmingLaneGraphicalRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
@@ -136,7 +135,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 		addToMouseDragControls(new ContainerCloser(), true);
 
 		if (object instanceof FlexoPetriGraph) {
-			addToMouseClickControls(new AnnotationMouseClickControl());
+			// addToMouseClickControls(new AnnotationMouseClickControl());
 			((FlexoPetriGraph) object).getContainer().addObserver(this);
 		}
 	}
