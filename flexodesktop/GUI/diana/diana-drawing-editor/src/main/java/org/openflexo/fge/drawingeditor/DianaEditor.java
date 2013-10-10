@@ -40,13 +40,13 @@ import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
-public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingFactory, JComponent> {
+public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingViewFactory, JComponent> {
 
 	private JPopupMenu contextualMenu;
 	private DrawingTreeNode<?, ?> contextualMenuInvoker;
@@ -55,7 +55,7 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingFactory, J
 	// private Shape copiedShape;
 
 	public DianaEditor(final DiagramDrawing aDrawing, DiagramFactory factory) {
-		super(aDrawing, factory, new SwingFactory());
+		super(aDrawing, factory, new SwingViewFactory());
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override

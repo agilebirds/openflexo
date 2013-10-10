@@ -23,6 +23,7 @@ package org.openflexo.fge.control;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.control.tools.DianaLayoutWidget;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DianaScaleSelector;
 import org.openflexo.fge.control.tools.DianaStyles;
 import org.openflexo.fge.control.tools.DianaToolSelector;
@@ -40,13 +41,15 @@ public interface DianaToolFactory<C> {
 
 	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
-	public DianaToolSelector<?, ?, ?> makeDianaToolSelector();
+	public DianaToolSelector<?, ?> makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor);
 
-	public DianaScaleSelector<?, ?, ?> makeDianaScaleSelector();
+	public DianaScaleSelector<?, ?> makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor);
 
-	public DianaStyles<?, ?, ?> makeDianaDianaStyles();
+	public DianaStyles<?, ?> makeDianaDianaStyles();
 
-	public DianaInspectors<?, ?, ?> makeDianaInspectors();
+	public DianaInspectors<?, ?> makeDianaInspectors();
 
-	public DianaLayoutWidget<?, ?, ?> makeDianaLayoutWidget();
+	public DianaLayoutWidget<?, ?> makeDianaLayoutWidget();
+
+	public DianaPalette<?, ?> makeDianaPalette(DrawingPalette palette);
 }

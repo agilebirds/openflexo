@@ -44,9 +44,8 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.tools.DrawingPalette;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
@@ -58,7 +57,8 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
 
@@ -76,11 +76,11 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 
 	private ShapeNode<O> shapeNode;
 	private FGEViewMouseListener mouseListener;
-	private AbstractDianaEditor<?, SwingFactory, JComponent> controller;
+	private AbstractDianaEditor<?, SwingViewFactory, JComponent> controller;
 
 	private JLabelView<O> labelView;
 
-	public JShapeView(ShapeNode<O> node, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+	public JShapeView(ShapeNode<O> node, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		super();
 		logger.fine("Create JShapeView " + Integer.toHexString(hashCode()) + " for " + node);
 		this.controller = controller;
@@ -98,13 +98,14 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		updateVisibility();
 		setFocusable(true);
 
-		if (getController() instanceof DianaInteractiveEditor) {
-			if (((DianaInteractiveEditor<?, SwingFactory, JComponent>) controller).getPalettes() != null) {
-				for (DrawingPalette p : ((DianaInteractiveEditor<?, SwingFactory, JComponent>) controller).getPalettes()) {
-					registerPalette(p);
+		/*if (getController() instanceof DianaInteractiveEditor) {
+			if (((DianaInteractiveEditor<?, SwingViewFactory, JComponent>) controller).getPalettes() != null) {
+				for (DrawingPalette p : ((DianaInteractiveEditor<?, SwingViewFactory, JComponent>) controller).getPalettes()) {
+					activatePalette(p);
 				}
 			}
-		}
+		}*/
+
 		// logger.info("make JShapeView with "+aGraphicalRepresentation+" bounds="+getBounds());
 
 		// setToolTipText(getClass().getSimpleName()+hashCode());
@@ -177,6 +178,10 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 			return (JDrawingView<?>) getController().getDrawingView();
 		}
 		return null;
+	}
+
+	public FGEPaintManager getPaintManager() {
+		return getDrawingView().getPaintManager();
 	}
 
 	@Override
@@ -324,7 +329,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 	}
 
 	@Override
-	public AbstractDianaEditor<?, SwingFactory, JComponent> getController() {
+	public AbstractDianaEditor<?, SwingViewFactory, JComponent> getController() {
 		return controller;
 	}
 
@@ -446,21 +451,19 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 	}
 
 	@Override
-	public void registerPalette(DrawingPalette aPalette) {
-		// A palette is registered, listen to drag'n'drop events
-		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, controller), true));
+	public void activatePalette(DianaPalette<?, ?> aPalette) {
+		if (aPalette instanceof JDianaPalette) {
+			// A palette is registered, listen to drag'n'drop events
+			setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, ((JDianaPalette) aPalette).buildPaletteDropListener(this,
+					controller), true));
+		}
 
-	}
-
-	@Override
-	public FGEPaintManager getPaintManager() {
-		return getDrawingView().getPaintManager();
 	}
 
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		if (getController() instanceof DianaInteractiveViewer) {
-			return ((DianaInteractiveViewer<?, SwingFactory, JComponent>) getController()).getToolTipText();
+			return ((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).getToolTipText();
 		}
 		return super.getToolTipText(event);
 	}
@@ -476,7 +479,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 
 	private void captureScreenshot() {
 		JComponent lbl = this;
-		getController().disablePaintingCache();
+		getPaintManager().disablePaintingCache();
 		try {
 			Rectangle bounds = new Rectangle(getBounds());
 			if (getLabelView() != null) {
@@ -506,7 +509,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 				logger.info("Captured image on " + this);
 			}
 		} finally {
-			getController().enablePaintingCache();
+			getPaintManager().enablePaintingCache();
 		}
 	}
 

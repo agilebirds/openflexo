@@ -46,7 +46,9 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.swing.view.JFGEView;
 import org.openflexo.fge.swing.view.JLabelView;
+import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
 
@@ -56,9 +58,9 @@ public class FGEPaintManager {
 
 	private static final Logger logger = Logger.getLogger(FGEPaintManager.class.getPackage().getName());
 
-	protected static final Logger paintPrimitiveLogger = Logger.getLogger("PaintPrimitive");
-	protected static final Logger paintRequestLogger = Logger.getLogger("PaintRequest");
-	protected static final Logger paintStatsLogger = Logger.getLogger("PaintStats");
+	public static final Logger paintPrimitiveLogger = Logger.getLogger("PaintPrimitive");
+	public static final Logger paintRequestLogger = Logger.getLogger("PaintRequest");
+	public static final Logger paintStatsLogger = Logger.getLogger("PaintStats");
 
 	private boolean _paintingCacheEnabled;
 
@@ -203,7 +205,7 @@ public class FGEPaintManager {
 		repaintManager.addTemporaryRepaintArea(r, view);
 	}
 
-	public void repaint(final FGEView<?, ?> view) {
+	public void repaint(final JFGEView<?, ?> view) {
 		if (view.isDeleted()) {
 			return;
 		}
@@ -285,7 +287,7 @@ public class FGEPaintManager {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + node);
 		}
-		FGEView<?, ?> view = _drawingView.viewForNode(node);
+		JFGEView<?, ?> view = _drawingView.viewForNode(node);
 		if (view != null) {
 			repaint(view);
 		}
@@ -300,9 +302,9 @@ public class FGEPaintManager {
 		FGEView<?, ?> v = getDrawingView().viewForNode(node);
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
-		if (v instanceof ShapeView) {
-			if (v.getLabelView() != null) {
-				rect = rect.union(v.getLabelView().getBounds());
+		if (v instanceof JShapeView) {
+			if (((JShapeView<?>) v).getLabelView() != null) {
+				rect = rect.union(((JShapeView<?>) v).getLabelView().getBounds());
 			}
 		}
 		return getPaintBuffer().getSubimage(rect.x, rect.y, rect.width, rect.height);
@@ -476,7 +478,7 @@ public class FGEPaintManager {
 	 * @param gr
 	 * @return
 	 */
-	protected boolean renderUsingBuffer(Graphics2D g, Rectangle renderingBounds, DrawingTreeNode<?, ?> node, double scale) {
+	public boolean renderUsingBuffer(Graphics2D g, Rectangle renderingBounds, DrawingTreeNode<?, ?> node, double scale) {
 		if (renderingBounds == null) {
 			return false;
 		}

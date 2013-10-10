@@ -17,15 +17,13 @@ import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.tools.DrawingPalette;
-import org.openflexo.fge.control.tools.PaletteElement;
-import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.control.PaletteElement;
+import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.swing.JPaletteController;
+import org.openflexo.fge.swing.control.tools.JDianaPalette.PaletteElementTransferable;
 import org.openflexo.toolbox.ToolBox;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
@@ -45,7 +43,7 @@ public class JPaletteElementView extends JShapeView<PaletteElement> {
 	/* Local controller ONLY */
 	// private AbstractDianaEditor<DrawingPalette> paletteController;
 
-	public JPaletteElementView(ShapeNode<PaletteElement> node, AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> controller) {
+	public JPaletteElementView(ShapeNode<PaletteElement> node, JPaletteController controller) {
 		super(node, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
@@ -63,8 +61,8 @@ public class JPaletteElementView extends JShapeView<PaletteElement> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent> getController() {
-		return (AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent>) super.getController();
+	public JPaletteController getController() {
+		return (JPaletteController) super.getController();
 	}
 
 	private DragGestureRecognizer createDragGestureRecognizer() {
@@ -83,10 +81,6 @@ public class JPaletteElementView extends JShapeView<PaletteElement> {
 
 	public PaletteElement getPaletteElement() {
 		return getDrawable();
-	}
-
-	public DrawingPalette getPalette() {
-		return getPaletteElement().getPalette();
 	}
 
 	public BufferedImage getBuffer() {
@@ -177,7 +171,7 @@ public class JPaletteElementView extends JShapeView<PaletteElement> {
 			}
 			try {
 				// initial cursor, transferrable, dsource listener
-				e.startDrag(DrawingPalette.dropKO, transferable, dsListener);
+				e.startDrag(DianaPalette.dropKO, transferable, dsListener);
 				logger.info("Starting drag for " + getNode());
 				getDrawingView().captureDraggedNode(JPaletteElementView.this, e);
 			} catch (Exception idoe) {
@@ -244,7 +238,7 @@ public class JPaletteElementView extends JShapeView<PaletteElement> {
 		@Override
 		public void dragOver(DragSourceDragEvent e) {
 			// interface
-			getPalette().setDragSourceContext(e.getDragSourceContext());
+			getController().getPalette().setDragSourceContext(e.getDragSourceContext());
 		}
 
 		/**

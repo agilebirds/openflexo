@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.swing.control.tools;
 
-import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.logging.Logger;
 
@@ -32,7 +31,7 @@ import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
 import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.shapes.ShapeSpecification;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
@@ -50,7 +49,7 @@ import org.openflexo.localization.LocalizedDelegate;
  * @author sylvain
  * 
  */
-public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingFactory, MouseEvent> {
+public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFactory> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(JDianaInspectors.class.getPackage().getName());

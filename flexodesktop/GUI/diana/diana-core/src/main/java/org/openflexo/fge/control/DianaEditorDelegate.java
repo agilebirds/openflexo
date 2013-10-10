@@ -1,6 +1,7 @@
 package org.openflexo.fge.control;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.Set;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
@@ -28,4 +29,13 @@ public interface DianaEditorDelegate {
 	public void repaintAll();
 
 	public Point getPointInView(Object source, Point point, FGEView<?, ?> view);
+
+	/**
+	 * Makes a screenshot of supplied graphical node
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public BufferedImage makeScreenshot(DrawingTreeNode<?, ?> node);
+
 }

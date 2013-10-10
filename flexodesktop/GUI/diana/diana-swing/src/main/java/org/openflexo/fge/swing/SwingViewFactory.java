@@ -34,12 +34,16 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.DNDInfo;
 import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.control.tools.PaletteController;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.swing.control.JDNDInfo;
 import org.openflexo.fge.swing.control.JMouseControlContext;
+import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.view.FGEViewMouseListener;
 import org.openflexo.fge.swing.view.JConnectorView;
 import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.fge.swing.view.JFGEView;
 import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.fge.swing.widget.JFIBBackgroundStyleSelector;
 import org.openflexo.fge.swing.widget.JFIBForegroundStyleSelector;
@@ -56,11 +60,11 @@ import org.openflexo.fge.view.FGEView;
  * @author sylvain
  * 
  */
-public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> {
+public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JComponent> {
 
-	public static SwingFactory INSTANCE = new SwingFactory();
+	public static SwingViewFactory INSTANCE = new SwingViewFactory();
 
-	private SwingFactory() {
+	protected SwingViewFactory() {
 	}
 
 	/**
@@ -72,8 +76,8 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	 * @return
 	 */
 	public <O> FGEViewMouseListener makeViewMouseListener(DrawingTreeNode<O, ?> node, FGEView<O, ? extends JComponent> view,
-			AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
-		return new FGEViewMouseListener(node, view);
+			AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
+		return new FGEViewMouseListener(node, (JFGEView<O, ? extends JComponent>) view);
 	}
 
 	/**
@@ -82,7 +86,7 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	 * 
 	 * @return
 	 */
-	public <M> JDrawingView<M> makeDrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
+	public <M> JDrawingView<M> makeDrawingView(AbstractDianaEditor<M, SwingViewFactory, JComponent> controller) {
 		return new JDrawingView<M>(controller);
 	}
 
@@ -93,7 +97,7 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	 * @param shapeNode
 	 * @return
 	 */
-	public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+	public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		return new JShapeView<O>(shapeNode, controller);
 	}
 
@@ -105,8 +109,13 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	 * @return
 	 */
 	public <O> JConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode,
-			AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+			AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		return new JConnectorView<O>(connectorNode, controller);
+	}
+
+	@Override
+	public PaletteController<SwingViewFactory, JComponent> makePaletteController(DianaPalette<?, ?> palette) {
+		return new JPaletteController((JDianaPalette) palette);
 	}
 
 	@Override

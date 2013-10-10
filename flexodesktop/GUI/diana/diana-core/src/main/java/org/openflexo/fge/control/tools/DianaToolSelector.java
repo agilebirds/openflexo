@@ -2,6 +2,7 @@ package org.openflexo.fge.control.tools;
 
 import java.util.Observable;
 
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.notifications.ToolChanged;
@@ -13,7 +14,12 @@ import org.openflexo.fge.view.DianaViewFactory;
  * @author sylvain
  * 
  */
-public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super C>, ME> extends DianaToolImpl<C, F, ME> {
+public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super C>> extends DianaToolImpl<C, F> {
+
+	public DianaToolSelector(AbstractDianaEditor<?, F, ?> editor) {
+		super();
+		setEditor(editor);
+	}
 
 	/**
 	 * Return the technology-specific component representing the tool selector

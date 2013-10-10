@@ -43,8 +43,12 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 		return action;
 	}
 
-	protected boolean isSignificativeDrag() {
+	public boolean isSignificativeDrag() {
 		return isSignificativeDrag;
+	}
+
+	public DrawingTreeNode<?, ?> getInitialNode() {
+		return initialNode;
 	}
 
 	/**

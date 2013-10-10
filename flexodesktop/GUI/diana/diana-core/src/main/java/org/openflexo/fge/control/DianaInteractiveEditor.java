@@ -20,7 +20,6 @@
 
 package org.openflexo.fge.control;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -32,8 +31,8 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.notifications.ToolChanged;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
-import org.openflexo.fge.control.tools.DrawingPalette;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -66,7 +65,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private ShadowStyle currentShadowStyle;
 	private ShapeSpecification currentShape;
 
-	private Vector<DrawingPalette> palettes;
+	// private Vector<DrawingPalette> palettes;
 
 	// private EditorToolbox toolbox;
 
@@ -78,7 +77,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		currentShadowStyle = factory.makeDefaultShadowStyle();
 		currentShape = factory.makeShape(ShapeType.RECTANGLE);
 		setCurrentTool(EditorTool.SelectionTool);
-		palettes = new Vector<DrawingPalette>();
+		// palettes = new Vector<DrawingPalette>();
 		// toolbox = new EditorToolbox(this);
 	}
 
@@ -88,12 +87,12 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 			toolbox.delete();
 		}
 		toolbox = null;*/
-		if (palettes != null) {
+		/*if (palettes != null) {
 			for (DrawingPalette palette : palettes) {
 				palette.delete();
 			}
 		}
-		palettes = null;
+		palettes = null;*/
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -180,7 +179,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		this.drawShapeAction = drawShapeAction;
 	}
 
-	public Vector<DrawingPalette> getPalettes() {
+	/*public Vector<DrawingPalette> getPalettes() {
 		return palettes;
 	}
 
@@ -195,11 +194,11 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	public void unregisterPalette(DrawingPalette aPalette) {
 		logger.fine("Un-Register palette for " + this);
 		palettes.remove(aPalette);
-	}
+	}*/
 
-	public void activatePalette(DrawingPalette aPalette) {
+	public void activatePalette(DianaPalette<?, ?> aPalette) {
 		if (getDrawingView() != null) {
-			getDrawingView().registerPalette(aPalette);
+			getDrawingView().activatePalette(aPalette);
 		}
 	}
 

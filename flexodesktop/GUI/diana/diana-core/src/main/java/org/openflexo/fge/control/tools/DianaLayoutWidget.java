@@ -22,7 +22,7 @@ import org.openflexo.fge.view.DianaViewFactory;
  * @param <F>
  * @param <ME>
  */
-public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super C>, ME> extends DianaToolImpl<C, F, ME> {
+public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super C>> extends DianaToolImpl<C, F> {
 
 	/**
 	 * Return the technology-specific component representing the widget

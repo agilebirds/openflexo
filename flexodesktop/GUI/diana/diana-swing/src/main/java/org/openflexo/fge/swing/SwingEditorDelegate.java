@@ -2,6 +2,7 @@ package org.openflexo.fge.swing;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -21,17 +22,17 @@ import org.openflexo.fge.view.FGEView;
 
 public class SwingEditorDelegate implements DianaEditorDelegate {
 
-	private AbstractDianaEditor<?, SwingFactory, JComponent> controller;
+	private AbstractDianaEditor<?, SwingViewFactory, JComponent> controller;
 
 	private MoveInfo keyDrivenMovingSession;
 	private KeyDrivenMovingSessionTimer keyDrivenMovingSessionTimer = null;
 
-	public SwingEditorDelegate(AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
+	public SwingEditorDelegate(AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		super();
 		this.controller = controller;
 	}
 
-	public AbstractDianaEditor<?, SwingFactory, JComponent> getController() {
+	public AbstractDianaEditor<?, SwingViewFactory, JComponent> getController() {
 		return controller;
 	}
 
@@ -236,4 +237,15 @@ public class SwingEditorDelegate implements DianaEditorDelegate {
 	public Point getPointInView(Object source, Point point, FGEView<?, ?> view) {
 		return SwingUtilities.convertPoint((Component) source, point, (Component) view);
 	}
+
+	/**
+	 * Makes a screenshot of supplied graphical node
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public BufferedImage makeScreenshot(DrawingTreeNode<?, ?> node) {
+		return getPaintManager().getScreenshot(node);
+	}
+
 }

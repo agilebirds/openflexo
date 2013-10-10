@@ -37,10 +37,15 @@ import org.openflexo.fge.swing.view.JDrawingView;
  * 
  * @param <M>
  */
-public class JDianaInteractiveEditor<M> extends DianaInteractiveEditor<M, SwingFactory, JComponent> {
+public class JDianaInteractiveEditor<M> extends DianaInteractiveEditor<M, SwingViewFactory, JComponent> {
 
 	public JDianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory) {
-		super(aDrawing, factory, SwingFactory.INSTANCE, SwingToolFactory.INSTANCE);
+		super(aDrawing, factory, SwingViewFactory.INSTANCE, SwingToolFactory.INSTANCE);
+		setDelegate(new SwingEditorDelegate(this));
+	}
+
+	public JDianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, SwingViewFactory viewFactory, SwingToolFactory toolFactory) {
+		super(aDrawing, factory, viewFactory, toolFactory);
 		setDelegate(new SwingEditorDelegate(this));
 	}
 

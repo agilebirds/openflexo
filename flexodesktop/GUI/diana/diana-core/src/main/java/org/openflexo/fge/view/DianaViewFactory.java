@@ -31,6 +31,8 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.DNDInfo;
 import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.control.tools.PaletteController;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
@@ -73,6 +75,8 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 * @return
 	 */
 	public <O> ConnectorView<O, ? extends C> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
+
+	public PaletteController<F, C> makePaletteController(DianaPalette<?, ?> palette);
 
 	public FIBBackgroundStyleSelector<? extends C> makeFIBBackgroundStyleSelector(BackgroundStyle backgroundStyle);
 

@@ -21,10 +21,15 @@
 
 package org.openflexo.fge.control;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public interface MouseDragControl extends MouseControl {
 
 	public MouseDragControlAction getControlAction();
+
+	public boolean isSignificativeDrag();
+
+	public DrawingTreeNode<?, ?> getInitialNode();
 
 	/**
 	 * Handle mouse pressed event, by performing what is required here If event has been correctely handled, consume it.

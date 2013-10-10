@@ -69,7 +69,7 @@ import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.actions.RectangleSelectingAction;
-import org.openflexo.fge.control.tools.DrawingPalette;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
@@ -80,8 +80,10 @@ import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingEditorDelegate;
+import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.JFocusRetriever;
+import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEContainerView;
@@ -104,7 +106,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 	private Drawing<M> drawing;
 	// private Map<DrawingTreeNode<?, ?>, FGEView<?,?>> contents;
-	private AbstractDianaEditor<M, SwingFactory, JComponent> controller;
+	private AbstractDianaEditor<M, SwingViewFactory, JComponent> controller;
 	private JFocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
 
@@ -133,7 +135,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 	private boolean isDeleted = false;
 
-	public JDrawingView(AbstractDianaEditor<M, SwingFactory, JComponent> controller) {
+	public JDrawingView(AbstractDianaEditor<M, SwingViewFactory, JComponent> controller) {
 		this.controller = controller;
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
@@ -156,13 +158,13 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			}
 		}
 
-		if (getController() instanceof DianaInteractiveEditor) {
+		/*if (getController() instanceof DianaInteractiveEditor) {
 			if (((DianaInteractiveEditor<?, ?, ?>) controller).getPalettes() != null) {
 				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, ?>) controller).getPalettes()) {
-					registerPalette(p);
+					activatePalette(p);
 				}
 			}
-		}
+		}*/
 
 		updateBackground();
 		setOpaque(true);
@@ -181,6 +183,10 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		return drawing.getRoot();
 	}
 
+	public SwingEditorDelegate getDelegate() {
+		return (SwingEditorDelegate) getController().getDelegate();
+	}
+
 	private void installKeyBindings() {
 		if (getController() instanceof DianaInteractiveViewer) {
 			getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "move_left");
@@ -191,28 +197,28 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					((DianaInteractiveViewer<?, ?, ?>) getController()).leftKeyPressed();
+					getDelegate().leftKeyPressed();
 				}
 			});
 			getActionMap().put("move_right", new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					((DianaInteractiveViewer<?, ?, ?>) getController()).rightKeyPressed();
+					getDelegate().rightKeyPressed();
 				}
 			});
 			getActionMap().put("move_up", new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					((DianaInteractiveViewer<?, ?, ?>) getController()).upKeyPressed();
+					getDelegate().upKeyPressed();
 				}
 			});
 			getActionMap().put("move_down", new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					((DianaInteractiveViewer<?, ?, ?>) getController()).downKeyPressed();
+					getDelegate().downKeyPressed();
 				}
 			});
 		}
@@ -276,8 +282,10 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			if (!(v instanceof JDrawingView)) {
 				v.rescale();
 			}
-			if (v.getLabelView() != null) {
-				v.getLabelView().rescale();
+			if (v instanceof JFGEView) {
+				if (((JFGEView<?, ?>) v).getLabelView() != null) {
+					((JFGEView<?, ?>) v).getLabelView().rescale();
+				}
 			}
 		}
 		resizeView();
@@ -455,7 +463,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	 * @param g
 	 *            graphics on which buffering will be performed
 	 */
-	protected synchronized void prepareForBuffering(Graphics2D g) {
+	public synchronized void prepareForBuffering(Graphics2D g) {
 		isBuffering = true;
 	}
 
@@ -488,7 +496,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			if (node.shouldBeDisplayed()
 					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(node) || getPaintManager().containsTemporaryObject(
 							node))) {
-				FGEView<?, ?> view = viewForNode(node);
+				JFGEView<?, ?> view = viewForNode(node);
 				if (view == null) {
 					continue;
 				}
@@ -657,7 +665,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		} else {
 			return;
 		}
-		FGEView<?, ?> view = viewForNode(focusedFloatingLabel);
+		JFGEView<?, ?> view = viewForNode(focusedFloatingLabel);
 		JLabelView<?> labelView = view.getLabelView();
 		if (labelView != null) {
 			Point p1 = SwingUtilities.convertPoint(labelView, new Point(0, labelView.getHeight() / 2), this);
@@ -834,29 +842,29 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		return mouseListener;
 	}
 
-	private DrawingPalette activePalette;
+	private JDianaPalette activePalette;
 
 	@Override
-	public void registerPalette(DrawingPalette aPalette) {
+	public void activatePalette(DianaPalette<?, ?> aPalette) {
 		// A palette is registered, listen to drag'n'drop events
-		logger.fine("Registering drop target");
-		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, controller), true));
-		activePalette = aPalette;
-		for (FGEView<?, ?> v : controller.getContents().values()) {
-			if (v != this) {
-				v.registerPalette(aPalette);
+		if (aPalette instanceof JDianaPalette) {
+			activePalette = (JDianaPalette) aPalette;
+			logger.fine("Registering drop target");
+			setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, activePalette.buildPaletteDropListener(this, controller), true));
+			for (FGEView<?, ?> v : controller.getContents().values()) {
+				if (v != this) {
+					v.activatePalette(aPalette);
+				}
 			}
+		} else {
+			logger.warning("Unexpected palette: " + aPalette);
 		}
 	}
 
-	@Override
 	public FGEPaintManager getPaintManager() {
 		return _paintManager;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.fge.view.DrawingView#contains(org.openflexo.fge.view.FGEView)
-	 */
 	@Override
 	public boolean contains(FGEView<?, ?> view) {
 		if (view == null) {
@@ -963,7 +971,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		}
 	}
 
-	public DrawingPalette getActivePalette() {
+	public JDianaPalette getActivePalette() {
 		return activePalette;
 	}
 

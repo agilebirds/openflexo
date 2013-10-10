@@ -39,7 +39,7 @@ import org.openflexo.fge.view.DianaViewFactory;
  * @param <F>
  * @param <ME>
  */
-public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaViewFactory<F, ?>, ME> extends DianaToolImpl<C, F, ME> {
+public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaViewFactory<F, ?>> extends DianaToolImpl<C, F> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaInspectors.class.getPackage().getName());

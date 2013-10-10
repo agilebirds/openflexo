@@ -31,10 +31,12 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.FGEContainerView;
 import org.openflexo.fge.view.FGEView;
 
@@ -114,8 +116,8 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		logger.info("add view " + view + " under " + this);
 		if (view instanceof JShapeView) {
 			((JShapeView<?>) view).setBackground(getBackground());
-			if (view.getLabelView() != null) {
-				add(view.getLabelView(), ((JShapeView<?>) view).getLayer(), -1);
+			if (((JShapeView<?>) view).getLabelView() != null) {
+				add(((JShapeView<?>) view).getLabelView(), ((JShapeView<?>) view).getLayer(), -1);
 			}
 			add(((JShapeView<?>) view), ((JShapeView<?>) view).getLayer(), -1);
 			childViews.add((JShapeView<?>) view);
@@ -132,8 +134,8 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 	public void removeView(FGEView<?, ?> view) {
 		logger.info("remove view " + view + " from " + this);
 		if (view instanceof JShapeView) {
-			if (view.getLabelView() != null) {
-				remove(view.getLabelView());
+			if (((JShapeView<?>) view).getLabelView() != null) {
+				remove(((JShapeView<?>) view).getLabelView());
 			}
 			remove(((JShapeView<?>) view));
 			childViews.remove((JShapeView<?>) view);
@@ -227,8 +229,18 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		}
 	}
 
+	@Override
+	public AbstractDianaEditor<?, ?, ? super JLayeredPane> getController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public List<FGEView<?, ? extends JComponent>> getChildViews() {
 		return childViews;
+	}
+
+	public FGEPaintManager getPaintManager() {
+		return getDrawingView().getPaintManager();
 	}
 
 }

@@ -17,26 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.tools;
+package org.openflexo.fge.swing.control.tools;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragSource;
 import java.awt.dnd.DragSourceContext;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,278 +38,56 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GRBinding.DrawingGRBinding;
-import org.openflexo.fge.GRBinding.ShapeGRBinding;
-import org.openflexo.fge.GRProvider.DrawingGRProvider;
-import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaInteractiveEditor;
-import org.openflexo.fge.control.DianaViewer;
+import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.FocusRetriever;
-import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable;
-import org.openflexo.fge.control.tools.PaletteElement.TransferedPaletteElement;
+import org.openflexo.fge.control.PaletteElement;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fib.utils.FIBIconLibrary;
-import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.toolbox.ToolBox;
 
 /**
- * A DrawingPalette represents the graphical tool working with a Drawing Editor, which allows to drag-drop elements represented in a panel
- * into an edited drawing
+ * A DianaPaletteC represents the graphical tool representing a {@link DrawingPalette} (the model)
  * 
  * @author sylvain
  * 
  */
-public class DrawingPalette {
+public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 
-	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
-
-	private static Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
-	private static Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
-
-	public static final Cursor dropOK = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
-			DROP_OK_IMAGE, new Point(16, 16), "Drop OK") : DragSource.DefaultMoveDrop;
-
-	public static final Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
-			DROP_KO_IMAGE, new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
-
-	private DianaInteractiveEditor<?, ?, ?> controller;
-
-	private final PaletteDrawing paletteDrawing;
-	// This controller is the local controller for displaying the palette, NOT the controller
-	// Which this palette is associated to.
-	private AbstractDianaEditor<DrawingPalette, ?, ?> paletteController;
-	protected List<PaletteElement> elements;
-
-	private DragSourceContext dragSourceContext;
-
-	private final int width;
-	private final int height;
-	private final String title;
-
-	/**
-	 * This factory is the one of the palette itself, NOT THE ONE which is used in the related drawing editor
-	 */
-	private FGEModelFactory factory;
-
-	public DrawingPalette(int width, int height, String title) {
-		try {
-			factory = new FGEModelFactoryImpl();
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-		this.width = width;
-		this.height = height;
-		this.title = title;
-		elements = new ArrayList<PaletteElement>();
-		paletteDrawing = new PaletteDrawing();
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
-		}
-	}
-
-	/**
-	 * Return the factory of the palette, which is different of the one which is used in the related drawing editor
-	 * 
-	 * @return
-	 */
-	public FGEModelFactory getFactory() {
-		return factory;
-	}
-
-	public void delete() {
-		paletteController.delete();
-		for (PaletteElement element : elements) {
-			element.getGraphicalRepresentation().delete();
-		}
-		paletteDrawing.gr.delete();
-		elements = null;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public List<PaletteElement> getElements() {
-		return elements;
-	}
-
-	public void addElement(PaletteElement element) {
-		elements.add(element);
-		// Try to perform some checks and initialization of
-		// expecting behaviour for a PaletteElement
-		element.getGraphicalRepresentation().setIsFocusable(false);
-		element.getGraphicalRepresentation().setIsSelectable(false);
-		element.getGraphicalRepresentation().setIsReadOnly(true);
-		element.getGraphicalRepresentation().setLocationConstraints(LocationConstraints.UNMOVABLE);
-		// element.getGraphicalRepresentation().addToMouseDragControls(mouseDragControl)
-	}
-
-	public void removeElement(PaletteElement element) {
-		elements.remove(element);
-	}
-
-	public DrawingView<DrawingPalette, ?> getPaletteView() {
-		if (paletteController == null) {
-			makePalettePanel();
-		}
-		return (DrawingView<DrawingPalette, ?>) paletteController.getDrawingView();
-	}
+	private static final Logger logger = Logger.getLogger(JDianaPalette.class.getPackage().getName());
 
 	private JScrollPane scrollPane;
 
+	private DragSourceContext dragSourceContext;
+
+	public JDianaPalette(DrawingPalette palette) {
+		super(palette);
+	}
+
+	@Override
+	protected void updatePalette(DrawingPalette palette) {
+		super.updatePalette(palette);
+		if (scrollPane != null) {
+			scrollPane.setViewportView(getPaletteView());
+		}
+	}
+
 	public JScrollPane getPaletteViewInScrollPane() {
 		if (scrollPane == null) {
-			scrollPane = new JScrollPane((JComponent) getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
 	}
 
-	public PaletteDrawing getPaletteDrawing() {
-		return paletteDrawing;
+	@SuppressWarnings("unchecked")
+	public JDrawingView<DrawingPalette> getPaletteView() {
+		return (JDrawingView<DrawingPalette>) super.getPaletteView();
 	}
-
-	protected void makePalettePanel() {
-		/*for (PaletteElement e : elements) {
-			e.getGraphicalRepresentation().setValidated(true);
-		}*/
-		paletteDrawing.printGraphicalObjectHierarchy();
-		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory, new SwingToolFactory() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {
-				if (shapeNode.getDrawable() instanceof PaletteElement) {
-					return (JShapeView<O>) (new JPaletteElementView((ShapeNode<PaletteElement>) shapeNode,
-							(AbstractDianaEditor<DrawingPalette, SwingFactory, JComponent>) controller));
-				}
-				return super.makeShapeView(shapeNode, controller);
-			}
-		});
-		/*for (PaletteElement e : elements) {
-			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
-		}*/
-		System.out.println("J'obtiens: " + paletteController.getDrawingView());
-		// paletteController.buildDrawingView();
-		// System.out.println("J'obtiens 2 : " + paletteController.getDrawingView());
-		// paletteController.getDrawingView().revalidate();
-		// System.out.println("J'obtiens 3 : " + paletteController.getDrawingView());
-	}
-
-	public class PaletteDrawing extends DrawingImpl<DrawingPalette> implements Drawing<DrawingPalette> {
-
-		private final DrawingGraphicalRepresentation gr;
-
-		private PaletteDrawing() {
-			super(DrawingPalette.this, factory, PersistenceMode.UniqueGraphicalRepresentations);
-			gr = factory.makeDrawingGraphicalRepresentation(this, false);
-			gr.setWidth(width);
-			gr.setHeight(height);
-			gr.setBackgroundColor(Color.WHITE);
-			gr.setDrawWorkingArea(true);
-			setEditable(true);
-		}
-
-		@Override
-		public void init() {
-
-			final DrawingGRBinding<DrawingPalette> paletteBinding = bindDrawing(DrawingPalette.class, "palette",
-					new DrawingGRProvider<DrawingPalette>() {
-						@Override
-						public DrawingGraphicalRepresentation provideGR(DrawingPalette drawable, FGEModelFactory factory) {
-							return gr;
-						}
-					});
-			final ShapeGRBinding<PaletteElement> paletteElementBinding = bindShape(PaletteElement.class, "paletteElement",
-					new ShapeGRProvider<PaletteElement>() {
-						@Override
-						public ShapeGraphicalRepresentation provideGR(PaletteElement drawable, FGEModelFactory factory) {
-							return drawable.getGraphicalRepresentation();
-						}
-					});
-
-			paletteBinding.addToWalkers(new GRStructureWalker<DrawingPalette>() {
-
-				@Override
-				public void walk(DrawingPalette palette) {
-					for (PaletteElement element : palette.getElements()) {
-						drawShape(paletteElementBinding, element, palette);
-					}
-				}
-			});
-
-		}
-
-		/*@Override
-		public List<?> getContainedObjects(Object aDrawable) {
-			if (aDrawable == getModel()) {
-				return elements;
-			} else {
-				return null;
-			}
-		}
-
-		@Override
-		public Object getContainer(Object aDrawable) {
-			if (aDrawable instanceof PaletteElement) {
-				return getModel();
-			} else {
-				return null;
-			}
-		}
-
-		@Override
-		public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-			return gr;
-		}
-
-		@Override
-		@SuppressWarnings("unchecked")
-		public GraphicalRepresentation getGraphicalRepresentation(Object aDrawable) {
-			if (aDrawable == getModel()) {
-				return getDrawingGraphicalRepresentation();
-			}
-			if (aDrawable instanceof PaletteElement) {
-				return ((PaletteElement) aDrawable).getGraphicalRepresentation();
-			}
-			return null;
-		}
-
-		@Override
-		public DrawingPalette getModel() {
-			return DrawingPalette.this;
-		}
-
-		@Override
-		public boolean isEditable() {
-			return false;
-		}*/
-
-	}
-
-	// Bout de code a rajouter dans les vues
-
-	/*
-	this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new WKFDTListener(this, controller), true){
-		@Override
-		public synchronized void dragOver(DropTargetDragEvent dtde) {
-			super.dragOver(dtde);
-			FlexoProcessView.this.getController().paintDraggedNode(FlexoProcessView.this, dtde);
-		}
-	});*/
 
 	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?, ?, ?> controller) {
 		return new PaletteDropListener(dropContainer, controller);
@@ -441,8 +213,8 @@ public class DrawingPalette {
 			}
 			if (!isDragOk(e)) {
 				if (getDragSourceContext() == null) {
-					logger.warning("dragSourceContext should NOT be null for " + DrawingPalette.this.getTitle()
-							+ Integer.toHexString(DrawingPalette.this.hashCode()) + " of " + DrawingPalette.this.getClass().getName());
+					logger.warning("dragSourceContext should NOT be null for " + getPalette().getTitle()
+							+ Integer.toHexString(JDianaPalette.this.hashCode()) + " of " + JDianaPalette.this.getClass().getName());
 				} else {
 					getDragSourceContext().setCursor(dropKO);
 				}
@@ -624,31 +396,16 @@ public class DrawingPalette {
 
 	}
 
-	/**
-	 * Return the DrawingView of the controller this palette is associated to
-	 * 
-	 * @return
-	 */
-	public JDrawingView<?> getDrawingView() {
-		if (getController() != null) {
-			return (JDrawingView<?>) getController().getDrawingView();
-		}
-		return null;
-	}
-
-	public DianaInteractiveEditor<?, ?, ?> getController() {
-		return controller;
-	}
-
-	public void registerController(DianaInteractiveEditor<?, ?, ?> controller) {
-		this.controller = controller;
-	}
-
 	public void updatePalette() {
-		paletteController.rebuildDrawingView();
+		super.updatePalette();
 		if (scrollPane != null) {
 			scrollPane.setViewportView(getPaletteView());
 		}
+	}
+
+	@Override
+	public JDrawingView<?> getDrawingView() {
+		return (JDrawingView<?>) super.getDrawingView();
 	}
 
 	public DragSourceContext getDragSourceContext() {
@@ -658,4 +415,60 @@ public class DrawingPalette {
 	public void setDragSourceContext(DragSourceContext dragSourceContext) {
 		this.dragSourceContext = dragSourceContext;
 	}
+
+	public static class PaletteElementTransferable implements Transferable {
+
+		private static DataFlavor _defaultFlavor;
+
+		private TransferedPaletteElement _transferedData;
+
+		public PaletteElementTransferable(PaletteElement element, Point dragOrigin) {
+			_transferedData = new TransferedPaletteElement(element, dragOrigin);
+		}
+
+		@Override
+		public DataFlavor[] getTransferDataFlavors() {
+			return new DataFlavor[] { defaultFlavor() };
+		}
+
+		@Override
+		public boolean isDataFlavorSupported(DataFlavor flavor) {
+			return true;
+		}
+
+		@Override
+		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+			return _transferedData;
+		}
+
+		public static DataFlavor defaultFlavor() {
+			if (_defaultFlavor == null) {
+				_defaultFlavor = new DataFlavor(PaletteElementTransferable.class, "PaletteElement");
+			}
+			return _defaultFlavor;
+		}
+
+	}
+
+	public static class TransferedPaletteElement {
+		private Point _offset;
+
+		private PaletteElement _transfered;
+
+		public TransferedPaletteElement(PaletteElement element, Point dragOffset) {
+			super();
+			_transfered = element;
+			_offset = dragOffset;
+		}
+
+		public Point getOffset() {
+			return _offset;
+		}
+
+		public PaletteElement getPaletteElement() {
+			return _transfered;
+		}
+
+	}
+
 }

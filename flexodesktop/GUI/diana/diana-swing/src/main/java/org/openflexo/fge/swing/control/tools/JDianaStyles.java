@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.swing.control.tools;
 
-import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.logging.Logger;
 
@@ -31,7 +30,7 @@ import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
 import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
 import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaStyles;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 
 /**
  * SWING implementation of {@link DianaStyles} toolbar
@@ -39,7 +38,7 @@ import org.openflexo.fge.swing.SwingFactory;
  * @author sylvain
  * 
  */
-public class JDianaStyles extends DianaStyles<JToolBar, SwingFactory, MouseEvent> {
+public class JDianaStyles extends DianaStyles<JToolBar, SwingViewFactory> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(JDianaStyles.class.getPackage().getName());

@@ -22,7 +22,6 @@ package org.openflexo.fge.swing.control.tools;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -33,7 +32,7 @@ import javax.swing.JToolBar;
 
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.control.tools.DianaLayoutWidget;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 
 /**
  * SWING implementation of {@link DianaLayoutWidget}
@@ -41,7 +40,7 @@ import org.openflexo.fge.swing.SwingFactory;
  * @author sylvain
  * 
  */
-public class JDianaLayoutWidget extends DianaLayoutWidget<JToolBar, SwingFactory, MouseEvent> {
+public class JDianaLayoutWidget extends DianaLayoutWidget<JToolBar, SwingViewFactory> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(JDianaLayoutWidget.class.getPackage().getName());

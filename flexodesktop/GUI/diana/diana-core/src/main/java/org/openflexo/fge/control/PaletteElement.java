@@ -17,36 +17,30 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.control.tools;
+package org.openflexo.fge.control;
 
-import java.awt.Point;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.tools.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 
 public interface PaletteElement extends Serializable {
 
 	public static final Logger logger = Logger.getLogger(PaletteElement.class.getPackage().getName());
 
-	public PaletteElementGraphicalRepresentation getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation();
 
 	public boolean acceptDragging(DrawingTreeNode<?, ?> target);
 
 	public boolean elementDragged(DrawingTreeNode<?, ?> target, FGEPoint dropLocation);
 
-	public DrawingPalette getPalette();
+	// public DrawingPalette getPalette();
 
-	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl {
+	public void delete();
+
+	/*public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl {
 		private ShapeGraphicalRepresentation originalGR;
 
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, DrawingPalette palette, PaletteElement paletteElement,
@@ -76,11 +70,6 @@ public interface PaletteElement extends Serializable {
 			}
 			super.delete();
 		}
-
-		/*@Override
-		public JShapeView makeShapeView(AbstractDianaEditor controller) {
-			return new JPaletteElementView(this, controller);
-		}*/
 
 		@Override
 		public final void setIsFocusable(boolean isFocusable) {
@@ -122,61 +111,6 @@ public interface PaletteElement extends Serializable {
 			return super.getLocationConstraints();
 		}
 
-	}
-
-	public static class PaletteElementTransferable implements Transferable {
-
-		private static DataFlavor _defaultFlavor;
-
-		private TransferedPaletteElement _transferedData;
-
-		public PaletteElementTransferable(PaletteElement element, Point dragOrigin) {
-			_transferedData = new TransferedPaletteElement(element, dragOrigin);
-		}
-
-		@Override
-		public DataFlavor[] getTransferDataFlavors() {
-			return new DataFlavor[] { defaultFlavor() };
-		}
-
-		@Override
-		public boolean isDataFlavorSupported(DataFlavor flavor) {
-			return true;
-		}
-
-		@Override
-		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-			return _transferedData;
-		}
-
-		public static DataFlavor defaultFlavor() {
-			if (_defaultFlavor == null) {
-				_defaultFlavor = new DataFlavor(PaletteElementTransferable.class, "PaletteElement");
-			}
-			return _defaultFlavor;
-		}
-
-	}
-
-	public static class TransferedPaletteElement {
-		private Point _offset;
-
-		private PaletteElement _transfered;
-
-		public TransferedPaletteElement(PaletteElement element, Point dragOffset) {
-			super();
-			_transfered = element;
-			_offset = dragOffset;
-		}
-
-		public Point getOffset() {
-			return _offset;
-		}
-
-		public PaletteElement getPaletteElement() {
-			return _transfered;
-		}
-
-	}
+	}*/
 
 }

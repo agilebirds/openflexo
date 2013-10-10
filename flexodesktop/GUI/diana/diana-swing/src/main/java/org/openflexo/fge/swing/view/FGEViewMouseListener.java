@@ -41,14 +41,13 @@ import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.FocusRetriever;
 import org.openflexo.fge.control.MouseClickControl;
+import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.MouseDragControl;
+import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.swing.FGEPaintManager;
-import org.openflexo.fge.swing.JDrawingView;
-import org.openflexo.fge.swing.JLabelView;
-import org.openflexo.fge.swing.actions.CustomMouseDragControlImpl;
-import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.swing.control.JMouseControlContext;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.toolbox.ToolBox;
 
 public class FGEViewMouseListener implements MouseListener, MouseMotionListener {
@@ -56,10 +55,10 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	private static final Logger logger = Logger.getLogger(FGEViewMouseListener.class.getPackage().getName());
 
 	private DrawingTreeNode<?, ?> node;
-	protected FGEView<?, ?> view;
+	protected JFGEView<?, ?> view;
 	private MouseEvent previousEvent;
 
-	public <O> FGEViewMouseListener(DrawingTreeNode<O, ?> node, FGEView<O, ?> aView) {
+	public <O> FGEViewMouseListener(DrawingTreeNode<O, ?> node, JFGEView<O, ?> aView) {
 		this.node = node;
 		view = aView;
 	}
@@ -73,6 +72,11 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			return (JDrawingView<?>) getController().getDrawingView();
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public DrawShapeToolController<?, MouseEvent> getDrawShapeToolController() {
+		return (DrawShapeToolController<?, MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController();
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			case DrawShapeTool:
 				performSelectionTool = false;
 				if (editable) {
-					((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().mouseClicked(e);
+					getDrawShapeToolController().mouseClicked(e);
 				}
 				break;
 			case DrawConnectorTool:
@@ -175,14 +179,15 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				return;
 			}
 
+			MouseControlContext mcc = new JMouseControlContext(e);
+
 			// We have now performed all low-level possible actions, let's go for the registered mouse controls
 			for (MouseClickControl mouseClickControl : focusedObject.getGraphicalRepresentation().getMouseClickControls()) {
-				if ((editable || !mouseClickControl.isModelEditionAction())
-						&& mouseClickControl.isApplicable(focusedObject, getController(), e)) {
+				if (mouseClickControl.isApplicable(focusedObject, getController(), mcc)) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Applying " + mouseClickControl);
 					}
-					mouseClickControl.handleClick(focusedObject, getController(), e);
+					mouseClickControl.getControlAction().handleClick(focusedObject, getController(), mcc);
 				} else {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Ignoring " + mouseClickControl);
@@ -370,11 +375,13 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 		}
 
+		MouseControlContext mcc = new JMouseControlContext(e);
+
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
 		List<MouseDragControl> applicableMouseDragControls = new ArrayList<MouseDragControl>();
 		for (MouseDragControl mouseDragControl : focusedObject.getGraphicalRepresentation().getMouseDragControls()) {
-			if ((editable || !mouseDragControl.isModelEditionAction()) && mouseDragControl.isApplicable(focusedObject, getController(), e)) {
+			if (mouseDragControl.isApplicable(focusedObject, getController(), mcc)) {
 				applicableMouseDragControls.add(mouseDragControl);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Found applicable " + mouseDragControl);
@@ -401,10 +408,10 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Applying " + currentMouseDrag);
 		}
-		if (currentMouseDrag.handleMousePressed(focusedObject, getController(), e)) {
+		if (currentMouseDrag.getControlAction().handleMousePressed(focusedObject, getController(), mcc)) {
 			// Everything OK
 			if (getController() != null) {
-				((DianaInteractiveViewer<?, ?, ?>) getController()).setCurrentMouseDrag((CustomMouseDragControlImpl) currentMouseDrag);
+				((DianaInteractiveViewer<?, ?, ?>) getController()).setCurrentMouseDrag(currentMouseDrag);
 			}
 		} else {
 			// Something failed, abort this drag
@@ -454,12 +461,18 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			return;
 		}
 
+		MouseControlContext mcc = new JMouseControlContext(e);
+
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
 		if ((getController() instanceof DianaInteractiveViewer)
 				&& ((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag() != null) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) getController();
-			controller.getCurrentMouseDrag().handleMouseReleased(getController(), e);
+			controller
+					.getCurrentMouseDrag()
+					.getControlAction()
+					.handleMouseReleased(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc,
+							controller.getCurrentMouseDrag().isSignificativeDrag());
 			controller.setCurrentMouseDrag(null);
 		}
 
@@ -509,12 +522,15 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			}
 		}
 
+		MouseControlContext mcc = new JMouseControlContext(e);
+
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 		getFocusRetriever().handleMouseMove(e);
 		if ((getController() instanceof DianaInteractiveViewer)
 				&& ((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag() != null) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) getController();
-			controller.getCurrentMouseDrag().handleMouseDragged(getController(), e);
+			controller.getCurrentMouseDrag().getControlAction()
+					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc);
 		}
 	}
 
@@ -542,16 +558,21 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		// We have now performed all low-level possible actions, let's go for the registered mouse controls
 
+		MouseControlContext mcc = new JMouseControlContext(e);
+
 		if ((getController() instanceof DianaInteractiveViewer)
 				&& ((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag() != null) {
-			((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag().handleMouseDragged(getController(), e);
+			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) getController();
+			controller.getCurrentMouseDrag().getControlAction()
+					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc);
 		}
 
 		getFocusRetriever().handleMouseMove(e);
 
 		if ((getController() instanceof DianaInteractiveEditor)
 				&& (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawShapeTool)) {
-			((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().mouseMoved(e);
+			DianaInteractiveEditor<?, ?, ?> controller = (DianaInteractiveEditor<?, ?, ?>) getController();
+			((DrawShapeToolController<?, MouseEvent>) controller.getDrawShapeToolController()).mouseMoved(e);
 		}
 
 	}
@@ -579,7 +600,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (focusedObject == null || !focusedObject.getDrawing().isEditable() || !(getController() instanceof DianaInteractiveViewer)) {
 			return false;
 		}
-		JLabelView<?> labelView = ((DianaInteractiveViewer<?, ?, ?>) getController()).getEditedLabel();
+		JLabelView<?> labelView = (JLabelView<?>) ((DianaInteractiveViewer<?, ?, ?>) getController()).getEditedLabel();
 		Point pointRelativeToTextComponent = SwingUtilities.convertPoint((Component) view, e.getPoint(), labelView);
 		if (labelView.getNode() == focusedObject) {
 
@@ -642,7 +663,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		return getView().getDrawable();
 	}
 
-	public FGEView<?, ?> getView() {
+	public JFGEView<?, ?> getView() {
 		return view;
 	}
 
@@ -651,7 +672,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	}*/
 
 	public FGEPaintManager getPaintManager() {
-		return view.getPaintManager();
+		return view.getDrawingView().getPaintManager();
 	}
 
 }

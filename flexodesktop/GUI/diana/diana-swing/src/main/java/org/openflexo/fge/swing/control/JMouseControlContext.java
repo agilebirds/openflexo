@@ -18,7 +18,7 @@ public class JMouseControlContext implements MouseControlContext {
 
 	private MouseEvent event;
 
-	protected JMouseControlContext(MouseEvent event) {
+	public JMouseControlContext(MouseEvent event) {
 		super();
 		this.event = event;
 	}

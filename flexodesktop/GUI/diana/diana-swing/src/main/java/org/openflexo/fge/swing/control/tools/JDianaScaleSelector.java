@@ -2,7 +2,6 @@ package org.openflexo.fge.swing.control.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JSlider;
@@ -13,8 +12,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.DianaScaleSelector;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 
 /**
  * SWING implementation of the {@link DianaScaleSelector}
@@ -22,7 +22,7 @@ import org.openflexo.fge.swing.SwingFactory;
  * @author sylvain
  * 
  */
-public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingFactory, MouseEvent> {
+public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewFactory> {
 
 	private static final int MAX_ZOOM_VALUE = 300;
 	protected JTextField scaleTF;
@@ -33,8 +33,8 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingFacto
 
 	private JToolBar component;
 
-	public JDianaScaleSelector() {
-		super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
+	public JDianaScaleSelector(AbstractDianaEditor<?, SwingViewFactory, ?> editor) {
+		super(editor);
 		component = new JToolBar();
 		component.setOpaque(false);
 		scaleTF = new JTextField(5);

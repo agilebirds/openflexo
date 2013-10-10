@@ -24,7 +24,7 @@ import java.util.Observer;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.tools.DrawingPalette;
+import org.openflexo.fge.control.tools.DianaPalette;
 
 /**
  * Implemented by all views representing a DrawingTreeNode<br>
@@ -51,7 +51,7 @@ public interface FGEView<O, C> extends Observer, FGEConstants {
 
 	public double getScale();
 
-	public void registerPalette(DrawingPalette aPalette);
+	public void activatePalette(DianaPalette<?, ?> aPalette);
 
 	public void delete();
 

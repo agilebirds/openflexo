@@ -22,12 +22,17 @@ package org.openflexo.fge.swing.control;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaToolFactory;
+import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.actions.DrawShapeAction;
+import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
+import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors;
 import org.openflexo.fge.swing.control.tools.JDianaLayoutWidget;
+import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
@@ -50,12 +55,12 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 		return new JDrawPolygonToolController(controller, control);
 	}
 
-	public JDianaToolSelector makeDianaToolSelector() {
-		return new JDianaToolSelector();
+	public JDianaToolSelector makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor) {
+		return new JDianaToolSelector((AbstractDianaEditor<?, SwingViewFactory, ?>) editor);
 	}
 
-	public JDianaScaleSelector makeDianaScaleSelector() {
-		return new JDianaScaleSelector();
+	public JDianaScaleSelector makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor) {
+		return new JDianaScaleSelector((AbstractDianaEditor<?, SwingViewFactory, ?>) editor);
 	}
 
 	public JDianaStyles makeDianaDianaStyles() {
@@ -70,4 +75,8 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 		return new JDianaLayoutWidget();
 	}
 
+	@Override
+	public DianaPalette<?, ?> makeDianaPalette(DrawingPalette palette) {
+		return new JDianaPalette(palette);
+	}
 }

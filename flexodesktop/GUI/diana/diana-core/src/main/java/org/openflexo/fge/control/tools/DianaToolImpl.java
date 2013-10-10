@@ -30,7 +30,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.view.DianaViewFactory;
 
-public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>, ME> implements DianaTool<C, F, ME>, Observer {
+public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> implements DianaTool<C, F>, Observer {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaToolImpl.class.getPackage().getName());

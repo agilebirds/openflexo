@@ -17,36 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package org.openflexo.fge.control.tools;
 
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.DianaViewer;
+import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.view.DianaViewFactory;
 
-/**
- * Represent a tool associated with a {@link DianaInteractiveViewer}
- * 
- * @author sylvain
- * 
- * @param <C>
- *            base minimal class of components provided by this tool (eg JComponent for SWING)
- * @param <ME>
- *            type of mouse events
- */
-public interface DianaTool<C, F extends DianaViewFactory<F, ?>> {
+public abstract class PaletteController<F extends DianaViewFactory<F, C>, C> extends DianaViewer<DrawingPalette, F, C> {
 
-	/**
-	 * Return the editor this tool is associated to
-	 * 
-	 * @return
-	 */
-	public AbstractDianaEditor<?, F, ?> getEditor();
+	private DianaPalette<C, F> palette;
 
-	/**
-	 * Sets the editor this tool is associated to
-	 * 
-	 * @param editor
-	 */
-	public void setEditor(AbstractDianaEditor<?, F, ?> editor);
+	public PaletteController(DianaPalette<C, F> palette, F dianaFactory) {
+		super(palette.getPaletteDrawing(), DrawingPalette.FACTORY, dianaFactory, null);
+		this.palette = palette;
+	}
+
+	public DianaPalette<C, F> getPalette() {
+		return palette;
+	}
 }

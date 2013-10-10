@@ -3,7 +3,6 @@ package org.openflexo.fge.swing.control.tools;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -12,9 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import org.openflexo.fge.FGEIconLibrary;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.tools.DianaToolSelector;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.SwingViewFactory;
 
 /**
  * SWING implementation of the {@link DianaToolSelector}
@@ -22,7 +22,7 @@ import org.openflexo.fge.swing.SwingFactory;
  * @author sylvain
  * 
  */
-public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingFactory, MouseEvent> {
+public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFactory> {
 
 	private ToolButton selectionToolButton;
 	private ToolButton drawShapeToolButton;
@@ -31,8 +31,8 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingFactory, 
 
 	private JPanel component;
 
-	public JDianaToolSelector() {
-		super();
+	public JDianaToolSelector(AbstractDianaEditor<?, SwingViewFactory, ?> editor) {
+		super(editor);
 		component = new JPanel();
 		component.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 

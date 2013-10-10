@@ -42,7 +42,7 @@ import org.openflexo.swing.CustomPopup.ApplyCancelListener;
  * @param <F>
  * @param <ME>
  */
-public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>, ME> extends DianaToolImpl<C, F, ME> {
+public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> extends DianaToolImpl<C, F> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaStyles.class.getPackage().getName());

@@ -33,7 +33,6 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
 import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
 import org.openflexo.fge.control.notifications.SelectionCleared;
@@ -81,7 +80,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
 
-	private MouseDragControlImpl currentMouseDrag = null;
+	private MouseDragControl currentMouseDrag = null;
 
 	private FGEPoint lastClickedPoint;
 	private DrawingTreeNode<?, ?> lastSelectedNode;
@@ -404,11 +403,11 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 
 	}
 
-	public MouseDragControlImpl getCurrentMouseDrag() {
+	public MouseDragControl getCurrentMouseDrag() {
 		return currentMouseDrag;
 	}
 
-	public void setCurrentMouseDrag(MouseDragControlImpl aMouseDrag) {
+	public void setCurrentMouseDrag(MouseDragControl aMouseDrag) {
 		currentMouseDrag = aMouseDrag;
 	}
 

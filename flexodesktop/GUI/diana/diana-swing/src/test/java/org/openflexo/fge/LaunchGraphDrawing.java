@@ -38,10 +38,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import org.openflexo.fge.control.DianaInteractiveEditor;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.swing.JDrawingView;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.swing.JDianaInteractiveEditor;
+import org.openflexo.fge.swing.JDianaInteractiveViewer;
+import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.control.SwingToolFactory;
+import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
@@ -50,8 +51,6 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 public class LaunchGraphDrawing {
 
 	private static final Logger logger = FlexoLogger.getLogger(LaunchGraphDrawing.class.getPackage().getName());
-
-	private static final SwingFactory SWING_FACTORY = new SwingFactory();
 
 	public static void main(String[] args) {
 		try {
@@ -67,18 +66,15 @@ public class LaunchGraphDrawing {
 		showPanel();
 	}
 
-	public static class TestDrawingController extends DianaInteractiveEditor<Graph, SwingFactory, JComponent> {
+	public static class TestDrawingController extends JDianaInteractiveEditor<Graph> {
 		private JPopupMenu contextualMenu;
+		private JDianaScaleSelector scaleSelector;
 
 		public TestDrawingController(GraphDrawing1 aDrawing) {
-			super(aDrawing, aDrawing.getFactory(), SWING_FACTORY);
+			super(aDrawing, aDrawing.getFactory(), SwingViewFactory.INSTANCE, SwingToolFactory.INSTANCE);
+			scaleSelector = (JDianaScaleSelector) getToolFactory().makeDianaScaleSelector(this);
 			contextualMenu = new JPopupMenu();
 			contextualMenu.add(new JMenuItem("Item"));
-		}
-
-		@Override
-		public JDrawingView<Graph> getDrawingView() {
-			return (JDrawingView<Graph>) super.getDrawingView();
 		}
 
 		/*@Override
@@ -144,10 +140,10 @@ public class LaunchGraphDrawing {
 
 		final GraphDrawing1 d = makeDrawing();
 		final TestDrawingController dc = new TestDrawingController(d);
-		dc.disablePaintingCache();
+		// dc.disablePaintingCache();
 		dc.getDrawingView().setName("[NO_CACHE]");
 		panel.add(new JScrollPane(dc.getDrawingView()), BorderLayout.CENTER);
-		panel.add(dc.getScalePanel(), BorderLayout.NORTH);
+		panel.add(dc.scaleSelector.getComponent(), BorderLayout.NORTH);
 
 		JButton closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
@@ -178,7 +174,7 @@ public class LaunchGraphDrawing {
 		screenshotButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final BufferedImage screenshot = dc.getPaintManager().getScreenshot(dc.getDrawing().getRoot());
+				final BufferedImage screenshot = dc.getDelegate().makeScreenshot(dc.getDrawing().getRoot());
 				JDialog screenshotDialog = new JDialog((Frame) null, false);
 				screenshotDialog.getContentPane().add(new JPanel() {
 					@Override
@@ -210,8 +206,7 @@ public class LaunchGraphDrawing {
 
 		dialog.setVisible(true);
 
-		DianaInteractiveViewer<Graph, SwingFactory, JComponent> dc2 = new DianaInteractiveViewer<Graph, SwingFactory, JComponent>(d,
-				d.getFactory(), SWING_FACTORY);
+		JDianaInteractiveViewer<Graph> dc2 = new JDianaInteractiveViewer<Graph>(d, d.getFactory());
 		final JDialog dialog2 = new JDialog((Frame) null, false);
 		dialog2.getContentPane().add(new JScrollPane((JComponent) dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));
@@ -219,7 +214,7 @@ public class LaunchGraphDrawing {
 		dialog2.validate();
 		dialog2.pack();
 		dialog2.setVisible(true);
-		dc2.enablePaintingCache();
+		// dc2.enablePaintingCache();
 
 		// dc.addObserver(inspector);
 		// inspector.getWindow().setVisible(true);
