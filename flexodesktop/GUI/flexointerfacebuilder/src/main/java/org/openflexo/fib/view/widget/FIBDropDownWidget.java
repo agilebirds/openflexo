@@ -165,7 +165,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateModelFromWidget with " + jComboBox.getSelectedItem());
 			}
-			if (jComboBox.getSelectedItem() != null && !widgetUpdating) {
+			if (!widgetUpdating) {
 				setValue(jComboBox.getSelectedItem());
 			}
 			modelUpdating = false;
