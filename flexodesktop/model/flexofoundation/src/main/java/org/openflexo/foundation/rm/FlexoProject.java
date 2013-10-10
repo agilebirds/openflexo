@@ -1699,7 +1699,14 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public TOCData getTOCData() {
+		return getTOCData(true);
+	}
+
+	public TOCData getTOCData(boolean createIfNotExists) {
 		if (getTOCResource() == null) {
+			if (!createIfNotExists) {
+				return null;
+			}
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Create TOC");
 			}
