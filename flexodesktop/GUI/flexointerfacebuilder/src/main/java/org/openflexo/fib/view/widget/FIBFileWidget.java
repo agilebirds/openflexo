@@ -19,8 +19,9 @@
  */
 package org.openflexo.fib.view.widget;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,20 +79,21 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 		isDirectory = model.isDirectory();
 		defaultDirectory = model.getDefaultDirectory() != null ? model.getDefaultDirectory() : new File(System.getProperty("user.dir"));
 
-		fileChooserPanel = new JPanel(new BorderLayout());
+		fileChooserPanel = new JPanel(new GridBagLayout());
 		fileChooserPanel.setOpaque(false);
 		chooseButton = new JButton();
 		chooseButton.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "choose", chooseButton));
 		addActionListenerToChooseButton();
-		currentDirectoryLabel = new JTextField("");
+		currentDirectoryLabel = new JTextField();
 		currentDirectoryLabel.setColumns(model.getColumns() != null ? model.getColumns() : DEFAULT_COLUMNS);
-		currentDirectoryLabel.setMinimumSize(MINIMUM_SIZE);
-		currentDirectoryLabel.setPreferredSize(MINIMUM_SIZE);
 		currentDirectoryLabel.setEditable(false);
 		currentDirectoryLabel.setEnabled(true);
 		currentDirectoryLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));
-		fileChooserPanel.add(currentDirectoryLabel, BorderLayout.CENTER);
-		fileChooserPanel.add(chooseButton, BorderLayout.EAST);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		fileChooserPanel.add(currentDirectoryLabel, gbc);
+		fileChooserPanel.add(chooseButton, new GridBagConstraints());
 		fileChooserPanel.addFocusListener(this);
 		if (!ToolBox.isMacOSLaf()) {
 			fileChooserPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
@@ -229,11 +231,9 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 	protected void setFile(File aFile) {
 		_file = aFile;
 		if (_file != null) {
-			currentDirectoryLabel.setEnabled(true);
 			currentDirectoryLabel.setText(_file.getAbsolutePath());
 			currentDirectoryLabel.setToolTipText(_file.getAbsolutePath());
 		} else {
-			currentDirectoryLabel.setEnabled(false);
 			currentDirectoryLabel.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_file"));
 		}
 	}
