@@ -117,7 +117,6 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 					"select_a_file") : FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getWidget()), title));
 			chooser.setFileFilterAsString(filter);
 			chooser.setDialogType(mode.getMode());
-			System.setProperty("apple.awt.fileDialogForDirectories", "false");
 		} else {
 			// System.out.println("Looking for directories");
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -125,7 +124,6 @@ public class FIBFileWidget extends FIBWidgetView<FIBFile, JTextField, File> {
 					"select_directory") : FlexoLocalization.localizedForKey(getController().getLocalizerForComponent(getWidget()), title));
 			chooser.setFileFilterAsString(filter);
 			chooser.setDialogType(mode.getMode());
-			System.setProperty("apple.awt.fileDialogForDirectories", "true");
 		}
 	}
 
