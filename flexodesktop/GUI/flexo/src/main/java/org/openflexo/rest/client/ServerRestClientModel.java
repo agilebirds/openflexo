@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
@@ -165,10 +166,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			project.setAvailableProtoToken(5);
 			project.setAvailableDocToken(5);
 			pcSupport = new PropertyChangeSupport(this);
-			if (getUser().getClientAccount() != null) {
-				Account account = new Account();
-				account.setClientAccountId(getUser().getClientAccount());
-				project.setClientAccount(account);
+			if (getAccount() != null) {
+				project.setClientAccount(getAccount());
 			}
 		}
 
@@ -182,22 +181,28 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				}
 				return Collections.emptyList();
 			} else {
-				return Collections.emptyList();
+				if (getAccount() != null) {
+					return Arrays.asList(getAccount());
+				} else {
+					return Collections.emptyList();
+				}
 			}
 		}
 
 		public List<User> getAvailableUsers(final Account account) {
+			if (account == null) {
+				return Collections.emptyList();
+			}
+			List<User> all = new ArrayList<User>();
 			try {
 				List<User> accountUsers = accountUserCache.get(account);
 				List<User> adminUsers = adminUserCache.get("");
-				List<User> all = new ArrayList<User>();
 				all.addAll(accountUsers);
 				all.addAll(adminUsers);
-				return all;
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
-			return Collections.emptyList();
+			return all;
 		}
 
 		public Project getProject() {
@@ -622,8 +627,10 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			progress.increment(FlexoLocalization.localizedForKey("creating_project"));
 			Project createdProject = client.projects().postXmlAsProject(newProjectParameter.getProject());
 			setServerProject(createdProject);
+			progress.increment(FlexoLocalization.localizedForKey("sending_project"));
 			SendProjectToServer send = new SendProjectToServer(newProjectParameter.getComment());
 			send.doOperation(client, progress);
 		}
@@ -641,6 +648,9 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	}
 
 	public List<Account> loadAccounts() {
+		if (getUser().getClientAccount() != null) {
+			return Arrays.asList(getAccount());
+		}
 		ServerRestClient client = getServerRestClient(false);
 		if (client == null) {
 			throw new RuntimeException("Operation cancelled");
@@ -756,6 +766,9 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		this.adminUserCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<User>>() {
 			@Override
 			public List<User> load(String key) throws Exception {
+				if (getUser() == null || getUser().getUserType() != UserType.ADMIN) {
+					return Collections.emptyList();
+				}
 				ServerRestClient client = getServerRestClient(false);
 				if (client == null) {
 					throw new RuntimeException("Operation cancelled");
