@@ -30,8 +30,12 @@ import org.openflexo.LocalDBAccess;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.foundation.Format;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.toc.TOCDocumentationPresets;
+import org.openflexo.foundation.toc.TOCRepositoryDefinition;
+import org.openflexo.foundation.toc.action.AddTOCDocumentationPresets;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.model.Account;
@@ -70,19 +74,39 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	private static final String DOC_FORMAT = "docFormat";
 	private static final String FOLDER = "folder";
 	private static final String TOC_ENTRY = "tocEntry";
+	private static final String PRESETS_NAME = "presetsName";
 
 	public class DocGenerationChoice implements HasPropertyChangeSupport {
+		private static final String PRESETS = "presets";
 		private final ProjectVersion version;
 		private PropertyChangeSupport pcSupport;
+		private TOCDocumentationPresets presets;
+		private String presetsName;
 		private String docType;
 		private DocFormat docFormat;
+		private TocEntryDefinition tocEntry;
 		private File folder;
 		private boolean automaticallyOpenFile = true;
-		private TocEntryDefinition tocEntry;
+		private List<TOCDocumentationPresets> availablePresets;
 
 		public DocGenerationChoice(ProjectVersion version) {
 			this.version = version;
 			pcSupport = new PropertyChangeSupport(this);
+			availablePresets = new ArrayList<TOCDocumentationPresets>();
+			availablePresets.add(null);
+			if (flexoProject.getTOCData(false) != null) {
+				for (TOCDocumentationPresets presets : flexoProject.getTOCData().getPresets()) {
+					if (serverProject.getDocTypes().contains(presets.getDocType())) {
+						if (presets.getToc() == null || getCorrespondingTocEntry(presets.getToc()) != null) {
+							availablePresets.add(presets);
+						}
+					}
+				}
+			}
+		}
+
+		public List<TOCDocumentationPresets> getAvailablePresets() {
+			return availablePresets;
 		}
 
 		public ProjectVersion getVersion() {
@@ -108,8 +132,69 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			return ServerRestClientModel.this;
 		}
 
+		public TocEntryDefinition getTocEntry() {
+			if (presets != null) {
+				return getCorrespondingTocEntry(presets.getToc());
+			} else {
+				return tocEntry;
+			}
+		}
+
+		public String getPresetsName() {
+			return presetsName;
+		}
+
+		public void setPresetsName(String presetsName) {
+			this.presetsName = presetsName;
+			pcSupport.firePropertyChange(PRESETS_NAME, null, presetsName);
+		}
+
+		private TocEntryDefinition getCorrespondingTocEntry(TOCRepositoryDefinition other) {
+			if (other == null) {
+				return null;
+			}
+			for (TocEntryDefinition def : version.getTocEntries()) {
+				if (def.getFlexoID() == null) {
+					if (other.getFlexoID() != null) {
+						continue;
+					}
+				} else if (!def.getFlexoID().equals(other.getFlexoID())) {
+					continue;
+				}
+				if (def.getTitle() == null) {
+					if (other.getTitle() != null) {
+						continue;
+					}
+				} else if (!def.getTitle().equals(other.getTitle())) {
+					continue;
+				}
+				if (def.getUserID() == null) {
+					if (other.getUserID() != null) {
+						continue;
+					}
+				} else if (!def.getUserID().equals(other.getUserID())) {
+					continue;
+				}
+				return def;
+			}
+			return null;
+		}
+
+		public void setTocEntry(TocEntryDefinition tocEntry) {
+			this.tocEntry = tocEntry;
+			pcSupport.firePropertyChange(TOC_ENTRY, null, tocEntry);
+		}
+
 		public String getDocType() {
-			return docType;
+			if (presets != null) {
+				if (getServerProject().getDocTypes().contains(presets.getDocType())) {
+					return presets.getDocType();
+				} else {
+					return null;
+				}
+			} else {
+				return docType;
+			}
 		}
 
 		public void setDocType(String docType) {
@@ -118,6 +203,19 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		}
 
 		public DocFormat getDocFormat() {
+			if (presets != null) {
+				Format format = presets.getFormat();
+				if (format == null) {
+					return null;
+				}
+				switch (presets.getFormat()) {
+				case HTML:
+					return DocFormat.HTML;
+				case DOCX:
+					return DocFormat.WORD;
+				}
+				return null;
+			}
 			return docFormat;
 		}
 
@@ -144,14 +242,19 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			pcSupport.firePropertyChange(AUTOMATICALLY_OPEN_FILE, !automaticallyOpenFile, automaticallyOpenFile);
 		}
 
-		public TocEntryDefinition getTocEntry() {
-			return tocEntry;
+		public TOCDocumentationPresets getPresets() {
+			return presets;
 		}
 
-		public void setTocEntry(TocEntryDefinition tocEntry) {
-			this.tocEntry = tocEntry;
-			pcSupport.firePropertyChange(TOC_ENTRY, null, tocEntry);
+		public void setPresets(TOCDocumentationPresets presets) {
+			this.presets = presets;
+			// Little hack to update the UI
+			pcSupport.firePropertyChange(PRESETS, null, presets);
+			pcSupport.firePropertyChange(TOC_ENTRY, null, getTocEntry());
+			pcSupport.firePropertyChange(DOC_FORMAT, null, getDocFormat());
+			pcSupport.firePropertyChange(DOC_TYPE, null, getDocType());
 		}
+
 	}
 
 	public class NewProjectParameter {
@@ -879,10 +982,59 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		DocGenerationChoice choice = new DocGenerationChoice(version);
 		choice.setDocFormat(DocFormat.WORD);
 		choice.setDocType(serverProject.getDocTypes().get(0));
-		FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
-				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
-			performOperationsInSwingWorker(new GenerateDocumentation(version, choice));
+		while (true) {
+			FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
+					controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
+			if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
+				if (choice.getDocFormat() == null) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("doc_format") + " "
+							+ FlexoLocalization.localizedForKey("is_mandatory"));
+					continue;
+				}
+				if (choice.getDocType() == null) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("doc_type") + " "
+							+ FlexoLocalization.localizedForKey("is_mandatory"));
+					continue;
+				}
+				if (choice.getTocEntry() == null && choice.getDocFormat() != DocFormat.HTML) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("toc") + " "
+							+ FlexoLocalization.localizedForKey("is_mandatory"));
+					continue;
+				}
+				if (choice.getPresets() == null) {
+					if (choice.getPresetsName() == null || choice.getPresetsName().trim().length() == 0) {
+						FlexoController.notify(FlexoLocalization.localizedForKey("presets_name") + " "
+								+ FlexoLocalization.localizedForKey("cannot_be_empty"));
+						continue;
+					}
+					AddTOCDocumentationPresets addPresets = AddTOCDocumentationPresets.actionType.makeNewAction(getFlexoProject()
+							.getTOCData(), null, controller.getEditor());
+					addPresets.doAction();
+					TOCDocumentationPresets presets = addPresets.getPresets();
+					try {
+						presets.setName(choice.getPresetsName());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					if (choice.getTocEntry() != null && choice.getDocFormat() != DocFormat.HTML) {
+						presets.setToc(new TOCRepositoryDefinition(choice.getTocEntry().getFlexoID(), choice.getTocEntry().getUserID(),
+								choice.getTocEntry().getTitle()));
+					}
+					switch (choice.getDocFormat()) {
+					case HTML:
+						presets.setFormat(Format.HTML);
+						break;
+					case WORD:
+						presets.setFormat(Format.DOCX);
+						break;
+					}
+					presets.setDocType(choice.getDocType());
+				}
+				performOperationsInSwingWorker(new GenerateDocumentation(version, choice));
+				return;
+			} else {
+				return;
+			}
 		}
 
 	}

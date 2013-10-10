@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel$DocGenerationChoice">
-  <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
+  <Panel layout="gridbag" borderTop="0" borderBottom="0" borderLeft="10" borderRight="10" darkLevel="0" constraints="border(location=center)">
+    <Label label="presets" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(data.availablePresets.size &gt; 0)" localize="true" />
+    <DropDown data="data.presets" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(data.availablePresets.size &gt; 0)" name="presets" format="object.name" localize="true" staticList="" list="data.availablePresets" iteratorClassName="org.openflexo.foundation.toc.TOCDocumentationPresets" autoSelectFirstRow="true" nullValue="new_presets" />
+    <Label label="presets_name" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(data.presets = null)" localize="true" />
+    <TextField data="data.presetsName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(data.presets = null)" localize="true" columns="30" text="TextField" />
     <Label label="doc_format" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-    <DropDown data="data.docFormat" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="docFormat" localize="true" iteratorClassName="org.openflexo.rest.client.model.DocFormat" autoSelectFirstRow="true" />
+    <DropDown data="data.docFormat" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="docFormat" localize="true" enable="(data.presets = null)" iteratorClassName="org.openflexo.rest.client.model.DocFormat" autoSelectFirstRow="true" />
     <Label label="doc_type" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-    <DropDown data="data.docType" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="docType" localize="true" list="data.serverRestClientModel.serverProject.docTypes" iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+    <DropDown data="data.docType" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="docType" localize="true" enable="(data.presets = null)" list="data.serverRestClientModel.serverProject.docTypes" iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
     <Label label="table_of_content" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(docFormat.data = &quot;WORD&quot;)" localize="true" />
-    <DropDown data="data.tocEntry" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(docFormat.data = &quot;WORD&quot;)" name="tocEntry" format="object.title" localize="true" list="data.version.tocEntries" iteratorClassName="org.openflexo.rest.client.model.TocEntryDefinition" autoSelectFirstRow="true" />
+    <DropDown data="data.tocEntry" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(docFormat.data = &quot;WORD&quot;)" name="tocEntry" format="object.title" localize="true" enable="(data.presets = null)" list="data.version.tocEntries" iteratorClassName="org.openflexo.rest.client.model.TocEntryDefinition" autoSelectFirstRow="true" />
     <Label label="save_in_folder" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
     <File mode="SaveMode" isDirectory="true" localize="true" data="data.folder" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
     <Label label="open_file" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
     <CheckBox selected="false" data="data.isAutomaticallyOpenFile" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="automaticallyOpenFile" localize="true" />
+    <Panel layout="border" darkLevel="0" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" />
   </Panel>
   <Panel layout="buttons" hGap="5" vGap="5" cols="2" rows="1" darkLevel="0" constraints="border(location=south)">
     <Button action="controller.validateAndDispose()" buttonType="Trigger" label="OK" localize="true" constraints="grid(x=0;y=0)" />
@@ -50,5 +55,17 @@
     <Localized key="unzip" lang="English">Unzip</Localized>
     <Localized key="unzip" lang="French">Décompresser</Localized>
     <Localized key="unzip" lang="Dutch">Unzip</Localized>
+    <Localized key="presets" lang="English">Presets</Localized>
+    <Localized key="presets" lang="French">Pré-réglages</Localized>
+    <Localized key="presets" lang="Dutch">Presets</Localized>
+    <Localized key="presets_name" lang="English">Presets name</Localized>
+    <Localized key="presets_name" lang="French">Nom des pré-réglages</Localized>
+    <Localized key="presets_name" lang="Dutch">Naam van de presets</Localized>
+    <Localized key="" lang="English" />
+    <Localized key="" lang="French" />
+    <Localized key="" lang="Dutch" />
+    <Localized key="new_presets" lang="English">New presets...</Localized>
+    <Localized key="new_presets" lang="French">Nouveau pré-réglages...</Localized>
+    <Localized key="new_presets" lang="Dutch">Nieuwe presets...</Localized>
   </LocalizedDictionary>
 </Panel>

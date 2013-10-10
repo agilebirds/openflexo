@@ -51,6 +51,7 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.controller.action.AddFlexoPropertyActionizer;
+import org.openflexo.view.controller.action.AddTOCDocumentationPresetsActionizer;
 import org.openflexo.view.controller.action.DeleteFlexoPropertyActionizer;
 import org.openflexo.view.controller.action.HelpActionizer;
 import org.openflexo.view.controller.action.InspectActionizer;
@@ -127,6 +128,9 @@ public class ControllerActionInitializer implements EditorProvider {
 		new AddFlexoPropertyActionizer(this);
 		new DeleteFlexoPropertyActionizer(this);
 		new SortFlexoPropertiesActionizer(this);
+
+		new AddTOCDocumentationPresetsActionizer(this);
+
 		if (FlexoModelObject.addFlexoPropertyActionizer == null) {
 			FlexoModelObject.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoModelObject, FlexoModelObject>(
 					AddFlexoProperty.actionType, this);
