@@ -98,9 +98,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private Vector<FlexoModelObjectReference<?>> referencers;
 
-	// Imported objects
-	private boolean isDeletedOnServer = false;
-
 	private String uri;
 
 	private String versionURI;
