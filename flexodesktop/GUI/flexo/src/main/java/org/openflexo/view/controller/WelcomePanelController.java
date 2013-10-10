@@ -125,6 +125,7 @@ public class WelcomePanelController extends FlexoFIBController {
 		dialog.setLocationRelativeTo(getWindow());
 		dialog.setVisible(true);
 		if (dialog.getStatus() == Status.VALIDATED) {
+			hide();
 			Project project = model.getSelectedProject();
 			if (project == null) {
 				return;
@@ -140,6 +141,7 @@ public class WelcomePanelController extends FlexoFIBController {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				show();
 				FlexoController.notify(FlexoLocalization.localizedForKey("could_not_download_project") + " " + project.getName() + " ("
 						+ e.getMessage() + ")");
 			}
