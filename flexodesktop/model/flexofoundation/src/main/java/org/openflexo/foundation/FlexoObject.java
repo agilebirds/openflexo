@@ -42,6 +42,7 @@ import org.openflexo.foundation.ie.util.TextFieldClass;
 import org.openflexo.foundation.ie.util.TextFieldFormatType;
 import org.openflexo.foundation.ie.util.TextFieldType;
 import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.toc.TOCRepositoryDefinition;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -118,6 +119,7 @@ public abstract class FlexoObject extends KVCObject {
 		encoder._addConverter(DataBinding.CONVERTER);
 		encoder._addConverter(GraphicalRepresentation.POINT_CONVERTER);
 		encoder._addConverter(GraphicalRepresentation.RECT_POLYLIN_CONVERTER);
+		encoder._addConverter(TOCRepositoryDefinition.converter);
 	}
 
 	@Override

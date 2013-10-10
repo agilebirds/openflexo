@@ -32,6 +32,7 @@
 
   <entity name="org.openflexo.foundation.toc.TOCData" xmlTag="TOCData">
     <property name="repositories" xmlTag="TOCRepository" type="vector" primary="yes" description="TODO"/> 
+    <property name="presets" xmlTag="Presets" type="vector" primary="yes" description="TODO"/> 
   </entity>
   
   <entity name="org.openflexo.foundation.toc.TOCRepository" xmlTag="TOCRepository">
@@ -47,6 +48,13 @@
     <property name="logo" xmlTag="logo" attribute="yes"/>
   </entity>
 	
+  <entity name="org.openflexo.foundation.toc.TOCDocumentationPresets" xmlTag="Presets">
+  	<property name="name" xmlTag="name" attribute="yes" description="The name of the presets"/>
+  	<property name="toc" xmlTag="toc" primary="yes" description="The table of content of the presets"/>
+  	<property name="format" xmlTag="format" attribute="yes" description="The format of the presets"/>
+  	<property name="docType" xmlTag="docType" attribute="yes" description="The doc type (target) of the presets"/> 	
+  </entity>
+  
   <entity name="org.openflexo.foundation.toc.TOCEntry" xmlTag="TOCEntry">
   	<description>Element of the hierarchy of a table of content</description>
   	<property name="tocEntries" contains="org.openflexo.foundation.toc.TOCEntry" primary="yes" type="vector" description="Sub elements of the hierarchy of a table of content"/>

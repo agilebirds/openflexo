@@ -42,6 +42,8 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 
 	private Vector<TOCRepository> repositories;
 
+	private Vector<TOCDocumentationPresets> presets;
+
 	public TOCData(FlexoTOCBuilder builder) {
 		this(builder.getProject());
 		initializeDeserialization(builder);
@@ -52,6 +54,7 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 	public TOCData(FlexoProject project) {
 		super(project);
 		repositories = new Vector<TOCRepository>();
+		presets = new Vector<TOCDocumentationPresets>();
 	}
 
 	@Override
@@ -127,6 +130,28 @@ public class TOCData extends TOCObject implements XMLStorageResourceData {
 		repositories.remove(repository);
 		setChanged();
 		notifyObservers(new TOCModification("repositories", repository, null));
+	}
+
+	public Vector<TOCDocumentationPresets> getPresets() {
+		return presets;
+	}
+
+	public void setPresets(Vector<TOCDocumentationPresets> presets) {
+		this.presets = presets;
+	}
+
+	public void addToPresets(TOCDocumentationPresets presets) {
+		if (!this.presets.contains(presets)) {
+			this.presets.add(presets);
+			setChanged();
+			notifyObservers(new TOCModification("presets", null, presets));
+		}
+	}
+
+	public void removeFromPresets(TOCDocumentationPresets presets) {
+		this.presets.remove(presets);
+		setChanged();
+		notifyObservers(new TOCModification("presets", presets, null));
 	}
 
 	public static TOCData createNewTOCData(FlexoProject project) {

@@ -119,6 +119,7 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	private void checkClassModels(Class aClass) {
 		boolean testFails = false;
+		StringBuilder sb = new StringBuilder();
 		ClassModels classModels = xmlMappings.getModelsForClass(aClass);
 		logger.info("-----------> Check class models for " + aClass.getName());
 		for (FlexoVersion version : classModels.getAvailableVersions()) {
@@ -129,16 +130,21 @@ public class TestXMLMappings extends FlexoTestCase {
 				} else {
 					logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
 					testFails = true;
+					sb.append("Failed decoded mapping for class ").append(aClass.getSimpleName()).append(", version ").append(version)
+							.append("\n");
 				}
 				checkXMLMapping(mapping);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version + " " + e.getMessage());
+				sb.append("Failed decoded mapping for class ").append(aClass.getSimpleName()).append(", version ").append(version)
+						.append("\n");
+				sb.append(e.getMessage());
 				testFails = true;
 			}
 		}
 		if (testFails) {
-			fail();
+			fail(sb.toString());
 		}
 	}
 
