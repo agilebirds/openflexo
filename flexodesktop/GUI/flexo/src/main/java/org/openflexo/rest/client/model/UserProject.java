@@ -21,8 +21,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="lastAccessDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="needEmailNotification" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="project" type="{http://www.agilebirds.com/openflexo}Project" minOccurs="0"/>
- *         &lt;element name="user" type="{http://www.agilebirds.com/openflexo}User" minOccurs="0"/>
+ *         &lt;element name="project" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="user" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="userProjectPK" type="{http://www.agilebirds.com/openflexo}UserProjectPK" minOccurs="0"/>
  *         &lt;element name="userRole" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -50,8 +50,8 @@ public class UserProject
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastAccessDate;
     protected Boolean needEmailNotification;
-    protected Project project;
-    protected User user;
+    protected Integer project;
+    protected String user;
     protected UserProjectPK userProjectPK;
     protected String userRole;
 
@@ -108,10 +108,10 @@ public class UserProject
      * 
      * @return
      *     possible object is
-     *     {@link Project }
+     *     {@link Integer }
      *     
      */
-    public Project getProject() {
+    public Integer getProject() {
         return project;
     }
 
@@ -120,10 +120,10 @@ public class UserProject
      * 
      * @param value
      *     allowed object is
-     *     {@link Project }
+     *     {@link Integer }
      *     
      */
-    public void setProject(Project value) {
+    public void setProject(Integer value) {
         this.project = value;
     }
 
@@ -132,10 +132,10 @@ public class UserProject
      * 
      * @return
      *     possible object is
-     *     {@link User }
+     *     {@link String }
      *     
      */
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
@@ -144,10 +144,10 @@ public class UserProject
      * 
      * @param value
      *     allowed object is
-     *     {@link User }
+     *     {@link String }
      *     
      */
-    public void setUser(User value) {
+    public void setUser(String value) {
         this.user = value;
     }
 

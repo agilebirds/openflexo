@@ -29,9 +29,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="consistencyReport" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="creationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="creator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="docFileUuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="docGenerationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="docUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="docxfileuuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="isIntermediate" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="isMergeSuccessful" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
@@ -67,9 +64,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "consistencyReport",
     "creationDate",
     "creator",
-    "docFileUuid",
-    "docGenerationDate",
-    "docUrl",
     "docxfileuuid",
     "isIntermediate",
     "isMergeSuccessful",
@@ -103,10 +97,6 @@ public class ProjectVersion
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creationDate;
     protected String creator;
-    protected String docFileUuid;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar docGenerationDate;
-    protected String docUrl;
     protected String docxfileuuid;
     protected Boolean isIntermediate;
     protected Boolean isMergeSuccessful;
@@ -271,78 +261,6 @@ public class ProjectVersion
      */
     public void setCreator(String value) {
         this.creator = value;
-    }
-
-    /**
-     * Gets the value of the docFileUuid property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDocFileUuid() {
-        return docFileUuid;
-    }
-
-    /**
-     * Sets the value of the docFileUuid property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDocFileUuid(String value) {
-        this.docFileUuid = value;
-    }
-
-    /**
-     * Gets the value of the docGenerationDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getDocGenerationDate() {
-        return docGenerationDate;
-    }
-
-    /**
-     * Sets the value of the docGenerationDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setDocGenerationDate(XMLGregorianCalendar value) {
-        this.docGenerationDate = value;
-    }
-
-    /**
-     * Gets the value of the docUrl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDocUrl() {
-        return docUrl;
-    }
-
-    /**
-     * Sets the value of the docUrl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDocUrl(String value) {
-        this.docUrl = value;
     }
 
     /**

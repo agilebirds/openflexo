@@ -78,14 +78,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Project }
-     * 
-     */
-    public Project createProject() {
-        return new Project();
-    }
-
-    /**
      * Create an instance of {@link UserProjectPK }
      * 
      */
@@ -107,6 +99,14 @@ public class ObjectFactory {
      */
     public Account createAccount() {
         return new Account();
+    }
+
+    /**
+     * Create an instance of {@link Project }
+     * 
+     */
+    public Project createProject() {
+        return new Project();
     }
 
     /**

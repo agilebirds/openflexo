@@ -27,7 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="availableServiceToken" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="canDownloadFlexoRelease" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="clientAccountId" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="clientAdmin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="clientAdmin" type="{http://www.agilebirds.com/openflexo}User" minOccurs="0"/>
  *         &lt;element name="contractEndDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="contractIdentifier" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="contractStartDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -111,7 +111,7 @@ public class Account
     protected Integer availableServiceToken;
     protected Boolean canDownloadFlexoRelease;
     protected Integer clientAccountId;
-    protected String clientAdmin;
+    protected User clientAdmin;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar contractEndDate;
     protected String contractIdentifier;
@@ -339,10 +339,10 @@ public class Account
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link User }
      *     
      */
-    public String getClientAdmin() {
+    public User getClientAdmin() {
         return clientAdmin;
     }
 
@@ -351,10 +351,10 @@ public class Account
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link User }
      *     
      */
-    public void setClientAdmin(String value) {
+    public void setClientAdmin(User value) {
         this.clientAdmin = value;
     }
 
