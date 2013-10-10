@@ -30,6 +30,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 
@@ -42,8 +43,7 @@ public class FlexoFileChooser {
 	}
 
 	static ImplementationType getImplementationType() {
-		return ToolBox.getPLATFORM() == ToolBox.MACOS ? ImplementationType.FileDialogImplementation
-				: ImplementationType.JFileChooserImplementation;
+		return ToolBox.isMacOSLaf() ? ImplementationType.FileDialogImplementation : ImplementationType.JFileChooserImplementation;
 	}
 
 	/**
@@ -112,12 +112,6 @@ public class FlexoFileChooser {
 				mode = JFileChooser.FILES_AND_DIRECTORIES;
 			}
 			_fileChooser.setFileSelectionMode(mode);
-		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
-			if (mode == JFileChooser.DIRECTORIES_ONLY) {
-				System.setProperty("apple.awt.fileDialogForDirectories", "true");
-			} else if (mode == JFileChooser.FILES_ONLY) {
-				System.setProperty("apple.awt.fileDialogForDirectories", "false");
-			}
 		}
 		/*else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
 			if(mode==JFileChooser.DIRECTORIES_ONLY){
@@ -293,6 +287,7 @@ public class FlexoFileChooser {
 			_fileDialog.setModal(true);
 			_fileDialog.setVisible(true);
 			_fileDialog.toFront();
+
 			if (_fileDialog.getFile() == null) {
 				return JFileChooser.CANCEL_OPTION;
 			} else {
@@ -311,10 +306,25 @@ public class FlexoFileChooser {
 			_fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			return _fileChooser.showDialog(parent, null);
 		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
-			_fileDialog.setMode(FileDialog.SAVE);
+			// Issue OPENFLEXO-839
+			// On MacOS, directory selection only works in model FileDialog.LOAD
+			if (ToolBox.isMacOS()) {
+				_fileDialog.setMode(_mode == JFileChooser.DIRECTORIES_ONLY ? FileDialog.LOAD : FileDialog.SAVE);
+			} else {
+				_fileDialog.setMode(FileDialog.SAVE);
+			}
 			_fileDialog.setModal(true);
+			// We need to wrap the toFront() in an invokeLater call so that it is called after the dialog has been made visible.
+			// The dialog will automatically pop the events from the EventQueue.
+			// Putting the toFront() after the call to setVisible(true) is useless since that call is a blocking call (that's the whole
+			// purpose of modal dialogs)
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					_fileDialog.toFront();
+				}
+			});
 			_fileDialog.setVisible(true);
-			_fileDialog.toFront();
 			if (_fileDialog.getFile() == null) {
 				return JFileChooser.CANCEL_OPTION;
 			} else {
