@@ -36,6 +36,9 @@ public class BinaryOperatorExpression extends Expression {
 
 	@Override
 	public int getDepth() {
+		if (leftArgument == null || rightArgument == null) {
+			return 0;
+		}
 		return Math.max(leftArgument.getDepth(), rightArgument.getDepth()) + 1;
 	}
 
