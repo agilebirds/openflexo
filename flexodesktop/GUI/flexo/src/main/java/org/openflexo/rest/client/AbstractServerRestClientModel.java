@@ -20,6 +20,7 @@ import javax.xml.ws.Holder;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
+import org.openflexo.rest.client.model.Account;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.utils.CancelException;
@@ -75,7 +76,12 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			try {
-				setUser(client.users(client.createClient()).id(client.getUserName()).getAsUserXml());
+				User user = client.users().id(client.getUserName()).getAsUserXml();
+				if (user != null && user.getClientAccount() != null) {
+					progress.increment(FlexoLocalization.localizedForKey("retrieving_account_info"));
+					setAccount(client.accounts().idSummary(user.getClientAccount()).getAsAccountXml());
+				}
+				setUser(user);
 			} finally {
 				if (getUser() == null) {
 					setStatus(FlexoLocalization.localizedForKey("could_not_identify_user"));
@@ -85,7 +91,7 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public int getSteps() {
-			return 0;
+			return 2;
 		}
 
 		@Override
@@ -96,10 +102,12 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	protected static final String DELETED = "deleted";
+	private static final String ACCOUNT = "account";
 	private static final String USER = "user";
 	private final ServerRestService serverRestService;
 	private final Window owner;
 	private User user;
+	private Account account;
 	protected PropertyChangeSupport pcSupport;
 
 	public AbstractServerRestClientModel(ServerRestService serverRestService, Window owner) {
@@ -297,6 +305,15 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 	protected void setUser(User user) {
 		this.user = user;
 		pcSupport.firePropertyChange(USER, null, user);
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+		pcSupport.firePropertyChange(ACCOUNT, null, account);
 	}
 
 	public void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)
