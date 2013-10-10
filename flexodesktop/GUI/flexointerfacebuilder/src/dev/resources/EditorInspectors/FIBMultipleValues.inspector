@@ -2,6 +2,8 @@
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBMultipleValues" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+      <Label label="null_value" constraints="twocols(location=left)" localize="true" />
+      <TextField data="data.nullValue" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
       <Label label="static_list" constraints="twocols(location=left)" localize="true" />
       <TextField data="data.staticList" constraints="twocols(expandHorizontally=true;location=right)" localize="true" columns="15" />
       <Label label="list" constraints="twocols(location=left)" localize="true" />

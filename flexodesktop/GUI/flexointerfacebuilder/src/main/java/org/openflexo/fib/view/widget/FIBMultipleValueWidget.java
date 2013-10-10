@@ -189,7 +189,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 		public int indexOf(Object cur) {
 			for (int i = 0; i < getSize(); i++) {
-				if (getElementAt(i).equals(cur)) {
+				Object elementAt = getElementAt(i);
+				if (elementAt != null && elementAt.equals(cur) || elementAt == null && cur == null) {
 					return i;
 				}
 			}
@@ -263,7 +264,11 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					}
 					label.setText(stringRepresentation);
 				} else {
-					label.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_selection"));
+					if (getWidget().getNullValue() != null) {
+						label.setText(getLocalized(getWidget().getNullValue()));
+					} else {
+						label.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "no_selection"));
+					}
 				}
 				if (FIBMultipleValueWidget.this.getFont() != null) {
 					label.setFont(FIBMultipleValueWidget.this.getFont());

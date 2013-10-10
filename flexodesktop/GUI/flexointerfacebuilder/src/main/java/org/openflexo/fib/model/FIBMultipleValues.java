@@ -44,7 +44,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 	private static final Logger logger = Logger.getLogger(FIBMultipleValues.class.getPackage().getName());
 
 	public static enum Parameters implements FIBModelAttribute {
-		staticList, list, array, showIcon, showText, iteratorClass, autoSelectFirstRow
+		staticList, list, array, showIcon, showText, iteratorClass, autoSelectFirstRow, nullValue;
 	}
 
 	public BindingDefinition LIST = new BindingDefinition("list", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class)),
@@ -68,6 +68,8 @@ public abstract class FIBMultipleValues extends FIBWidget {
 			return getDataType();
 		};
 	};
+
+	private String nullValue;
 
 	private String staticList;
 
@@ -329,6 +331,18 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		performValidation(FIBMultipleValuesMustDefineValueRange.class, report);
 		performValidation(ListBindingMustBeValid.class, report);
 		performValidation(ArrayBindingMustBeValid.class, report);
+	}
+
+	public String getNullValue() {
+		return nullValue;
+	}
+
+	public void setNullValue(String nullValueFormat) {
+		FIBAttributeNotification<String> notification = requireChange(Parameters.nullValue, nullValueFormat);
+		if (notification != null) {
+			this.nullValue = nullValueFormat;
+			hasChanged(notification);
+		}
 	}
 
 	public static class FIBMultipleValuesMustDefineValueRange extends

@@ -155,7 +155,8 @@
     <property name="showIcon" xmlTag="showIcon" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="showText" xmlTag="showText" attribute="YES" ignoreDefaultValue="true"/> 
     <property name="iteratorClass" xmlTag="iteratorClassName" attribute="YES"/> 
-    <property name="autoSelectFirstRow" xmlTag="autoSelectFirstRow" attribute="YES"/> 
+    <property name="autoSelectFirstRow" xmlTag="autoSelectFirstRow" attribute="YES"/>
+    <property name="nullValue" xmlTag="nullValue" attribute="YES"/>
    </entity>
   
   <entity name="org.openflexo.fib.model.FIBDropDown" xmlTag="DropDown"> 
