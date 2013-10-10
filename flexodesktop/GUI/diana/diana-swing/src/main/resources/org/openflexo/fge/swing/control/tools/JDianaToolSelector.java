@@ -1,8 +1,9 @@
-package org.openflexo.fge.control.tools;
+package org.openflexo.fge.swing.control.tools;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -11,22 +12,30 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
+import org.openflexo.fge.control.tools.DianaToolSelector;
+import org.openflexo.fge.swing.SwingFactory;
 
-@SuppressWarnings("serial")
-public class ToolPanel extends JPanel {
-
-	private final EditorToolbox editorToolbox;
+/**
+ * SWING implementation of the {@link DianaToolSelector}
+ * 
+ * @author sylvain
+ * 
+ */
+public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingFactory, MouseEvent> {
 
 	private ToolButton selectionToolButton;
 	private ToolButton drawShapeToolButton;
 	private ToolButton drawConnectorToolButton;
 	private ToolButton drawTextToolButton;
 
-	public ToolPanel(EditorToolbox editorToolbox) {
-		super(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		this.editorToolbox = editorToolbox;
+	private JPanel component;
+
+	public JDianaToolSelector() {
+		super();
+		component = new JPanel();
+		component.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+
 		selectionToolButton = new ToolButton(EditorTool.SelectionTool, FGEIconLibrary.SELECTION_TOOL_ICON,
 				FGEIconLibrary.SELECTION_TOOL_SELECTED_ICON);
 		drawShapeToolButton = new ToolButton(EditorTool.DrawShapeTool, FGEIconLibrary.DRAW_SHAPE_TOOL_ICON,
@@ -35,30 +44,36 @@ public class ToolPanel extends JPanel {
 				FGEIconLibrary.DRAW_CONNECTOR_TOOL_SELECTED_ICON);
 		drawTextToolButton = new ToolButton(EditorTool.DrawTextTool, FGEIconLibrary.DRAW_TEXT_TOOL_ICON,
 				FGEIconLibrary.DRAW_TEXT_TOOL_SELECTED_ICON);
-		add(new JLabel(FGEIconLibrary.TOOLBAR_LEFT_ICON));
-		add(selectionToolButton);
-		add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-		add(drawShapeToolButton);
-		add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-		add(drawConnectorToolButton);
-		add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
-		add(drawTextToolButton);
-		add(new JLabel(FGEIconLibrary.TOOLBAR_RIGHT_ICON));
+		component.add(new JLabel(FGEIconLibrary.TOOLBAR_LEFT_ICON));
+		component.add(selectionToolButton);
+		component.add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
+		component.add(drawShapeToolButton);
+		component.add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
+		component.add(drawConnectorToolButton);
+		component.add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
+		component.add(drawTextToolButton);
+		component.add(new JLabel(FGEIconLibrary.TOOLBAR_RIGHT_ICON));
 		updateButtons();
 	}
 
-	private void selectTool(EditorTool tool) {
-		this.editorToolbox.getController().setCurrentTool(tool);
+	@Override
+	public JPanel getComponent() {
+		return component;
+	}
+
+	@Override
+	public void handleToolChanged() {
 		updateButtons();
 	}
 
-	public void updateButtons() {
-		selectionToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.SelectionTool);
-		drawShapeToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawShapeTool);
-		drawConnectorToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawConnectorTool);
-		drawTextToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawTextTool);
+	private void updateButtons() {
+		selectionToolButton.setSelected(getSelectedTool() == EditorTool.SelectionTool);
+		drawShapeToolButton.setSelected(getSelectedTool() == EditorTool.DrawShapeTool);
+		drawConnectorToolButton.setSelected(getSelectedTool() == EditorTool.DrawConnectorTool);
+		drawTextToolButton.setSelected(getSelectedTool() == EditorTool.DrawTextTool);
 	}
 
+	@SuppressWarnings("serial")
 	public class ToolButton extends JToggleButton {
 		// private final EditorTool tool;
 

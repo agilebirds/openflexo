@@ -19,8 +19,6 @@
  */
 package org.openflexo.fge.control;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
@@ -28,20 +26,12 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.notifications.ScaleChanged;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -69,8 +59,6 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	protected DrawingView<M, ? extends C> drawingView;
 	private DianaEditorDelegate delegate;
 
-	private ScalePanel _scalePanel;
-
 	private double scale = 1.0;
 
 	/**
@@ -83,14 +71,19 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	 */
 	private F dianaFactory;
 
+	/**
+	 * This is the view factory installed for this editor
+	 */
+	private DianaToolFactory<C> toolFactory;
+
 	protected Map<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>> contents;
 
-	public AbstractDianaEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
+	public AbstractDianaEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		super();
 
 		this.factory = factory;
 		this.dianaFactory = dianaFactory;
-		this.delegate = delegate;
+		this.toolFactory = toolFactory;
 
 		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>>();
 
@@ -111,6 +104,10 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	public F getDianaFactory() {
 		return dianaFactory;
+	}
+
+	public DianaToolFactory<C> getToolFactory() {
+		return toolFactory;
 	}
 
 	public DianaEditorDelegate getDelegate() {
@@ -243,91 +240,12 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		if (aScale < 0) {
 			return;
 		}
-		scale = aScale;
-		if (_scalePanel != null) {
-			_scalePanel.slider.setValue((int) (aScale * 100));
-		}
-		drawingView.rescale();
-	}
-
-	public ScalePanel getScalePanel() {
-		if (_scalePanel == null) {
-			_scalePanel = new ScalePanel();
-		}
-		return _scalePanel;
-	}
-
-	@SuppressWarnings("serial")
-	public class ScalePanel extends JToolBar {
-
-		private static final int MAX_ZOOM_VALUE = 300;
-		protected JTextField scaleTF;
-		protected JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 500, 100);
-
-		protected ChangeListener sliderChangeListener;
-		protected ActionListener actionListener;
-
-		protected ScalePanel() {
-			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
-			setOpaque(false);
-			scaleTF = new JTextField(5);
-			int currentScale = (int) (getScale() * 100);
-			scaleTF.setText(currentScale + "%");
-			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
-			slider.setOpaque(false);
-			slider.setMajorTickSpacing(100);
-			slider.setMinorTickSpacing(20);
-			slider.setPaintTicks(false/* true */);
-			slider.setPaintLabels(false);
-			slider.setBorder(BorderFactory.createEmptyBorder());
-			sliderChangeListener = new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if (slider.getValue() > 0) {
-						setScale((double) slider.getValue() / 100);
-						scaleTF.removeActionListener(actionListener);
-						scaleTF.setText("" + (int) (getScale() * 100) + "%");
-						scaleTF.addActionListener(actionListener);
-					}
-				}
-			};
-			actionListener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						// logger.info("On fait avec "+scaleTF.getText()+" ce qui donne: "+(((double)Integer.decode(scaleTF.getText()))/100));
-						Integer newScale = null;
-						if (scaleTF.getText().indexOf("%") > -1) {
-							newScale = Integer.decode(scaleTF.getText().substring(0, scaleTF.getText().indexOf("%")));
-						} else {
-							newScale = Integer.decode(scaleTF.getText());
-						}
-						if (newScale > MAX_ZOOM_VALUE) {
-							newScale = MAX_ZOOM_VALUE;
-							SwingUtilities.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									scaleTF.setText(MAX_ZOOM_VALUE + "%");
-								}
-							});
-						}
-						setScale((double) newScale / 100);
-					} catch (NumberFormatException exception) {
-						// Forget
-					}
-					scaleTF.removeActionListener(actionListener);
-					slider.removeChangeListener(sliderChangeListener);
-					scaleTF.setText("" + (int) (getScale() * 100) + "%");
-					slider.setValue((int) (getScale() * 100));
-					slider.addChangeListener(sliderChangeListener);
-					scaleTF.addActionListener(actionListener);
-				}
-			};
-			scaleTF.addActionListener(actionListener);
-			slider.addChangeListener(sliderChangeListener);
-			add(slider);
-			add(scaleTF);
-			// setBorder(BorderFactory.createEmptyBorder());
+		if (scale != aScale) {
+			double oldValue = scale;
+			scale = aScale;
+			setChanged();
+			notifyObservers(new ScaleChanged(oldValue, aScale));
+			drawingView.rescale();
 		}
 	}
 

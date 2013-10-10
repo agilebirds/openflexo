@@ -20,16 +20,11 @@
 package org.openflexo.fge.control.tools;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.Drawing.ContainerNode;
@@ -49,9 +44,9 @@ import org.openflexo.fge.impl.ContainerNodeImpl;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.GeometricNodeImpl;
 import org.openflexo.fge.notifications.GeometryModified;
-import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.view.DrawingView;
 
-public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Observable implements Observer {
+public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends Observable implements Observer {
 
 	private static final Logger logger = Logger.getLogger(DrawShapeToolController.class.getPackage().getName());
 
@@ -81,16 +76,16 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	 * 
 	 * @return
 	 */
-	public JDrawingView<?> getDrawingView() {
+	public DrawingView<?, ?> getDrawingView() {
 		if (getController() != null) {
-			return (JDrawingView<?>) getController().getDrawingView();
+			return getController().getDrawingView();
 		}
 		return null;
 	}
 
-	protected void startMouseEdition(MouseEvent e) {
+	protected void startMouseEdition(ME e) {
 		editionHasBeenStarted = true;
-		parentNode = getDrawingView().getFocusRetriever().getFocusedObject(getController().getDrawing().getRoot(), e);
+		parentNode = getFocusedObject(e);
 		shape = makeDefaultShape(e);
 		Class<S> shapeClass = (Class<S>) TypeUtils.getTypeArgument(getClass(), DrawShapeToolController.class, 0);
 		GeometricGRBinding<S> editedGeometricObjectBinding = getController().getDrawing().bindGeometric(shapeClass,
@@ -128,7 +123,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		return editionHasBeenStarted;
 	}
 
-	public abstract S makeDefaultShape(MouseEvent e);
+	public abstract S makeDefaultShape(ME e);
 
 	/**
 	 * Returns shape currently being edited (using DrawShape tool)
@@ -159,9 +154,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	}
 
 	protected void geometryChanged() {
-		if (controller.getPaintManager() != null) {
-			controller.getPaintManager().repaint(controller.getDrawingView());
-		}
+		controller.getDelegate().repaintAll();
 	}
 
 	@Override
@@ -169,31 +162,29 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		logger.info("update in DrawShapeToolController");
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(ME e) {
 		// System.out.println("mouseClicked() on " + getPoint(e));
 	}
 
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(ME e) {
 		// System.out.println("mousePressed() on " + getPoint(e));
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(ME e) {
 		// System.out.println("mouseReleased() on " + getPoint(e));
 	}
 
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(ME e) {
 		// System.out.println("mouseDragged() on " + getPoint(e));
 	}
 
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(ME e) {
 		// System.out.println("mouseMoved() on " + getPoint(e));
 	}
 
-	protected FGEPoint getPoint(MouseEvent e) {
-		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
-		return currentEditedShapeGeometricNode.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, controller.getDrawing().getRoot(),
-				controller.getScale());
-	}
+	public abstract DrawingTreeNode<?, ?> getFocusedObject(ME e);
+
+	public abstract FGEPoint getPoint(ME e);
 
 	public void paintCurrentEditedShape(FGEDrawingGraphicsImpl graphics) {
 

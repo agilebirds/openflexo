@@ -17,23 +17,26 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view.widget;
+package org.openflexo.fge.control.notifications;
 
-import javax.swing.JComponent;
+import org.openflexo.fge.notifications.FGENotification;
 
-import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
-import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to view and edit a BackgroundStyle
+ * This notification is thrown when the selection is cleared
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-// TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
-public interface FIBBackgroundStyleSelector<C extends JComponent> extends FIBCustomComponent<BackgroundStyle, C> {
+public class SelectionCleared extends FGENotification {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
+	public SelectionCleared() {
+		super("selection", null, new Object());
+	}
+
+	@Override
+	public boolean isModelNotification() {
+		return false;
+	}
 
 }

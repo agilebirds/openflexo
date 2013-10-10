@@ -980,4 +980,20 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		return getParentNode() != null && getParentNode().getDimensionConstraints() == DimensionConstraints.CONTAINER;
 	}
 
+	/**
+	 * Convenient method used to retrieve text property value
+	 */
+	@Override
+	public TextStyle getTextStyle() {
+		return getPropertyValue(GraphicalRepresentation.TEXT_STYLE);
+	}
+
+	/**
+	 * Convenient method used to set text property value
+	 */
+	@Override
+	public void setTextStyle(TextStyle style) {
+		setPropertyValue(GraphicalRepresentation.TEXT_STYLE, style);
+	}
+
 }

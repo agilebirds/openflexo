@@ -25,17 +25,15 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.control.tools.DrawPolygonToolController;
+import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.DrawingPalette;
-import org.openflexo.fge.control.tools.EditorToolbox;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -59,7 +57,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	private EditorTool currentTool;
 
-	private DrawShapeToolController<?> drawShapeToolController;
+	private DrawShapeToolController<?, ?> drawShapeToolController;
 	private DrawShapeAction drawShapeAction;
 
 	private ForegroundStyle currentForegroundStyle;
@@ -70,10 +68,10 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	private Vector<DrawingPalette> palettes;
 
-	private EditorToolbox toolbox;
+	// private EditorToolbox toolbox;
 
-	public DianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
-		super(aDrawing, factory, dianaFactory, true, true, true, true, true);
+	public DianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
+		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
 		currentForegroundStyle = factory.makeDefaultForegroundStyle();
 		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = factory.makeDefaultTextStyle();
@@ -81,15 +79,15 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		currentShape = factory.makeShape(ShapeType.RECTANGLE);
 		setCurrentTool(EditorTool.SelectionTool);
 		palettes = new Vector<DrawingPalette>();
-		toolbox = new EditorToolbox(this);
+		// toolbox = new EditorToolbox(this);
 	}
 
 	public void delete() {
 		super.delete();
-		if (toolbox != null) {
+		/*if (toolbox != null) {
 			toolbox.delete();
 		}
-		toolbox = null;
+		toolbox = null;*/
 		if (palettes != null) {
 			for (DrawingPalette palette : palettes) {
 				palette.delete();
@@ -98,7 +96,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		palettes = null;
 	}
 
-	public DrawShapeToolController<?> getDrawShapeToolController() {
+	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
 		return drawShapeToolController;
 	}
 
@@ -108,6 +106,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	public void setCurrentTool(EditorTool aTool) {
 		if (aTool != currentTool) {
+			EditorTool oldTool = currentTool;
 			logger.fine("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
@@ -117,7 +116,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 				break;
 			case DrawShapeTool:
 				// if (drawShapeAction != null) {
-				drawShapeToolController = new DrawPolygonToolController(this, drawShapeAction);
+				drawShapeToolController = getToolFactory().makeDrawPolygonToolController(this, drawShapeAction);
 				// }
 				break;
 			case DrawConnectorTool:
@@ -128,9 +127,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 				break;
 			}
 			currentTool = aTool;
-			if (getToolbox() != null) {
-				getToolbox().getToolPanel().updateButtons();
-			}
+			setChanged();
+			notifyObservers(new ToolChanged(oldTool, currentTool));
 		}
 	}
 
@@ -205,11 +203,11 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		}
 	}
 
-	public EditorToolbox getToolbox() {
+	/*public EditorToolbox getToolbox() {
 		return toolbox;
-	}
+	}*/
 
-	public void setSelectedObject(DrawingTreeNode<?, ?> aNode) {
+	/*public void setSelectedObject(DrawingTreeNode<?, ?> aNode) {
 		super.setSelectedObject(aNode);
 		if (getToolbox() != null) {
 			getToolbox().update();
@@ -242,6 +240,6 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		if (getToolbox() != null) {
 			getToolbox().update();
 		}
-	}
+	}*/
 
 }

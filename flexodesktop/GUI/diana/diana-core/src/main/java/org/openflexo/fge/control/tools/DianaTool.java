@@ -18,25 +18,35 @@
  *
  */
 
-package org.openflexo.fge.control;
+package org.openflexo.fge.control.tools;
 
-import org.openflexo.fge.Drawing;
-import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.view.DianaViewFactory;
 
 /**
- * Represents a basic read-only viewer of a {@link Drawing}<br>
- * 
- * The {@link Drawing} can only be viewed, without any editing possibility (shapes are all non-movable)
+ * Represent a tool associated with a {@link DianaInteractiveViewer}
  * 
  * @author sylvain
  * 
- * @param <M>
+ * @param <C>
+ *            base minimal class of components provided by this tool (eg JComponent for SWING)
+ * @param <ME>
+ *            type of mouse events
  */
-public abstract class DianaViewer<M, F extends DianaViewFactory<F, C>, C> extends AbstractDianaEditor<M, F, C> {
+public interface DianaTool<C, F extends DianaViewFactory<F, ?>, ME> {
 
-	public DianaViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
-		super(aDrawing, factory, dianaFactory, toolFactory);
-	}
+	/**
+	 * Return the editor this tool is associated to
+	 * 
+	 * @return
+	 */
+	public AbstractDianaEditor<?, F, ?> getEditor();
 
+	/**
+	 * Sets the editor this tool is associated to
+	 * 
+	 * @param editor
+	 */
+	public void setEditor(AbstractDianaEditor<?, F, ?> editor);
 }

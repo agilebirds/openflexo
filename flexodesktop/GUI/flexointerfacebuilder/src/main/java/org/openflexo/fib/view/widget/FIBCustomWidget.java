@@ -50,7 +50,7 @@ import org.openflexo.swing.CustomPopup.ApplyCancelListener;
  * 
  */
 public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBCustom, J, T> implements ApplyCancelListener,
-BindingEvaluationContext {
+		BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(FIBCustomWidget.class.getPackage().getName());
 
@@ -233,7 +233,7 @@ BindingEvaluationContext {
 
 			try {
 				T val = getValue();
-				if (val != null){
+				if (val != null) {
 					customComponent.setEditedObject(getValue());
 				}
 			} catch (ClassCastException e) {
@@ -352,6 +352,10 @@ BindingEvaluationContext {
 		public void setRevertValue(Object object) {
 		}
 
+		@Override
+		public void delete() {
+			label = null;
+		}
 	}
 
 }

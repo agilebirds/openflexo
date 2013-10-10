@@ -22,20 +22,31 @@ package org.openflexo.fge.swing;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.DNDInfo;
 import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.swing.control.JDNDInfo;
 import org.openflexo.fge.swing.control.JMouseControlContext;
 import org.openflexo.fge.swing.view.FGEViewMouseListener;
 import org.openflexo.fge.swing.view.JConnectorView;
 import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.fge.swing.view.JShapeView;
+import org.openflexo.fge.swing.widget.JFIBBackgroundStyleSelector;
+import org.openflexo.fge.swing.widget.JFIBForegroundStyleSelector;
+import org.openflexo.fge.swing.widget.JFIBShadowStyleSelector;
+import org.openflexo.fge.swing.widget.JFIBShapeSelector;
+import org.openflexo.fge.swing.widget.JFIBTextStyleSelector;
+import org.openflexo.fge.swing.widget.JShapePreviewPanel;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.FGEView;
 
@@ -102,5 +113,35 @@ public class SwingFactory implements DianaViewFactory<SwingFactory, JComponent> 
 	public DNDInfo makeDNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller,
 			MouseControlContext initialContext) {
 		return new JDNDInfo(moveAction, shapeNode, controller, (JMouseControlContext) initialContext);
+	}
+
+	@Override
+	public JFIBBackgroundStyleSelector makeFIBBackgroundStyleSelector(BackgroundStyle backgroundStyle) {
+		return new JFIBBackgroundStyleSelector(backgroundStyle);
+	}
+
+	@Override
+	public JFIBForegroundStyleSelector makeFIBForegroundStyleSelector(ForegroundStyle foregroundStyle) {
+		return new JFIBForegroundStyleSelector(foregroundStyle);
+	}
+
+	@Override
+	public JFIBTextStyleSelector makeFIBTextStyleSelector(TextStyle textStyle) {
+		return new JFIBTextStyleSelector(textStyle);
+	}
+
+	@Override
+	public JFIBShadowStyleSelector makeFIBShadowStyleSelector(ShadowStyle shadowStyle) {
+		return new JFIBShadowStyleSelector(shadowStyle);
+	}
+
+	@Override
+	public JFIBShapeSelector makeFIBShapeSelector(ShapeSpecification shapeSpecification) {
+		return new JFIBShapeSelector(shapeSpecification);
+	}
+
+	@Override
+	public JShapePreviewPanel makeShapePreviewPanel(ShapeSpecification shapeSpecification) {
+		return new JShapePreviewPanel(shapeSpecification);
 	}
 }

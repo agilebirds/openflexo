@@ -17,23 +17,33 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view.widget;
+package org.openflexo.fge.control.notifications;
 
-import javax.swing.JComponent;
-
-import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
-import org.openflexo.toolbox.FileResource;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.notifications.FGENotification;
 
 /**
- * Widget allowing to view and edit a BackgroundStyle
+ * This notification is thrown when a node has been removed from selection
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-// TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
-public interface FIBBackgroundStyleSelector<C extends JComponent> extends FIBCustomComponent<BackgroundStyle, C> {
+public class ObjectRemovedFromSelection extends FGENotification {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
+	private DrawingTreeNode<?, ?> newDeselectedNode;
+
+	public ObjectRemovedFromSelection(DrawingTreeNode<?, ?> newDeselectedNode) {
+		super("selection", newDeselectedNode, null);
+		this.newDeselectedNode = newDeselectedNode;
+	}
+
+	public DrawingTreeNode<?, ?> getNewDeselectedNode() {
+		return newDeselectedNode;
+	}
+
+	@Override
+	public boolean isModelNotification() {
+		return false;
+	}
 
 }

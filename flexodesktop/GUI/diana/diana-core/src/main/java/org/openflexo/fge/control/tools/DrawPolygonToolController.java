@@ -19,13 +19,8 @@
  */
 package org.openflexo.fge.control.tools;
 
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
@@ -39,9 +34,9 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.swing.JDrawingView;
+import org.openflexo.fge.view.DrawingView;
 
-public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygon> {
+public abstract class DrawPolygonToolController<ME> extends DrawShapeToolController<FGEPolygon, ME> {
 
 	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
 
@@ -56,18 +51,16 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	 * 
 	 * @return
 	 */
-	public JDrawingView<?> getDrawingView() {
+	public DrawingView<?, ?> getDrawingView() {
 		if (getController() != null) {
-			return (JDrawingView<?>) getController().getDrawingView();
+			return getController().getDrawingView();
 		}
 		return null;
 	}
 
 	@Override
-	public FGEPolygon makeDefaultShape(MouseEvent e) {
-		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
-		FGEPoint newPoint = getController().getDrawing().getRoot()
-				.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(), getController().getScale());
+	public FGEPolygon makeDefaultShape(ME e) {
+		FGEPoint newPoint = getPoint(e);
 		return new FGEPolygon(Filling.NOT_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 
@@ -88,7 +81,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(ME e) {
 		super.mouseClicked(e);
 		logger.fine("Handle mouseClicked()");
 		// System.out.println("Mouse clicked");
@@ -98,7 +91,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 			logger.info("Edition started");
 			if (isBuildingPoints) {
 				FGEPoint newPoint = getPoint(e);
-				if (e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
+				if (isFinalizationEvent(e)) {
 					// System.out.println("Stopping point edition");
 					getShape().getPoints().lastElement().setX(newPoint.x);
 					getShape().getPoints().lastElement().setY(newPoint.y);
@@ -117,8 +110,10 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 		}
 	}
 
+	protected abstract boolean isFinalizationEvent(ME e);
+
 	@Override
-	protected void startMouseEdition(MouseEvent e) {
+	protected void startMouseEdition(ME e) {
 		super.startMouseEdition(e);
 		isBuildingPoints = true;
 	}
@@ -132,7 +127,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(ME e) {
 		super.mouseMoved(e);
 		// System.out.println("ShapeSpecification=" + getShape());
 		if (isBuildingPoints && getShape().getPointsNb() > 0) {

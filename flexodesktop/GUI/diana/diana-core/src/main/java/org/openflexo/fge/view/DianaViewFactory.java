@@ -20,13 +20,24 @@
 
 package org.openflexo.fge.view;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.DNDInfo;
 import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
+import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
+import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
+import org.openflexo.fge.view.widget.FIBShapeSelector;
+import org.openflexo.fge.view.widget.FIBTextStyleSelector;
+import org.openflexo.fge.view.widget.ShapePreviewPanel;
 
 /**
  * Represent the view factory for a given technology (eg. Swing)
@@ -34,6 +45,7 @@ import org.openflexo.fge.control.actions.MoveAction;
  * @author sylvain
  * 
  * @param <C>
+ *            base minimal class of components build by this tool factory (eg JComponent for Swing)
  */
 public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 
@@ -61,6 +73,18 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	 * @return
 	 */
 	public <O> ConnectorView<O, ? extends C> makeConnectorView(ConnectorNode<O> connectorNode, AbstractDianaEditor<?, F, C> controller);
+
+	public FIBBackgroundStyleSelector<? extends C> makeFIBBackgroundStyleSelector(BackgroundStyle backgroundStyle);
+
+	public FIBForegroundStyleSelector<? extends C> makeFIBForegroundStyleSelector(ForegroundStyle foregroundStyle);
+
+	public FIBTextStyleSelector<? extends C> makeFIBTextStyleSelector(TextStyle textStyle);
+
+	public FIBShadowStyleSelector<? extends C> makeFIBShadowStyleSelector(ShadowStyle shadowStyle);
+
+	public FIBShapeSelector<? extends C> makeFIBShapeSelector(ShapeSpecification shapeSpecification);
+
+	public ShapePreviewPanel<? extends C> makeShapePreviewPanel(ShapeSpecification shapeSpecification);
 
 	public DNDInfo makeDNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller,
 			final MouseControlContext initialContext);

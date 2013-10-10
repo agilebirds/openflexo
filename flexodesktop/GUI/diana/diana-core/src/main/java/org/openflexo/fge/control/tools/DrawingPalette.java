@@ -66,10 +66,7 @@ import org.openflexo.fge.control.tools.PaletteElement.PaletteElementTransferable
 import org.openflexo.fge.control.tools.PaletteElement.TransferedPaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.fge.swing.JDrawingView;
-import org.openflexo.fge.swing.JPaletteElementView;
-import org.openflexo.fge.swing.JShapeView;
-import org.openflexo.fge.swing.SwingFactory;
+import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -171,18 +168,18 @@ public class DrawingPalette {
 		elements.remove(element);
 	}
 
-	public JDrawingView<DrawingPalette> getPaletteView() {
+	public DrawingView<DrawingPalette, ?> getPaletteView() {
 		if (paletteController == null) {
 			makePalettePanel();
 		}
-		return (JDrawingView<DrawingPalette>) paletteController.getDrawingView();
+		return (DrawingView<DrawingPalette, ?>) paletteController.getDrawingView();
 	}
 
 	private JScrollPane scrollPane;
 
 	public JScrollPane getPaletteViewInScrollPane() {
 		if (scrollPane == null) {
-			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+			scrollPane = new JScrollPane((JComponent) getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
@@ -197,7 +194,7 @@ public class DrawingPalette {
 			e.getGraphicalRepresentation().setValidated(true);
 		}*/
 		paletteDrawing.printGraphicalObjectHierarchy();
-		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory, new SwingFactory() {
+		paletteController = new DianaViewer<DrawingPalette, SwingFactory, JComponent>(paletteDrawing, factory, new SwingToolFactory() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public <O> JShapeView<O> makeShapeView(ShapeNode<O> shapeNode, AbstractDianaEditor<?, SwingFactory, JComponent> controller) {

@@ -28,12 +28,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.actions.MouseDragControlImpl;
-import org.openflexo.fge.control.tools.DianaInspectors;
+import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
+import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
+import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -66,12 +69,14 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	private boolean objectsAreInspectable = true;
 
 	// private EditorToolbox toolbox;
-	private DianaInspectors inspectors;
+	// private DianaInspectors inspectors;
 
 	private DrawingTreeNode<?, ?> focusedFloatingLabel;
 
 	private List<DrawingTreeNode<?, ?>> focusedObjects;
 	private List<DrawingTreeNode<?, ?>> selectedObjects;
+	private List<ShapeNode<?>> selectedShapes;
+	private List<ConnectorNode<?>> selectedConnectors;
 
 	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
@@ -86,31 +91,32 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	 */
 	private List<DrawingTreeNodeIdentifier<?>> storedSelection;
 
-	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory) {
-		this(aDrawing, factory, dianaFactory, true, false, true, true, true);
+	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
+		this(aDrawing, factory, dianaFactory, toolFactory, true, false, true, true, true);
 	}
 
-	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, boolean shapesAreMovable,
-			boolean labelsAreEditable, boolean objectsAreFocusable, boolean objectsAreSelectable, boolean objectsAreInspectable) {
-		super(aDrawing, factory, dianaFactory);
+	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory,
+			boolean shapesAreMovable, boolean labelsAreEditable, boolean objectsAreFocusable, boolean objectsAreSelectable,
+			boolean objectsAreInspectable) {
+		super(aDrawing, factory, dianaFactory, toolFactory);
 		this.shapesAreMovable = shapesAreMovable;
 		this.labelsAreEditable = labelsAreEditable;
 		this.objectsAreFocusable = objectsAreFocusable;
 		this.objectsAreSelectable = objectsAreSelectable;
 		this.objectsAreInspectable = objectsAreInspectable;
-		inspectors = new DianaInspectors(this);
+		// inspectors = new DianaInspectors(this);
 		focusedObjects = new ArrayList<DrawingTreeNode<?, ?>>();
 		selectedObjects = new ArrayList<DrawingTreeNode<?, ?>>();
 	}
 
 	public void delete() {
-		if (inspectors != null) {
+		/*if (inspectors != null) {
 			inspectors.delete();
-		}
+		}*/
 		focusedObjects.clear();
 		selectedObjects.clear();
 		focusedControlArea = null;
-		inspectors = null;
+		// inspectors = null;
 		storedSelection = null;
 		super.delete();
 	}
@@ -155,9 +161,9 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		this.objectsAreInspectable = objectsAreInspectable;
 	}
 
-	public DianaInspectors getInspectors() {
+	/*public DianaInspectors getInspectors() {
 		return inspectors;
-	}
+	}*/
 
 	public DrawingTreeNode<?, ?> getFocusedFloatingLabel() {
 		return focusedFloatingLabel;
@@ -204,9 +210,9 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	public void setSelectedObject(DrawingTreeNode<?, ?> aNode) {
 		stopEditionOfEditedLabelIfAny();
 		setSelectedObjects(Collections.singletonList(aNode));
-		if (getInspectors() != null) {
+		/*if (getInspectors() != null) {
 			getInspectors().update();
-		}
+		}*/
 	}
 
 	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
@@ -215,13 +221,17 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			logger.warning("Cannot add null object");
 			return;
 		}
+		aNode.setIsSelected(true);
 		if (!selectedObjects.contains(aNode)) {
 			selectedObjects.add(aNode);
-			aNode.setIsSelected(true);
+			setChanged();
+			notifyObservers(new ObjectAddedToSelection(aNode));
+			selectedShapes = null;
+			selectedConnectors = null;
 		}
-		if (getInspectors() != null) {
+		/*if (getInspectors() != null) {
 			getInspectors().update();
-		}
+		}*/
 	}
 
 	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
@@ -230,13 +240,17 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			logger.warning("Cannot remove null object");
 			return;
 		}
+		aNode.setIsSelected(false);
 		if (selectedObjects.contains(aNode)) {
 			selectedObjects.remove(aNode);
+			setChanged();
+			notifyObservers(new ObjectRemovedFromSelection(aNode));
+			selectedShapes = null;
+			selectedConnectors = null;
 		}
-		aNode.setIsSelected(false);
-		if (getInspectors() != null) {
+		/*if (getInspectors() != null) {
 			getInspectors().update();
-		}
+		}*/
 	}
 
 	public void toggleSelection(DrawingTreeNode<?, ?> aNode) {
@@ -257,9 +271,38 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			s.setIsSelected(false);
 		}
 		selectedObjects.clear();
-		if (getInspectors() != null) {
+		setChanged();
+		notifyObservers(new SelectionCleared());
+		selectedShapes = null;
+		selectedConnectors = null;
+
+		/*if (getInspectors() != null) {
 			getInspectors().update();
+		}*/
+	}
+
+	public List<ShapeNode<?>> getSelectedShapes() {
+		if (selectedShapes == null) {
+			selectedShapes = new ArrayList<ShapeNode<?>>();
+			for (DrawingTreeNode<?, ?> node : selectedObjects) {
+				if (node instanceof ShapeNode) {
+					selectedShapes.add((ShapeNode<?>) node);
+				}
+			}
 		}
+		return selectedShapes;
+	}
+
+	public List<ConnectorNode<?>> getSelectedConnectors() {
+		if (selectedConnectors == null) {
+			selectedConnectors = new ArrayList<ConnectorNode<?>>();
+			for (DrawingTreeNode<?, ?> node : selectedObjects) {
+				if (node instanceof ConnectorNode) {
+					selectedConnectors.add((ConnectorNode<?>) node);
+				}
+			}
+		}
+		return selectedConnectors;
 	}
 
 	public List<DrawingTreeNode<?, ?>> getFocusedObjects() {

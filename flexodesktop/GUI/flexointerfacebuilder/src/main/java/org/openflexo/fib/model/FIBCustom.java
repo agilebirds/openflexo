@@ -86,6 +86,7 @@ public class FIBCustom extends FIBWidget {
 
 		public void init(FIBCustom component, FIBController controller);
 
+		public void delete();
 	}
 
 	private Class componentClass;

@@ -19,94 +19,47 @@
  */
 package org.openflexo.fge.control.tools;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
-import org.openflexo.fib.FIBLibrary;
-import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.view.DianaViewFactory;
 
-public class DianaInspectors {
+/**
+ * Represents a tool allowing to manage style inspectors
+ * 
+ * @author sylvain
+ * 
+ * @param <C>
+ * @param <F>
+ * @param <ME>
+ */
+public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaViewFactory<F, ?>, ME> extends DianaToolImpl<C, F, ME> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaInspectors.class.getPackage().getName());
 
-	private FIBDialog<ForegroundStyle> foregroundInspector;
-
-	private DianaInteractiveViewer<?, ?, ?> controller;
-
-	private List<ShapeNode<?>> selectedShapes = new ArrayList<ShapeNode<?>>();
-	private List<ConnectorNode<?>> selectedConnectors = new ArrayList<ConnectorNode<?>>();
-	private List<DrawingTreeNode<?, ?>> selection = new ArrayList<DrawingTreeNode<?, ?>>();
-
-	public DianaInspectors(DianaInteractiveViewer<?, ?, ?> controller) {
-		super();
-		this.controller = controller;
-
+	@Override
+	public DianaInteractiveEditor<?, F, ?> getEditor() {
+		return (DianaInteractiveEditor<?, F, ?>) super.getEditor();
 	}
 
-	public FIBDialog<ForegroundStyle> getForegroundInspector() {
-		if (foregroundInspector == null) {
-			foregroundInspector = FIBDialog.instanciateAndShowDialog(
-					FIBLibrary.instance().retrieveFIBComponent(FIBForegroundStyleSelector.FIB_FILE), null, null, false);
-		}
-		return foregroundInspector;
-	}
+	public abstract Inspector<ForegroundStyle> getForegroundStyleInspector();
 
-	public void delete() {
+	public abstract Inspector<BackgroundStyle> getBackgroundStyleInspector();
 
-		selectedShapes.clear();
-		selectedConnectors.clear();
-		selection.clear();
-		controller = null;// Don't delete, we did not create it
-	}
+	public abstract Inspector<TextStyle> getTextStyleInspector();
 
-	public DianaInteractiveViewer<?, ?, ?> getController() {
-		return controller;
-	}
+	public abstract Inspector<ShadowStyle> getShadowStyleInspector();
 
-	public void update() {
-		selectedShapes.clear();
-		selectedConnectors.clear();
-		selection.clear();
-		for (DrawingTreeNode<?, ?> node : controller.getSelectedObjects()) {
-			if (node instanceof ShapeNode) {
-				selection.add(node);
-				selectedShapes.add((ShapeNode<?>) node);
-			}
-			if (node instanceof ConnectorNode) {
-				selection.add(node);
-				selectedConnectors.add((ConnectorNode<?>) node);
-			}
-		}
-		if (selection.size() > 0) {
-			if (selectedShapes.size() > 0) {
-				if (foregroundInspector != null) {
-					foregroundInspector.setData(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
-				}
-			} else if (selectedConnectors.size() > 0) {
-				if (foregroundInspector != null) {
-					foregroundInspector.setData(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
-				}
-			}
-		} else {
-			if (foregroundInspector != null) {
-				foregroundInspector.setData(null);
-			}
-		}
-	}
+	public abstract Inspector<ShapeSpecification> getShapeInspector();
 
-	public List<ShapeNode<?>> getSelectedShapes() {
-		return selectedShapes;
-	}
-
-	public List<DrawingTreeNode<?, ?>> getSelection() {
-		return selection;
+	public static interface Inspector<D> {
+		public void setData(D data);
 	}
 }

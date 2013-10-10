@@ -390,6 +390,10 @@ public interface Drawing<M> {
 
 		public boolean isParentLayoutedAsContainer();
 
+		public TextStyle getTextStyle();
+
+		public void setTextStyle(TextStyle style);
+
 	}
 
 	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {

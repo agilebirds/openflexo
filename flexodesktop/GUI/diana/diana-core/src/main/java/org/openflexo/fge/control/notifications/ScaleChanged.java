@@ -17,23 +17,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view.widget;
+package org.openflexo.fge.control.notifications;
 
-import javax.swing.JComponent;
-
-import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
-import org.openflexo.toolbox.FileResource;
+import org.openflexo.fge.notifications.FGENotification;
 
 /**
- * Widget allowing to view and edit a BackgroundStyle
+ * This notification is thrown when the scale of a DianaEditor has changed
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-// TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
-public interface FIBBackgroundStyleSelector<C extends JComponent> extends FIBCustomComponent<BackgroundStyle, C> {
+public class ScaleChanged extends FGENotification {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
+	public ScaleChanged(double oldValue, double newValue) {
+		super("scale", oldValue, newValue);
+	}
+
+	@Override
+	public boolean isModelNotification() {
+		return false;
+	}
 
 }
