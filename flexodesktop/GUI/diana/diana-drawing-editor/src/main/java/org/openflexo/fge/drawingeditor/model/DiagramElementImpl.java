@@ -68,6 +68,8 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	@Override
 	public void removeFromShapes(Shape aShape) {
 		shapes.remove(aShape);
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override
@@ -83,15 +85,15 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	@Override
 	public void addToConnectors(Connector aConnector) {
 		connectors.add(aConnector);
-		// System.out.println("Add "+aConnector+" isDeserializing="+isDeserializing());
-		/*if (!isDeserializing()) {
-			getDiagram().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
-		}*/
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override
 	public void removeFromConnectors(Connector aConnector) {
 		connectors.remove(aConnector);
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override

@@ -42,11 +42,11 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DrawingPalette;
-import org.openflexo.fge.control.FocusRetriever;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.control.JFocusRetriever;
 import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.fge.view.FGEView;
 
@@ -153,6 +153,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 		 * @return whether the flavor and operation is ok
 		 */
 		private boolean isDragOk(DropTargetDragEvent e) {
+
 			if (isDragFlavorSupported(e) == false) {
 				return false;
 			}
@@ -359,7 +360,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 			}
 		}
 
-		private FocusRetriever getFocusRetriever() {
+		private JFocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
 				return getDrawingView().getFocusRetriever();
 			}

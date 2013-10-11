@@ -13,9 +13,9 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
-import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
@@ -445,7 +445,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	public final void setX(double aValue) {
 		FGENotification notification = requireChange(X, aValue);
 		if (notification != null) {
-			//FGEPoint oldLocation = getLocation();
+			// FGEPoint oldLocation = getLocation();
 			x = aValue;
 			hasChanged(notification);
 			// notifyObjectMoved(oldLocation);
@@ -481,7 +481,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	public final void setY(double aValue) {
 		FGENotification notification = requireChange(Y, aValue);
 		if (notification != null) {
-			//FGEPoint oldLocation = getLocation();
+			// FGEPoint oldLocation = getLocation();
 			y = aValue;
 			hasChanged(notification);
 			// notifyObjectMoved(oldLocation);
@@ -1462,7 +1462,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public ForegroundStyle getSelectedForeground() {
-		if (selectedForeground == null) {
+		if (selectedForeground == null && foreground != null) {
 			selectedForeground = foreground.clone();
 		}
 		return selectedForeground;
@@ -1495,7 +1495,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public ForegroundStyle getFocusedForeground() {
-		if (focusedForeground == null) {
+		if (focusedForeground == null && foreground != null) {
 			focusedForeground = foreground.clone();
 		}
 		return focusedForeground;
@@ -1572,7 +1572,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public BackgroundStyle getSelectedBackground() {
-		if (selectedBackground == null) {
+		if (selectedBackground == null && background != null) {
 			selectedBackground = background.clone();
 		}
 		return selectedBackground;
@@ -1607,7 +1607,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public BackgroundStyle getFocusedBackground() {
-		if (focusedBackground == null) {
+		if (focusedBackground == null && background != null) {
 			focusedBackground = background.clone();
 		}
 		return focusedBackground;

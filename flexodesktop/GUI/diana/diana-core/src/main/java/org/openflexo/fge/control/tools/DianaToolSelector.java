@@ -34,11 +34,22 @@ public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super
 	}
 
 	public EditorTool getSelectedTool() {
-		return getEditor().getCurrentTool();
+		if (getEditor() != null) {
+			return getEditor().getCurrentTool();
+		}
+		return EditorTool.SelectionTool;
 	}
 
 	public void selectTool(EditorTool tool) {
-		getEditor().setCurrentTool(tool);
+		if (getEditor() != null) {
+			getEditor().setCurrentTool(tool);
+		}
+	}
+
+	@Override
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
+		super.attachToEditor(editor);
+		handleToolChanged();
 	}
 
 	@Override

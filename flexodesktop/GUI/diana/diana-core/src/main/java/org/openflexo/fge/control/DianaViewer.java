@@ -27,7 +27,8 @@ import org.openflexo.fge.view.DianaViewFactory;
 /**
  * Represents a basic read-only viewer of a {@link Drawing}<br>
  * 
- * The {@link Drawing} can only be viewed, without any editing possibility (shapes are all non-movable)
+ * The {@link Drawing} can only be viewed, without any editing possibility (shapes are all non-movable)<br>
+ * No focus nor selection are managed at this level
  * 
  * @author sylvain
  * 

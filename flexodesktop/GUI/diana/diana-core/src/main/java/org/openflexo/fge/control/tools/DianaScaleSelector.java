@@ -22,6 +22,12 @@ public abstract class DianaScaleSelector<C, F extends DianaViewFactory<F, ? supe
 		attachToEditor(editor);
 	}
 
+	@Override
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
+		super.attachToEditor(editor);
+		handleScaleChanged();
+	}
+
 	/**
 	 * Return the technology-specific component representing the selector
 	 * 

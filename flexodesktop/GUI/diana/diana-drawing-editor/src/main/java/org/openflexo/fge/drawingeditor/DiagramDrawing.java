@@ -59,7 +59,14 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 				new ConnectorGRProvider<Connector>() {
 					@Override
 					public ConnectorGraphicalRepresentation provideGR(Connector drawable, FGEModelFactory factory) {
-						return null;
+						if (drawable.getGraphicalRepresentation() != null) {
+							drawable.getGraphicalRepresentation().setFactory(factory);
+							return drawable.getGraphicalRepresentation();
+						} else {
+							ConnectorGraphicalRepresentation returned = factory.makeConnectorGraphicalRepresentation(DiagramDrawing.this);
+							drawable.setGraphicalRepresentation(returned);
+							return returned;
+						}
 					}
 				});
 

@@ -40,7 +40,7 @@ import org.openflexo.fge.swing.control.JMouseControlContext;
 public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 
 	public DrawEdgeControl(DiagramFactory factory) {
-		super("Draw edge", MouseButton.LEFT, new DrawEdgeAction(factory), false, true, false, false, factory); // CTRL DRAG
+		super("Draw edge", MouseButton.LEFT, new DrawEdgeAction(factory), false, true, false, false, factory); // CTRL-DRAG
 	}
 
 	protected static class DrawEdgeAction extends MouseDragControlActionImpl<DianaDrawingEditor> {
@@ -75,7 +75,8 @@ public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
 							(DiagramDrawing) controller.getDrawing());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
-					((DianaDrawingEditor) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
+					((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
+					System.out.println("Add new connector !");
 				}
 				drawEdge = false;
 				fromShape = null;

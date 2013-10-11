@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.MouseControlContext;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * Implements {@link MouseControlContext} for SWING technology<br>
@@ -30,9 +29,9 @@ public class JMouseControlContext implements MouseControlContext {
 	@Override
 	public MouseButton getButton() {
 
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS && event.getButton() == MouseEvent.BUTTON1 && event.isControlDown()) {
+		/*if (ToolBox.getPLATFORM() == ToolBox.MACOS && event.getButton() == MouseEvent.BUTTON1 && event.isControlDown()) {
 			return MouseButton.RIGHT;
-		}
+		}*/
 
 		switch (event.getButton()) {
 		case MouseEvent.BUTTON1:

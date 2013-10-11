@@ -33,6 +33,8 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 
 	private JToolBar component;
 
+	private boolean isInitialized = false;
+
 	public JDianaScaleSelector(AbstractDianaEditor<?, SwingViewFactory, ?> editor) {
 		super(editor);
 		component = new JToolBar();
@@ -94,6 +96,7 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 		slider.addChangeListener(sliderChangeListener);
 		component.add(slider);
 		component.add(scaleTF);
+		isInitialized = true;
 		// setBorder(BorderFactory.createEmptyBorder());
 	}
 
@@ -104,7 +107,9 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 
 	@Override
 	public void handleScaleChanged() {
-		slider.setValue((int) (getEditor().getScale() * 100));
+		if (isInitialized) {
+			slider.setValue((int) (getEditor().getScale() * 100));
+		}
 	}
 
 	@Override

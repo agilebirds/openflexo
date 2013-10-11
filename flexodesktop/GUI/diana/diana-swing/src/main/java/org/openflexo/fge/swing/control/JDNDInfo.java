@@ -596,7 +596,7 @@ public class JDNDInfo implements DNDInfo {
 
 		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
-				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObjectForDragEvent(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getNode().getDrawing().getRoot();
@@ -609,7 +609,7 @@ public class JDNDInfo implements DNDInfo {
 
 		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
-				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObjectForDropEvent(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getNode().getDrawing().getRoot();

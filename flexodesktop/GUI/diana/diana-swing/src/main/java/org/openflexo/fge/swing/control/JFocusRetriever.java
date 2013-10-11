@@ -42,7 +42,6 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.FocusRetriever;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -63,7 +62,7 @@ import org.openflexo.fge.view.FGEView;
  * @author sylvain
  * 
  */
-public class JFocusRetriever implements FocusRetriever<MouseEvent> {
+public class JFocusRetriever {
 
 	private static final Logger logger = Logger.getLogger(JFocusRetriever.class.getPackage().getName());
 
@@ -86,12 +85,10 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 		}
 	}
 
-	@Override
 	public DianaInteractiveViewer<?, ?, ?> getController() {
 		return (DianaInteractiveViewer<?, ?, ?>) drawingView.getController();
 	}
 
-	@Override
 	public void handleMouseMove(MouseEvent event) {
 		DrawingTreeNode<?, ?> newFocusedObject = getFocusedObject(event);
 
@@ -123,7 +120,6 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 
 	}
 
-	@Override
 	public boolean focusOnFloatingLabel(DrawingTreeNode<?, ?> node, MouseEvent event) {
 		return focusOnFloatingLabel(node, (Component) event.getSource(), event.getPoint());
 	}
@@ -157,12 +153,10 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 
 	}
 
-	@Override
 	public ControlArea<?> getFocusedControlAreaForDrawable(DrawingTreeNode<?, ?> node, MouseEvent event) {
 		return getFocusedControlAreaForDrawable(node, drawingView.getDrawing().getRoot(), event);
 	}
 
-	@Override
 	public ControlArea<?> getFocusedControlAreaForDrawable(DrawingTreeNode<?, ?> node, ContainerNode<?, ?> container, MouseEvent event) {
 		ControlArea<?> returned = null;
 		double selectionDistance = FGEConstants.SELECTION_DISTANCE; // Math.max(5.0,FGEConstants.SELECTION_DISTANCE*getScale());
@@ -244,7 +238,6 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 		return returned;
 	}
 
-	@Override
 	public DrawingTreeNode<?, ?> getFocusedObject(MouseEvent event) {
 		if (getController() instanceof DianaInteractiveEditor) {
 			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
@@ -263,24 +256,23 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 		return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 	}
 
-	public DrawingTreeNode<?, ?> getFocusedObjectForDragEvent(DropTargetDragEvent event) {
-		return getFocusedObjectForDragEvent(drawingView.getDrawing().getRoot(), event);
+	public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDragEvent event) {
+		return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 	}
 
-	public DrawingTreeNode<?, ?> getFocusedObjectForDropEvent(DropTargetDropEvent event) {
-		return getFocusedObjectForDropEvent(drawingView.getDrawing().getRoot(), event);
+	public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDropEvent event) {
+		return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 	}
 
-	@Override
 	public DrawingTreeNode<?, ?> getFocusedObject(ContainerNode<?, ?> node, MouseEvent event) {
 		return getFocusedObject(node, (Component) event.getSource(), event.getPoint());
 	}
 
-	public DrawingTreeNode<?, ?> getFocusedObjectForDragEvent(ContainerNode<?, ?> node, DropTargetDragEvent event) {
+	public DrawingTreeNode<?, ?> getFocusedObject(ContainerNode<?, ?> node, DropTargetDragEvent event) {
 		return getFocusedObject(node, event.getDropTargetContext().getComponent(), event.getLocation());
 	}
 
-	public DrawingTreeNode<?, ?> getFocusedObjectForDropEvent(ContainerNode<?, ?> node, DropTargetDropEvent event) {
+	public DrawingTreeNode<?, ?> getFocusedObject(ContainerNode<?, ?> node, DropTargetDropEvent event) {
 		return getFocusedObject(node, event.getDropTargetContext().getComponent(), event.getLocation());
 	}
 
@@ -689,7 +681,6 @@ public class JFocusRetriever implements FocusRetriever<MouseEvent> {
 		}
 	}
 
-	@Override
 	public double getScale() {
 		return drawingView.getController().getScale();
 	}

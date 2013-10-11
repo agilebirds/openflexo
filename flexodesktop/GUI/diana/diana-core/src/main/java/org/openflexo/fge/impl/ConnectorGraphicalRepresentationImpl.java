@@ -14,8 +14,8 @@ import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
@@ -189,7 +189,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public ForegroundStyle getSelectedForeground() {
-		if (selectedForeground == null) {
+		if (selectedForeground == null && foreground != null) {
 			selectedForeground = foreground.clone();
 		}
 		return selectedForeground;
@@ -222,7 +222,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public ForegroundStyle getFocusedForeground() {
-		if (focusedForeground == null) {
+		if (focusedForeground == null && foreground != null) {
 			focusedForeground = foreground.clone();
 		}
 		return focusedForeground;

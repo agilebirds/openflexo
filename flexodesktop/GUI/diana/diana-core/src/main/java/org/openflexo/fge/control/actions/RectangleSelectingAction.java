@@ -26,7 +26,6 @@ import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ContainerNode;
@@ -48,7 +47,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl<DianaIn
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 
-			// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING AbstractMouseDragControlActionImpl");
+			// logger.info("Perform mouse PRESSED on RectangleSelectingAction");
 
 			rectangleSelectingOriginInDrawingView = getPointInDrawingView(controller, context);
 
@@ -66,6 +65,9 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl<DianaIn
 	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context,
 			boolean isSignificativeDrag) {
 		if (editor instanceof DianaInteractiveViewer) {
+
+			// logger.info("Perform mouse RELEASED on RectangleSelectingAction, isSignificative=" + isSignificativeDrag);
+
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (isSignificativeDrag && node instanceof ContainerNode) {
 				List<DrawingTreeNode<?, ?>> newSelection = buildCurrentSelection((ContainerNode<?, ?>) node, controller);
@@ -84,9 +86,9 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl<DianaIn
 	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING AbstractMouseDragControlActionImpl");
-			}
+
+			// logger.info("Perform mouse DRAGGED on RectangleSelectingAction");
+
 			currentMousePositionInDrawingView = getPointInDrawingView(controller, context);
 
 			List<DrawingTreeNode<?, ?>> newFocusSelection;

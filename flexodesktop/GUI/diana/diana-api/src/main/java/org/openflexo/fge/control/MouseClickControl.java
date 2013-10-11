@@ -21,6 +21,8 @@
 
 package org.openflexo.fge.control;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+
 public interface MouseClickControl<E extends DianaEditor<?>> extends MouseControl<E> {
 
 	public MouseClickControlAction<E> getControlAction();
@@ -28,15 +30,15 @@ public interface MouseClickControl<E extends DianaEditor<?>> extends MouseContro
 	public int getClickCount();
 
 	/**
-	 * Handle click event, by performing what is required here If event has been correctely handled, consume it.
+	 * Handle click event
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node pointer focuses
 	 * @param controller
+	 *            the related editor
+	 * @param context
+	 *            the mouse control context (mouse informations)
 	 */
-	/*public abstract void handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
-
-	public abstract PredefinedMouseClickControlActionType getActionType();
-
-	public abstract void setActionType(PredefinedMouseClickControlActionType actionType);*/
+	public abstract void handleClick(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 }

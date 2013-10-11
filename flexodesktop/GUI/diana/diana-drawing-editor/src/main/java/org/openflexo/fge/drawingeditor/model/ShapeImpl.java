@@ -72,9 +72,7 @@ public abstract class ShapeImpl extends DiagramElementImpl<Shape, ShapeGraphical
 
 	@Override
 	public String toString() {
-		return "Shape[" + name + ":" + getGraphicalRepresentation().toString() + "  drawable="
-		/*+ (getGraphicalRepresentation().getDrawable() != null ? getGraphicalRepresentation().getDrawable().getClass()
-				.getSimpleName() : null)*/+ " drawing=" + getGraphicalRepresentation().getDrawing() + "]";
+		return "Shape[" + name + "]";
 	}
 
 }

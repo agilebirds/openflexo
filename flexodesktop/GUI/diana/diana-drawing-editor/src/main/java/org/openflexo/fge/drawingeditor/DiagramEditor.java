@@ -60,7 +60,9 @@ public class DiagramEditor {
 
 		try {
 			returned.diagram = (Diagram) factory.deserialize(new FileInputStream(file));
+			returned.file = file;
 			System.out.println("Loaded " + factory.stringRepresentation(returned.diagram));
+			return returned;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -115,7 +117,7 @@ public class DiagramEditor {
 		if (file != null) {
 			return file.getName();
 		} else {
-			return FlexoLocalization.localizedForKey(LaunchDiagramEditor.LOCALIZATION, "untitled") + "-" + index;
+			return FlexoLocalization.localizedForKey(DiagramEditorApplication.LOCALIZATION, "untitled") + "-" + index;
 		}
 	}
 
@@ -166,6 +168,11 @@ public class DiagramEditor {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	@Override
+	public String toString() {
+		return "DiagramEditor:" + getTitle();
 	}
 
 }

@@ -31,6 +31,8 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 
 	private JPanel component;
 
+	private boolean isInitialized = false;
+
 	public JDianaToolSelector(AbstractDianaEditor<?, SwingViewFactory, ?> editor) {
 		super(editor);
 		component = new JPanel();
@@ -53,6 +55,7 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 		component.add(new JLabel(FGEIconLibrary.TOOLBAR_SPACER_ICON));
 		component.add(drawTextToolButton);
 		component.add(new JLabel(FGEIconLibrary.TOOLBAR_RIGHT_ICON));
+		isInitialized = true;
 		updateButtons();
 	}
 
@@ -67,10 +70,12 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 	}
 
 	private void updateButtons() {
-		selectionToolButton.setSelected(getSelectedTool() == EditorTool.SelectionTool);
-		drawShapeToolButton.setSelected(getSelectedTool() == EditorTool.DrawShapeTool);
-		drawConnectorToolButton.setSelected(getSelectedTool() == EditorTool.DrawConnectorTool);
-		drawTextToolButton.setSelected(getSelectedTool() == EditorTool.DrawTextTool);
+		if (isInitialized) {
+			selectionToolButton.setSelected(getSelectedTool() == EditorTool.SelectionTool);
+			drawShapeToolButton.setSelected(getSelectedTool() == EditorTool.DrawShapeTool);
+			drawConnectorToolButton.setSelected(getSelectedTool() == EditorTool.DrawConnectorTool);
+			drawTextToolButton.setSelected(getSelectedTool() == EditorTool.DrawTextTool);
+		}
 	}
 
 	@SuppressWarnings("serial")

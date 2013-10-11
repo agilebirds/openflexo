@@ -502,15 +502,17 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void storeCurrentSelection() {
-		if (storedSelection != null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Cannot store selection when there is already a stored selection");
+		if (getSelectedObjects() != null) {
+			if (storedSelection != null) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Cannot store selection when there is already a stored selection");
+				}
+				return;
 			}
-			return;
-		}
-		storedSelection = new ArrayList<DrawingTreeNodeIdentifier<?>>();
-		for (DrawingTreeNode<?, ?> node : getSelectedObjects()) {
-			storedSelection.add(new DrawingTreeNodeIdentifier(node.getDrawable(), node.getGRBinding()));
+			storedSelection = new ArrayList<DrawingTreeNodeIdentifier<?>>();
+			for (DrawingTreeNode<?, ?> node : getSelectedObjects()) {
+				storedSelection.add(new DrawingTreeNodeIdentifier(node.getDrawable(), node.getGRBinding()));
+			}
 		}
 	}
 
@@ -520,7 +522,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		if (o == getDrawing()) {
 			if (arg instanceof DrawingTreeNodeHierarchyRebuildStarted) {
 				storeCurrentSelection();
-			} else if (arg instanceof DrawingTreeNodeHierarchyRebuildEnded) {
+			} else if (arg instanceof DrawingTreeNodeHierarchyRebuildEnded && storedSelection != null) {
 				restoreStoredSelection();
 			}
 		}

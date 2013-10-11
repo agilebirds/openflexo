@@ -35,12 +35,14 @@ public interface Connector extends DiagramElement<Connector, ConnectorGraphicalR
 	public static final String END_SHAPE = "endShape";
 
 	@Getter(START_SHAPE)
+	@XMLElement(context = "Start")
 	public Shape getStartShape();
 
 	@Setter(START_SHAPE)
 	public void setStartShape(Shape startShape);
 
 	@Getter(END_SHAPE)
+	@XMLElement(context = "End")
 	public abstract Shape getEndShape();
 
 	@Setter(END_SHAPE)

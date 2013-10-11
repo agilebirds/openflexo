@@ -32,33 +32,40 @@ public interface MouseDragControl<E extends DianaEditor<?>> extends MouseControl
 	public DrawingTreeNode<?, ?> getInitialNode();
 
 	/**
-	 * Handle mouse pressed event, by performing what is required here If event has been correctely handled, consume it.
+	 * Handle mouse pressed event
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node pointer focuses
 	 * @param controller
-	 * @param e
-	 *            MouseEvent
+	 *            the related editor
+	 * @param context
+	 *            the mouse control context (mouse informations)
+	 * @return
 	 */
-	// public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, CI controlInfo);
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 	/**
-	 * Handle mouse released event, by performing what is required here If event has been correctely handled, consume it.
+	 * Handle mouse released event
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node pointer focuses
 	 * @param controller
-	 * @param e
-	 *            MouseEvent
+	 *            the related editor
+	 * @param context
+	 *            the mouse control context (mouse informations)
 	 */
-	// public void handleMouseReleased(DianaEditor<?> controller, CI controlInfo);
+	public void handleMouseReleased(E controller, MouseControlContext context);
 
 	/**
-	 * Handle mouse dragged event, by performing what is required here If event has been correctely handled, consume it.
+	 * Handle mouse dragged event
 	 * 
-	 * @param graphicalRepresentation
+	 * @param node
+	 *            the node pointer focuses
 	 * @param controller
-	 * @param e
-	 *            MouseEvent
+	 *            the related editor
+	 * @param context
+	 *            the mouse control context (mouse informations)
 	 */
-	// public void handleMouseDragged(DianaEditor<?> controller, CI controlInfo);
+	public void handleMouseDragged(E controller, MouseControlContext context);
 
 }

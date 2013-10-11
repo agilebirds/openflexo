@@ -26,7 +26,9 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 
 	public BackgroundImageBackgroundStyleImpl(ImageIcon image) {
 		super();
-		this.image = image.getImage();
+		if (image != null) {
+			this.image = image.getImage();
+		}
 	}
 
 	@Override
