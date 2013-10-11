@@ -135,6 +135,7 @@ class XMLDeserializer {
 			}
 		} else {
 			returned = modelFactory._newInstance(modelEntity.getImplementedInterface(), policy == DeserializationPolicy.EXTENSIVE);
+			modelFactory.objectHasBeenDeserialized(returned, modelEntity.getImplementedInterface());
 		}
 
 		if (currentDeserializedReference != null) {

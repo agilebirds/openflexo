@@ -139,6 +139,7 @@ public class ModelFactory {
 					}
 				}
 			}
+			objectHasBeenCreated(returned, modelEntity.getImplementedInterface());
 			return returned;
 		}
 	}
@@ -594,5 +595,24 @@ public class ModelFactory {
 			ModelDefinitionException {
 		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
 		return deserializer.deserializeDocument(input);
+	}
+
+	/**
+	 * Hook to detect an object creation Default implementation silently returns
+	 * 
+	 * @param newlyCreatedObject
+	 * @param implementedInterface
+	 */
+	public <I> void objectHasBeenCreated(I newlyCreatedObject, Class<I> implementedInterface) {
+	}
+
+	/**
+	 * Hook to detect an object deserialization<br>
+	 * Default implementation silently returns
+	 * 
+	 * @param newlyCreatedObject
+	 * @param implementedInterface
+	 */
+	public <I> void objectHasBeenDeserialized(I newlyCreatedObject, Class<I> implementedInterface) {
 	}
 }
