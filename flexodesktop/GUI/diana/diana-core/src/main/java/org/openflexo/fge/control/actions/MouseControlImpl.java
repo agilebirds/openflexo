@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseControl;
 import org.openflexo.fge.control.MouseControlContext;
 
-public abstract class MouseControlImpl implements MouseControl {
+public abstract class MouseControlImpl<E extends AbstractDianaEditor<?, ?, ?>> implements MouseControl<E> {
 	static final Logger logger = Logger.getLogger(MouseControlImpl.class.getPackage().getName());
 
 	private String name;
@@ -57,7 +57,7 @@ public abstract class MouseControlImpl implements MouseControl {
 	}
 
 	@Override
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + context);
 		}

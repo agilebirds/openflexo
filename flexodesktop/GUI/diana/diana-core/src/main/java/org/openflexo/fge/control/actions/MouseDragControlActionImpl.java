@@ -22,21 +22,22 @@ package org.openflexo.fge.control.actions;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.MouseDragControlAction;
 
-public abstract class MouseDragControlActionImpl extends MouseControlActionImpl implements MouseDragControlAction {
+public abstract class MouseDragControlActionImpl<E extends AbstractDianaEditor<?, ?, ?>> extends MouseControlActionImpl<E> implements
+		MouseDragControlAction<E> {
 
 	static final Logger logger = Logger.getLogger(MouseDragControlActionImpl.class.getPackage().getName());
 
 	@Override
-	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 	@Override
-	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context,
+	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context,
 			boolean isSignificativeDrag);
 
 	@Override
-	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 }

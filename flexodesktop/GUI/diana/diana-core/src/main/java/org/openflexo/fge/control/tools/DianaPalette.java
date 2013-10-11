@@ -37,6 +37,8 @@ import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.fge.impl.DrawingImpl;
@@ -53,6 +55,7 @@ import org.openflexo.toolbox.ToolBox;
  */
 public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> extends DianaToolImpl<C, F> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaPalette.class.getPackage().getName());
 
 	private static Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
@@ -78,6 +81,21 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 		setPalette(palette);
 	}
 
+	/**
+	 * Return the technology-specific component representing the palette
+	 * 
+	 * @return
+	 */
+	public abstract C getComponent();
+
+	@Override
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
+		super.attachToEditor(editor);
+		if (editor instanceof DianaInteractiveEditor) {
+			((DianaInteractiveEditor<?, F, ?>) editor).activatePalette(this);
+		}
+	}
+
 	public DrawingPalette getPalette() {
 		return palette;
 	}
@@ -97,7 +115,7 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 		}
 		this.palette = palette;
 		paletteDrawing = new PaletteDrawing(palette);
-		paletteController = getEditor().getDianaFactory().makePaletteController(this);
+		paletteController = getDianaFactory().makePaletteController(this);
 	}
 
 	public void delete() {

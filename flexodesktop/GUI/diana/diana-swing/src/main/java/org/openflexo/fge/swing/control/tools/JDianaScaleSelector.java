@@ -38,7 +38,7 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 		component = new JToolBar();
 		component.setOpaque(false);
 		scaleTF = new JTextField(5);
-		int currentScale = (int) (getEditor().getScale() * 100);
+		int currentScale = (getEditor() != null ? (int) (getEditor().getScale() * 100) : 100);
 		scaleTF.setText(currentScale + "%");
 		slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
 		slider.setOpaque(false);
@@ -106,4 +106,10 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 	public void handleScaleChanged() {
 		slider.setValue((int) (getEditor().getScale() * 100));
 	}
+
+	@Override
+	public SwingViewFactory getDianaFactory() {
+		return SwingViewFactory.INSTANCE;
+	}
+
 }

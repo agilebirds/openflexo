@@ -48,5 +48,8 @@ public interface DianaTool<C, F extends DianaViewFactory<F, ?>> {
 	 * 
 	 * @param editor
 	 */
-	public void setEditor(AbstractDianaEditor<?, F, ?> editor);
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor);
+
+	public abstract F getDianaFactory();
+
 }

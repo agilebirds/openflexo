@@ -35,14 +35,13 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.ToolBox;
 
-public class MoveAction extends MouseDragControlActionImpl {
+public class MoveAction extends MouseDragControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 	private static final Logger logger = Logger.getLogger(MoveAction.class.getPackage().getName());
 
 	private MoveInfo currentMove = null;
@@ -59,7 +58,7 @@ public class MoveAction extends MouseDragControlActionImpl {
 	public Point initialClickOffset;
 
 	@Override
-	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (logger.isLoggable(Level.FINE)) {
@@ -84,7 +83,7 @@ public class MoveAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (logger.isLoggable(Level.FINE)) {
@@ -104,10 +103,9 @@ public class MoveAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context,
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context,
 			boolean isSignificativeDrag) {
 		if (editor instanceof DianaInteractiveViewer) {
-			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Perform mouse RELEASED on MOVE AbstractMouseDragControlActionImpl");
 			}

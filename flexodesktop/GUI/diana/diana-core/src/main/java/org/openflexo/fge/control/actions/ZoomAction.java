@@ -22,14 +22,13 @@ package org.openflexo.fge.control.actions;
 import java.awt.Point;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 
-public class ZoomAction extends MouseDragControlActionImpl {
+public class ZoomAction extends MouseDragControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 
 	private Point startPoint;
 	private double initialScale;
@@ -37,7 +36,7 @@ public class ZoomAction extends MouseDragControlActionImpl {
 	private FGELine refLine;
 
 	@Override
-	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			Point currentMousePositionInDrawingView = getPointInDrawingView(controller, context);
@@ -49,6 +48,8 @@ public class ZoomAction extends MouseDragControlActionImpl {
 			case NORTH:
 			case WEST:
 				isPositive = false;
+				break;
+			default:
 				break;
 			}
 			// We compute a distance to this refline instead of a distance to the start point so that that there is no gap when going from
@@ -67,7 +68,7 @@ public class ZoomAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			startPoint = getPointInDrawingView(controller, context);
@@ -80,7 +81,7 @@ public class ZoomAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context,
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context,
 			boolean isSignificativeDrag) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;

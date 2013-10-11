@@ -45,7 +45,7 @@ public interface DianaToolFactory<C> {
 
 	public DianaScaleSelector<?, ?> makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor);
 
-	public DianaStyles<?, ?> makeDianaDianaStyles();
+	public DianaStyles<?, ?> makeDianaStyles();
 
 	public DianaInspectors<?, ?> makeDianaInspectors();
 

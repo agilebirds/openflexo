@@ -23,17 +23,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.RootNode;
-import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
-import org.openflexo.fge.control.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
-import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
@@ -48,12 +45,10 @@ public class DiagramEditorPalette extends DrawingPalette {
 	public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 9);
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
-	// This factory is the one of the editor
-	private DiagramFactory editorFactory;
+	private DianaDrawingEditor editor;
 
-	public DiagramEditorPalette(DiagramFactory editorFactory) {
+	public DiagramEditorPalette() {
 		super(360, 350, "default");
-		this.editorFactory = editorFactory;
 		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
@@ -71,13 +66,19 @@ public class DiagramEditorPalette extends DrawingPalette {
 		addElement(makeMultilineLabel(1, 3));
 		addElement(makeBoundedMultilineLabel(2, 3));
 
-		makePalettePanel();
-		getPaletteView().revalidate();
+	}
+
+	public DianaDrawingEditor getEditor() {
+		return editor;
+	}
+
+	public void setEditor(DianaDrawingEditor editor) {
+		this.editor = editor;
 	}
 
 	private PaletteElement makePaletteElement(ShapeType st, int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(st, this, null, getPaletteDrawing());
-		getFactory().applyDefaultProperties(gr);
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(st, null);
+		FACTORY.applyDefaultProperties(gr);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setX(px * GRID_WIDTH + 15);
 			gr.setY(py * GRID_HEIGHT + 10);
@@ -90,10 +91,10 @@ public class DiagramEditorPalette extends DrawingPalette {
 			gr.setHeight(50);
 		}
 		gr.setText(st.name());
-		gr.setTextStyle(getFactory().makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
+		gr.setTextStyle(FACTORY.makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(getFactory().makeForegroundStyle(Color.BLACK));
-		gr.setBackground(getFactory().makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
+		gr.setForeground(FACTORY.makeForegroundStyle(Color.BLACK));
+		gr.setBackground(FACTORY.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 		gr.setAllowToLeaveBounds(false);
 
@@ -123,14 +124,8 @@ public class DiagramEditorPalette extends DrawingPalette {
 		return returned;*/
 	}
 
-	@Override
-	public DianaEditor getController() {
-		return (DianaEditor) super.getController();
-	}
-
 	private PaletteElement makeSingleLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
-				getPaletteDrawing());
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 15);
 		gr.setWidth(60);
@@ -138,20 +133,19 @@ public class DiagramEditorPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(FACTORY.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setText("Label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(getFactory().makeNoneForegroundStyle());
-		gr.setBackground(getFactory().makeEmptyBackground());
-		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
+		gr.setForeground(FACTORY.makeNoneForegroundStyle());
+		gr.setBackground(FACTORY.makeEmptyBackground());
+		gr.setShadowStyle(FACTORY.makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
 	}
 
 	private PaletteElement makeMultilineLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
-				getPaletteDrawing());
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
@@ -159,21 +153,20 @@ public class DiagramEditorPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(FACTORY.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(getFactory().makeNoneForegroundStyle());
-		gr.setBackground(getFactory().makeEmptyBackground());
-		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
+		gr.setForeground(FACTORY.makeNoneForegroundStyle());
+		gr.setBackground(FACTORY.makeEmptyBackground());
+		gr.setShadowStyle(FACTORY.makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
 	}
 
 	private PaletteElement makeBoundedMultilineLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
-				getPaletteDrawing());
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
@@ -181,28 +174,32 @@ public class DiagramEditorPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(FACTORY.makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setBackground(getFactory().makeEmptyBackground());
-		gr.setForeground(getFactory().makeNoneForegroundStyle());
-		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
+		gr.setBackground(FACTORY.makeEmptyBackground());
+		gr.setForeground(FACTORY.makeNoneForegroundStyle());
+		gr.setShadowStyle(FACTORY.makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
 	}
 
-	private PaletteElement makePaletteElement(final PaletteElementGraphicalRepresentation gr, final boolean applyCurrentForeground,
+	private PaletteElement makePaletteElement(final ShapeGraphicalRepresentation gr, final boolean applyCurrentForeground,
 			final boolean applyCurrentBackground, final boolean applyCurrentTextStyle, final boolean applyCurrentShadowStyle) {
 		PaletteElement returned = new PaletteElement() {
 			@Override
 			public boolean acceptDragging(DrawingTreeNode<?, ?> target) {
-				return target instanceof RootNode || target instanceof ShapeNode;
+				return getEditor() != null && target instanceof ContainerNode;
 			}
 
 			@Override
 			public boolean elementDragged(DrawingTreeNode<?, ?> target, FGEPoint dropLocation) {
+
+				if (getEditor() == null) {
+					return false;
+				}
 
 				DiagramElement<?, ?> container = (DiagramElement<?, ?>) target.getDrawable();
 
@@ -211,22 +208,22 @@ public class DiagramEditorPalette extends DrawingPalette {
 				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 
-				Shape newShape = getController().getFactory().makeNewShape(getGraphicalRepresentation(), dropLocation,
-						getController().getDrawing());
+				Shape newShape = getEditor().getFactory()
+						.makeNewShape(getGraphicalRepresentation(), dropLocation, getEditor().getDrawing());
 
 				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
 
 				if (applyCurrentForeground) {
-					shapeGR.setForeground(getController().getCurrentForegroundStyle());
+					shapeGR.setForeground(getEditor().getCurrentForegroundStyle());
 				}
 				if (applyCurrentBackground) {
-					shapeGR.setBackground(getController().getCurrentBackgroundStyle());
+					shapeGR.setBackground(getEditor().getCurrentBackgroundStyle());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle(getController().getCurrentTextStyle());
+					shapeGR.setTextStyle(getEditor().getCurrentTextStyle());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
+					shapeGR.setShadowStyle(getEditor().getCurrentShadowStyle());
 				}
 
 				container.addToShapes(newShape);
@@ -236,14 +233,18 @@ public class DiagramEditorPalette extends DrawingPalette {
 			}
 
 			@Override
-			public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
+			public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 				return gr;
 			}
 
 			@Override
-			public DrawingPalette getPalette() {
-				return DiagramEditorPalette.this;
+			public void delete() {
+				gr.delete();
 			}
+
+			/*public DrawingPalette getPalette() {
+				return DiagramEditorPalette.this;
+			}*/
 		};
 		// gr.setDrawable(returned);
 		return returned;

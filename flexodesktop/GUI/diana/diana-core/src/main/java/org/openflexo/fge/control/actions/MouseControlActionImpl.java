@@ -23,25 +23,24 @@ import java.awt.Point;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.MouseControlAction;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.view.FGEView;
 
-public abstract class MouseControlActionImpl implements MouseControlAction {
+public abstract class MouseControlActionImpl<E extends AbstractDianaEditor<?, ?, ?>> implements MouseControlAction<E> {
 
 	@Override
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context) {
 		return true;
 	}
 
-	protected Point getPointInView(DrawingTreeNode<?, ?> node, AbstractDianaEditor<?, ?, ?> editor, MouseControlContext context) {
+	protected Point getPointInView(DrawingTreeNode<?, ?> node, E editor, MouseControlContext context) {
 		FGEView<?, ?> view = editor.getDrawingView().viewForNode(node);
 		return editor.getDelegate().getPointInView(context.getSource(), context.getPoint(), view);
 
 	}
 
-	protected Point getPointInDrawingView(AbstractDianaEditor<?, ?, ?> editor, MouseControlContext context) {
+	protected Point getPointInDrawingView(E editor, MouseControlContext context) {
 		return editor.getDelegate().getPointInView(context.getSource(), context.getPoint(), editor.getDrawingView());
 	}
 

@@ -53,7 +53,7 @@ public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> impleme
 	 * @param editor
 	 */
 	@Override
-	public void setEditor(AbstractDianaEditor<?, F, ?> editor) {
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
 		if (this.editor != editor) {
 			if (this.editor != null) {
 				// This tool was associated to another editor, disconnect it

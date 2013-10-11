@@ -24,14 +24,12 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.drawingeditor.model.Connector;
 import org.openflexo.fge.drawingeditor.model.Diagram;
@@ -40,13 +38,13 @@ import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.JDianaInteractiveEditor;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
-public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingViewFactory, JComponent> {
+public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 	private JPopupMenu contextualMenu;
 	private DrawingTreeNode<?, ?> contextualMenuInvoker;
@@ -54,8 +52,8 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingViewFactor
 
 	// private Shape copiedShape;
 
-	public DianaEditor(final DiagramDrawing aDrawing, DiagramFactory factory) {
-		super(aDrawing, factory, new SwingViewFactory());
+	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory) {
+		super(aDrawing, factory);
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
@@ -107,7 +105,7 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingViewFactor
 			}
 		});
 		contextualMenu.add(cutItem);
-		initPalette();
+		// initPalette();
 	}
 
 	@Override
@@ -120,18 +118,19 @@ public class DianaEditor extends DianaInteractiveEditor<Diagram, SwingViewFactor
 		return (DiagramFactory) super.getFactory();
 	}
 
-	private void initPalette() {
-		// TODO Auto-generated method stub
-		_palette = new DiagramEditorPalette(getFactory());
-		registerPalette(_palette);
-		activatePalette(_palette);
-	}
+	/*private void initPalette() {
+		paletteModel = new DiagramEditorPalette(this);
+		palette = (JDianaPalette) getToolFactory().makeDianaPalette(paletteModel);
+		palette.setEditor(this);
+		activatePalette(palette);
+	}*/
 
-	private DiagramEditorPalette _palette;
+	// private DiagramEditorPalette paletteModel;
+	// private JDianaPalette palette;
 
-	public DiagramEditorPalette getPalette() {
-		return _palette;
-	}
+	/*public DiagramEditorPalette getPaletteModel() {
+		return paletteModel;
+	}*/
 
 	@Deprecated
 	public void addNewShape(Shape aShape, DiagramElement father) {

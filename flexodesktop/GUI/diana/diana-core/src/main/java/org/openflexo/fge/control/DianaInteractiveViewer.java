@@ -80,7 +80,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
 
-	private MouseDragControl currentMouseDrag = null;
+	private MouseDragControl<DianaInteractiveViewer<?, ?, ?>> currentMouseDrag = null;
 
 	private FGEPoint lastClickedPoint;
 	private DrawingTreeNode<?, ?> lastSelectedNode;
@@ -403,11 +403,11 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 
 	}
 
-	public MouseDragControl getCurrentMouseDrag() {
+	public MouseDragControl<DianaInteractiveViewer<?, ?, ?>> getCurrentMouseDrag() {
 		return currentMouseDrag;
 	}
 
-	public void setCurrentMouseDrag(MouseDragControl aMouseDrag) {
+	public void setCurrentMouseDrag(MouseDragControl<DianaInteractiveViewer<?, ?, ?>> aMouseDrag) {
 		currentMouseDrag = aMouseDrag;
 	}
 

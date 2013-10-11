@@ -40,7 +40,7 @@ public class DiagramEditor {
 
 	private Diagram diagram;
 	private DiagramDrawing drawing;
-	private DianaEditor controller;
+	private DianaDrawingEditor controller;
 	private int index;
 	private File file = null;
 	private DiagramFactory factory;
@@ -104,9 +104,9 @@ public class DiagramEditor {
 		return drawing;
 	}
 
-	public DianaEditor getController() {
+	public DianaDrawingEditor getController() {
 		if (controller == null) {
-			controller = new DianaEditor(getDrawing(), factory);
+			controller = new DianaDrawingEditor(getDrawing(), factory);
 		}
 		return controller;
 	}

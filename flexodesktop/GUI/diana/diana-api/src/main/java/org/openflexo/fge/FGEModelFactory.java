@@ -24,6 +24,7 @@ import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseControl.MouseButton;
@@ -911,117 +912,125 @@ public abstract class FGEModelFactory extends ModelFactory {
 		return returned;
 	}
 
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount) {
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseClickControl(String aName, MouseButton button, int clickCount) {
 		return makeMouseClickControl(aName, button, clickCount, false, false, false, false);
 	}
 
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action) {
+	public <E extends DianaEditor<?>> MouseClickControl<E> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			MouseClickControlAction<E> action) {
 		return makeMouseClickControl(aName, button, clickCount, action, false, false, false, false);
 	}
 
-	public MouseClickControl makeMouseShiftClickControl(String aName, MouseButton button, int clickCount) {
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseShiftClickControl(String aName, MouseButton button, int clickCount) {
 		return makeMouseClickControl(aName, button, clickCount, true, false, false, false);
 	}
 
-	public MouseClickControl makeMouseControlClickControl(String aName, MouseButton button, int clickCount) {
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseControlClickControl(String aName, MouseButton button, int clickCount) {
 		return makeMouseClickControl(aName, button, clickCount, false, true, false, false);
 	}
 
-	public MouseClickControl makeMouseMetaClickControl(String aName, MouseButton button, int clickCount) {
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseMetaClickControl(String aName, MouseButton button, int clickCount) {
 		return makeMouseClickControl(aName, button, clickCount, false, false, true, false);
 	}
 
-	public MouseClickControl makeMouseAltClickControl(String aName, MouseButton button, int clickCount) {
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseAltClickControl(String aName, MouseButton button, int clickCount) {
 		return makeMouseClickControl(aName, button, clickCount, false, false, false, true);
 	}
 
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType) {
 		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, false, false);
 	}
 
-	public MouseClickControl makeMouseShiftClickControl(String aName, MouseButton button, int clickCount,
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseShiftClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType) {
 		return makeMouseClickControl(aName, button, clickCount, actionType, true, false, false, false);
 	}
 
-	public MouseClickControl makeMouseControlClickControl(String aName, MouseButton button, int clickCount,
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseControlClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType) {
 		return makeMouseClickControl(aName, button, clickCount, actionType, false, true, false, false);
 	}
 
-	public MouseClickControl makeMouseMetaClickControl(String aName, MouseButton button, int clickCount,
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseMetaClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType) {
 		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, true, false);
 	}
 
-	public MouseClickControl makeMouseAltClickControl(String aName, MouseButton button, int clickCount,
+	public MouseClickControl<? extends DianaEditor<?>> makeMouseAltClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType) {
 		return makeMouseClickControl(aName, button, clickCount, actionType, false, false, false, true);
 	}
 
-	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+	public abstract MouseClickControl<? extends DianaEditor<?>> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
-	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
+	public abstract MouseClickControl<? extends DianaEditor<?>> makeMouseClickControl(String aName, MouseButton button, int clickCount,
 			PredefinedMouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
 			boolean altPressed);
 
-	public abstract MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			MouseClickControlAction action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+	public abstract <E extends DianaEditor<?>> MouseClickControl<E> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			MouseClickControlAction<E> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, false, false, false, false);
 	}
 
-	public MouseDragControl makeMouseShiftDragControl(String aName, MouseButton button) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseShiftDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, true, false, false, false);
 	}
 
-	public MouseDragControl makeMouseControlDragControl(String aName, MouseButton button) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseControlDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, false, true, false, false);
 	}
 
-	public MouseDragControl makeMouseMetaDragControl(String aName, MouseButton button) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseMetaDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, false, false, true, false);
 	}
 
-	public MouseDragControl makeMouseAltDragControl(String aName, MouseButton button) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseAltDragControl(String aName, MouseButton button) {
 		return makeMouseDragControl(aName, button, false, false, false, true);
 	}
 
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType) {
 		return makeMouseDragControl(aName, button, actionType, false, false, false, false);
 	}
 
-	public MouseDragControl makeMouseShiftDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseShiftDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType) {
 		return makeMouseDragControl(aName, button, actionType, true, false, false, false);
 	}
 
-	public MouseDragControl makeMouseControlDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseControlDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType) {
 		return makeMouseDragControl(aName, button, actionType, false, true, false, false);
 	}
 
-	public MouseDragControl makeMouseMetaDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseMetaDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType) {
 		return makeMouseDragControl(aName, button, actionType, false, false, true, false);
 	}
 
-	public MouseDragControl makeMouseAltDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType) {
+	public MouseDragControl<? extends DianaEditor<?>> makeMouseAltDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType) {
 		return makeMouseDragControl(aName, button, actionType, false, false, false, true);
 	}
 
-	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed);
+	public abstract MouseDragControl<? extends DianaEditor<?>> makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
-	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button,
+	public abstract MouseDragControl<? extends DianaEditor<?>> makeMouseDragControl(String aName, MouseButton button,
 			PredefinedMouseDragControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
 			boolean altPressed);
 
-	public abstract MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
+	public abstract <E extends DianaEditor<?>> MouseDragControl<E> makeMouseDragControl(String aName, MouseButton button,
+			MouseDragControlAction<E> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed);
 
-	public abstract MouseDragControlAction makeMouseDragControlAction(PredefinedMouseDragControlActionType actionType);
+	public abstract MouseDragControlAction<? extends DianaEditor<?>> makeMouseDragControlAction(
+			PredefinedMouseDragControlActionType actionType);
 
-	public abstract MouseClickControlAction makeMouseClickControlAction(PredefinedMouseClickControlActionType actionType);
+	public abstract MouseClickControlAction<? extends DianaEditor<?>> makeMouseClickControlAction(
+			PredefinedMouseClickControlActionType actionType);
 
 }

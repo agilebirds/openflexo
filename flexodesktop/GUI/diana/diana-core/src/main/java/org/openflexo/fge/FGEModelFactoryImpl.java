@@ -15,6 +15,8 @@ import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
+import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseControl.MouseButton;
@@ -146,45 +148,76 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 	}
 
 	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, null, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount,
-			PredefinedMouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
-			boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, makeMouseClickControlAction(actionType), shiftPressed, ctrlPressed,
+	public MouseClickControl<AbstractDianaEditor<?, ?, ?>> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseClickControlImpl<AbstractDianaEditor<?, ?, ?>>(aName, button, clickCount, null, shiftPressed, ctrlPressed,
 				metaPressed, altPressed, this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public MouseClickControl makeMouseClickControl(String aName, MouseButton button, int clickCount, MouseClickControlAction action,
-			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseClickControlImpl(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	public MouseClickControl<AbstractDianaEditor<?, ?, ?>> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			PredefinedMouseClickControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed) {
+		return new MouseClickControlImpl<AbstractDianaEditor<?, ?, ?>>(aName, button, clickCount,
+				(MouseClickControlAction<AbstractDianaEditor<?, ?, ?>>) makeMouseClickControlAction(actionType), shiftPressed, ctrlPressed,
+				metaPressed, altPressed, this);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E extends DianaEditor<?>> MouseClickControl<E> makeMouseClickControl(String aName, MouseButton button, int clickCount,
+			MouseClickControlAction<E> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		// Little compiling hack to "cast" generics E (the goal is to change upper bounds of E from DianaEditor<?> to AbstractDianaEditor<?,
+		// ?, ?>)
+		return (MouseClickControl<E>) makeMouseClickControl2(aName, button, clickCount,
+				(MouseClickControlAction<AbstractDianaEditor<?, ?, ?>>) action, shiftPressed, ctrlPressed, metaPressed, altPressed);
+	}
+
+	// Little compiling hack to "cast" generics E (the goal is to change upper bounds of E from DianaEditor<?> to AbstractDianaEditor<?, ?,
+	// ?>)
+	private <E2 extends AbstractDianaEditor<?, ?, ?>> MouseClickControl<E2> makeMouseClickControl2(String aName, MouseButton button,
+			int clickCount, MouseClickControlAction<E2> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed) {
+		return new MouseClickControlImpl<E2>(aName, button, clickCount, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
 	}
 
 	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, null, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
-	}
-
-	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, PredefinedMouseDragControlActionType actionType,
+	public MouseDragControl<? extends AbstractDianaEditor<?, ?, ?>> makeMouseDragControl(String aName, MouseButton button,
 			boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, makeMouseDragControlAction(actionType), shiftPressed, ctrlPressed, metaPressed,
+		return new MouseDragControlImpl<AbstractDianaEditor<?, ?, ?>>(aName, button, null, shiftPressed, ctrlPressed, metaPressed,
 				altPressed, this);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public MouseDragControl makeMouseDragControl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed,
-			boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
-		return new MouseDragControlImpl(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	public MouseDragControl<AbstractDianaEditor<?, ?, ?>> makeMouseDragControl(String aName, MouseButton button,
+			PredefinedMouseDragControlActionType actionType, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
+			boolean altPressed) {
+		return new MouseDragControlImpl<AbstractDianaEditor<?, ?, ?>>(aName, button,
+				(MouseDragControlAction<AbstractDianaEditor<?, ?, ?>>) makeMouseDragControlAction(actionType), shiftPressed, ctrlPressed,
+				metaPressed, altPressed, this);
 	}
 
-	public MouseDragControlAction makeMouseDragControlAction(PredefinedMouseDragControlActionType actionType) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E extends DianaEditor<?>> MouseDragControl<E> makeMouseDragControl(String aName, MouseButton button,
+			MouseDragControlAction<E> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		// Little compiling hack to "cast" generics E (the goal is to change upper bounds of E from DianaEditor<?> to AbstractDianaEditor<?,
+		// ?, ?>)
+		return (MouseDragControl<E>) makeMouseDragControl2(aName, button, (MouseDragControlAction<AbstractDianaEditor<?, ?, ?>>) action,
+				shiftPressed, ctrlPressed, metaPressed, altPressed);
+	}
+
+	// Little compiling hack to "cast" generics E (the goal is to change upper bounds of E from DianaEditor<?> to AbstractDianaEditor<?, ?,
+	// ?>)
+	private <E2 extends AbstractDianaEditor<?, ?, ?>> MouseDragControl<E2> makeMouseDragControl2(String aName, MouseButton button,
+			MouseDragControlAction<E2> action, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed, boolean altPressed) {
+		return new MouseDragControlImpl<E2>(aName, button, action, shiftPressed, ctrlPressed, metaPressed, altPressed, this);
+	}
+
+	public MouseDragControlAction<? extends AbstractDianaEditor<?, ?, ?>> makeMouseDragControlAction(
+			PredefinedMouseDragControlActionType actionType) {
 		switch (actionType) {
 		case MOVE:
 			return new MoveAction();
@@ -198,7 +231,8 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		}
 	}
 
-	public MouseClickControlAction makeMouseClickControlAction(PredefinedMouseClickControlActionType actionType) {
+	public MouseClickControlAction<? extends AbstractDianaEditor<?, ?, ?>> makeMouseClickControlAction(
+			PredefinedMouseClickControlActionType actionType) {
 		switch (actionType) {
 		case SELECTION:
 			return new SelectionAction();

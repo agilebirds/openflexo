@@ -22,15 +22,16 @@ package org.openflexo.fge.control.actions;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseControlContext;
 
-public abstract class MouseClickControlActionImpl extends MouseControlActionImpl implements MouseClickControlAction {
+public abstract class MouseClickControlActionImpl<E extends AbstractDianaEditor<?, ?, ?>> extends MouseControlActionImpl<E> implements
+		MouseClickControlAction<E> {
 
 	static final Logger logger = Logger.getLogger(MouseClickControlActionImpl.class.getPackage().getName());
 
 	@Override
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 }

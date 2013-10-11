@@ -18,7 +18,7 @@ public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super
 
 	public DianaToolSelector(AbstractDianaEditor<?, F, ?> editor) {
 		super();
-		setEditor(editor);
+		attachToEditor(editor);
 	}
 
 	/**

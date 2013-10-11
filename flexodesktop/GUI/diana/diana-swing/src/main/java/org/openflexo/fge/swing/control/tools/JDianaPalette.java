@@ -60,7 +60,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 
 	private static final Logger logger = Logger.getLogger(JDianaPalette.class.getPackage().getName());
 
-	private JScrollPane scrollPane;
+	private JScrollPane component;
 
 	private DragSourceContext dragSourceContext;
 
@@ -71,22 +71,27 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 	@Override
 	protected void updatePalette(DrawingPalette palette) {
 		super.updatePalette(palette);
-		if (scrollPane != null) {
-			scrollPane.setViewportView(getPaletteView());
+		if (component != null) {
+			component.setViewportView(getPaletteView());
 		}
 	}
 
-	public JScrollPane getPaletteViewInScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+	public JScrollPane getComponent() {
+		if (component == null) {
+			component = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
-		return scrollPane;
+		return component;
 	}
 
 	@SuppressWarnings("unchecked")
 	public JDrawingView<DrawingPalette> getPaletteView() {
 		return (JDrawingView<DrawingPalette>) super.getPaletteView();
+	}
+
+	@Override
+	public SwingViewFactory getDianaFactory() {
+		return SwingViewFactory.INSTANCE;
 	}
 
 	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, AbstractDianaEditor<?, ?, ?> controller) {
@@ -398,8 +403,8 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 
 	public void updatePalette() {
 		super.updatePalette();
-		if (scrollPane != null) {
-			scrollPane.setViewportView(getPaletteView());
+		if (component != null) {
+			component.setViewportView(getPaletteView());
 		}
 	}
 

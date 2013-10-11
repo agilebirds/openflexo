@@ -21,27 +21,12 @@ package org.openflexo.fge.swing.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fge.FGECoreUtils;
-import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.Arc;
-import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.Losange;
-import org.openflexo.fge.shapes.Oval;
-import org.openflexo.fge.shapes.Polygon;
-import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.RegularPolygon;
 import org.openflexo.fge.shapes.ShapeSpecification;
-import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.shapes.Square;
-import org.openflexo.fge.shapes.Star;
-import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.ShapePreviewPanel;
 import org.openflexo.fib.FIBLibrary;
@@ -51,7 +36,6 @@ import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.swing.CustomPopup;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * Widget allowing to view and edit a ShapeSpecification
@@ -63,8 +47,6 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implements FIBShapeSelector<JFIBShapeSelector> {
 
 	static final Logger logger = Logger.getLogger(JFIBShapeSelector.class.getPackage().getName());
-
-	private static final FGEModelFactory SHAPE_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
 	private ShapeSpecification _revertValue;
 
@@ -125,146 +107,6 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 		}
 		getFrontComponent().setShape(editedObject);
 		// getFrontComponent().update();
-	}
-
-	/**
-	 * Convenient class use to manipulate BackgroundStyle
-	 * 
-	 * @author sylvain
-	 * 
-	 */
-	public static class ShapeFactory implements HasPropertyChangeSupport {
-		private static final String DELETED = "deleted";
-
-		private ShapeSpecification shape;
-
-		private Rectangle rectangle;
-		private Square square;
-		private Polygon polygon;
-		private RegularPolygon regularPolygon;
-		private Losange losange;
-		private Triangle triangle;
-		private Oval oval;
-		private Circle circle;
-		private Arc arc;
-		private Star star;
-
-		private PropertyChangeSupport pcSupport;
-
-		public ShapeFactory(ShapeSpecification shape) {
-			pcSupport = new PropertyChangeSupport(this);
-			this.shape = shape;
-		}
-
-		@Override
-		public PropertyChangeSupport getPropertyChangeSupport() {
-			return pcSupport;
-		}
-
-		public void delete() {
-			pcSupport.firePropertyChange(DELETED, false, true);
-			pcSupport = null;
-		}
-
-		@Override
-		public String getDeletedProperty() {
-			return DELETED;
-		}
-
-		public ShapeSpecification getShape() {
-			return shape;
-		}
-
-		public void setShape(ShapeSpecification shape) {
-			ShapeSpecification oldShape = this.shape;
-			this.shape = shape;
-			pcSupport.firePropertyChange("shape", oldShape, shape);
-		}
-
-		public ShapeType getShapeType() {
-			if (shape != null) {
-				return shape.getShapeType();
-			}
-			return null;
-		}
-
-		public void setShapeType(ShapeType shapeType) {
-			// logger.info("setBackgroundStyleType with " +
-			// backgroundStyleType);
-			ShapeType oldShapeType = getShapeType();
-
-			if (oldShapeType != shapeType) {
-
-				// System.out.println("set shape type to " + shapeType);
-
-				switch (shapeType) {
-				case RECTANGLE:
-					if (rectangle == null) {
-						rectangle = (Rectangle) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = rectangle;
-					break;
-				case SQUARE:
-					if (square == null) {
-						square = (Square) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = square;
-					break;
-				case CUSTOM_POLYGON:
-					if (polygon == null) {
-						polygon = SHAPE_FACTORY.makePolygon(null, new FGEPoint(0.1, 0.1), new FGEPoint(0.3, 0.9), new FGEPoint(0.9, 0.3));
-					}
-					shape = polygon;
-					break;
-				case POLYGON:
-					if (regularPolygon == null) {
-						regularPolygon = (RegularPolygon) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = regularPolygon;
-					break;
-				case TRIANGLE:
-					if (triangle == null) {
-						triangle = (Triangle) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = triangle;
-					break;
-				case LOSANGE:
-					if (losange == null) {
-						losange = (Losange) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = losange;
-					break;
-				case OVAL:
-					if (oval == null) {
-						oval = (Oval) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = oval;
-					break;
-				case CIRCLE:
-					if (circle == null) {
-						circle = (Circle) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = circle;
-					break;
-				case ARC:
-					if (arc == null) {
-						arc = (Arc) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = arc;
-					break;
-				case STAR:
-					if (star == null) {
-						star = (Star) SHAPE_FACTORY.makeShape(shapeType);
-					}
-					shape = star;
-					break;
-				default:
-					shape = SHAPE_FACTORY.makeShape(shapeType);
-				}
-
-				pcSupport.firePropertyChange("shapeType", oldShapeType, getShapeType());
-			}
-		}
 	}
 
 	public class ShapeDetailsPanel extends ResizablePanel {

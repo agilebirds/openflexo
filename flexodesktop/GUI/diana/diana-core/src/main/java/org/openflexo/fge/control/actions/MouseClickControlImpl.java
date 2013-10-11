@@ -21,24 +21,24 @@ package org.openflexo.fge.control.actions;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseClickControlAction;
 import org.openflexo.fge.control.MouseControlContext;
 
-public class MouseClickControlImpl extends MouseControlImpl implements MouseClickControl {
+public class MouseClickControlImpl<E extends AbstractDianaEditor<?, ?, ?>> extends MouseControlImpl<E> implements MouseClickControl<E> {
 
 	private int clickCount = 1;
-	private MouseClickControlAction action;
+	private MouseClickControlAction<E> action;
 
-	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlAction action, boolean shiftPressed,
+	public MouseClickControlImpl(String aName, MouseButton button, int clickCount, MouseClickControlAction<E> action, boolean shiftPressed,
 			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
 		this.clickCount = clickCount;
 		this.action = action;
 	}
 
-	public MouseClickControlAction getControlAction() {
+	public MouseClickControlAction<E> getControlAction() {
 		return action;
 	}
 
@@ -48,7 +48,7 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 	}
 
 	@Override
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context) {
 		if (!super.isApplicable(node, controller, context)) {
 			return false;
 		}
@@ -62,7 +62,7 @@ public class MouseClickControlImpl extends MouseControlImpl implements MouseClic
 	 * @param graphicalRepresentation
 	 * @param controller
 	 */
-	public void handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public void handleClick(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context) {
 		if (action != null) {
 			if (action.handleClick(node, controller, context)) {
 				context.consume();

@@ -23,9 +23,9 @@ package org.openflexo.fge.control;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-public interface MouseDragControl extends MouseControl {
+public interface MouseDragControl<E extends DianaEditor<?>> extends MouseControl<E> {
 
-	public MouseDragControlAction getControlAction();
+	public MouseDragControlAction<E> getControlAction();
 
 	public boolean isSignificativeDrag();
 

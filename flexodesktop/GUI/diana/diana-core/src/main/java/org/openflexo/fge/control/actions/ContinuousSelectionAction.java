@@ -20,13 +20,13 @@
 package org.openflexo.fge.control.actions;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 
-public class ContinuousSelectionAction extends MouseClickControlActionImpl {
+public class ContinuousSelectionAction extends MouseClickControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseControlContext context) {
 		System.out.println("Continuous select " + node);
 		return true;
 	}

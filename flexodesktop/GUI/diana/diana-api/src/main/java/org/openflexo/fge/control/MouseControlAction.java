@@ -30,7 +30,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  * @author sylvain
  * 
  */
-public interface MouseControlAction {
+public interface MouseControlAction<E extends DianaEditor<?>> {
 
 	/**
 	 * Return boolean indicating if this control action is applicable in the current context
@@ -40,6 +40,6 @@ public interface MouseControlAction {
 	 * @param context
 	 * @return
 	 */
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 }

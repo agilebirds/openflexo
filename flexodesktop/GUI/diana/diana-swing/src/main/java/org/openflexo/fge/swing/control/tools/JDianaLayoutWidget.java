@@ -119,4 +119,9 @@ public class JDianaLayoutWidget extends DianaLayoutWidget<JToolBar, SwingViewFac
 		return component;
 	}
 
+	@Override
+	public SwingViewFactory getDianaFactory() {
+		return SwingViewFactory.INSTANCE;
+	}
+
 }

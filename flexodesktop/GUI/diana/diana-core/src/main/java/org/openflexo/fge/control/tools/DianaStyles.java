@@ -21,10 +21,18 @@ package org.openflexo.fge.control.tools;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGECoreUtils;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
@@ -52,6 +60,20 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	private FIBTextStyleSelector<?> textStyleSelector;
 	private FIBShadowStyleSelector<?> shadowStyleSelector;
 	private FIBShapeSelector<?> shapeSelector;
+
+	private ForegroundStyle defaultForegroundStyle;
+	private BackgroundStyle defaultBackgroundStyle;
+	private TextStyle defaultTextStyle;
+	private ShadowStyle defaultShadowStyle;
+	private ShapeSpecification defaultShape;
+
+	public DianaStyles() {
+		defaultForegroundStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultForegroundStyle();
+		defaultBackgroundStyle = FGECoreUtils.TOOLS_FACTORY.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		defaultTextStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultTextStyle();
+		defaultShadowStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultShadowStyle();
+		defaultShape = FGECoreUtils.TOOLS_FACTORY.makeShape(ShapeType.RECTANGLE);
+	}
 
 	/**
 	 * Return the technology-specific component representing the toolbar
@@ -91,7 +113,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBForegroundStyleSelector<?> getForegroundSelector() {
 		if (foregroundSelector == null) {
-			foregroundSelector = getEditor().getDianaFactory().makeFIBForegroundStyleSelector(getEditor().getCurrentForegroundStyle());
+			foregroundSelector = getDianaFactory().makeFIBForegroundStyleSelector(getCurrentForegroundStyle());
 			foregroundSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -117,7 +139,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBBackgroundStyleSelector<?> getBackgroundSelector() {
 		if (backgroundSelector == null) {
-			backgroundSelector = getEditor().getDianaFactory().makeFIBBackgroundStyleSelector(getEditor().getCurrentBackgroundStyle());
+			backgroundSelector = getDianaFactory().makeFIBBackgroundStyleSelector(getCurrentBackgroundStyle());
 			backgroundSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -140,7 +162,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBTextStyleSelector<?> getTextStyleSelector() {
 		if (textStyleSelector == null) {
-			textStyleSelector = getEditor().getDianaFactory().makeFIBTextStyleSelector(getEditor().getCurrentTextStyle());
+			textStyleSelector = getDianaFactory().makeFIBTextStyleSelector(getCurrentTextStyle());
 			textStyleSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -163,7 +185,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBShadowStyleSelector<?> getShadowStyleSelector() {
 		if (shadowStyleSelector == null) {
-			shadowStyleSelector = getEditor().getDianaFactory().makeFIBShadowStyleSelector(getEditor().getCurrentShadowStyle());
+			shadowStyleSelector = getDianaFactory().makeFIBShadowStyleSelector(getCurrentShadowStyle());
 			shadowStyleSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -186,7 +208,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBShapeSelector<?> getShapeSelector() {
 		if (shapeSelector == null) {
-			shapeSelector = getEditor().getDianaFactory().makeFIBShapeSelector(getEditor().getCurrentShape());
+			shapeSelector = getDianaFactory().makeFIBShapeSelector(getCurrentShape());
 			shapeSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -206,5 +228,40 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 			});
 		}
 		return shapeSelector;
+	}
+
+	public ForegroundStyle getCurrentForegroundStyle() {
+		if (getEditor() != null) {
+			return getEditor().getCurrentForegroundStyle();
+		}
+		return defaultForegroundStyle;
+	}
+
+	public BackgroundStyle getCurrentBackgroundStyle() {
+		if (getEditor() != null) {
+			return getEditor().getCurrentBackgroundStyle();
+		}
+		return defaultBackgroundStyle;
+	}
+
+	public TextStyle getCurrentTextStyle() {
+		if (getEditor() != null) {
+			return getEditor().getCurrentTextStyle();
+		}
+		return defaultTextStyle;
+	}
+
+	public ShadowStyle getCurrentShadowStyle() {
+		if (getEditor() != null) {
+			return getEditor().getCurrentShadowStyle();
+		}
+		return defaultShadowStyle;
+	}
+
+	public ShapeSpecification getCurrentShape() {
+		if (getEditor() != null) {
+			return getEditor().getCurrentShape();
+		}
+		return defaultShape;
 	}
 }

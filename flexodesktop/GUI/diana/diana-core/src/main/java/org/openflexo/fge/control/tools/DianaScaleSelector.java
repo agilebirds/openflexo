@@ -19,7 +19,7 @@ public abstract class DianaScaleSelector<C, F extends DianaViewFactory<F, ? supe
 
 	public DianaScaleSelector(AbstractDianaEditor<?, F, ?> editor) {
 		super();
-		setEditor(editor);
+		attachToEditor(editor);
 	}
 
 	/**

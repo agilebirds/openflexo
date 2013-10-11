@@ -102,4 +102,10 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 			}
 		}
 	}
+
+	@Override
+	public SwingViewFactory getDianaFactory() {
+		return SwingViewFactory.INSTANCE;
+	}
+
 }

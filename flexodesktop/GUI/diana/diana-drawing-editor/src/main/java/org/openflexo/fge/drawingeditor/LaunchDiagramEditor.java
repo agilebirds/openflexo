@@ -49,6 +49,10 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
+import org.openflexo.fge.swing.control.SwingToolFactory;
+import org.openflexo.fge.swing.control.tools.JDianaPalette;
+import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
+import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
@@ -147,14 +151,6 @@ public class LaunchDiagramEditor {
 
 		inspector = new FIBInspectorController(frame);
 
-		paletteDialog = new JDialog(frame, "Palette", false);
-		JPanel emptyContent = new JPanel();
-		emptyContent.setPreferredSize(new Dimension(300, 300));
-		paletteDialog.getContentPane().add(emptyContent);
-		paletteDialog.setLocation(1010, 0);
-		paletteDialog.pack();
-		paletteDialog.setVisible(true);
-
 	}
 
 	private Vector<DiagramEditor> diagramEditors = new Vector<DiagramEditor>();
@@ -201,7 +197,7 @@ public class LaunchDiagramEditor {
 		// AbstractDianaEditor<DiagramDrawing> controller = new AbstractDianaEditor<DiagramDrawing>(aDrawing, factory)
 
 		tabbedPane.add(diagramEditor.getTitle(), new MyDrawingViewScrollPane(diagramEditor.getController().getDrawingView()));
-		diagramEditor.getController().getToolbox().getForegroundInspector().setVisible(true);
+		// diagramEditor.getController().getToolbox().getForegroundInspector().setVisible(true);
 		switchToDiagramEditor(diagramEditor);
 
 		/*frame.addKeyListener(new KeyAdapter() {
@@ -251,23 +247,24 @@ public class LaunchDiagramEditor {
 
 	private void drawingSwitched(DiagramEditor diagramEditor) {
 		if (currentDiagramEditor != null) {
-			mainPanel.remove(currentDiagramEditor.getController().getScalePanel());
+			// mainPanel.remove(currentDiagramEditor.getController().getScalePanel());
 			currentDiagramEditor.getController().deleteObserver(inspector);
 		}
 		currentDiagramEditor = diagramEditor;
+		stylesWidget.attachToEditor(diagramEditor.getController());
+		scaleSelector.attachToEditor(diagramEditor.getController());
+		commonPalette.attachToEditor(diagramEditor.getController());
 
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		/*JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(currentDiagramEditor.getController().getToolbox().getStyleToolBar());
 		topPanel.add(currentDiagramEditor.getController().getScalePanel());
 
-		mainPanel.add(topPanel, BorderLayout.NORTH);
+		mainPanel.add(topPanel, BorderLayout.NORTH);*/
+
 		currentDiagramEditor.getController().addObserver(inspector);
 		updateFrameTitle();
 		mainPanel.revalidate();
 		mainPanel.repaint();
-		paletteDialog.getContentPane().removeAll();
-		paletteDialog.getContentPane().add(currentDiagramEditor.getController().getPalette().getPaletteView());
-		paletteDialog.pack();
 	}
 
 	private void updateFrameTitle() {
@@ -278,9 +275,34 @@ public class LaunchDiagramEditor {
 		tabbedPane.setTitleAt(diagramEditors.indexOf(currentDiagramEditor), currentDiagramEditor.getTitle());
 	}
 
+	private JDianaScaleSelector scaleSelector;
+	private JDianaStyles stylesWidget;
+	private JDianaPalette commonPalette;
+	private DiagramEditorPalette commonPaletteModel;
+
 	public void showPanel() {
+
 		frame.setTitle("Basic drawing editor");
+
 		mainPanel = new JPanel(new BorderLayout());
+
+		stylesWidget = SwingToolFactory.INSTANCE.makeDianaStyles();
+		scaleSelector = SwingToolFactory.INSTANCE.makeDianaScaleSelector(null);
+
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(stylesWidget.getComponent());
+		topPanel.add(scaleSelector.getComponent());
+
+		mainPanel.add(topPanel, BorderLayout.NORTH);
+
+		commonPaletteModel = new DiagramEditorPalette();
+		commonPalette = SwingToolFactory.INSTANCE.makeDianaPalette(commonPaletteModel);
+
+		paletteDialog = new JDialog(frame, "Palette", false);
+		paletteDialog.getContentPane().add(commonPalette.getComponent());
+		paletteDialog.setLocation(1010, 0);
+		paletteDialog.pack();
+		paletteDialog.setVisible(true);
 
 		JMenuBar mb = new JMenuBar();
 		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "file"));

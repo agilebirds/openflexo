@@ -20,42 +20,43 @@
 package org.openflexo.fge.drawingeditor;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-
-import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.control.actions.CustomDragControlAction;
+import org.openflexo.fge.control.MouseControlContext;
+import org.openflexo.fge.control.actions.MouseDragControlActionImpl;
 import org.openflexo.fge.control.actions.MouseDragControlImpl;
 import org.openflexo.fge.drawingeditor.model.Connector;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
+import org.openflexo.fge.swing.control.JMouseControlContext;
 
-public class DrawEdgeControl extends MouseDragControlImpl {
-
-	Point currentDraggingLocationInDrawingView = null;
-	boolean drawEdge = false;
-	ShapeNode<Shape> fromShape = null;
-	ShapeNode<Shape> toShape = null;
-	private DiagramFactory factory;
+public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 
 	public DrawEdgeControl(DiagramFactory factory) {
-		super("Draw edge", MouseButton.LEFT, false, true, false, false, factory); // CTRL DRAG
-		action = new DrawEdgeAction();
-		this.factory = factory;
+		super("Draw edge", MouseButton.LEFT, new DrawEdgeAction(factory), false, true, false, false, factory); // CTRL DRAG
 	}
 
-	protected class DrawEdgeAction extends CustomDragControlAction {
+	protected static class DrawEdgeAction extends MouseDragControlActionImpl<DianaDrawingEditor> {
+
+		Point currentDraggingLocationInDrawingView = null;
+		boolean drawEdge = false;
+		ShapeNode<Shape> fromShape = null;
+		ShapeNode<Shape> toShape = null;
+		private DiagramFactory factory;
+
+		public DrawEdgeAction(DiagramFactory factory) {
+			this.factory = factory;
+		}
+
 		@Override
-		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaDrawingEditor controller, MouseControlContext context) {
 			if (node instanceof ShapeNode) {
 				drawEdge = true;
 				fromShape = (ShapeNode<Shape>) node;
@@ -66,7 +67,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event,
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaDrawingEditor controller, MouseControlContext context,
 				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
@@ -74,7 +75,7 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
 							(DiagramDrawing) controller.getDrawing());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
-					((DianaEditor) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
+					((DianaDrawingEditor) controller).addNewConnector(newConnector, (DiagramElement) fatherNode.getDrawable());
 				}
 				drawEdge = false;
 				fromShape = null;
@@ -86,16 +87,16 @@ public class DrawEdgeControl extends MouseDragControlImpl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> controller, MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaDrawingEditor controller, MouseControlContext context) {
 			if (drawEdge) {
+				MouseEvent event = ((JMouseControlContext) context).getMouseEvent();
 				DrawingTreeNode<?, ?> dtn = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (dtn instanceof ShapeNode && dtn != fromShape && !fromShape.getAncestors().contains(dtn)) {
 					toShape = (ShapeNode<Shape>) dtn;
 				} else {
 					toShape = null;
 				}
-				currentDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
-						controller.getDrawingView());
+				currentDraggingLocationInDrawingView = getPointInDrawingView(controller, context);
 				controller.getDrawingView().getPaintManager().repaint(controller.getDrawingView());
 				return true;
 			}

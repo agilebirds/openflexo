@@ -75,7 +75,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 	}
 
 	@Override
-	public void setShape(FGEShape shape) {
+	public void setShape(FGEShape<?> shape) {
 		super.setShape(shape);
 		stopMouseEdition();
 	}

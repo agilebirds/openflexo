@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.control;
 
-import java.awt.dnd.DragSourceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,8 +41,6 @@ public class DrawingPalette {
 	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
 
 	protected List<PaletteElement> elements;
-
-	private DragSourceContext dragSourceContext;
 
 	private final int width;
 	private final int height;

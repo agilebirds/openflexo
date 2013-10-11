@@ -32,11 +32,10 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 
-public class RectangleSelectingAction extends MouseDragControlActionImpl {
+public class RectangleSelectingAction extends MouseDragControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 
 	static final Logger logger = Logger.getLogger(RectangleSelectingAction.class.getPackage().getName());
 
@@ -44,7 +43,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	private Point currentMousePositionInDrawingView;
 
 	@Override
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
@@ -64,7 +63,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context,
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context,
 			boolean isSignificativeDrag) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
@@ -82,7 +81,7 @@ public class RectangleSelectingAction extends MouseDragControlActionImpl {
 	}
 
 	@Override
-	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (logger.isLoggable(Level.FINE)) {

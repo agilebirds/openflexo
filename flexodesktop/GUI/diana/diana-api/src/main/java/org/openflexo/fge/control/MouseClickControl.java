@@ -21,9 +21,9 @@
 
 package org.openflexo.fge.control;
 
-public interface MouseClickControl extends MouseControl {
+public interface MouseClickControl<E extends DianaEditor<?>> extends MouseControl<E> {
 
-	public MouseClickControlAction getControlAction();
+	public MouseClickControlAction<E> getControlAction();
 
 	public int getClickCount();
 

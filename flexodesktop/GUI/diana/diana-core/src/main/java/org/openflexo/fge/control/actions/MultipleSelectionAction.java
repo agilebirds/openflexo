@@ -20,14 +20,13 @@
 package org.openflexo.fge.control.actions;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 
-public class MultipleSelectionAction extends MouseClickControlActionImpl {
+public class MultipleSelectionAction extends MouseClickControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 
 	@Override
-	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> editor, MouseControlContext context) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DianaInteractiveViewer<?, ?, ?> editor, MouseControlContext context) {
 		if (editor instanceof DianaInteractiveViewer) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) editor;
 			if (node.getGraphicalRepresentation().getIsSelectable()) {

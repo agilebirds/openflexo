@@ -471,7 +471,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			controller
 					.getCurrentMouseDrag()
 					.getControlAction()
-					.handleMouseReleased(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc,
+					.handleMouseReleased(controller.getCurrentMouseDrag().getInitialNode(), controller, mcc,
 							controller.getCurrentMouseDrag().isSignificativeDrag());
 			controller.setCurrentMouseDrag(null);
 		}
@@ -530,7 +530,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				&& ((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag() != null) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) getController();
 			controller.getCurrentMouseDrag().getControlAction()
-					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc);
+					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), controller, mcc);
 		}
 	}
 
@@ -564,7 +564,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 				&& ((DianaInteractiveViewer<?, ?, ?>) getController()).getCurrentMouseDrag() != null) {
 			DianaInteractiveViewer<?, ?, ?> controller = (DianaInteractiveViewer<?, ?, ?>) getController();
 			controller.getCurrentMouseDrag().getControlAction()
-					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), getController(), mcc);
+					.handleMouseDragged(controller.getCurrentMouseDrag().getInitialNode(), controller, mcc);
 		}
 
 		getFocusRetriever().handleMouseMove(e);

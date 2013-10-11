@@ -93,4 +93,9 @@ public class JDianaStyles extends DianaStyles<JToolBar, SwingViewFactory> {
 		}
 	}
 
+	@Override
+	public SwingViewFactory getDianaFactory() {
+		return SwingViewFactory.INSTANCE;
+	}
+
 }

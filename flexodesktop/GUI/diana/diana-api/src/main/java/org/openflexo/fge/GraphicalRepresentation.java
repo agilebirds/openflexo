@@ -23,9 +23,9 @@ package org.openflexo.fge;
 import java.awt.Dimension;
 import java.awt.Stroke;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
@@ -195,10 +195,10 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 			Boolean.class);
 	public static GRParameter<Boolean> IS_VISIBLE = GRParameter
 			.getGRParameter(GraphicalRepresentation.class, IS_VISIBLE_KEY, Boolean.class);
-	public static GRParameter<Vector> MOUSE_CLICK_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
-			MOUSE_CLICK_CONTROLS_KEY, Vector.class);
-	public static GRParameter<Vector> MOUSE_DRAG_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
-			MOUSE_DRAG_CONTROLS_KEY, Vector.class);
+	public static GRParameter<List> MOUSE_CLICK_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			MOUSE_CLICK_CONTROLS_KEY, List.class);
+	public static GRParameter<List> MOUSE_DRAG_CONTROLS = GRParameter.getGRParameter(GraphicalRepresentation.class,
+			MOUSE_DRAG_CONTROLS_KEY, List.class);
 	public static GRParameter<String> TOOLTIP_TEXT = GRParameter.getGRParameter(GraphicalRepresentation.class, TOOLTIP_TEXT_KEY,
 			String.class);
 
@@ -383,32 +383,32 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	public void setTransparency(Double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<MouseClickControl> getMouseClickControls();
+	public List<MouseClickControl<?>> getMouseClickControls();
 
 	@Setter(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void setMouseClickControls(Vector<MouseClickControl> mouseClickControls);
+	public void setMouseClickControls(List<MouseClickControl<?>> mouseClickControls);
 
 	@Adder(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void addToMouseClickControls(MouseClickControl mouseClickControl);
+	public void addToMouseClickControls(MouseClickControl<?> mouseClickControl);
 
-	public void addToMouseClickControls(MouseClickControl mouseClickControl, boolean isPrioritar);
+	public void addToMouseClickControls(MouseClickControl<?> mouseClickControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_CLICK_CONTROLS_KEY)
-	public void removeFromMouseClickControls(MouseClickControl mouseClickControl);
+	public void removeFromMouseClickControls(MouseClickControl<?> mouseClickControl);
 
 	@Getter(value = MOUSE_DRAG_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
-	public Vector<MouseDragControl> getMouseDragControls();
+	public List<MouseDragControl<?>> getMouseDragControls();
 
 	@Setter(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void setMouseDragControls(Vector<MouseDragControl> mouseDragControls);
+	public void setMouseDragControls(List<MouseDragControl<?>> mouseDragControls);
 
 	@Adder(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void addToMouseDragControls(MouseDragControl mouseDragControl);
+	public void addToMouseDragControls(MouseDragControl<?> mouseDragControl);
 
-	public void addToMouseDragControls(MouseDragControl mouseDragControl, boolean isPrioritar);
+	public void addToMouseDragControls(MouseDragControl<?> mouseDragControl, boolean isPrioritar);
 
 	@Remover(value = MOUSE_DRAG_CONTROLS_KEY)
-	public void removeFromMouseDragControls(MouseDragControl mouseDragControl);
+	public void removeFromMouseDragControls(MouseDragControl<?> mouseDragControl);
 
 	@Getter(value = TOOLTIP_TEXT_KEY)
 	@XMLAttribute
@@ -578,17 +578,17 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public void setRegistered(boolean aFlag);
 
-	public MouseClickControl createMouseClickControl();
+	public MouseClickControl<?> createMouseClickControl();
 
-	public void deleteMouseClickControl(MouseClickControl mouseClickControl);
+	public void deleteMouseClickControl(MouseClickControl<?> mouseClickControl);
 
-	public boolean isMouseClickControlDeletable(MouseClickControl mouseClickControl);
+	public boolean isMouseClickControlDeletable(MouseClickControl<?> mouseClickControl);
 
-	public MouseDragControl createMouseDragControl();
+	public MouseDragControl<?> createMouseDragControl();
 
-	public void deleteMouseDragControl(MouseDragControl mouseDragControl);
+	public void deleteMouseDragControl(MouseDragControl<?> mouseDragControl);
 
-	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
+	public boolean isMouseDragControlDeletable(MouseDragControl<?> mouseDragControl);
 
 	// public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 

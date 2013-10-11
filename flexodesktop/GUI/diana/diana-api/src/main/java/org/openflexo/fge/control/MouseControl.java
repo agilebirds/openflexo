@@ -31,15 +31,15 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  * @author sylvain
  * 
  */
-public interface MouseControl {
+public interface MouseControl<E extends DianaEditor<?>> {
 
 	public static enum MouseButton {
 		LEFT, RIGHT, CENTER
 	}
 
-	public MouseControlAction getControlAction();
+	public MouseControlAction<E> getControlAction();
 
-	public boolean isApplicable(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 	public String getName();
 

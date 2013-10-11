@@ -32,7 +32,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  * @author sylvain
  * 
  */
-public interface MouseClickControlAction extends MouseControlAction {
+public interface MouseClickControlAction<E extends DianaEditor<?>> extends MouseControlAction<E> {
 
 	public static final Logger logger = Logger.getLogger(MouseClickControlAction.class.getPackage().getName());
 
@@ -51,6 +51,6 @@ public interface MouseClickControlAction extends MouseControlAction {
 	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @return
 	 */
-	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 }

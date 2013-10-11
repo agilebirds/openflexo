@@ -32,7 +32,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  * @author sylvain
  * 
  */
-public interface MouseDragControlAction extends MouseControlAction {
+public interface MouseDragControlAction<E extends DianaEditor<?>> extends MouseControlAction<E> {
 
 	public static final Logger logger = Logger.getLogger(MouseDragControlAction.class.getPackage().getName());
 
@@ -50,7 +50,7 @@ public interface MouseDragControlAction extends MouseControlAction {
 	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @return
 	 */
-	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 	/**
 	 * Handle mouse released event, by performing what is required here Return flag indicating if event has been correctely handled and
@@ -66,7 +66,7 @@ public interface MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context,
+	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context,
 			boolean isSignificativeDrag);
 
 	/**
@@ -81,6 +81,6 @@ public interface MouseDragControlAction extends MouseControlAction {
 	 *            run-time context of mouse control handling (eg MouseEvent)
 	 * @return
 	 */
-	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context);
+	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context);
 
 }

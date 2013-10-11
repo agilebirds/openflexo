@@ -21,25 +21,25 @@ package org.openflexo.fge.control.actions;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.control.DianaEditor;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
 
-public class MouseDragControlImpl extends MouseControlImpl implements MouseDragControl {
+public class MouseDragControlImpl<E extends AbstractDianaEditor<?, ?, ?>> extends MouseControlImpl<E> implements MouseDragControl<E> {
 
-	public MouseDragControlAction action;
+	public MouseDragControlAction<E> action;
 
 	private DrawingTreeNode<?, ?> initialNode;
 	private boolean isSignificativeDrag = false;
 
-	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlAction action, boolean shiftPressed, boolean ctrlPressed,
-			boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
+	public MouseDragControlImpl(String aName, MouseButton button, MouseDragControlAction<E> action, boolean shiftPressed,
+			boolean ctrlPressed, boolean metaPressed, boolean altPressed, FGEModelFactory factory) {
 		super(aName, shiftPressed, ctrlPressed, metaPressed, altPressed, button, factory);
 		this.action = action;
 	}
 
-	public MouseDragControlAction getControlAction() {
+	public MouseDragControlAction<E> getControlAction() {
 		return action;
 	}
 
@@ -59,7 +59,7 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 	 * @param e
 	 *            MouseEvent
 	 */
-	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DianaEditor<?> controller, MouseControlContext context) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, E controller, MouseControlContext context) {
 
 		if (action.handleMousePressed(node, controller, context)) {
 			initialNode = node;
@@ -79,7 +79,7 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseReleased(DianaEditor<?> controller, MouseControlContext context) {
+	public void handleMouseReleased(E controller, MouseControlContext context) {
 		if (action.handleMouseReleased(initialNode, controller, context, isSignificativeDrag())) {
 			initialNode = null;
 			// System.out.println("RELEASED initialNode="+initialNode);
@@ -95,7 +95,7 @@ public class MouseDragControlImpl extends MouseControlImpl implements MouseDragC
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseDragged(DianaEditor<?> controller, MouseControlContext context) {
+	public void handleMouseDragged(E controller, MouseControlContext context) {
 		if (action.handleMouseDragged(initialNode, controller, context)) {
 			// System.out.println("DRAGGED initialNode="+initialNode);
 			isSignificativeDrag = true;
