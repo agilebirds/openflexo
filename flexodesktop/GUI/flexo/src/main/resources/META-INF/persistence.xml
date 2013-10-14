@@ -6,7 +6,7 @@
         <class>org.openflexo.rest.client.WatchedRemoteJob</class>
         <class>org.openflexo.rest.client.WatchedRemoteDocJob</class>
         <properties>
-            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.show_sql" value="false" />
         </properties>
     </persistence-unit>
 
