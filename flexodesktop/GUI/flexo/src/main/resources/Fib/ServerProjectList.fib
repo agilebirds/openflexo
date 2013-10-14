@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestProjectListModel" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestProjectListModel" controllerClassName="org.openflexo.rest.client.ServerRestProjectListModel$ServerRestProjectListController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
     <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
-      <Table iteratorClassName="org.openflexo.rest.client.model.Project" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="data.selectedProject" localize="true" manageDynamicModel="true" doubleClickAction="controller.validateAndDispose()" name="versionTable" data="data.projects" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=20;insetsLeft=20;insetsRight=20;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=1.0)">
-        <IconColumn data="data.projectIcon" title="icon" columnWidth="24" resizable="false" displayTitle="false" name="icon" />
-        <LabelColumn data="(iterator.name + ((data.user.clientAccount = null) ? ((&quot;[&quot; + iterator.clientAccount.accountName) + &quot;]&quot;) : &quot;&quot;))" title="Name" columnWidth="325" resizable="true" displayTitle="true" name="label" />
-        <LabelColumn data="data.lastVersion(iterator).versionNumber" title="Version" columnWidth="50" resizable="true" displayTitle="true" name="label" />
+      <Table iteratorClassName="org.openflexo.rest.client.model.Project" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="data.selectedProject" selectable="data.canOpen(iterator)" localize="true" manageDynamicModel="true" doubleClickAction="controller.validateAndDispose()" name="versionTable" data="data.projects" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=20;insetsLeft=20;insetsRight=20;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+        <IconColumn data="data.projectIcon" title="icon" columnWidth="24" resizable="false" displayTitle="false" tooltip="data.getTooltip(iterator)" name="icon" />
+        <LabelColumn data="(iterator.name + ((data.user.clientAccount = null) ? ((&quot; [&quot; + iterator.clientAccount.accountName) + &quot;]&quot;) : &quot;&quot;))" title="Name" columnWidth="325" resizable="true" displayTitle="true" color="data.getTextColor(iterator)" tooltip="data.getTooltip(iterator)" name="label" />
+        <LabelColumn data="data.lastVersion(iterator).versionNumber" title="Version" columnWidth="50" resizable="true" displayTitle="true" color="data.getTextColor(iterator)" tooltip="data.getTooltip(iterator)" name="label" />
       </Table>
     </Panel>
     <Panel layout="buttons" hGap="5" vGap="5" borderTitle="Panel" borderBottom="20" darkLevel="0" constraints="border(location=south)">
-      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" localize="true" constraints="grid(x=0;y=0)" />
+      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" localize="true" enable="(versionTable.selected != null)" constraints="grid(x=0;y=0)" />
       <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" enable="(data.serverProject = null)" constraints="buttons()" />
       <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=2;y=0)" />
     </Panel>

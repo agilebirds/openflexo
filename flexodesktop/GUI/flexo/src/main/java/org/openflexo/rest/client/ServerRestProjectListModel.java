@@ -1,5 +1,6 @@
 package org.openflexo.rest.client;
 
+import java.awt.Color;
 import java.awt.Window;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -23,11 +25,14 @@ import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openflexo.GeneralPreferences;
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.model.Project;
 import org.openflexo.rest.client.model.ProjectVersion;
+import org.openflexo.rest.client.model.Session;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
@@ -41,38 +46,66 @@ import com.sun.jersey.api.client.GenericType;
 
 public class ServerRestProjectListModel extends AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
+	public static class ServerRestProjectListController extends FIBController {
+
+		public ServerRestProjectListController(FIBComponent rootComponent) {
+			super(rootComponent);
+		}
+
+		@Override
+		public void validateAndDispose() {
+			ServerRestProjectListModel listModel = (ServerRestProjectListModel) getDataObject();
+			if (listModel.getSelectedProject() != null && listModel.canOpen(listModel.getSelectedProject())) {
+				super.validateAndDispose();
+			}
+		}
+	}
+
 	public static final File FIB_FILE = new FileResource("Fib/ServerProjectList.fib");
 	private static final String PROJECTS = "projects";
 	private static final String SELECTED_PROJECT = "selectedProject";
 
 	private Map<Project, ProjectVersion> lastVersion = new HashMap<Project, ProjectVersion>();
+	private Map<Project, Session> editionSession = new HashMap<Project, Session>();
 
 	public class UpdateProjects implements ServerRestClientOperation {
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			lastVersion.clear();
+			editionSession.clear();
+			if (getUser() == null) {
+				setProjects(Collections.<Project> emptyList());
+				return;
+			}
 			URI uri = UriBuilder.fromUri(client.getBASE_URI()).queryParam("projectUri!", "null").build();
 			Client jerseyClient = client.createClient();
 			List<Project> projects = client.projects(jerseyClient, uri).getAsXml(-1, -1, null, new GenericType<List<Project>>() {
 
 			});
 			if (projects.size() > 0) {
-				progress.setSteps(projects.size());
+				progress.setSteps(projects.size() * 2);
 			}
 			uri = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", "true").build();
 			for (Iterator<Project> iterator = projects.iterator(); iterator.hasNext();) {
 				Project project = iterator.next();
 				progress.increment(FlexoLocalization.localizedForKey("fetching_last_version_for") + " " + project.getName());
-				List<ProjectVersion> version = client.projectsProjectIDVersions(jerseyClient, uri, project.getProjectId()).getAsXml(0, 1,
+				List<ProjectVersion> versions = client.projectsProjectIDVersions(jerseyClient, uri, project.getProjectId()).getAsXml(0, 1,
 						"creationDate desc", new GenericType<List<ProjectVersion>>() {
 						});
-				if (version.size() == 0) {
+				if (versions.size() == 0) {
 					iterator.remove();
 				} else {
-					lastVersion.put(project, version.get(0));
+					lastVersion.put(project, versions.get(0));
+				}
+				progress.increment(FlexoLocalization.localizedForKey("fetching_edition_session_for") + " " + project.getName());
+				List<Session> sessions = client.projectsProjectIDSessions(jerseyClient, uri, project.getProjectId()).getAsXml(-1, -1,
+						"downloadDate desc", new GenericType<List<Session>>() {
+						});
+				if (sessions.size() > 0) {
+					editionSession.put(project, sessions.get(0));
 				}
 			}
-
 			final List<String> lastServerProjects = GeneralPreferences.getLastServerProjects();
 			Collections.sort(projects, new Comparator<Project>() {
 				@Override
@@ -99,6 +132,7 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 					}
 				}
 			});
+
 			setProjects(projects);
 		}
 
@@ -194,10 +228,9 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 					}
 				}
 			};
-			int copied = 0;
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			try {
-				copied = IOUtils.copy(response.getEntity(InputStream.class), bos);
+				IOUtils.copy(response.getEntity(InputStream.class), bos);
 			} finally {
 				IOUtils.closeQuietly(bos);
 			}
@@ -260,6 +293,28 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		pcSupport.firePropertyChange(SELECTED_PROJECT, null, selectedProject);
+	}
+
+	public boolean canOpen(Project project) {
+		Session session = editionSession.get(project);
+		return session == null || getUser().getLogin().equals(session.getUser());
+	}
+
+	public String getTooltip(Project project) {
+		Session session = editionSession.get(project);
+		if (session != null && !getUser().getLogin().equals(session.getUser())) {
+			return FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + getUser().getFirstName() + " "
+					+ getUser().getLastName() + " (" + getUser().getLogin() + ")";
+		}
+		return null;
+	}
+
+	public Color getTextColor(Project project) {
+		if (canOpen(project)) {
+			return null;
+		} else {
+			return UIManager.getDefaults().getColor("Label.disabledForeground");
+		}
 	}
 
 	public File downloadToFolder(Project project, File folder) throws IOException {
