@@ -36,6 +36,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -68,6 +69,130 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 		ListSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBTableWidget.class.getPackage().getName());
+
+	private DynamicBindingContext evaluationContext = new DynamicBindingContext("iterator");
+
+	private class TableSelectionModel extends DefaultListSelectionModel {
+
+		private class Interval {
+			final int first;
+			final int last;
+
+			public Interval(int first, int last) {
+				super();
+				this.first = first;
+				this.last = last;
+			}
+
+		}
+
+		private boolean hackSelectionMode = false;
+
+		@Override
+		public void addSelectionInterval(int index0, int index1) {
+			if (hasSelectableBinding()) {
+				List<Interval> selectableIntervals = getSelectableIntervals(index0, index1);
+				for (Interval interval : selectableIntervals) {
+					super.addSelectionInterval(interval.first, interval.last);
+				}
+			} else {
+				super.addSelectionInterval(index0, index1);
+			}
+		}
+
+		private boolean hasSelectableBinding() {
+			return getTable().getSelectable() != null && getTable().getSelectable().isValid();
+		}
+
+		@Override
+		public void insertIndexInterval(int index, int length, boolean before) {
+			if (hasSelectableBinding()) {
+				boolean setAsSelected = getSelectionMode() == SINGLE_SELECTION ? false : isSelectedIndex(index);
+				hackSelectionMode = true;
+				try {
+					super.insertIndexInterval(index, length, before);
+				} finally {
+					hackSelectionMode = false;
+				}
+				int insMinIndex = before ? index : index + 1;
+				int insMaxIndex = insMinIndex + length - 1;
+				if (setAsSelected) {
+					addSelectionInterval(insMinIndex, insMaxIndex);
+				}
+			} else {
+				super.insertIndexInterval(index, length, before);
+			}
+		}
+
+		@Override
+		public int getSelectionMode() {
+			if (hackSelectionMode) {
+				return SINGLE_SELECTION;
+			} else {
+				return super.getSelectionMode();
+			}
+		}
+
+		@Override
+		public void setSelectionInterval(int index0, int index1) {
+			if (hasSelectableBinding()) {
+				List<Interval> selectableIntervals = getSelectableIntervals(index0, index1);
+				if (selectableIntervals.size() > 0) {
+					if (getSelectionMode() == SINGLE_INTERVAL_SELECTION) {
+						Interval interval = selectableIntervals.get(selectableIntervals.size() - 1);
+						super.setSelectionInterval(interval.first, interval.last);
+					} else {
+						for (Interval interval : selectableIntervals) {
+							addSelectionInterval(interval.first, interval.last);
+						}
+					}
+				}
+			} else {
+				super.setSelectionInterval(index0, index1);
+			}
+		}
+
+		private List<Interval> getSelectableIntervals(int index0, int index1) {
+			if (getSelectionMode() == SINGLE_SELECTION) {
+				index0 = index1;
+			}
+			int first = -1;
+			int last = -1;
+			List<Interval> intervals = new ArrayList<Interval>();
+			for (int i = index0; i <= index1; i++) {
+				Object object = getTableModel().elementAt(_table.convertRowIndexToModel(i));
+				evaluationContext.setValue(object);
+				boolean selectable = true;
+				Object bv = getTable().getSelectable().getBindingValue(evaluationContext);
+				if (bv instanceof Boolean) {
+					selectable = (Boolean) bv;
+				}
+				if (selectable) {
+					if (first == -1) {
+						first = i;
+					} else {
+						last = i;
+					}
+				} else {
+					if (first != -1) {
+						if (last == -1) {
+							last = first;
+						}
+						intervals.add(new Interval(first, last));
+					}
+					first = -1;
+					last = -1;
+				}
+			}
+			if (first != -1) {
+				if (last == -1) {
+					last = first;
+				}
+				intervals.add(new Interval(first, last));
+			}
+			return intervals;
+		}
+	}
 
 	private JXTable _table;
 	private final JPanel _dynamicComponent;
@@ -391,7 +516,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 				_table.setRowHeight(18);
 			}
 		}
-
+		_table.setSelectionModel(new TableSelectionModel());
 		_table.setSelectionMode(_fibTable.getSelectionMode().getMode());
 		// _table.getTableHeader().setReorderingAllowed(false);
 
@@ -538,6 +663,15 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public void objectAddedToSelection(Object o) {
+		evaluationContext.setValue(o);
+		boolean selectable = true;
+		Object bv = getTable().getSelectable().getBindingValue(evaluationContext);
+		if (bv instanceof Boolean) {
+			selectable = (Boolean) bv;
+		}
+		if (!selectable) {
+			return;
+		}
 		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
@@ -567,6 +701,15 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public void addToSelection(Object o) {
+		evaluationContext.setValue(o);
+		boolean selectable = true;
+		Object bv = getTable().getSelectable().getBindingValue(evaluationContext);
+		if (bv instanceof Boolean) {
+			selectable = (Boolean) bv;
+		}
+		if (!selectable) {
+			return;
+		}
 		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			index = _table.convertRowIndexToView(index);

@@ -334,6 +334,7 @@
     <property name="showFooter" xmlTag="showFooter" attribute="YES"/> 
     <property name="selectionMode" xmlTag="selectionMode" attribute="YES"/> 
     <property name="selected" xmlTag="selected" attribute="YES"/> 
+    <property name="selectable" xmlTag="selectable" attribute="YES"/> 
     <property name="columns" type="vector" contains="org.openflexo.fib.model.FIBTableColumn"/> 
     <property name="actions" type="vector" contains="org.openflexo.fib.model.FIBTableAction"/> 
     <property name="textSelectionColor" xmlTag="textSelectionColor" attribute="YES"/> 

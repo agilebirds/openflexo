@@ -612,55 +612,60 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 	}
 
-	protected class DynamicValueBindingContext implements BindingEvaluationContext {
+	protected class DynamicBindingContext implements BindingEvaluationContext {
+
+		private final String variableName;
 		private Object value;
 
-		private void setValue(Object aValue) {
-			value = aValue;
+		public DynamicBindingContext(String variableName) {
+			super();
+			this.variableName = variableName;
+		}
+
+		public final Object getValue() {
+			return value;
+		}
+
+		public final void setValue(Object value) {
+			this.value = value;
 		}
 
 		@Override
-		public Object getValue(BindingVariable variable) {
-			if (variable.getVariableName().equals("value")) {
+		public final Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals(variableName)) {
 				return value;
 			} else {
 				return getController().getValue(variable);
 			}
 		}
+
 	}
 
-	protected class DynamicFormatter implements BindingEvaluationContext {
-		private Object value;
+	protected class DynamicValueBindingContext extends DynamicBindingContext {
 
-		private void setValue(Object aValue) {
-			value = aValue;
+		public DynamicValueBindingContext() {
+			super("value");
 		}
 
-		@Override
-		public Object getValue(BindingVariable variable) {
-			if (variable.getVariableName().equals("object")) {
-				return value;
-			} else {
-				return getController().getValue(variable);
-			}
-		}
 	}
 
-	protected class DynamicEventListener implements BindingEvaluationContext {
-		private MouseEvent mouseEvent;
+	protected class DynamicFormatter extends DynamicBindingContext {
+
+		public DynamicFormatter() {
+			super("object");
+		}
+
+	}
+
+	protected class DynamicEventListener extends DynamicBindingContext {
+		public DynamicEventListener() {
+			super("event");
+		}
 
 		private void setEvent(MouseEvent mouseEvent) {
-			this.mouseEvent = mouseEvent;
+			super.setValue(mouseEvent);
 		}
 
-		@Override
-		public Object getValue(BindingVariable variable) {
-			if (variable.getVariableName().equals("event")) {
-				return mouseEvent;
-			} else {
-				return getController().getValue(variable);
-			}
-		}
 	}
 
 }

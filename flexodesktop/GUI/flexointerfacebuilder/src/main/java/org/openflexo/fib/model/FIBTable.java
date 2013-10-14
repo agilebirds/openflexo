@@ -29,8 +29,10 @@ import java.util.logging.Logger;
 
 import javax.swing.ListSelectionModel;
 
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -54,6 +56,24 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		return SELECTED;
 	}
 
+	private BindingDefinition SELECTABLE;
+
+	private SelectableBindable selectableBindable;
+
+	public BindingDefinition getSelectableBindingDefinition() {
+		if (SELECTABLE == null) {
+			SELECTABLE = new BindingDefinition("selectable", Boolean.class, BindingDefinitionType.GET, false);
+		}
+		return SELECTABLE;
+	}
+
+	public SelectableBindable getSelectableBindable() {
+		if (selectableBindable == null) {
+			selectableBindable = new SelectableBindable();
+		}
+		return selectableBindable;
+	}
+
 	public static enum Parameters implements FIBModelAttribute {
 		iteratorClass,
 		visibleRowCount,
@@ -63,6 +83,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		boundToSelectionManager,
 		selectionMode,
 		selected,
+		selectable,
 		columns,
 		actions,
 		showFooter,
@@ -96,7 +117,32 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		public abstract int getMode();
 	}
 
+	private class SelectableBindable extends FIBModelObject implements Bindable {
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getTableBindingModel();
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return FIBTable.this.getBindingFactory();
+		}
+
+		@Override
+		public FIBComponent getRootComponent() {
+			return FIBTable.this.getRootComponent();
+		}
+
+		@Override
+		public List<? extends FIBModelObject> getEmbeddedObjects() {
+			return null;
+		}
+
+	}
+
 	private DataBinding selected;
+	private DataBinding selectable;
 
 	private Integer visibleRowCount;
 	private Integer rowHeight;
@@ -240,6 +286,20 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		this.selected = selected;
 	}
 
+	public DataBinding getSelectable() {
+		if (selectable == null) {
+			selectable = new DataBinding(getSelectableBindable(), Parameters.selectable, getSelectableBindingDefinition());
+		}
+		return selectable;
+	}
+
+	public void setSelectable(DataBinding selectable) {
+		selectable.setOwner(getSelectableBindable());
+		selectable.setBindingAttribute(Parameters.selectable);
+		selectable.setBindingDefinition(getSelectableBindingDefinition());
+		this.selectable = selectable;
+	}
+
 	@Override
 	public void finalizeDeserialization() {
 		logger.fine("finalizeDeserialization() for FIBTable " + getName());
@@ -254,6 +314,9 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		}
 		if (selected != null) {
 			selected.finalizeDeserialization();
+		}
+		if (selectable != null) {
+			selectable.finalizeDeserialization();
 		}
 	}
 

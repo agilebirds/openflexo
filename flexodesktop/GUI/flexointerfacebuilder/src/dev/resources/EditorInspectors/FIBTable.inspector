@@ -8,12 +8,12 @@
       <Number minValue="1" maxValue="100" increment="1" numberType="IntegerType" columns="3" data="data.visibleRowCount" constraints="twocols(location=right)" localize="true" />
       <Label label="row_height" constraints="twocols(location=left)" localize="true" />
       <Number minValue="5" maxValue="100" increment="1" numberType="IntegerType" columns="3" data="data.rowHeight" constraints="twocols(location=right)" localize="true" />
-      <CheckBox selected="false" data="data.autoSelectFirstRow" constraints="twocols(location=left)" localize="true" />
-      <Label label="select_first_row" constraints="twocols(location=right)" localize="true" />
-      <CheckBox selected="false" data="data.createNewRowOnClick" constraints="twocols(location=left)" localize="true" />
-      <Label label="create_new_row_on_click" constraints="twocols(location=right)" localize="true" />
-      <CheckBox selected="false" data="data.showFooter" constraints="twocols(location=left)" localize="true" />
-      <Label label="show_footer" constraints="twocols(location=right)" localize="true" />
+      <Label label="select_first_row" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.autoSelectFirstRow" constraints="twocols(location=right)" localize="true" />
+      <Label label="create_new_row_on_click" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.createNewRowOnClick" constraints="twocols(location=right)" localize="true" />
+      <Label label="show_footer" constraints="twocols(location=left)" localize="true" />
+      <CheckBox selected="false" data="data.showFooter" constraints="twocols(location=right)" localize="true" />
     </Tab>
     <Tab title="Table" layout="twocols" darkLevel="0" index="1" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="AdvancedTab">
       <TabPanel constraints="twocols(expandHorizontally=true;expandVertically=true;location=center)">
@@ -123,6 +123,11 @@
       <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.selected.binding" constraints="twocols(expandHorizontally=true;location=right)">
         <Assignment variable="component.bindable" value="data" />
         <Assignment variable="component.bindingDefinition" value="data.selectedBindingDefinition" />
+      </Custom>
+      <Label label="selectable" constraints="twocols(location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.selectable.binding" constraints="twocols(expandHorizontally=true;location=right)">
+        <Assignment variable="component.bindable" value="data.selectableBindable" />
+        <Assignment variable="component.bindingDefinition" value="data.selectableBindingDefinition" />
       </Custom>
       <CheckBox selected="false" data="data.boundToSelectionManager" constraints="twocols(location=left)" localize="true" />
       <Label label="bound_to_selection_manager" constraints="twocols(location=right)" localize="true" />
