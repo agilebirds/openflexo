@@ -27,8 +27,11 @@ import javax.swing.Icon;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class AddConnectorInitializer extends ActionInitializer {
 
@@ -49,9 +52,14 @@ public class AddConnectorInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, AddConnector action) {
 				if (action.getAutomaticallyCreateConnector()) {
+					String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_connector"));
+					if (newName == null || StringUtils.isEmpty(newName)) {
+						return false;
+					}
+					action.setNewConnectorName(newName);
 					return true;
 				}
-
+				
 				/*	DynamicDropDownParameter<Role> roles = new DynamicDropDownParameter<Role>("parentRole", "role_that_will_be_specialized", availableRoles, availableRoles.firstElement());
 				roles.setShowReset(false);
 				roles.setFormatter("name");

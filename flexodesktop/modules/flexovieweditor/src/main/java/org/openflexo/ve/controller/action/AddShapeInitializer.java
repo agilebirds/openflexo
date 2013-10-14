@@ -78,6 +78,7 @@ public class AddShapeInitializer extends ActionInitializer<AddShape, DiagramElem
 			@Override
 			public boolean run(EventObject e, AddShape action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
+				
 				return true;
 			}
 		};
