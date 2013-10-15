@@ -26,10 +26,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.foundation.DataFlexoObserver;
@@ -44,7 +45,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  * @author sguerin
  * 
  */
-public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoModelObject> extends DefaultTableModel implements
+public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoModelObject> extends AbstractTableModel implements
 		DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(AbstractModel.class.getPackage().getName());
@@ -210,14 +211,19 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable instanceof FlexoModelObject) {
-			int row = indexOf((D) observable);
-			fireTableRowsUpdated(row, row);
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Update row " + row + " for object " + observable);
+	public void update(final FlexoObservable observable, DataModification dataModification) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (observable instanceof FlexoModelObject) {
+					int row = indexOf((D) observable);
+					fireTableRowsUpdated(row, row);
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Update row " + row + " for object " + observable);
+					}
+				}
 			}
-		}
+		});
 	}
 
 	@Override
