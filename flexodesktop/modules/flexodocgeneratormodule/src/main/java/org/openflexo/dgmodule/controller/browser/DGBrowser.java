@@ -19,6 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.browser;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,12 +89,12 @@ public class DGBrowser extends ProjectBrowser implements FlexoObserver {
 		}
 
 		public boolean acceptCGPathElement(CGPathElement pathElement) {
-			for (CGFile file : pathElement.getFiles()) {
+			for (CGFile file : new ArrayList<CGFile>(pathElement.getFiles())) {
 				if (acceptFile(file)) {
 					return true;
 				}
 			}
-			for (CGPathElement folder : pathElement.getSubFolders()) {
+			for (CGPathElement folder : new ArrayList<CGPathElement>(pathElement.getSubFolders())) {
 				if (acceptCGPathElement(folder)) {
 					return true;
 				}
