@@ -253,4 +253,11 @@ public interface AccessibleProxyObject extends HasPropertyChangeSupport {
 	 */
 	public void setModified(boolean modified);
 
+	/**
+	 * Return whether supplied object is equals to this, regarding persistant properties defined as PAMELA model
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public boolean equalsObject(Object obj);
 }

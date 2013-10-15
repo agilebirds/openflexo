@@ -180,6 +180,7 @@ public class ModelProperty<I> {
 				addPastingPoint = pastingPoint;
 			}
 		}
+
 		if (getter != null) {
 			switch (getCardinality()) {
 			case SINGLE:
@@ -553,8 +554,8 @@ public class ModelProperty<I> {
 		Embedded embedded = null;
 		ComplexEmbedded complexEmbedded = null;
 		CloningStrategy cloningStrategy = null;
-		PastingPoint setPastingPoint = null;
-		PastingPoint addPastingPoint = null;
+		// PastingPoint setPastingPoint = null;
+		// PastingPoint addPastingPoint = null;
 		Method getterMethod = null;
 		Method setterMethod = null;
 		Method adderMethod = null;
@@ -729,7 +730,16 @@ public class ModelProperty<I> {
 				xmlElement = property.getXMLElement();
 			}
 		}
-		// TODO: combine pasting points
+
+		addPastingPoint = property.getAddPastingPoint();
+		setPastingPoint = property.getSetPastingPoint();
+
+		if (rulingProperty.getAddPastingPoint() != null) {
+			addPastingPoint = rulingProperty.getAddPastingPoint();
+		}
+		if (rulingProperty.getSetPastingPoint() != null) {
+			setPastingPoint = rulingProperty.getSetPastingPoint();
+		}
 
 		return new ModelProperty<I>(getModelEntity(), getPropertyIdentifier(), getter, setter, adder, remover, xmlAttribute, xmlElement,
 				returnedValue, embedded, complexEmbedded, cloningStrategy, setPastingPoint, addPastingPoint, getterMethod, setterMethod,

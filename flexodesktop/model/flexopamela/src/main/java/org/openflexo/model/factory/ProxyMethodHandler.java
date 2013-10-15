@@ -28,6 +28,7 @@ import javassist.util.proxy.ProxyObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.ModelContext;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
@@ -99,6 +100,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method DELETE_OBJECT;
 	private static Method DELETE_OBJECT_WITH_CONTEXT;
 	private static Method IS_DELETED;
+	private static Method EQUALS_OBJECT;
 	private final PAMELAProxyFactory<I> pamelaProxyFactory;
 
 	static {
@@ -134,6 +136,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			CLONE_OBJECT_WITH_CONTEXT = CloneableProxyObject.class.getMethod("cloneObject", Array.newInstance(Object.class, 0).getClass());
 			IS_CREATED_BY_CLONING = CloneableProxyObject.class.getMethod("isCreatedByCloning");
 			IS_BEING_CLONED = CloneableProxyObject.class.getMethod("isBeingCloned");
+			EQUALS_OBJECT = AccessibleProxyObject.class.getMethod("equalsObject", Object.class);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -282,6 +285,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeToString();
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT)) {
 			return cloneObject();
+		} else if (methodIsEquivalentTo(method, EQUALS_OBJECT)) {
+			return equalsObject(args[0]);
 		} else if (methodIsEquivalentTo(method, IS_DELETED)) {
 			return deleted;
 		} else if (methodIsEquivalentTo(method, IS_BEING_CLONED)) {
@@ -457,7 +462,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		try {
 			property.getAdderMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
-			throw new ModelExecutionException(e);
+			throw new ModelExecutionException("Illegal argument exception adder:" + property.getAdderMethod() + " value=" + value, e);
 		} catch (IllegalAccessException e) {
 			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
@@ -1134,6 +1139,42 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return clonedObject;
 	}*/
 
+	public boolean equalsObject(Object obj) {
+		if (getObject() == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		ProxyMethodHandler<?> oppositeObjectHandler = getModelFactory().getHandler(obj);
+		if (getModelEntity() != oppositeObjectHandler.getModelEntity()) {
+			return false;
+		}
+
+		Iterator<ModelProperty<? super I>> properties;
+		try {
+			properties = getModelEntity().getProperties();
+		} catch (ModelDefinitionException e) {
+			return false;
+		}
+		while (properties.hasNext()) {
+			ModelProperty p = properties.next();
+			// switch (p.getCardinality()) {
+			// case SINGLE:
+			Object singleValue = invokeGetter(p);
+			Object oppositeValue = oppositeObjectHandler.invokeGetter(p);
+			if (!isEqual(singleValue, oppositeValue)) {
+				return false;
+			}
+			/*		break;
+				default:
+					break;
+				}*/
+		}
+		// System.out.println("ok, equals return true for " + getObject() + " and " + object);
+		return true;
+	}
+
 	/**
 	 * Clone current object, using meta informations provided by related class All property should be annoted with a @CloningStrategy
 	 * annotation which determine the way of handling this property Supplied context is used to determine the closure of objects graph being
@@ -1148,8 +1189,12 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	 * @throws CloneNotSupportedException
 	 *             when supplied object is not implementing CloneableProxyObject interface
 	 */
-	protected Object cloneObject(Object... context) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
-		// System.out.println("Cloning "+getObject());
+	protected I cloneObject(Object... context) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
+
+		/*System.out.println("Cloning " + getObject());
+		for (Object o : context) {
+			System.out.println("Context: " + o);
+		}*/
 
 		if (context != null && context.length == 1 && context[0].getClass().isArray()) {
 			context = (Object[]) context[0];
@@ -1171,11 +1216,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		Hashtable<CloneableProxyObject, Object> clonedObjects = new Hashtable<CloneableProxyObject, Object>();
 		Object returned = performClone(clonedObjects, context);
+		// System.out.println("All clones are ready");
 		for (CloneableProxyObject o : clonedObjects.keySet()) {
+			// System.out.println("Finalizing " + o);
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(o);
 			clonedObjectHandler.finalizeClone(clonedObjects, context);
 		}
-		return returned;
+		return (I) returned;
 	}
 
 	/**
@@ -1189,7 +1236,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 		ProxyMethodHandler<?> clonedValueHandler = getModelFactory().getHandler(objectToCloneOrReference);
 		returned = clonedValueHandler.performClone(clonedObjects);
-		// System.out.println("for "+objectToCloneOrReference+" clone is "+returned);
+		// System.out.println("for " + objectToCloneOrReference + " clone is " + returned);
 		return returned;
 	}
 
@@ -1198,17 +1245,19 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	 */
 	private Object performClone(Hashtable<CloneableProxyObject, Object> clonedObjects, Object... context) throws ModelExecutionException,
 			ModelDefinitionException {
-		// System.out.println("******* performClone "+getObject());
+		// System.out.println("******* performClone " + getObject());
 		boolean setIsBeingCloned = !beingCloned;
 		beingCloned = true;
 		Object returned = null;
 		try {
-			returned = getModelFactory().newInstance(getModelEntity());
+			returned = getModelFactory()._newInstance(getModelEntity().getImplementedInterface(), true);
+			// System.out.println("Perform clone " + getModelEntity());
 			ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(returned);
 			clonedObjectHandler.createdByCloning = true;
 			clonedObjectHandler.initialized = true;
 			try {
 				clonedObjects.put((CloneableProxyObject) getObject(), returned);
+				// System.out.println("Registering " + returned + " as clone of " + getObject());
 
 				Iterator<ModelProperty<? super I>> properties = getModelEntity().getProperties();
 				while (properties.hasNext()) {
@@ -1222,7 +1271,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 								if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 									// Don't do it, outside of context
 								} else {
-									appendToClonedObjects(clonedObjects, (CloneableProxyObject) singleValue);
+									Object clonedValue = appendToClonedObjects(clonedObjects, (CloneableProxyObject) singleValue);
+									// System.out.println("Cloned " + clonedValue + " for " + p);
 								}
 							}
 							break;
@@ -1279,7 +1329,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			ModelDefinitionException {
 		Object clonedObject = clonedObjects.get(getObject());
 
-		// System.out.println("Finalizing clone for "+getObject()+" clone is "+clonedObject);
+		// System.out.println("Finalizing clone for " + getObject() + " clone is " + clonedObject);
 
 		ProxyMethodHandler<?> clonedObjectHandler = getModelFactory().getHandler(clonedObject);
 		clonedObjectHandler.createdByCloning = true;
@@ -1305,13 +1355,26 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 							} catch (InvalidDataException e) {
 								throw new ModelExecutionException(e);
 							}
-							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
+							clonedObjectHandler.invokeSetter(p, clonedValue);
+							// clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
 						} else if (ModelEntity.isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
+							boolean debug = false;
+							if (p.getPropertyIdentifier().equals("shapeSpecification")) {
+								System.out.println("Tiens, pour shapeSpecification, je l'ai");
+								debug = true;
+							}
 							Object clonedValue = clonedObjects.get(singleValue);
+							if (debug) {
+								System.out.println("clonedValue=" + clonedValue + " singleValue=" + singleValue);
+							}
 							if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 								clonedValue = null;
+								if (debug) {
+									System.out.println("mais pas dans le contexte !!!");
+								}
 							}
-							clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
+							clonedObjectHandler.invokeSetter(p, clonedValue);
+							// clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
 						}
 						break;
 					case REFERENCE:
@@ -1319,7 +1382,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						if (referenceValue == null) {
 							referenceValue = singleValue;
 						}
-						clonedObjectHandler.internallyInvokeSetter(p, referenceValue);
+						clonedObjectHandler.invokeSetter(p, referenceValue);
+						// clonedObjectHandler.internallyInvokeSetter(p, referenceValue);
 						break;
 					case FACTORY:
 						if (p.getStrategyTypeFactory().equals("deriveName()")) {
@@ -1460,10 +1524,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				new Predicate<ModelProperty<?>>() {
 					@Override
 					public boolean apply(ModelProperty<?> arg0) {
+						System.out.println("Property " + arg0);
+						System.out.println("Add PP=" + arg0.getAddPastingPoint());
+						System.out.println("Set PP=" + arg0.getSetPastingPoint());
 						return arg0.getAddPastingPoint() != null || arg0.getSetPastingPoint() != null;
 					}
 				});
 		if (pastingPointProperties.size() == 0) {
+			System.out.println("modelEntity=" + getModelEntity());
+			System.out.println("clipboard type=" + clipboard.getType());
+			System.out.println("propertiesAssignableFrom=" + propertiesAssignableFrom);
+			System.out.println("pastingPointProperties=" + pastingPointProperties);
+
 			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
 		} else if (pastingPointProperties.size() > 1) {
 			throw new ClipboardOperationException("Ambiguous pasting operations: several properties are compatible for pasting type "
@@ -1512,7 +1584,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					invokeAdder(modelProperty, clipboardContent);
 				} else {
 					for (Object o : (List) clipboardContent) {
-						invokeAdder(modelProperty, o);
+						if (TypeUtils.isTypeAssignableFrom(modelProperty.getType(), o.getClass())) {
+							invokeAdder(modelProperty, o);
+						} else {
+							System.out.println("Cannot add " + o + " to " + getObject() + " with " + modelProperty);
+						}
 					}
 				}
 			}
