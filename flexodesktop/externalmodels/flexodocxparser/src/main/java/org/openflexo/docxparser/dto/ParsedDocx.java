@@ -188,8 +188,8 @@ public class ParsedDocx implements IParsedDocx {
 		return list;
 	}
 
-	public IParsedFlexoEPI createParsedFlexoEPI(FlexoEPITag tag, String value) {
-		IParsedFlexoEPI parsedFlexoEPI = new ParsedFlexoEPI(tag, value);
+	public IParsedFlexoEPI createParsedFlexoEPI(FlexoEPITag tag, String singleLineValue, String multilineValue, ParsedHtml styledValue) {
+		IParsedFlexoEPI parsedFlexoEPI = new ParsedFlexoEPI(tag, singleLineValue, multilineValue, styledValue);
 		parsedFlexoEPIs.add(parsedFlexoEPI);
 		return parsedFlexoEPI;
 	}

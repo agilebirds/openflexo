@@ -9,9 +9,14 @@ public class ParsedFlexoEPI implements IParsedFlexoEPI {
 
 	private String value;
 
-	public ParsedFlexoEPI(FlexoEPITag epiTag, String value) {
+	private String multilineValue;
+
+	private ParsedHtml styledValue;
+
+	public ParsedFlexoEPI(FlexoEPITag epiTag, String value, String multilineValue, ParsedHtml styledValue) {
 		this.epiTag = epiTag;
-		this.value = value;
+		this.multilineValue = multilineValue;
+		this.styledValue = styledValue;
 	}
 
 	@Override
@@ -37,6 +42,16 @@ public class ParsedFlexoEPI implements IParsedFlexoEPI {
 	@Override
 	public String getValue() {
 		return value;
+	}
+
+	@Override
+	public String getMultilineValue() {
+		return multilineValue;
+	}
+
+	@Override
+	public ParsedHtml getStyledValue() {
+		return styledValue;
 	}
 
 	public FlexoEPITag getEpiTag() {

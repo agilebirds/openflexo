@@ -761,8 +761,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 	}
 
 	public static String escapeStringForXML(String string) {
+		if (string != null && string.indexOf("Prout") > -1) {
+			System.err.println("here");
+		}
 		String escapedString = StringEscapeUtils.escapeXml(string);
-		return escapedString != null ? StringUtils.replaceBreakLinesBy(escapedString, " ") : "";
+		return escapedString != null ? escapedString : "";
 	}
 
 	public static String removeAllWhiteCharacters(String text, String replacement) {

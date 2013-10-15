@@ -64,6 +64,12 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewDefinition;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
+import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
+import org.openflexo.foundation.viewpoint.inspector.WysiwygInspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -177,6 +183,10 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 		}
 	}
 
+	enum FieldType {
+		SINGLE_LINE, MULTILINE, STYLED_TEXT;
+	}
+
 	private void reinjectEPI(IParsedDocx parsedDocx) {
 		Multimap<EditionPatternInstance, IParsedFlexoEPI> epis = lookUpEditionPatternInstances(parsedDocx);
 		Multimap<EditionPatternInstance, IParsedFlexoEPI> episToReinject = removeConflictingParsedDocX(epis);
@@ -185,7 +195,51 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			for (IParsedFlexoEPI parsedFlexoEPI : e.getValue()) {
 				setSecondaryProgress(FlexoLocalization.localizedForKey("reinjecting_edition_pattern_value") + " "
 						+ parsedFlexoEPI.getValue());
-				boolean result = epi.setBindingValue(parsedFlexoEPI.getBindingPath(), parsedFlexoEPI.getValue());
+				FieldType fieldType = FieldType.SINGLE_LINE;
+				String bindingPath = parsedFlexoEPI.getBindingPath();
+				Object evaluate = epi.evaluate(bindingPath);
+				if (evaluate != null && evaluate.toString().contains("\n")) {
+					fieldType = FieldType.MULTILINE;
+				}
+				if (fieldType == FieldType.SINGLE_LINE) {
+					for (PatternRole role : epi.getPattern().getPatternRoles()) {
+						if (role instanceof GraphicalElementPatternRole) {
+							ViewPointDataBinding label = ((GraphicalElementPatternRole) role).getLabel();
+							if (label != null && label.isSet() && label.toString().equals(bindingPath)) {
+								if (((GraphicalElementPatternRole) role).getGraphicalRepresentation() != null
+										&& ((GraphicalElementPatternRole) role).getGraphicalRepresentation().getIsMultilineAllowed()) {
+									fieldType = FieldType.MULTILINE;
+									break;
+								}
+							}
+						}
+					}
+				}
+				for (InspectorEntry entry : epi.getPattern().getInspector().getEntries()) {
+					if (bindingPath.equals(entry.getData().toString())) {
+						if (entry instanceof TextAreaInspectorEntry && fieldType != FieldType.STYLED_TEXT) {
+							fieldType = FieldType.MULTILINE;
+						} else if (entry instanceof WysiwygInspectorEntry) {
+							fieldType = FieldType.STYLED_TEXT;
+						}
+
+					}
+				}
+				boolean result = false;
+				switch (fieldType) {
+				case SINGLE_LINE:
+					result = epi.setBindingValue(bindingPath, parsedFlexoEPI.getValue());
+					break;
+				case MULTILINE:
+					result = epi.setBindingValue(bindingPath, parsedFlexoEPI.getMultilineValue());
+					break;
+				case STYLED_TEXT:
+					result = epi.setBindingValue(bindingPath, parsedFlexoEPI.getStyledValue().getHtml());
+					break;
+				default:
+					break;
+
+				}
 				if (result) {
 					numberOfEPIUpdated++;
 				}

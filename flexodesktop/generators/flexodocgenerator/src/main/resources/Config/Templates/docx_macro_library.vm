@@ -972,7 +972,7 @@ name of the template corresponding to the specific toc_entry.
     #getEPIValues($epiValues)
     #set($epiValues = ${epiValues.get()})
     #foreach($epiValue in $epiValues)
-        @single $epiValue @end
+        $epiValue
     #end
 #end
 
@@ -2200,6 +2200,11 @@ name of the template corresponding to the specific toc_entry.
     #set($_ot="<${_enclosingTag}><w:p><w:r><w:t>")
     #set($_ct="</w:t></w:r></w:p></${_enclosingTag}>")
 #end
+   #set($_binding = "#escape($_text)")
+   #set($_text = "#escape($_text)")
+   #if($multiline)
+       #set($_text = $_text.replace($n,"</w:t></w:r><w:r><w:br/></w:r><w:r><w:t>"))
+   #end
    <w:sdt>
         <w:sdtPr>
             #set($_epiTag = ${projectGenerator.getEPITag($_epi, $_bindingPath)})
@@ -2212,13 +2217,13 @@ name of the template corresponding to the specific toc_entry.
             #end
             #set($_epiName = "EPIV_$generator.makeValidXMLName($_epiTag)")
             <w:dataBinding w:xpath="/OpenFlexo/EditionPatternInstanceValues/${_epiName}[1]"/>
-            #addEPIValue("<${_epiName}>#escape($_text)</${_epiName}>")
+            #addEPIValue("<${_epiName}>$_binding</${_epiName}>")
         </w:sdtPr>
         <w:sdtContent>
             $_ot 
                 $_style
             #if($_hasText)
-                #escape($_text)
+            	$_text
             #else
                 Click here to fill the $_alias
             #end

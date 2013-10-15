@@ -49,6 +49,7 @@ import org.openflexo.docxparser.flexotag.FlexoDescriptionTag;
 import org.openflexo.docxparser.flexotag.FlexoEPITag;
 import org.openflexo.docxparser.flexotag.FlexoNameTag;
 import org.openflexo.docxparser.flexotag.FlexoTitleTag;
+import org.openflexo.toolbox.StringUtils;
 
 public class DocxFileParser {
 	protected static final Logger logger = Logger.getLogger(DocxFileParser.class.getPackage().toString());
@@ -167,9 +168,11 @@ public class DocxFileParser {
 					// Reinjection shall then choose the appropriate extract according the info
 					// available in VP.
 					String text = extractTextContent(sdtContentElement);
-
+					String multilineText = extractMultilineTextContent(sdtContentElement);
+					ParsedHtml parsedHtml = OpenXml2Html.getHtml(sdtContentElement, getDocumentPart(), availableCssClasses,
+							resourcesDirectory);
 					if (text.length() > 0) {
-						parsedDocx.createParsedFlexoEPI(epiTag, text);
+						parsedDocx.createParsedFlexoEPI(epiTag, text, multilineText, parsedHtml);
 					}
 				} else if (tagValue.startsWith(FlexoContentTag.FLEXOCONTENTTAG)) {
 					FlexoContentTag contentTag = new FlexoContentTag(tagValue);
@@ -196,6 +199,9 @@ public class DocxFileParser {
 			Element wpElement = (Element) iteratorWp.next();*/
 		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
 		while (iteratorWt.hasNext()) {
+			if (sb.length() > 0) {
+				sb.append(' ');
+			}
 			Element textElement = (Element) iteratorWt.next();
 			sb.append(textElement.getText());
 		}
@@ -203,6 +209,30 @@ public class DocxFileParser {
 			sb.append(StringUtils.LINE_SEPARATOR);
 		}
 		}*/
+		return sb.toString().trim();
+	}
+
+	private String extractMultilineTextContent(Element sdtContentElement) {
+		StringBuilder sb = new StringBuilder();
+		Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
+		while (iteratorWp.hasNext()) {
+			Element wpElement = (Element) iteratorWp.next();
+			Iterator<?> iteratorWt = wpElement.selectNodes("descendant::w:t | descendant::w:br").iterator();
+			while (iteratorWt.hasNext()) {
+				if (sb.length() > 0) {
+					sb.append(' ');
+				}
+				Element textElement = (Element) iteratorWt.next();
+				if (textElement.getName().equals("br")) {
+					sb.append(StringUtils.LINE_SEPARATOR);
+				} else {
+					sb.append(textElement.getText());
+				}
+			}
+			if (iteratorWp.hasNext()) {
+				sb.append(StringUtils.LINE_SEPARATOR);
+			}
+		}
 		return sb.toString().trim();
 	}
 
