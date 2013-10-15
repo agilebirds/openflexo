@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,8 @@ import javax.swing.UIManager;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -167,7 +170,17 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 
 		@Override
 		public void doOperation(ServerRestClient client, final Progress progress) throws IOException, WebApplicationException {
-			ClientResponse response = client.projectsProjectIDVersions(project.getProjectId()).idFile(version.getVersionID())
+			Client createClient = client.createClient();
+			Session session = new Session();
+			session.setUser(getUser());
+			session.setVersion(version);
+			try {
+				session.setDownloadDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+			} catch (DatatypeConfigurationException e1) {
+				e1.printStackTrace();
+			}
+			client.projectsProjectIDSessions(createClient, project.getProjectId()).postXmlAsSession(session);
+			ClientResponse response = client.projectsProjectIDVersions(createClient, project.getProjectId()).idFile(version.getVersionID())
 					.getAsOctetStream(ClientResponse.class);
 			if (response.getStatus() >= 400) {
 				String message = "";
@@ -184,7 +197,7 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 			if (list != null) {
 				for (String string : list) {
 					try {
-						length = Long.parseLong(string);
+						length = Long.valueOf(string);
 						break;
 					} catch (NumberFormatException e) {
 						e.printStackTrace();
@@ -192,7 +205,13 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 				}
 			}
 			if (length < 1) {
-				// TODO: Call getProjectLength
+				String fileLength = client.projectsProjectIDVersions(project.getProjectId()).idFileLength(version.getVersionID())
+						.getAsTextPlain(String.class);
+				try {
+					length = Long.valueOf(fileLength);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
 			}
 			file = File.createTempFile(StringUtils.rightPad(project.getName() + "_" + version.getVersionNumber(), 3, '_'), ".zip");
 			bytesRead = 0;
