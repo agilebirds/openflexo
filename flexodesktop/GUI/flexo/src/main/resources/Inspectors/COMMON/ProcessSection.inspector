@@ -3,7 +3,7 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
       <Label label="documentation_type" index="18" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <DropDown index="19" data="data.subType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;location=right)" format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.ProcessSection$ProcessDocSectionSubType" autoSelectFirstRow="false" />
+      <DropDown index="19" data="data.subType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=19;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.ProcessSection$ProcessDocSectionSubType" autoSelectFirstRow="false" />
       <Label label="process" index="20" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <Custom componentClassName="org.openflexo.components.widget.FIBProcessSelector" localize="true" manageDynamicModel="true" name="processSelector" index="21" data="data.process" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <Assignment variable="component.defaultHeight" value="200" />
@@ -16,5 +16,34 @@
       </Custom>
     </Tab>
   </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="documentation_type" lang="English">Documentation type</Localized>
+    <Localized key="documentation_type" lang="French">Type de documentation</Localized>
+    <Localized key="documentation_type" lang="Dutch">Type van documentatie</Localized>
+    <Localized key="OperationTable" lang="English">OperationTable</Localized>
+    <Localized key="OperationTable" lang="French">OperationTable</Localized>
+    <Localized key="OperationTable" lang="Dutch">OperationTable</Localized>
+    <Localized key="RaciMatrix" lang="English">RaciMatrix</Localized>
+    <Localized key="RaciMatrix" lang="French">RaciMatrix</Localized>
+    <Localized key="RaciMatrix" lang="Dutch">RaciMatrix</Localized>
+    <Localized key="SIPOCLevel2" lang="English">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel2" lang="French">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel2" lang="Dutch">SIPOCLevel2</Localized>
+    <Localized key="SIPOCLevel3" lang="English">SIPOCLevel3</Localized>
+    <Localized key="SIPOCLevel3" lang="French">SIPOCLevel3</Localized>
+    <Localized key="SIPOCLevel3" lang="Dutch">SIPOCLevel3</Localized>
+    <Localized key="process" lang="English">Process</Localized>
+    <Localized key="process" lang="French">Processus</Localized>
+    <Localized key="process" lang="Dutch">Process</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Waarde</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+  </LocalizedDictionary>
   <Parameter name="title" value="Process section" />
 </Panel>

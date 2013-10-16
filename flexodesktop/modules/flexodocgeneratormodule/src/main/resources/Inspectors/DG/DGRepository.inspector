@@ -15,7 +15,7 @@
       <Label label="templates_repository" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="PreferredTemplateRepositoryLabel" localize="true" />
       <DropDown showReset="true" index="25" data="data.preferredTemplateRepository" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="PreferredTemplateRepository" format="object.name" localize="true" list="data.generatedCode.templates.customDocRepositoriesVector" iteratorClassName="org.openflexo.foundation.cg.templates.CustomCGTemplateRepository" autoSelectFirstRow="false" />
     </Tab>
-    <Tab title="History" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="HistoryTab">
+    <Tab title="History" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="HistoryTab">
       <Label label="manage_history" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ManageHistoryLabel" localize="true" />
       <CheckBox selected="false" index="1" data="data.manageHistory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ManageHistory" localize="true" />
       <Label label="releases" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.manageHistory = true)" name="ReleasesLabel" localize="true" />
@@ -107,6 +107,12 @@
     <Localized key="Objectifs" lang="English">Objectives</Localized>
     <Localized key="Objectifs" lang="French">Objectifs</Localized>
     <Localized key="Objectifs" lang="Dutch">Objectives</Localized>
+    <Localized key="SmartSeatsTemplate" lang="English">SmartSeatsTemplate</Localized>
+    <Localized key="SmartSeatsTemplate" lang="French">SmartSeatsTemplate</Localized>
+    <Localized key="SmartSeatsTemplate" lang="Dutch">SmartSeatsTemplate</Localized>
+    <Localized key="Smart Seats Prototype BRS" lang="English">Smart Seats Prototype BRS</Localized>
+    <Localized key="Smart Seats Prototype BRS" lang="French">Smart Seats Prototype BRS</Localized>
+    <Localized key="Smart Seats Prototype BRS" lang="Dutch">Smart Seats Prototype BRS</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="generated_doc_repository" />
 </Panel>

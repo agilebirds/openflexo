@@ -61,7 +61,7 @@
     <Localized key="section" lang="French">Section</Localized>
     <Localized key="section" lang="Dutch">Section</Localized>
     <Localized key="subType" lang="English">Sub type</Localized>
-    <Localized key="subType" lang="French">sous-type</Localized>
+    <Localized key="subType" lang="French">Sous-type</Localized>
     <Localized key="subType" lang="Dutch">Sub type</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
     <Localized key="title" lang="English">Title</Localized>

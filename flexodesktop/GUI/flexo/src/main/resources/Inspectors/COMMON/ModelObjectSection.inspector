@@ -3,5 +3,6 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab" />
   </TabPanel>
+  <LocalizedDictionary />
   <Parameter name="title" value="Model object section" />
 </Panel>
