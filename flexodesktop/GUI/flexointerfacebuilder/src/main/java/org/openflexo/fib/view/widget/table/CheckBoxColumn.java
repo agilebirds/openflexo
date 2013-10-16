@@ -47,11 +47,6 @@ public class CheckBoxColumn extends AbstractColumn<Boolean> implements EditableC
 	}
 
 	@Override
-	public Class<Boolean> getValueClass() {
-		return Boolean.class;
-	}
-
-	@Override
 	public String toString() {
 		return "BooleanColumn " + "@" + Integer.toHexString(hashCode());
 	}

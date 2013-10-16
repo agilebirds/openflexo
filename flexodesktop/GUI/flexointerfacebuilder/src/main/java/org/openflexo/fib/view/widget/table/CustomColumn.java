@@ -37,7 +37,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -120,11 +119,6 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	@Override
-	public Class<T> getValueClass() {
-		return TypeUtils.getBaseClass(getColumnModel().getDataClass());
 	}
 
 	@Override

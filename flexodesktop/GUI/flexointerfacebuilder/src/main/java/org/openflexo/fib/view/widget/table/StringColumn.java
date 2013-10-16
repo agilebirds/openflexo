@@ -35,11 +35,6 @@ public abstract class StringColumn extends AbstractColumn<String> {
 	}
 
 	@Override
-	public Class<String> getValueClass() {
-		return String.class;
-	}
-
-	@Override
 	public String toString() {
 		return "StringColumn " + "@" + Integer.toHexString(hashCode());
 	}

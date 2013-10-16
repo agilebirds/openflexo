@@ -27,7 +27,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButtonColumn;
 
@@ -72,11 +71,6 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 	@Override
 	public FIBButtonColumn getColumnModel() {
 		return (FIBButtonColumn) super.getColumnModel();
-	}
-
-	@Override
-	public Class<T> getValueClass() {
-		return TypeUtils.getBaseClass(getColumnModel().getDataClass());
 	}
 
 	@Override

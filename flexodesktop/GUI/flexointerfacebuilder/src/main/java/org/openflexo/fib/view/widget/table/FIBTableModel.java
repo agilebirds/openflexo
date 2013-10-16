@@ -33,6 +33,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
@@ -226,6 +227,15 @@ public class FIBTableModel extends AbstractTableModel {
 		}
 
 		private void updateRow() {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						updateRow();
+					}
+				});
+				return;
+			}
 			fireTableRowsUpdated(indexOf(rowObject), indexOf(rowObject));
 			getTableWidget().notifyDynamicModelChanged();
 		}

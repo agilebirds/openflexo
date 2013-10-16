@@ -47,11 +47,6 @@ public class IconColumn extends AbstractColumn<Icon> implements EditableColumn<I
 	}
 
 	@Override
-	public Class<Icon> getValueClass() {
-		return Icon.class;
-	}
-
-	@Override
 	public String toString() {
 		return "IconColumn " + "@" + Integer.toHexString(hashCode());
 	}

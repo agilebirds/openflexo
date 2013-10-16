@@ -59,11 +59,6 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		return (FIBDropDownColumn) super.getColumnModel();
 	}
 
-	@Override
-	public Class getValueClass() {
-		return Object.class;
-	}
-
 	/**
 	 * Must be overriden if required
 	 * 

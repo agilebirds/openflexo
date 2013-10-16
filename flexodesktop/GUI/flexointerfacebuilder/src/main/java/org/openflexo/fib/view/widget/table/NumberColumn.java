@@ -53,11 +53,6 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 	}
 
 	@Override
-	public Class<Number> getValueClass() {
-		return Number.class;
-	}
-
-	@Override
 	public String toString() {
 		return "IntegerColumn " + "@" + Integer.toHexString(hashCode());
 	}

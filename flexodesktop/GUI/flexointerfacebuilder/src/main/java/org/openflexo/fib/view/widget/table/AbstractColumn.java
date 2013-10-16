@@ -31,6 +31,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
@@ -154,7 +155,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return false;
 	}
 
-	public abstract Class<T> getValueClass();
+	public final Class<T> getValueClass() {
+		return TypeUtils.getBaseClass(getColumnModel().getDataClass());
+	}
 
 	public synchronized T getValueFor(final Object object) {
 		iteratorObject = object;
