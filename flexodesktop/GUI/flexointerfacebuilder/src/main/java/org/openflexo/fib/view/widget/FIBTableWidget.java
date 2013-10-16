@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,18 +38,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.sort.TableSortController;
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -476,6 +481,25 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			protected void resetDefaultTableCellRendererColors(Component renderer, int row, int column) {
 			}
 
+			@Override
+			protected RowSorter<? extends TableModel> createDefaultRowSorter() {
+				return new TableSortController<TableModel>(getModel()) {
+					@Override
+					public Comparator<?> getComparator(int column) {
+						// We need to override this, because somehow, someone once has had the bad idea of returning Collator.getInstance()
+						// when no comparator was found (instead of properly returning null, as expected by RowSorter). However, Collator is
+						// a pretty stupid Comparator which blindly casts everything to a
+						// String.
+						final Comparator<?> comparator = super.getComparator(column);
+						if (comparator == Collator.getInstance()) {
+							if (getModel().getColumnClass(column) != String.class) {
+								return null;
+							}
+						}
+						return comparator;
+					}
+				};
+			}
 		};
 		_table.setVisibleRowCount(0);
 		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
@@ -485,6 +509,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 		_table.setShowVerticalLines(false);
 		_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_table.addFocusListener(this);
+		if (_table.getRowSorter() instanceof DefaultRowSorter) {
+
+		}
 
 		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
 			TableColumn col = _table.getColumnModel().getColumn(i);
