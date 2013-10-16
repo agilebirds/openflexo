@@ -180,6 +180,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	@Override
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
+
+		// System.out.println("Invoke " + method);
 		Initializer initializer = method.getAnnotation(Initializer.class);
 		if (initializer != null) {
 			internallyInvokeInitializer(getModelEntity().getInitializers(method), args);
@@ -191,7 +193,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		Getter getter = method.getAnnotation(Getter.class);
 		if (getter != null) {
 			String id = getter.value();
-			return internallyInvokeGetter(id);
+			Object returned = internallyInvokeGetter(id);
+			return returned;
 		}
 
 		Setter setter = method.getAnnotation(Setter.class);
@@ -252,8 +255,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			internallyInvokeRemover(e.getModelProperty((String) args[0]), args[1]);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER_ENTITY)) {
-			internallyInvokeDeleter();
-			return null;
+			return internallyInvokeDeleter();
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER_ENTITY)) {
 			Class<?> class1 = (Class<?>) args[2];
 			ModelEntity<? super I> e = getModelEntityFromArg(class1);
@@ -296,14 +298,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
 			return DELETED;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
-			internallyInvokeDeleter();
-			return null;
+			return internallyInvokeDeleter();
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT)) {
-			internallyInvokeDeleter();
-			return null;
+			return internallyInvokeDeleter();
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT_WITH_CONTEXT)) {
-			internallyInvokeDeleter(args);
-			return null;
+			return internallyInvokeDeleter(args);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		}
@@ -393,9 +392,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		internallyInvokeRemover(property, args[0]);
 	}
 
-	private void internallyInvokeDeleter(Object... context) throws ModelDefinitionException {
+	private boolean internallyInvokeDeleter(Object... context) throws ModelDefinitionException {
+
 		if (deleted || deleting) {
-			return;
+			return false;
 		}
 		deleting = true;
 		if (context == null) {
@@ -432,6 +432,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		deleting = false;
 		getPropertyChangeSuppport().firePropertyChange(DELETED, false, true);
 		propertyChangeSupport = null;
+		return deleted;
 	}
 
 	public Object invokeGetter(ModelProperty<? super I> property) {
@@ -1236,7 +1237,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 		ProxyMethodHandler<?> clonedValueHandler = getModelFactory().getHandler(objectToCloneOrReference);
 		returned = clonedValueHandler.performClone(clonedObjects);
-		// System.out.println("for " + objectToCloneOrReference + " clone is " + returned);
+		System.out.println("CLONING " + objectToCloneOrReference + " clone is " + returned);
 		return returned;
 	}
 
@@ -1358,20 +1359,20 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 							clonedObjectHandler.invokeSetter(p, clonedValue);
 							// clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
 						} else if (ModelEntity.isModelEntity(p.getType()) && singleValue instanceof CloneableProxyObject) {
-							boolean debug = false;
-							if (p.getPropertyIdentifier().equals("shapeSpecification")) {
+							// boolean debug = false;
+							/*if (p.getPropertyIdentifier().equals("shapeSpecification")) {
 								System.out.println("Tiens, pour shapeSpecification, je l'ai");
 								debug = true;
-							}
+							}*/
 							Object clonedValue = clonedObjects.get(singleValue);
-							if (debug) {
+							/*if (debug) {
 								System.out.println("clonedValue=" + clonedValue + " singleValue=" + singleValue);
-							}
+							}*/
 							if (!isPartOfContext(singleValue, EmbeddingType.CLOSURE, context)) {
 								clonedValue = null;
-								if (debug) {
+								/*if (debug) {
 									System.out.println("mais pas dans le contexte !!!");
-								}
+								}*/
 							}
 							clonedObjectHandler.invokeSetter(p, clonedValue);
 							// clonedObjectHandler.internallyInvokeSetter(p, clonedValue);
@@ -1518,32 +1519,82 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return returned;
 	}
 
+	/**
+	 * Paste supplied clipboard in object monitored by this method handler<br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	protected Object paste(Clipboard clipboard) throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
-		Collection<ModelProperty<? super I>> propertiesAssignableFrom = getModelEntity().getPropertiesAssignableFrom(clipboard.getType());
-		Collection<ModelProperty<? super I>> pastingPointProperties = Collections2.filter(propertiesAssignableFrom,
-				new Predicate<ModelProperty<?>>() {
-					@Override
-					public boolean apply(ModelProperty<?> arg0) {
-						System.out.println("Property " + arg0);
-						System.out.println("Add PP=" + arg0.getAddPastingPoint());
-						System.out.println("Set PP=" + arg0.getSetPastingPoint());
-						return arg0.getAddPastingPoint() != null || arg0.getSetPastingPoint() != null;
-					}
-				});
-		if (pastingPointProperties.size() == 0) {
-			System.out.println("modelEntity=" + getModelEntity());
-			System.out.println("clipboard type=" + clipboard.getType());
-			System.out.println("propertiesAssignableFrom=" + propertiesAssignableFrom);
-			System.out.println("pastingPointProperties=" + pastingPointProperties);
 
-			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
-		} else if (pastingPointProperties.size() > 1) {
-			throw new ClipboardOperationException("Ambiguous pasting operations: several properties are compatible for pasting type "
-					+ clipboard.getType());
+		System.out.println("PASTING in " + getObject());
+
+		List<Object> returned = null;
+
+		if (!clipboard.isSingleObject()) {
+			returned = new ArrayList<Object>();
 		}
-		return paste(clipboard, pastingPointProperties.iterator().next());
+
+		boolean somethingWasPasted = false;
+		for (Class<?> type : clipboard.getTypes()) {
+
+			System.out.println("pasting as " + type);
+
+			Collection<ModelProperty<? super I>> propertiesAssignableFrom = getModelEntity().getPropertiesAssignableFrom(type);
+			Collection<ModelProperty<? super I>> pastingPointProperties = Collections2.filter(propertiesAssignableFrom,
+					new Predicate<ModelProperty<?>>() {
+						@Override
+						public boolean apply(ModelProperty<?> arg0) {
+							// System.out.println("Property " + arg0);
+							// System.out.println("Add PP=" + arg0.getAddPastingPoint());
+							// System.out.println("Set PP=" + arg0.getSetPastingPoint());
+							return arg0.getAddPastingPoint() != null || arg0.getSetPastingPoint() != null;
+						}
+					});
+			if (pastingPointProperties.size() == 0) {
+				// System.out.println("modelEntity=" + getModelEntity());
+				// System.out.println("clipboard type=" + type);
+				// System.out.println("propertiesAssignableFrom=" + propertiesAssignableFrom);
+				// System.out.println("pastingPointProperties=" + pastingPointProperties);
+
+			} else if (pastingPointProperties.size() > 1) {
+				throw new ClipboardOperationException("Ambiguous pasting operations: several properties are compatible for pasting type "
+						+ type);
+			} else {
+				ModelProperty<? super I> pastingProperty = pastingPointProperties.iterator().next();
+				System.out.println("Paste for property " + pastingProperty);
+				Object pastedContents = paste(clipboard, pastingProperty);
+				if (clipboard.isSingleObject()) {
+					return pastedContents;
+				} else if (pastedContents != null) {
+					returned.addAll((List) pastedContents);
+					somethingWasPasted = true;
+				}
+			}
+		}
+
+		if (!somethingWasPasted) {
+			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
+		}
+
+		return returned;
 	}
 
+	/**
+	 * Paste using supplied clipboard and property, asserting a pasting point could be found<br>
+	 * Return pasted objects for supplied property
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	protected Object paste(Clipboard clipboard, ModelProperty<? super I> modelProperty) throws ModelExecutionException,
 			ModelDefinitionException, CloneNotSupportedException {
 		if (modelProperty.getSetPastingPoint() == null && modelProperty.getAddPastingPoint() == null) {
@@ -1560,6 +1611,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 	}
 
+	/**
+	 * Paste using supplied clipboard and property, as specified pasting point<br>
+	 * Return pasted objects for supplied property
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @param pp
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	protected Object paste(Clipboard clipboard, ModelProperty<? super I> modelProperty, PastingPoint pp) throws ModelExecutionException,
 			ModelDefinitionException, CloneNotSupportedException {
 		ModelEntity<?> entity = getModelEntity();
@@ -1568,34 +1631,40 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 		// System.out.println("Found pasting point: "+pp);
 		if (modelProperty == null) {
-			throw new ClipboardOperationException("Cannot paste here: no suitable property found for type " + clipboard.getType());
+			throw new ClipboardOperationException("Cannot paste here: no suitable property found");
 			// System.out.println("Found property: "+ppProperty);
 		}
 
-		Object clipboardContent = clipboard.getContents();
+		// Object clipboardContent = clipboard.getContents();
 		if (getModelEntity().hasProperty(modelProperty)) {
 			if (modelProperty.getSetPastingPoint() == pp) {
 				if (!clipboard.isSingleObject()) {
 					throw new ClipboardOperationException("Cannot paste here: multiple cardinality clipboard for a SINGLE property");
 				}
-				invokeSetter(modelProperty, clipboardContent);
+				invokeSetter(modelProperty, clipboard.getSingleContents());
+				return clipboard.getSingleContents();
 			} else if (modelProperty.getAddPastingPoint() == pp) {
 				if (clipboard.isSingleObject()) {
-					invokeAdder(modelProperty, clipboardContent);
+					invokeAdder(modelProperty, clipboard.getSingleContents());
+					return clipboard.getSingleContents();
 				} else {
-					for (Object o : (List) clipboardContent) {
+					List<Object> returned = new ArrayList<Object>();
+					for (Object o : clipboard.getMultipleContents()) {
 						if (TypeUtils.isTypeAssignableFrom(modelProperty.getType(), o.getClass())) {
+							System.out.println("PASTE: add " + o + " to " + getObject() + " with " + modelProperty);
 							invokeAdder(modelProperty, o);
+							returned.add(o);
 						} else {
-							System.out.println("Cannot add " + o + " to " + getObject() + " with " + modelProperty);
+							System.out.println("PASTE: cannot add " + o + " to " + getObject() + " with " + modelProperty);
 						}
 					}
+					return returned;
 				}
 			}
 		}
 
 		clipboard.consume();
-		return clipboardContent;
+		return null;
 	}
 
 	@Override

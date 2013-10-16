@@ -530,6 +530,17 @@ public class ModelFactory {
 		return null;
 	}
 
+	/**
+	 * Paste supplied clipboard in context object<br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
 			CloneNotSupportedException {
 		if (!isProxyObject(context)) {
@@ -539,6 +550,18 @@ public class ModelFactory {
 		return getHandler(context).paste(clipboard);
 	}
 
+	/**
+	 * Paste supplied clipboard in context object for supplied property <br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
 			ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
@@ -548,6 +571,19 @@ public class ModelFactory {
 		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
 	}
 
+	/**
+	 * Paste supplied clipboard in context object for supplied property at specified pasting point<br>
+	 * Return pasted objects (a single object for a single contents clipboard, and a list of objects for a multiple contents)
+	 * 
+	 * @param clipboard
+	 * @param modelProperty
+	 * @param pp
+	 * @param context
+	 * @return
+	 * @throws ModelExecutionException
+	 * @throws ModelDefinitionException
+	 * @throws CloneNotSupportedException
+	 */
 	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context)
 			throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
 		if (!isProxyObject(context)) {
