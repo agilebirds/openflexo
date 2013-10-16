@@ -1569,6 +1569,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				System.out.println("Paste for property " + pastingProperty);
 				Object pastedContents = paste(clipboard, pastingProperty);
 				if (clipboard.isSingleObject()) {
+					clipboard.consume();
 					return pastedContents;
 				} else if (pastedContents != null) {
 					returned.addAll((List) pastedContents);
@@ -1581,6 +1582,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			throw new ClipboardOperationException("Cannot paste here: no pasting point found");
 		}
 
+		clipboard.consume();
 		return returned;
 	}
 
@@ -1663,7 +1665,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			}
 		}
 
-		clipboard.consume();
 		return null;
 	}
 
