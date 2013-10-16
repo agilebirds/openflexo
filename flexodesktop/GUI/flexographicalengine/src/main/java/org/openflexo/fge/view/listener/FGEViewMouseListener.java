@@ -113,21 +113,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 						return;
 					}
 				}
-
-				// PRI Requirement
-				if (focusedObject != null) {
-					if (focusedObject instanceof ShapeGraphicalRepresentation) {
-						view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
-								.continueEdition();
-						e.consume();
-						return;
-					} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
-						view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
-								.continueEdition();
-						e.consume();
-						return;
-					}
-				}
 				
 				if (focusedObject != null) {
 					ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
@@ -146,6 +131,17 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 							return;
 						}
 					}
+					/*if (focusedObject instanceof ShapeGraphicalRepresentation) {
+						view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.continueEdition();
+						e.consume();
+						return;
+					} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
+						view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.continueEdition();
+						e.consume();
+						return;
+					}*/
 				}
 			}
 
@@ -165,6 +161,21 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Ignoring " + mouseClickControl);
 					}
+				}
+			}
+			
+			// PRI Requirement
+			if (focusedObject != null) {
+				if (focusedObject instanceof ShapeGraphicalRepresentation) {
+					view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
+							.continueEdition();
+					e.consume();
+					return;
+				} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
+					view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
+							.continueEdition();
+					e.consume();
+					return;
 				}
 			}
 
