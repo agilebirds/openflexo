@@ -92,7 +92,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	private ShapeGraphicalRepresentationImpl(Object aDrawable, Drawing<?> aDrawing) {
 		this();
 		// setDrawable(aDrawable);
-		setDrawing(aDrawing);
+		// setDrawing(aDrawing);
 	}
 
 	@Deprecated

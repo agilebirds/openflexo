@@ -23,16 +23,16 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 
 	@Override
 	public void init() {
-		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation(this);
+		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation();
 		// graphRepresentation.setBackgroundColor(Color.RED);
-		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE, this);
+		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE);
 		// nodeRepresentation.setX(50);
 		// nodeRepresentation.setY(50);
 		nodeRepresentation.setWidth(20);
 		nodeRepresentation.setHeight(20);
 		nodeRepresentation.setAbsoluteTextX(30);
 		nodeRepresentation.setAbsoluteTextY(0);
-		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.LINE, this);
+		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.LINE);
 
 		final DrawingGRBinding<Graph> graphBinding = bindDrawing(Graph.class, "graph", new DrawingGRProvider<Graph>() {
 			@Override

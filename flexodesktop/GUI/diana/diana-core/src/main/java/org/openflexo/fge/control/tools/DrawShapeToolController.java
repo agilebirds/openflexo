@@ -90,8 +90,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 		Class<S> shapeClass = (Class<S>) TypeUtils.getTypeArgument(getClass(), DrawShapeToolController.class, 0);
 		GeometricGRBinding<S> editedGeometricObjectBinding = getController().getDrawing().bindGeometric(shapeClass,
 				"editedGeometricObject", null);
-		GeometricGraphicalRepresentation geomGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape, shape,
-				controller.getDrawing());
+		GeometricGraphicalRepresentation geomGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape);
 		currentEditedShapeGeometricNode = new GeometricNodeImpl<S>((DrawingImpl<?>) getController().getDrawing(), shape,
 				editedGeometricObjectBinding, (ContainerNodeImpl<?, ?>) getController().getDrawing().getRoot());
 		currentEditedShapeGeometricNode.addObserver(new Observer() {

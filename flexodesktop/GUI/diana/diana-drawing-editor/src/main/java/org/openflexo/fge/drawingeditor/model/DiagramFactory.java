@@ -6,7 +6,6 @@ import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
-import org.openflexo.fge.drawingeditor.DiagramDrawing;
 import org.openflexo.fge.drawingeditor.DrawEdgeControl;
 import org.openflexo.fge.drawingeditor.ShowContextualMenuControl;
 import org.openflexo.fge.geom.FGEPoint;
@@ -31,48 +30,44 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		return returned;
 	}
 
-	public Connector makeNewConnector(Shape from, Shape to, DiagramDrawing drawing) {
+	public Connector makeNewConnector(Shape from, Shape to, Diagram diagram) {
 		Connector returned = newInstance(Connector.class);
 		returned.setName("Connector" + connectorIndex);
 		connectorIndex++;
-		returned.setDiagram(drawing.getModel());
-		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE, returned, drawing));
+		returned.setDiagram(diagram);
+		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
 		return returned;
 	}
 
-	public Shape makeNewShape(ShapeType shape, FGEPoint p, DiagramDrawing drawing) {
-		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape, drawing);
+	public Shape makeNewShape(ShapeType shape, FGEPoint p, Diagram diagram) {
+		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape);
 		gr.setWidth(100);
 		gr.setHeight(80);
-		return makeNewShape(gr, p, drawing);
+		return makeNewShape(gr, p, diagram);
 	}
 
-	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, DiagramDrawing drawing) {
+	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, Diagram diagram) {
 		Shape returned = newInstance(Shape.class);
-		returned.setDiagram(drawing.getModel());
+		returned.setDiagram(diagram);
 		returned.setName("Shape" + shapeIndex);
 		System.out.println("New name: " + returned.getName());
 		shapeIndex++;
-		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR, drawing);
+		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR);
 		gr.setX(p.x);
 		gr.setY(p.y);
 		returned.setGraphicalRepresentation(gr);
 		return returned;
 	}
 
-	public DrawingGraphicalRepresentation makeNewDrawingGR(DiagramDrawing aDrawing) {
-		DrawingGraphicalRepresentation returned = newInstance(DrawingGraphicalRepresentation.class, true, true);
-		returned.setFactory(this);
-		returned.setDrawing(aDrawing);
-		return returned;
+	public DrawingGraphicalRepresentation makeNewDrawingGR() {
+		return makeDrawingGraphicalRepresentation(true);
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType, /*Shape aDrawable,*/DiagramDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeType shapeType) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
-		returned.setDrawing(aDrawing);
 		returned.setShapeType(shapeType);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
@@ -82,10 +77,9 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 
 	}
 
-	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR,/* Shape aDrawable,*/DiagramDrawing aDrawing) {
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR) {
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
-		returned.setDrawing(aDrawing);
 		returned.setsWith(aGR);
 		returned.setIsFocusable(true);
 		returned.setIsSelectable(true);
@@ -94,12 +88,9 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		return returned;
 	}
 
-	public ConnectorGraphicalRepresentation makeNewConnectorGR(ConnectorType aConnectorType/*, ShapeGraphicalRepresentation aStartObject,
-																							ShapeGraphicalRepresentation anEndObject*/,
-			Connector aDrawable, DiagramDrawing aDrawing) {
+	public ConnectorGraphicalRepresentation makeNewConnectorGR(ConnectorType aConnectorType) {
 		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class);
 		returned.setFactory(this);
-		returned.setDrawing(aDrawing);
 		returned.setConnectorType(aConnectorType);
 		// returned.setStartObject(aStartObject);
 		// returned.setEndObject(anEndObject);

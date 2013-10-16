@@ -299,12 +299,12 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 			};
 			drawing.setEditable(false);
 
-			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(199);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			textGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
+			textGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 			textGR.setWidth(200);
 			textGR.setHeight(20);
 			textGR.setX(0);

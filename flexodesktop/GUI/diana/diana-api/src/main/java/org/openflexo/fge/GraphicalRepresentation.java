@@ -34,7 +34,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.model.annotations.Adder;
-import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
@@ -58,8 +57,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// Property keys
 
-	public static final String DRAWABLE_KEY = "drawable";
-	public static final String DRAWING_KEY = "drawing";
+	// public static final String DRAWABLE_KEY = "drawable";
+	// public static final String DRAWING_KEY = "drawing";
 
 	@PropertyIdentifier(type = String.class)
 	public static final String IDENTIFIER_KEY = "identifier";
@@ -206,12 +205,12 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 	// * Model
 	// *******************************************************************************
 
-	@Getter(value = DRAWING_KEY, ignoreType = true)
+	/*@Getter(value = DRAWING_KEY, ignoreType = true)
 	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
 	public Drawing<?> getDrawing();
 
 	@Setter(value = DRAWING_KEY)
-	public void setDrawing(Drawing<?> drawing);
+	public void setDrawing(Drawing<?> drawing);*/
 
 	// *******************************************************************************
 	// * Properties

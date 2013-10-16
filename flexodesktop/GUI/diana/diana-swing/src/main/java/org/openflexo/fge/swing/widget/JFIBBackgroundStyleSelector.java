@@ -326,12 +326,12 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 			};
 			drawing.setEditable(false);
 
-			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			rectGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
+			rectGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 			rectGR.setWidth(36);
 			rectGR.setHeight(20);
 			rectGR.setX(0);

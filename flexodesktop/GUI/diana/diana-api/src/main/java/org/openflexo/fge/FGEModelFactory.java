@@ -165,8 +165,8 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aDrawing
 	 * @return a newly created DrawingGraphicalRepresentation
 	 */
-	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(Drawing<?> aDrawing) {
-		return makeDrawingGraphicalRepresentation(aDrawing, true);
+	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(/*Drawing<?> aDrawing*/) {
+		return makeDrawingGraphicalRepresentation(/*aDrawing,*/true);
 	}
 
 	/**
@@ -176,11 +176,11 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aDrawing
 	 * @return a newly created DrawingGraphicalRepresentation
 	 */
-	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(Drawing<?> aDrawing, boolean initBasicControls) {
+	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(/*Drawing<?> aDrawing,*/boolean initBasicControls) {
 		DrawingGraphicalRepresentation returned = newInstance(DrawingGraphicalRepresentation.class, true, initBasicControls);
 		returned.setFactory(this);
 		// returned.setDrawable(aDrawing.getModel());
-		returned.setDrawing(aDrawing);
+		// returned.setDrawing(aDrawing);
 		return returned;
 	}
 
@@ -221,12 +221,12 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(/*O aDrawable,*/Drawing<?> aDrawing) {
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation() {
 
 		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		// returned.setDrawable(aDrawable);
-		returned.setDrawing(aDrawing);
+		// returned.setDrawing(aDrawing);
 		return returned;
 	}
 
@@ -279,8 +279,8 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeType shapeType,/* O aDrawable,*/Drawing<?> aDrawing) {
-		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation(/*aDrawable,*/aDrawing);
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeType shapeType) {
+		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation();
 		returned.setShapeType(shapeType);
 		return returned;
 	}
@@ -296,9 +296,8 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeGraphicalRepresentation aGR,/* O aDrawable,*/
-			Drawing<?> aDrawing) {
-		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation(/*aDrawable,*/aDrawing);
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeGraphicalRepresentation aGR) {
+		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation();
 		returned.setsWith(aGR);
 		return returned;
 	}
@@ -313,12 +312,12 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ConnectorGraphicalRepresentation
 	 */
-	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(/*O aDrawable,*/Drawing<?> aDrawing) {
+	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation() {
 
 		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		// returned.setDrawable(aDrawable);
-		returned.setDrawing(aDrawing);
+		// returned.setDrawing(aDrawing);
 		return returned;
 	}
 
@@ -333,10 +332,9 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ConnectorGraphicalRepresentation
 	 */
-	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(ConnectorType aConnectorType,
-	/*ShapeGraphicalRepresentation aStartObject, ShapeGraphicalRepresentation anEndObject,*//* O aDrawable,*/Drawing<?> aDrawing) {
+	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(ConnectorType aConnectorType) {
 
-		ConnectorGraphicalRepresentation returned = makeConnectorGraphicalRepresentation(/*aDrawable,*/aDrawing);
+		ConnectorGraphicalRepresentation returned = makeConnectorGraphicalRepresentation();
 		// returned.setStartObject(aStartObject);
 		// returned.setEndObject(anEndObject);
 		returned.setConnectorType(aConnectorType);
@@ -382,12 +380,12 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created GeometricGraphicalRepresentation
 	 */
-	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
+	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation() {
 
 		GeometricGraphicalRepresentation returned = newInstance(GeometricGraphicalRepresentation.class, true, true);
 		returned.setFactory(this);
 		// returned.setDrawable(aDrawable);
-		returned.setDrawing(aDrawing);
+		// returned.setDrawing(aDrawing);
 
 		applyDefaultProperties(returned);
 		applyBasicControls(returned);
@@ -405,10 +403,9 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created GeometricGraphicalRepresentation
 	 */
-	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation(FGEArea geometricObject, O aDrawable,
-			Drawing<?> aDrawing) {
+	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation(FGEArea geometricObject) {
 
-		GeometricGraphicalRepresentation returned = makeGeometricGraphicalRepresentation(aDrawable, aDrawing);
+		GeometricGraphicalRepresentation returned = makeGeometricGraphicalRepresentation();
 		returned.setGeometricObject(geometricObject);
 		return returned;
 	}

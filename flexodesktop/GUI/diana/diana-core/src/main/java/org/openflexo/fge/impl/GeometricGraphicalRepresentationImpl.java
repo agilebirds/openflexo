@@ -50,7 +50,7 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 	private GeometricGraphicalRepresentationImpl(FGEArea anObject, Object aDrawable, Drawing<?> aDrawing) {
 		this();
 		// setDrawable(aDrawable);
-		setDrawing(aDrawing);
+		// setDrawing(aDrawing);
 
 		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);

@@ -141,8 +141,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 
 	@Override
 	public ShapeGraphicalRepresentation buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON,
-				getController().getDrawing());
+		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON);
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());

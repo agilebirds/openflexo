@@ -98,12 +98,12 @@ public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JSha
 		};
 		drawing.setEditable(false);
 
-		drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
+		drawingGR = factory.makeDrawingGraphicalRepresentation(false);
 		drawingGR.setBackgroundColor(Color.WHITE);
 		drawingGR.setWidth(getPanelWidth());
 		drawingGR.setHeight(getPanelHeight());
 		drawingGR.setDrawWorkingArea(false);
-		shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
+		shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());

@@ -36,7 +36,7 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 					drawable.getGraphicalRepresentation().setFactory(factory);
 					return drawable.getGraphicalRepresentation();
 				} else {
-					DrawingGraphicalRepresentation returned = factory.makeDrawingGraphicalRepresentation(DiagramDrawing.this);
+					DrawingGraphicalRepresentation returned = factory.makeDrawingGraphicalRepresentation();
 					drawable.setGraphicalRepresentation(returned);
 					return returned;
 				}
@@ -49,7 +49,7 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 					drawable.getGraphicalRepresentation().setFactory(factory);
 					return drawable.getGraphicalRepresentation();
 				} else {
-					ShapeGraphicalRepresentation returned = factory.makeShapeGraphicalRepresentation(DiagramDrawing.this);
+					ShapeGraphicalRepresentation returned = factory.makeShapeGraphicalRepresentation();
 					drawable.setGraphicalRepresentation(returned);
 					return returned;
 				}
@@ -63,7 +63,7 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 							drawable.getGraphicalRepresentation().setFactory(factory);
 							return drawable.getGraphicalRepresentation();
 						} else {
-							ConnectorGraphicalRepresentation returned = factory.makeConnectorGraphicalRepresentation(DiagramDrawing.this);
+							ConnectorGraphicalRepresentation returned = factory.makeConnectorGraphicalRepresentation();
 							drawable.setGraphicalRepresentation(returned);
 							return returned;
 						}

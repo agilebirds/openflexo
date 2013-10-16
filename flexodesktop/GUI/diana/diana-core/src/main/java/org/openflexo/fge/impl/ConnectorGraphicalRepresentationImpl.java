@@ -63,7 +63,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 	private ConnectorGraphicalRepresentationImpl(Object aDrawable, Drawing<?> aDrawing) {
 		this();
 		// setDrawable(aDrawable);
-		setDrawing(aDrawing);
+		// setDrawing(aDrawing);
 	}
 
 	@Deprecated

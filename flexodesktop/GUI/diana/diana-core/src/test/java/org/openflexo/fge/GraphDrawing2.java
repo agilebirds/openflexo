@@ -23,9 +23,9 @@ public class GraphDrawing2 extends DrawingImpl<Graph> {
 
 	@Override
 	public void init() {
-		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation(this);
-		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE, this);
-		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.CURVE, this);
+		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation();
+		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE);
+		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.CURVE);
 
 		final DrawingGRBinding<Graph> graphBinding = bindDrawing(Graph.class, "graph", new DrawingGRProvider<Graph>() {
 			@Override

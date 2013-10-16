@@ -85,7 +85,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	// *******************************************************************************
 
-	private Drawing<?> drawing;
+	// private Drawing<?> drawing;
 
 	// private Vector<Object> ancestors;
 
@@ -119,7 +119,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	@Deprecated
 	private GraphicalRepresentationImpl(Drawing<?> aDrawing) {
 		this();
-		setDrawing(aDrawing);
+		// setDrawing(aDrawing);
 		textStyle = getFactory().makeDefaultTextStyle();
 		// textStyle.setGraphicalRepresentation(this);
 		if (textStyle != null) {
@@ -357,7 +357,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	 * FGENotification("layer",oldLayer,layer)); }
 	 */
 
-	@Override
+	/*@Override
 	public Drawing<?> getDrawing() {
 		return drawing;
 	}
@@ -365,7 +365,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	@Override
 	public void setDrawing(Drawing<?> drawing) {
 		this.drawing = drawing;
-	}
+	}*/
 
 	/*@Override
 	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {

@@ -78,7 +78,7 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
+					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing().getModel());
 					addNewShape(newShape, (DiagramElement) contextualMenuInvoker.getDrawable());
 				}
 			});

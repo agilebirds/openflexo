@@ -144,7 +144,7 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 
 		private PaletteDrawing(DrawingPalette palette) {
 			super(palette, DrawingPalette.FACTORY, PersistenceMode.UniqueGraphicalRepresentations);
-			gr = DrawingPalette.FACTORY.makeDrawingGraphicalRepresentation(this, false);
+			gr = DrawingPalette.FACTORY.makeDrawingGraphicalRepresentation(false);
 			gr.setWidth(palette.getWidth());
 			gr.setHeight(palette.getHeight());
 			gr.setBackgroundColor(Color.WHITE);

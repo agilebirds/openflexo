@@ -81,7 +81,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makePaletteElement(ShapeType st, int px, int py) {
-		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(st, null);
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(st);
 		FACTORY.applyDefaultProperties(gr);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setX(px * GRID_WIDTH + 15);
@@ -129,7 +129,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
-		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 15);
 		gr.setWidth(60);
@@ -149,7 +149,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makeMultilineLabel(int px, int py) {
-		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
@@ -170,7 +170,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makeBoundedMultilineLabel(int px, int py) {
-		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, null);
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
 		gr.setWidth(60);
@@ -212,8 +212,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 
-				Shape newShape = getEditor().getFactory()
-						.makeNewShape(getGraphicalRepresentation(), dropLocation, getEditor().getDrawing());
+				Shape newShape = getEditor().getFactory().makeNewShape(getGraphicalRepresentation(), dropLocation, container.getDiagram());
 
 				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
 

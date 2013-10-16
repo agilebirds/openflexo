@@ -44,7 +44,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 	@Deprecated
 	private DrawingGraphicalRepresentationImpl(Drawing<?> aDrawing) {
 		this();
-		setDrawing(aDrawing);
+		// setDrawing(aDrawing);
 		// setDrawable(aDrawing != null ? aDrawing.getModel() : null);
 	}
 

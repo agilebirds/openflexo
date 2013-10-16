@@ -72,8 +72,8 @@ public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
 					// System.out.println("Add ConnectorSpecification contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
-					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
-							(DiagramDrawing) controller.getDrawing());
+					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(), controller
+							.getDrawing().getModel());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
 					((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
 					System.out.println("Add new connector !");

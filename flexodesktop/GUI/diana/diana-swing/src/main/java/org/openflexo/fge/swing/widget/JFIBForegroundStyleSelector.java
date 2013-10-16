@@ -309,12 +309,12 @@ public class JFIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> im
 			};
 			drawing.setEditable(false);
 
-			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			lineGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
+			lineGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
 			lineGR.setWidth(25);
 			lineGR.setHeight(0);
 			lineGR.setX(-5);
