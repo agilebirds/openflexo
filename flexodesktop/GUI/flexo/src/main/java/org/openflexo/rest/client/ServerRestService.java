@@ -178,6 +178,7 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				File fileToOpen = null;
 				InputStream input = null;
 				FileOutputStream fos = null;
+				BufferedOutputStream bos = null;
 				try {
 					File saveToFolder = new File(watchedRemoteJob.getSaveToFolder());
 					if (watchedRemoteJob.isUnzip()) {
@@ -188,9 +189,12 @@ public class ServerRestService implements HasPropertyChangeSupport {
 					}
 					saveToFile.getParentFile().mkdirs();
 					fos = new FileOutputStream(saveToFile);
+					bos = new BufferedOutputStream(fos);
 					input = response.getEntity(InputStream.class);
-					IOUtils.copy(input, new BufferedOutputStream(fos));
+					IOUtils.copy(input, bos);
 					if (watchedRemoteJob.isUnzip()) {
+						saveToFolder = new File(saveToFile, saveToFile.getName().substring(0, saveToFile.getName().length() - 4));
+						saveToFolder.mkdir();
 						ZipUtils.unzip(saveToFile, saveToFolder);
 						Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);
 						if (listFiles.size() == 0) {
@@ -224,14 +228,14 @@ public class ServerRestService implements HasPropertyChangeSupport {
 					em.getTransaction().commit();
 				} finally {
 					IOUtils.closeQuietly(input);
-					IOUtils.closeQuietly(fos);
+					IOUtils.closeQuietly(bos);
 					if (em.getTransaction().isActive()) {
 						em.getTransaction().rollback();
 					}
 					if (watchedRemoteJob.isOpenDocument()) {
 						if (Desktop.isDesktopSupported()) {
 							try {
-								Desktop.getDesktop().open(saveToFile);
+								Desktop.getDesktop().open(fileToOpen);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
