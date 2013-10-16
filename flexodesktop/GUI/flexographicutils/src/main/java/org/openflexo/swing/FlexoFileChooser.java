@@ -108,7 +108,7 @@ public class FlexoFileChooser {
 		_mode = mode;
 		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
 			if (mode == JFileChooser.FILES_ONLY) {
-				mode = JFileChooser.FILES_AND_DIRECTORIES;
+				// mode = JFileChooser.FILES_AND_DIRECTORIES;
 			}
 			_fileChooser.setFileSelectionMode(mode);
 		}
