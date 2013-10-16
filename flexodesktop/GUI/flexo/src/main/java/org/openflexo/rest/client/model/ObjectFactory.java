@@ -86,6 +86,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Document }
+     * 
+     */
+    public Document createDocument() {
+        return new Document();
+    }
+
+    /**
+     * Create an instance of {@link Project }
+     * 
+     */
+    public Project createProject() {
+        return new Project();
+    }
+
+    /**
      * Create an instance of {@link Session }
      * 
      */
@@ -99,14 +115,6 @@ public class ObjectFactory {
      */
     public Account createAccount() {
         return new Account();
-    }
-
-    /**
-     * Create an instance of {@link Project }
-     * 
-     */
-    public Project createProject() {
-        return new Project();
     }
 
     /**
