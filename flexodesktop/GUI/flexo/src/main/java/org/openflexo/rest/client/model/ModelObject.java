@@ -1,17 +1,22 @@
-
 package org.openflexo.rest.client.model;
+
+import java.beans.PropertyChangeSupport;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
- * <p>Java class for ModelObject complex type.
+ * <p>
+ * Java class for ModelObject complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ModelObject">
@@ -28,47 +33,47 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ModelObject", propOrder = {
-    "id"
-})
-@XmlSeeAlso({
-    JobHistory.class,
-    Project.class,
-    Account.class,
-    Slave.class,
-    ProjectVersion.class,
-    Session.class,
-    UserProject.class,
-    Job.class,
-    User.class
-})
-public abstract class ModelObject {
+@XmlType(name = "ModelObject", propOrder = { "id" })
+@XmlSeeAlso({ JobHistory.class, Project.class, Account.class, Slave.class, ProjectVersion.class, Session.class, Document.class,
+		UserProject.class, Job.class, User.class })
+public abstract class ModelObject implements HasPropertyChangeSupport {
 
-    @XmlElement(name = "ID")
-    protected Object id;
+	private transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Object }
-     *     
-     */
-    public Object getID() {
-        return id;
-    }
+	@Override
+	@XmlTransient
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Object }
-     *     
-     */
-    public void setID(Object value) {
-        this.id = value;
-    }
+	@Override
+	@XmlTransient
+	public String getDeletedProperty() {
+		return null;
+	}
+
+	@XmlElement(name = "ID")
+	protected Object id;
+
+	/**
+	 * Gets the value of the id property.
+	 * 
+	 * @return possible object is {@link Object }
+	 * 
+	 */
+	public Object getID() {
+		return id;
+	}
+
+	/**
+	 * Sets the value of the id property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Object }
+	 * 
+	 */
+	public void setID(Object value) {
+		this.id = value;
+	}
 
 }
