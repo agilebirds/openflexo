@@ -72,6 +72,7 @@ public class LineConnector extends Connector {
 	public LineConnector(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
+		lineConnectorType = LineConnectorType.ADJUSTABLE;
 	}
 
 	@Override

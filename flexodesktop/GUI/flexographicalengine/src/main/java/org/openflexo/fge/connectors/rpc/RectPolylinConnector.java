@@ -118,8 +118,8 @@ public class RectPolylinConnector extends Connector {
 	private boolean isStartingLocationFixed = false;
 	private boolean isEndingLocationFixed = false;
 
-	private boolean isStartingLocationDraggable = false;
-	private boolean isEndingLocationDraggable = false;
+	private boolean isStartingLocationDraggable = true;
+	private boolean isEndingLocationDraggable = true;
 
 	// private FGEPoint startCPRelativeToStartObject;
 	// private FGEPoint endCPRelativeToEndObject;
