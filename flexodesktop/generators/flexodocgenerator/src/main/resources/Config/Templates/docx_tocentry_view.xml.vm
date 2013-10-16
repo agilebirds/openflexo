@@ -104,7 +104,7 @@
 	                     #void($rows.add($row))
 	                  #end
 	                #end
-	                #if($row.size()>0)
+	                #if($rows.size()>0)
 	                   <w:p>
 	                       <w:pPr>
 	                           <w:keepNext/>
