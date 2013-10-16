@@ -8,8 +8,12 @@
         <LabelColumn data="iterator.creationDate" format="data.formatDate(object)" title="creation_date" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creator" title="creator" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <IconColumn data="data.getConsistencyIcon(iterator)" title="Consistency" columnWidth="70" resizable="false" displayTitle="true" name="icon" />
-        <ButtonColumn action="data.generateDocumentation(iterator)" enabled="((iterator.tocEntries.size &gt; 0) &amp; (data.serverProject.availableDocToken &gt; 0))" data="controller.getLocalizedForKey(&quot;generate_doc&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
-        <ButtonColumn action="data.generatePrototype(iterator)" enabled="(iterator.isIsProtoValidationSuccessful &amp; (data.serverProject.availableProtoToken &gt; 0))" data="controller.getLocalizedForKey(&quot;generate_proto&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
+        <ButtonColumn action="data.showDocuments(iterator,controller.getWindow())" data="controller.getLocalizedForKey(&quot;show_generated_documents&quot;)" title="documents" columnWidth="100" resizable="true" displayTitle="true" name="button" />
+        <ButtonColumn action="data.generateDocumentation(iterator)" enabled="((iterator.tocEntries.size &gt; 0) &amp; (data.serverProject.availableDocToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_doc&quot;) + &quot; (&quot;) + data.serverProject.availableDocToken) + &quot;)&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
+        <IconColumn data="data.getDocumentationJobInProgress(iterator)" title="doc_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
+        <ButtonColumn action="data.showPrototypes(iterator)" enabled="(iterator.protoUrl != null)" data="controller.getLocalizedForKey(&quot;show_storyboards&quot;)" title="storyboards" columnWidth="100" resizable="true" displayTitle="true" name="button" />
+        <ButtonColumn action="data.generatePrototype(iterator)" enabled="(iterator.isIsProtoValidationSuccessful &amp; (data.serverProject.availableProtoToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_proto&quot;) + &quot; (&quot;) + data.serverProject.availableProtoToken) + &quot;)&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
+        <IconColumn data="data.getPrototypeJobInProgress(iterator)" title="proto_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
       </Table>
     </Panel>
     <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
@@ -61,5 +65,11 @@
     <Localized key="create_project" lang="English">Create project</Localized>
     <Localized key="create_project" lang="French">Créer un project</Localized>
     <Localized key="create_project" lang="Dutch">Creëren een project</Localized>
+    <Localized key="documents" lang="English">Documents</Localized>
+    <Localized key="documents" lang="French">Documents</Localized>
+    <Localized key="documents" lang="Dutch">Documenten</Localized>
+    <Localized key="storyboards" lang="English">Storyboards</Localized>
+    <Localized key="storyboards" lang="French">Storyboards</Localized>
+    <Localized key="storyboards" lang="Dutch">Storyboards</Localized>
   </LocalizedDictionary>
 </Panel>
