@@ -29,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -45,6 +47,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.action.AddExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.localization.FlexoLocalization;
 
 public class DrawEdgeControl extends MouseDragControl {
@@ -79,7 +82,49 @@ public class DrawEdgeControl extends MouseDragControl {
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge && toShape != null) {
 
+				
+				// VINCENT: I comment this because I tried on huge viewpoints with many link schemes, and this is not easy to use.
+				// Most of the case what we want to reuse is the shape of connector pattern roles, so, I change the code to display only the shapes
+				// of the connector pattern roles available for this virtual model
 				if (fromShape.getDrawable().getVirtualModel() != null) {
+				Vector<EditionPattern> availableEditionPatterns = fromShape.getDrawable().getVirtualModel().getEditionPatterns();
+				Vector<ConnectorPatternRole> aivalableConnectorPatternRoles = new Vector<ConnectorPatternRole>();
+				for(EditionPattern editionPattern : availableEditionPatterns){
+					if(editionPattern.getConnectorPatternRoles()!=null){
+						aivalableConnectorPatternRoles.addAll(editionPattern.getConnectorPatternRoles());
+					}
+				}
+
+				if (aivalableConnectorPatternRoles.size() > 0) {
+					JPopupMenu popup = new JPopupMenu();
+					for (final ConnectorPatternRole connectorPatternRole : aivalableConnectorPatternRoles) {
+						JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(connectorPatternRole.getEditionPattern().getName()));
+						menuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+									String text = connectorPatternRole.getLabel().getExpression().toString();// Value(null);
+									performAddConnector(controller, connectorPatternRole.getGraphicalRepresentation(), text);
+									return;
+							}
+						});
+						popup.add(menuItem);
+					}
+					JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey("graphical_connector_only"));
+					menuItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							performAddDefaultConnector(controller);
+						}
+					});
+					popup.add(menuItem);
+					popup.show(event.getComponent(), event.getX(), event.getY());
+					return false;
+				} else {
+					performAddDefaultConnector(controller);
+				}
+			}
+				
+				/*if (fromShape.getDrawable().getVirtualModel() != null) {
 					Vector<LinkScheme> availableConnectors = fromShape.getDrawable().getVirtualModel().getAllConnectors();
 
 					if (availableConnectors.size() > 0) {
@@ -117,7 +162,7 @@ public class DrawEdgeControl extends MouseDragControl {
 					} else {
 						performAddDefaultConnector(controller);
 					}
-				}
+				}*/
 
 				drawEdge = false;
 				fromShape = null;
