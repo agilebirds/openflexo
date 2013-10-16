@@ -410,7 +410,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		}
 	}
 
-	protected Window getWindow() {
+	public Window getWindow() {
 		return SwingUtilities.getWindowAncestor(getRootView().getJComponent());
 	}
 
