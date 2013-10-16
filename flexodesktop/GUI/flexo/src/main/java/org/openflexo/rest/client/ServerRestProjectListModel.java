@@ -240,11 +240,13 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 				}
 
 				private void updateDisplay(final Progress progress, final int stepSize) {
-					if (stepSize > 0 && bytesRead - lastByteProgressReport > stepSize) {
+					while (stepSize > 0 && bytesRead - lastByteProgressReport > stepSize) {
 						double percent = (double) bytesRead / (10 * stepSize);
+						percent = Math.min(percent, 100.0);
 						progress.increment(String.format("%1$.2f", percent) + "%");
-						lastByteProgressReport = bytesRead;
+						lastByteProgressReport += stepSize;
 					}
+					lastByteProgressReport = bytesRead;
 				}
 			};
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
