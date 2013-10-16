@@ -243,6 +243,10 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
+	public ServerRestService getServerRestService() {
+		return serverRestService;
+	}
+
 	public void performOperationsInSwingWorker(ServerRestClientOperation... operations) {
 		performOperationsInSwingWorker(true, false, operations);
 	}
