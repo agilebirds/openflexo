@@ -20,6 +20,11 @@
 
 package org.openflexo;
 
+import java.io.FileInputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.openflexo.toolbox.FileResource;
+
 public class ApplicationVersion {
 	public static String BUSINESS_APPLICATION_VERSION = "1.5.2";
 	// Must be like x.x.x or x.x or x.xalpha or x.xbeta or x.x.xRCxx or x.x.xalpha x.x.xbeta
@@ -28,4 +33,33 @@ public class ApplicationVersion {
 	public static String BUILD_ID = "dev";
 
 	public static String COMMIT_ID = "dev";
+
+	// Next block is not necessary in production and should not be used in production
+	static {
+		FileInputStream headInputStream = null;
+		FileInputStream commitInputStream = null;
+		try {
+			FileResource HEAD = new FileResource(".git/HEAD");
+			if (HEAD.exists()) {
+				headInputStream = new FileInputStream(HEAD);
+				String headContent = IOUtils.toString(headInputStream);
+				int index = headContent.indexOf("ref:");
+				if (index > -1) {
+					headContent = headContent.substring("ref:".length()).trim();
+				}
+				FileResource commit = new FileResource(".git/" + headContent);
+				if (commit.exists()) {
+					commitInputStream = new FileInputStream(commit);
+					COMMIT_ID = IOUtils.toString(commitInputStream);
+					System.err.println("Found COMMIT ID " + COMMIT_ID);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(headInputStream);
+			IOUtils.closeQuietly(commitInputStream);
+		}
+	}
+
 }
