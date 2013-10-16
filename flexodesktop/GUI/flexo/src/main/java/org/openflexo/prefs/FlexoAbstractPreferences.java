@@ -307,7 +307,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	public File getDirectoryProperty(String key, boolean mustExist) {
 		File returned = getFileProperty(key, mustExist);
-		if (returned != null && returned.isDirectory()) {
+		if (returned != null && (returned.isDirectory() || !mustExist)) {
 			return returned;
 		} else {
 			return null;
