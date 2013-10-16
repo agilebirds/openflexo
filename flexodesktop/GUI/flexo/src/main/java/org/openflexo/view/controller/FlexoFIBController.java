@@ -80,7 +80,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public FlexoFIBController(FIBComponent component, FlexoController controller) {
-		super(component);
+		this(component);
 		this.controller = controller;
 	}
 
@@ -175,6 +175,15 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	public ImageIcon getFolderIcon() {
 		return IconLibrary.FOLDER_ICON;
+	}
+
+	@Override
+	public String getLocalizedForKey(String key) {
+		String localizedForKey = super.getLocalizedForKey(key);
+		if (localizedForKey == null) {
+			return FlexoLocalization.localizedForKey(key);
+		}
+		return localizedForKey;
 	}
 
 	@Override
