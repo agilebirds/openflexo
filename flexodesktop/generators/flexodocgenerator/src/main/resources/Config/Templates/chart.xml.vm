@@ -14,13 +14,16 @@
 #void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("Actor"))))
 #if($epis.size()>0)
     #foreach($epi in $epis)
-      #set($row = $generator.getNewList())
-      #foreach($path in $paths)
-      	  #set($alias = ${headers.get(${foreach.index})})
-          #void($row.add("#renderEPIWithTagAndAlias($epi $path $tag $alias)"))
+      #if(!${epi.getPatternActor($epi.getEditionPattern().getPrimaryRepresentationRole()).getDontGenerate()})
+         #set($row = $generator.getNewList())
+         #foreach($path in $paths)
+      	    #set($alias = ${headers.get(${foreach.index})})
+            #void($row.add("#renderEPIWithTagAndAlias($epi $path $tag $alias)"))
+         #end
+         #void($rows.add($row))
       #end
-      #void($rows.add($row))
     #end
-    #renderDocxTable2($headers $rows $falseValue)
+    #if($rows.size()>0)
+      #renderDocxTable2($headers $rows $falseValue)
+    #end
 #end
-
