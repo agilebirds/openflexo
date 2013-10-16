@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.controller.ContinuousSelectionAction;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.notifications.FGENotification;
@@ -270,9 +271,9 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 	/**
 	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing
 	 */
-	@Override
+	/*@Override
 	public boolean getContinuousTextEditing() {
-		return false;
-	}
+		return continuous;
+	}*/
 
 }

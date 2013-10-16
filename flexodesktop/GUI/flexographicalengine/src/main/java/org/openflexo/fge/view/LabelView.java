@@ -654,6 +654,38 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		textComponent.removeMouseListener(mouseListener);
 		textComponent.removeMouseMotionListener(mouseListener);
 	}
+	
+	public void continueEdition() {
+		if (!getGraphicalRepresentation().getDrawing().isEditable() || !getGraphicalRepresentation().getIsLabelEditable()) {
+			return;
+		}
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Continue edition of " + getGraphicalRepresentation());
+		}
+		isEditing = true;
+		registerTextListener();
+		textComponent.setEditable(true);
+		setDoubleBuffered(false);
+		if (getController() != null) {
+			getController().setEditedLabel(LabelView.this);
+		}
+		getGraphicalRepresentation().notifyLabelWillBeEdited();
+		getPaintManager().invalidate(getGraphicalRepresentation());
+		getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
+		try{
+			if(getGraphicalRepresentation().getText()!=null){
+				textComponent.setCaretPosition(textComponent.getDocument().getLength());
+			}
+			else{
+				textComponent.setCaretPosition(0);
+			}
+		}
+		catch(IllegalArgumentException e){
+			textComponent.setCaretPosition(0);
+		}
+		textComponent.requestFocusInWindow();
+		repaint();
+	}
 
 	public void startEdition() {
 		if (!getGraphicalRepresentation().getDrawing().isEditable() || !getGraphicalRepresentation().getIsLabelEditable()) {

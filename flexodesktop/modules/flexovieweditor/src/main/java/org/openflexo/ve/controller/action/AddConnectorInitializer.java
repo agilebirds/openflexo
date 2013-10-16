@@ -24,11 +24,20 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.view.ConnectorView;
+import org.openflexo.fge.view.ShapeView;
+import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.action.AddConnector;
+import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -52,11 +61,11 @@ public class AddConnectorInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, AddConnector action) {
 				if (action.getAutomaticallyCreateConnector()) {
-					String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_connector"));
+					/*String newName = FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_connector"));
 					if (newName == null || StringUtils.isEmpty(newName)) {
 						return false;
-					}
-					action.setNewConnectorName(newName);
+					}*/
+					action.setNewConnectorName("");
 					return true;
 				}
 				
@@ -82,16 +91,26 @@ public class AddConnectorInitializer extends ActionInitializer {
 		};
 	}
 
-	/*   @Override
-	protected FlexoActionFinalizer<AddParentRole> getDefaultFinalizer() 
-	{
-		return new FlexoActionFinalizer<AddParentRole>() {
-	        public boolean run(ActionEvent e, AddParentRole action)
-	        {
-	            return true;
-	      }
-	    };
-	}*/
+	   @Override
+	   protected FlexoActionFinalizer<AddConnector> getDefaultFinalizer() {
+			return new FlexoActionFinalizer<AddConnector>() {
+				@Override
+				public boolean run(EventObject e, AddConnector action) {
+					((VEController) getController()).getSelectionManager().setSelectedObject(action.getConnector());
+					
+					ModuleView<?> moduleView = getController().moduleViewForObject(action.getConnector().getDiagram(), false);
+					ConnectorView<DiagramConnector> connector = ((DiagramModuleView) moduleView).getController().getDrawingView()
+							.connectorViewForObject(action.getConnector().getGraphicalRepresentation());
+					if (action.getConnector() != null) {
+						if (connector.getLabelView() != null) {
+							connector.getGraphicalRepresentation().setContinuousTextEditing(true);
+							connector.getLabelView().startEdition();
+						}
+					}
+					return true;
+				}
+			};
+		}
 
 	@Override
 	protected Icon getEnabledIcon() {

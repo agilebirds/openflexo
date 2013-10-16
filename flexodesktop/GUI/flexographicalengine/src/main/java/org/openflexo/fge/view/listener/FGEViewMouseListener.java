@@ -99,7 +99,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					e.consume();
 					return;
 				}
-
+	
 				if (focusedObject != null && e.getClickCount() == 2 && getFocusRetriever().focusOnFloatingLabel(focusedObject, e)) {
 					if (focusedObject instanceof ShapeGraphicalRepresentation) {
 						view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
@@ -114,6 +114,21 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 					}
 				}
 
+				// PRI Requirement
+				if (focusedObject != null) {
+					if (focusedObject instanceof ShapeGraphicalRepresentation) {
+						view.getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.continueEdition();
+						e.consume();
+						return;
+					} else if (focusedObject instanceof ConnectorGraphicalRepresentation) {
+						view.getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) focusedObject).getLabelView()
+								.continueEdition();
+						e.consume();
+						return;
+					}
+				}
+				
 				if (focusedObject != null) {
 					ControlArea<?> ca = getFocusRetriever().getFocusedControlAreaForDrawable(focusedObject, e);
 					if (ca != null && ca.isClickable()) {
