@@ -34,6 +34,7 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.CustomPopup;
 import org.openflexo.swing.LookAndFeel;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ProxyUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -44,6 +45,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	private static final Class<AdvancedPrefs> ADVANCED_PREFERENCES = AdvancedPrefs.class;
 
 	public static final String LAST_VISITED_DIRECTORY_KEY = "lastVisitedDirectory";
+	public static final String LAST_DOCUMENT_DIRECTORY_KEY = "lastDocumentDirectory";
 
 	public static final String ECLIPSE_WORKSPACE_DIRECTORY_KEY = "eclipseWorkspaceDirectory";
 
@@ -108,6 +110,27 @@ public class AdvancedPrefs extends ContextPreferences {
 			logger.fine("setLastVisitedDirectory");
 		}
 		getPreferences().setDirectoryProperty(LAST_VISITED_DIRECTORY_KEY, f, true);
+	}
+
+	public static File getLastDocumentDirectory() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("getLastDocumentDirectory");
+		}
+		File lastDocumentDirectory = getPreferences().getDirectoryProperty(LAST_DOCUMENT_DIRECTORY_KEY, true);
+		if (lastDocumentDirectory == null || !lastDocumentDirectory.canWrite()) {
+			lastDocumentDirectory = FileUtils.getDocumentDirectory();
+			if (!lastDocumentDirectory.canWrite()) {
+				lastDocumentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
+			}
+		}
+		return lastDocumentDirectory;
+	}
+
+	public static void setLastDocumentDirectory(File f) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("setLastDocumentDirectory");
+		}
+		getPreferences().setDirectoryProperty(LAST_DOCUMENT_DIRECTORY_KEY, f, true);
 	}
 
 	public static File getEclipseWorkspaceDirectory() {
