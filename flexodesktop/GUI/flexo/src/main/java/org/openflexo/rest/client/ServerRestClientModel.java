@@ -1,12 +1,20 @@
 package org.openflexo.rest.client;
 
+import java.awt.Desktop;
+import java.awt.Window;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
@@ -19,13 +27,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.LocalDBAccess;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
@@ -40,6 +53,7 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.model.Account;
 import org.openflexo.rest.client.model.DocFormat;
+import org.openflexo.rest.client.model.Document;
 import org.openflexo.rest.client.model.Job;
 import org.openflexo.rest.client.model.JobType;
 import org.openflexo.rest.client.model.Project;
@@ -48,22 +62,28 @@ import org.openflexo.rest.client.model.Session;
 import org.openflexo.rest.client.model.TocEntryDefinition;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.rest.client.model.UserType;
+import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.Holder;
+import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.controller.FlexoController;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
 public class ServerRestClientModel extends AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
+	private static final List<String> HTML_FILE_ORDER = Arrays.asList("index.html", "main.html");
+
 	public static final File FIB_FILE = new FileResource("Fib/ServerClientModelView.fib");
+	public static final File DOCUMENT_LIST_FIB_FILE = new FileResource("Fib/ServerDocumentList.fib");
 	public static final File DOC_GENERATION_CHOOSER_FIB_FILE = new FileResource("Fib/DocGenerationChooser.fib");
 	public static final File NEW_SERVER_PROJECT_FIB_FILE = new FileResource("Fib/NewServerProject.fib");
 
@@ -415,36 +435,303 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	}
 
+	public class RetrieveGeneratedDocuments implements ServerRestClientOperation {
+
+		private final ProjectVersion version;
+		private List<Document> documents;
+
+		public RetrieveGeneratedDocuments(ProjectVersion version) {
+			super();
+			this.version = version;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			if (version == null) {
+				return;
+			}
+			if (documents == null) {
+				documents = client.documents(
+						client.createClient(),
+						UriBuilder.fromUri(client.getBASE_URI()).queryParam("projectVersion", version.getVersionID())
+								.queryParam("docType", "GENERATED").build()).getAsXml(0, 100, "creationDate desc",
+						new GenericType<List<Document>>() {
+						});
+			}
+		}
+
+		public String getFormat(String docFormat) {
+			if (docFormat == null) {
+				return null;
+			}
+			docFormat = docFormat.toUpperCase();
+			if (docFormat.equals("WORD") || docFormat.equals("DOCX")) {
+				return "WORD";
+			} else if (docFormat.equals("HTML")) {
+				return "HTML";
+			} else if (docFormat.equals("PDF") || docFormat.equals("LATEX")) {
+				return "PDF";
+			} else {
+				return docFormat;
+			}
+		}
+
+		public void download(final Document document, final boolean openDocument, Window parentWindow) {
+			if (document.getDocUuid() == null) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("sorry_but_document_file_has_been_removed"));
+				return;
+			}
+			FlexoFileChooser chooser = new FlexoFileChooser(parentWindow);
+			chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_where_to_save_document") + " " + document.getTitle());
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			String extension = getExtensionForDocument(document);
+			String fileName = document.getTitle() + extension;
+			chooser.setCurrentDirectory(AdvancedPrefs.getLastDocumentDirectory());
+			chooser.setSelectedFile(new File(fileName));
+			while (true) {
+				int ret = chooser.showSaveDialog(parentWindow);
+				File file = chooser.getSelectedFile();
+				if (ret == JFileChooser.APPROVE_OPTION && file != null) {
+					if (file.isDirectory()) {
+						file = new File(file, fileName);
+					} else if (!file.getName().toLowerCase().endsWith(extension.toLowerCase())) {
+						file = new File(file.getParentFile(), file.getName() + extension);
+					}
+					file.getParentFile().mkdirs();
+					boolean canWrite = false;
+					try {
+						canWrite = file.getParentFile().exists() && file.createNewFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					if (!canWrite) {
+						FlexoController.notify(FlexoLocalization.localizedForKey("you_cant_write_in") + " "
+								+ file.getParentFile().getAbsolutePath());
+						continue;
+					}
+					AdvancedPrefs.setLastDocumentDirectory(file.getParentFile());
+					AdvancedPrefs.save();
+					final File selectedFile = file;
+					performOperationsInSwingWorker(true, true, new ServerRestClientOperation() {
+
+						@Override
+						public int getSteps() {
+							return 1000;
+						}
+
+						@Override
+						public String getLocalizedTitle() {
+							return FlexoLocalization.localizedForKey("downloading") + " " + selectedFile.getName();
+						}
+
+						@Override
+						public void doOperation(ServerRestClient client, final Progress progress) throws IOException,
+								WebApplicationException {
+							ClientResponse response = client.files().getAsOctetStream(document.getDocUuid(), ClientResponse.class);
+							if (response.getStatus() >= 400) {
+								String message = "";
+								try {
+									message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+								throw new WebApplicationException(Response
+										.fromResponse(Response.status(response.getClientResponseStatus()).build()).entity(message).build());
+							}
+							List<String> list = response.getHeaders().get("Content-Length");
+							long length = -1;
+							if (list != null) {
+								for (String string : list) {
+									try {
+										length = Long.valueOf(string);
+										break;
+									} catch (NumberFormatException e) {
+										e.printStackTrace();
+									}
+								}
+							}
+							InputStream input = null;
+							final int stepSize = length > 0 ? (int) length / 1000 : -1;
+							FileOutputStream fos = new FileOutputStream(selectedFile) {
+								long bytesRead = 0;
+								long lastByteProgressReport = 0;
+
+								@Override
+								public void write(byte[] b) throws IOException {
+									super.write(b);
+									bytesRead += b.length;
+									updateDisplay(progress, stepSize);
+								}
+
+								@Override
+								public void write(byte[] b, int off, int len) throws IOException {
+									super.write(b, off, len);
+									bytesRead += len;
+									updateDisplay(progress, stepSize);
+								}
+
+								@Override
+								public void write(int b) throws IOException {
+									super.write(b);
+									bytesRead++;
+									updateDisplay(progress, stepSize);
+								}
+
+								private void updateDisplay(final Progress progress, final int stepSize) {
+									while (stepSize > 0 && bytesRead - lastByteProgressReport > stepSize) {
+										double percent = (double) bytesRead / (10 * stepSize);
+										percent = Math.min(percent, 100.0);
+										progress.increment(String.format("%1$.2f", percent) + "%");
+										lastByteProgressReport += stepSize;
+									}
+									lastByteProgressReport = bytesRead;
+								}
+							};
+							BufferedOutputStream bos = new BufferedOutputStream(fos);
+							try {
+								IOUtils.copy(response.getEntity(InputStream.class), bos);
+							} finally {
+								IOUtils.closeQuietly(bos);
+								File fileToOpen = selectedFile;
+								if (getFormat(document.getGenerationDocFormat()).equals("HTML")) {
+									final File outputDir = new File(fileToOpen.getParentFile(), document.getTitle());
+									outputDir.mkdir();
+									ZipUtils.unzip(fileToOpen, outputDir);
+									Collection<File> listFiles = FileUtils.listFiles(outputDir, new String[] { "html" }, false);
+									if (listFiles.size() == 0) {
+										listFiles = FileUtils.listFiles(outputDir, new String[] { "html" }, true);
+									}
+									if (listFiles.size() == 0) {
+										fileToOpen = selectedFile;
+									} else if (listFiles.size() == 1) {
+										fileToOpen = listFiles.iterator().next();
+									} else {
+										fileToOpen = null;
+										int curIndex = Integer.MAX_VALUE;
+										for (File f : listFiles) {
+											if (fileToOpen == null) {
+												fileToOpen = f;
+											} else {
+												int index = HTML_FILE_ORDER.indexOf(f.getName().toLowerCase());
+												if (index > -1 && index < curIndex) {
+													curIndex = index;
+													fileToOpen = f;
+												}
+											}
+										}
+									}
+								}
+								if (openDocument) {
+									if (Desktop.isDesktopSupported()) {
+										try {
+											Desktop.getDesktop().open(fileToOpen);
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								}
+							}
+						}
+					});
+					return;
+				} else {
+					return;
+				}
+			}
+		}
+
+		private String getExtensionForDocument(Document document) {
+			String docFormat = document.getGenerationDocFormat();
+			if (docFormat == null) {
+				return "";
+			}
+			docFormat = docFormat.toUpperCase();
+			if (docFormat.equals("WORD") || docFormat.equals("DOCX")) {
+				return ".docx";
+			} else if (docFormat.equals("HTML")) {
+				return ".zip";
+			} else if (docFormat.equals("PDF") || docFormat.equals("LATEX")) {
+				return ".pdf";
+			} else {
+				return docFormat.toLowerCase();
+			}
+		}
+
+		public ProjectVersion getVersion() {
+			return version;
+		}
+
+		public Project getProject() {
+			return serverProject;
+		}
+
+		public List<Document> getDocuments() {
+			return documents;
+		}
+
+		@Override
+		public int getSteps() {
+			return 0;
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("retrieving_documents");
+		}
+
+	}
+
 	public class UpdateVersions implements ServerRestClientOperation {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			if (serverProject == null) {
 				return;
 			}
-			validationInProgress.clear();
+			jobsInProgress.clear();
 			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", Boolean.TRUE)
 					.queryParam("isIntermediate", Boolean.FALSE).queryParam("isIntermediate", "null");
 			Client restClient = client.createClient();
 			setVersions(client.projectsProjectIDVersions(restClient, builder.build(), serverProject.getProjectId()).getAsXml(
 					page * pageSize, (page + 1) * pageSize, "creationDate desc", new GenericType<List<ProjectVersion>>() {
 					}));
-			progress.increment(FlexoLocalization.localizedForKey("retrieving_status"));
-			for (ProjectVersion version : getVersions()) {
-				progress.increment(FlexoLocalization.localizedForKey("retrieving_status"));
-				Boolean value = isValidationInProgress(client, restClient, version);
-				setValidationInProgress(version, value);
-			}
 		}
 
 		@Override
 		public int getSteps() {
-			return pageSize + 1;
+			return 1;
 		}
 
 		@Override
 		public String getLocalizedTitle() {
 			return FlexoLocalization.localizedForKey("retrieving_versions");
 		}
+	}
+
+	public class UpdateJobsForVersion implements ServerRestClientOperation {
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			if (getVersions() == null) {
+				return;
+			}
+			Client restClient = client.createClient();
+			for (ProjectVersion version : getVersions()) {
+				progress.increment(FlexoLocalization.localizedForKey("retrieving_status_for") + " " + version.getVersionNumber());
+				List<Job> jobs = jobsInProgress(client, restClient, version);
+				setJobsInProgress(jobs, version);
+			}
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("retrieving_jobs_in_progress");
+		}
+
+		@Override
+		public int getSteps() {
+			return getVersions() == null ? 0 : getVersions().size();
+		}
+
 	}
 
 	public class SendProjectToServer implements ServerRestClientOperation {
@@ -562,24 +849,31 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			job.setDocType(choice.getDocType());
 			job.setTocEntry(choice.getTocEntry());
 			final Job returned = client.jobs().postXmlAsJob(job);
-			if (returned != null && choice.getFolder() != null) {
-				WatchedRemoteDocJob watchedRemoteJob = new WatchedRemoteDocJob();
-				watchedRemoteJob.setRemoteJobId(returned.getJobId());
-				watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
-				watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
-				watchedRemoteJob.setUnzip(job.getDocFormat() == DocFormat.HTML);
-				watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
-				watchedRemoteJob.setLogin(getUser().getLogin());
-				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
-				try {
-					em.getTransaction().begin();
-					em.persist(watchedRemoteJob);
-					em.getTransaction().commit();
-				} finally {
-					if (em.getTransaction().isActive()) {
-						em.getTransaction().rollback();
+			if (returned != null) {
+				if (choice.getFolder() != null) {
+					WatchedRemoteDocJob watchedRemoteJob = new WatchedRemoteDocJob();
+					watchedRemoteJob.setRemoteJobId(returned.getJobId());
+					watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
+					watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
+					watchedRemoteJob.setUnzip(job.getDocFormat() == DocFormat.HTML);
+					watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
+					watchedRemoteJob.setLogin(getUser().getLogin());
+					EntityManager em = LocalDBAccess.getInstance().getEntityManager();
+					try {
+						em.getTransaction().begin();
+						em.persist(watchedRemoteJob);
+						em.getTransaction().commit();
+					} finally {
+						if (em.getTransaction().isActive()) {
+							em.getTransaction().rollback();
+						}
+						em.close();
 					}
-					em.close();
+				}
+				try {
+					performOperations(true, new UpdateJobsForVersion());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -611,6 +905,13 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			job.setJobType(JobType.PROTOTYPE_BUILDER);
 			job.setVersion(version);
 			final Job returned = client.jobs().postXmlAsJob(job);
+			if (returned != null) {
+				try {
+					performOperations(true, new UpdateJobsForVersion());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		@Override
@@ -624,23 +925,21 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		}
 	}
 
-	private class ValidationInProgress implements ServerRestClientOperation {
+	private class JobInProgress implements ServerRestClientOperation {
 
 		private ProjectVersion version;
 
-		public ValidationInProgress(ProjectVersion version) {
+		public JobInProgress(ProjectVersion version) {
 			super();
 			this.version = version;
 		}
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("version.versionID", version.getVersionID())
-					.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("jobType", JobType.DOC_REINJECTER);
+			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("version.versionID", version.getVersionID());
 			List<Job> jobs = client.jobs(client.createClient(), builder.build()).getAsXml(new GenericType<List<Job>>() {
 			});
-			Boolean value = isValidationInProgress(client, client.createClient(), version);
-			setValidationInProgress(version, value);
+			setJobsInProgress(jobs, version);
 		}
 
 		@Override
@@ -710,13 +1009,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	}
 
-	protected Boolean isValidationInProgress(ServerRestClient client, Client restClient, ProjectVersion version) {
-		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("jobType", JobType.DOC_REINJECTER)
-				.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("version.versionID", version.getVersionID());
+	protected List<Job> jobsInProgress(ServerRestClient client, Client restClient, ProjectVersion version) {
+		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("version.versionID", version.getVersionID());
 		List<Job> jobs = client.jobs(restClient, builder.build()).getAsXml(null, null, null, new GenericType<List<Job>>() {
 		});
-		Boolean validationInProgressValue = jobs.size() > 0;
-		return validationInProgressValue;
+		return jobs;
 	}
 
 	public class CreateProjectAndUploadFirstVersion implements ServerRestClientOperation {
@@ -764,20 +1061,48 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				});
 	}
 
-	protected void setValidationInProgress(ProjectVersion version, Boolean value) {
-		Boolean oldValue = validationInProgress.put(version, value);
-		if (value != oldValue && oldValue != null) {
+	protected void setJobsInProgress(List<Job> jobs, ProjectVersion version) {
+		List<Job> oldJobs = jobsInProgress.put(version, jobs);
+		if (!jobListIsEqual(oldJobs, jobs) && oldJobs != null) {
 			performOperationsInSwingWorker(false, false, new UpdateVersions());
+			for (Job job : jobs) {
+				boolean found = false;
+				for (Job oldJob : oldJobs) {
+					if (job.getJobId().equals(oldJob.getJobId())) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					firePropertyChangeForJob(job, version);
+				}
+			}
+			for (Job oldJob : oldJobs) {
+				boolean found = false;
+				for (Job job : jobs) {
+					if (job.getJobId().equals(oldJob.getJobId())) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					firePropertyChangeForJob(oldJob, version);
+				}
+			}
+		} else if (oldJobs == null) {
+			for (Job job : jobs) {
+				firePropertyChangeForJob(job, version);
+			}
 		}
-		if (value && validationJobChecker == null) {
+		if (jobs.size() > 0 && validationJobChecker == null) {
 			validationJobChecker = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable() {
 
 				@Override
 				public void run() {
-					for (Entry<ProjectVersion, Boolean> e : validationInProgress.entrySet()) {
-						if (e.getValue()) {
+					for (Entry<ProjectVersion, List<Job>> e : jobsInProgress.entrySet()) {
+						if (e.getValue() != null && e.getValue().size() > 0) {
 							try {
-								performOperations(false, new ValidationInProgress(e.getKey()));
+								performOperations(false, new JobInProgress(e.getKey()));
 							} catch (InterruptedException ex) {
 								ex.printStackTrace();
 							}
@@ -785,10 +1110,10 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					}
 				}
 			}, 10, 10, TimeUnit.SECONDS);
-		} else if (!value && validationJobChecker != null) {
+		} else if (jobs.size() == 0 && validationJobChecker != null) {
 			boolean stop = true;
-			for (Entry<ProjectVersion, Boolean> e : validationInProgress.entrySet()) {
-				if (e.getValue()) {
+			for (Entry<ProjectVersion, List<Job>> e : jobsInProgress.entrySet()) {
+				if (e.getValue() != null && e.getValue().size() > 0) {
 					stop = false;
 					break;
 				}
@@ -798,6 +1123,50 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				validationJobChecker = null;
 			}
 		}
+	}
+
+	private void firePropertyChangeForJob(Job job, ProjectVersion version) {
+		// Hack to make the table widget update
+		version.getPropertyChangeSupport().firePropertyChange("jobStatus", null, null);
+		/*
+		switch (job.getJobType()) {
+		case DOC_BUILDER:
+			break;
+		case DOC_REINJECTER:
+		case PROJECT_MERGER:
+			break;
+		case PROTOTYPE_BUILDER:
+			break;
+		default:
+			break;
+
+		}
+		*/
+	}
+
+	private boolean jobListIsEqual(List<Job> oldJobs, List<Job> jobs) {
+		if (oldJobs == null) {
+			return jobs == null;
+		}
+		if (jobs == null) {
+			return oldJobs == null;
+		}
+		if (oldJobs.size() != jobs.size()) {
+			return false;
+		}
+		for (Job job : jobs) {
+			boolean found = false;
+			for (Job oldJob : oldJobs) {
+				if (job.getJobId().equals(oldJob.getJobId())) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static final String SERVER_PROJECT = "serverProject";
@@ -812,7 +1181,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	private List<ProjectVersion> versions;
 
-	private Map<ProjectVersion, Boolean> validationInProgress;
+	private Map<ProjectVersion, List<Job>> jobsInProgress;
 
 	private int pageSize = 5;
 	private int page = 0;
@@ -826,7 +1195,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		super(controller.getApplicationContext().getServerRestService(), controller.getFlexoFrame());
 		this.controller = controller;
 		this.flexoProject = flexoProject;
-		this.validationInProgress = new Hashtable<ProjectVersion, Boolean>();
+		this.jobsInProgress = new Hashtable<ProjectVersion, List<Job>>();
 		this.accountCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<Account>>() {
 			@Override
 			public List<Account> load(String key) throws Exception {
@@ -899,12 +1268,12 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		accountUserCache.invalidateAll();
 		goOnline();
 		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateProjectEditionSession(),
-				new UpdateVersions());
+				new UpdateVersions(), new UpdateJobsForVersion());
 	}
 
 	public void refreshVersions() {
 		goOnline();
-		performOperationsInSwingWorker(new UpdateVersions());
+		performOperationsInSwingWorker(new UpdateVersions(), new UpdateJobsForVersion());
 	}
 
 	public FlexoProject getFlexoProject() {
@@ -949,16 +1318,52 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		}
 	}
 
+	public Icon getDocumentationJobInProgress(ProjectVersion version) {
+		if (isDocGenInProgress(version)) {
+			return IconLibrary.IN_PROGRESS_ICON;
+		} else {
+			return null;
+		}
+	}
+
+	public Icon getPrototypeJobInProgress(ProjectVersion version) {
+		if (isProtoGenInProgress(version)) {
+			return IconLibrary.IN_PROGRESS_ICON;
+		} else {
+			return null;
+		}
+	}
+
 	public String formatDate(XMLGregorianCalendar date) {
 		return FORMATTER.format(date.toGregorianCalendar().getTime());
 	}
 
 	public boolean isValidationInProgress(ProjectVersion version) {
-		Boolean b = validationInProgress.get(version);
-		if (b == null) {
-			// performOperations(false, new ValidationInProgress(version));
+		return hasJobInProgress(version, JobType.PROJECT_MERGER, JobType.DOC_REINJECTER);
+	}
+
+	public boolean isDocGenInProgress(ProjectVersion version) {
+		return hasJobInProgress(version, JobType.DOC_BUILDER);
+	}
+
+	public boolean isProtoGenInProgress(ProjectVersion version) {
+		return hasJobInProgress(version, JobType.PROTOTYPE_BUILDER);
+	}
+
+	private boolean hasJobInProgress(ProjectVersion version, JobType... jobTypes) {
+		List<Job> jobs = jobsInProgress.get(version);
+		if (jobs == null || jobs.size() == 0) {
+			return false;
+		} else {
+			for (Job job : jobs) {
+				for (JobType type : jobTypes) {
+					if (job.getJobType() == type) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
-		return b != null && b;
 	}
 
 	public void sendProjectToServer() {
@@ -969,6 +1374,41 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			}
 			performOperationsInSwingWorker(new SendProjectToServer(comment));
 		}
+	}
+
+	public void showDocuments(ProjectVersion version, Window parentWindow) {
+		if (version == null) {
+			return;
+		}
+		RetrieveGeneratedDocuments retrieveDocuments = new RetrieveGeneratedDocuments(version);
+		performOperationsInSwingWorker(true, true, retrieveDocuments);
+		if (retrieveDocuments.getDocuments() != null) {
+			FIBDialog.instanciateAndShowDialog(DOCUMENT_LIST_FIB_FILE, retrieveDocuments, parentWindow, true,
+					FlexoLocalization.getMainLocalizer());
+		}
+	}
+
+	public void showPrototypes(ProjectVersion version) {
+		if (version == null) {
+			return;
+		}
+		if (version.getProtoUrl() == null) {
+			FlexoController.notify(FlexoLocalization.localizedForKey("version") + " " + version.getVersionNumber() + " "
+					+ FlexoLocalization.localizedForKey("has_no_prototype_generated"));
+			return;
+		}
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(new URI(version.getProtoUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				FlexoController.notify(FlexoLocalization.localizedForKey("unable_to_open_prototype_for_version") + " "
+						+ version.getVersionNumber());
+				return;
+			}
+		}
+
 	}
 
 	public void generateDocumentation(ProjectVersion version) {

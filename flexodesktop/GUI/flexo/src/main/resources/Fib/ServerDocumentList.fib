@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" borderTop="20" borderBottom="20" borderLeft="20" borderRight="20" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel$RetrieveGeneratedDocuments" controllerClassName="org.openflexo.view.controller.FlexoFIBController" name="Root">
+  <Panel layout="border" darkLevel="0" constraints="border(location=center)" name="Center">
+    <Table iteratorClassName="org.openflexo.rest.client.model.Document" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="SingleSelection" localize="true" manageDynamicModel="true" doubleClickAction="data.download(DocumentList.selected,true,controller.getWindow())" name="DocumentList" data="data.documents" constraints="border(location=center)">
+      <LabelColumn data="iterator.title" title="title" columnWidth="300" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.tocTitle" title="toc" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.generationDocFormat" title="format" columnWidth="40" resizable="true" displayTitle="true" name="label" />
+      <LabelColumn data="iterator.generationDocType" title="type" columnWidth="80" resizable="true" displayTitle="true" name="label" />
+      <ButtonColumn action="data.download(iterator,false,controller.getWindow())" enabled="(iterator.docUuid != null)" data="controller.getLocalizedForKey(&quot;download&quot;)" title="download" columnWidth="120" resizable="true" displayTitle="false" name="button" />
+      <ButtonColumn action="data.download(iterator,true,controller.getWindow())" enabled="(iterator.docUuid != null)" data="controller.getLocalizedForKey(&quot;download_and_open&quot;)" title="download_and_open" columnWidth="120" resizable="true" displayTitle="false" name="button" />
+    </Table>
+  </Panel>
+  <Panel layout="buttons" hGap="5" vGap="5" darkLevel="0" constraints="border(location=south)" name="South">
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="close" localize="true" name="Close" constraints="buttons()" />
+  </Panel>
+  <Label label="label" align="center" data="((((((&quot;&lt;html&gt;&lt;b&gt;&quot; + controller.getLocalizedForKey(&quot;documents_for&quot;)) + &quot; &quot;) + data.project.name) + &quot; &quot;) + data.version.versionNumber) + &quot;&lt;/b&gt;&lt;/html&gt;&quot;)" constraints="border(location=north)" name="Header" localize="true" />
+  <LocalizedDictionary>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="title" lang="Dutch">Titel</Localized>
+    <Localized key="toc" lang="English">Table of content</Localized>
+    <Localized key="toc" lang="French">Table des matières</Localized>
+    <Localized key="toc" lang="Dutch">Inhoudstafel</Localized>
+    <Localized key="format" lang="English">Format</Localized>
+    <Localized key="format" lang="French">Format</Localized>
+    <Localized key="format" lang="Dutch">Formaat</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="OK" lang="English">OK</Localized>
+    <Localized key="OK" lang="French">OK</Localized>
+    <Localized key="OK" lang="Dutch">OK</Localized>
+    <Localized key="Button" lang="English">Button</Localized>
+    <Localized key="Button" lang="French">Bouton</Localized>
+    <Localized key="Button" lang="Dutch">Knop</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Etiquette</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="close" lang="English">Close</Localized>
+    <Localized key="close" lang="French">Fermer</Localized>
+    <Localized key="close" lang="Dutch">Sluiten</Localized>
+  </LocalizedDictionary>
+</Panel>
