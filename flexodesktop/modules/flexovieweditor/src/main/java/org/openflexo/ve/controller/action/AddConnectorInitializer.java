@@ -96,15 +96,18 @@ public class AddConnectorInitializer extends ActionInitializer {
 			return new FlexoActionFinalizer<AddConnector>() {
 				@Override
 				public boolean run(EventObject e, AddConnector action) {
-					((VEController) getController()).getSelectionManager().setSelectedObject(action.getConnector());
-					
-					ModuleView<?> moduleView = getController().moduleViewForObject(action.getConnector().getDiagram(), false);
-					ConnectorView<DiagramConnector> connector = ((DiagramModuleView) moduleView).getController().getDrawingView()
-							.connectorViewForObject(action.getConnector().getGraphicalRepresentation());
-					if (action.getConnector() != null) {
-						if (connector.getLabelView() != null) {
-							connector.getGraphicalRepresentation().setContinuousTextEditing(true);
-							connector.getLabelView().startEdition();
+					if(action.getConnector()!=null)
+					{
+						((VEController) getController()).getSelectionManager().setSelectedObject(action.getConnector());
+						
+						ModuleView<?> moduleView = getController().moduleViewForObject(action.getConnector().getDiagram(), false);
+						ConnectorView<DiagramConnector> connector = ((DiagramModuleView) moduleView).getController().getDrawingView()
+								.connectorViewForObject(action.getConnector().getGraphicalRepresentation());
+						if (action.getConnector() != null) {
+							if (connector.getLabelView() != null) {
+								connector.getGraphicalRepresentation().setContinuousTextEditing(true);
+								connector.getLabelView().startEdition();
+							}
 						}
 					}
 					return true;
