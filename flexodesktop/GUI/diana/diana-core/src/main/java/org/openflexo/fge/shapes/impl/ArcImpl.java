@@ -26,7 +26,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Arc;
 
-public class ArcImpl extends ShapeSpecificationImpl implements Arc {
+public abstract class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	// private FGEArc arc;
 

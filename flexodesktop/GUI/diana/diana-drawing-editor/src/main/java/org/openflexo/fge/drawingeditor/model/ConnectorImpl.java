@@ -20,15 +20,14 @@
 package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.drawingeditor.model.Diagram.DrawingBuilder;
 
 public abstract class ConnectorImpl extends DiagramElementImpl<Connector, ConnectorGraphicalRepresentation> implements Connector {
 
 	// Called for LOAD
-	public ConnectorImpl(DrawingBuilder builder) {
+	/*public ConnectorImpl(DrawingBuilder builder) {
 		super(builder.drawing);
 		// initializeDeserialization();
-	}
+	}*/
 
 	// Used by PAMELA, do not use it
 	public ConnectorImpl() {

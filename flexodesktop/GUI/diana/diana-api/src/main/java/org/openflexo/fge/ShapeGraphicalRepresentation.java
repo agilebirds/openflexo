@@ -28,6 +28,9 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
@@ -215,7 +218,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 		@Setter(value = RIGHT)
 		public void setRight(int right);
 
-		public ShapeBorder clone();
+		// public ShapeBorder clone();
 
 	}
 
@@ -380,6 +383,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	public void setHasFocusedBackground(boolean aFlag);
 
 	@Getter(value = BORDER_KEY)
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
 	@XMLElement
 	public ShapeBorder getBorder();
 
@@ -388,6 +393,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SHAPE_SPECIFICATION_KEY)
 	@XMLElement
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
 	public ShapeSpecification getShapeSpecification();
 
 	@Setter(value = SHAPE_SPECIFICATION_KEY)
@@ -514,7 +521,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	public void setShapeType(ShapeType shapeType);
 
-	public ShapeGraphicalRepresentation clone();
+	// public ShapeGraphicalRepresentation clone();
 
 	// public void extendParentBoundsToHostThisShape();
 

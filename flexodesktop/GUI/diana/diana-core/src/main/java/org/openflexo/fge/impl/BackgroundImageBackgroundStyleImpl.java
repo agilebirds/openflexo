@@ -10,7 +10,7 @@ import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl implements BackgroundImageBackgroundStyle {
+public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl implements BackgroundImageBackgroundStyle {
 
 	private File imageFile;
 	private Image image;
@@ -200,10 +200,10 @@ public class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl impl
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BackgroundStyle.IMAGE(" + getImageFile() + ")";
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

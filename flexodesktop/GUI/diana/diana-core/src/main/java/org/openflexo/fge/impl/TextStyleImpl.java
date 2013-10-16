@@ -8,7 +8,7 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
+public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 
 	private static final Logger logger = Logger.getLogger(TextStyle.class.getPackage().getName());
 
@@ -24,7 +24,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 		font = FGEConstants.DEFAULT_TEXT_FONT;
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private TextStyleImpl(Color aColor, Font aFont) {
 		this();
 		color = aColor;
@@ -40,6 +40,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 	private static TextStyleImpl makeTextStyle(Color aColor, Font aFont) {
 		return new TextStyleImpl(aColor, aFont);
 	}
+	*/
 
 	@Override
 	public Color getColor() {
@@ -116,7 +117,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 		}
 	}
 
-	@Override
+	/*@Override
 	public TextStyle clone() {
 		try {
 			return (TextStyle) super.clone();
@@ -125,7 +126,7 @@ public class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

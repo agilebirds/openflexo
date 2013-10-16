@@ -29,42 +29,4 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement(xmlTag = "Diagram")
 public interface Diagram extends DiagramElement<Diagram, DrawingGraphicalRepresentation> {
 
-	/*public File getFile();
-
-	public void setFile(File file);
-
-	public int getIndex();
-
-	public void setIndex(int index);
-
-	@Override
-	public Diagram getDrawing();
-
-	public String getTitle();
-
-	public DiagramDrawing getEditedDrawing();
-
-	public boolean save();
-
-	@Override
-	public void finalizeDeserialization();*/
-
-	public static class DrawingBuilder {
-		public Diagram drawing;
-	}
-
-	// public DiagramFactory getFactory();
-
-	// public void setFactory(DiagramFactory factory);
-
-	// ces methodes la ne devraient pas etre necessaire
-	/*@Override
-	@Getter(value = GRAPHICAL_REPRESENTATION)
-	@XMLElement
-	public MyDrawingGraphicalRepresentation getGraphicalRepresentation();
-
-	@Override
-	@Setter(value = GRAPHICAL_REPRESENTATION)
-	public void setGraphicalRepresentation(MyDrawingGraphicalRepresentation graphicalRepresentation);
-	*/
 }

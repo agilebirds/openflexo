@@ -1,18 +1,12 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Paint;
-import java.io.File;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-
-import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GRParameter;
-import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 
 public abstract class BackgroundStyleImpl extends FGEStyleImpl implements BackgroundStyle {
@@ -32,7 +26,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		return GRParameter.getGRParameters(BackgroundStyle.class);
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public static BackgroundStyle makeEmptyBackground() {
 		return new NoneBackgroundStyleImpl();
 	}
@@ -62,7 +56,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	@Deprecated
 	public static BackgroundImageBackgroundStyle makeImageBackground(ImageIcon image) {
 		return new BackgroundImageBackgroundStyleImpl(image);
-	}
+	}*/
 
 	// @Deprecated
 	/*public static BackgroundStyle makeBackground(BackgroundStyleType type) {
@@ -98,8 +92,8 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		this.graphicalRepresentation = graphicalRepresentation;
 	}*/
 
-	@Override
-	public abstract String toString();
+	// @Override
+	// public abstract String toString();
 
 	@Override
 	public float getTransparencyLevel() {
@@ -131,7 +125,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		}
 	}
 
-	@Override
+	/*@Override
 	public BackgroundStyle clone() {
 		try {
 			BackgroundStyle returned = (BackgroundStyle) super.clone();
@@ -142,7 +136,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

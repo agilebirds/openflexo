@@ -116,9 +116,11 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		logger.info("add view " + view + " under " + this);
 		if (view instanceof JShapeView) {
 			((JShapeView<?>) view).setBackground(getBackground());
+			// logger.info("add the label view " + ((JShapeView<?>) view).getLabelView());
 			if (((JShapeView<?>) view).getLabelView() != null) {
 				add(((JShapeView<?>) view).getLabelView(), ((JShapeView<?>) view).getLayer(), -1);
 			}
+			// logger.info("add the view");
 			add(((JShapeView<?>) view), ((JShapeView<?>) view).getLayer(), -1);
 			childViews.add((JShapeView<?>) view);
 		} else if (view instanceof JConnectorView) {
@@ -154,7 +156,7 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		if (newNode instanceof ShapeNode) {
 			ShapeNode<?> shapeNode = (ShapeNode<?>) newNode;
 			JShapeView<?> shapeView = (JShapeView<?>) getController().makeShapeView(shapeNode);
-			add(shapeView);
+			addView(shapeView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
 			getPaintManager().repaint(this);
@@ -162,7 +164,7 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		} else if (newNode instanceof ConnectorNode) {
 			ConnectorNode<?> connectorNode = (ConnectorNode<?>) newNode;
 			JConnectorView<?> connectorView = (JConnectorView<?>) getController().makeConnectorView(connectorNode);
-			add(connectorView);
+			addView(connectorView);
 			revalidate();
 			getPaintManager().invalidate(notification.getParent());
 			getPaintManager().repaint(this);

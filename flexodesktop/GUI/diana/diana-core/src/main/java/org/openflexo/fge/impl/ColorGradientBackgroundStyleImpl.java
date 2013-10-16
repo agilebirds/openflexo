@@ -7,7 +7,7 @@ import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implements ColorGradientBackgroundStyle {
+public abstract class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implements ColorGradientBackgroundStyle {
 
 	private java.awt.Color color1;
 	private java.awt.Color color2;
@@ -94,10 +94,10 @@ public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implem
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BackgroundStyle.COLOR_GRADIENT(" + getColor1() + "," + getColor2() + "," + getDirection() + ")";
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

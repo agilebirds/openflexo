@@ -138,6 +138,26 @@ public abstract class FGEModelFactory extends ModelFactory {
 		}
 	}
 
+	@Override
+	public <I> void objectHasBeenCreated(I newlyCreatedObject, Class<I> implementedInterface) {
+		if (newlyCreatedObject instanceof FGEObject) {
+			((FGEObject) newlyCreatedObject).setFactory(this);
+		}
+		super.objectHasBeenCreated(newlyCreatedObject, implementedInterface);
+		if (newlyCreatedObject instanceof DrawingGraphicalRepresentation) {
+			applyBasicControls((DrawingGraphicalRepresentation) newlyCreatedObject);
+		}
+		if (newlyCreatedObject instanceof ShapeGraphicalRepresentation) {
+			applyBasicControls((ShapeGraphicalRepresentation) newlyCreatedObject);
+		}
+		if (newlyCreatedObject instanceof ConnectorGraphicalRepresentation) {
+			applyBasicControls((ConnectorGraphicalRepresentation) newlyCreatedObject);
+		}
+		if (newlyCreatedObject instanceof GeometricGraphicalRepresentation) {
+			applyBasicControls((GeometricGraphicalRepresentation) newlyCreatedObject);
+		}
+	}
+
 	/**
 	 * Creates and return a new DrawingGraphicalRepresentation, given a Drawing instance, and initialized with default values and default
 	 * controls (drawing selection, rectangle selection and zoom)

@@ -7,7 +7,7 @@ import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurveConnectorSpecification {
+public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurveConnectorSpecification {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CurveConnectorSpecification.class.getPackage().getName());
@@ -88,15 +88,15 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 		return ConnectorType.CURVE;
 	}
 
-	@Override
+	/*@Override
 	public CurveConnectorSpecification clone() {
-		CurveConnectorSpecification returned = new CurveConnectorSpecificationImpl();
+		CurveConnectorSpecification returned = (CurveConnectorSpecification) cloneObject();
 		returned.setCpPosition(getCpPosition());
 		returned.setCp1RelativeToStartObject(getCp1RelativeToStartObject());
 		returned.setCp2RelativeToEndObject(getCp2RelativeToEndObject());
 		returned.setAreBoundsAdjustable(getAreBoundsAdjustable());
 		return returned;
-	}
+	}*/
 
 	@Override
 	public CurveConnector makeConnector(ConnectorNode<?> connectorNode) {

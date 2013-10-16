@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes.impl;
 
 import org.openflexo.fge.shapes.Losange;
 
-public class LosangeImpl extends RegularPolygonImpl implements Losange {
+public abstract class LosangeImpl extends RegularPolygonImpl implements Losange {
 
 	// *******************************************************************************
 	// * Constructor *

@@ -23,11 +23,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
@@ -214,16 +218,16 @@ public class DiagramEditorPalette extends DrawingPalette {
 				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
 
 				if (applyCurrentForeground) {
-					shapeGR.setForeground(getEditor().getCurrentForegroundStyle());
+					shapeGR.setForeground((ForegroundStyle) getEditor().getCurrentForegroundStyle().clone());
 				}
 				if (applyCurrentBackground) {
-					shapeGR.setBackground(getEditor().getCurrentBackgroundStyle());
+					shapeGR.setBackground((BackgroundStyle) getEditor().getCurrentBackgroundStyle().clone());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle(getEditor().getCurrentTextStyle());
+					shapeGR.setTextStyle((TextStyle) getEditor().getCurrentTextStyle().clone());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle(getEditor().getCurrentShadowStyle());
+					shapeGR.setShadowStyle((ShadowStyle) getEditor().getCurrentShadowStyle().clone());
 				}
 
 				container.addToShapes(newShape);

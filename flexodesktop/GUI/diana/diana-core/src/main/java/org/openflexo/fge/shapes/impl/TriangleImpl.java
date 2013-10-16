@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes.impl;
 
 import org.openflexo.fge.shapes.Triangle;
 
-public class TriangleImpl extends RegularPolygonImpl implements Triangle {
+public abstract class TriangleImpl extends RegularPolygonImpl implements Triangle {
 
 	// *******************************************************************************
 	// * Constructor *

@@ -458,6 +458,11 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		return null;
 	}
 
+	/**
+	 * Return last clicked point, when any, relatively to last selected node (see {@link #getLastSelectedNode()})
+	 * 
+	 * @return
+	 */
 	public FGEPoint getLastClickedPoint() {
 		return lastClickedPoint;
 	}
@@ -466,6 +471,11 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		this.lastClickedPoint = lastClickedPoint;
 	}
 
+	/**
+	 * Return last selected node
+	 * 
+	 * @return
+	 */
 	public DrawingTreeNode<?, ?> getLastSelectedNode() {
 		return lastSelectedNode;
 	}

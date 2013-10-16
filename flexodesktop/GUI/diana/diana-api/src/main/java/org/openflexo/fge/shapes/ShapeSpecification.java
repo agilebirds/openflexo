@@ -65,7 +65,7 @@ public interface ShapeSpecification extends FGEObject {
 
 	public ShapeType getShapeType();
 
-	public ShapeSpecification clone();
+	// public ShapeSpecification clone();
 
 	public abstract Shape<?> makeShape(ShapeNode<?> node);
 

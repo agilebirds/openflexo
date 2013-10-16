@@ -234,7 +234,7 @@ public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JSha
 
 	public void setShape(ShapeSpecification shape) {
 		if (shape != null && (shape != shapeGR.getShapeSpecification() || !shape.equals(shapeGR.getShapeSpecification()))) {
-			shapeGR.setShapeSpecification(shape.clone());
+			shapeGR.setShapeSpecification((ShapeSpecification) shape.clone());
 			/*
 			 * if (shape.getShapeType() == ShapeType.CUSTOM_POLYGON) {
 			 * System.out.println("Go to edition mode");

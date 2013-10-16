@@ -10,7 +10,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements RectPolylinConnectorSpecification {
+public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements RectPolylinConnectorSpecification {
 
 	static final Logger logger = Logger.getLogger(RectPolylinConnectorSpecification.class.getPackage().getName());
 
@@ -328,9 +328,9 @@ public class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificatio
 		}
 	}
 
-	@Override
+	/*@Override
 	public RectPolylinConnectorSpecification clone() {
-		RectPolylinConnectorSpecification returned = new RectPolylinConnectorSpecificationImpl();
+		RectPolylinConnectorSpecification returned = (RectPolylinConnectorSpecificationImpl) cloneObject();
 		returned.setRectPolylinConstraints(getRectPolylinConstraints());
 		returned.setStraightLineWhenPossible(getStraightLineWhenPossible());
 		returned.setAdjustability(getAdjustability());
@@ -351,7 +351,7 @@ public class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificatio
 		returned.setCrossedControlPoint(getCrossedControlPoint());
 		returned.setPolylin(getPolylin());
 		return returned;
-	}
+	}*/
 
 	@Override
 	public RectPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {

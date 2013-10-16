@@ -29,7 +29,7 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Polygon;
 
-public class PolygonImpl extends ShapeSpecificationImpl implements Polygon {
+public abstract class PolygonImpl extends ShapeSpecificationImpl implements Polygon {
 
 	private List<FGEPoint> points;
 

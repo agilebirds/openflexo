@@ -86,6 +86,6 @@ public interface ShadowStyle extends FGEStyle {
 	@Setter(value = SHADOW_BLUR_KEY)
 	public void setShadowBlur(int aValue);
 
-	public ShadowStyle clone();
+	// public ShadowStyle clone();
 
 }

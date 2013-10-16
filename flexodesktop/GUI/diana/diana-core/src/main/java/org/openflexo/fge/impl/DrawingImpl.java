@@ -467,7 +467,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	 */
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 		if (dtn.isInvalidated()) {
-			System.out.println("Updating " + dtn);
+			// System.out.println("Updating " + dtn);
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
 			// List<DrawingTreeNode<?, ?>> nodesToRemove;
 			// if (dtn instanceof ContainerNode) {
@@ -511,6 +511,8 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 				if (pendingConnector.tryToResolve(this)) {
 					System.out.println("Resolved " + pendingConnector);
 					pendingConnectors.remove(pendingConnector);
+				} else {
+					System.out.println("I cannot resolve " + pendingConnector);
 				}
 			}
 

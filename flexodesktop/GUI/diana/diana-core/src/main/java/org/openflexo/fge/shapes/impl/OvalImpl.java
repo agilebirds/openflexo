@@ -25,7 +25,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Oval;
 
-public class OvalImpl extends ShapeSpecificationImpl implements Oval {
+public abstract class OvalImpl extends ShapeSpecificationImpl implements Oval {
 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization

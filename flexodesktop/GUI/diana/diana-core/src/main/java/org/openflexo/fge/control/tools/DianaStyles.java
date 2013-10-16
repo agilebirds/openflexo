@@ -119,13 +119,15 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				public void fireApplyPerformed() {
 					if (getSelection().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
-							shape.getGraphicalRepresentation().setForeground(foregroundSelector.getEditedObject().clone());
+							shape.getGraphicalRepresentation()
+									.setForeground((ForegroundStyle) foregroundSelector.getEditedObject().clone());
 						}
 						for (ConnectorNode<?> connector : getSelectedConnectors()) {
-							connector.getGraphicalRepresentation().setForeground(foregroundSelector.getEditedObject().clone());
+							connector.getGraphicalRepresentation().setForeground(
+									(ForegroundStyle) foregroundSelector.getEditedObject().clone());
 						}
 					} else {
-						getEditor().setCurrentForegroundStyle(foregroundSelector.getEditedObject().clone());
+						getEditor().setCurrentForegroundStyle((ForegroundStyle) foregroundSelector.getEditedObject().clone());
 					}
 				}
 
@@ -145,10 +147,11 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				public void fireApplyPerformed() {
 					if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
-							shape.getGraphicalRepresentation().setBackground(backgroundSelector.getEditedObject().clone());
+							shape.getGraphicalRepresentation()
+									.setBackground((BackgroundStyle) backgroundSelector.getEditedObject().clone());
 						}
 					} else {
-						getEditor().setCurrentBackgroundStyle(backgroundSelector.getEditedObject().clone());
+						getEditor().setCurrentBackgroundStyle((BackgroundStyle) backgroundSelector.getEditedObject().clone());
 					}
 				}
 
@@ -168,10 +171,10 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				public void fireApplyPerformed() {
 					if (getSelection().size() > 0) {
 						for (DrawingTreeNode<?, ?> gr : getSelection()) {
-							gr.getGraphicalRepresentation().setTextStyle(textStyleSelector.getEditedObject().clone());
+							gr.getGraphicalRepresentation().setTextStyle((TextStyle) textStyleSelector.getEditedObject().clone());
 						}
 					} else {
-						getEditor().setCurrentTextStyle(textStyleSelector.getEditedObject().clone());
+						getEditor().setCurrentTextStyle((TextStyle) textStyleSelector.getEditedObject().clone());
 					}
 				}
 
@@ -191,10 +194,10 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				public void fireApplyPerformed() {
 					if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
-							shape.getGraphicalRepresentation().setShadowStyle(shadowStyleSelector.getEditedObject().clone());
+							shape.getGraphicalRepresentation().setShadowStyle((ShadowStyle) shadowStyleSelector.getEditedObject().clone());
 						}
 					} else {
-						getEditor().setCurrentShadowStyle(shadowStyleSelector.getEditedObject().clone());
+						getEditor().setCurrentShadowStyle((ShadowStyle) shadowStyleSelector.getEditedObject().clone());
 					}
 				}
 
@@ -214,11 +217,12 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				public void fireApplyPerformed() {
 					if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
-							shape.getGraphicalRepresentation().setShapeSpecification(shapeSelector.getEditedObject().clone());
+							shape.getGraphicalRepresentation().setShapeSpecification(
+									(ShapeSpecification) shapeSelector.getEditedObject().clone());
 						}
 
 					} else {
-						getEditor().setCurrentShape(shapeSelector.getEditedObject().clone());
+						getEditor().setCurrentShape((ShapeSpecification) shapeSelector.getEditedObject().clone());
 					}
 				}
 

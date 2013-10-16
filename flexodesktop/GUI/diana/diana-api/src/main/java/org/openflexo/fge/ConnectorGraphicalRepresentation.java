@@ -295,6 +295,6 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	// public List<? extends ControlArea<?>> getControlAreas();
 
-	public ConnectorGraphicalRepresentation clone();
+	// public ConnectorGraphicalRepresentation clone();
 
 }

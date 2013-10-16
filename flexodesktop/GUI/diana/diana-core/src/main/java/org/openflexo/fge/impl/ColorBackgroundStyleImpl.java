@@ -6,8 +6,7 @@ import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGENotification;
 
-
-public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
+public abstract class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
 
 	private java.awt.Color color;
 
@@ -44,10 +43,10 @@ public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements Col
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BackgroundStyle.COLOR(" + getColor() + ")";
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

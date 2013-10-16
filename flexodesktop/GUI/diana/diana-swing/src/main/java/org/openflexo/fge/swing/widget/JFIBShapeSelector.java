@@ -55,7 +55,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 	public JFIBShapeSelector(ShapeSpecification editedObject) {
 		super(editedObject);
-		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setRevertValue(editedObject != null ? (ShapeSpecification) editedObject.clone() : null);
 		setFocusable(true);
 	}
 
@@ -76,7 +76,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 		// WARNING: we need here to clone to keep track back of previous data
 		// !!!
 		if (oldValue != null) {
-			_revertValue = oldValue.clone();
+			_revertValue = (ShapeSpecification) oldValue.clone();
 		} else {
 			_revertValue = null;
 		}
@@ -193,7 +193,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 	@Override
 	public void apply() {
-		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		setRevertValue(getEditedObject() != null ? (ShapeSpecification) getEditedObject().clone() : null);
 		closePopup();
 		super.apply();
 	}

@@ -19,7 +19,7 @@ import org.openflexo.fge.notifications.FGENotification;
 import sun.awt.image.ImageRepresentation;
 import sun.awt.image.ToolkitImage;
 
-public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements TextureBackgroundStyle {
+public abstract class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements TextureBackgroundStyle {
 
 	private TextureBackgroundStyle.TextureType textureType;
 	private java.awt.Color color1;
@@ -189,10 +189,10 @@ public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements T
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BackgroundStyle.TEXTURE(" + getColor1() + "," + getColor2() + "," + getTextureType() + ")";
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

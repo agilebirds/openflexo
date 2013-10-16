@@ -28,6 +28,8 @@ import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.kvc.KVCObservableObject;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public abstract class FGEObjectImpl extends KVCObservableObject implements FGEObject {
 	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
@@ -36,6 +38,13 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 
 	private PropertyChangeSupport pcSupport;
 	private boolean isDeleted = false;
+
+	private static int INDEX = 0;
+	private int index = 0;
+
+	public FGEObjectImpl() {
+		index = INDEX++;
+	}
 
 	@Override
 	public FGEModelFactory getFactory() {
@@ -48,9 +57,10 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 	}
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (!isDeleted) {
 			isDeleted = true;
+			performSuperDelete();
 			deleteObservers();
 			if (getPropertyChangeSupport() != null) {
 				// Property change support can be null if noone is listening. I noone is listening,
@@ -61,7 +71,9 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 				// Until now, it still create big issues
 				// pcSupport = null;
 			}
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -226,4 +238,35 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 
+	@Override
+	public final boolean equals(Object object) {
+		if (object instanceof FGEObject) {
+			return equalsObject(object);
+		}
+		return super.equals(object);
+	}
+
+	@Override
+	public final Object clone() {
+		FGEObject returned = (FGEObject) cloneObject();
+		returned.setFactory(getFactory());
+		return returned;
+	}
+
+	@Override
+	public final String toString() {
+		if (getFactory() != null) {
+			ModelEntity<?> entity = getFactory().getModelEntityForInstance(this);
+			if (entity != null) {
+				try {
+					String returned = entity.getImplementedInterface().getSimpleName() + index
+							+ (entity.getImplementingClass() != null ? "[" + entity.getImplementingClass().getSimpleName() + "]" : "");
+					return entity.getImplementedInterface().getSimpleName() + index
+							+ (entity.getImplementingClass() != null ? "[" + entity.getImplementingClass().getSimpleName() + "]" : "");
+				} catch (ModelDefinitionException e) {
+				}
+			}
+		}
+		return super.toString();
+	}
 }

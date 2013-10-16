@@ -4,7 +4,6 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.drawingeditor.DiagramDrawing;
@@ -16,7 +15,8 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class DiagramFactory extends FGEModelFactoryImpl {
 
-	private static int totalOccurences = 0;
+	private int shapeIndex = 0;
+	private int connectorIndex = 0;
 
 	public DiagramFactory() throws ModelDefinitionException {
 		super(Diagram.class, Shape.class, Connector.class);
@@ -24,7 +24,6 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 
 	// Called for NEW
 	public Diagram makeNewDiagram() {
-		totalOccurences++;
 		Diagram returned = newInstance(Diagram.class);
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
@@ -34,6 +33,8 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public Connector makeNewConnector(Shape from, Shape to, DiagramDrawing drawing) {
 		Connector returned = newInstance(Connector.class);
+		returned.setName("Connector" + connectorIndex);
+		connectorIndex++;
 		returned.setDiagram(drawing.getModel());
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE, returned, drawing));
 		returned.setStartShape(from);
@@ -42,25 +43,18 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 	}
 
 	public Shape makeNewShape(ShapeType shape, FGEPoint p, DiagramDrawing drawing) {
-		Shape returned = newInstance(Shape.class);
-		returned.setDiagram(drawing.getModel());
 		ShapeGraphicalRepresentation gr = makeNewShapeGR(shape, drawing);
-		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-			gr.setWidth(80);
-			gr.setHeight(80);
-		} else {
-			gr.setWidth(100);
-			gr.setHeight(80);
-		}
-		gr.setX(p.x);
-		gr.setY(p.y);
-		returned.setGraphicalRepresentation(gr);
-		return returned;
+		gr.setWidth(100);
+		gr.setHeight(80);
+		return makeNewShape(gr, p, drawing);
 	}
 
 	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, DiagramDrawing drawing) {
 		Shape returned = newInstance(Shape.class);
 		returned.setDiagram(drawing.getModel());
+		returned.setName("Shape" + shapeIndex);
+		System.out.println("New name: " + returned.getName());
+		shapeIndex++;
 		ShapeGraphicalRepresentation gr = makeNewShapeGR(aGR, drawing);
 		gr.setX(p.x);
 		gr.setY(p.y);

@@ -103,6 +103,6 @@ public interface TextStyle extends FGEStyle {
 	@Setter(value = IS_BACKGROUND_COLORED_KEY)
 	public void setIsBackgroundColored(boolean aFlag);
 
-	public TextStyle clone();
+	// public TextStyle clone();
 
 }

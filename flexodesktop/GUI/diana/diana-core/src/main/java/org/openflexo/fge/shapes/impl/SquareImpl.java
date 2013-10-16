@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes.impl;
 
 import org.openflexo.fge.shapes.Square;
 
-public class SquareImpl extends RectangleImpl implements Square {
+public abstract class SquareImpl extends RectangleImpl implements Square {
 
 	// *******************************************************************************
 	// * Constructor *

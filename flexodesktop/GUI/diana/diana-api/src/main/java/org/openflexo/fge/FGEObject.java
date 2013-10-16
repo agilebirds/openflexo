@@ -22,11 +22,13 @@ package org.openflexo.fge;
 
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.kvc.KeyValueCoding;
+import org.openflexo.model.factory.AccessibleProxyObject;
+import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cloneable, IObservable, KeyValueCoding, FGEConstants,
-		HasPropertyChangeSupport {
+public interface FGEObject extends AccessibleProxyObject, CloneableProxyObject, XMLSerializable, Cloneable, IObservable, KeyValueCoding,
+		FGEConstants, HasPropertyChangeSupport {
 
 	public FGEModelFactory getFactory();
 
@@ -47,7 +49,7 @@ public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cl
 	/**
 	 * Delete this object
 	 */
-	public void delete();
+	public boolean delete();
 
 	/**
 	 * Return a flag indicating if this object has been deleted
@@ -56,4 +58,10 @@ public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cl
 	 */
 	public boolean isDeleted();
 
+	/**
+	 * Clone this FGE object using persistant properties defined as PAMELA model
+	 * 
+	 * @return
+	 */
+	public Object clone();
 }

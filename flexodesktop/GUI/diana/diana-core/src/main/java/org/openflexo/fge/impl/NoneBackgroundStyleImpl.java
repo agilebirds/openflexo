@@ -5,7 +5,7 @@ import java.awt.Paint;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.NoneBackgroundStyle;
 
-public class NoneBackgroundStyleImpl extends BackgroundStyleImpl implements NoneBackgroundStyle {
+public abstract class NoneBackgroundStyleImpl extends BackgroundStyleImpl implements NoneBackgroundStyle {
 
 	@Override
 	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
@@ -17,9 +17,9 @@ public class NoneBackgroundStyleImpl extends BackgroundStyleImpl implements None
 		return BackgroundStyleType.NONE;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "BackgroundStyle.NONE";
-	}
+	}*/
 
 }

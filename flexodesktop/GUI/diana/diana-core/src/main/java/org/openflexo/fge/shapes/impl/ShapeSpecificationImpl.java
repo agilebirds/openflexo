@@ -65,7 +65,7 @@ public abstract class ShapeSpecificationImpl extends FGEObjectImpl implements Sh
 	@Override
 	public abstract ShapeType getShapeType();
 
-	@Override
+	/*@Override
 	public ShapeSpecificationImpl clone() {
 		try {
 			ShapeSpecificationImpl returned = (ShapeSpecificationImpl) super.clone();
@@ -79,17 +79,17 @@ public abstract class ShapeSpecificationImpl extends FGEObjectImpl implements Sh
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean equals(Object object) {
 		// TODO
-		/*if (object instanceof ShapeSpecificationImpl && getShape() != null) {
-			return getShape().equals(((ShapeSpecificationImpl) object).getShape())
-					&& areDimensionConstrained() == ((ShapeSpecificationImpl) object).areDimensionConstrained();
-		}*/
+		//if (object instanceof ShapeSpecificationImpl && getShape() != null) {
+		//	return getShape().equals(((ShapeSpecificationImpl) object).getShape())
+		//			&& areDimensionConstrained() == ((ShapeSpecificationImpl) object).areDimensionConstrained();
+		//}
 		return super.equals(object);
-	}
+	}*/
 
 	@Override
 	public int hashCode() {

@@ -27,7 +27,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Star;
 
-public class StarImpl extends ShapeSpecificationImpl implements Star {
+public abstract class StarImpl extends ShapeSpecificationImpl implements Star {
 
 	private int npoints = 6;
 	private double ratio = 0.5;

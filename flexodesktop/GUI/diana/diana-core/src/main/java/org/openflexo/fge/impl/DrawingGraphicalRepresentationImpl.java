@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
-import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
+import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
@@ -18,7 +18,8 @@ import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillResize;
 
-public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements DrawingGraphicalRepresentation {
+public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements
+		DrawingGraphicalRepresentation {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DrawingGraphicalRepresentation.class.getPackage().getName());
@@ -64,14 +65,15 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 	}
 
 	@Override
-	public void delete() {
-		super.delete();
+	public boolean delete() {
+		boolean returned = super.delete();
 		/*if (graphics != null) {
 			graphics.delete();
 		}
 		graphics = null;
 		decorationGraphics = null;*/
 		decorationPainter = null;
+		return returned;
 	}
 
 	/*@Override
@@ -198,7 +200,6 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		}
 	}
 
-
 	@Override
 	public DrawingDecorationPainter getDecorationPainter() {
 		return decorationPainter;
@@ -289,10 +290,8 @@ public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepres
 		notifyObservers(new DrawingNeedsToBeRedrawn());
 	}
 
-
 	// *******************************************************************************
 	// * Layout *
 	// *******************************************************************************
-
 
 }

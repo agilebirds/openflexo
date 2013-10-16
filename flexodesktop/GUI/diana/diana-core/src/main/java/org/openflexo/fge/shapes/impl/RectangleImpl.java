@@ -30,7 +30,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Rectangle;
 
-public class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
+public abstract class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RectangleImpl.class.getPackage().getName());
@@ -41,13 +41,6 @@ public class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
 	// *******************************************************************************
 	// * Constructor *
 	// *******************************************************************************
-
-	/**
-	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
-	 */
-	public RectangleImpl() {
-		super();
-	}
 
 	/*@Deprecated
 	private RectangleImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {

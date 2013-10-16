@@ -10,7 +10,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle {
+public abstract class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ForegroundStyle.class.getPackage().getName());
@@ -45,7 +45,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		color = aColor;
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public static ForegroundStyleImpl makeDefault() {
 		return new ForegroundStyleImpl();
 	}
@@ -85,7 +85,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		returned.setLineWidth(aLineWidth);
 		returned.setDashStyle(dashStyle);
 		return returned;
-	}
+	}*/
 
 	@Override
 	public CapStyle getCapStyle() {
@@ -235,7 +235,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		}
 	}
 
-	@Override
+	/*@Override
 	public ForegroundStyle clone() {
 		try {
 			ForegroundStyle returned = (ForegroundStyle) super.clone();
@@ -245,14 +245,14 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "ForegroundStyle " + Integer.toHexString(hashCode()) + " [noStroke=" + noStroke + ",lineWidth=" + lineWidth + ",color="
 				+ color + ",joinStyle=" + joinStyle + ",capStyle=" + capStyle + ",dashStyle=" + dashStyle + ",useTransparency="
 				+ useTransparency + ",transparencyLevel=" + transparencyLevel + "]";
-	}
+	}*/
 
 	@Override
 	public String toNiceString() {
@@ -263,7 +263,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ForegroundStyle) {
 			// logger.info("Equals called for ForegroundStyle !!!!!!!!!");
@@ -273,7 +273,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 					&& getUseTransparency() == fs.getUseTransparency() && getTransparencyLevel() == fs.getTransparencyLevel();
 		}
 		return super.equals(obj);
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {

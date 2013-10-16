@@ -20,8 +20,13 @@
 package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
@@ -29,8 +34,14 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement(xmlTag = "Shape")
 public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentation> {
 
-	public String getName();
+	@Getter(value = GRAPHICAL_REPRESENTATION)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	@XMLElement
+	@Override
+	public ShapeGraphicalRepresentation getGraphicalRepresentation();
 
-	public void setName(String name);
-
+	@Setter(value = GRAPHICAL_REPRESENTATION)
+	@Override
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation);
 }

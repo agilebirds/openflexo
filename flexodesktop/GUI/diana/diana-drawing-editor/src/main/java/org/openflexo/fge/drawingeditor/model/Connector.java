@@ -20,6 +20,9 @@
 package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -36,6 +39,8 @@ public interface Connector extends DiagramElement<Connector, ConnectorGraphicalR
 
 	@Getter(START_SHAPE)
 	@XMLElement(context = "Start")
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
 	public Shape getStartShape();
 
 	@Setter(START_SHAPE)
@@ -43,6 +48,8 @@ public interface Connector extends DiagramElement<Connector, ConnectorGraphicalR
 
 	@Getter(END_SHAPE)
 	@XMLElement(context = "End")
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
 	public abstract Shape getEndShape();
 
 	@Setter(END_SHAPE)

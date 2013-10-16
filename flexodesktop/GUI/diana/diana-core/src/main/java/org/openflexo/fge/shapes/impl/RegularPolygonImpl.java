@@ -32,7 +32,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.RegularPolygon;
 
-public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
+public abstract class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	private int npoints = -1;
 	private int startAngle = 90;

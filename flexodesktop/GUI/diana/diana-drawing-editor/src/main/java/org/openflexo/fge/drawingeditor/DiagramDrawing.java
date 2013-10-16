@@ -100,6 +100,15 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 				}
 			}
 		});
+		shapeBinding.addToWalkers(new GRStructureWalker<Shape>() {
+			@Override
+			public void walk(Shape myShape) {
+				for (Connector connector : myShape.getConnectors()) {
+					drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape());
+				}
+			}
+		});
+
 		shapeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
 		connectorBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
 

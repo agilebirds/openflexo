@@ -9,13 +9,13 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.MouseControl.MouseButton;
+import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ToolBox;
 
-public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements GeometricGraphicalRepresentation {
+public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements GeometricGraphicalRepresentation {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeometricGraphicalRepresentation.class.getPackage().getName());
@@ -28,7 +28,7 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// * Fields *
 	// *******************************************************************************
 
-	//private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
+	// private int layer = FGEConstants.DEFAULT_OBJECT_LAYER;
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
@@ -88,14 +88,14 @@ public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// ***************************************************************************
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (background != null) {
 			background.deleteObserver(this);
 		}
 		if (foreground != null) {
 			foreground.deleteObserver(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	// *******************************************************************************

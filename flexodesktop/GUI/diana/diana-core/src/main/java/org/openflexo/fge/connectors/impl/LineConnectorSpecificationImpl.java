@@ -7,7 +7,7 @@ import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl implements LineConnectorSpecification {
+public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl implements LineConnectorSpecification {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(LineConnectorSpecification.class.getPackage().getName());
@@ -68,14 +68,14 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 		return ConnectorType.LINE;
 	}
 
-	@Override
+	/*@Override
 	public LineConnectorSpecification clone() {
-		LineConnectorSpecification returned = new LineConnectorSpecificationImpl();
+		LineConnectorSpecification returned = (LineConnectorSpecification) cloneObject();
 		returned.setLineConnectorType(getLineConnectorType());
 		returned.setCp1RelativeToStartObject(getCp1RelativeToStartObject());
 		returned.setCp2RelativeToEndObject(getCp2RelativeToEndObject());
 		return returned;
-	}
+	}*/
 
 	@Override
 	public LineConnector makeConnector(ConnectorNode<?> connectorNode) {

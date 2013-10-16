@@ -3,7 +3,8 @@ package org.openflexo.fge.connectors.impl;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
 
-public class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurvedPolylinConnectorSpecification {
+public abstract class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements
+		CurvedPolylinConnectorSpecification {
 
 	// *******************************************************************************
 	// * Constructor *
@@ -19,11 +20,11 @@ public class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificat
 		return ConnectorType.CURVED_POLYLIN;
 	}
 
-	@Override
+	/*@Override
 	public CurvedPolylinConnectorSpecification clone() {
-		CurvedPolylinConnectorSpecification returned = new CurvedPolylinConnectorSpecificationImpl();
+		CurvedPolylinConnectorSpecification returned = (CurvedPolylinConnectorSpecification) cloneObject();
 		return returned;
-	}
+	}*/
 
 	@Override
 	public CurvedPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {

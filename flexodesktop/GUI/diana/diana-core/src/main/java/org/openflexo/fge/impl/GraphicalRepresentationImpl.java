@@ -133,16 +133,18 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// ***************************************************************************
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (!isDeleted()) {
 			if (textStyle != null) {
 				textStyle.deleteObserver(this);
 			}
 			_bindingModel = null;
-			super.delete();
+			boolean returned = super.delete();
 			setChanged();
 			notifyObservers(new GRDeleted(this));
+			return returned;
 		}
+		return false;
 	}
 
 	// ***************************************************************************

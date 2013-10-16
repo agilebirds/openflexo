@@ -102,7 +102,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public ShapeImpl<?> getShape() {
-		if (shape == null && getGraphicalRepresentation() != null) {
+		if (shape == null && getGraphicalRepresentation() != null && getGraphicalRepresentation().getShapeSpecification() != null) {
 			shape = (ShapeImpl<?>) getGraphicalRepresentation().getShapeSpecification().makeShape(this);
 		}
 		return shape;

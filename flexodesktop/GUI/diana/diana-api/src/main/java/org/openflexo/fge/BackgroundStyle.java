@@ -95,6 +95,6 @@ public interface BackgroundStyle extends FGEStyle {
 	@Setter(value = USE_TRANSPARENCY_KEY)
 	public void setUseTransparency(boolean aFlag);
 
-	public BackgroundStyle clone();
+	// public BackgroundStyle clone();
 
 }

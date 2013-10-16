@@ -21,7 +21,7 @@ package org.openflexo.fge.shapes.impl;
 
 import org.openflexo.fge.shapes.Circle;
 
-public class CircleImpl extends OvalImpl implements Circle {
+public abstract class CircleImpl extends OvalImpl implements Circle {
 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization

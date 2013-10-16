@@ -34,12 +34,12 @@ public abstract class DiagramImpl extends DiagramElementImpl<Diagram, DrawingGra
 	}
 
 	// Called for LOAD
-	public DiagramImpl(DrawingBuilder builder) {
+	/*public DiagramImpl(DrawingBuilder builder) {
 		this();
 		if (builder != null) {
 			builder.drawing = this;
 		}
 		// initializeDeserialization();
-	}
+	}*/
 
 }

@@ -430,6 +430,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			// Those notifications are forwarded by my graphical representation
 			FGENotification notif = (FGENotification) notification;
 
+			setChanged();
+			notifyObservers(notification);
+
 			if (notif instanceof BindingChanged) {
 				updateDependanciesForBinding(((BindingChanged) notif).getBinding());
 			}
@@ -959,6 +962,18 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	 */
 	@Override
 	public String getText() {
+		/*System.out.println("Le text pour " + getDrawable().getClass().getSimpleName());
+		if (getDrawable().getClass().getSimpleName().contains("ShapeImpl_$$_javassist")) {
+			System.out.println("c'est quoi le text ???");
+			System.out.println("hasPV=" + hasDynamicPropertyValue(GraphicalRepresentation.TEXT));
+			try {
+				System.out.println("DPV=" + getDynamicPropertyValue(GraphicalRepresentation.TEXT));
+				return getDynamicPropertyValue(GraphicalRepresentation.TEXT);
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
 		return getPropertyValue(GraphicalRepresentation.TEXT);
 	}
 

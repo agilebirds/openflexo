@@ -35,6 +35,7 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
@@ -49,6 +50,7 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public static final String DIAGRAM = "diagram";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
+	public static final String NAME = "name";
 
 	@Getter(value = SHAPES, cardinality = Cardinality.LIST)
 	@XMLElement(primary = true)
@@ -82,6 +84,13 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Remover(CONNECTORS)
 	public void removeFromConnectors(Connector aConnector);
 
+	@Getter(value = NAME)
+	@XMLAttribute
+	public String getName();
+
+	@Setter(value = NAME)
+	public void setName(String aName);
+
 	@Getter(value = DIAGRAM)
 	public Diagram getDiagram();
 
@@ -89,6 +98,8 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public void setDiagram(Diagram diagram);
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public G getGraphicalRepresentation();
 

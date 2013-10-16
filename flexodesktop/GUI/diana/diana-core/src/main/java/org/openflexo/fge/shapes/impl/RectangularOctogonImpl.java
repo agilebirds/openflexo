@@ -22,7 +22,7 @@ package org.openflexo.fge.shapes.impl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.RectangularOctogon;
 
-public class RectangularOctogonImpl extends PolygonImpl implements RectangularOctogon {
+public abstract class RectangularOctogonImpl extends PolygonImpl implements RectangularOctogon {
 
 	// *******************************************************************************
 	// * Constructor *

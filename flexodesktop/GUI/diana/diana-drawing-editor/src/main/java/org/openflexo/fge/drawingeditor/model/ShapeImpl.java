@@ -20,20 +20,23 @@
 package org.openflexo.fge.drawingeditor.model;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.drawingeditor.model.Diagram.DrawingBuilder;
 
 public abstract class ShapeImpl extends DiagramElementImpl<Shape, ShapeGraphicalRepresentation> implements Shape {
-	public String name;
+	// public String name;
+
+	private static int INDEX = 0;
+	private int index = 0;
 
 	// Called for LOAD
-	public ShapeImpl(DrawingBuilder builder) {
+	/*public ShapeImpl(DrawingBuilder builder) {
 		super(builder.drawing);
 		// initializeDeserialization();
-	}
+	}*/
 
 	// Used by PAMELA, do not use it
 	public ShapeImpl() {
 		super(null);
+		index = INDEX++;
 	}
 
 	// Called for NEW
@@ -60,19 +63,22 @@ public abstract class ShapeImpl extends DiagramElementImpl<Shape, ShapeGraphical
 		setGraphicalRepresentation(gr);
 	}*/
 
-	@Override
+	/*@Override
 	public String getName() {
+		if (name == null) {
+			return "unnamed" + index;
+		}
 		return name;
 	}
 
 	@Override
 	public void setName(String name) {
 		this.name = name;
-	}
+	}*/
 
 	@Override
 	public String toString() {
-		return "Shape[" + name + "]";
+		return "Shape[" + getName() + "]";
 	}
 
 }

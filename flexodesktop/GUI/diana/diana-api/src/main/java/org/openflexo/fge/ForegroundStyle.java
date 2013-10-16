@@ -289,7 +289,7 @@ public interface ForegroundStyle extends FGEStyle {
 
 	public Stroke getStroke(double scale);
 
-	public ForegroundStyle clone();
+	// public ForegroundStyle clone();
 
 	public String toNiceString();
 

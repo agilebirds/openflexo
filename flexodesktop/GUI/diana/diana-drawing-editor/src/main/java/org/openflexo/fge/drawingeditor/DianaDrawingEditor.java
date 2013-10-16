@@ -23,12 +23,14 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.drawingeditor.model.Connector;
@@ -45,6 +47,8 @@ import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
 public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
+
+	private static final Logger logger = Logger.getLogger(DianaDrawingEditor.class.getPackage().getName());
 
 	private JPopupMenu contextualMenu;
 	private DrawingTreeNode<?, ?> contextualMenuInvoker;
@@ -261,25 +265,60 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 		System.out.println(clipboard.debug());
 
+		/*Shape shapeToCopy = (Shape) objectsToBeCopied[0];
+
+		System.out.println("Je viens de copier l'objet " + shapeToCopy);
+		System.out.println("gr=" + shapeToCopy.getGraphicalRepresentation());
+		System.out.println("ss=" + shapeToCopy.getGraphicalRepresentation().getShapeSpecification());
+		System.out.println("controls=" + shapeToCopy.getGraphicalRepresentation().getMouseClickControls());
+
+		Shape copiedShape = (Shape) clipboard.getContents();
+		System.out.println("J'obtiens " + copiedShape);
+		System.out.println("gr=" + copiedShape.getGraphicalRepresentation());
+		System.out.println("ss=" + copiedShape.getGraphicalRepresentation().getShapeSpecification());
+		System.out.println("controls=" + copiedShape.getGraphicalRepresentation().getMouseClickControls());*/
 	}
 
 	public void paste() {
-		System.out.println("Paste in " + contextualMenuInvoker.getDrawable());
-		// addNewShape((Shape) copiedShape.clone(), (DiagramElement) contextualMenuInvoker.getDrawable());
 
-		try {
-			getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
-		} catch (ModelExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ModelDefinitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (clipboard != null) {
+
+			// addNewShape((Shape) copiedShape.clone(), (DiagramElement) contextualMenuInvoker.getDrawable());
+
+			try {
+				FGEPoint p = FGEUtils.convertNormalizedPoint(getLastSelectedNode(), getLastClickedPoint(), contextualMenuInvoker);
+				logger.info("Pasting in " + contextualMenuInvoker.getDrawable() + " at " + p);
+				if (clipboard.isSingleObject()) {
+					if (clipboard.getSingleContents() instanceof Shape) {
+						((Shape) clipboard.getSingleContents()).getGraphicalRepresentation().setX(p.x);
+						((Shape) clipboard.getSingleContents()).getGraphicalRepresentation().setY(p.y);
+					}
+				} else {
+					for (Object o : clipboard.getMultipleContents()) {
+						if (o instanceof Shape) {
+							((Shape) o).getGraphicalRepresentation().setX(((Shape) o).getGraphicalRepresentation().getX() + 10);
+							((Shape) o).getGraphicalRepresentation().setY(((Shape) o).getGraphicalRepresentation().getY() + 10);
+							((Shape) o).setName(((Shape) o).getName() + "-new");
+						} else if (o instanceof Connector) {
+							((Connector) o).setName(((Connector) o).getName() + "-new");
+						}
+					}
+				}
+
+				getLastClickedPoint();
+
+				getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+			} catch (ModelExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ModelDefinitionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	public void cut() {

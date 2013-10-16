@@ -180,7 +180,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		graphics.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 
 		if (getIsSelected() || getIsFocused()) {
-			ForegroundStyle style = getGraphicalRepresentation().getForeground().clone();
+			ForegroundStyle style = (ForegroundStyle) getGraphicalRepresentation().getForeground().clone();
 			if (getIsSelected()) {
 				style.setColorNoNotification(getDrawing().getRoot().getGraphicalRepresentation().getSelectionColor());
 			} else if (getIsFocused()) {

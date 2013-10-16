@@ -73,7 +73,7 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 
 	public JFIBTextStyleSelector(TextStyle editedObject) {
 		super(editedObject);
-		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setRevertValue(editedObject != null ? (TextStyle) editedObject.clone() : null);
 		setFocusable(true);
 	}
 
@@ -106,7 +106,7 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 	public void setRevertValue(TextStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
 		if (oldValue != null) {
-			_revertValue = oldValue.clone();
+			_revertValue = (TextStyle) oldValue.clone();
 		} else {
 			_revertValue = null;
 		}
@@ -197,7 +197,7 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 
 	@Override
 	public void apply() {
-		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		setRevertValue(getEditedObject() != null ? (TextStyle) getEditedObject().clone() : null);
 		closePopup();
 		super.apply();
 	}

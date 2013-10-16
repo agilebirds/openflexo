@@ -25,7 +25,7 @@ import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.toolbox.ToolBox;
 
-public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
+public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShapeGraphicalRepresentation.class.getPackage().getName());
@@ -50,7 +50,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	private boolean hasFocusedForeground = false;
 	private boolean hasFocusedBackground = false;
 
-	private ShapeBorder border = new ShapeBorderImpl();
+	private ShapeBorder border; /* = new ShapeBorderImpl();*/
 
 	private ShapeSpecification shape = null;
 
@@ -145,7 +145,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	}
 
-	@Override
+	/*@Override
 	public ShapeGraphicalRepresentationImpl clone() {
 		// logger.info("La GR "+this+" se fait cloner la");
 		try {
@@ -155,7 +155,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 	/*@Override
 	public Vector<GRParameter> getAllParameters() {
@@ -172,7 +172,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	// ***************************************************************************
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (background != null) {
 			background.deleteObserver(this);
 		}
@@ -194,7 +194,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		if (shadowStyle != null) {
 			shadowStyle.deleteObserver(this);
 		}
-		super.delete();
+		return super.delete();
 	}
 
 	// ***************************************************************************
@@ -1463,7 +1463,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	@Override
 	public ForegroundStyle getSelectedForeground() {
 		if (selectedForeground == null && foreground != null) {
-			selectedForeground = foreground.clone();
+			selectedForeground = (ForegroundStyle) foreground.clone();
 		}
 		return selectedForeground;
 	}
@@ -1496,7 +1496,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	@Override
 	public ForegroundStyle getFocusedForeground() {
 		if (focusedForeground == null && foreground != null) {
-			focusedForeground = foreground.clone();
+			focusedForeground = (ForegroundStyle) foreground.clone();
 		}
 		return focusedForeground;
 	}
@@ -1573,7 +1573,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	@Override
 	public BackgroundStyle getSelectedBackground() {
 		if (selectedBackground == null && background != null) {
-			selectedBackground = background.clone();
+			selectedBackground = (BackgroundStyle) background.clone();
 		}
 		return selectedBackground;
 	}
@@ -1608,7 +1608,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	@Override
 	public BackgroundStyle getFocusedBackground() {
 		if (focusedBackground == null && background != null) {
-			focusedBackground = background.clone();
+			focusedBackground = (BackgroundStyle) background.clone();
 		}
 		return focusedBackground;
 	}
@@ -2257,10 +2257,10 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		return new JShapeView<Object>(this, controller);
 	}*/
 
-	@Override
+	/*@Override
 	public String toString() {
 		return getClass().getSimpleName() + "[" + getShapeType() + "," + getText() + "]";
-	}
+	}*/
 
 	/*@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
@@ -2383,27 +2383,27 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		return area;
 	}*/
 
-	public static class ShapeBorderImpl extends FGEObjectImpl implements ShapeBorder {
+	public static abstract class ShapeBorderImpl extends FGEObjectImpl implements ShapeBorder {
 		private int top = FGEConstants.DEFAULT_BORDER_SIZE;
 		private int bottom = FGEConstants.DEFAULT_BORDER_SIZE;
 		private int left = FGEConstants.DEFAULT_BORDER_SIZE;
 		private int right = FGEConstants.DEFAULT_BORDER_SIZE;
 
-		@Override
-		public ShapeBorder clone() {
-			try {
-				return (ShapeBorder) super.clone();
-			} catch (CloneNotSupportedException e) {
-				// cannot happen, we are clonable
-				e.printStackTrace();
-				return null;
-			}
-		}
+		/*	@Override
+			public ShapeBorder clone() {
+				try {
+					return (ShapeBorder) super.clone();
+				} catch (CloneNotSupportedException e) {
+					// cannot happen, we are clonable
+					e.printStackTrace();
+					return null;
+				}
+			}*/
 
-		@Override
+		/*@Override
 		public String toString() {
 			return "ShapeBorder [" + left + "," + top + "," + right + "," + bottom + "]";
-		}
+		}*/
 
 		@Override
 		public int getTop() {

@@ -59,7 +59,7 @@ public interface ConnectorSpecification extends FGEObject {
 
 	public ConnectorType getConnectorType();
 
-	public ConnectorSpecification clone();
+	// public ConnectorSpecification clone();
 
 	public Connector<?> makeConnector(ConnectorNode<?> connectorNode);
 }

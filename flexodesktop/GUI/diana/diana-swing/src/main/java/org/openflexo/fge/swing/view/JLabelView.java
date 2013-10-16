@@ -110,6 +110,8 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 	public JLabelView(final DrawingTreeNode<O, ?> node, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller,
 			FGEView<O, ? extends JComponent> delegateView) {
 
+		logger.info("Build JLabelView for " + node.getDrawable() + " with text " + node.getText());
+
 		setUI(new BasicScrollPaneUI());
 		getViewport().setUI(new BasicViewportUI());
 		this.controller = controller;
@@ -591,7 +593,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 			return;
 		}
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Start edition of " + node);
+			logger.info("Start edition of " + node + " with text " + node.getText());
 		}
 		isEditing = true;
 		registerTextListener();

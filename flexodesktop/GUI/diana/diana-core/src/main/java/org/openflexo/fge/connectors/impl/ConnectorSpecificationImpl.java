@@ -17,7 +17,7 @@ public abstract class ConnectorSpecificationImpl extends FGEObjectImpl implement
 	@Override
 	public abstract ConnectorType getConnectorType();
 
-	@Override
-	public abstract ConnectorSpecification clone();
+	// @Override
+	// public abstract ConnectorSpecification clone();
 
 }

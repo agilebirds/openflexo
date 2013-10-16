@@ -76,7 +76,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 	public JFIBBackgroundStyleSelector(BackgroundStyle editedObject) {
 		super(editedObject);
-		setRevertValue(editedObject != null ? editedObject.clone() : null);
+		setRevertValue(editedObject != null ? (BackgroundStyle) editedObject.clone() : null);
 		setFocusable(true);
 	}
 
@@ -109,7 +109,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 	public void setRevertValue(BackgroundStyle oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data !!!
 		if (oldValue != null) {
-			_revertValue = oldValue.clone();
+			_revertValue = (BackgroundStyle) oldValue.clone();
 		} else {
 			_revertValue = null;
 		}
@@ -223,7 +223,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 	@Override
 	public void apply() {
-		setRevertValue(getEditedObject() != null ? getEditedObject().clone() : null);
+		setRevertValue(getEditedObject() != null ? (BackgroundStyle) getEditedObject().clone() : null);
 		closePopup();
 		super.apply();
 	}

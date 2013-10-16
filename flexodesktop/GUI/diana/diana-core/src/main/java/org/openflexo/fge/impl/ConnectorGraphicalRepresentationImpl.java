@@ -22,7 +22,7 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.toolbox.ToolBox;
 
-public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ConnectorGraphicalRepresentation {
+public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ConnectorGraphicalRepresentation {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ConnectorGraphicalRepresentation.class.getPackage().getName());
@@ -98,11 +98,11 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// ***************************************************************************
 
 	@Override
-	public void delete() {
+	public boolean delete() {
 		if (foreground != null) {
 			foreground.deleteObserver(this);
 		}
-		super.delete();
+		return super.delete();
 		// disableStartObjectObserving();
 		// disableEndObjectObserving();
 	}
@@ -190,7 +190,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	@Override
 	public ForegroundStyle getSelectedForeground() {
 		if (selectedForeground == null && foreground != null) {
-			selectedForeground = foreground.clone();
+			selectedForeground = (ForegroundStyle) foreground.clone();
 		}
 		return selectedForeground;
 	}
@@ -223,7 +223,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	@Override
 	public ForegroundStyle getFocusedForeground() {
 		if (focusedForeground == null && foreground != null) {
-			focusedForeground = foreground.clone();
+			focusedForeground = (ForegroundStyle) foreground.clone();
 		}
 		return focusedForeground;
 	}
@@ -862,7 +862,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 	}*/
 
-	@Override
+	/*@Override
 	public ConnectorGraphicalRepresentation clone() {
 		// logger.info("La GR "+this+" se fait cloner la");
 		try {
@@ -872,6 +872,6 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 }

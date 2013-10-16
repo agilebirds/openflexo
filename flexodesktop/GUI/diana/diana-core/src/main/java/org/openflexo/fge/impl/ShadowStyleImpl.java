@@ -4,7 +4,7 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.notifications.FGENotification;
 
-public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
+public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 	private boolean drawShadow;
 	private int shadowDarkness;
 	private int shadowDepth;
@@ -17,7 +17,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
 	}
 
-	@SuppressWarnings("unused")
+	/*@SuppressWarnings("unused")
 	@Deprecated
 	private static ShadowStyleImpl makeNone() {
 		ShadowStyleImpl returned = new ShadowStyleImpl();
@@ -30,7 +30,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 	@Deprecated
 	private static ShadowStyleImpl makeDefault() {
 		return new ShadowStyleImpl();
-	}
+	}*/
 
 	@Override
 	public boolean getDrawShadow() {
@@ -97,7 +97,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 		}
 	}
 
-	@Override
+	/*@Override
 	public ShadowStyle clone() {
 		try {
 			return (ShadowStyle) super.clone();
@@ -106,7 +106,7 @@ public class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 	private boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {
