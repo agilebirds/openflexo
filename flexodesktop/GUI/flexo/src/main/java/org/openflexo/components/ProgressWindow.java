@@ -323,12 +323,15 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	@Override
 	public void setProgress(final String stepName) {
+		final boolean wasVisible = isVisible();
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
 				public void run() {
-					setProgress(stepName);
+					if (ProgressWindow.this.isVisible() || !wasVisible) {
+						setProgress(stepName);
+					}
 				}
 			});
 			return;
