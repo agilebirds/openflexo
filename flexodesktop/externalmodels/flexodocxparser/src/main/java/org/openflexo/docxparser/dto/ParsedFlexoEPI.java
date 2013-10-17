@@ -15,6 +15,7 @@ public class ParsedFlexoEPI implements IParsedFlexoEPI {
 
 	public ParsedFlexoEPI(FlexoEPITag epiTag, String value, String multilineValue, ParsedHtml styledValue) {
 		this.epiTag = epiTag;
+		this.value = value;
 		this.multilineValue = multilineValue;
 		this.styledValue = styledValue;
 	}
