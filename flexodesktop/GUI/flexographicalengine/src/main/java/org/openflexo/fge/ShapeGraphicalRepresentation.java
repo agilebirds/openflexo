@@ -2543,6 +2543,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void setTranparency(Double transparency) {
 		background.setUseTransparency(true);
 		background.setTransparencyLevel(transparency.floatValue());
+		foreground.setUseTransparency(true);
+		foreground.setTransparencyLevel(transparency.floatValue());
 		//super.setTranparency(transparency);
 	}
 	

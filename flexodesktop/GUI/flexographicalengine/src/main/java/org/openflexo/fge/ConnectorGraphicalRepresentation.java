@@ -690,6 +690,13 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	}
 
 	@Override
+	public void setTranparency(Double transparency) {
+		foreground.setUseTransparency(true);
+		foreground.setTransparencyLevel(transparency.floatValue());
+		//super.setTranparency(transparency);
+	}
+	
+	@Override
 	public void update(Observable observable, Object notification) {
 		// System.out.println("Connector received "+notification+" from "+observable);
 
