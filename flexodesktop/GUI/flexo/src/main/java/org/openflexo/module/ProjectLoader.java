@@ -39,15 +39,21 @@ import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
@@ -67,7 +73,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
-public class ProjectLoader implements HasPropertyChangeSupport {
+public class ProjectLoader implements HasPropertyChangeSupport, FlexoObserver {
 
 	public static final String PROJECT_OPENED = "projectOpened";
 	public static final String PROJECT_CLOSED = "projectClosed";
@@ -246,6 +252,7 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 		try {
 			FlexoProjectReference ref = modelFactory.newInstance(FlexoProjectReference.class);
 			ref.init(editor.getProject());
+			ref.syncWithResourceData();
 			applicationContext.getResourceCenterService().getUserResourceCenter()
 					.publishResource(ref, editor.getProject().getVersion(), null);
 		} catch (Exception e) {
@@ -484,15 +491,47 @@ public class ProjectLoader implements HasPropertyChangeSupport {
 	private void addToRootProjects(FlexoProject project) {
 		if (!rootProjects.contains(project)) {
 			rootProjects.add(project);
+			project.addObserver(this);
 			getPropertyChangeSupport().firePropertyChange(PROJECT_OPENED, null, project);
 			getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, null, project);
 		}
 	}
 
 	private void removeFromRootProjects(FlexoProject project) {
+		project.deleteObserver(this);
 		rootProjects.remove(project);
 		getPropertyChangeSupport().firePropertyChange(PROJECT_CLOSED, project, null);
 		getPropertyChangeSupport().firePropertyChange(ROOT_PROJECTS, project, null);
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (observable instanceof FlexoProject && dataModification instanceof ResourceStatusModification) {
+			FlexoProject project = (FlexoProject) observable;
+			if (!project.isModified()) {
+				List<FlexoResource<FlexoProject>> resources = applicationContext.getResourceCenterService().getUserResourceCenter()
+						.retrieveResource(project.getURI(), FlexoProject.class, null);
+				for (FlexoResource<FlexoProject> r : resources) {
+					try {
+						if (r.getResourceData(null) == project && r instanceof FlexoProjectReference) {
+							((FlexoProjectReference) r).syncWithResourceData();
+							if (((FlexoProjectReference) r).isModified()) {
+								try {
+									applicationContext.getResourceCenterService().getUserResourceCenter()
+											.publishResource(r, r.getVersion(), null);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+							break;
+						}
+					} catch (ResourceLoadingCancelledException e) {
+						e.printStackTrace();
+						continue;
+					}
+				}
+			}
+		}
 	}
 
 	public void saveAllProjects() throws SaveResourceExceptionList {

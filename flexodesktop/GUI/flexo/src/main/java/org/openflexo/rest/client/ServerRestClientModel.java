@@ -3,6 +3,7 @@ package org.openflexo.rest.client;
 import java.awt.Desktop;
 import java.awt.Window;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -752,6 +753,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			}
 			boolean success = false;
 			String oldVersion = flexoProject.getVersion();
+			BufferedInputStream bis = null;
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("retrieving_next_version"), 6);
 				String nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).next().getAsTextPlain(String.class);
@@ -789,13 +791,31 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 						return super.read();
 					}
 
+					@Override
+					public int read(byte[] b) throws IOException {
+						progress += b.length;
+						updateProgress();
+						return super.read(b);
+					}
+
+					@Override
+					public int read(byte[] b, int off, int len) throws IOException {
+						progress += len;
+						updateProgress();
+						return super.read(b, off, len);
+					}
+
 					private void updateProgress() {
-						if (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
+						while (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
 							double percent = progress * 100.0d / length;
 							ProgressWindow.instance().setProgress(
 									String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
-							lastUpdate = progress;
+							lastUpdate += stepSize;
+							if (progress == length) {
+								return;
+							}
 						}
+						lastUpdate = progress;
 					}
 				};
 				ProjectVersion version = new ProjectVersion();
@@ -804,12 +824,13 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				version.setComment(comment);
 				FormDataMultiPart mp = new FormDataMultiPart();
 				mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
-				mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
+				mp.bodyPart(new StreamDataBodyPart("file", bis = new BufferedInputStream(inputStream), zipFile.getName()));
 				zipFile.delete();
 				ProjectVersion response = client.projectsProjectIDVersions(serverProject.getProjectId()).postMultipartFormDataAsXml(mp,
 						ProjectVersion.class);
 				success = true;
 			} finally {
+				IOUtils.closeQuietly(bis);
 				if (!success) {
 					flexoProject.setVersion(oldVersion);
 				}

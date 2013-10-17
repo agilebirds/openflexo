@@ -7,6 +7,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.IProgress;
@@ -42,6 +43,9 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@XMLAttribute()
 	public String getName();
 
+	@Setter(NAME)
+	public void setName(String name);
+
 	/**
 	 * Returns the unique resource identifier of this resource. A URI is unique in the whole universe and clearly and uniquely identifies
 	 * this resource.
@@ -52,6 +56,9 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@XMLAttribute()
 	public String getURI();
 
+	@Setter(URI)
+	public void setURI(String uri);
+
 	/**
 	 * Returns a displayable version that the end-user will understand.
 	 * 
@@ -60,6 +67,9 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(VERSION)
 	@XMLAttribute
 	public String getVersion();
+
+	@Setter(VERSION)
+	public void setVersion(String version);
 
 	/**
 	 * Returns the revision of this resource. Each resource should ensure that upon each time it is edited, the revision number is
@@ -71,6 +81,9 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	@Getter(REVISION)
 	@XMLAttribute
 	public Long getRevision();
+
+	@Setter(REVISION)
+	public void setRevision(Long revision);
 
 	/**
 	 * Returns the class of the resource data held by this resource.

@@ -2,16 +2,12 @@ package org.openflexo.rest.client;
 
 import java.awt.Color;
 import java.awt.Window;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,13 +16,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -41,10 +32,10 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ZipUtils;
+import org.openflexo.view.controller.FlexoController;
 
 import com.google.common.io.Files;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 
 public class ServerRestProjectListModel extends AbstractServerRestClientModel implements HasPropertyChangeSupport {
@@ -151,138 +142,14 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 
 	}
 
-	public class DownloadProjectVersion implements ServerRestClientOperation {
-
-		private final Project project;
-		private final ProjectVersion version;
-
-		private boolean success = false;
-		private File file;
-
-		private long bytesRead = 0;
-		private long lastByteProgressReport = 0;
-
-		public DownloadProjectVersion(Project project, ProjectVersion version) {
-			super();
-			this.project = project;
-			this.version = version;
-		}
-
-		@Override
-		public void doOperation(ServerRestClient client, final Progress progress) throws IOException, WebApplicationException {
-			Client createClient = client.createClient();
-			Session session = new Session();
-			session.setUser(getUser());
-			session.setVersion(version);
-			try {
-				session.setDownloadDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
-			} catch (DatatypeConfigurationException e1) {
-				e1.printStackTrace();
-			}
-			client.projectsProjectIDSessions(createClient, project.getProjectId()).postXmlAsSession(session);
-			ClientResponse response = client.projectsProjectIDVersions(createClient, project.getProjectId()).idFile(version.getVersionID())
-					.getAsOctetStream(ClientResponse.class);
-			if (response.getStatus() >= 400) {
-				String message = "";
-				try {
-					message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
-						.entity(message).build());
-			}
-			List<String> list = response.getHeaders().get("Content-Length");
-			long length = -1;
-			if (list != null) {
-				for (String string : list) {
-					try {
-						length = Long.valueOf(string);
-						break;
-					} catch (NumberFormatException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			if (length < 1) {
-				String fileLength = client.projectsProjectIDVersions(project.getProjectId()).idFileLength(version.getVersionID())
-						.getAsTextPlain(String.class);
-				try {
-					length = Long.valueOf(fileLength);
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			}
-			file = File.createTempFile(StringUtils.rightPad(project.getName() + "_" + version.getVersionNumber(), 3, '_'), ".zip");
-			bytesRead = 0;
-			final int stepSize = length > 0 ? (int) length / 1000 : -1;
-			FileOutputStream fos = new FileOutputStream(file) {
-
-				@Override
-				public void write(byte[] b) throws IOException {
-					super.write(b);
-					bytesRead += b.length;
-					updateDisplay(progress, stepSize);
-				}
-
-				@Override
-				public void write(byte[] b, int off, int len) throws IOException {
-					super.write(b, off, len);
-					bytesRead += len;
-					updateDisplay(progress, stepSize);
-				}
-
-				@Override
-				public void write(int b) throws IOException {
-					super.write(b);
-					bytesRead++;
-					updateDisplay(progress, stepSize);
-				}
-
-				private void updateDisplay(final Progress progress, final int stepSize) {
-					while (stepSize > 0 && bytesRead - lastByteProgressReport > stepSize) {
-						double percent = (double) bytesRead / (10 * stepSize);
-						percent = Math.min(percent, 100.0);
-						progress.increment(String.format("%1$.2f", percent) + "%");
-						lastByteProgressReport += stepSize;
-					}
-					lastByteProgressReport = bytesRead;
-				}
-			};
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			try {
-				IOUtils.copy(response.getEntity(InputStream.class), bos);
-			} finally {
-				IOUtils.closeQuietly(bos);
-			}
-			success = true;
-		}
-
-		@Override
-		public String getLocalizedTitle() {
-			return FlexoLocalization.localizedForKey("downloading") + " " + project.getName() + " " + version.getVersionNumber();
-		}
-
-		@Override
-		public int getSteps() {
-			return 1000;
-		}
-
-		public File getFile() {
-			if (success) {
-				return file;
-			}
-			return null;
-		}
-
-	}
-
 	private List<Project> projects;
 
 	private Project selectedProject;
+	private boolean forEdition;
 
-	public ServerRestProjectListModel(ServerRestService serverRestService, Window owner) {
+	public ServerRestProjectListModel(ServerRestService serverRestService, Window owner, boolean forEdition) {
 		super(serverRestService, owner);
+		this.forEdition = forEdition;
 		projects = new ArrayList<Project>();
 	}
 
@@ -317,6 +184,9 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 	}
 
 	public boolean canOpen(Project project) {
+		if (!forEdition) {
+			return true;
+		}
 		Session session = editionSession.get(project);
 		return session == null || getUser().getLogin().equals(session.getUser());
 	}
@@ -349,13 +219,21 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 		if (!folder.canWrite()) {
 			throw new IOException(FlexoLocalization.localizedForKey("you_dont_have_access_to") + " " + folder.getAbsolutePath());
 		}
-		DownloadProjectVersion download = new DownloadProjectVersion(project, lastVersion(project));
+		DownloadProjectVersion download = new DownloadProjectVersion(project, lastVersion(project), forEdition
+				&& editionSession.get(project) == null);
 		performOperationsInSwingWorker(true, true, download);
 		if (download.getFile() != null) {
 			File tempDir = Files.createTempDir();
 			ZipUtils.unzip(download.getFile(), tempDir);
 			File tempProjectDirectory = FlexoProject.searchProjectDirectory(tempDir);
 			File projectDirectory = new File(folder, project.getName() + ".prj");
+			if (projectDirectory.exists()) {
+				if (!FlexoController.confirm(FlexoLocalization.localizedForKey("folder") + " " + projectDirectory.getAbsolutePath() + " "
+						+ FlexoLocalization.localizedForKey("already_exists") + "\n"
+						+ FlexoLocalization.localizedForKey("do_you_want_to_overwrite_local_changes") + "?")) {
+					return null;
+				}
+			}
 			FileUtils.copyContentDirToDir(tempProjectDirectory, projectDirectory, CopyStrategy.REPLACE);
 			return projectDirectory;
 		} else {

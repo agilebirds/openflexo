@@ -82,6 +82,8 @@ public class IconLibrary {
 	public static final ImageIcon DELETE_ICON = new ImageIconResource("Icons/Actions/Delete.png");
 	public static final ImageIcon HELP_ICON = new ImageIconResource("Icons/Actions/Help.png");
 	public static final ImageIcon IMPORT_ICON = new ImageIconResource("Icons/Actions/Import.png");
+	public static final ImageIcon LOCAL_IMPORT_ICON = new ImageIconResource("Icons/Actions/LocalImport.png");
+	public static final ImageIcon REMOTE_IMPORT_ICON = new ImageIconResource("Icons/Actions/RemoteImport.png");
 	public static final ImageIcon EXPORT_ICON = new ImageIconResource("Icons/Actions/Export.png");
 	public static final ImageIcon OPEN_ICON = new ImageIconResource("Icons/Actions/Open.png");
 	public static final ImageIcon NEW_ICON = new ImageIconResource("Icons/Actions/New.png");

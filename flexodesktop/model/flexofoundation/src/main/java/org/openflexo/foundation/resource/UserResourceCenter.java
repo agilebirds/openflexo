@@ -153,6 +153,10 @@ public class UserResourceCenter implements FlexoResourceCenter {
 
 	@Override
 	public void publishResource(FlexoResource<?> resource, String newVersion, IProgress progress) throws Exception {
+		if (resource.getURI() == null) {
+			logger.warning("No URI on resource " + resource.getName() + " " + resource.getClass().getName());
+			return;
+		}
 		FlexoResource<?> oldResource = retrieveResource(resource.getURI(), newVersion, resource.getResourceDataClass(), progress);
 		if (oldResource != null) {
 			storage.removeFromResources(oldResource);
@@ -213,8 +217,11 @@ public class UserResourceCenter implements FlexoResourceCenter {
 	private void checkKnownResources() throws IOException {
 		if (storage != null) {
 			boolean changed = false;
-			for (FlexoResource<?> resource : storage.getResources()) {
-				// TODO check resources
+			for (FlexoResource<?> resource : new ArrayList<FlexoResource<?>>(storage.getResources())) {
+				if (resource.getURI() == null) {
+					storage.removeFromResources(resource);
+					changed = true;
+				}
 			}
 			if (changed) {
 				saveStorage();

@@ -110,7 +110,7 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void openServerProject(Module module) {
 		final ServerRestProjectListModel model = new ServerRestProjectListModel(getDataObject().getApplicationContext()
-				.getServerRestService(), getWindow());
+				.getServerRestService(), getWindow(), true);
 
 		final FIBDialog<ServerRestProjectListModel> dialog = FIBDialog.instanciateDialog(ServerRestProjectListModel.FIB_FILE, model,
 				getWindow(), true, FlexoLocalization.getMainLocalizer());

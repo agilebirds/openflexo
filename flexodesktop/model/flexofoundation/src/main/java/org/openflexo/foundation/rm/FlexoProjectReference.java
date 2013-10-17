@@ -29,6 +29,12 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	public FlexoProjectReference init(@Parameter(REFERRED_PROJECT) FlexoProject referredProject);
 
 	/**
+	 * Synchronized the resource internal properties with the one declared in the resource data (if any). Typically, URI, version and
+	 * revision are updated with the referred project (if available).
+	 */
+	public void syncWithResourceData();
+
+	/**
 	 * Getter for the project data
 	 * 
 	 * @return the project data of this project reference

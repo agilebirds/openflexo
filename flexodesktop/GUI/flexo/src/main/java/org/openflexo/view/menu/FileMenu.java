@@ -83,6 +83,8 @@ public class FileMenu extends FlexoMenu {
 
 	public JMenu importMenu;
 
+	public JMenu importProjectMenu;
+
 	protected FlexoController _controller;
 
 	protected FileMenu(FlexoController controller) {
@@ -98,7 +100,11 @@ public class FileMenu extends FlexoMenu {
 			add(new OpenProjectFromServerItem());
 			add(recentProjectMenu = new JMenu());
 			recentProjectMenu.setText(FlexoLocalization.localizedForKey("recent_projects", recentProjectMenu));
-			add(new ImportProjectMenuItem());
+			importProjectMenu = new JMenu();
+			importProjectMenu.add(new ImportProjectMenuItem(true));
+			importProjectMenu.add(new ImportProjectMenuItem(false));
+			importProjectMenu.setText(FlexoLocalization.localizedForKey("import_project"));
+			add(importProjectMenu);
 			add(new SaveProjectItem());
 			add(new SaveAllProjectItem());
 			add(new SaveAsProjectItem());
@@ -259,7 +265,7 @@ public class FileMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			final ServerRestProjectListModel model = new ServerRestProjectListModel(getController().getApplicationContext()
-					.getServerRestService(), getController().getFlexoFrame());
+					.getServerRestService(), getController().getFlexoFrame(), true);
 
 			final FIBDialog<ServerRestProjectListModel> dialog = FIBDialog.instanciateDialog(ServerRestProjectListModel.FIB_FILE, model,
 					getController().getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -339,23 +345,28 @@ public class FileMenu extends FlexoMenu {
 
 	public class ImportProjectMenuItem extends FlexoMenuItem {
 
-		public ImportProjectMenuItem() {
-			super(new ImportProjectAction(), "import_project", null, getController(), true);
-			setIcon(IconLibrary.IMPORT_ICON);
+		public ImportProjectMenuItem(boolean fromDisk) {
+			super(new ImportProjectAction(fromDisk), fromDisk ? "from_disk" : "from_server", null, getController(), true);
+			setIcon(fromDisk ? IconLibrary.LOCAL_IMPORT_ICON : IconLibrary.REMOTE_IMPORT_ICON);
 		}
 
 	}
 
 	public class ImportProjectAction extends AbstractAction {
-		public ImportProjectAction() {
+		private boolean fromDisk;
+
+		public ImportProjectAction(boolean fromDisk) {
 			super();
+			this.fromDisk = fromDisk;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			FlexoEditor editor = getController().getEditor();
 			if (editor != null) {
-				editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
+				ImportProject importProject = ImportProject.actionType.makeNewAction(editor.getProject(), null, editor);
+				importProject.setFromDisk(fromDisk);
+				editor.performAction(importProject, e);
 			}
 		}
 

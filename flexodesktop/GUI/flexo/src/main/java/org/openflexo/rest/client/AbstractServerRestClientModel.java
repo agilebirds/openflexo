@@ -3,29 +3,46 @@ package org.openflexo.rest.client;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.ws.Holder;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.Account;
+import org.openflexo.rest.client.model.Project;
+import org.openflexo.rest.client.model.ProjectVersion;
+import org.openflexo.rest.client.model.Session;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
 import org.openflexo.view.controller.FlexoController;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 
 public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
@@ -97,6 +114,136 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 		@Override
 		public String getLocalizedTitle() {
 			return FlexoLocalization.localizedForKey("retrieving_user_information");
+		}
+
+	}
+
+	public class DownloadProjectVersion implements ServerRestClientOperation {
+
+		private final Project project;
+		private final ProjectVersion version;
+
+		private boolean success = false;
+		private File file;
+
+		private long bytesRead = 0;
+		private long lastByteProgressReport = 0;
+		private boolean startEditionSession;
+
+		public DownloadProjectVersion(Project project, ProjectVersion version, boolean startEditionSession) {
+			super();
+			this.project = project;
+			this.version = version;
+			this.startEditionSession = startEditionSession;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, final Progress progress) throws IOException, WebApplicationException {
+			Client createClient = client.createClient();
+			if (startEditionSession) {
+				Session session = new Session();
+				session.setUser(getUser());
+				session.setVersion(version);
+				try {
+					session.setDownloadDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+				} catch (DatatypeConfigurationException e1) {
+					e1.printStackTrace();
+				}
+				client.projectsProjectIDSessions(createClient, version.getProject()).postXmlAsSession(session);
+			}
+			ClientResponse response = client.projectsProjectIDVersions(createClient, version.getProject()).idFile(version.getVersionID())
+					.getAsOctetStream(ClientResponse.class);
+			if (response.getStatus() >= 400) {
+				String message = "";
+				try {
+					message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
+						.entity(message).build());
+			}
+			List<String> list = response.getHeaders().get("Content-Length");
+			long length = -1;
+			if (list != null) {
+				for (String string : list) {
+					try {
+						length = Long.valueOf(string);
+						break;
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			if (length < 1) {
+				String fileLength = client.projectsProjectIDVersions(version.getProject()).idFileLength(version.getVersionID())
+						.getAsTextPlain(String.class);
+				try {
+					length = Long.valueOf(fileLength);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+			file = File.createTempFile(StringUtils.rightPad(project.getName() + "_" + version.getVersionNumber(), 3, '_'), ".zip");
+			bytesRead = 0;
+			final int stepSize = length > 0 ? (int) length / 1000 : -1;
+			FileOutputStream fos = new FileOutputStream(file) {
+
+				@Override
+				public void write(byte[] b) throws IOException {
+					super.write(b);
+					bytesRead += b.length;
+					updateDisplay(progress, stepSize);
+				}
+
+				@Override
+				public void write(byte[] b, int off, int len) throws IOException {
+					super.write(b, off, len);
+					bytesRead += len;
+					updateDisplay(progress, stepSize);
+				}
+
+				@Override
+				public void write(int b) throws IOException {
+					super.write(b);
+					bytesRead++;
+					updateDisplay(progress, stepSize);
+				}
+
+				private void updateDisplay(final Progress progress, final int stepSize) {
+					while (stepSize > 0 && bytesRead - lastByteProgressReport > stepSize) {
+						double percent = (double) bytesRead / (10 * stepSize);
+						percent = Math.min(percent, 100.0);
+						progress.increment(String.format("%1$.2f", percent) + "%");
+						lastByteProgressReport += stepSize;
+					}
+					lastByteProgressReport = bytesRead;
+				}
+			};
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			try {
+				IOUtils.copy(response.getEntity(InputStream.class), bos);
+			} finally {
+				IOUtils.closeQuietly(bos);
+			}
+			success = true;
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("downloading") + " " + project.getName() + " " + version.getVersionNumber();
+		}
+
+		@Override
+		public int getSteps() {
+			return 1000;
+		}
+
+		public File getFile() {
+			if (success) {
+				return file;
+			}
+			return null;
 		}
 
 	}

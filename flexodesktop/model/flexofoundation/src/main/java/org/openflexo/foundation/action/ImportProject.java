@@ -39,6 +39,8 @@ public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, 
 		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
+	private boolean fromDisk = true;
+
 	private FlexoProject projectToImport;
 
 	public ImportProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
@@ -50,6 +52,7 @@ public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, 
 		FlexoProject project = getImportingProject();
 		FlexoPamelaResource<ProjectData> resource = (FlexoPamelaResource<ProjectData>) project.getProjectData(true).getFlexoResource();
 		FlexoProjectReference projectReference = resource.getModelFactory().newInstance(FlexoProjectReference.class).init(projectToImport);
+		projectReference.syncWithResourceData();
 		project.getProjectData(true).addToImportedProjects(projectReference);
 	}
 
@@ -63,6 +66,14 @@ public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, 
 
 	public void setProjectToImport(FlexoProject projectToImport) {
 		this.projectToImport = projectToImport;
+	}
+
+	public boolean isFromDisk() {
+		return fromDisk;
+	}
+
+	public void setFromDisk(boolean fromDisk) {
+		this.fromDisk = fromDisk;
 	}
 
 }
