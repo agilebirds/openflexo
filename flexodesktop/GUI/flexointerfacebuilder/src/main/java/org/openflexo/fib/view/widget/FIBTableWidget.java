@@ -143,7 +143,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			if (hasSelectableBinding()) {
 				List<Interval> selectableIntervals = getSelectableIntervals(index0, index1);
 				if (selectableIntervals.size() > 0) {
-					if (getSelectionMode() == SINGLE_INTERVAL_SELECTION) {
+					if (getSelectionMode() == SINGLE_INTERVAL_SELECTION || getSelectionMode() == SINGLE_SELECTION) {
 						Interval interval = selectableIntervals.get(selectableIntervals.size() - 1);
 						super.setSelectionInterval(interval.first, interval.last);
 					} else {
