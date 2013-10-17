@@ -21,14 +21,14 @@ package org.openflexo.fge.control.tools;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
-import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
+import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**
  * Represents a tool allowing to manage style inspectors
@@ -51,13 +51,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 
 	public abstract Inspector<ForegroundStyle> getForegroundStyleInspector();
 
-	public abstract Inspector<BackgroundStyle> getBackgroundStyleInspector();
+	public abstract Inspector<BackgroundStyleFactory> getBackgroundStyleInspector();
 
 	public abstract Inspector<TextStyle> getTextStyleInspector();
 
 	public abstract Inspector<ShadowStyle> getShadowStyleInspector();
 
-	public abstract Inspector<ShapeSpecification> getShapeInspector();
+	public abstract Inspector<ShapeFactory> getShapeInspector();
 
 	public static interface Inspector<D> {
 		public void setData(D data);

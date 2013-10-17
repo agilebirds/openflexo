@@ -273,7 +273,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
+				System.out.println("Class=" + fibComponent.getControllerClass());
 				Constructor<? extends FIBController> c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
+				System.out.println("Constructor=" + c);
 				returned = c.newInstance(fibComponent);
 			} catch (SecurityException e) {
 				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
@@ -680,9 +682,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	 */
 	public void updateSelection(FIBSelectable widget, List<Object> oldSelection, List<Object> newSelection) {
 
-		//logger.info("updateSelection() dans FIBController with " + newSelection);
-		//logger.info("widget=" + widget);
-		//logger.info("selectionLeader=" + selectionLeader);
+		// logger.info("updateSelection() dans FIBController with " + newSelection);
+		// logger.info("widget=" + widget);
+		// logger.info("selectionLeader=" + selectionLeader);
 
 		if (widget == selectionLeader) {
 			// The caller widget is the selection leader, and should fire selection change event all over the world !
@@ -721,7 +723,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void objectAddedToSelection(Object o) {
 
-		//logger.info("objectAddedToSelection() dans FIBController with " + o);
+		// logger.info("objectAddedToSelection() dans FIBController with " + o);
 
 		logger.fine("FIBController: objectAddedToSelection(): " + o);
 		Enumeration<FIBView<?, ?>> en = getViews();
@@ -745,7 +747,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void objectRemovedFromSelection(Object o) {
 
-		//logger.info("objectRemovedFromSelection() dans FIBController with " + o);
+		// logger.info("objectRemovedFromSelection() dans FIBController with " + o);
 
 		logger.fine("FIBController: objectRemovedFromSelection(): " + o);
 		Enumeration<FIBView<?, ?>> en = getViews();

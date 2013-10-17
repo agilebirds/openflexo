@@ -22,7 +22,6 @@ package org.openflexo.fge.swing.control.tools;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
@@ -30,13 +29,14 @@ import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
 import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
 import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaInspectors;
-import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
+import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
+import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
@@ -55,23 +55,33 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	private static final Logger logger = Logger.getLogger(JDianaInspectors.class.getPackage().getName());
 
 	private JInspector<ForegroundStyle> foregroundStyleInspector;
-	private JInspector<BackgroundStyle> backgroundStyleInspector;
+	private JInspector<BackgroundStyleFactory> backgroundStyleInspector;
 	private JInspector<TextStyle> textStyleInspector;
 	private JInspector<ShadowStyle> shadowInspector;
-	private JInspector<ShapeSpecification> shapeInspector;
+	private JInspector<ShapeFactory> shapeInspector;
+
+	private BackgroundStyleFactory bsFactory;
+	private ShapeFactory shapeFactory;
+
+	public JDianaInspectors() {
+		bsFactory = new BackgroundStyleFactory(null);
+		shapeFactory = new ShapeFactory(null);
+	}
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
 			foregroundStyleInspector = new JInspector<ForegroundStyle>(FIBLibrary.instance().retrieveFIBComponent(
-					FIBForegroundStyleSelector.FIB_FILE), getEditor().getCurrentForegroundStyle());
+					FIBForegroundStyleSelector.FIB_FILE), null);
+			System.out.println("Controller: " + foregroundStyleInspector.getController());
 		}
 		return foregroundStyleInspector;
 	}
 
-	public JInspector<BackgroundStyle> getBackgroundStyleInspector() {
+	public JInspector<BackgroundStyleFactory> getBackgroundStyleInspector() {
 		if (backgroundStyleInspector == null) {
-			backgroundStyleInspector = new JInspector<BackgroundStyle>(FIBLibrary.instance().retrieveFIBComponent(
-					FIBBackgroundStyleSelector.FIB_FILE), getEditor().getCurrentBackgroundStyle());
+			// bsFactory = new BackgroundStyleFactory(getEditor().getCurrentBackgroundStyle());
+			backgroundStyleInspector = new JInspector<BackgroundStyleFactory>(FIBLibrary.instance().retrieveFIBComponent(
+					FIBBackgroundStyleSelector.FIB_FILE), bsFactory);
 		}
 		return backgroundStyleInspector;
 	}
@@ -92,10 +102,11 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		return shadowInspector;
 	}
 
-	public JInspector<ShapeSpecification> getShapeInspector() {
+	public JInspector<ShapeFactory> getShapeInspector() {
 		if (shapeInspector == null) {
-			shapeInspector = new JInspector<ShapeSpecification>(FIBLibrary.instance().retrieveFIBComponent(FIBShapeSelector.FIB_FILE),
-					getEditor().getCurrentShape());
+			// shapeFactory = new ShapeFactory(getEditor().getCurrentShape());
+			shapeInspector = new JInspector<ShapeFactory>(FIBLibrary.instance().retrieveFIBComponent(FIBShapeSelector.FIB_FILE),
+					shapeFactory);
 		}
 		return shapeInspector;
 	}
@@ -132,12 +143,16 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 			getForegroundStyleInspector().setData(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
-			getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
-			getShapeInspector().setData(getEditor().getCurrentShape());
-			getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
+			shapeFactory.setShape(getEditor().getCurrentShape());
+			// getShapeInspector().setData(getEditor().getCurrentShape());
+			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
 			getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
 		}
 	}

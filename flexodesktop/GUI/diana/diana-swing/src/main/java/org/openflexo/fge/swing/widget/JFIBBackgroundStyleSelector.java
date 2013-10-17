@@ -68,16 +68,30 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 	private static final Color DEFAULT_COLOR1 = Color.RED;
 	// private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
+	private BackgroundStyleFactory factory;
+
 	private BackgroundStyle _revertValue;
 
 	protected BackgroundStyleDetailsPanel _selectorPanel;
 
 	private BackgroundStylePreviewPanel backgroundStylePreviewPanel;
 
-	public JFIBBackgroundStyleSelector(BackgroundStyle editedObject) {
-		super(editedObject);
-		setRevertValue(editedObject != null ? (BackgroundStyle) editedObject.clone() : null);
+	public JFIBBackgroundStyleSelector(BackgroundStyleFactory factory) {
+		super(factory.getBackgroundStyle());
+		this.factory = factory;
+		setRevertValue(factory.getBackgroundStyle() != null ? (BackgroundStyle) factory.getBackgroundStyle().clone() : null);
 		setFocusable(true);
+	}
+
+	public BackgroundStyleFactory getFactory() {
+		if (factory == null) {
+			factory = new BackgroundStyleFactory(getEditedObject());
+		}
+		return factory;
+	}
+
+	public void setFactory(BackgroundStyleFactory factory) {
+		this.factory = factory;
 	}
 
 	@Override
@@ -145,17 +159,17 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 		private FIBComponent fibComponent;
 		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
-		private BackgroundStyleFactory bsFactory;
+
+		// private BackgroundStyleFactory bsFactory;
 
 		protected BackgroundStyleDetailsPanel(BackgroundStyle backgroundStyle) {
 			super();
 
-			bsFactory = new BackgroundStyleFactory(backgroundStyle);
 			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
 			controller = new CustomFIBController(fibComponent);
 			fibView = controller.buildView(fibComponent);
 
-			controller.setDataObject(bsFactory);
+			controller.setDataObject(getFactory());
 
 			setLayout(new BorderLayout());
 			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
@@ -163,8 +177,8 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 		public void update() {
 			// logger.info("Update with " + getEditedObject());
-			bsFactory.setBackgroundStyle(getEditedObject());
-			controller.setDataObject(bsFactory, true);
+			getFactory().setBackgroundStyle(getEditedObject());
+			controller.setDataObject(getFactory(), true);
 		}
 
 		@Override
@@ -175,11 +189,11 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 		public void delete() {
 			controller.delete();
 			fibView.delete();
-			bsFactory.delete();
+			getFactory().delete();
 			fibComponent = null;
 			controller = null;
 			fibView = null;
-			bsFactory = null;
+			factory = null;
 		}
 
 		public class CustomFIBController extends FIBController {
@@ -188,7 +202,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 			}
 
 			public void apply() {
-				setEditedObject(bsFactory.getBackgroundStyle());
+				setEditedObject(getFactory().getBackgroundStyle());
 				JFIBBackgroundStyleSelector.this.apply();
 			}
 
@@ -198,14 +212,14 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 			public void parameterChanged() {
 				// System.out.println("parameterChanged() for "+bsFactory.getBackgroundStyle());
-				setEditedObject(bsFactory.getBackgroundStyle());
+				setEditedObject(getFactory().getBackgroundStyle());
 				getFrontComponent().update();
 				// notifyApplyPerformed();
 			}
 
 			public void backgroundStyleChanged() {
 				// System.out.println("backgroundStyleChanged() for "+bsFactory.getBackgroundStyle());
-				setEditedObject(bsFactory.getBackgroundStyle());
+				setEditedObject(getFactory().getBackgroundStyle());
 				getFrontComponent().update();
 				notifyApplyPerformed();
 			}

@@ -53,10 +53,24 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 	protected ShapeDetailsPanel _selectorPanel;
 	private JShapePreviewPanel frontComponent;
 
-	public JFIBShapeSelector(ShapeSpecification editedObject) {
-		super(editedObject);
-		setRevertValue(editedObject != null ? (ShapeSpecification) editedObject.clone() : null);
+	private ShapeFactory factory;
+
+	public JFIBShapeSelector(ShapeFactory factory) {
+		super(factory.getShape());
+		this.factory = factory;
+		setRevertValue(factory.getShape() != null ? (ShapeSpecification) factory.getShape().clone() : null);
 		setFocusable(true);
+	}
+
+	public ShapeFactory getFactory() {
+		if (factory == null) {
+			factory = new ShapeFactory(getEditedObject());
+		}
+		return factory;
+	}
+
+	public void setFactory(ShapeFactory factory) {
+		this.factory = factory;
 	}
 
 	@Override
@@ -113,17 +127,15 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 		private FIBComponent fibComponent;
 		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
-		private ShapeFactory shapeFactory;
 
 		protected ShapeDetailsPanel(ShapeSpecification backgroundStyle) {
 			super();
 
-			shapeFactory = new ShapeFactory(backgroundStyle);
 			fibComponent = FIBLibrary.instance().retrieveFIBComponent(FIB_FILE);
 			controller = new CustomFIBController(fibComponent);
 			fibView = controller.buildView(fibComponent);
 
-			controller.setDataObject(shapeFactory);
+			controller.setDataObject(getFactory());
 
 			setLayout(new BorderLayout());
 			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
@@ -132,8 +144,8 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 		public void update() {
 			// logger.info("Update with " + getEditedObject());
-			shapeFactory.setShape(getEditedObject());
-			controller.setDataObject(shapeFactory, true);
+			getFactory().setShape(getEditedObject());
+			controller.setDataObject(getFactory(), true);
 		}
 
 		@Override
@@ -144,11 +156,11 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 		public void delete() {
 			controller.delete();
 			fibView.delete();
-			shapeFactory.delete();
+			factory.delete();
 			fibComponent = null;
 			controller = null;
 			fibView = null;
-			shapeFactory = null;
+			factory = null;
 		}
 
 		public class CustomFIBController extends FIBController {
@@ -157,7 +169,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 			}
 
 			public void apply() {
-				setEditedObject(shapeFactory.getShape());
+				setEditedObject(getFactory().getShape());
 				JFIBShapeSelector.this.apply();
 			}
 
@@ -167,14 +179,14 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 			public void shapeChanged() {
 
-				getFrontComponent().setShape(shapeFactory.getShape());
+				getFrontComponent().setShape(getFactory().getShape());
 				// getFrontComponent().update();
 
 				FIBView<?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
 					JComponent customComponent = ((FIBCustomWidget<?, ?>) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
-						((JShapePreviewPanel) customComponent).setShape(shapeFactory.getShape());
+						((JShapePreviewPanel) customComponent).setShape(getFactory().getShape());
 						// ((ShapePreviewPanel) customComponent).update();
 					}
 				}

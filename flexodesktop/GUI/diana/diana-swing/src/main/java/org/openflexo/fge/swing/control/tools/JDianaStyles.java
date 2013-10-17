@@ -83,12 +83,16 @@ public class JDianaStyles extends DianaStyles<JToolBar, SwingViewFactory> {
 			getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
-			getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
-			getShapeSelector().setEditedObject(getEditor().getCurrentShape());
-			getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
+			shapeFactory.setShape(getEditor().getCurrentShape());
+			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
+			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
 			getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
 		}
 	}

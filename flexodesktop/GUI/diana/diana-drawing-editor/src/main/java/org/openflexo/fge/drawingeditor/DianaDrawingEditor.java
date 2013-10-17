@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
@@ -162,6 +163,9 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 	@Override
 	public void addToSelectedObjects(DrawingTreeNode<?, ?> anObject) {
+		if (anObject == null) {
+			return;
+		}
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
@@ -174,6 +178,9 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 	@Override
 	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> anObject) {
+		if (anObject == null) {
+			return;
+		}
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
@@ -307,7 +314,16 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 				getLastClickedPoint();
 
-				getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+				Object pasted = getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+				if (clipboard.isSingleObject()) {
+					addToSelectedObjects(getDrawing().getDrawingTreeNode(pasted));
+				} else {
+					clearSelection();
+					for (Object o : (List<?>) pasted) {
+						addToSelectedObjects(getDrawing().getDrawingTreeNode(o));
+					}
+				}
+
 			} catch (ModelExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -318,6 +334,7 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		}
 	}
 

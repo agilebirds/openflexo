@@ -80,9 +80,8 @@ public class JavaPropertyPathElement extends SimplePathElement {
 		try {
 			Object obj = KeyValueDecoder.objectForKey(target, getPropertyName());
 			return obj;
-		}
-		catch (InvalidObjectSpecificationException e) {
-			logger.warning("Cannot retrieve Java property Value for: " + getPropertyName());
+		} catch (InvalidObjectSpecificationException e) {
+			logger.warning("Cannot retrieve Java property Value for: " + getPropertyName() + " target=" + target);
 		}
 		return null;
 	}

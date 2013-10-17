@@ -44,6 +44,7 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.swing.control.SwingToolFactory;
+import org.openflexo.fge.swing.control.tools.JDianaInspectors;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
@@ -96,6 +97,7 @@ public class DiagramEditorApplication {
 	private JDianaStyles stylesWidget;
 	private JDianaPalette commonPalette;
 	private DiagramEditorPalette commonPaletteModel;
+	private JDianaInspectors inspectors;
 
 	public DiagramEditorApplication() {
 		super();
@@ -126,6 +128,8 @@ public class DiagramEditorApplication {
 		toolSelector = SwingToolFactory.INSTANCE.makeDianaToolSelector(null);
 		stylesWidget = SwingToolFactory.INSTANCE.makeDianaStyles();
 		scaleSelector = SwingToolFactory.INSTANCE.makeDianaScaleSelector(null);
+		inspectors = SwingToolFactory.INSTANCE.makeDianaInspectors();
+		inspectors.getForegroundStyleInspector().setVisible(true);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(toolSelector.getComponent());
@@ -355,6 +359,7 @@ public class DiagramEditorApplication {
 		scaleSelector.attachToEditor(diagramEditor.getController());
 		commonPaletteModel.setEditor(diagramEditor.getController());
 		commonPalette.attachToEditor(diagramEditor.getController());
+		inspectors.attachToEditor(diagramEditor.getController());
 
 		/*JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(currentDiagramEditor.getController().getToolbox().getStyleToolBar());

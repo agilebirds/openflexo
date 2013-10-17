@@ -22,7 +22,6 @@ package org.openflexo.fge.swing;
 
 import javax.swing.JComponent;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
@@ -53,6 +52,8 @@ import org.openflexo.fge.swing.widget.JFIBTextStyleSelector;
 import org.openflexo.fge.swing.widget.JShapePreviewPanel;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
+import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**
  * Represent the view factory for Swing technology
@@ -125,8 +126,8 @@ public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JCom
 	}
 
 	@Override
-	public JFIBBackgroundStyleSelector makeFIBBackgroundStyleSelector(BackgroundStyle backgroundStyle) {
-		return new JFIBBackgroundStyleSelector(backgroundStyle);
+	public JFIBBackgroundStyleSelector makeFIBBackgroundStyleSelector(BackgroundStyleFactory backgroundStyleFactory) {
+		return new JFIBBackgroundStyleSelector(backgroundStyleFactory);
 	}
 
 	@Override
@@ -145,8 +146,8 @@ public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JCom
 	}
 
 	@Override
-	public JFIBShapeSelector makeFIBShapeSelector(ShapeSpecification shapeSpecification) {
-		return new JFIBShapeSelector(shapeSpecification);
+	public JFIBShapeSelector makeFIBShapeSelector(ShapeFactory shapeFactory) {
+		return new JFIBShapeSelector(shapeFactory);
 	}
 
 	@Override

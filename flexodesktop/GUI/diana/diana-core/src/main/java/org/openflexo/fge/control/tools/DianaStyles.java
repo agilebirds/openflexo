@@ -35,9 +35,11 @@ import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
+import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
+import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
@@ -66,6 +68,9 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	private TextStyle defaultTextStyle;
 	private ShadowStyle defaultShadowStyle;
 	private ShapeSpecification defaultShape;
+
+	protected BackgroundStyleFactory bsFactory;
+	protected ShapeFactory shapeFactory;
 
 	public DianaStyles() {
 		defaultForegroundStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultForegroundStyle();
@@ -141,7 +146,8 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBBackgroundStyleSelector<?> getBackgroundSelector() {
 		if (backgroundSelector == null) {
-			backgroundSelector = getDianaFactory().makeFIBBackgroundStyleSelector(getCurrentBackgroundStyle());
+			bsFactory = new BackgroundStyleFactory(getCurrentBackgroundStyle());
+			backgroundSelector = getDianaFactory().makeFIBBackgroundStyleSelector(bsFactory);
 			backgroundSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
@@ -211,7 +217,8 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBShapeSelector<?> getShapeSelector() {
 		if (shapeSelector == null) {
-			shapeSelector = getDianaFactory().makeFIBShapeSelector(getCurrentShape());
+			shapeFactory = new ShapeFactory(getCurrentShape());
+			shapeSelector = getDianaFactory().makeFIBShapeSelector(shapeFactory);
 			shapeSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
