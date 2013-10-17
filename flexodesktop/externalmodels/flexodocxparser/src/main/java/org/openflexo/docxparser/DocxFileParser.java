@@ -142,7 +142,7 @@ public class DocxFileParser {
 					parsedFlexoDescription.addHtmlDescription(descTag.getTarget(), parsedHtml);
 				} else if (tagValue.startsWith(FlexoNameTag.FLEXONAMETAG)) {
 
-					String text = extractTextContent(sdtContentElement);
+					String text = extractTextContent(sdtContentElement, " ");
 
 					FlexoNameTag nameTag = new FlexoNameTag(tagValue);
 					if (text.length() > 0) {
@@ -152,7 +152,7 @@ public class DocxFileParser {
 				} else if (tagValue.startsWith(FlexoTitleTag.FLEXOTITLETAG)) {
 					FlexoTitleTag titleTag = new FlexoTitleTag(tagValue);
 
-					String text = extractTextContent(sdtContentElement);
+					String text = extractTextContent(sdtContentElement, " ");
 
 					if (text.length() > 0) {
 						IParsedFlexoTitle parsedFlexoTitle = parsedDocx.getOrCreateParsedTitle(titleTag.getFlexoId(), titleTag.getUserId());
@@ -167,8 +167,8 @@ public class DocxFileParser {
 					// * styled text
 					// Reinjection shall then choose the appropriate extract according the info
 					// available in VP.
-					String text = extractTextContent(sdtContentElement);
-					String multilineText = extractMultilineTextContent(sdtContentElement);
+					String text = extractTextContent(sdtContentElement, " ");
+					String multilineText = extractTextContent(sdtContentElement, StringUtils.LINE_SEPARATOR);
 					ParsedHtml parsedHtml = OpenXml2Html.getHtml(sdtContentElement, getDocumentPart(), availableCssClasses,
 							resourcesDirectory);
 					if (text.length() > 0) {
@@ -192,45 +192,22 @@ public class DocxFileParser {
 		return parsedDocx;
 	}
 
-	public String extractTextContent(Element sdtContentElement) {
-		StringBuilder sb = new StringBuilder();
-		/*Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
-		while (iteratorWp.hasNext()) {
-			Element wpElement = (Element) iteratorWp.next();*/
-		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
-		while (iteratorWt.hasNext()) {
-			if (sb.length() > 0) {
-				sb.append(' ');
-			}
-			Element textElement = (Element) iteratorWt.next();
-			sb.append(textElement.getText());
-		}
-		/*if (iteratorWp.hasNext()) {
-			sb.append(StringUtils.LINE_SEPARATOR);
-		}
-		}*/
-		return sb.toString().trim();
-	}
-
-	private String extractMultilineTextContent(Element sdtContentElement) {
+	private String extractTextContent(Element sdtContentElement, String paragraphSeparator) {
 		StringBuilder sb = new StringBuilder();
 		Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
 		while (iteratorWp.hasNext()) {
 			Element wpElement = (Element) iteratorWp.next();
 			Iterator<?> iteratorWt = wpElement.selectNodes("descendant::w:t | descendant::w:br").iterator();
 			while (iteratorWt.hasNext()) {
-				if (sb.length() > 0) {
-					sb.append(' ');
-				}
 				Element textElement = (Element) iteratorWt.next();
 				if (textElement.getName().equals("br")) {
-					sb.append(StringUtils.LINE_SEPARATOR);
+					sb.append(paragraphSeparator);
 				} else {
 					sb.append(textElement.getText());
 				}
 			}
 			if (iteratorWp.hasNext()) {
-				sb.append(StringUtils.LINE_SEPARATOR);
+				sb.append(paragraphSeparator);
 			}
 		}
 		return sb.toString().trim();
