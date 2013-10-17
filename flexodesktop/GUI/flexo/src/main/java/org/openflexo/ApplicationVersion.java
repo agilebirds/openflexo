@@ -50,7 +50,7 @@ public class ApplicationVersion {
 				FileResource commit = new FileResource(".git/" + headContent);
 				if (commit.exists()) {
 					commitInputStream = new FileInputStream(commit);
-					COMMIT_ID = IOUtils.toString(commitInputStream);
+					COMMIT_ID = IOUtils.toString(commitInputStream).trim();
 					System.err.println("Found COMMIT ID " + COMMIT_ID);
 				}
 			}
