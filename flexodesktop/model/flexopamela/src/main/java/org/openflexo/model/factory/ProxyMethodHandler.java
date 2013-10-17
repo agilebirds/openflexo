@@ -47,6 +47,7 @@ import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.ModelFactory.PAMELAProxyFactory;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
+import com.google.common.base.Defaults;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -180,6 +181,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	@Override
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
+		Object invoke = _invoke(self, method, proceed, args);
+		if (method.getReturnType().isPrimitive() && invoke == null) {
+			// Avoids an NPE
+			invoke = Defaults.defaultValue(method.getReturnType());
+		}
+		return invoke;
+	}
+
+	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
 		// System.out.println("Invoke " + method);
 		Initializer initializer = method.getAnnotation(Initializer.class);
