@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.connectors.Connector;
+import org.openflexo.fge.connectors.LineConnector;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.view.FGEView;
 import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
@@ -48,9 +54,13 @@ import org.openflexo.localization.FlexoLocalization;
 public class DrawEdgeControl extends MouseDragControl {
 
 	protected Point currentDraggingLocationInDrawingView = null;
+	protected Point sourceDraggingLocationInDrawingView = null;
 	protected boolean drawEdge = false;
 	protected DiagramShapeGR fromShape = null;
 	protected DiagramShapeGR toShape = null;
+	private FGEPoint sourcePoint;
+	private FGEPoint targetPoint;
+	private boolean centerToCenter;
 
 	public DrawEdgeControl() {
 		super("Draw edge", MouseButton.LEFT, false, true, false, false); // CTRL DRAG
@@ -65,6 +75,15 @@ public class DrawEdgeControl extends MouseDragControl {
 				drawEdge = true;
 				fromShape = (DiagramShapeGR) graphicalRepresentation;
 				((DiagramView) controller.getDrawingView()).setDrawEdgeAction(this);
+				
+				sourceDraggingLocationInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
+						controller.getDrawingView());
+				if(sourcePoint==null){
+					sourcePoint = new FGEPoint();
+				}
+				if(targetPoint==null){
+					targetPoint = new FGEPoint();
+				}
 				return true;
 			}
 			return false;
@@ -128,6 +147,15 @@ public class DrawEdgeControl extends MouseDragControl {
 						action.setToShape(to);
 						action.setAutomaticallyCreateConnector(true);
 						action.doAction();
+						// PRI REQUIREMENT
+						if(!centerToCenter){
+							Connector connector = action.getConnector().getGraphicalRepresentation().getConnector();
+							connector.getStartLocation().setX(sourcePoint.getX());
+							connector.getStartLocation().setY(sourcePoint.getY());
+							connector.getEndLocation().setX(targetPoint.getX());
+							connector.getEndLocation().setY(targetPoint.getY());
+							connector.refreshConnector(true);;
+						}
 					}
 
 				}
@@ -233,12 +261,52 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		public void paint(Graphics g, DrawingController<?> controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
-				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());
+				
+				// Before PRI, the default points were at center of shapes.
+				/*Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
+						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());*/
+				
+				// PRI REQUIREMENT
+				centerToCenter = true;
+				Point from = sourceDraggingLocationInDrawingView;
+				FGEPoint fgePointFrom = new FGEPoint(from);
+				fgePointFrom = GraphicalRepresentation.convertNormalizedPoint(controller.getDrawingGraphicalRepresentation(), fgePointFrom, fromShape);
+				
+				// Must check if this point is closed to outline or center
+				fgePointFrom = fgePointFrom.getNearestPoint(fgePointFrom, fromShape.getShape().CENTER,fromShape.getShape().nearestOutlinePoint(fgePointFrom));
+				if(!fgePointFrom.equals(fromShape.getShape().CENTER)){
+					sourcePoint.setX(fgePointFrom.getX());
+					sourcePoint.setY(fgePointFrom.getY());
+					centerToCenter=false;
+				}
+				else{
+					centerToCenter=true;
+				}
+				fgePointFrom = GraphicalRepresentation.convertNormalizedPoint(fromShape.getShape().getGraphicalRepresentation(), fgePointFrom,
+						controller.getDrawingGraphicalRepresentation());
+				from = fgePointFrom.toPoint();
+				sourceDraggingLocationInDrawingView=from;
+				
 				Point to = currentDraggingLocationInDrawingView;
 				if (toShape != null) {
-					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-							toShape.getShape().getShape().getCenter(), toShape, controller.getScale());
+					// PRI REQUIREMENT
+					FGEPoint fgePointTo = new FGEPoint(to);
+					fgePointTo = GraphicalRepresentation.convertNormalizedPoint(controller.getDrawingGraphicalRepresentation(), fgePointTo, toShape);
+
+					// Must check if this point is closed to outline or center
+					fgePointTo = fgePointTo.getNearestPoint(fgePointTo, toShape.getShape().CENTER,toShape.getShape().nearestOutlinePoint(fgePointTo));
+					
+					if(!fgePointTo.equals(toShape.getShape().CENTER)){
+						targetPoint.setX(fgePointTo.getX());
+						targetPoint.setY(fgePointTo.getY());
+						centerToCenter=false;
+					}
+
+					fgePointTo = GraphicalRepresentation.convertNormalizedPoint(toShape.getShape().getGraphicalRepresentation(), fgePointTo,
+							controller.getDrawingGraphicalRepresentation());
+					to = fgePointTo.toPoint();
+					currentDraggingLocationInDrawingView = to;
+
 					g.setColor(Color.BLUE);
 				} else {
 					g.setColor(Color.RED);
