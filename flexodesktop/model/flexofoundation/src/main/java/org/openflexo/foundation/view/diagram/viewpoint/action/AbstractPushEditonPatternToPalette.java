@@ -103,12 +103,16 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 				gr.setHeight(imageHeight);
 				gr.setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 				gr.setIsFloatingLabel(false);
+				gr.setX(xLocation);
+				gr.setY(yLocation);
 				graphicalRepresentation = gr;
 			} else {
 				GraphicalRepresentation gr = getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					graphicalRepresentation = new ShapeGraphicalRepresentation();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
+					((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
+					((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
 				} else if (gr instanceof ConnectorGraphicalRepresentation) {
 					graphicalRepresentation = new ConnectorGraphicalRepresentation();
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
@@ -119,7 +123,7 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 			_newPaletteElement.setEditionPattern(editionPattern);
 			_newPaletteElement.setDropScheme(dropScheme);
 			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
-			
+		
 			
 			/*for (DrawingObjectEntry entry : drawingObjectEntries) {
 				if(!entry.isMainEntry()){
@@ -153,11 +157,6 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 					}
 				}
 			}
-			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
-				((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
-			}
-			
 			
 		} else {
 			logger.warning("Focused role is null !");
