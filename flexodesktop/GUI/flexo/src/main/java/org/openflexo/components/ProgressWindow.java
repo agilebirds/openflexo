@@ -29,6 +29,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -140,7 +141,29 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	};
 
-	public synchronized static ProgressWindow makeProgressWindow(String title, int steps) {
+	public synchronized static ProgressWindow makeProgressWindow(final String title, final int steps) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						_makeProgressWindow(title, steps);
+					}
+				});
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return _instance;
+		} else {
+			return _makeProgressWindow(title, steps);
+		}
+	}
+
+	private static ProgressWindow _makeProgressWindow(String title, int steps) {
 		if (_instance != null) {
 			logger.warning("Invoke creation of new progress window while an other one is displayed. Using old one.");
 		} else {
@@ -279,9 +302,18 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void showProgressWindow(String title, int steps) {
+	public synchronized static void showProgressWindow(final String title, final int steps) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					showProgressWindow(title, steps);
+				}
+			});
+			return;
+		}
 		if (_instance != null) {
-			logger.warning("Try to open another ProgressWindow !!!!");
+			_instance.setVisible(true);
 		} else {
 			_instance = new ProgressWindow(title, steps);
 		}
@@ -290,7 +322,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	public synchronized static void hideProgressWindow() {
 		if (_instance != null) {
 			_instance.hideWindow();
-			_instance = null;
 		}
 	}
 
@@ -323,15 +354,12 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	@Override
 	public void setProgress(final String stepName) {
-		final boolean wasVisible = isVisible();
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
 				public void run() {
-					if (ProgressWindow.this.isVisible() || !wasVisible) {
-						setProgress(stepName);
-					}
+					setProgress(stepName);
 				}
 			});
 			return;
@@ -420,7 +448,16 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		paintImmediately();
 	}
 
-	public synchronized static void setProgressInstance(String stepName) {
+	public synchronized static void setProgressInstance(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					setProgressInstance(stepName);
+				}
+			});
+			return;
+		}
 		if (instance() != null) {
 			if (!instance().isVisible()) {
 				instance().setVisible(true);
@@ -429,13 +466,31 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void resetSecondaryProgressInstance(int steps) {
+	public synchronized static void resetSecondaryProgressInstance(final int steps) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					resetSecondaryProgressInstance(steps);
+				}
+			});
+			return;
+		}
 		if (instance() != null) {
 			instance().resetSecondaryProgress(steps);
 		}
 	}
 
-	public synchronized static void setSecondaryProgressInstance(String stepName) {
+	public synchronized static void setSecondaryProgressInstance(final String stepName) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					setSecondaryProgressInstance(stepName);
+				}
+			});
+			return;
+		}
 		if (instance() != null) {
 			instance().setSecondaryProgress(stepName);
 		}
