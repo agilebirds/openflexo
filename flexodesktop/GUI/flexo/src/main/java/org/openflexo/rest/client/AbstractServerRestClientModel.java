@@ -424,14 +424,14 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 					dialog.setVisible(false);
 					dialog.dispose();
 				}
-				if (useProgressWindow) {
-					ProgressWindow.hideProgressWindow();
-				}
 			}
 		};
 		worker.execute();
 		if (dialog != null) {
 			dialog.setVisible(true);
+		}
+		if (useProgressWindow) {
+			ProgressWindow.hideProgressWindow();
 		}
 	}
 
