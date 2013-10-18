@@ -151,8 +151,10 @@ public class ResourceLocator {
 						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
 					}
 					directoriesSearchOrder.add(workingDirectory);
-					// Next line is used in development to retrieve the current commit (See class ApplicationVersion).
-					directoriesSearchOrder.add(flexoDesktopDirectory.getParentFile());
+					if (flexoDesktopDirectory != null) {
+						// Next line is used in development to retrieve the current commit (See class ApplicationVersion).
+						directoriesSearchOrder.add(flexoDesktopDirectory.getParentFile());
+					}
 				}
 			}
 		}
