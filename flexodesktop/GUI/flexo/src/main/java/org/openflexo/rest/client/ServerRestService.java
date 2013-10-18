@@ -25,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -53,7 +52,6 @@ import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
 
 public class ServerRestService implements HasPropertyChangeSupport {
 
@@ -146,99 +144,106 @@ public class ServerRestService implements HasPropertyChangeSupport {
 
 		private void handleRemoteDocJob(ServerRestClient client, Client createClient, EntityManager em, WatchedRemoteDocJob watchedRemoteJob)
 				throws Exception {
-			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("originalJobId", watchedRemoteJob.getRemoteJobId());
-			List<JobHistory> jobHistory = client.jobsHistory(createClient, builder.build()).getAsXml(new GenericType<List<JobHistory>>() {
-			});
-			if (jobHistory.size() > 0) {
-				JobHistory history = jobHistory.get(0);
-				String uuid = history.getJobResult();
-				ClientResponse response = client.files(createClient, client.getBASE_URI()).getAsOctetStream(uuid, ClientResponse.class);
-				if (response.getStatus() >= 400) {
-					String message = "";
-					try {
-						message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
-							.entity(message).build());
+			JobHistory history;
+			try {
+				history = client.jobsHistory(createClient, client.getBASE_URI()).jobsIdHistory(watchedRemoteJob.getRemoteJobId())
+						.getAsJobHistoryXml();
+			} catch (WebApplicationException e) {
+				e.printStackTrace();
+				if (e.getResponse().getStatus() == 404) {
+					// This is normal, it just means that the jobs is not finished
+					return;
+				} else {
+					throw e;
 				}
-				String fileName = uuid;
-				List<String> list = response.getHeaders().get("Content-Disposition");
-				for (String string : list) {
-					int indexOf = string.toLowerCase().indexOf("filename");
-					if (indexOf > -1) {
-						string = string.substring(indexOf + "filename".length());
-						indexOf = string.indexOf('=');
-						fileName = string.substring(indexOf + 1).trim();
-					}
-				}
-
-				File saveToFile = null;
-				File fileToOpen = null;
-				InputStream input = null;
-				FileOutputStream fos = null;
-				BufferedOutputStream bos = null;
+			}
+			String uuid = history.getJobResult();
+			ClientResponse response = client.files(createClient, client.getBASE_URI()).getAsOctetStream(uuid, ClientResponse.class);
+			if (response.getStatus() >= 400) {
+				String message = "";
 				try {
-					File saveToFolder = new File(watchedRemoteJob.getSaveToFolder());
-					if (watchedRemoteJob.isUnzip()) {
-						saveToFile = File.createTempFile(StringUtils.rightPad(fileName, 3, '_'), ".zip");
-					} else {
-						saveToFile = new File(saveToFolder, fileName);
-						fileToOpen = saveToFile;
+					message = IOUtils.toString(response.getEntityInputStream(), "utf-8");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
+						.entity(message).build());
+			}
+			String fileName = uuid;
+			List<String> list = response.getHeaders().get("Content-Disposition");
+			for (String string : list) {
+				int indexOf = string.toLowerCase().indexOf("filename");
+				if (indexOf > -1) {
+					string = string.substring(indexOf + "filename".length());
+					indexOf = string.indexOf('=');
+					fileName = string.substring(indexOf + 1).trim();
+				}
+			}
+
+			File saveToFile = null;
+			File fileToOpen = null;
+			InputStream input = null;
+			FileOutputStream fos = null;
+			BufferedOutputStream bos = null;
+			try {
+				File saveToFolder = new File(watchedRemoteJob.getSaveToFolder());
+				if (watchedRemoteJob.isUnzip()) {
+					saveToFile = File.createTempFile(StringUtils.rightPad(fileName, 3, '_'), ".zip");
+				} else {
+					saveToFile = new File(saveToFolder, fileName);
+					fileToOpen = saveToFile;
+				}
+				saveToFile.getParentFile().mkdirs();
+				fos = new FileOutputStream(saveToFile);
+				bos = new BufferedOutputStream(fos);
+				input = response.getEntity(InputStream.class);
+				IOUtils.copy(input, bos);
+				if (watchedRemoteJob.isUnzip()) {
+					saveToFolder = new File(saveToFile, saveToFile.getName().substring(0, saveToFile.getName().length() - 4));
+					saveToFolder.mkdir();
+					ZipUtils.unzip(saveToFile, saveToFolder);
+					Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);
+					if (listFiles.size() == 0) {
+						listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, true);
 					}
-					saveToFile.getParentFile().mkdirs();
-					fos = new FileOutputStream(saveToFile);
-					bos = new BufferedOutputStream(fos);
-					input = response.getEntity(InputStream.class);
-					IOUtils.copy(input, bos);
-					if (watchedRemoteJob.isUnzip()) {
-						saveToFolder = new File(saveToFile, saveToFile.getName().substring(0, saveToFile.getName().length() - 4));
-						saveToFolder.mkdir();
-						ZipUtils.unzip(saveToFile, saveToFolder);
-						Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);
-						if (listFiles.size() == 0) {
-							listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, true);
+					if (listFiles.size() == 0) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not find html file in zip extracted at: " + saveToFolder.getAbsolutePath());
 						}
-						if (listFiles.size() == 0) {
-							if (logger.isLoggable(Level.WARNING)) {
-								logger.warning("Could not find html file in zip extracted at: " + saveToFolder.getAbsolutePath());
-							}
-							fileToOpen = saveToFile;
-						} else if (listFiles.size() == 1) {
-							fileToOpen = listFiles.iterator().next();
-						} else {
-							fileToOpen = null;
-							int curIndex = Integer.MAX_VALUE;
-							for (File f : listFiles) {
-								if (fileToOpen == null) {
+						fileToOpen = saveToFile;
+					} else if (listFiles.size() == 1) {
+						fileToOpen = listFiles.iterator().next();
+					} else {
+						fileToOpen = null;
+						int curIndex = Integer.MAX_VALUE;
+						for (File f : listFiles) {
+							if (fileToOpen == null) {
+								fileToOpen = f;
+							} else {
+								int index = HTML_FILE_ORDER.indexOf(f.getName().toLowerCase());
+								if (index > -1 && index < curIndex) {
+									curIndex = index;
 									fileToOpen = f;
-								} else {
-									int index = HTML_FILE_ORDER.indexOf(f.getName().toLowerCase());
-									if (index > -1 && index < curIndex) {
-										curIndex = index;
-										fileToOpen = f;
-									}
 								}
 							}
 						}
 					}
-					em.getTransaction().begin();
-					em.remove(watchedRemoteJob);
-					em.getTransaction().commit();
-				} finally {
-					IOUtils.closeQuietly(input);
-					IOUtils.closeQuietly(bos);
-					if (em.getTransaction().isActive()) {
-						em.getTransaction().rollback();
-					}
-					if (watchedRemoteJob.isOpenDocument()) {
-						if (Desktop.isDesktopSupported()) {
-							try {
-								Desktop.getDesktop().open(fileToOpen);
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+				}
+				em.getTransaction().begin();
+				em.remove(watchedRemoteJob);
+				em.getTransaction().commit();
+			} finally {
+				IOUtils.closeQuietly(input);
+				IOUtils.closeQuietly(bos);
+				if (em.getTransaction().isActive()) {
+					em.getTransaction().rollback();
+				}
+				if (watchedRemoteJob.isOpenDocument()) {
+					if (Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(fileToOpen);
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
 					}
 				}

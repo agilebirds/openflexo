@@ -11,7 +11,7 @@
         <ButtonColumn action="data.showDocuments(iterator,controller.getWindow())" data="controller.getLocalizedForKey(&quot;show_generated_documents&quot;)" title="documents" columnWidth="100" resizable="true" displayTitle="true" name="button" />
         <ButtonColumn action="data.generateDocumentation(iterator)" enabled="((iterator.tocEntries.size &gt; 0) &amp; (data.serverProject.availableDocToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_doc&quot;) + &quot; (&quot;) + data.serverProject.availableDocToken) + &quot;)&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
         <IconColumn data="data.getDocumentationJobInProgress(iterator)" title="doc_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
-        <ButtonColumn action="data.showPrototypes(iterator)" enabled="(iterator.protoUrl != null)" data="controller.getLocalizedForKey(&quot;show_storyboards&quot;)" title="storyboards" columnWidth="100" resizable="true" displayTitle="true" name="button" />
+        <ButtonColumn action="data.showPrototypes(iterator)" enabled="(iterator.protoUrl != null)" data="controller.getLocalizedForKey(&quot;show_prototypes&quot;)" title="prototypes" columnWidth="100" resizable="true" displayTitle="true" name="button" />
         <ButtonColumn action="data.generatePrototype(iterator)" enabled="(iterator.isIsProtoValidationSuccessful &amp; (data.serverProject.availableProtoToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_proto&quot;) + &quot; (&quot;) + data.serverProject.availableProtoToken) + &quot;)&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
         <IconColumn data="data.getPrototypeJobInProgress(iterator)" title="proto_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
       </Table>
@@ -21,9 +21,12 @@
         <Panel layout="buttons" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
           <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=0;y=0)" />
           <Button action="data.createProject()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject = null)" constraints="buttons()" visible="(data.serverProject = null)" />
-          <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject != null)" data="send_to_server" constraints="grid(x=1;y=0)" visible="(data.serverProject != null)" />
+          <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" tooltip="data.cantSendToServerReason" tooltipText="" localize="true" enable="((data.serverProject != null) &amp; ((data.session = null) | data.session.user.login.equals(data.user.login)))" constraints="grid(x=1;y=0)" visible="(data.serverProject != null)">
+            <description />
+          </Button>
           <Button action="data.generateDocumentation(versionTable.selected)" buttonType="Trigger" label="generate_doc" localize="true" enable="(((versionTable.selected != null) &amp; (versionTable.selected.tocEntries.size &gt; 0)) &amp; (data.serverProject.availableDocToken &gt; 0))" constraints="grid(x=2;y=0)" />
           <Button action="data.generatePrototype(versionTable.selected)" buttonType="Trigger" label="generate_proto" localize="true" enable="(((versionTable.selected != null) &amp; versionTable.selected.isIsProtoValidationSuccessful) &amp; (data.serverProject.availableProtoToken &gt; 0))" constraints="grid(x=3;y=0)" />
+          <Button buttonType="Trigger" label="send_and_close_session" localize="true" constraints="buttons()" />
         </Panel>
       </Panel>
       <Panel layout="border" darkLevel="0" constraints="border(location=east)" width="35" height="30">
@@ -68,8 +71,8 @@
     <Localized key="documents" lang="English">Documents</Localized>
     <Localized key="documents" lang="French">Documents</Localized>
     <Localized key="documents" lang="Dutch">Documenten</Localized>
-    <Localized key="storyboards" lang="English">Storyboards</Localized>
-    <Localized key="storyboards" lang="French">Storyboards</Localized>
-    <Localized key="storyboards" lang="Dutch">Storyboards</Localized>
+    <Localized key="prototypes" lang="English">Prototypes</Localized>
+    <Localized key="prototypes" lang="French">Prototypes</Localized>
+    <Localized key="prototypes" lang="Dutch">Prototypes</Localized>
   </LocalizedDictionary>
 </Panel>

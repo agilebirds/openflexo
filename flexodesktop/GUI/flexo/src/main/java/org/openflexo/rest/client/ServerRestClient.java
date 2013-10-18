@@ -3621,7 +3621,7 @@ public class ServerRestClient {
 			}
 		}
 
-		public ServerRestClient.JobsHistory.JobsIdHistory jobsIdHistory(String id) {
+		public ServerRestClient.JobsHistory.JobsIdHistory jobsIdHistory(Integer id) {
 			return new ServerRestClient.JobsHistory.JobsIdHistory(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues), id);
 		}
 
@@ -4027,7 +4027,7 @@ public class ServerRestClient {
 			 * Create new instance using existing Client instance, and a base URI and any parameters
 			 * 
 			 */
-			public JobsIdHistory(com.sun.jersey.api.client.Client client, URI baseUri, String id) {
+			public JobsIdHistory(com.sun.jersey.api.client.Client client, URI baseUri, Integer id) {
 				_client = client;
 				_uriBuilder = UriBuilder.fromUri(baseUri);
 				_uriBuilder = _uriBuilder.path("/jobs/{id}/history");
@@ -4059,15 +4059,15 @@ public class ServerRestClient {
 			 * Get id
 			 * 
 			 */
-			public String getId() {
-				return (String) _templateAndMatrixParameterValues.get("id");
+			public Integer getId() {
+				return (Integer) _templateAndMatrixParameterValues.get("id");
 			}
 
 			/**
 			 * Duplicate state and set id
 			 * 
 			 */
-			public ServerRestClient.JobsHistory.JobsIdHistory setId(String id) {
+			public ServerRestClient.JobsHistory.JobsIdHistory setId(Integer id) {
 				Map<String, Object> copyMap;
 				copyMap = new HashMap<String, Object>(_templateAndMatrixParameterValues);
 				UriBuilder copyUriBuilder = _uriBuilder.clone();
@@ -4075,34 +4075,45 @@ public class ServerRestClient {
 				return new ServerRestClient.JobsHistory.JobsIdHistory(_client, copyUriBuilder, copyMap);
 			}
 
-			public <T> T getAsXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+			public JobHistory getAsJobHistoryXml() {
 				UriBuilder localUriBuilder = _uriBuilder.clone();
 				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 						.buildFromMap(_templateAndMatrixParameterValues));
 				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 				resourceBuilder = resourceBuilder.accept("application/xml");
-				resourceBuilder = resourceBuilder.type("*/*");
 				com.sun.jersey.api.client.ClientResponse response;
-				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+				if (response.getStatus() >= 400) {
+					throwWebApplicationException(response);
+				}
+				return response.getEntity(JobHistory.class);
+			}
+
+			public <T> T getAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+				UriBuilder localUriBuilder = _uriBuilder.clone();
+				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+						.buildFromMap(_templateAndMatrixParameterValues));
+				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+				resourceBuilder = resourceBuilder.accept("application/xml");
+				com.sun.jersey.api.client.ClientResponse response;
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
 					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
 
-			public <T> T getAsXml(Object input, Class<T> returnType) {
+			public <T> T getAsXml(Class<T> returnType) {
 				UriBuilder localUriBuilder = _uriBuilder.clone();
 				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 						.buildFromMap(_templateAndMatrixParameterValues));
 				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 				resourceBuilder = resourceBuilder.accept("application/xml");
-				resourceBuilder = resourceBuilder.type("*/*");
 				com.sun.jersey.api.client.ClientResponse response;
-				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 					if (response.getStatus() >= 400) {
 						throwWebApplicationException(response);
-
 					}
 				}
 				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4112,34 +4123,45 @@ public class ServerRestClient {
 				}
 			}
 
-			public <T> T getAsJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
+			public JobHistory getAsJobHistoryJson() {
 				UriBuilder localUriBuilder = _uriBuilder.clone();
 				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 						.buildFromMap(_templateAndMatrixParameterValues));
 				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 				resourceBuilder = resourceBuilder.accept("application/json");
-				resourceBuilder = resourceBuilder.type("*/*");
 				com.sun.jersey.api.client.ClientResponse response;
-				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+				if (response.getStatus() >= 400) {
+					throwWebApplicationException(response);
+				}
+				return response.getEntity(JobHistory.class);
+			}
+
+			public <T> T getAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+				UriBuilder localUriBuilder = _uriBuilder.clone();
+				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+						.buildFromMap(_templateAndMatrixParameterValues));
+				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+				resourceBuilder = resourceBuilder.accept("application/json");
+				com.sun.jersey.api.client.ClientResponse response;
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
 					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
 
-			public <T> T getAsJson(Object input, Class<T> returnType) {
+			public <T> T getAsJson(Class<T> returnType) {
 				UriBuilder localUriBuilder = _uriBuilder.clone();
 				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 						.buildFromMap(_templateAndMatrixParameterValues));
 				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 				resourceBuilder = resourceBuilder.accept("application/json");
-				resourceBuilder = resourceBuilder.type("*/*");
 				com.sun.jersey.api.client.ClientResponse response;
-				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 					if (response.getStatus() >= 400) {
 						throwWebApplicationException(response);
-
 					}
 				}
 				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4148,9 +4170,7 @@ public class ServerRestClient {
 					return returnType.cast(response);
 				}
 			}
-
 		}
-
 	}
 
 	public class Projects {

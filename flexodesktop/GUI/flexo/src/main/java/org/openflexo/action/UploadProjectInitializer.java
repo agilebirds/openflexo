@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoException;
@@ -67,9 +68,15 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 					return false;
 				}
 				ServerRestClientModel model = new ServerRestClientModel(getController(), project);
-				model.performOperationsInSwingWorker(true, true, model.new UpdateUserOperation(), model.new UpdateServerProject(false));
+				model.performOperationsInSwingWorker(true, true, model.new UpdateUserOperation(), model.new UpdateProjectEditionSession(),
+						model.new UpdateServerProject(false));
 				if (model.getServerProject() != null) {
-					model.performOperationsInSwingWorker(true, true, model.new SendProjectToServer(comment));
+					if (model.canSendToServer()) {
+						model.performOperationsInSwingWorker(true, true, model.new SendProjectToServer(comment));
+					} else {
+						FlexoController.notify(model.cantSendToServerReason());
+						return false;
+					}
 				} else {
 					if (model.getUser() != null) {
 						if (model.getUser().getUserType() == UserType.ADMIN || model.getUser().getUserType() == UserType.CLIENT_ADMIN) {
@@ -115,6 +122,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 		return new FlexoActionFinalizer<UploadProjectAction>() {
 			@Override
 			public boolean run(EventObject e, UploadProjectAction action) {
+				ProgressWindow.hideProgressWindow();
 				FlexoController.notify(FlexoLocalization.localizedForKey("successfully_created_version") + " "
 						+ action.getFocusedObject().getVersion());
 				return true;

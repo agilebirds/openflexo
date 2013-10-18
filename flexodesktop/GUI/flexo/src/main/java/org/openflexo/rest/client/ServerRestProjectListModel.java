@@ -188,7 +188,7 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 			return true;
 		}
 		Session session = editionSession.get(project);
-		return session == null || getUser().getLogin().equals(session.getUser().getLogin());
+		return session == null /*|| getUser().getLogin().equals(session.getUser().getLogin())*/;
 	}
 
 	public String getTooltip(Project project) {

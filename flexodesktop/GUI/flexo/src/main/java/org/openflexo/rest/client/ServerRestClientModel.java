@@ -695,6 +695,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			setVersions(client.projectsProjectIDVersions(restClient, builder.build(), serverProject.getProjectId()).getAsXml(
 					page * pageSize, (page + 1) * pageSize, "creationDate desc", new GenericType<List<ProjectVersion>>() {
 					}));
+
 		}
 
 		@Override
@@ -808,8 +809,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					private void updateProgress() {
 						while (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
 							double percent = progress * 100.0d / length;
-							ProgressWindow.instance().setProgress(
-									String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
+							percent = Math.min(100.0, percent);
+							ProgressWindow instance = ProgressWindow.instance();
+							if (instance != null) {
+								instance.setProgress(String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
+							}
 							lastUpdate += stepSize;
 							if (progress == length) {
 								return;
@@ -835,7 +839,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					flexoProject.setVersion(oldVersion);
 				}
 			}
-			performOperationsInSwingWorker(new UpdateVersions());
+			performOperationsInSwingWorker(new UpdateVersions(), new UpdateJobsForVersion());
 		}
 
 		@Override
@@ -1084,30 +1088,33 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	protected void setJobsInProgress(List<Job> jobs, ProjectVersion version) {
 		List<Job> oldJobs = jobsInProgress.put(version, jobs);
-		if (!jobListIsEqual(oldJobs, jobs) && oldJobs != null) {
-			performOperationsInSwingWorker(false, false, new UpdateVersions());
+		if (!jobListIsEqual(oldJobs, jobs)) {
 			for (Job job : jobs) {
 				boolean found = false;
-				for (Job oldJob : oldJobs) {
-					if (job.getJobId().equals(oldJob.getJobId())) {
-						found = true;
-						break;
+				if (oldJobs != null) {
+					for (Job oldJob : oldJobs) {
+						if (job.getJobId().equals(oldJob.getJobId())) {
+							found = true;
+							break;
+						}
 					}
 				}
 				if (!found) {
 					firePropertyChangeForJob(job, version);
 				}
 			}
-			for (Job oldJob : oldJobs) {
-				boolean found = false;
-				for (Job job : jobs) {
-					if (job.getJobId().equals(oldJob.getJobId())) {
-						found = true;
-						break;
+			if (oldJobs != null) {
+				for (Job oldJob : oldJobs) {
+					boolean found = false;
+					for (Job job : jobs) {
+						if (job.getJobId().equals(oldJob.getJobId())) {
+							found = true;
+							break;
+						}
 					}
-				}
-				if (!found) {
-					firePropertyChangeForJob(oldJob, version);
+					if (!found) {
+						firePropertyChangeForJob(oldJob, version);
+					}
 				}
 			}
 		} else if (oldJobs == null) {
@@ -1387,14 +1394,45 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		}
 	}
 
+	public void sendToServerAndCloseSession() {
+
+	}
+
 	public void sendProjectToServer() {
-		if (serverProject != null) {
-			String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-			if (comment == null) {
-				return;
+		sendToServerAndPerformOperations();
+	}
+
+	private void sendToServerAndPerformOperations(ServerRestClientOperation... operations) {
+		if (serverProject != null && getUser() != null) {
+			if (canSendToServer()) {
+				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+				if (comment == null) {
+					return;
+				}
+				ServerRestClientOperation[] operationsToPerform = new ServerRestClientOperation[operations.length];
+				operationsToPerform[0] = new SendProjectToServer(comment);
+				System.arraycopy(operations, 0, operationsToPerform, 1, operations.length);
+				performOperationsInSwingWorker(operations);
+			} else {
+				FlexoController.notify(FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + "\n"
+						+ FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + session.getUser().getFirstName()
+						+ " " + session.getUser().getLastName() + " (" + session.getUser().getLogin() + ")");
 			}
-			performOperationsInSwingWorker(new SendProjectToServer(comment));
 		}
+	}
+
+	public String cantSendToServerReason() {
+		if (!canSendToServer() && getSession() != null) {
+			return FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + "\n"
+					+ FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + session.getUser().getFirstName() + " "
+					+ session.getUser().getLastName() + " (" + session.getUser().getLogin() + ")";
+		} else {
+			return null;
+		}
+	}
+
+	public boolean canSendToServer() {
+		return getSession() == null || getSession().getUser().getLogin().equals(getUser().getLogin());
 	}
 
 	public void showDocuments(ProjectVersion version, Window parentWindow) {
