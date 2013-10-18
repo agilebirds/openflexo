@@ -38,7 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.DefaultRowSorter;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -509,9 +508,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 		_table.setShowVerticalLines(false);
 		_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		_table.addFocusListener(this);
-		if (_table.getRowSorter() instanceof DefaultRowSorter) {
-
-		}
 
 		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
 			TableColumn col = _table.getColumnModel().getColumn(i);
