@@ -739,9 +739,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	public class SendProjectToServer implements ServerRestClientOperation {
 
 		private final String comment;
+		private final boolean closeSession;
 
-		public SendProjectToServer(String comment) {
+		public SendProjectToServer(String comment, boolean closeSession) {
 			this.comment = comment;
+			this.closeSession = closeSession;
 		}
 
 		@Override
@@ -757,7 +759,12 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			BufferedInputStream bis = null;
 			try {
 				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("retrieving_next_version"), 6);
-				String nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).next().getAsTextPlain(String.class);
+				String nextVersion;
+				if (closeSession) {
+					nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).nextMajor().getAsTextPlain(String.class);
+				} else {
+					nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).next().getAsTextPlain(String.class);
+				}
 				flexoProject.setVersion(nextVersion);
 				File zipFile = null;
 				zipFile = File.createTempFile(StringUtils.rightPad(flexoProject.getProjectName(), 3, '_'), ".zip");
@@ -831,7 +838,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				mp.bodyPart(new StreamDataBodyPart("file", bis = new BufferedInputStream(inputStream), zipFile.getName()));
 				zipFile.delete();
 				ProjectVersion response = client.projectsProjectIDVersions(serverProject.getProjectId()).postMultipartFormDataAsXml(mp,
-						ProjectVersion.class);
+						closeSession, ProjectVersion.class);
 				success = true;
 			} finally {
 				IOUtils.closeQuietly(bis);
@@ -839,7 +846,6 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					flexoProject.setVersion(oldVersion);
 				}
 			}
-			performOperationsInSwingWorker(new UpdateVersions(), new UpdateJobsForVersion());
 		}
 
 		@Override
@@ -1018,8 +1024,10 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
-			performOperationsInSwingWorker(new UpdateProjectEditionSession());
+			if (session != null) {
+				client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
+				performOperationsInSwingWorker(new UpdateProjectEditionSession());
+			}
 		}
 
 		@Override
@@ -1056,7 +1064,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			Project createdProject = client.projects().postXmlAsProject(newProjectParameter.getProject());
 			setServerProject(createdProject);
 			progress.increment(FlexoLocalization.localizedForKey("sending_project"));
-			SendProjectToServer send = new SendProjectToServer(newProjectParameter.getComment());
+			SendProjectToServer send = new SendProjectToServer(newProjectParameter.getComment(), false);
 			send.doOperation(client, progress);
 		}
 
@@ -1395,24 +1403,22 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	}
 
 	public void sendToServerAndCloseSession() {
-
+		sendToServer(true);
 	}
 
 	public void sendProjectToServer() {
-		sendToServerAndPerformOperations();
+		sendToServer(false);
 	}
 
-	private void sendToServerAndPerformOperations(ServerRestClientOperation... operations) {
+	private void sendToServer(boolean closeSession) {
 		if (serverProject != null && getUser() != null) {
 			if (canSendToServer()) {
 				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
 				if (comment == null) {
 					return;
 				}
-				ServerRestClientOperation[] operationsToPerform = new ServerRestClientOperation[operations.length];
-				operationsToPerform[0] = new SendProjectToServer(comment);
-				System.arraycopy(operations, 0, operationsToPerform, 1, operations.length);
-				performOperationsInSwingWorker(operations);
+				performOperationsInSwingWorker(new SendProjectToServer(comment, closeSession), new UpdateVersions(),
+						new UpdateJobsForVersion());
 			} else {
 				FlexoController.notify(FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + "\n"
 						+ FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + session.getUser().getFirstName()
@@ -1559,7 +1565,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	public void closeSession() {
 		if (session != null) {
-			performOperationsInSwingWorker(new CloseSession(session));
+			performOperationsInSwingWorker(new CloseSession(session), new UpdateVersions(), new UpdateJobsForVersion());
 		}
 	}
 
@@ -1577,7 +1583,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		FIBDialog<NewProjectParameter> dialog = FIBDialog.instanciateAndShowDialog(NEW_SERVER_PROJECT_FIB_FILE, data,
 				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
-			performOperationsInSwingWorker(new CreateProjectAndUploadFirstVersion(data));
+			performOperationsInSwingWorker(new CreateProjectAndUploadFirstVersion(data), new UpdateVersions(), new UpdateJobsForVersion());
 		}
 	}
 
