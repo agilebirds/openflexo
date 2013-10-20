@@ -6492,6 +6492,56 @@ public class ServerRestClient {
 			}
 		}
 
+		public <T> T postMultipartFormDataAsXml(Object input, Boolean closesession, com.sun.jersey.api.client.GenericType<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (closesession == null) {
+			}
+			if (closesession != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", closesession);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", (Object[]) null);
+			}
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("multipart/form-data");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+			if (response.getStatus() >= 400) {
+				throwWebApplicationException(response);
+			}
+			return response.getEntity(returnType);
+		}
+
+		public <T> T postMultipartFormDataAsXml(Object input, Boolean closesession, Class<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (closesession == null) {
+			}
+			if (closesession != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", closesession);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", (Object[]) null);
+			}
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("multipart/form-data");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				if (response.getStatus() >= 400) {
+					throwWebApplicationException(response);
+				}
+			}
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				return response.getEntity(returnType);
+			} else {
+				return returnType.cast(response);
+			}
+		}
+
 		public <T> T postMultipartFormDataAsJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
@@ -6509,6 +6559,56 @@ public class ServerRestClient {
 
 		public <T> T postMultipartFormDataAsJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("multipart/form-data");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				if (response.getStatus() >= 400) {
+					throwWebApplicationException(response);
+				}
+			}
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				return response.getEntity(returnType);
+			} else {
+				return returnType.cast(response);
+			}
+		}
+
+		public <T> T postMultipartFormDataAsJson(Object input, Boolean closesession, com.sun.jersey.api.client.GenericType<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (closesession == null) {
+			}
+			if (closesession != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", closesession);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", (Object[]) null);
+			}
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("multipart/form-data");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
+			if (response.getStatus() >= 400) {
+				throwWebApplicationException(response);
+			}
+			return response.getEntity(returnType);
+		}
+
+		public <T> T postMultipartFormDataAsJson(Object input, Boolean closesession, Class<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (closesession == null) {
+			}
+			if (closesession != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", closesession);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("closeSession", (Object[]) null);
+			}
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
@@ -6642,6 +6742,11 @@ public class ServerRestClient {
 
 		public ServerRestClient.ProjectsProjectIDVersions.Next next() {
 			return new ServerRestClient.ProjectsProjectIDVersions.Next(_client, _uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+		}
+
+		public ServerRestClient.ProjectsProjectIDVersions.NextMajor nextMajor() {
+			return new ServerRestClient.ProjectsProjectIDVersions.NextMajor(_client,
+					_uriBuilder.buildFromMap(_templateAndMatrixParameterValues));
 		}
 
 		public ServerRestClient.ProjectsProjectIDVersions.Id id(Integer id) {
@@ -7350,6 +7455,65 @@ public class ServerRestClient {
 				_client = client;
 				_uriBuilder = UriBuilder.fromUri(baseUri);
 				_uriBuilder = _uriBuilder.path("next");
+				_templateAndMatrixParameterValues = new HashMap<String, Object>();
+			}
+
+			public <T> T getAsTextPlain(com.sun.jersey.api.client.GenericType<T> returnType) {
+				UriBuilder localUriBuilder = _uriBuilder.clone();
+				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+						.buildFromMap(_templateAndMatrixParameterValues));
+				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+				resourceBuilder = resourceBuilder.accept("text/plain");
+				com.sun.jersey.api.client.ClientResponse response;
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+				if (response.getStatus() >= 400) {
+					throwWebApplicationException(response);
+				}
+				return response.getEntity(returnType);
+			}
+
+			public <T> T getAsTextPlain(Class<T> returnType) {
+				UriBuilder localUriBuilder = _uriBuilder.clone();
+				com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+						.buildFromMap(_templateAndMatrixParameterValues));
+				com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+				resourceBuilder = resourceBuilder.accept("text/plain");
+				com.sun.jersey.api.client.ClientResponse response;
+				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+					if (response.getStatus() >= 400) {
+						throwWebApplicationException(response);
+					}
+				}
+				if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+					return response.getEntity(returnType);
+				} else {
+					return returnType.cast(response);
+				}
+			}
+
+		}
+
+		public class NextMajor {
+
+			private com.sun.jersey.api.client.Client _client;
+			private UriBuilder _uriBuilder;
+			private Map<String, Object> _templateAndMatrixParameterValues;
+
+			private NextMajor(com.sun.jersey.api.client.Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+				_client = client;
+				_uriBuilder = uriBuilder.clone();
+				_templateAndMatrixParameterValues = map;
+			}
+
+			/**
+			 * Create new instance using existing Client instance, and a base URI and any parameters
+			 * 
+			 */
+			public NextMajor(com.sun.jersey.api.client.Client client, URI baseUri) {
+				_client = client;
+				_uriBuilder = UriBuilder.fromUri(baseUri);
+				_uriBuilder = _uriBuilder.path("nextMajor");
 				_templateAndMatrixParameterValues = new HashMap<String, Object>();
 			}
 

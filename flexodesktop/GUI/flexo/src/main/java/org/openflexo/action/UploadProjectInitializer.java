@@ -72,7 +72,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 						model.new UpdateServerProject(false));
 				if (model.getServerProject() != null) {
 					if (model.canSendToServer()) {
-						model.performOperationsInSwingWorker(true, true, model.new SendProjectToServer(comment));
+						model.performOperationsInSwingWorker(true, true, model.new SendProjectToServer(comment, false));
 					} else {
 						FlexoController.notify(model.cantSendToServerReason());
 						return false;
