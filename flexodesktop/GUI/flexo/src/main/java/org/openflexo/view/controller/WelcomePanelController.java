@@ -138,6 +138,8 @@ public class WelcomePanelController extends FlexoFIBController {
 				File downloadToFolder = model.downloadToFolder(project, new File(documentDirectory, "OpenFlexo Projects"));
 				if (downloadToFolder != null) {
 					openProject(downloadToFolder, module);
+				} else {
+					show();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
