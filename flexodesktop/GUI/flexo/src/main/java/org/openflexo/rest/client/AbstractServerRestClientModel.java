@@ -423,15 +423,19 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 				if (dialog != null) {
 					dialog.setVisible(false);
 					dialog.dispose();
+				} else {
+					if (useProgressWindow) {
+						ProgressWindow.hideProgressWindow();
+					}
 				}
 			}
 		};
 		worker.execute();
 		if (dialog != null) {
 			dialog.setVisible(true);
-		}
-		if (useProgressWindow) {
-			ProgressWindow.hideProgressWindow();
+			if (useProgressWindow) {
+				ProgressWindow.hideProgressWindow();
+			}
 		}
 	}
 
@@ -471,7 +475,7 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 			throws InterruptedException {
 		boolean firstAttempt = true;
 		try {
-			for (ServerRestClientOperation operation : operations) {
+			for (final ServerRestClientOperation operation : operations) {
 				boolean done = false;
 				while (!done) {
 					ServerRestClient client = getServerRestClient(!firstAttempt);
@@ -495,7 +499,7 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 							@Override
 							public void setSteps(int steps) {
 								if (useProgressWindow) {
-									ProgressWindow.instance().resetMainSteps(steps);
+									ProgressWindow.makeProgressWindow(operation.getLocalizedTitle(), steps);
 								}
 							}
 

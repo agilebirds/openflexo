@@ -76,6 +76,7 @@ import com.google.common.cache.LoadingCache;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.StreamDataBodyPart;
 
@@ -88,7 +89,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	public static final File DOC_GENERATION_CHOOSER_FIB_FILE = new FileResource("Fib/DocGenerationChooser.fib");
 	public static final File NEW_SERVER_PROJECT_FIB_FILE = new FileResource("Fib/NewServerProject.fib");
 
-	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd/MM/yy hh:mm");
+	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd/MM/yy HH:mm");
 
 	private static final String AUTOMATICALLY_OPEN_FILE = "automaticallyOpenFile";
 	private static final String DOC_TYPE = "docType";
@@ -884,6 +885,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				if (choice.getFolder() != null) {
 					WatchedRemoteDocJob watchedRemoteJob = new WatchedRemoteDocJob();
 					watchedRemoteJob.setRemoteJobId(returned.getJobId());
+					watchedRemoteJob.setProjectID(version.getProject());
+					watchedRemoteJob.setProjectVersionID(version.getVersionID());
 					watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
 					watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
 					watchedRemoteJob.setUnzip(job.getDocFormat() == DocFormat.HTML);
@@ -937,6 +940,22 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			job.setVersion(version);
 			final Job returned = client.jobs().postXmlAsJob(job);
 			if (returned != null) {
+				WatchedRemoteProtoJob watchedRemoteJob = new WatchedRemoteProtoJob();
+				watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
+				watchedRemoteJob.setLogin(getUser().getLogin());
+				watchedRemoteJob.setProjectID(version.getProject());
+				watchedRemoteJob.setProjectVersionID(version.getVersionID());
+				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
+				try {
+					em.getTransaction().begin();
+					em.persist(watchedRemoteJob);
+					em.getTransaction().commit();
+				} finally {
+					if (em.getTransaction().isActive()) {
+						em.getTransaction().rollback();
+					}
+					em.close();
+				}
 				try {
 					performOperations(true, new UpdateJobsForVersion());
 				} catch (InterruptedException e) {
@@ -1025,7 +1044,13 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			if (session != null) {
-				client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
+				try {
+					client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
+				} catch (UniformInterfaceException e) {
+					if (e.getResponse().getStatus() != 204) {
+						throw e;
+					}
+				}
 				performOperationsInSwingWorker(new UpdateProjectEditionSession());
 			}
 		}

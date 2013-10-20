@@ -3,17 +3,17 @@
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
     <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
       <Table iteratorClassName="org.openflexo.rest.client.model.ProjectVersion" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="SingleSelection" localize="true" manageDynamicModel="true" name="versionTable" data="data.versions" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
-        <LabelColumn data="iterator.versionNumber" title="Version" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+        <LabelColumn data="iterator.versionNumber" title="Version" columnWidth="60" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.comment" title="comment" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creationDate" format="data.formatDate(object)" title="creation_date" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creator" title="creator" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <IconColumn data="data.getConsistencyIcon(iterator)" title="Consistency" columnWidth="70" resizable="false" displayTitle="true" name="icon" />
         <ButtonColumn action="data.showDocuments(iterator,controller.getWindow())" data="controller.getLocalizedForKey(&quot;show_generated_documents&quot;)" title="documents" columnWidth="100" resizable="true" displayTitle="true" name="button" />
         <ButtonColumn action="data.generateDocumentation(iterator)" enabled="((iterator.tocEntries.size &gt; 0) &amp; (data.serverProject.availableDocToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_doc&quot;) + &quot; (&quot;) + data.serverProject.availableDocToken) + &quot;)&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="false" name="button" />
-        <IconColumn data="data.getDocumentationJobInProgress(iterator)" title="doc_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
+        <IconColumn data="data.getDocumentationJobInProgress(iterator)" title="doc_in_progress" columnWidth="24" resizable="false" displayTitle="false" name="icon" />
         <ButtonColumn action="data.showPrototypes(iterator)" enabled="(iterator.protoUrl != null)" data="controller.getLocalizedForKey(&quot;show_prototypes&quot;)" title="prototypes" columnWidth="100" resizable="true" displayTitle="true" name="button" />
         <ButtonColumn action="data.generatePrototype(iterator)" enabled="(iterator.isIsProtoValidationSuccessful &amp; (data.serverProject.availableProtoToken &gt; 0))" data="(((controller.getLocalizedForKey(&quot;generate_proto&quot;) + &quot; (&quot;) + data.serverProject.availableProtoToken) + &quot;)&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="false" name="button" />
-        <IconColumn data="data.getPrototypeJobInProgress(iterator)" title="proto_in_progress" columnWidth="70" resizable="false" displayTitle="false" name="icon" />
+        <IconColumn data="data.getPrototypeJobInProgress(iterator)" title="proto_in_progress" columnWidth="24" resizable="false" displayTitle="false" name="icon" />
       </Table>
     </Panel>
     <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
@@ -73,5 +73,11 @@
     <Localized key="prototypes" lang="English">Prototypes</Localized>
     <Localized key="prototypes" lang="French">Prototypes</Localized>
     <Localized key="prototypes" lang="Dutch">Prototypes</Localized>
+    <Localized key="send_and_close_session" lang="English">Send and close session</Localized>
+    <Localized key="send_and_close_session" lang="French">Envoyer et fermer la session</Localized>
+    <Localized key="send_and_close_session" lang="Dutch">Verzenden en sluiten sessie</Localized>
+    <Localized key="close_session" lang="English">Close session</Localized>
+    <Localized key="close_session" lang="French">Fermer la session</Localized>
+    <Localized key="close_session" lang="Dutch">Sluiten sessie</Localized>
   </LocalizedDictionary>
 </Panel>
