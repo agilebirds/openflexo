@@ -108,7 +108,7 @@ public class FileMenu extends FlexoMenu {
 			add(new SaveProjectItem());
 			add(new SaveAllProjectItem());
 			add(new SaveAsProjectItem());
-			add(new SaveProjectForServerItem());
+			// add(new SaveProjectForServerItem());
 			add(new SendProjectToFlexoServerItem());
 			// TODO: repair reload project. this includes to also support close project.
 			// add(reloadProjectItem = new ReloadProjectItem());
