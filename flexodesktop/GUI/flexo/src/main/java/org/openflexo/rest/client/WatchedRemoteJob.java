@@ -41,6 +41,10 @@ public class WatchedRemoteJob extends DBObject<Integer> {
 
 	private String login;
 
+	private Integer projectVersionID;
+
+	private Integer projectID;
+
 	@Override
 	public Integer getId() {
 		return id;
@@ -81,6 +85,22 @@ public class WatchedRemoteJob extends DBObject<Integer> {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public Integer getProjectVersionID() {
+		return projectVersionID;
+	}
+
+	public void setProjectVersionID(Integer projectVersionID) {
+		this.projectVersionID = projectVersionID;
+	}
+
+	public Integer getProjectID() {
+		return projectID;
+	}
+
+	public void setProjectID(Integer projectID) {
+		this.projectID = projectID;
 	}
 
 }

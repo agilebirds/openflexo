@@ -5,6 +5,7 @@
     <persistence-unit name="local-db">
         <class>org.openflexo.rest.client.WatchedRemoteJob</class>
         <class>org.openflexo.rest.client.WatchedRemoteDocJob</class>
+        <class>org.openflexo.rest.client.WatchedRemoteProtoJob</class>
         <properties>
             <property name="hibernate.show_sql" value="false" />
         </properties>

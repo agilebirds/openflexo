@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URI;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.swing.SwingUtilities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -40,10 +42,12 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.JobHistory;
+import org.openflexo.rest.client.model.ProjectVersion;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.rest.client.model.UserType;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.Holder;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -105,8 +109,16 @@ public class ServerRestService implements HasPropertyChangeSupport {
 					List<WatchedRemoteJob> watchedRemoteJobs = query.getResultList();
 					for (WatchedRemoteJob watchedRemoteJob : watchedRemoteJobs) {
 						try {
+							boolean handled = false;
 							if (watchedRemoteJob instanceof WatchedRemoteDocJob) {
-								handleRemoteDocJob(client, createClient, em, (WatchedRemoteDocJob) watchedRemoteJob);
+								handled = handleRemoteDocJob(client, createClient, (WatchedRemoteDocJob) watchedRemoteJob);
+							} else if (watchedRemoteJob instanceof WatchedRemoteProtoJob) {
+								handled = handleRemoteProtoJob(client, createClient, (WatchedRemoteProtoJob) watchedRemoteJob);
+							}
+							if (handled) {
+								em.getTransaction().begin();
+								em.remove(watchedRemoteJob);
+								em.getTransaction().commit();
 							}
 						} catch (SocketException e) {
 							// Issues with connection (no Internet, server down, etc...)
@@ -142,7 +154,62 @@ public class ServerRestService implements HasPropertyChangeSupport {
 			}
 		}
 
-		private void handleRemoteDocJob(ServerRestClient client, Client createClient, EntityManager em, WatchedRemoteDocJob watchedRemoteJob)
+		private boolean handleRemoteProtoJob(ServerRestClient client, Client createClient, WatchedRemoteProtoJob job) {
+			JobHistory history;
+			try {
+				history = client.jobsHistory(createClient, client.getBASE_URI()).jobsIdHistory(job.getRemoteJobId()).getAsJobHistoryXml();
+			} catch (WebApplicationException e) {
+				e.printStackTrace();
+				if (e.getResponse().getStatus() == 404) {
+					// This is normal, it just means that the jobs is not finished
+					return false;
+				} else {
+					throw e;
+				}
+			}
+			String url = history.getJobResult();
+			final ProjectVersion version = client.projectsProjectIDVersions(job.getProjectID()).getAsProjectVersionXml();
+			if (url == null) {
+				url = version.getProtoUrl();
+			}
+			if (url != null) {
+				if (Desktop.isDesktopSupported()) {
+					final Holder<Boolean> confirm = new Holder<Boolean>();
+					try {
+						SwingUtilities.invokeAndWait(new Runnable() {
+							@Override
+							public void run() {
+								confirm.set(FlexoController.confirm(FlexoLocalization
+										.localizedForKey("prototype_has_been_generated_for_version")
+										+ " "
+										+ version.getVersionNumber()
+										+ ". " + FlexoLocalization.localizedForKey("would_you_like_to_open_it_now") + "?"));
+							}
+						});
+					} catch (InvocationTargetException e1) {
+						e1.printStackTrace();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					if (confirm.get() != null && confirm.get()) {
+						try {
+							Desktop.getDesktop().browse(new URL(url).toURI());
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (URISyntaxException e) {
+							e.printStackTrace();
+						}
+					}
+					return true;
+				}
+			}
+			// If url is null, there is not much we can do about it. It's just too bad.
+			return true;
+		}
+
+		private boolean handleRemoteDocJob(ServerRestClient client, Client createClient, WatchedRemoteDocJob watchedRemoteJob)
 				throws Exception {
 			JobHistory history;
 			try {
@@ -152,7 +219,7 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				e.printStackTrace();
 				if (e.getResponse().getStatus() == 404) {
 					// This is normal, it just means that the jobs is not finished
-					return;
+					return false;
 				} else {
 					throw e;
 				}
@@ -229,15 +296,10 @@ public class ServerRestService implements HasPropertyChangeSupport {
 						}
 					}
 				}
-				em.getTransaction().begin();
-				em.remove(watchedRemoteJob);
-				em.getTransaction().commit();
+				return true;
 			} finally {
 				IOUtils.closeQuietly(input);
 				IOUtils.closeQuietly(bos);
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
 				if (watchedRemoteJob.isOpenDocument()) {
 					if (Desktop.isDesktopSupported()) {
 						try {

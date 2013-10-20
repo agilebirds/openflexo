@@ -8,6 +8,11 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class WatchedRemoteDocJob extends WatchedRemoteJob {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8788550235455516824L;
+
 	public static final String ENTITY_NAME = "WatchedRemoteDocJob";
 
 	private String saveToFolder;
