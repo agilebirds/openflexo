@@ -19,8 +19,7 @@ public class AddExcelWorkbook extends AssignableAction<BasicExcelModelSlot, Exce
 
 	@Override
 	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelWorkbook.class;
 	}
 
 	@Override

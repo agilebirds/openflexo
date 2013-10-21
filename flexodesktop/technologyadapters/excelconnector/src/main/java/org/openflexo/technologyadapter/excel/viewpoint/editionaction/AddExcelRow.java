@@ -19,8 +19,7 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 
 	@Override
 	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelRow.class;
 	}
 
 	@Override

@@ -4,9 +4,11 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
-public abstract class ExcelObject extends FlexoObject implements TechnologyObject, ExcelPropertyObject {
+public abstract class ExcelObject extends FlexoObject implements TechnologyObject{
 
 	private ExcelTechnologyAdapter technologyAdapter;
+	
+	private String uri;
 
 	public ExcelObject(ExcelTechnologyAdapter adapter) {
 		super();
@@ -29,6 +31,10 @@ public abstract class ExcelObject extends FlexoObject implements TechnologyObjec
 	@Override
 	public String getFullyQualifiedName() {
 		return getName();
+	}
+
+	public String getUri() {
+		return uri;
 	}
 
 }

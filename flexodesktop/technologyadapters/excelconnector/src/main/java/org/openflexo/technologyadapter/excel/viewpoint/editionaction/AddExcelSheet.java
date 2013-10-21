@@ -24,8 +24,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	@Override
 	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelSheet.class;
 	}
 
 	@Override

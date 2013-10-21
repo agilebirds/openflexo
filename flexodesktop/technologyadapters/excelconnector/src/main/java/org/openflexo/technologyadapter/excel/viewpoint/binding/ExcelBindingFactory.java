@@ -41,9 +41,6 @@ public final class ExcelBindingFactory extends TechnologyAdapterBindingFactory {
 		if (technologySpecificType instanceof ExcelSheet) {
 			return true;
 		}
-		/*if (technologySpecificType instanceof ExcelSheetType) {
-			return true;
-		}*/
 		return true;
 	}
 

@@ -90,6 +90,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	public BasicExcelModelSlot(VirtualModelBuilder builder) {
 		super(builder);
+		uriProcessor = new BasicExcelModelSlotURIProcessor();
 	}
 
 	@Override

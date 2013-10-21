@@ -19,8 +19,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	@Override
 	public Type getAssignableType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelCell.class;
 	}
 
 	@Override

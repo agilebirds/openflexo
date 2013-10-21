@@ -39,12 +39,6 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-/* Correct processing of XML Objects URIs needs to add an internal class to store
- * for each XMLType wich are the XML Elements (attributes or CDATA, or...) that will be 
- * used to calculate URIs
- */
-
-// TODO Manage the fact that URI May Change
 
 public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implements XMLSerializable {
 
@@ -70,10 +64,8 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 		return typeURI.toString();
 	}
 
-	// TODO WARNING!!! Pb avec les typeURI....
 	public void _setTypeURI(String name) {
 		typeURI = URI.create(name);
-		bindtypeURIToMappedClass();
 	}
 
 	public String _getAttributeName() {
@@ -89,10 +81,6 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 		modelSlot = null;
 	}
 
-	public void bindtypeURIToMappedClass() {
-		// TODO?
-	}
-
 	public BasicExcelModelSlotURIProcessor() {
 		super((VirtualModelBuilder) null);
 	}
@@ -106,11 +94,9 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 
 	public String getURIForObject(ModelSlotInstance msInstance, ExcelObject excelObject) {
 		String builtURI = null;
-		StringBuffer completeURIStr = new StringBuffer();
-
-		Object value = excelObject;
+		
 		try {
-			builtURI = URLEncoder.encode(value.toString(), "UTF-8");
+			builtURI = URLEncoder.encode(excelObject.getUri(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			logger.warning("Cannot process URI - Unexpected encoding error");
 			e.printStackTrace();
@@ -122,39 +108,15 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 				uriCache.put(builtURI, excelObject);
 			}
 		}
-		completeURIStr.append(typeURI.getScheme()).append("://").append(typeURI.getHost()).append(typeURI.getPath()).append("?")
-				.append(builtURI).append("#").append(typeURI.getFragment());
-		return completeURIStr.toString();
+		return builtURI.toString();
 	}
 
 	// get the Object given the URI
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws Exception {
-
 		ExcelObject o = uriCache.get(objectURI);
-
-		// retrieve object
-		if (o == null) {
-
-		}
-
 		return o;
 	}
 
-	// get the right URIProcessor for URI
-
-	static public String retrieveTypeURI(ModelSlotInstance msInstance, String objectURI) {
-
-		URI fullURI;
-		StringBuffer typeURIStr = new StringBuffer();
-
-		fullURI = URI.create(objectURI);
-		typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost()).append(fullURI.getPath()).append("#")
-				.append(fullURI.getFragment());
-
-		return typeURIStr.toString();
-	}
-
-	// TODO ... To support Notification
 
 	@Override
 	public BindingModel getBindingModel() {
