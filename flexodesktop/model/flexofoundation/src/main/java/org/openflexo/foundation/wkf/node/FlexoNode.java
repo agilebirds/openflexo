@@ -19,7 +19,9 @@
  */
 package org.openflexo.foundation.wkf.node;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -166,6 +168,16 @@ public abstract class FlexoNode extends PetriGraphNode implements ExecutableWork
 			setChanged();
 			notifyObservers(new PreRemoved(pre));
 		}
+	}
+
+	public List<FlexoPreCondition> getUnusedPreConditions() {
+		List<FlexoPreCondition> list = new ArrayList<FlexoPreCondition>();
+		for (FlexoPreCondition c : getPreConditions()) {
+			if (c.getIncomingPostConditions().size() == 0) {
+				list.add(c);
+			}
+		}
+		return list;
 	}
 
 	/**

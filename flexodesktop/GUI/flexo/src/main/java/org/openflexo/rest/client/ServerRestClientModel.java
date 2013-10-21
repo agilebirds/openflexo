@@ -40,6 +40,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openflexo.AdvancedPrefs;
+import org.openflexo.GeneralPreferences;
 import org.openflexo.LocalDBAccess;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
@@ -683,13 +684,44 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	}
 
+	public class UpdateVersion implements ServerRestClientOperation {
+		private final ProjectVersion version;
+
+		public UpdateVersion(ProjectVersion version) {
+			super();
+			this.version = version;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			ProjectVersion updateVersion = client.projectsProjectIDVersions(version.getProject()).id(version.getVersionID())
+					.getAsProjectVersionXml();
+			int index = getVersions().indexOf(version);
+			getVersions().set(index, updateVersion);
+			setVersions(getVersions());
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("updating_version") + " " + version.getVersionNumber();
+		}
+
+		@Override
+		public int getSteps() {
+			return 1;
+		}
+
+	}
+
 	public class UpdateVersions implements ServerRestClientOperation {
+
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			if (serverProject == null) {
 				return;
 			}
-			jobsInProgress.clear();
+
+			Map<ProjectVersion, List<Job>> old = jobsInProgress;
 			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", Boolean.TRUE)
 					.queryParam("isIntermediate", Boolean.FALSE).queryParam("isIntermediate", "null");
 			Client restClient = client.createClient();
@@ -1046,6 +1078,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			if (session != null) {
 				try {
 					client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
+					GeneralPreferences.removeFromLastOpenedProjects(controller.getProjectDirectory());
+					GeneralPreferences.save();
 				} catch (UniformInterfaceException e) {
 					if (e.getResponse().getStatus() != 204) {
 						throw e;
@@ -1088,9 +1122,17 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			progress.increment(FlexoLocalization.localizedForKey("creating_project"));
 			Project createdProject = client.projects().postXmlAsProject(newProjectParameter.getProject());
 			setServerProject(createdProject);
-			progress.increment(FlexoLocalization.localizedForKey("sending_project"));
 			SendProjectToServer send = new SendProjectToServer(newProjectParameter.getComment(), false);
+			progress.increment(send.getLocalizedTitle());
 			send.doOperation(client, progress);
+			UpdateVersions update = new UpdateVersions();
+			progress.increment(update.getLocalizedTitle());
+			update.doOperation(client, progress);
+			if (session == null) {
+				UpdateProjectEditionSession updateSession = new UpdateProjectEditionSession();
+				progress.increment(updateSession.getLocalizedTitle());
+				updateSession.doOperation(client, progress);
+			}
 		}
 
 		@Override
@@ -1100,7 +1142,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 		@Override
 		public int getSteps() {
-			return 2;
+			return session == null ? 4 : 3;
 		}
 
 	}
@@ -1146,6 +1188,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 						}
 					}
 					if (!found) {
+						performOperationsInSwingWorker(false, false, new UpdateVersion(version));
 						firePropertyChangeForJob(oldJob, version);
 					}
 				}
@@ -1252,10 +1295,13 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	private LoadingCache<Account, List<User>> accountUserCache;
 	private FlexoController controller;
 
-	public ServerRestClientModel(FlexoController controller, FlexoProject flexoProject) {
+	private boolean editable;
+
+	public ServerRestClientModel(FlexoController controller, FlexoProject flexoProject, boolean editable) {
 		super(controller.getApplicationContext().getServerRestService(), controller.getFlexoFrame());
 		this.controller = controller;
 		this.flexoProject = flexoProject;
+		this.editable = editable;
 		this.jobsInProgress = new Hashtable<ProjectVersion, List<Job>>();
 		this.accountCache = CacheBuilder.newBuilder().build(new CacheLoader<String, List<Account>>() {
 			@Override
@@ -1313,6 +1359,10 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			}
 		});
 
+	}
+
+	public boolean isEditable() {
+		return editable;
 	}
 
 	@Override
@@ -1436,14 +1486,20 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	}
 
 	private void sendToServer(boolean closeSession) {
-		if (serverProject != null && getUser() != null) {
+		if (serverProject != null && getUser() != null && isEditable()) {
 			if (canSendToServer()) {
 				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
 				if (comment == null) {
 					return;
 				}
-				performOperationsInSwingWorker(new SendProjectToServer(comment, closeSession), new UpdateVersions(),
-						new UpdateJobsForVersion());
+				List<ServerRestClientOperation> operations = new ArrayList<AbstractServerRestClientModel.ServerRestClientOperation>(4);
+				operations.add(new SendProjectToServer(comment, closeSession));
+				if (session == null || closeSession) {
+					operations.add(new UpdateProjectEditionSession());
+				}
+				operations.add(new UpdateVersions());
+				operations.add(new UpdateJobsForVersion());
+				performOperationsInSwingWorker(operations.toArray(new ServerRestClientOperation[operations.size()]));
 			} else {
 				FlexoController.notify(FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + "\n"
 						+ FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + session.getUser().getFirstName()
@@ -1453,8 +1509,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	}
 
 	public String cantSendToServerReason() {
-		if (!canSendToServer() && getSession() != null) {
-			return FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + "\n"
+		if (isEditable() && !canSendToServer() && getSession() != null) {
+			return FlexoLocalization.localizedForKey("cannot_send_project_to_server_because") + " "
 					+ FlexoLocalization.localizedForKey("project_is_currently_edited_by") + " " + session.getUser().getFirstName() + " "
 					+ session.getUser().getLastName() + " (" + session.getUser().getLogin() + ")";
 		} else {
@@ -1463,13 +1519,14 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	}
 
 	public boolean canSendToServer() {
-		return getSession() == null || getSession().getUser().getLogin().equals(getUser().getLogin());
+		return isEditable() && (getSession() == null || getSession().getUser().getLogin().equals(getUser().getLogin()));
 	}
 
 	public void showDocuments(ProjectVersion version, Window parentWindow) {
 		if (version == null) {
 			return;
 		}
+		goOnline();
 		RetrieveGeneratedDocuments retrieveDocuments = new RetrieveGeneratedDocuments(version);
 		performOperationsInSwingWorker(true, true, retrieveDocuments);
 		if (retrieveDocuments.getDocuments() != null) {
@@ -1508,10 +1565,10 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		if (getUser() == null) {
 			return;
 		}
-		goOnline();
 		DocGenerationChoice choice = new DocGenerationChoice(version);
 		choice.setDocFormat(DocFormat.WORD);
 		choice.setDocType(serverProject.getDocTypes().get(0));
+		choice.setFolder(AdvancedPrefs.getLastDocumentDirectory());
 		while (true) {
 			FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
 					controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
@@ -1560,6 +1617,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					}
 					presets.setDocType(choice.getDocType());
 				}
+				if (choice.getFolder() != null) {
+					AdvancedPrefs.setLastDocumentDirectory(choice.getFolder());
+					AdvancedPrefs.save();
+				}
+				goOnline();
 				performOperationsInSwingWorker(new GenerateDocumentation(version, choice));
 				return;
 			} else {
@@ -1590,7 +1652,9 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 
 	public void closeSession() {
 		if (session != null) {
-			performOperationsInSwingWorker(new CloseSession(session), new UpdateVersions(), new UpdateJobsForVersion());
+			goOnline();
+			performOperationsInSwingWorker(new CloseSession(session), new UpdateProjectEditionSession(), new UpdateVersions(),
+					new UpdateJobsForVersion());
 		}
 	}
 
@@ -1602,6 +1666,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 			FlexoController.notify(FlexoLocalization.localizedForKey("project_already_exists_on_server"));
 			return;
 		}
+		goOnline();
 		NewProjectParameter data = new NewProjectParameter();
 		data.getProject().setName(flexoProject.getDisplayName());
 		data.setComment(FlexoLocalization.localizedForKey("first_import_of_project"));

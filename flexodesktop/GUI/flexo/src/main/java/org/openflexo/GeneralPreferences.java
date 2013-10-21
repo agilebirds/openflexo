@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -75,15 +75,7 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static final String LAST_SERVER_PROJECTS = "lastServerProjects";
 
-	public static final String LAST_OPENED_PROJECTS_1 = "lastProjects_1";
-
-	public static final String LAST_OPENED_PROJECTS_2 = "lastProjects_2";
-
-	public static final String LAST_OPENED_PROJECTS_3 = "lastProjects_3";
-
-	public static final String LAST_OPENED_PROJECTS_4 = "lastProjects_4";
-
-	public static final String LAST_OPENED_PROJECTS_5 = "lastProjects_5";
+	public static final String LAST_OPENED_PROJECTS = "lastProjects";
 
 	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
 
@@ -116,6 +108,8 @@ public final class GeneralPreferences extends ContextPreferences {
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
 	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
+
+	private static final String REMEMBER_LAST_PROJECTS_SIZE = "rememberLastProjectSize";
 
 	private static final FlexoObserver observer = new FlexoObserver() {
 
@@ -216,123 +210,72 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().setProperty(SYNCHRONIZED_BROWSER, synchronizedBrowser ? "true" : "false");
 	}
 
-	public static String getLastOpenedProject1() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_1);
+	public static File getLastOpenedProject(int i) {
+		return getPreferences().getDirectoryProperty(LAST_OPENED_PROJECTS + "_" + i, true);
 	}
 
-	public static void setLastOpenedProject1(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_1, lastOpenedProjects);
+	public static void setLastOpenedProject(File f, int i) {
+		getPreferences().setDirectoryProperty(LAST_OPENED_PROJECTS + "_" + i, f, true);
 	}
 
-	public static String getLastOpenedProject2() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_2);
+	public static int getRememberLastProjectsSize() {
+		Integer r = getPreferences().getIntegerProperty(REMEMBER_LAST_PROJECTS_SIZE);
+		if (r == null) {
+			setRememberLastProjectsSize(r = 10);
+		}
+		return r;
 	}
 
-	public static void setLastOpenedProject2(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_2, lastOpenedProjects);
+	public static void setRememberLastProjectsSize(int i) {
+		getPreferences().setIntegerProperty(REMEMBER_LAST_PROJECTS_SIZE, i);
 	}
 
-	public static String getLastOpenedProject3() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_3);
+	public static Vector<File> getRememberedLastOpenedProjects() {
+		return getLastOpenedProjects(getRememberLastProjectsSize());
 	}
 
-	public static void setLastOpenedProject3(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_3, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject4() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_4);
-	}
-
-	public static void setLastOpenedProject4(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_4, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject5() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_5);
-	}
-
-	public static void setLastOpenedProject5(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_5, lastOpenedProjects);
+	public static Vector<File> getLastOpenedProjects(int maxListSize) {
+		Vector<File> files = new Vector<File>();
+		int i = 1;
+		File f;
+		while ((maxListSize < 0 || i <= maxListSize) && (f = getLastOpenedProject(i++)) != null) {
+			files.add(f);
+		}
+		return files;
 	}
 
 	public static Vector<File> getLastOpenedProjects() {
-		Vector<File> files = new Vector<File>();
-		String s1 = getLastOpenedProject1();
-		String s2 = getLastOpenedProject2();
-		String s3 = getLastOpenedProject3();
-		String s4 = getLastOpenedProject4();
-		String s5 = getLastOpenedProject5();
-		File f1 = null;
-		File f2 = null;
-		File f3 = null;
-		File f4 = null;
-		File f5 = null;
-		if (s1 != null) {
-			f1 = new File(s1);
-			if (f1.exists()) {
-				files.add(f1);
-			}
-		}
-		if (s2 != null) {
-			f2 = new File(s2);
-			if (f2.exists()) {
-				files.add(f2);
-			}
-		}
-		if (s3 != null) {
-			f3 = new File(s3);
-			if (f3.exists()) {
-				files.add(f3);
-			}
-		}
-		if (s4 != null) {
-			f4 = new File(s4);
-			if (f4.exists()) {
-				files.add(f4);
-			}
-		}
-		if (s5 != null) {
-			f5 = new File(s5);
-			if (f5.exists()) {
-				files.add(f5);
-			}
-		}
-		return files;
+		return getLastOpenedProjects(-1);
 	}
 
 	/**
 	 * @param files
 	 */
 	public static void setLastOpenedProjects(Vector<File> files) {
-		if (files.size() > 0) {
-			setLastOpenedProject1(files.get(0).getAbsolutePath());
-		}
-		if (files.size() > 1) {
-			setLastOpenedProject2(files.get(1).getAbsolutePath());
-		}
-		if (files.size() > 2) {
-			setLastOpenedProject3(files.get(2).getAbsolutePath());
-		}
-		if (files.size() > 3) {
-			setLastOpenedProject4(files.get(3).getAbsolutePath());
-		}
-		if (files.size() > 4) {
-			setLastOpenedProject5(files.get(4).getAbsolutePath());
+		int i = 1;
+		for (File f : files) {
+			setLastOpenedProject(f, i++);
 		}
 	}
 
 	public static void addToLastOpenedProjects(File project) {
 		Vector<File> files = getLastOpenedProjects();
-		Enumeration<File> en = new Vector<File>(files).elements();
-		while (en.hasMoreElements()) {
-			File f = en.nextElement();
-			if (project.equals(f)) {
-				files.remove(f);
-				break;
+		Iterator<File> i = files.iterator();
+		while (i.hasNext()) {
+			File file = i.next();
+			if (project.equals(file)) {
+				i.remove();
 			}
 		}
 		files.insertElementAt(project, 0);
+		setLastOpenedProjects(files);
+	}
+
+	public static void removeFromLastOpenedProjects(File project) {
+		Vector<File> files = getLastOpenedProjects();
+		while (files.remove(project)) {
+			;
+		}
 		setLastOpenedProjects(files);
 	}
 

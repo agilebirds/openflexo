@@ -1607,9 +1607,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				String key = ((PreferencesHaveChanged) dataModification).propertyName();
 				if (GeneralPreferences.LANGUAGE_KEY.equals(key)) {
 					getFlexoFrame().updateTitle();
-				} else if (GeneralPreferences.LAST_OPENED_PROJECTS_1.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_2.equals(key)
-						|| GeneralPreferences.LAST_OPENED_PROJECTS_3.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_4.equals(key)
-						|| GeneralPreferences.LAST_OPENED_PROJECTS_5.equals(key)) {
+				} else if (key != null && key.startsWith(GeneralPreferences.LAST_OPENED_PROJECTS)) {
 					updateRecentProjectMenu();
 				}
 			}

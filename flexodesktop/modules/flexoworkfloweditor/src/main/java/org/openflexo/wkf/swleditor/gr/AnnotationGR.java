@@ -40,6 +40,7 @@ import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
 import org.openflexo.wkf.WKFCst;
+import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
@@ -113,6 +114,20 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 				}
 			}
 		});
+	}
+
+	@Override
+	public double getDefaultWidth() {
+		if (getDimensionConstraints() == DimensionConstraints.UNRESIZABLE || getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED
+				|| !getDrawable().hasDimensionForContext(SWLEditorConstants.SWIMMING_LANE_EDITOR)) {
+			if (getAnnotation().isAnnotation()) {
+				return 80.0;
+			} else {
+				return 30.0;
+			}
+		} else {
+			return getDrawable().getWidth(SWLEditorConstants.SWIMMING_LANE_EDITOR);
+		}
 	}
 
 	public WKFAnnotation getAnnotation() {
@@ -199,12 +214,12 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setBackground(BackgroundStyle.makeEmptyBackground());
 			setForeground(ForegroundStyle.makeNone());
 			setIsFloatingLabel(false);
-			setAdjustMinimalWidthToLabelWidth(true);
-			setAdjustMinimalHeightToLabelHeight(false);
+			setAdjustMinimalWidthToLabelWidth(false);
+			setAdjustMinimalHeightToLabelHeight(true);
 			setMinimalHeight(20);
 			setAdjustMaximalWidthToLabelWidth(true);
 			setAdjustMaximalHeightToLabelHeight(true);
-			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+			setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 		} else {
 			if (getAnnotation().getIsSolidBackground()) {
 				setBackground(BackgroundStyle.makeColoredBackground(getAnnotation().getBackgroundColor()));

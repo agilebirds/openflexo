@@ -46,7 +46,6 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.ServerRestProjectListModel;
 import org.openflexo.rest.client.model.Project;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -67,8 +66,8 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 						chooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
 						};
 					}
-					File selectedFile = chooser.getSelectedFile();
-					if (chooser.showOpenDialog() == JFileChooser.APPROVE_OPTION && selectedFile != null) {
+					File selectedFile;
+					if (chooser.showOpenDialog() == JFileChooser.APPROVE_OPTION && (selectedFile = chooser.getSelectedFile()) != null) {
 						if (!loadAndSetProject(action, selectedFile)) {
 							return false;
 						} else if (action.getProjectToImport() != null) {
@@ -100,12 +99,8 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 							return false;
 						}
 						try {
-							File documentDirectory = FileUtils.getDocumentDirectory();
-							if (!documentDirectory.exists() || !documentDirectory.canWrite()) {
-								documentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
-							}
-							File downloadToFolder = model.downloadToFolder(project, new File(documentDirectory, "OpenFlexo Projects"));
-							if (!loadAndSetProject(action, downloadToFolder)) {
+							File projectDirectory = model.downloadToFolder(project, model.getProjectDownloadDirectory());
+							if (!loadAndSetProject(action, projectDirectory)) {
 								return false;
 							} else if (action.getProjectToImport() != null) {
 								return true;

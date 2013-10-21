@@ -63,7 +63,6 @@ import org.openflexo.print.PrintManagingController;
 import org.openflexo.rest.action.UploadProjectAction;
 import org.openflexo.rest.client.ServerRestProjectListModel;
 import org.openflexo.rest.client.model.Project;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -141,7 +140,7 @@ public class FileMenu extends FlexoMenu {
 	public void updateRecentProjectMenu() {
 		if (recentProjectMenu != null) {
 			recentProjectMenu.removeAll();
-			Enumeration<File> en = GeneralPreferences.getLastOpenedProjects().elements();
+			Enumeration<File> en = GeneralPreferences.getRememberedLastOpenedProjects().elements();
 			while (en.hasMoreElements()) {
 				File f = en.nextElement();
 				recentProjectMenu.add(new ProjectItem(f));
@@ -285,13 +284,9 @@ public class FileMenu extends FlexoMenu {
 					return;
 				}
 				try {
-					File documentDirectory = FileUtils.getDocumentDirectory();
-					if (!documentDirectory.exists() || !documentDirectory.canWrite()) {
-						documentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
-					}
-					File projectDirectory = model.downloadToFolder(project, new File(documentDirectory, "OpenFlexo Projects"));
+					File projectDirectory = model.downloadToFolder(project, model.getProjectDownloadDirectory());
 					if (projectDirectory != null) {
-						if (projectDirectory != null) {
+						if (projectDirectory != null && projectDirectory.exists()) {
 							try {
 								getProjectLoader().loadProject(projectDirectory);
 							} catch (ProjectLoadingCancelledException e) {

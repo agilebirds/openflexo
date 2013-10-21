@@ -280,7 +280,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	}
 
 	public boolean setFileProperty(String key, File aFile, boolean mustExist) {
-		if (aFile != null && aFile.exists()) {
+		if (aFile != null && (aFile.exists() || !mustExist)) {
 			setFileProperty(key, aFile);
 			return true;
 		} else {
@@ -298,7 +298,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	}
 
 	public void setDirectoryProperty(String key, File aFile) {
-		if (aFile != null && aFile.isDirectory()) {
+		if (aFile != null && (aFile.isDirectory() || !aFile.exists())) {
 			setFileProperty(key, aFile);
 		} else {
 			setFileProperty(key, null);
@@ -315,12 +315,11 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	}
 
 	public boolean setDirectoryProperty(String key, File aFile, boolean mustExist) {
-		if (aFile != null && aFile.exists()) {
+		if (aFile != null && (aFile.exists() || !mustExist)) {
 			setDirectoryProperty(key, aFile);
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 }

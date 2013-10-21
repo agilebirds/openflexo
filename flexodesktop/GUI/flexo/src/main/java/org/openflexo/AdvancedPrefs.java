@@ -85,6 +85,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	private static final String HTTPS_PROXY_PORT = "HTTPSProxyPort";
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
+	public static final String PROJECTS_DOWNLOAD_DIRECTORY = "projectsDownloadDirectory";
 	public static final String SHOW_ALL_TABS = "show_all_tabs";
 	public static final String PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE = "preference_override_from_flexo_properties_done";
 
@@ -131,6 +132,28 @@ public class AdvancedPrefs extends ContextPreferences {
 			logger.fine("setLastDocumentDirectory");
 		}
 		getPreferences().setDirectoryProperty(LAST_DOCUMENT_DIRECTORY_KEY, f, true);
+	}
+
+	public static File getProjectsDownloadDirectory() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("getProjectsDownloadDirectory");
+		}
+		File projectsDirectory = getPreferences().getDirectoryProperty(PROJECTS_DOWNLOAD_DIRECTORY, false);
+		if (projectsDirectory == null || !projectsDirectory.canWrite()) {
+			File documentDirectory = FileUtils.getDocumentDirectory();
+			if (!documentDirectory.exists() || !documentDirectory.canWrite()) {
+				documentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
+			}
+			projectsDirectory = new File(documentDirectory, "OpenFlexo Projects");
+		}
+		return projectsDirectory;
+	}
+
+	public static void setProjectsDownloadDirectory(File f) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("setProjectsDownloadDirectory");
+		}
+		getPreferences().setDirectoryProperty(PROJECTS_DOWNLOAD_DIRECTORY, f, false);
 	}
 
 	public static File getEclipseWorkspaceDirectory() {

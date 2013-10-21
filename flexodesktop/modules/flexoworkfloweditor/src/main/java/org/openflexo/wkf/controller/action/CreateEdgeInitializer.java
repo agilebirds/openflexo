@@ -20,6 +20,7 @@
 package org.openflexo.wkf.controller.action;
 
 import java.util.EventObject;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -54,6 +55,7 @@ import org.openflexo.foundation.wkf.node.ChildNode;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.FatherNode;
 import org.openflexo.foundation.wkf.node.FlexoNode;
+import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -227,16 +229,25 @@ public class CreateEdgeInitializer extends ActionInitializer {
 								&& ((FlexoPortMap) action.getStartingNode()).isOutputPort()) {
 
 							// In this case, we first have to decide what to to relating to the end precondition
-
-							executionContext.createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction(
-									(FatherNode) action.getEndNode(), null, action);
-							executionContext.createPreCondition.setAllowsToSelectPreconditionOnly(true);
-							executionContext.createPreCondition.setForceNewCreation(true);
-							executionContext.createPreCondition.doAction();
-							if (!executionContext.createPreCondition.hasActionExecutionSucceeded()) {
-								return false;
+							List<FlexoPreCondition> unusedPreConditions = ((FatherNode) action.getEndNode()).getUnusedPreConditions();
+							if (unusedPreConditions.size() > 0) {
+								action.setEndNodePreCondition(unusedPreConditions.get(0));
+							} else {
+								Vector<FlexoNode> unboundBeginNodes = ((FatherNode) action.getEndNode()).getContainedPetriGraph() != null ? ((FatherNode) action
+										.getEndNode()).getContainedPetriGraph().getUnboundBeginNodes() : null;
+								executionContext.createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction(
+										(FatherNode) action.getEndNode(), null, action);
+								if (unboundBeginNodes != null && unboundBeginNodes.size() > 0) {
+									executionContext.createPreCondition.setAttachedBeginNode(unboundBeginNodes.get(0));
+								}
+								executionContext.createPreCondition.setAllowsToSelectPreconditionOnly(true);
+								executionContext.createPreCondition.setForceNewCreation(true);
+								executionContext.createPreCondition.doAction();
+								if (!executionContext.createPreCondition.hasActionExecutionSucceeded()) {
+									return false;
+								}
+								action.setEndNodePreCondition(executionContext.createPreCondition.getNewPreCondition());
 							}
-							action.setEndNodePreCondition(executionContext.createPreCondition.getNewPreCondition());
 						}
 
 						else {

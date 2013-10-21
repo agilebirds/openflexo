@@ -67,7 +67,8 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 				if (comment == null) {
 					return false;
 				}
-				ServerRestClientModel model = new ServerRestClientModel(getController(), project);
+				ServerRestClientModel model = new ServerRestClientModel(getController(), project, true);
+				model.goOnline();
 				model.performOperationsInSwingWorker(true, true, model.new UpdateUserOperation(), model.new UpdateProjectEditionSession(),
 						model.new UpdateServerProject(false));
 				if (model.getServerProject() != null) {

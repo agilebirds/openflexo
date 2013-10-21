@@ -127,6 +127,12 @@ public class CreatePreconditionInitializer extends ActionInitializer<CreatePreCo
 								return false;
 							}
 						}
+						if (pg != null) {
+							Vector<FlexoNode> unboundBeginNodes = pg.getUnboundBeginNodes();
+							if (unboundBeginNodes.size() > 0) {
+								action.setAttachedBeginNode(unboundBeginNodes.get(0));
+							}
+						}
 					}
 					if (action.getAttachedBeginNode() == null && pg != null) {
 						if (action.isForceNewCreation()) {

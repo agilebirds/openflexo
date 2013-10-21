@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -88,7 +89,8 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 						return;
 					}
 					progress.increment(FlexoLocalization.localizedForKey("retrieving_version"));
-					uri = UriBuilder.fromUri(client.getBASE_URI()).queryParam("projectRevision>", reference.getRevision())
+					uri = UriBuilder.fromUri(client.getBASE_URI())
+							.queryParam(URLEncoder.encode("projectRevision>", "utf-8"), reference.getRevision())
 							.queryParam("isMerged", "true").build();
 					versions = client.projectsProjectIDVersions(restClient, uri, project.getProjectId()).getAsXml(-1, -1,
 							"projectRevision desc", new GenericType<List<ProjectVersion>>() {
@@ -191,6 +193,9 @@ public class InteractiveFlexoProjectReferenceLoader implements FlexoProjectRefer
 		}
 		boolean wasOpened = applicationContext.getProjectLoader().hasEditorForProjectDirectory(selectedFile);
 		FlexoEditor editor = load(selectedFile, silentlyOnly, manuallySelected);
+		if (editor == null) {
+			return null;
+		}
 		FlexoProject project = editor.getProject();
 		if (project.getProjectURI().equals(ref.getURI())) {
 			// Project URI do match

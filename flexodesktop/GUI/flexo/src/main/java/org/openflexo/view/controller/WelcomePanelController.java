@@ -20,7 +20,6 @@ import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.rest.client.ServerRestProjectListModel;
 import org.openflexo.rest.client.model.Project;
-import org.openflexo.toolbox.FileUtils;
 
 public class WelcomePanelController extends FlexoFIBController {
 
@@ -131,13 +130,9 @@ public class WelcomePanelController extends FlexoFIBController {
 				return;
 			}
 			try {
-				File documentDirectory = FileUtils.getDocumentDirectory();
-				if (!documentDirectory.exists() || !documentDirectory.canWrite()) {
-					documentDirectory = org.apache.commons.io.FileUtils.getUserDirectory();
-				}
-				File downloadToFolder = model.downloadToFolder(project, new File(documentDirectory, "OpenFlexo Projects"));
-				if (downloadToFolder != null) {
-					openProject(downloadToFolder, module);
+				File projectDirectory = model.downloadToFolder(project, model.getProjectDownloadDirectory());
+				if (projectDirectory != null) {
+					openProject(projectDirectory, module);
 				} else {
 					show();
 				}

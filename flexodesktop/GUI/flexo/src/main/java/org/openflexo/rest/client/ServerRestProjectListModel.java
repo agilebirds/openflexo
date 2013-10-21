@@ -14,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.UriBuilder;
 
+import org.openflexo.AdvancedPrefs;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
@@ -27,6 +29,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.model.Project;
 import org.openflexo.rest.client.model.ProjectVersion;
 import org.openflexo.rest.client.model.Session;
+import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
@@ -40,6 +43,8 @@ import com.sun.jersey.api.client.GenericType;
 
 public class ServerRestProjectListModel extends AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
+	public static final String PROJECT_DOWNLOAD_DIRECTORY = "projectDownloadDirectory";
+
 	public static class ServerRestProjectListController extends FIBController {
 
 		public ServerRestProjectListController(FIBComponent rootComponent) {
@@ -50,7 +55,17 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 		public void validateAndDispose() {
 			ServerRestProjectListModel listModel = (ServerRestProjectListModel) getDataObject();
 			if (listModel.getSelectedProject() != null && listModel.canOpen(listModel.getSelectedProject())) {
-				super.validateAndDispose();
+				FlexoFileChooser chooser = new FlexoFileChooser(getWindow());
+				chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_folder_where_to_download_project"));
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setSelectedFile(AdvancedPrefs.getProjectsDownloadDirectory());
+				int retval = chooser.showSaveDialog(getWindow());
+				if (retval == JFileChooser.APPROVE_OPTION) {
+					AdvancedPrefs.setProjectsDownloadDirectory(chooser.getSelectedFile());
+					AdvancedPrefs.save();
+					((ServerRestProjectListModel) getDataObject()).setProjectDownloadDirectory(chooser.getSelectedFile());
+					super.validateAndDispose();
+				}
 			}
 		}
 	}
@@ -147,6 +162,8 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 	private Project selectedProject;
 	private boolean forEdition;
 
+	private File projectDownloadDirectory;
+
 	public ServerRestProjectListModel(ServerRestService serverRestService, Window owner, boolean forEdition) {
 		super(serverRestService, owner);
 		this.forEdition = forEdition;
@@ -241,8 +258,12 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 		}
 	}
 
-	public static void main(String[] args) {
-		double percent = 2.123456;
-		System.err.println(String.format("%1$.2f", percent) + "%");
+	public File getProjectDownloadDirectory() {
+		return projectDownloadDirectory;
+	}
+
+	public void setProjectDownloadDirectory(File projectDownloadDirectory) {
+		this.projectDownloadDirectory = projectDownloadDirectory;
+		pcSupport.firePropertyChange(PROJECT_DOWNLOAD_DIRECTORY, null, projectDownloadDirectory);
 	}
 }

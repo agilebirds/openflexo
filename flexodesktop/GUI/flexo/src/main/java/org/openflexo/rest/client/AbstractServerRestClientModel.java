@@ -315,19 +315,23 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 			Object entity = wae.getResponse().getEntity();
 			switch (wae.getResponse().getStatus()) {
 			case 500:
+			case 501:
+			case 502:
+			case 503:
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			case 401:
+			case 403:
+			case 404:
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			default:
 				if (entity != null) {
-					return FlexoController.confirm(entity.toString() + "\n"
-							+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+					FlexoController.notify(entity.toString());
 				} else {
-					return FlexoController.confirm(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server")
-							+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+					FlexoController.notify(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server"));
 				}
+				return false;
 			}
 		}
 		if (e.getCause() instanceof ConnectException) {

@@ -66,7 +66,7 @@ public class ApplicationData {
 	}
 
 	public Vector<File> getLastOpenedProjects() {
-		return GeneralPreferences.getLastOpenedProjects();
+		return GeneralPreferences.getRememberedLastOpenedProjects();
 	}
 
 	public ImageIcon getProjectIcon() {
