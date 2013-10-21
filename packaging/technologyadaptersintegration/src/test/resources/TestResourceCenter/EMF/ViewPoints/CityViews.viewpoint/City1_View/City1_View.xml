@@ -266,7 +266,7 @@
           <AddressedDiagramModelSlot idref="6" />
         </GraphicalAction>
         <IterationAction id="167" iteration="subItem.childs" iteratorName="subsubItem">
-          <GraphicalAction id="168" subject="subsubItem" value="0.0" feature="transparency" conditional="(subsubItem.editionPatternInstance != null)">
+          <GraphicalAction id="168" subject="subsubItem" value="1.0" feature="transparency" conditional="(subsubItem.editionPatternInstance != null)">
             <AddressedDiagramModelSlot idref="6" />
           </GraphicalAction>
           <GraphicalAction id="169" subject="subsubItem" value="0.1" feature="transparency" conditional="(subsubItem.editionPatternInstance = null)">
