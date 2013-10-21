@@ -46,13 +46,11 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	@Override
 	public boolean getIsPrimaryRole() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

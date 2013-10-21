@@ -36,14 +36,12 @@ public class ExcelCellPatternRole extends PatternRole<ExcelCell> {
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelCell.class;
 	}
 
 	@Override
 	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelCell.class.getName();
 	}
 
 	@Override
