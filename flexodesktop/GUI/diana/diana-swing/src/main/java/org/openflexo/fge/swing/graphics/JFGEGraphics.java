@@ -35,9 +35,17 @@ import org.openflexo.fge.geom.FGEGeneralShape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.FGEGraphicsImpl;
 
-public class JFGEGraphics extends FGEGraphicsImpl {
+/**
+ * This is the SWING base implementation of a {@link FGEGraphics}.<br>
+ * We mainly wrap a {@link Graphics2D} object and use those paint primitive
+ * 
+ * @author sylvain
+ * 
+ */
+public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 	private static final Logger logger = Logger.getLogger(JFGEGraphics.class.getPackage().getName());
 
