@@ -27,7 +27,7 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.ObjectIntersection;
 import org.openflexo.fge.geomedit.construction.IntersectionConstruction;
 import org.openflexo.fge.geomedit.construction.ObjectReference;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 import org.openflexo.logging.FlexoLogger;
 
 public class CreateIntersection extends Edition {
@@ -80,7 +80,7 @@ public class CreateIntersection extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		for (EditionInput o : inputs) {
 			ObtainObject oo = (ObtainObject) o;
 			if (oo.getReferencedObject() != null) {

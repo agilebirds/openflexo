@@ -25,10 +25,14 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.graphics.FGEGraphics;
 
 /**
  * Implemented by all views representing a DrawingTreeNode<br>
- * The implementation of this interface is technology specific, and is guaranteed to be an instance of (or s subclass of) C
+ * The implementation of this interface is technology specific, and is guaranteed to be an instance of (or s subclass of) C<br>
+ * 
+ * A {@link FGEView} manages a {@link FGEGraphics}.<br>
+ * A {@link FGEView} is painted using {@link #paint()} method.
  * 
  * @author sylvain
  * 
@@ -49,7 +53,16 @@ public interface FGEView<O, C> extends Observer, FGEConstants {
 
 	public O getDrawable();
 
+	/**
+	 * Return {@link FGEGraphics} for this view
+	 * 
+	 * @return
+	 */
+	public FGEGraphics getFGEGraphics();
+
 	public double getScale();
+
+	public void rescale();
 
 	public void activatePalette(DianaPalette<?, ?> aPalette);
 
@@ -57,7 +70,6 @@ public interface FGEView<O, C> extends Observer, FGEConstants {
 
 	public boolean isDeleted();
 
-	public void rescale();
-
 	public void stopLabelEdition();
+
 }

@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.RoundRectangle;
 import org.openflexo.fge.geomedit.construction.RoundRectangleWithTwoPointsConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateRoundRectangleFromPoints extends Edition {
 
@@ -50,7 +50,7 @@ public class CreateRoundRectangleFromPoints extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.HalfLine;
 import org.openflexo.fge.geomedit.construction.HalfLineWithTwoPointsConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateHalfLineFromPoints extends Edition {
 
@@ -45,7 +45,7 @@ public class CreateHalfLineFromPoints extends Edition {
 	}
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

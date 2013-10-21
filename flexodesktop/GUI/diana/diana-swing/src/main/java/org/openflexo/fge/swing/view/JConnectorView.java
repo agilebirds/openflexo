@@ -41,6 +41,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeDeleted;
@@ -52,6 +53,7 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
+import org.openflexo.fge.swing.graphics.JFGEConnectorGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ConnectorView;
 
@@ -73,6 +75,8 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 
 	private JLabelView<O> labelView;
 
+	protected JFGEConnectorGraphics graphics;
+
 	public JConnectorView(ConnectorNode<O> node, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		super();
 		this.controller = controller;
@@ -87,17 +91,8 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 
 		updateVisibility();
 
-		/*if (getController() instanceof DianaInteractiveEditor) {
-			if (((DianaInteractiveEditor<?, ?, JComponent>) controller).getPalettes() != null) {
-				for (DrawingPalette p : ((DianaInteractiveEditor<?, ?, JComponent>) controller).getPalettes()) {
-					activatePalette(p);
-				}
-			}
-		}*/
+		graphics = new JFGEConnectorGraphics(node);
 
-		// setToolTipText(getClass().getSimpleName()+hashCode());
-
-		// logger.info("Build JConnectorView for aGraphicalRepresentation="+aGraphicalRepresentation);
 	}
 
 	private boolean isDeleted = false;
@@ -146,6 +141,11 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 	@Override
 	public ConnectorNode<O> getNode() {
 		return connectorNode;
+	}
+
+	@Override
+	public JFGEConnectorGraphics getFGEGraphics() {
+		return graphics;
 	}
 
 	@Override
@@ -267,6 +267,12 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 		if (isDeleted()) {
 			return;
 		}
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
 				// Buffering painting
@@ -281,12 +287,12 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 						FGEPaintManager.paintPrimitiveLogger.fine("JConnectorView: buffering paint, draw: " + connectorNode + " clip="
 								+ g.getClip());
 					}
-					connectorNode.paint(g, getController());
+					getNode().paint(graphics);
 					super.paint(g);
 				}
 			} else {
 				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), connectorNode, getScale())) {
-					connectorNode.paint(g, getController());
+					getNode().paint(graphics);
 					super.paint(g);
 				}
 
@@ -309,12 +315,14 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 			}
 		} else {
 			// Normal painting
-			connectorNode.paint(g, getController());
+			getNode().paint(graphics);
 			super.paint(g);
 		}
 
 		// super.paint(g);
 		// getGraphicalRepresentation().paint(g,getController());
+
+		graphics.releaseGraphics();
 	}
 
 	@Override

@@ -17,19 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge.swing.graphics;
 
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.graphics.FGEGeometricGraphics;
 
-public class FGEGeometricGraphicsImpl extends FGEGraphicsImpl implements FGEGeometricGraphics {
+public class JFGEGeometricGraphics extends JFGEGraphics implements FGEGeometricGraphics {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(FGEGeometricGraphicsImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JFGEGeometricGraphics.class.getPackage().getName());
 
-	public FGEGeometricGraphicsImpl(GeometricNode<?> geometricNode) {
+	public JFGEGeometricGraphics(GeometricNode<?> geometricNode) {
 		super(geometricNode);
 	}
 

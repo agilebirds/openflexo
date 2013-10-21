@@ -36,7 +36,7 @@ import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.LineIntersectionPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PointReference;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class ObtainPoint extends EditionInput<FGEPoint> {
@@ -146,7 +146,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 		}
 
 		@Override
-		public void paint(FGEDrawingGraphicsImpl graphics) {
+		public void paint(JFGEDrawingGraphics graphics) {
 			if (focusedControlPoint != null) {
 				graphics.useForegroundStyle(graphics.getFactory().makeForegroundStyle(Color.RED));
 				graphics.drawControlPoint(focusedControlPoint.getPoint(), FGEConstants.CONTROL_POINT_SIZE);
@@ -187,7 +187,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 		}
 
 		@Override
-		public void paint(FGEDrawingGraphicsImpl graphics) {
+		public void paint(JFGEDrawingGraphics graphics) {
 			if (currentChildInputStep == 0) {
 				// Nothing to draw
 			} else if (currentChildInputStep == 1 && ((ObtainLine) childInputs.get(0)).getReferencedLine() != null) {
@@ -259,7 +259,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 	}
 
 	@Override
-	public void paint(FGEDrawingGraphicsImpl graphics) {
+	public void paint(JFGEDrawingGraphics graphics) {
 		super.paint(graphics);
 		if ((getActiveMethod() instanceof ControlPointSelection) || (getActiveMethod() instanceof IntersectionSelection)) {
 			getActiveMethod().paint(graphics);

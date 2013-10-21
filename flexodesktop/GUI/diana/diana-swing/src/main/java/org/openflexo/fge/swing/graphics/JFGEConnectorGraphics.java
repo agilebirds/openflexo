@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge.swing.graphics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -31,21 +31,26 @@ import org.openflexo.fge.connectors.ConnectorSymbol;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public class FGEConnectorGraphicsImpl extends FGEGraphicsImpl implements FGEConnectorGraphics {
+public class JFGEConnectorGraphics extends JFGEGraphics implements FGEConnectorGraphics {
 
-	private static final Logger logger = Logger.getLogger(FGEConnectorGraphicsImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JFGEConnectorGraphics.class.getPackage().getName());
 
-	private FGESymbolGraphicsImpl symbolGraphics;
+	private JFGESymbolGraphics symbolGraphics;
 
-	public FGEConnectorGraphicsImpl(ConnectorNode<?> node) {
+	public JFGEConnectorGraphics(ConnectorNode<?> node) {
 		super(node);
-		symbolGraphics = new FGESymbolGraphicsImpl(node);
+		symbolGraphics = new JFGESymbolGraphics(node);
 	}
 
 	@Override
 	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
+	}
+
+	public JFGESymbolGraphics getSymbolGraphics() {
+		return symbolGraphics;
 	}
 
 	/**

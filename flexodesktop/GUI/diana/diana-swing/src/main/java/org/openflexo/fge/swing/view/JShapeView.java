@@ -46,6 +46,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
+import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
@@ -59,6 +60,7 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
+import org.openflexo.fge.swing.graphics.JFGEShapeGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
 
@@ -80,6 +82,8 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 
 	private JLabelView<O> labelView;
 
+	protected JFGEShapeGraphics graphics;
+
 	public JShapeView(ShapeNode<O> node, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller) {
 		super();
 		logger.fine("Create JShapeView " + Integer.toHexString(hashCode()) + " for " + node);
@@ -98,21 +102,13 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		updateVisibility();
 		setFocusable(true);
 
-		/*if (getController() instanceof DianaInteractiveEditor) {
-			if (((DianaInteractiveEditor<?, SwingViewFactory, JComponent>) controller).getPalettes() != null) {
-				for (DrawingPalette p : ((DianaInteractiveEditor<?, SwingViewFactory, JComponent>) controller).getPalettes()) {
-					activatePalette(p);
-				}
-			}
-		}*/
+		graphics = new JFGEShapeGraphics(node);
 
-		// logger.info("make JShapeView with "+aGraphicalRepresentation+" bounds="+getBounds());
+	}
 
-		// setToolTipText(getClass().getSimpleName()+hashCode());
-
-		// System.out.println("isDoubleBuffered()="+isDoubleBuffered());
-
-		// revalidate();
+	@Override
+	public JFGEShapeGraphics getFGEGraphics() {
+		return graphics;
 	}
 
 	public void disableFGEViewMouseListener() {
@@ -324,7 +320,13 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 	}
 
 	private void doPaint(Graphics g) {
-		shapeNode.paint(g, getController());
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+		shapeNode.paint(graphics);
+		graphics.releaseGraphics();
 		super.paint(g);
 	}
 

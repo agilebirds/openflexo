@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.GeometricConstruction;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod.InputComponent;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public abstract class EditionInput<O extends Object> {
 	private String inputLabel;
@@ -160,7 +160,7 @@ public abstract class EditionInput<O extends Object> {
 	public void endEdition() {
 	}
 
-	public void paint(FGEDrawingGraphicsImpl graphics) {
+	public void paint(JFGEDrawingGraphics graphics) {
 	}
 
 	private EditionInputMethod parentInputMethod = null;

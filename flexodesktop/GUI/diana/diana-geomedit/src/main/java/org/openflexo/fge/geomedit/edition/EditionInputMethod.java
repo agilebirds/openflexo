@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.construction.GeometricConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 import org.openflexo.fge.view.listener.DrawingViewMouseListener;
 
 public abstract class EditionInputMethod<O extends Object, I extends EditionInput<O>> extends DrawingViewMouseListener {
@@ -92,7 +92,7 @@ public abstract class EditionInputMethod<O extends Object, I extends EditionInpu
 		return returned;
 	}
 
-	public void paint(FGEDrawingGraphicsImpl graphics) {
+	public void paint(JFGEDrawingGraphics graphics) {
 	}
 
 	public abstract InputComponent getInputComponent();

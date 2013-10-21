@@ -1,5 +1,6 @@
 ARITHMETIC_FLOAT=[FLOAT]
 BOOLEAN=BOOLEAN
+LITERAL=[LITERAL]
 addition=addition
 bold=Bold
 bold_italic=Bold italic

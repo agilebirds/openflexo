@@ -40,7 +40,7 @@ import org.openflexo.fge.geomedit.construction.ExplicitPointConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.QuadCurveConstruction;
 import org.openflexo.fge.geomedit.construction.QuadCurveWithThreePointsConstruction;
-import org.openflexo.fge.graphics.FGEGeometricGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class QuadCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEQuadCurve, QuadCurve> implements
@@ -63,7 +63,7 @@ public class QuadCurveGraphicalRepresentation extends GeometricObjectGraphicalRe
 	}
 
 	@Override
-	public void paintGeometricObject(FGEGeometricGraphicsImpl graphics) {
+	public void paintGeometricObject(JFGEGeometricGraphics graphics) {
 		getGeometricObject().paint(graphics);
 
 		if (getIsSelected() || getIsFocused()) {

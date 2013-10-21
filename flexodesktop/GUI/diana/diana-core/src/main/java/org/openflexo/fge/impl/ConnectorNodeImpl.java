@@ -1,8 +1,5 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -16,15 +13,12 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -32,7 +26,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.GeomUtils;
-import org.openflexo.fge.graphics.FGEConnectorGraphicsImpl;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
@@ -47,8 +41,6 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	private static final Logger logger = Logger.getLogger(ConnectorNodeImpl.class.getPackage().getName());
 
-	protected FGEConnectorGraphicsImpl graphics;
-
 	private ShapeNodeImpl<?> startNode;
 	private ShapeNodeImpl<?> endNode;
 
@@ -57,7 +49,6 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	protected ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
-		graphics = new FGEConnectorGraphicsImpl(this);
 	}
 
 	@Override
@@ -358,58 +349,6 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public void paint(Graphics g, DianaEditor<?> controller) {
-		/*if (!isRegistered()) {
-			setRegistered(true);
-		}*/
-
-		super.paint(g, controller);
-
-		if (getStartNode() == null || getStartNode().isDeleted()) {
-			logger.warning("Could not paint connector: start object is null or deleted");
-			return;
-		}
-
-		if (getEndNode() == null || getEndNode().isDeleted()) {
-			logger.warning("Could not paint connector: end object is null or deleted");
-			return;
-		}
-
-		Graphics2D g2 = (Graphics2D) g;
-		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
-		} else {
-			logger.warning("Unsupported controller: " + controller);
-		}
-
-		if (FGEConstants.DEBUG) {
-			g2.setColor(Color.PINK);
-			g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
-		}
-
-		if (getGraphicalRepresentation().getConnectorSpecification() != null) {
-
-			if (!isValidated()) {
-				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
-				return;
-			}
-			if (getStartNode() == null || getStartNode().isDeleted() || !getStartNode().isValidated()) {
-				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
-						+ " start=" + getStartNode());
-				return;
-			}
-			if (getEndNode() == null || getEndNode().isDeleted() || !getEndNode().isValidated()) {
-				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
-						+ " end=" + getEndNode());
-				return;
-			}
-			getConnector().paintConnector(graphics);
-		}
-
-		graphics.releaseGraphics();
-	}
-
-	@Override
 	public Point getLabelLocation(double scale) {
 		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
 		return new Point((int) (connectorCenter.x + getGraphicalRepresentation().getAbsoluteTextX() * scale + getViewX(scale)),
@@ -499,11 +438,6 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public FGEConnectorGraphicsImpl getGraphics() {
-		return graphics;
-	}
-
-	@Override
 	public List<? extends ControlArea<?>> getControlAreas() {
 		return getConnector().getControlAreas();
 	}
@@ -548,4 +482,44 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	public FGEDimension getRequiredLabelSize() {
 		return null;
 	}
+
+	public void paint(FGEConnectorGraphics g) {
+
+		if (getStartNode() == null || getStartNode().isDeleted()) {
+			logger.warning("Could not paint connector: start object is null or deleted");
+			return;
+		}
+
+		if (getEndNode() == null || getEndNode().isDeleted()) {
+			logger.warning("Could not paint connector: end object is null or deleted");
+			return;
+		}
+
+		/*if (FGEConstants.DEBUG) {
+			Graphics2D g2 = graphics.getGraphics();
+			g2.setColor(Color.PINK);
+			g2.drawRect(0, 0, getNode().getViewWidth(controller.getScale()) - 1, getNode().getViewHeight(controller.getScale()) - 1);
+		}*/
+
+		if (getGraphicalRepresentation().getConnectorSpecification() != null) {
+
+			if (!isValidated()) {
+				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
+				return;
+			}
+			if (getStartNode() == null || getStartNode().isDeleted() || !getStartNode().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " start=" + getStartNode());
+				return;
+			}
+			if (getEndNode() == null || getEndNode().isDeleted() || !getEndNode().isValidated()) {
+				logger.warning("paint connector requested for invalid start object (either null, deleted or not validated) : " + this
+						+ " end=" + getEndNode());
+				return;
+			}
+			getConnector().paintConnector(g);
+		}
+
+	}
+
 }

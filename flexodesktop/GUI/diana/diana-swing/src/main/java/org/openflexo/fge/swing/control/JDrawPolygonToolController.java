@@ -27,10 +27,12 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.fge.swing.view.JDrawingView;
 
 public class JDrawPolygonToolController extends DrawPolygonToolController<MouseEvent> {
@@ -66,4 +68,15 @@ public class JDrawPolygonToolController extends DrawPolygonToolController<MouseE
 				getController().getScale());
 	}
 
+	@Override
+	public JFGEGeometricGraphics makeGraphics(ForegroundStyle foregroundStyle) {
+		JFGEGeometricGraphics returned = new JFGEGeometricGraphics(getCurrentEditedShape());
+		returned.setDefaultForeground(foregroundStyle);
+		return returned;
+	}
+
+	@Override
+	public JFGEGeometricGraphics getGraphics() {
+		return (JFGEGeometricGraphics) super.getGraphics();
+	}
 }

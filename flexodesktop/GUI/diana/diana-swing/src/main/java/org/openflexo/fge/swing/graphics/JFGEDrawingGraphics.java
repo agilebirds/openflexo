@@ -17,26 +17,53 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge.swing.graphics;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
+import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-public class FGEDrawingGraphicsImpl extends FGEGraphicsImpl implements FGEDrawingGraphics {
+public class JFGEDrawingGraphics extends JFGEGraphics implements FGEDrawingGraphics {
 
-	private static final Logger logger = Logger.getLogger(FGEDrawingGraphicsImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JFGEDrawingGraphics.class.getPackage().getName());
 
-	public FGEDrawingGraphicsImpl(RootNode<?> rootNode) {
+	private JFGEDrawingDecorationGraphics drawingDecorationGraphics;
+
+	public JFGEDrawingGraphics(RootNode<?> rootNode) {
 		super(rootNode);
+		drawingDecorationGraphics = new JFGEDrawingDecorationGraphics(rootNode);
 	}
 
 	@Override
 	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return (DrawingGraphicalRepresentation) super.getGraphicalRepresentation();
+	}
+
+	@Override
+	public FGEDrawingDecorationGraphics getDrawingDecorationGraphics() {
+		return drawingDecorationGraphics;
+	}
+
+	/**
+	 * 
+	 * @param graphics2D
+	 * @param controller
+	 */
+	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?, ?, ?> controller) {
+		super.createGraphics(graphics2D, controller);
+		drawingDecorationGraphics.createGraphics(graphics2D, controller);
+	}
+
+	public void releaseGraphics() {
+		super.releaseGraphics();
+		drawingDecorationGraphics.releaseGraphics();
 	}
 
 	// Drawing graphics doesn't use normalized coordinates system

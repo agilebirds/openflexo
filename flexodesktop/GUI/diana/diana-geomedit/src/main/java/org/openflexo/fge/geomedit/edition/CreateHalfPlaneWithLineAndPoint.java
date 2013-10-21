@@ -27,7 +27,7 @@ import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.HalfPlane;
 import org.openflexo.fge.geomedit.construction.HalfPlaneWithLineAndPointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateHalfPlaneWithLineAndPoint extends Edition {
 
@@ -53,7 +53,7 @@ public class CreateHalfPlaneWithLineAndPoint extends Edition {
 	private boolean requireRepaint = true;
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

@@ -14,6 +14,16 @@ import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 
+/**
+ * 
+ * The <code>FGEGraphics</code> class is the abstract base class for all graphics contexts that allow to draw inside a view representing a
+ * {@link DrawingTreeNode}.<br>
+ * A <code>FGEGraphics</code> object encapsulates state information needed for the basic rendering operations that Diana supports.<br>
+ * A <code>FGEGraphics</code> object is connected to its {@link DrawingTreeNode} and to its {@link DianaEditor}.
+ * 
+ * @author sylvain
+ * 
+ */
 public interface FGEGraphics extends AbstractFGEGraphics {
 
 	public abstract FGEModelFactory getFactory();

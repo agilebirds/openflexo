@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Polylin;
 import org.openflexo.fge.geomedit.construction.RectPolylinWithStartAndEndAreaConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateRectPolylinWithStartAndEndArea extends Edition {
 
@@ -54,7 +54,7 @@ public class CreateRectPolylinWithStartAndEndArea extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		// Nothing to draw
 	}
 }

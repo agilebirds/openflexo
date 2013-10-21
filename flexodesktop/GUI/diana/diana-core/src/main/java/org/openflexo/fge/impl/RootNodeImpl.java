@@ -1,8 +1,6 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.Collections;
@@ -16,27 +14,21 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.FGEDrawingDecorationGraphicsImpl;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
 public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepresentation> implements RootNode<M> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RootNodeImpl.class.getPackage().getName());
 
-	protected FGEDrawingGraphicsImpl graphics;
-	private FGEDrawingDecorationGraphicsImpl decorationGraphics;
 	private BackgroundStyle bgStyle;
 
 	protected RootNodeImpl(DrawingImpl<M> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding) {
 		super(drawing, drawable, grBinding, null);
-		graphics = new FGEDrawingGraphicsImpl(this);
-		decorationGraphics = new FGEDrawingDecorationGraphicsImpl(this);
 		startDrawableObserving();
 	}
 
@@ -109,64 +101,6 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	}
 
 	@Override
-	public void paint(Graphics g, DianaEditor<?> controller) {
-		Graphics2D g2 = (Graphics2D) g;
-		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
-			// If there is a decoration painter init its graphics
-			if (getGraphicalRepresentation().getDecorationPainter() != null) {
-				decorationGraphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
-			}
-		} else {
-			logger.warning("Unsupported controller: " + controller);
-		}
-
-		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
-		if (getGraphicalRepresentation().getDecorationPainter() != null
-				&& getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {
-			getGraphicalRepresentation().getDecorationPainter().paintDecoration(decorationGraphics);
-		}
-
-		super.paint(g, controller);
-
-		if (!(getBGStyle() instanceof ColorBackgroundStyle)
-				|| !((ColorBackgroundStyle) getBGStyle()).getColor().equals(getGraphicalRepresentation().getBackgroundColor())) {
-			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
-		}
-
-		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
-
-		graphics.setDefaultForeground(fgStyle);
-		graphics.setDefaultBackground(getBGStyle());
-		if (getGraphicalRepresentation().getDrawWorkingArea()) {
-			getGraphicalRepresentation().getWorkingArea().paint(graphics);
-		}
-		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
-		if (getGraphicalRepresentation().getDecorationPainter() != null
-				&& !getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {
-			getGraphicalRepresentation().getDecorationPainter().paintDecoration(decorationGraphics);
-		}
-
-		graphics.releaseGraphics();
-
-	}
-
-	@Override
-	public FGEDrawingGraphicsImpl getGraphics() {
-		return graphics;
-	}
-
-	@Override
-	public void delete() {
-		super.delete();
-		if (graphics != null) {
-			graphics.delete();
-		}
-		graphics = null;
-		decorationGraphics = null;
-	}
-
-	@Override
 	public List<ControlArea<?>> getControlAreas() {
 		// No control areas are declared for the root node
 		return Collections.emptyList();
@@ -209,4 +143,34 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	public FGEDimension getRequiredLabelSize() {
 		return null;
 	}
+
+	@Override
+	public void paint(FGEDrawingGraphics g) {
+
+		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
+		if (getGraphicalRepresentation().getDecorationPainter() != null
+				&& getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {
+			getGraphicalRepresentation().getDecorationPainter().paintDecoration(g.getDrawingDecorationGraphics());
+		}
+
+		if (!(getBGStyle() instanceof ColorBackgroundStyle)
+				|| !((ColorBackgroundStyle) getBGStyle()).getColor().equals(getGraphicalRepresentation().getBackgroundColor())) {
+			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
+		}
+
+		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
+
+		g.setDefaultForeground(fgStyle);
+		g.setDefaultBackground(getBGStyle());
+		if (getGraphicalRepresentation().getDrawWorkingArea()) {
+			getGraphicalRepresentation().getWorkingArea().paint(g);
+		}
+		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
+		if (getGraphicalRepresentation().getDecorationPainter() != null
+				&& !getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {
+			getGraphicalRepresentation().getDecorationPainter().paintDecoration(g.getDrawingDecorationGraphics());
+		}
+
+	}
+
 }

@@ -103,7 +103,7 @@ public interface Shape<SS extends ShapeSpecification> {
 
 	public abstract FGEArea getAllowedVerticalConnectorLocationFromSouth();
 
-	public abstract void paintShadow(FGEShapeGraphics g);
+	// public abstract void paintShadow(FGEShapeGraphics g);
 
 	public abstract void paintShape(FGEShapeGraphics g);
 

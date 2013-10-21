@@ -17,21 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge.swing.graphics;
 
 import java.awt.Point;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.FGESymbolGraphics;
 
 //import org.openflexo.fge.ShapeGraphicalRepresentation;
 
-public class FGESymbolGraphicsImpl extends FGEGraphicsImpl implements FGESymbolGraphics {
+public class JFGESymbolGraphics extends JFGEGraphics implements FGESymbolGraphics {
 
-	private static final Logger logger = Logger.getLogger(FGESymbolGraphicsImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JFGESymbolGraphics.class.getPackage().getName());
 
-	public FGESymbolGraphicsImpl(ConnectorNode<?> node) {
+	public JFGESymbolGraphics(ConnectorNode<?> node) {
 		super(node);
 	}
 

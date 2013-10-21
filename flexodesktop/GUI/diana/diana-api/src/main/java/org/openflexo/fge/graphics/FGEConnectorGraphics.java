@@ -28,6 +28,8 @@ public interface FGEConnectorGraphics extends FGEGraphics {
 
 	public abstract ConnectorGraphicalRepresentation getGraphicalRepresentation();
 
+	public FGESymbolGraphics getSymbolGraphics();
+
 	/**
 	 * 
 	 * @param point

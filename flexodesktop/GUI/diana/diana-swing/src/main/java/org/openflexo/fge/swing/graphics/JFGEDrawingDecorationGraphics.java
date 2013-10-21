@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge.swing.graphics;
 
 import java.awt.Point;
 import java.util.logging.Logger;
@@ -25,12 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 
-public class FGEDrawingDecorationGraphicsImpl extends FGEGraphicsImpl implements FGEDrawingDecorationGraphics {
+public class JFGEDrawingDecorationGraphics extends JFGEGraphics implements FGEDrawingDecorationGraphics {
 
-	private static final Logger logger = Logger.getLogger(FGEDrawingDecorationGraphicsImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JFGEDrawingDecorationGraphics.class.getPackage().getName());
 
-	public FGEDrawingDecorationGraphicsImpl(RootNode<?> rootNode) {
+	public JFGEDrawingDecorationGraphics(RootNode<?> rootNode) {
 		super(rootNode);
 	}
 

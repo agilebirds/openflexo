@@ -1,9 +1,6 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -23,7 +20,6 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
@@ -32,8 +28,6 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.control.AbstractDianaEditor;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -47,8 +41,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
-import org.openflexo.fge.graphics.FGEShapeDecorationGraphicsImpl;
-import org.openflexo.fge.graphics.FGEShapeGraphicsImpl;
+import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapeDecorationPainter;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.notifications.BindingChanged;
@@ -77,8 +70,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	private boolean observeParentGRBecauseMyLocationReferToIt = false;
 
-	private FGEShapeGraphicsImpl graphics;
-	private FGEShapeDecorationGraphicsImpl decorationGraphics;
+	// private FGEShapeGraphicsImpl graphics;
+	// private FGEShapeDecorationGraphicsImpl decorationGraphics;
 	private ShapeDecorationPainter decorationPainter;
 	private ShapePainter shapePainter;
 
@@ -87,7 +80,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	protected ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
-		graphics = new FGEShapeGraphicsImpl(this);
+		// graphics = new FGEShapeGraphicsImpl(this);
 		// width = getGraphicalRepresentation().getMinimalWidth();
 		// height = getGraphicalRepresentation().getMinimalHeight();
 	}
@@ -291,11 +284,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		return getGraphicalRepresentation().getHeight()
 				+ (getGraphicalRepresentation().getBorder() != null ? getGraphicalRepresentation().getBorder().getTop()
 						+ getGraphicalRepresentation().getBorder().getBottom() : 0);
-	}
-
-	@Override
-	public FGEShapeGraphicsImpl getGraphics() {
-		return graphics;
 	}
 
 	@Override
@@ -932,74 +920,12 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public void paint(Graphics g, DianaEditor<?> controller) {
-		/*if (!getGraphicalRepresentation().isRegistered()) {
-			getGraphicalRepresentation().setRegistered(true);
-		}*/
-		super.paint(g, controller);
-
-		Graphics2D g2 = (Graphics2D) g;
-
-		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
-			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
-			// If there is a decoration painter init its graphics
-			if (decorationPainter != null) {
-				decorationGraphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
-			}
-		} else {
-			logger.warning("Unsupported controller: " + controller);
-		}
-
-		// If there is a decoration painter and decoration should be painted BEFORE shape, do it now
-		if (decorationPainter != null && decorationPainter.paintBeforeShape()) {
-			decorationPainter.paintDecoration(decorationGraphics);
-		}
-
-		if (FGEConstants.DEBUG) {
-			if (getGraphicalRepresentation().getBorder() != null) {
-				g2.setColor(Color.RED);
-				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
-				g2.setColor(Color.BLUE);
-				g2.drawRect((int) (getGraphicalRepresentation().getBorder().getLeft() * controller.getScale()),
-						(int) (getGraphicalRepresentation().getBorder().getTop() * controller.getScale()),
-						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);
-			} else {
-				g2.setColor(Color.BLUE);
-				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
-			}
-		}
-
-		if (getGraphicalRepresentation().getShapeSpecification() != null && getGraphicalRepresentation().getShadowStyle() != null) {
-			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
-				getShape().paintShadow(graphics);
-			}
-			getShape().paintShape(graphics);
-		}
-
-		if (shapePainter != null) {
-			shapePainter.paintShape(graphics);
-		}
-
-		// If there is a decoration painter and decoration should be painted AFTER shape, do it now
-		if (decorationPainter != null && !decorationPainter.paintBeforeShape()) {
-			decorationPainter.paintDecoration(decorationGraphics);
-		}
-
-		graphics.releaseGraphics();
-
-		if (decorationPainter != null) {
-			decorationGraphics.releaseGraphics();
-		}
-	}
-
-	@Override
 	public ShapeDecorationPainter getDecorationPainter() {
 		return decorationPainter;
 	}
 
 	@Override
 	public void setDecorationPainter(ShapeDecorationPainter aPainter) {
-		decorationGraphics = new FGEShapeDecorationGraphicsImpl(this);
 		decorationPainter = aPainter;
 	}
 
@@ -1447,6 +1373,46 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		} else {
 			setSize(getSize());
 		}
+	}
+
+	@Override
+	public void paint(FGEShapeGraphics g) {
+		// If there is a decoration painter and decoration should be painted BEFORE shape, do it now
+		if (decorationPainter != null && decorationPainter.paintBeforeShape()) {
+			decorationPainter.paintDecoration(g.getShapeDecorationGraphics());
+		}
+
+		/*if (FGEConstants.DEBUG) {
+			if (getGraphicalRepresentation().getBorder() != null) {
+				g2.setColor(Color.RED);
+				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
+				g2.setColor(Color.BLUE);
+				g2.drawRect((int) (getGraphicalRepresentation().getBorder().getLeft() * controller.getScale()),
+						(int) (getGraphicalRepresentation().getBorder().getTop() * controller.getScale()),
+						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);
+			} else {
+				g2.setColor(Color.BLUE);
+				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
+			}
+		}*/
+
+		if (getGraphicalRepresentation().getShapeSpecification() != null && getGraphicalRepresentation().getShadowStyle() != null) {
+			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
+				g.paintShadow();
+				// getShape().paintShadow(g);
+			}
+			getShape().paintShape(g);
+		}
+
+		if (shapePainter != null) {
+			shapePainter.paintShape(g);
+		}
+
+		// If there is a decoration painter and decoration should be painted AFTER shape, do it now
+		if (decorationPainter != null && !decorationPainter.paintBeforeShape()) {
+			decorationPainter.paintDecoration(g.getShapeDecorationGraphics());
+		}
+
 	}
 
 }

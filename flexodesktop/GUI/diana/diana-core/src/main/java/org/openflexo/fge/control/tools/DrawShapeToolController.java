@@ -20,7 +20,6 @@
 package org.openflexo.fge.control.tools;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -39,7 +38,7 @@ import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.impl.ContainerNodeImpl;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.GeometricNodeImpl;
@@ -60,7 +59,9 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 
 	private boolean editionHasBeenStarted = false;
 
-	private ForegroundStyle currentlyEditedForeground;
+	// private ForegroundStyle currentlyEditedForeground;
+
+	private FGEGeometricGraphics graphics;
 
 	public DrawShapeToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super();
@@ -68,7 +69,13 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 		this.control = control;
 		editionHasBeenStarted = false;
 
-		currentlyEditedForeground = controller.getFactory().makeForegroundStyle(Color.GREEN);
+		graphics = makeGraphics(controller.getFactory().makeForegroundStyle(Color.GREEN));
+	}
+
+	public abstract FGEGeometricGraphics makeGraphics(ForegroundStyle foregroundStyle);
+
+	public FGEGeometricGraphics getGraphics() {
+		return graphics;
 	}
 
 	/**
@@ -185,18 +192,13 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 
 	public abstract FGEPoint getPoint(ME e);
 
-	public void paintCurrentEditedShape(FGEDrawingGraphicsImpl graphics) {
+	public void paintCurrentEditedShape() {
 
 		if (!editionHasBeenStarted) {
 			return;
 		}
 
-		Graphics2D oldGraphics = graphics.cloneGraphics();
-		graphics.setDefaultForeground(currentlyEditedForeground);
-
-		currentEditedShapeGeometricNode.paint(graphics.getGraphics(), getController());
-
-		graphics.releaseClonedGraphics(oldGraphics);
+		currentEditedShapeGeometricNode.paint(graphics);
 	}
 
 	public List<? extends ControlArea<?>> getControlAreas() {

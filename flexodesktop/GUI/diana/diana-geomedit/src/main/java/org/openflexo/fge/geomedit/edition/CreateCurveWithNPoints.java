@@ -29,7 +29,7 @@ import org.openflexo.fge.geomedit.ComplexCurve;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.ComplexCurveWithNPointsConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateCurveWithNPoints extends Edition {
 
@@ -73,7 +73,7 @@ public class CreateCurveWithNPoints extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		}

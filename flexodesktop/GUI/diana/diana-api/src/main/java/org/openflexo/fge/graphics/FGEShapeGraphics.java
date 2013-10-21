@@ -24,6 +24,10 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public interface FGEShapeGraphics extends FGEGraphics {
 
-	public abstract ShapeGraphicalRepresentation getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation();
+
+	public FGEShapeDecorationGraphics getShapeDecorationGraphics();
+
+	public void paintShadow();
 
 }

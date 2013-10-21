@@ -6,6 +6,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.actions.RectangleSelectingAction;
+import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
 public interface DrawingView<M, C> extends FGEContainerView<M, C> {
 
@@ -28,5 +29,7 @@ public interface DrawingView<M, C> extends FGEContainerView<M, C> {
 	public void setRectangleSelectingAction(RectangleSelectingAction action);
 
 	public void resetRectangleSelectingAction();
+
+	public FGEDrawingGraphics getFGEGraphics();
 
 }

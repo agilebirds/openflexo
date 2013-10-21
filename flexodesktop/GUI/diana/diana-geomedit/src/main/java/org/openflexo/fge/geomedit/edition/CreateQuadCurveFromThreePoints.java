@@ -28,7 +28,7 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.QuadCurve;
 import org.openflexo.fge.geomedit.construction.QuadCurveWithThreePointsConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateQuadCurveFromThreePoints extends Edition {
 
@@ -56,7 +56,7 @@ public class CreateQuadCurveFromThreePoints extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

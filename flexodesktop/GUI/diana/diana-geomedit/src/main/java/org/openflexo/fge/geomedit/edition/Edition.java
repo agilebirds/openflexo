@@ -28,7 +28,7 @@ import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.GeometricObject;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public abstract class Edition {
 	public int currentStep;
@@ -73,12 +73,12 @@ public abstract class Edition {
 
 	public abstract void performEdition();
 
-	public final void paint(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public final void paint(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		paintEdition(graphics, lastMouseLocation);
 		inputs.get(currentStep).paint(graphics);
 	}
 
-	public abstract void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation);
+	public abstract void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation);
 
 	public boolean requireRepaint(FGEPoint lastMouseLocation) {
 		return true;

@@ -1,8 +1,6 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -39,12 +37,10 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.LabelHasEdited;
@@ -686,14 +682,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public Rectangle getLabelBounds(double scale) {
 		return new Rectangle(getLabelLocation(scale), getLabelDimension(scale));
-	}
-
-	@Override
-	public void paint(Graphics g, DianaEditor<?> controller) {
-		Graphics2D g2 = (Graphics2D) g;
-		DrawUtils.turnOnAntiAlising(g2);
-		DrawUtils.setRenderQuality(g2);
-		DrawUtils.setColorRenderQuality(g2);
 	}
 
 	/**

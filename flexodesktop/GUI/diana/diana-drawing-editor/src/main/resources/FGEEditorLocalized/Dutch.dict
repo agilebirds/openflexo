@@ -1,4 +1,5 @@
 BOOLEAN=BOOLEAN
+LITERAL=[LITERAL]
 cancel=Cancel
 close_drawing=Close drawing
 edit=Edit

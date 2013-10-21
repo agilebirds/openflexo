@@ -71,9 +71,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.actions.RectangleSelectingAction;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.cp.ControlArea;
-import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
-import org.openflexo.fge.impl.RootNodeImpl;
+import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
@@ -84,6 +82,11 @@ import org.openflexo.fge.swing.SwingEditorDelegate;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.JFocusRetriever;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
+import org.openflexo.fge.swing.graphics.JFGEConnectorGraphics;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
+import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
+import org.openflexo.fge.swing.graphics.JFGEGraphics;
+import org.openflexo.fge.swing.graphics.JFGEShapeGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEContainerView;
@@ -113,7 +116,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	private MouseResizer resizer;
 	private FGEViewMouseListener mouseListener;
 
-	protected FGEDrawingGraphics graphics;
+	protected JFGEDrawingGraphics graphics;
 
 	private static final FGEModelFactory PAINT_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 
@@ -140,7 +143,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
 		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?,?>>();
-		graphics = new FGEDrawingGraphicsImpl(drawing.getRoot());
+		graphics = new JFGEDrawingGraphics(drawing.getRoot());
 		_focusRetriever = new JFocusRetriever(this);
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
@@ -151,6 +154,8 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		installKeyBindings();
 		resizeView();
 		drawing.getRoot().addObserver(this);
+
+		graphics = new JFGEDrawingGraphics(drawing.getRoot());
 
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof GeometricNode<?>) {
@@ -176,6 +181,11 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		setFocusable(true);
 		// GPO: no LayoutManager here, so next line is useless?
 		revalidate();
+	}
+
+	@Override
+	public JFGEDrawingGraphics getFGEGraphics() {
+		return graphics;
 	}
 
 	@Override
@@ -455,7 +465,13 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		getDrawing().getRoot().paint(g, getController());
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+		getDrawing().getRoot().paint(graphics);
+		graphics.releaseGraphics();
 	}
 
 	/**
@@ -501,14 +517,24 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 					continue;
 				}
 				Component viewAsComponent = (Component) view;
-				Graphics childGraphics = g.create(viewAsComponent.getX(), viewAsComponent.getY(), viewAsComponent.getWidth(),
+				JFGEGraphics childGraphics = view.getFGEGraphics();
+				Graphics2D g2d = (Graphics2D) g.create(viewAsComponent.getX(), viewAsComponent.getY(), viewAsComponent.getWidth(),
 						viewAsComponent.getHeight());
 				if (getPaintManager().isTemporaryObject(node) || !temporaryObjectsOnly) {
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
 						FGEPaintManager.paintPrimitiveLogger.fine("JDrawingView: continuous painting, paint " + node
 								+ " temporaryObjectsOnly=" + temporaryObjectsOnly);
 					}
-					node.paint(childGraphics, getController());
+					childGraphics.createGraphics(g2d, controller);
+					if (node instanceof ShapeNode) {
+						((ShapeNode<?>) node).paint((JFGEShapeGraphics) childGraphics);
+					} else if (node instanceof ConnectorNode) {
+						((ConnectorNode<?>) node).paint((JFGEConnectorGraphics) childGraphics);
+					}
+					if (node instanceof GeometricNode) {
+						((GeometricNode<?>) node).paint((JFGEGeometricGraphics) childGraphics);
+					}
+					childGraphics.releaseGraphics();
 					JLabelView<?> labelView = view.getLabelView();
 					if (labelView != null) {
 						Graphics labelGraphics = g.create(labelView.getX(), labelView.getY(), labelView.getWidth(), labelView.getHeight());
@@ -521,12 +547,12 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 					}
 					// do the job for childs
 					if (node instanceof ContainerNode) {
-						forcePaintObjects((ContainerNode<?, ?>) node, childGraphics, false);
+						forcePaintObjects((ContainerNode<?, ?>) node, g2d, false);
 					}
 				} else {
 					// do the job for childs
 					if (node instanceof ContainerNode) {
-						forcePaintObjects((ContainerNode<?, ?>) node, childGraphics, true);
+						forcePaintObjects((ContainerNode<?, ?>) node, g2d, true);
 					}
 				}
 			}
@@ -543,6 +569,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		if (isDeleted()) {
 			return;
 		}
+
 		long startTime = System.currentTimeMillis();
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (isBuffering) {
@@ -579,9 +606,11 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 		if (!isBuffering) {
 
-			FGEDrawingGraphicsImpl graphics = ((RootNodeImpl<?>) drawing.getRoot()).getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
-			graphics.createGraphics(g2, getController());
+			DrawUtils.turnOnAntiAlising(g2);
+			DrawUtils.setRenderQuality(g2);
+			DrawUtils.setColorRenderQuality(g2);
+			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 
 			if (getController() instanceof DianaInteractiveViewer) {
 				// Don't paint those things in case of buffering
@@ -637,6 +666,12 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	}
 
 	private void paintGeometricObjects(Graphics g) {
+
+		Graphics2D g2 = (Graphics2D) g;
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
+
 		List<GeometricNode<?>> geomList = new ArrayList<GeometricNode<?>>();
 		for (Object n : drawing.getRoot().getChildNodes()) {
 			if (n instanceof GeometricNode) {
@@ -651,7 +686,12 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 				}
 			});
 			for (GeometricNode<?> gn : geomList) {
-				gn.paint(g, getController());
+				// TODO: use the same graphics, just change DrawingTreeNode
+				JFGEGeometricGraphics geometricGraphics = new JFGEGeometricGraphics(gn);
+				geometricGraphics.createGraphics(g2, controller);
+				gn.paint(geometricGraphics);
+				geometricGraphics.releaseGraphics();
+				geometricGraphics.delete();
 			}
 		}
 	}
@@ -675,7 +715,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		}
 	}
 
-	public void paintControlArea(ControlArea<?> ca, FGEDrawingGraphicsImpl graphics) {
+	public void paintControlArea(ControlArea<?> ca, JFGEDrawingGraphics graphics) {
 		Rectangle invalidatedArea = ca.paint(graphics);
 		if (invalidatedArea != null) {
 			getPaintManager().addTemporaryRepaintArea(invalidatedArea, this);
@@ -690,7 +730,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		getPaintManager().addTemporaryRepaintArea(r, this);
 	}
 
-	private void paintSelected(DrawingTreeNode<?, ?> selected, FGEDrawingGraphicsImpl graphics) {
+	private void paintSelected(DrawingTreeNode<?, ?> selected, JFGEDrawingGraphics graphics) {
 
 		if (selected.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
@@ -744,7 +784,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 	}
 
-	private void paintCurrentEditedShape(FGEDrawingGraphicsImpl graphics) {
+	private void paintCurrentEditedShape(JFGEDrawingGraphics graphics) {
 
 		// logger.info("Painting current edited shape");
 		/*GeometricGraphicalRepresentation currentEditedShape = getController().getDrawShapeToolController().getCurrentEditedShapeGR();
@@ -762,7 +802,11 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			return;
 		}
 
-		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().paintCurrentEditedShape(graphics);
+		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getGraphics())
+				.createGraphics(graphics.getGraphics(), controller);
+		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().paintCurrentEditedShape();
+		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getGraphics())
+				.releaseGraphics();
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
@@ -774,7 +818,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
-	private void paintFocused(DrawingTreeNode<?, ?> focused, FGEDrawingGraphicsImpl graphics) {
+	private void paintFocused(DrawingTreeNode<?, ?> focused, JFGEDrawingGraphics graphics) {
 		if (focused.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;

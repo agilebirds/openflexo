@@ -30,7 +30,7 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geomedit.CubicCurve;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
-import org.openflexo.fge.graphics.FGEGeometricGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGECubicCurve, CubicCurve> implements
@@ -53,7 +53,7 @@ public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalR
 	}
 
 	@Override
-	public void paintGeometricObject(FGEGeometricGraphicsImpl graphics) {
+	public void paintGeometricObject(JFGEGeometricGraphics graphics) {
 		getGeometricObject().paint(graphics);
 
 		if (getIsSelected() || getIsFocused()) {

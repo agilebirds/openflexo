@@ -30,7 +30,7 @@ import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.HalfBand;
 import org.openflexo.fge.geomedit.construction.HalfBandWithLinesConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateHalfBandWithLines extends Edition {
 
@@ -60,7 +60,7 @@ public class CreateHalfBandWithLines extends Edition {
 	private boolean requireRepaint = true;
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 			return;

@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.ParallelLineWithPointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateParallelLineWithPoint extends Edition {
 
@@ -50,7 +50,7 @@ public class CreateParallelLineWithPoint extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

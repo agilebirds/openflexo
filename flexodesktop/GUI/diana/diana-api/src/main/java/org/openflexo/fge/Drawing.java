@@ -21,7 +21,6 @@
 package org.openflexo.fge;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -42,7 +41,6 @@ import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
-import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
@@ -54,7 +52,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapeDecorationPainter;
 import org.openflexo.fge.graphics.ShapePainter;
@@ -328,9 +325,9 @@ public interface Drawing<M> {
 
 		public Rectangle getLabelBounds(double scale);
 
-		public FGEGraphics getGraphics();
+		// public FGEGraphics getGraphics();
 
-		public void paint(Graphics g, DianaEditor<?> controller);
+		// public void paint(Graphics g, DianaEditor<?> controller);
 
 		public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
@@ -467,8 +464,12 @@ public interface Drawing<M> {
 
 	public interface RootNode<M> extends ContainerNode<M, DrawingGraphicalRepresentation> {
 
-		@Override
-		public FGEDrawingGraphics getGraphics();
+		/**
+		 * Paint this {@link RootNode} using supplied FGEDrawingGraphics
+		 * 
+		 * @param g
+		 */
+		public void paint(FGEDrawingGraphics g);
 
 	}
 
@@ -477,9 +478,6 @@ public interface Drawing<M> {
 		public ShapeSpecification getShapeSpecification();
 
 		public Shape<?> getShape();
-
-		@Override
-		public FGEShapeGraphics getGraphics();
 
 		public double getUnscaledViewWidth();
 
@@ -615,6 +613,12 @@ public interface Drawing<M> {
 		public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorNode<?> connector, FGEArea area,
 				SimplifiedCardinalDirection direction);
 
+		/**
+		 * Paint this {@link ShapeNode} using supplied FGEShapeGraphics
+		 * 
+		 * @param g
+		 */
+		public void paint(FGEShapeGraphics g);
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {
@@ -626,9 +630,6 @@ public interface Drawing<M> {
 		public ConnectorSpecification getConnectorSpecification();
 
 		public Connector<?> getConnector();
-
-		@Override
-		public FGEConnectorGraphics getGraphics();
 
 		public void notifyConnectorModified();
 
@@ -648,6 +649,13 @@ public interface Drawing<M> {
 
 		public double distanceToConnector(FGEPoint aPoint, double scale);
 
+		/**
+		 * Paint this {@link ConnectorNode} using supplied FGEConnectorGraphics
+		 * 
+		 * @param g
+		 */
+		public void paint(FGEConnectorGraphics g);
+
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
@@ -662,8 +670,12 @@ public interface Drawing<M> {
 
 		public void notifyGeometryChanged();
 
-		@Override
-		public FGEGeometricGraphics getGraphics();
+		/**
+		 * Paint this {@link GeometricNode} using supplied FGEGeometricGraphics
+		 * 
+		 * @param g
+		 */
+		public void paint(FGEGeometricGraphics g);
 
 	}
 

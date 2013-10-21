@@ -79,6 +79,7 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.swing.SwingViewFactory;
+import org.openflexo.fge.swing.graphics.JFGEGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.swing.FlexoSwingUtils;
@@ -98,7 +99,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 	private DrawingTreeNode<O, ?> node;
 	private FGEViewMouseListener mouseListener;
 	private AbstractDianaEditor<?, SwingViewFactory, JComponent> controller;
-	private FGEView<O, ? extends JComponent> delegateView;
+	private JFGEView<O, ? extends JComponent> delegateView;
 	private boolean isEditing = false;
 
 	private TextComponent textComponent;
@@ -108,7 +109,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 	private boolean mouseInsideLabel = false;
 
 	public JLabelView(final DrawingTreeNode<O, ?> node, AbstractDianaEditor<?, SwingViewFactory, JComponent> controller,
-			FGEView<O, ? extends JComponent> delegateView) {
+			JFGEView<O, ? extends JComponent> delegateView) {
 
 		logger.info("Build JLabelView for " + node.getDrawable() + " with text " + node.getText());
 
@@ -175,6 +176,11 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 	@Override
 	public DrawingTreeNode<O, ?> getNode() {
 		return node;
+	}
+
+	@Override
+	public JFGEGraphics getFGEGraphics() {
+		return delegateView.getFGEGraphics();
 	}
 
 	@Override

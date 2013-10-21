@@ -27,7 +27,7 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geomedit.Circle;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CircleWithCenterAndPointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateCircleWithCenterAndPoint extends Edition {
 
@@ -53,7 +53,7 @@ public class CreateCircleWithCenterAndPoint extends Edition {
 	}*/
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

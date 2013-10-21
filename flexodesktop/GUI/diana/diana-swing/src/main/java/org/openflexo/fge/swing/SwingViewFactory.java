@@ -154,4 +154,33 @@ public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JCom
 	public JShapePreviewPanel makeShapePreviewPanel(ShapeSpecification shapeSpecification) {
 		return new JShapePreviewPanel(shapeSpecification);
 	}
+	/*
+		public JFGEDrawingGraphics makeDrawingGraphics(RootNode<?> rootNode) {
+			return new JFGEDrawingGraphics(rootNode);
+		}
+
+		public JFGEShapeGraphics makeShapeGraphics(ShapeNode<?> shapeNode) {
+			return new JFGEShapeGraphics(shapeNode);
+		}
+
+		public JFGEConnectorGraphics makeConnectorGraphics(ConnectorNode<?> connectorNode) {
+			return new JFGEConnectorGraphics(connectorNode);
+		}
+
+		public JFGEGeometricGraphics makeGeometricGraphics(GeometricNode<?> geometricNode) {
+			return new JFGEGeometricGraphics(geometricNode);
+		}
+
+		public JFGEDrawingDecorationGraphics makeDrawingDecorationGraphics(RootNode<?> rootNode) {
+			return new JFGEDrawingDecorationGraphics(rootNode);
+		}
+
+		public JFGEShapeDecorationGraphics makeShapeDecorationGraphics(ShapeNode<?> shapeNode) {
+			return new JFGEShapeDecorationGraphics(shapeNode);
+		}
+
+		public JFGESymbolGraphics makeSymbolGraphics(ConnectorNode<?> connectorNode) {
+			return new JFGESymbolGraphics(connectorNode);
+		}
+	*/
 }

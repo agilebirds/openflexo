@@ -31,7 +31,7 @@ import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.TangentLineWithCircleAndPointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateTangentLineWithCircleAndPoint extends Edition {
 
@@ -58,7 +58,7 @@ public class CreateTangentLineWithCircleAndPoint extends Edition {
 	}
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			// Nothing to draw
 		} else if (currentStep == 1) {

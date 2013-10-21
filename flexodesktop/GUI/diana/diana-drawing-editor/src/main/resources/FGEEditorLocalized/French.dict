@@ -1,5 +1,6 @@
 ARITHMETIC_FLOAT=[FLOTTANT]
 BOOLEAN=BOOLEEN
+LITERAL=[LITTERAL]
 addition=ajout
 bold=Gras
 bold_italic=Gras italique

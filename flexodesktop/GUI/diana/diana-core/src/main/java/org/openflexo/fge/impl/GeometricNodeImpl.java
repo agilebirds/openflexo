@@ -1,8 +1,6 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -16,7 +14,6 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
@@ -42,7 +39,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.FGEGeometricGraphicsImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 
@@ -50,7 +46,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 	private static final Logger logger = Logger.getLogger(GeometricNodeImpl.class.getPackage().getName());
 
-	protected FGEGeometricGraphicsImpl graphics;
+	// protected FGEGeometricGraphicsImpl graphics;
 
 	protected List<ControlPoint> _controlPoints;
 
@@ -58,7 +54,7 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 	public GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
-		graphics = new FGEGeometricGraphicsImpl(this);
+		// graphics = new FGEGeometricGraphicsImpl(this);
 	}
 
 	@Override
@@ -74,10 +70,10 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		return getControlAreas();
 	}
 
-	@Override
+	/*@Override
 	public FGEGeometricGraphicsImpl getGraphics() {
 		return graphics;
-	}
+	}*/
 
 	@Override
 	public int getViewX(double scale) {
@@ -160,24 +156,23 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		return isFullyContained;
 	}
 
-	@Override
-	public void paint(Graphics g, DianaEditor<?> controller) {
+	public void paint(FGEGeometricGraphics g) {
 		/*if (!isRegistered()) {
 			setRegistered(true);
 		}*/
 
-		super.paint(g, controller);
+		// super.paint(g, controller);
 
-		Graphics2D g2 = (Graphics2D) g;
+		/*Graphics2D g2 = (Graphics2D) g;
 		if (controller instanceof AbstractDianaEditor<?, ?, ?>) {
 			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
 		} else {
 			logger.warning("Unsupported controller: " + controller);
-		}
+		}*/
 
-		graphics.setDefaultBackground(getGraphicalRepresentation().getBackground());
-		graphics.setDefaultForeground(getGraphicalRepresentation().getForeground());
-		graphics.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
+		g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+		g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 
 		if (getIsSelected() || getIsFocused()) {
 			ForegroundStyle style = (ForegroundStyle) getGraphicalRepresentation().getForeground().clone();
@@ -186,10 +181,10 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			} else if (getIsFocused()) {
 				style.setColorNoNotification(getDrawing().getRoot().getGraphicalRepresentation().getFocusColor());
 			}
-			graphics.setDefaultForeground(style);
+			g.setDefaultForeground(style);
 		}
 
-		paintGeometricObject(graphics);
+		paintGeometricObject(g);
 
 		if (getIsSelected() || getIsFocused()) {
 			Color color = null;
@@ -199,18 +194,18 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 				color = getDrawing().getRoot().getGraphicalRepresentation().getFocusColor();
 			}
 			for (ControlPoint cp : getControlPoints()) {
-				cp.paint(graphics);
+				cp.paint(g);
 			}
 		}
 
 		if (hasFloatingLabel()) {
-			graphics.useTextStyle(getGraphicalRepresentation().getTextStyle());
-			graphics.drawString(getGraphicalRepresentation().getText(), new FGEPoint(getLabelRelativePosition().x
+			g.useTextStyle(getGraphicalRepresentation().getTextStyle());
+			g.drawString(getGraphicalRepresentation().getText(), new FGEPoint(getLabelRelativePosition().x
 					+ getGraphicalRepresentation().getAbsoluteTextX(), getLabelRelativePosition().y
 					+ getGraphicalRepresentation().getAbsoluteTextY()), getGraphicalRepresentation().getHorizontalTextAlignment());
 		}
 
-		graphics.releaseGraphics();
+		// g.releaseGraphics();
 	}
 
 	@Override

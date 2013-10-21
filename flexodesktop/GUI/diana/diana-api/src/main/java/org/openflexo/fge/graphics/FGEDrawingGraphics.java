@@ -26,4 +26,6 @@ public interface FGEDrawingGraphics extends FGEGraphics {
 
 	public abstract DrawingGraphicalRepresentation getGraphicalRepresentation();
 
+	public FGEDrawingDecorationGraphics getDrawingDecorationGraphics();
+
 }

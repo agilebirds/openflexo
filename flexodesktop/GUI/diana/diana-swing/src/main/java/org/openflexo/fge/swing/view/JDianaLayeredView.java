@@ -20,6 +20,7 @@
 package org.openflexo.fge.swing.view;
 
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,10 +33,14 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
+import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.graphics.DrawUtils;
+import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
+import org.openflexo.fge.swing.graphics.JFGEGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.FGEContainerView;
 import org.openflexo.fge.view.FGEView;
@@ -243,6 +248,13 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 
 	public FGEPaintManager getPaintManager() {
 		return getDrawingView().getPaintManager();
+	}
+
+	public void paint(FGEGraphics graphics, DianaEditor<?> controller) {
+		Graphics2D g2 = ((JFGEGraphics) graphics).getGraphics();
+		DrawUtils.turnOnAntiAlising(g2);
+		DrawUtils.setRenderQuality(g2);
+		DrawUtils.setColorRenderQuality(g2);
 	}
 
 }

@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.Line;
 import org.openflexo.fge.geomedit.construction.HorizontalLineWithPointConstruction;
-import org.openflexo.fge.graphics.FGEDrawingGraphicsImpl;
+import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
 
 public class CreateHorizontalLineWithPoint extends Edition {
 
@@ -42,7 +42,7 @@ public class CreateHorizontalLineWithPoint extends Edition {
 	}
 
 	@Override
-	public void paintEdition(FGEDrawingGraphicsImpl graphics, FGEPoint lastMouseLocation) {
+	public void paintEdition(JFGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			FGELine.makeHorizontalLine(lastMouseLocation).paint(graphics);
