@@ -3661,6 +3661,7 @@ offset=Verschil
 ok=OK
 old_version=Oude versie
 on=on
+once_you_have_closed_the_session_you_should_no_longer_modify_this_project.\ are_you_sure_you_want_to_close_this_session=Once you have closed the session you should no longer modify this project. are you sure you want to close this session
 onclick=Bij het klikken
 one_by_one_decidions=Beslissing per beslissing
 one_of_the_cell_span_is_not_in_the_selection=Een uitgebreide cel ontsnapt aan de selectie

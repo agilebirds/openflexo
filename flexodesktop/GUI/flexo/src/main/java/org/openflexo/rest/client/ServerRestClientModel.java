@@ -1488,6 +1488,14 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	private void sendToServer(boolean closeSession) {
 		if (serverProject != null && getUser() != null && isEditable()) {
 			if (canSendToServer()) {
+				if (closeSession) {
+					if (!FlexoController
+							.confirm(FlexoLocalization
+									.localizedForKey("once_you_have_closed_the_session_you_should_no_longer_modify_this_project. are_you_sure_you_want_to_close_this_session")
+									+ "?")) {
+						return;
+					}
+				}
 				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
 				if (comment == null) {
 					return;
@@ -1544,6 +1552,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					+ FlexoLocalization.localizedForKey("has_no_prototype_generated"));
 			return;
 		}
+		FlexoController.notify(FlexoLocalization.localizedForKey("login") + " " + version.getProtoLogin() + "\n"
+				+ FlexoLocalization.localizedForKey("password") + " " + version.getProtoPassword());
 		if (Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().browse(new URI(version.getProtoUrl()));
@@ -1653,8 +1663,13 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 	public void closeSession() {
 		if (session != null) {
 			goOnline();
-			performOperationsInSwingWorker(new CloseSession(session), new UpdateProjectEditionSession(), new UpdateVersions(),
-					new UpdateJobsForVersion());
+			if (FlexoController
+					.confirm(FlexoLocalization
+							.localizedForKey("once_you_have_closed_the_session_you_should_no_longer_modify_this_project. are_you_sure_you_want_to_close_this_session")
+							+ "?")) {
+				performOperationsInSwingWorker(new CloseSession(session), new UpdateProjectEditionSession(), new UpdateVersions(),
+						new UpdateJobsForVersion());
+			}
 		}
 	}
 

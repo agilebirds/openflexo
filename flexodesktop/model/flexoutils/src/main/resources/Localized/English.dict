@@ -3663,6 +3663,7 @@ offset=Offset
 ok=OK
 old_version=Old version
 on=on
+once_you_have_closed_the_session_you_should_no_longer_modify_this_project.\ are_you_sure_you_want_to_close_this_session=Once you have closed the session you should no longer modify this project. Are you sure you want to close this session
 onclick=On click
 one_by_one_decidions=One by one decisions
 one_of_the_cell_span_is_not_in_the_selection=One of the cell span is not in the selection
