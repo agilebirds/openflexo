@@ -2,12 +2,15 @@ package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/AddExcelCellPanel.fib")
 public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCell> {
@@ -24,8 +27,13 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	@Override
 	public ExcelCell performAction(EditionSchemeAction action) {
-		// TODO Auto-generated method stub
+		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		return null;
 	}
 
+	@Override
+	public FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
+	}
+	
 }
