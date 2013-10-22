@@ -19,12 +19,16 @@
  */
 package org.openflexo.fge.control.tools;
 
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
+import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
+import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
@@ -44,10 +48,33 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaInspectors.class.getPackage().getName());
 
+	// protected InspectedForegroundStyle inspectedForegroundStyle;
+
+	protected BackgroundStyleFactory bsFactory;
+	protected ShapeFactory shapeFactory;
+
+	public DianaInspectors() {
+		bsFactory = new BackgroundStyleFactory(null);
+		shapeFactory = new ShapeFactory(null);
+	}
+
 	@Override
 	public DianaInteractiveEditor<?, F, ?> getEditor() {
 		return (DianaInteractiveEditor<?, F, ?>) super.getEditor();
 	}
+
+	public InspectedForegroundStyle getInspectedForegroundStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedForegroundStyle();
+		}
+		return null;
+	}
+
+	/*@Override
+	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
+		super.attachToEditor(editor);
+		inspectedForegroundStyle = new InspectedForegroundStyle((DianaInteractiveViewer<?, F, ?>) editor);
+	}*/
 
 	public abstract Inspector<ForegroundStyle> getForegroundStyleInspector();
 
@@ -62,4 +89,45 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 	public static interface Inspector<D> {
 		public void setData(D data);
 	}
+
+	@Override
+	public void update(Observable o, Object notification) {
+		if (o == getEditor()) {
+			if (notification instanceof ObjectAddedToSelection || notification instanceof ObjectRemovedFromSelection
+					|| notification instanceof SelectionCleared) {
+				updateSelection();
+			}
+		}
+	}
+
+	private void updateSelection() {
+		// System.out.println("Hop, le FS c'est " + inspectedForegroundStyle);
+		// getForegroundStyleInspector().setData(inspectedForegroundStyle);
+		// inspectedForegroundStyle.fireSelectionUpdated();
+		if (getSelection().size() > 0) {
+			getTextStyleInspector().setData(getSelection().get(0).getTextStyle());
+			/*if (getSelectedShapes().size() > 0) {
+				getForegroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getForeground());
+			} else if (getSelectedConnectors().size() > 0) {
+				getForegroundStyleInspector().setData(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
+			}*/
+		} else {
+			getTextStyleInspector().setData(getEditor().getCurrentTextStyle());
+			// getForegroundStyleInspector().setData(getEditor().getCurrentForegroundStyle());
+		}
+		if (getSelectedShapes().size() > 0) {
+			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
+		} else {
+			shapeFactory.setShape(getEditor().getCurrentShape());
+			// getShapeInspector().setData(getEditor().getCurrentShape());
+			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
+			getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
+		}
+	}
+
 }

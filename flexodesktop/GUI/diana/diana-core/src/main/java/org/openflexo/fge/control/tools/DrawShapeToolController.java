@@ -117,7 +117,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 			}
 		};*/
 		currentEditedShapeGeometricNode.getGraphicalRepresentation().setBackground(getController().getCurrentBackgroundStyle());
-		currentEditedShapeGeometricNode.getGraphicalRepresentation().setForeground(getController().getCurrentForegroundStyle());
+		currentEditedShapeGeometricNode.getGraphicalRepresentation().setForeground(
+				getController().getInspectedForegroundStyle().cloneStyle());
 		geometryChanged();
 	}
 

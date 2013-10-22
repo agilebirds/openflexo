@@ -14,6 +14,7 @@ import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.GeometryAdjustingControlPoint;
@@ -848,6 +849,16 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 	@Override
 	public FGEDimension getRequiredLabelSize() {
 		return null;
+	}
+
+	@Override
+	public ForegroundStyle getForegroundStyle() {
+		return getPropertyValue(ShapeGraphicalRepresentation.FOREGROUND);
+	}
+
+	@Override
+	public void setForegroundStyle(ForegroundStyle aValue) {
+		setPropertyValue(ShapeGraphicalRepresentation.FOREGROUND, aValue);
 	}
 
 }

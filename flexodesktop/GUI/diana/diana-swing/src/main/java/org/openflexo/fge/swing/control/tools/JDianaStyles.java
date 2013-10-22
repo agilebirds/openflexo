@@ -80,7 +80,7 @@ public class JDianaStyles extends DianaStyles<JToolBar, SwingViewFactory> {
 			}
 		} else {
 			getTextStyleSelector().setEditedObject(getEditor().getCurrentTextStyle());
-			getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
+			// getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
 			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());

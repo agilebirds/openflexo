@@ -16,6 +16,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
@@ -520,6 +521,16 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			getConnector().paintConnector(g);
 		}
 
+	}
+
+	@Override
+	public ForegroundStyle getForegroundStyle() {
+		return getPropertyValue(ShapeGraphicalRepresentation.FOREGROUND);
+	}
+
+	@Override
+	public void setForegroundStyle(ForegroundStyle aValue) {
+		setPropertyValue(ShapeGraphicalRepresentation.FOREGROUND, aValue);
 	}
 
 }

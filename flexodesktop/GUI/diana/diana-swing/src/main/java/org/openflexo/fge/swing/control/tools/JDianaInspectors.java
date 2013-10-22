@@ -19,21 +19,19 @@
  */
 package org.openflexo.fge.swing.control.tools;
 
-import java.util.Observable;
 import java.util.logging.Logger;
+
+import javax.swing.JFrame;
 
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
-import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
-import org.openflexo.fge.control.notifications.SelectionCleared;
+import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
-import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
@@ -42,6 +40,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.toolbox.FileResource;
 
 /**
  * SWING implementation of {@link DianaInspectors}
@@ -60,19 +59,26 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	private JInspector<ShadowStyle> shadowInspector;
 	private JInspector<ShapeFactory> shapeInspector;
 
-	private BackgroundStyleFactory bsFactory;
-	private ShapeFactory shapeFactory;
+	private JFrame frame;
 
-	public JDianaInspectors() {
-		bsFactory = new BackgroundStyleFactory(null);
-		shapeFactory = new ShapeFactory(null);
+	public JDianaInspectors(JFrame frame) {
+		this.frame = frame;
 	}
+
+	@Override
+	public void attachToEditor(AbstractDianaEditor<?, SwingViewFactory, ?> editor) {
+		super.attachToEditor(editor);
+		if (foregroundStyleInspector != null) {
+			foregroundStyleInspector.setData(getInspectedForegroundStyle(), true);
+		}
+	}
+
+	public static FileResource FOREGROUND_STYLE_FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
-			foregroundStyleInspector = new JInspector<ForegroundStyle>(FIBLibrary.instance().retrieveFIBComponent(
-					FIBForegroundStyleSelector.FIB_FILE), null);
-			System.out.println("Controller: " + foregroundStyleInspector.getController());
+			foregroundStyleInspector = new JInspector<ForegroundStyle>(FIBLibrary.instance()
+					.retrieveFIBComponent(FOREGROUND_STYLE_FIB_FILE), getInspectedForegroundStyle(), frame, "Foreground");
 		}
 		return foregroundStyleInspector;
 	}
@@ -81,7 +87,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (backgroundStyleInspector == null) {
 			// bsFactory = new BackgroundStyleFactory(getEditor().getCurrentBackgroundStyle());
 			backgroundStyleInspector = new JInspector<BackgroundStyleFactory>(FIBLibrary.instance().retrieveFIBComponent(
-					FIBBackgroundStyleSelector.FIB_FILE), bsFactory);
+					FIBBackgroundStyleSelector.FIB_FILE), bsFactory, frame, "Background");
 		}
 		return backgroundStyleInspector;
 	}
@@ -89,7 +95,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	public JInspector<TextStyle> getTextStyleInspector() {
 		if (textStyleInspector == null) {
 			textStyleInspector = new JInspector<TextStyle>(FIBLibrary.instance().retrieveFIBComponent(FIBTextStyleSelector.FIB_FILE),
-					getEditor().getCurrentTextStyle());
+					getEditor().getCurrentTextStyle(), frame, "Text");
 		}
 		return textStyleInspector;
 	}
@@ -97,7 +103,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	public JInspector<ShadowStyle> getShadowStyleInspector() {
 		if (shadowInspector == null) {
 			shadowInspector = new JInspector<ShadowStyle>(FIBLibrary.instance().retrieveFIBComponent(FIBShadowStyleSelector.FIB_FILE),
-					getEditor().getCurrentShadowStyle());
+					getEditor().getCurrentShadowStyle(), frame, "Shadow");
 		}
 		return shadowInspector;
 	}
@@ -106,55 +112,20 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (shapeInspector == null) {
 			// shapeFactory = new ShapeFactory(getEditor().getCurrentShape());
 			shapeInspector = new JInspector<ShapeFactory>(FIBLibrary.instance().retrieveFIBComponent(FIBShapeSelector.FIB_FILE),
-					shapeFactory);
+					shapeFactory, frame, "Shape");
 		}
 		return shapeInspector;
-	}
-
-	@Override
-	public void update(Observable o, Object notification) {
-		if (o == getEditor()) {
-			if (notification instanceof ObjectAddedToSelection || notification instanceof ObjectRemovedFromSelection
-					|| notification instanceof SelectionCleared) {
-				updateSelection();
-			}
-		}
 	}
 
 	@SuppressWarnings("serial")
 	public static class JInspector<T> extends FIBDialog<T> implements DianaInspectors.Inspector<T> {
 
-		protected JInspector(FIBComponent fibComponent, T data) {
-			super(fibComponent, data, null, false, (LocalizedDelegate) null);
+		protected JInspector(FIBComponent fibComponent, T data, JFrame frame, String title) {
+			super(fibComponent, data, frame, false, (LocalizedDelegate) null);
+			setTitle(title);
+			setAlwaysOnTop(true);
 		}
 
-	}
-
-	private void updateSelection() {
-		if (getSelection().size() > 0) {
-			getTextStyleInspector().setData(getSelection().get(0).getTextStyle());
-			if (getSelectedShapes().size() > 0) {
-				getForegroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getForeground());
-			} else if (getSelectedConnectors().size() > 0) {
-				getForegroundStyleInspector().setData(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
-			}
-		} else {
-			getTextStyleInspector().setData(getEditor().getCurrentTextStyle());
-			getForegroundStyleInspector().setData(getEditor().getCurrentForegroundStyle());
-		}
-		if (getSelectedShapes().size() > 0) {
-			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
-		} else {
-			shapeFactory.setShape(getEditor().getCurrentShape());
-			// getShapeInspector().setData(getEditor().getCurrentShape());
-			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
-			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
-			getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
-		}
 	}
 
 	@Override

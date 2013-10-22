@@ -39,8 +39,8 @@ import org.openflexo.fge.swing.view.JDrawingView;
  */
 public class JDianaViewer<M> extends DianaViewer<M, SwingViewFactory, JComponent> {
 
-	public JDianaViewer(Drawing<M> aDrawing, FGEModelFactory factory) {
-		super(aDrawing, factory, SwingViewFactory.INSTANCE, SwingToolFactory.INSTANCE);
+	public JDianaViewer(Drawing<M> aDrawing, FGEModelFactory factory, SwingToolFactory toolFactory) {
+		super(aDrawing, factory, SwingViewFactory.INSTANCE, toolFactory);
 		setDelegate(new SwingEditorDelegate(this));
 	}
 

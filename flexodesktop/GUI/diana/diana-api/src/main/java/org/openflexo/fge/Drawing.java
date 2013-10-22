@@ -619,6 +619,11 @@ public interface Drawing<M> {
 		 * @param g
 		 */
 		public void paint(FGEShapeGraphics g);
+
+		public ForegroundStyle getForegroundStyle();
+
+		public void setForegroundStyle(ForegroundStyle aValue);
+
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {
@@ -656,6 +661,10 @@ public interface Drawing<M> {
 		 */
 		public void paint(FGEConnectorGraphics g);
 
+		public ForegroundStyle getForegroundStyle();
+
+		public void setForegroundStyle(ForegroundStyle aValue);
+
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
@@ -676,6 +685,10 @@ public interface Drawing<M> {
 		 * @param g
 		 */
 		public void paint(FGEGeometricGraphics g);
+
+		public ForegroundStyle getForegroundStyle();
+
+		public void setForegroundStyle(ForegroundStyle aValue);
 
 	}
 

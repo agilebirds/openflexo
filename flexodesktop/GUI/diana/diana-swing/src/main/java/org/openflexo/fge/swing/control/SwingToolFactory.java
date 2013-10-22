@@ -21,6 +21,7 @@
 package org.openflexo.fge.swing.control;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
@@ -44,9 +45,12 @@ import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
  */
 public class SwingToolFactory implements DianaToolFactory<JComponent> {
 
-	public static SwingToolFactory INSTANCE = new SwingToolFactory();
+	public static SwingToolFactory DEFAULT = new SwingToolFactory(null);
 
-	private SwingToolFactory() {
+	private JFrame frame;
+
+	public SwingToolFactory(JFrame frame) {
+		this.frame = frame;
 	}
 
 	@Override
@@ -67,7 +71,7 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 	}
 
 	public JDianaInspectors makeDianaInspectors() {
-		return new JDianaInspectors();
+		return new JDianaInspectors(frame);
 	}
 
 	public JDianaLayoutWidget makeDianaLayoutWidget() {

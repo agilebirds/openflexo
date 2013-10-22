@@ -156,6 +156,10 @@ public class FIBDialog<T> extends JDialog {
 		getController().setDataObject(value);
 	}
 
+	public void setData(T value, boolean force) {
+		getController().setDataObject(value, force);
+	}
+
 	public Status getStatus() {
 		return getController().getStatus();
 	}

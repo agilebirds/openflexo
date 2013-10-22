@@ -44,19 +44,20 @@ public class DiagramEditor {
 	private int index;
 	private File file = null;
 	private DiagramFactory factory;
+	private DiagramEditorApplication application;
 
-	public static DiagramEditor newDiagramEditor(DiagramFactory factory) {
+	public static DiagramEditor newDiagramEditor(DiagramFactory factory, DiagramEditorApplication application) {
 
-		DiagramEditor returned = new DiagramEditor(factory);
+		DiagramEditor returned = new DiagramEditor(factory, application);
 		returned.diagram = factory.makeNewDiagram();
 		return returned;
 
 	}
 
-	public static DiagramEditor loadDiagramEditor(File file, DiagramFactory factory) {
+	public static DiagramEditor loadDiagramEditor(File file, DiagramFactory factory, DiagramEditorApplication application) {
 		logger.info("Loading " + file);
 
-		DiagramEditor returned = new DiagramEditor(factory);
+		DiagramEditor returned = new DiagramEditor(factory, application);
 
 		try {
 			returned.diagram = (Diagram) factory.deserialize(new FileInputStream(file));
@@ -91,8 +92,9 @@ public class DiagramEditor {
 		}*/
 	}
 
-	private DiagramEditor(DiagramFactory factory) {
+	private DiagramEditor(DiagramFactory factory, DiagramEditorApplication application) {
 		this.factory = factory;
+		this.application = application;
 	}
 
 	public Diagram getDiagram() {
@@ -108,7 +110,7 @@ public class DiagramEditor {
 
 	public DianaDrawingEditor getController() {
 		if (controller == null) {
-			controller = new DianaDrawingEditor(getDrawing(), factory);
+			controller = new DianaDrawingEditor(getDrawing(), factory, application.getToolFactory());
 		}
 		return controller;
 	}

@@ -44,6 +44,7 @@ import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaViewer;
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -322,7 +323,7 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 			textGR.setIsReadOnly(true);
 			textGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 
-			controller = new JDianaViewer<TextStylePreviewPanel>(drawing, factory);
+			controller = new JDianaViewer<TextStylePreviewPanel>(drawing, factory, SwingToolFactory.DEFAULT);
 			add((JComponent) controller.getDrawingView());
 
 			update();

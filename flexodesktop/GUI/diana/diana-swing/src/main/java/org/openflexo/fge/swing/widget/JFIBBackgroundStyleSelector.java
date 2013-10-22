@@ -45,6 +45,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaViewer;
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -358,7 +359,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 			rectGR.setIsReadOnly(true);
 			rectGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 
-			controller = new JDianaViewer<BackgroundStylePreviewPanel>(drawing, factory);
+			controller = new JDianaViewer<BackgroundStylePreviewPanel>(drawing, factory, SwingToolFactory.DEFAULT);
 			add((JComponent) controller.getDrawingView());
 		}
 

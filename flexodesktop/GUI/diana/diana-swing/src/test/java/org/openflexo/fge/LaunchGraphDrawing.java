@@ -71,7 +71,7 @@ public class LaunchGraphDrawing {
 		private JDianaScaleSelector scaleSelector;
 
 		public TestDrawingController(GraphDrawing1 aDrawing) {
-			super(aDrawing, aDrawing.getFactory(), SwingViewFactory.INSTANCE, SwingToolFactory.INSTANCE);
+			super(aDrawing, aDrawing.getFactory(), SwingViewFactory.INSTANCE, SwingToolFactory.DEFAULT);
 			scaleSelector = (JDianaScaleSelector) getToolFactory().makeDianaScaleSelector(this);
 			contextualMenu = new JPopupMenu();
 			contextualMenu.add(new JMenuItem("Item"));
@@ -206,7 +206,7 @@ public class LaunchGraphDrawing {
 
 		dialog.setVisible(true);
 
-		JDianaInteractiveViewer<Graph> dc2 = new JDianaInteractiveViewer<Graph>(d, d.getFactory());
+		JDianaInteractiveViewer<Graph> dc2 = new JDianaInteractiveViewer<Graph>(d, d.getFactory(), SwingToolFactory.DEFAULT);
 		final JDialog dialog2 = new JDialog((Frame) null, false);
 		dialog2.getContentPane().add(new JScrollPane((JComponent) dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));

@@ -81,6 +81,7 @@ public class DiagramEditorApplication {
 	private JFrame frame;
 	private JDialog paletteDialog;
 	private FlexoFileChooser fileChooser;
+	private SwingToolFactory toolFactory;
 
 	// private FIBInspectorController inspector;
 
@@ -119,16 +120,18 @@ public class DiagramEditorApplication {
 		fileChooser.setFileFilterAsString("*.drw");
 		fileChooser.setCurrentDirectory(new FileResource("DrawingExamples"));
 
+		toolFactory = new SwingToolFactory(frame);
+
 		// inspector = new FIBInspectorController(frame);
 
 		frame.setTitle("Basic drawing editor");
 
 		mainPanel = new JPanel(new BorderLayout());
 
-		toolSelector = SwingToolFactory.INSTANCE.makeDianaToolSelector(null);
-		stylesWidget = SwingToolFactory.INSTANCE.makeDianaStyles();
-		scaleSelector = SwingToolFactory.INSTANCE.makeDianaScaleSelector(null);
-		inspectors = SwingToolFactory.INSTANCE.makeDianaInspectors();
+		toolSelector = toolFactory.makeDianaToolSelector(null);
+		stylesWidget = toolFactory.makeDianaStyles();
+		scaleSelector = toolFactory.makeDianaScaleSelector(null);
+		inspectors = toolFactory.makeDianaInspectors();
 		inspectors.getForegroundStyleInspector().setVisible(true);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -139,7 +142,7 @@ public class DiagramEditorApplication {
 		mainPanel.add(topPanel, BorderLayout.NORTH);
 
 		commonPaletteModel = new DiagramEditorPalette();
-		commonPalette = SwingToolFactory.INSTANCE.makeDianaPalette(commonPaletteModel);
+		commonPalette = toolFactory.makeDianaPalette(commonPaletteModel);
 
 		paletteDialog = new JDialog(frame, "Palette", false);
 		paletteDialog.getContentPane().add(commonPalette.getComponent());
@@ -270,6 +273,10 @@ public class DiagramEditorApplication {
 
 	public DiagramFactory getFactory() {
 		return factory;
+	}
+
+	public SwingToolFactory getToolFactory() {
+		return toolFactory;
 	}
 
 	/*public Injector getInjector() {
@@ -419,14 +426,14 @@ public class DiagramEditorApplication {
 	}
 
 	public void newDiagramEditor() {
-		DiagramEditor newDiagramEditor = DiagramEditor.newDiagramEditor(factory);
+		DiagramEditor newDiagramEditor = DiagramEditor.newDiagramEditor(factory, this);
 		addDiagramEditor(newDiagramEditor);
 	}
 
 	public void loadDiagramEditor() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			DiagramEditor loadedDiagramEditor = DiagramEditor.loadDiagramEditor(file, factory);
+			DiagramEditor loadedDiagramEditor = DiagramEditor.loadDiagramEditor(file, factory, this);
 			if (loadedDiagramEditor != null) {
 				addDiagramEditor(loadedDiagramEditor);
 			}

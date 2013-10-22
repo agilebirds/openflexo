@@ -1415,4 +1415,14 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	}
 
+	@Override
+	public ForegroundStyle getForegroundStyle() {
+		return getPropertyValue(ShapeGraphicalRepresentation.FOREGROUND);
+	}
+
+	@Override
+	public void setForegroundStyle(ForegroundStyle aValue) {
+		setPropertyValue(ShapeGraphicalRepresentation.FOREGROUND, aValue);
+	}
+
 }

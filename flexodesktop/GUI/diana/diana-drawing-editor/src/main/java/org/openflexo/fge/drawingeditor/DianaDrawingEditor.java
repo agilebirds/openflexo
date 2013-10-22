@@ -42,6 +42,7 @@ import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaInteractiveEditor;
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
@@ -57,8 +58,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 	// private Shape copiedShape;
 
-	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory) {
-		super(aDrawing, factory);
+	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory, SwingToolFactory toolFactory) {
+		super(aDrawing, factory, toolFactory);
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override

@@ -1158,6 +1158,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return false;
 		}
 		ProxyMethodHandler<?> oppositeObjectHandler = getModelFactory().getHandler(obj);
+		if (oppositeObjectHandler == null) {
+			// Other object is not handled by the same factory
+			return false;
+		}
 		if (getModelEntity() != oppositeObjectHandler.getModelEntity()) {
 			return false;
 		}

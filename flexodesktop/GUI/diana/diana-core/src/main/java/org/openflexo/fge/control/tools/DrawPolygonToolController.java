@@ -145,7 +145,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
-		returned.setForeground(getController().getCurrentForegroundStyle());
+		returned.setForeground(getController().getInspectedForegroundStyle().cloneStyle());
 		returned.setTextStyle(getController().getCurrentTextStyle());
 		returned.setAllowToLeaveBounds(false);
 

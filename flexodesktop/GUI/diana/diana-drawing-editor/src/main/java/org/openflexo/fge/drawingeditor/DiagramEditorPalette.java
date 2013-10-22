@@ -27,7 +27,6 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
@@ -217,7 +216,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
 
 				if (applyCurrentForeground) {
-					shapeGR.setForeground((ForegroundStyle) getEditor().getCurrentForegroundStyle().clone());
+					shapeGR.setForeground(getEditor().getInspectedForegroundStyle().cloneStyle());
 				}
 				if (applyCurrentBackground) {
 					shapeGR.setBackground((BackgroundStyle) getEditor().getCurrentBackgroundStyle().clone());

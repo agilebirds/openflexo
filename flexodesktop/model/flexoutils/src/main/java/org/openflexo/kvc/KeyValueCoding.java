@@ -22,12 +22,10 @@ package org.openflexo.kvc;
 /**
  * Classes implementing this interface are intented to implement Key/Value coding.
  * 
- * This scheme allows powerfull introspection capabilities on such classes since they are handlable by basic accessors such as
- * objectForKey(String), setObjectForKey (Object,String) and integerValueForKey(String), setIntegerValueForKey(int,String) (defined for all
- * primitives: boolean, byte, char, double, float, integer, long, short). Key is a String identifying a key/value pair public methods such
- * as getKey()/setKey() or _getKey()/_setKey(). If no method is found, research on public field is done and performed.
- * 
- * This scheme could also be seen as a dynamic redefinition of java dynamic liaison scheme.
+ * This scheme allows introspection capabilities on such classes since they are handlable by basic accessors such as objectForKey(String),
+ * setObjectForKey (Object,String) and integerValueForKey(String), setIntegerValueForKey(int,String) (defined for all primitives: boolean,
+ * byte, char, double, float, integer, long, short). Key is a String identifying a key/value pair public methods such as getKey()/setKey()
+ * or _getKey()/_setKey(). If no method is found, research on public field is done and performed.
  * 
  * Additionnaly, 2 methods valueForKey(String) and setValueForKey (Object,String) could be used as wrapers allowing to handle primitives and
  * simple classes (such as Date, String, File and URL) with string representations.

@@ -24,15 +24,16 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.InspectedForegroundStyle;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -59,7 +60,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private DrawShapeToolController<?, ?> drawShapeToolController;
 	private DrawShapeAction drawShapeAction;
 
-	private ForegroundStyle currentForegroundStyle;
+	// private ForegroundStyle currentForegroundStyle;
+	private InspectedForegroundStyle inspectedForegroundStyle;
 	private BackgroundStyle currentBackgroundStyle;
 	private TextStyle currentTextStyle;
 	private ShadowStyle currentShadowStyle;
@@ -71,7 +73,9 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	public DianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
-		currentForegroundStyle = factory.makeDefaultForegroundStyle();
+		// currentForegroundStyle = factory.makeDefaultForegroundStyle();
+		inspectedForegroundStyle = new InspectedForegroundStyle(this);
+
 		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		currentTextStyle = factory.makeDefaultTextStyle();
 		currentShadowStyle = factory.makeDefaultShadowStyle();
@@ -93,6 +97,24 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 			}
 		}
 		palettes = null;*/
+	}
+
+	@Override
+	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
+		super.addToSelectedObjects(aNode);
+		inspectedForegroundStyle.fireSelectionUpdated();
+	}
+
+	@Override
+	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
+		super.removeFromSelectedObjects(aNode);
+		inspectedForegroundStyle.fireSelectionUpdated();
+	}
+
+	@Override
+	public void clearSelection() {
+		super.clearSelection();
+		inspectedForegroundStyle.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -131,13 +153,17 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		}
 	}
 
-	public ForegroundStyle getCurrentForegroundStyle() {
+	public InspectedForegroundStyle getInspectedForegroundStyle() {
+		return inspectedForegroundStyle;
+	}
+
+	/*public ForegroundStyle getCurrentForegroundStyle() {
 		return currentForegroundStyle;
 	}
 
 	public void setCurrentForegroundStyle(ForegroundStyle currentForegroundStyle) {
 		this.currentForegroundStyle = currentForegroundStyle;
-	}
+	}*/
 
 	public BackgroundStyle getCurrentBackgroundStyle() {
 		return currentBackgroundStyle;

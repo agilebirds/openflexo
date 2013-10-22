@@ -285,12 +285,15 @@ public interface ForegroundStyle extends FGEStyle {
 	// * Utils
 	// *******************************************************************************
 
+	// TODO remove this
 	public void setColorNoNotification(Color aColor);
 
+	// TODO remove this
 	public Stroke getStroke(double scale);
 
 	// public ForegroundStyle clone();
 
+	// TODO remove this
 	public String toNiceString();
 
 }

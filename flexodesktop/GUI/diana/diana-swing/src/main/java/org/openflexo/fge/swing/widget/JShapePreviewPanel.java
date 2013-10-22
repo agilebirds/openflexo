@@ -26,6 +26,7 @@ import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaViewer;
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.view.widget.ShapePreviewPanel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
@@ -117,7 +118,7 @@ public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JSha
 		shapeGR.setIsReadOnly(true);
 		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 
-		controller = new JDianaViewer<JShapePreviewPanel>(drawing, factory);
+		controller = new JDianaViewer<JShapePreviewPanel>(drawing, factory, SwingToolFactory.DEFAULT);
 		add((JComponent) controller.getDrawingView());
 	}
 
