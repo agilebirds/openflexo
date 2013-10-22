@@ -25,7 +25,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
-	private DataBinding<String> excelObjectName;
+	private DataBinding<String> sheetName;
 	
 	private DataBinding<List<ExcelRow>> sheetRows;
 	
@@ -48,7 +48,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 			Workbook wb = modelSlotInstance.getResourceData().getWorkbook();
 			Sheet sheet = null;
 			try {
-				String name = getExcelObjectName().getBindingValue(action);
+				String name = getSheetName().getBindingValue(action);
 				// Create an Excel Sheet
 				sheet = wb.createSheet(name);
 				// Instanciate Wrapper.
@@ -81,22 +81,22 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
 	}
 
-	public DataBinding<String> getExcelObjectName() {
-		if (excelObjectName == null) {
-			excelObjectName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
-			excelObjectName.setBindingName("excelObjectName");
+	public DataBinding<String> getSheetName() {
+		if (sheetName == null) {
+			sheetName = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
+			sheetName.setBindingName("sheetName");
 		}
-		return excelObjectName;
+		return sheetName;
 	}
 
-	public void setExcelObjectName(DataBinding<String> excelObjectName) {
-		if (excelObjectName != null) {
-			excelObjectName.setOwner(this);
-			excelObjectName.setDeclaredType(String.class);
-			excelObjectName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-			excelObjectName.setBindingName("excelObjectName");
+	public void setSheetName(DataBinding<String> sheetName) {
+		if (sheetName != null) {
+			sheetName.setOwner(this);
+			sheetName.setDeclaredType(String.class);
+			sheetName.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			sheetName.setBindingName("sheetName");
 		}
-		this.excelObjectName = excelObjectName;
+		this.sheetName = sheetName;
 	}
 
 	public DataBinding<List<ExcelRow>> getSheetRows() {
