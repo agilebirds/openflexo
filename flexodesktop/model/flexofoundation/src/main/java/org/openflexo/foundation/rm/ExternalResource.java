@@ -25,6 +25,13 @@ public class ExternalResource implements FlexoObserver, XMLSerializable {
 		this.project.addObserver(this);
 	}
 
+	public ExternalResource(FlexoProject ownerResourceProject, String projectURI, String resourceIdentifier) {
+		this.project = ownerResourceProject;
+		this.projectURI = projectURI;
+		this.resourceIdentifier = resourceIdentifier;
+		this.project.addObserver(this);
+	}
+
 	// Created during serialization
 	public ExternalResource(FlexoResource<?> resource) {
 		this.projectURI = resource.getProject().getProjectURI();
@@ -85,6 +92,7 @@ public class ExternalResource implements FlexoObserver, XMLSerializable {
 				owner.externalResourceNotFound(this);
 			}
 		} else if (observable instanceof FlexoProject && dataModification instanceof ResourceAdded
+				&& ((FlexoProject) observable).getProjectURI() != null
 				&& ((FlexoProject) observable).getProjectURI().equals(getProjectURI())) {
 			FlexoProject project = (FlexoProject) observable;
 			FlexoResource<FlexoResourceData> resource = (FlexoResource<FlexoResourceData>) project.resourceForKey(getResourceIdentifier());

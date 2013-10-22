@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -38,6 +37,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.rm.ExternalResource.ExternalResourceOwner;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.Validable;
@@ -142,7 +142,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	/**
 	 * Hashtable coding the date 'this' resource was lastly backward synchronized with the resource matching related key
 	 */
-	private Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> _lastSynchronizedForResources;
+	private List<LastSynchronizedWithResourceEntry> _lastSynchronizedForResources;
 
 	/**
 	 * Default constructor
@@ -151,7 +151,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	 */
 	public FlexoResource(FlexoProject aProject) {
 		super();
-		_lastSynchronizedForResources = new Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry>();
+		_lastSynchronizedForResources = new Vector<FlexoResource.LastSynchronizedWithResourceEntry>();
 		project = aProject;
 	}
 
@@ -767,11 +767,10 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	public Date getLastSynchronizedWithResource(FlexoResource aResource) {
-		LastSynchronizedWithResourceEntry entry = _lastSynchronizedForResources.get(aResource);
+		LastSynchronizedWithResourceEntry entry = getLastSynchronizedForResource(aResource);
 		if (entry != null) {
 			return entry.date;
 		}
-		// return null;
 		return new Date(0);
 	}
 
@@ -779,11 +778,25 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setLastSynchronizedWithResource " + aResource + " with " + aDate);
 		}
-		_lastSynchronizedForResources.put(aResource, new LastSynchronizedWithResourceEntry(this, aResource, aDate));
+		LastSynchronizedWithResourceEntry entry = getLastSynchronizedForResource(aResource);
+		if (entry != null) {
+			entry.setDate(aDate);
+		} else {
+			addToLastSynchronizedForResources(new LastSynchronizedWithResourceEntry(this, aResource, aDate));
+		}
 		for (FlexoResource<?> alteredResource : getAlteredResources()) {
 			alteredResource.resetLastSynchronizedWithResource(this);
 		}
 		notifyResourceChanged();
+	}
+
+	public LastSynchronizedWithResourceEntry getLastSynchronizedForResource(FlexoResource aResource) {
+		for (LastSynchronizedWithResourceEntry entry : getLastSynchronizedForResources()) {
+			if (entry.getResource() == aResource) {
+				return entry;
+			}
+		}
+		return null;
 	}
 
 	public void resetLastSynchronizedWithResource(FlexoResource aResource) {
@@ -802,6 +815,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	private void resetLastSynchronizedWithResource(FlexoResource aResource, Vector<FlexoResource> alreadyDone) {
 		if (!alreadyDone.contains(this)) {
+			Date entry = getLastSynchronizedWithResource(aResource);
 			_lastSynchronizedForResources.remove(aResource);
 			alreadyDone.add(this);
 			// And propagate it again
@@ -813,30 +827,41 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		notifyResourceChanged();
 	}
 
-	public Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> getLastSynchronizedForResources() {
+	public List<LastSynchronizedWithResourceEntry> getLastSynchronizedForResources() {
 		return _lastSynchronizedForResources;
 	}
 
-	public void setLastSynchronizedForResources(Hashtable<FlexoResource<?>, LastSynchronizedWithResourceEntry> lastSynchronizedForResources) {
+	public void setLastSynchronizedForResources(List<LastSynchronizedWithResourceEntry> lastSynchronizedForResources) {
 		this._lastSynchronizedForResources = lastSynchronizedForResources;
 	}
 
-	public void setLastSynchronizedForResourcesForKey(LastSynchronizedWithResourceEntry entry, FlexoResource key) {
+	public void addToLastSynchronizedForResources(LastSynchronizedWithResourceEntry entry) {
 		entry.originResource = this;
-		_lastSynchronizedForResources.put(key, entry);
+		_lastSynchronizedForResources.add(entry);
 	}
 
-	public void removeLastSynchronizedForResourcesWithKey(FlexoResource key) {
-		_lastSynchronizedForResources.remove(key);
+	public void removeFromLastSynchronizedForResources(LastSynchronizedWithResourceEntry entry) {
+		_lastSynchronizedForResources.remove(entry);
 	}
 
-	public static class LastSynchronizedWithResourceEntry implements XMLSerializable {
+	public static class LastSynchronizedWithResourceEntry implements XMLSerializable, ExternalResourceOwner {
 		protected FlexoResource<? extends FlexoResourceData> originResource;
 		private FlexoResource<? extends FlexoResourceData> resource;
+
+		private ExternalResource externalResource;
+
 		Date date;
 
 		public LastSynchronizedWithResourceEntry() {
 			super();
+		}
+
+		public LastSynchronizedWithResourceEntry(FlexoResource<? extends FlexoResourceData> anOriginResource,
+				ExternalResource externalResource, Date aDate) {
+			this();
+			this.originResource = anOriginResource;
+			setExternalResource(externalResource);
+			this.date = aDate;
 		}
 
 		public LastSynchronizedWithResourceEntry(FlexoResource<? extends FlexoResourceData> anOriginResource,
@@ -868,7 +893,63 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 		}
 
 		public String getSerializationIdentifier() {
-			return originResource.getSerializationIdentifier() + "_" + getResource().getSerializationIdentifier();
+			if (getResource() != null) {
+				if (getResource().getProject() == getOriginResource().getProject()) {
+					return originResource.getSerializationIdentifier() + "_" + getResource().getSerializationIdentifier();
+				} else {
+					return originResource.getSerializationIdentifier() + "_" + getResource().getProject().getProjectURI() + "_"
+							+ getResource().getSerializationIdentifier();
+				}
+			} else if (getExternalResource() != null) {
+				return originResource.getSerializationIdentifier() + "_" + getResource().getProject().getProjectURI() + "_"
+						+ getResource().getSerializationIdentifier();
+			} else {
+				return null;
+			}
+		}
+
+		public FlexoResource<? extends FlexoResourceData> getSerialisationResource() {
+			if (getResource() != null && getResource().getProject() == getOriginResource().getProject()) {
+				return getResource();
+			} else {
+				return null;
+			}
+		}
+
+		public void setSerialisationResource(FlexoResource<? extends FlexoResourceData> serialisationResource) {
+			setResource(serialisationResource);
+		}
+
+		public ExternalResource getExternalResource() {
+			if (externalResource != null) {
+				return externalResource;
+			} else if (getResource() != null && getResource().getProject() != getOriginResource().getProject()) {
+				return new ExternalResource(getResource());
+			} else {
+				return null;
+			}
+		}
+
+		public void setExternalResource(ExternalResource externalResource) {
+			this.externalResource = externalResource;
+			if (externalResource != null) {
+				externalResource.setOwner(this);
+			}
+		}
+
+		@Override
+		public void externalResourceFound(ExternalResource externalResource, FlexoResource resource) {
+			setResource(resource);
+			setExternalResource(null);
+		}
+
+		@Override
+		public void externalResourceNotFound(ExternalResource externalResource) {
+			setResource(null);
+			setExternalResource(null);
+			if (getOriginResource() != null) {
+				getOriginResource().removeFromLastSynchronizedForResources(this);
+			}
 		}
 	}
 

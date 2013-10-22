@@ -782,16 +782,29 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("updateTSForResource" + resource + " entries=" + tempResource.getLastSynchronizedForResources().size());
 		}
-		for (LastSynchronizedWithResourceEntry entry : tempResource.getLastSynchronizedForResources().values()) {
+		// GPO note: I am pretty sure that below resource and originResource are always the exact same thing
+		for (LastSynchronizedWithResourceEntry entry : tempResource.getLastSynchronizedForResources()) {
 			FlexoResource<? extends FlexoResourceData> tempOriginResource = entry.getOriginResource();
-			FlexoResource<? extends FlexoResourceData> tempBSResource = entry.getResource();
-			FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
-					.getResourceIdentifier());
-			FlexoResource<? extends FlexoResourceData> bsResource = currentProject.resourceForKey(tempBSResource.getResourceIdentifier());
-			if (bsResource != null) {
-				LastSynchronizedWithResourceEntry newEntry = new LastSynchronizedWithResourceEntry(originResource, bsResource,
+			if (entry.getResource() != null) {
+				FlexoResource<? extends FlexoResourceData> tempBSResource = entry.getResource();
+				FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
+						.getResourceIdentifier());
+				FlexoResource<? extends FlexoResourceData> bsResource = currentProject.resourceForKey(tempBSResource
+						.getResourceIdentifier());
+				if (bsResource != null) {
+					LastSynchronizedWithResourceEntry newEntry = new LastSynchronizedWithResourceEntry(originResource, bsResource,
+							entry.getDate());
+					resource.addToLastSynchronizedForResources(newEntry);
+				}
+			} else if (entry.getExternalResource() != null) {
+				ExternalResource tempBSExternalResource = entry.getExternalResource();
+				FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
+						.getResourceIdentifier());
+
+				LastSynchronizedWithResourceEntry newEntry = new LastSynchronizedWithResourceEntry(originResource, new ExternalResource(
+						currentProject, tempBSExternalResource.getProjectURI(), tempBSExternalResource.getResourceIdentifier()),
 						entry.getDate());
-				resource.setLastSynchronizedForResourcesForKey(newEntry, bsResource);
+				resource.addToLastSynchronizedForResources(newEntry);
 			}
 		}
 		// Dont forget to set lastWrittenOnDisk !!!!!

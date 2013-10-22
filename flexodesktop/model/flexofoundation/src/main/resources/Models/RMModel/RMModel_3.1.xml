@@ -18,7 +18,7 @@
   <entity name="org.openflexo.foundation.rm.FlexoResource" abstract="YES">
 	<property name="dependentResources" xmlTag="DependantResources"/>
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
-	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="hashtable" key="resource"/>
+	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="vector"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">

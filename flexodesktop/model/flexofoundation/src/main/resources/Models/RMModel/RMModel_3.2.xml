@@ -30,7 +30,7 @@
   	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
 	<property name="dependentResources" xmlTag="DependantResources"/>
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
-	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="hashtable" key="resource"/>
+	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="vector"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
