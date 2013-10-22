@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl" owlFile="CostaValueStream.owl">
+  <EditionPattern id="2" name="ValueStream">
+    <DropScheme id="3" target="top" name="dropValueStreamAtTopLevel" label="drop_Value_Stream_At_Top_Level" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <description>Allow to create a new value stream at top level</description>
+      <TextFieldParameter id="4" name="name" label="name" defaultValue="&quot;ValueStream&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+        <description>Allow to give a name to a value stream</description>
+      </TextFieldParameter>
+      <URIParameter id="5" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+        <description>Allow to give a unique URI to a value stream</description>
+      </URIParameter>
+      <AddIndividual id="6" individualName="parameters.uri" assignation="valueStream">
+        <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddShape id="8" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeValueStream" />
+      <AddShape id="9" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeLabelValueStream" />
+      <AddShape id="10" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeLeftText" />
+      <AddShape id="11" extendParentBoundsToHostThisShape="false" assignation="shapeRightText" />
+    </DropScheme>
+    <DeletionScheme id="12" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <description>Allow to delete a value stream from top level</description>
+      <DeleteAction id="13" object="valueStream" />
+      <DeleteAction id="14" object="shapeLeftText" />
+      <DeleteAction id="15" object="shapeRightText" />
+      <DeleteAction id="16" object="shapeValueStream" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="17" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStream" patternRole="valueStream" />
+    <ContainedShapePatternRole id="18" exampleLabel="" patternRole="shapeValueStream">
+      <ShapeGraphicalRepresentation id="19" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="181.8181818181818" y="8.666666666666666" width="60.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="20" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="21" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="22" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="23" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="24" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="25" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="26" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="27" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="28" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="29" font="Lucida Sans Demibold,1,14" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="30" exampleLabel="Initiating Stakeholder" patternRole="shapeLeftText">
+      <ShapeGraphicalRepresentation id="31" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="7.575757575757576" width="6.0" height="34.949999999999996" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" yConstraints="(parent.height / 6.6)" widthConstraints="(parent.width * 0.1)" heightConstraints="(parent.height * 0.699)" identifier="object_0_0" layer="1" hasText="true" text="Initiating Stakeholder" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="32" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="33" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="34" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="35" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="36" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="37" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="38" top="20" bottom="20" left="20" right="20" />
+        <CustomPolygon id="39">
+          <FGEPoint id="40" x="1.0" y="0.0" />
+          <FGEPoint id="41" x="1.0" y="1.0" />
+          <FGEPoint id="42" x="0.0" y="0.8046875" />
+          <FGEPoint id="43" x="0.0" y="0.1953125" />
+          <FGEPoint idref="43" />
+        </CustomPolygon>
+        <ShadowStyle id="44" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="45" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="18" />
+      <GRSpec id="46" featureName="label" value="valueStream.valueStreamTriggeringStakeholder" readOnly="true" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="47" exampleLabel="Receiving&#xA;Stakeholder" patternRole="shapeRightText">
+      <ShapeGraphicalRepresentation id="48" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="50.4" y="12.5" width="6.0" height="25.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="(parent.width - (this.width * 1.6))" yConstraints="(parent.height / 4)" widthConstraints="(parent.width * 0.1)" heightConstraints="(parent.height * 0.5)" identifier="object_0_1" layer="2" hasText="true" text="Receiving&#xA;Stakeholder" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="49" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="50" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="51" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="52" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="53" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="54" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="55" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="27" />
+        <ShadowStyle id="56" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="57" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="18" />
+      <GRSpec id="58" featureName="label" value="valueStream.valueStrealReceivingStakeholder" readOnly="true" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="59" exampleLabel="label" patternRole="shapeLabelValueStream">
+      <ShapeGraphicalRepresentation id="60" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="24.0" y="1.6666666666666667" width="300.0" height="44.59772399730096" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="(components.object_0.width / 2.5)" yConstraints="((shapeValueStream.height - (shapeValueStream.height * 0.16)) - 155)" identifier="object_0_2" layer="1" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="61" noStroke="true" color="0,102,153" lineWidth="1.500000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="62" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="63" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="64" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="65" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="66" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="67" top="20" bottom="20" left="20" right="20" />
+        <CustomPolygon id="68" className="org.openflexo.fge.shapes.RectangularOctogon">
+          <FGEPoint id="69" x="0.0" y="0.2" />
+          <FGEPoint id="70" x="0.0" y="0.8" />
+          <FGEPoint id="71" x="0.1" y="1.0" />
+          <FGEPoint id="72" x="0.9" y="1.0" />
+          <FGEPoint id="73" x="1.0" y="0.8" />
+          <FGEPoint id="74" x="1.0" y="0.2" />
+          <FGEPoint id="75" x="0.9" y="0.0" />
+          <FGEPoint id="76" x="0.1" y="0.0" />
+        </CustomPolygon>
+        <ShadowStyle id="77" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="78" font="Lucida Sans Demibold,1,14" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="18" />
+      <GRSpec id="79" featureName="label" value="valueStream.label.asString" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="17" />
+    <PrimaryRepresentationShapePatternRole idref="18" />
+    <Inspector id="80" inspectorTitle="ValueStream">
+      <TextField id="81" label="name" name="name" readOnly="false" data="valueStream.name" />
+      <TextArea id="82" label="description" name="description" readOnly="false" data="valueStream.description" />
+      <TextField id="83" label="initiating_stakeholder" name="initiatingstakeholder" readOnly="false" data="valueStream.valueStreamTriggeringStakeholder" />
+      <TextField id="84" label="receiving_stakeholder" name="receivingstakeholder" readOnly="false" data="valueStream.valueStrealReceivingStakeholder" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="85" name="ValueStreamActivity">
+    <DropScheme id="86" target="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStream" name="dropValueStreamActivityInValueStream" label="drop_Value_Stream_Activity_In_Value_Stream" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <ContextShapePatternRole idref="18" />
+      <description>Allow to put the activity in the value stream</description>
+      <TextFieldParameter id="87" name="name" label="name" defaultValue="&quot;Activity&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+        <description>Allow to give a name to an activity</description>
+      </TextFieldParameter>
+      <URIParameter id="88" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+        <description>Allow to give a unique URI to an activity</description>
+      </URIParameter>
+      <AddIndividual id="89" individualName="parameters.uri" assignation="valueStreamActivity">
+        <DataPropertyAssertion id="90" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddObjectPropertyStatement id="91" object="valueStreamActivity" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasActivity" subject="target.valueStream" />
+      <AddObjectPropertyStatement id="92" object="target.valueStream" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#isActivityOf" subject="valueStreamActivity" />
+      <AddShape id="93" container="target.shapeValueStream" extendParentBoundsToHostThisShape="false" assignation="shape" />
+    </DropScheme>
+    <DeletionScheme id="94" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <description>Allow to delete the activity from a value stream</description>
+      <DeleteAction id="95" object="valueStreamActivity" />
+      <DeleteAction id="96" object="shape" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="97" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStreamActivity" patternRole="valueStreamActivity" />
+    <ContainedShapePatternRole id="98" exampleLabel="Activity" patternRole="shape">
+      <ShapeGraphicalRepresentation id="99" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="158.12335672143504" y="4.472008717060888" width="188.87664327856496" height="82.52799128293911" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.4900000002235174" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" text="Activity" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="100" noStroke="false" color="51,102,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="101" color1="21,94,175" color2="43,131,230" direction="SOUTH_WEST_NORTH_EAST" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="102" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="103" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="104" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="105" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="106" top="20" bottom="20" left="20" right="20" />
+        <CustomPolygon id="107">
+          <FGEPoint id="108" x="0.0027624309392265192" y="0.0" />
+          <FGEPoint id="109" x="0.8784530386740331" y="0.011428571428571429" />
+          <FGEPoint id="110" x="1.0" y="0.5085714285714286" />
+          <FGEPoint id="111" x="0.8756906077348066" y="1.0" />
+          <FGEPoint id="112" x="0.0" y="1.0" />
+          <FGEPoint id="113" x="0.1270718232044199" y="0.49714285714285716" />
+          <FGEPoint idref="113" />
+        </CustomPolygon>
+        <ShadowStyle id="114" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="115" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <GRSpec id="116" featureName="label" value="valueStreamActivity.name" readOnly="true" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="97" />
+    <PrimaryRepresentationShapePatternRole idref="98" />
+    <Inspector id="117" inspectorTitle="ValueStreamActivity">
+      <TextField id="118" label="name" name="name" readOnly="false" data="valueStreamActivity.name" />
+      <TextArea id="119" label="description" name="description" readOnly="false" data="valueStreamActivity.description" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="120" name="ActivityLink">
+    <LinkScheme id="121" fromTarget="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStreamActivity" toTarget="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStreamActivity" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkValueStreamActivityToValueStreamActivity" label="linkValueStreamActivityToValueStreamActivity" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <URIParameter id="122" base="&quot;activityLink&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddObjectPropertyStatement id="123" object="toTarget.valueStreamActivity" assignation="nextActivityStatement" subject="fromTarget.valueStreamActivity">
+        <description>Allow to create a link between two activities.</description>
+      </AddObjectPropertyStatement>
+      <AddObjectPropertyStatement id="124" object="toTarget.valueStreamActivity" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#previousActivity" subject="fromTarget.valueStreamActivity">
+        <description>Allow to create a link between two activities.</description>
+      </AddObjectPropertyStatement>
+      <AddConnector id="125" fromShape="fromTarget.shape" toShape="toTarget.shape" assignation="connector" />
+    </LinkScheme>
+    <DeletionScheme id="126" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="127" object="nextActivityStatement" />
+      <DeleteAction id="128" object="connector" />
+    </DeletionScheme>
+    <ContainedObjectPropertyStatementPatternRole id="129" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#nextActivity" patternRole="nextActivityStatement" />
+    <ContainedConnectorPatternRole id="130" exampleLabel="" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="131" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="132" noStroke="true" color="255,255,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="133" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="134" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <StartShapeGraphicalRepresentation id="135" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="136" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="137" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="138" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="139" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="140" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="141" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="142" top="20" bottom="20" left="20" right="20" />
+          <CircleShape id="143" />
+          <ShadowStyle id="144" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="145" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </StartShapeGraphicalRepresentation>
+        <EndShapeGraphicalRepresentation id="146" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="147" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorBackgroundStyle id="148" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="149" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="150" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="151" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="152" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="153" top="20" bottom="20" left="20" right="20" />
+          <CircleShape idref="143" />
+          <ShadowStyle id="154" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="155" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </EndShapeGraphicalRepresentation>
+        <RectPolylinConnector id="156" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="EAST" endOrientation="WEST" isRounded="false" arcSize="5" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="157" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation idref="135" />
+      <ArtifactToShapeGraphicalRepresentation idref="146" />
+      <GRSpec id="158" featureName="label" value="&quot;&quot;" readOnly="true" />
+    </ContainedConnectorPatternRole>
+    <PrimaryConceptObjectPropertyStatementPatternRole idref="129" />
+    <PrimaryRepresentationConnectorPatternRole idref="130" />
+    <Inspector id="159" inspectorTitle="ActivityLink">
+      <TextField id="160" label="FromActivity" name="FromActivity" readOnly="true" data="nextActivityStatement.subject.name" />
+      <TextField id="161" label="ToActivity" name="ToActivity" readOnly="true" data="nextActivityStatement.object.name" />
+    </Inspector>
+  </EditionPattern>
+  <LocalizedDictionary id="162">
+    <Localized id="163" key="ValueStream" lang="English">ValueStream</Localized>
+    <Localized id="164" key="ValueStream" lang="French">Chaine_de_Valeur</Localized>
+    <Localized id="165" key="ValueStream" lang="Dutch">Waardeketen</Localized>
+    <Localized id="166" key="drop_Value_Stream_At_Top_Level" lang="English">Drop_Value_Stream_At_Top_Level</Localized>
+    <Localized id="167" key="drop_Value_Stream_At_Top_Level" lang="French">Mettre_Une_Activite_Dans_La_Racine</Localized>
+    <Localized id="168" key="drop_Value_Stream_At_Top_Level" lang="Dutch">Plaats_Activiteit_Op_Het_Hoogste_Niveau</Localized>
+    <Localized id="169" key="name" lang="English">Name</Localized>
+    <Localized id="170" key="name" lang="French">Nom</Localized>
+    <Localized id="171" key="name" lang="Dutch">Naam</Localized>
+    <Localized id="172" key="uri" lang="English">URI</Localized>
+    <Localized id="173" key="uri" lang="French">URI</Localized>
+    <Localized id="174" key="uri" lang="Dutch">URI</Localized>
+    <Localized id="175" key="index" lang="English">Index</Localized>
+    <Localized id="176" key="index" lang="French">Index</Localized>
+    <Localized id="177" key="index" lang="Dutch">Index</Localized>
+    <Localized id="178" key="description" lang="English">Description</Localized>
+    <Localized id="179" key="description" lang="French">Description</Localized>
+    <Localized id="180" key="description" lang="Dutch">Beschrijving</Localized>
+    <Localized id="181" key="initiatingstakeholder" lang="English">Initiating_Stakeholder</Localized>
+    <Localized id="182" key="initiatingstakeholder" lang="French">Partie_Prenante_Initiatrice</Localized>
+    <Localized id="183" key="initiatingstakeholder" lang="Dutch">Initiatiefnemer_Belanghebbenden</Localized>
+    <Localized id="184" key="receivingstakeholder" lang="English">Receiving_Stakeholder</Localized>
+    <Localized id="185" key="receivingstakeholder" lang="French">Reception_Des_Parties_Prenantes</Localized>
+    <Localized id="186" key="receivingstakeholder" lang="Dutch">Ontvangen_Van_Belanghebbenden</Localized>
+    <Localized id="187" key="deletion" lang="English">Deletion</Localized>
+    <Localized id="188" key="deletion" lang="French">Suppression</Localized>
+    <Localized id="189" key="deletion" lang="Dutch">Verwijdering</Localized>
+    <Localized id="190" key="ValueStreamActivity" lang="English">Activity</Localized>
+    <Localized id="191" key="ValueStreamActivity" lang="French">Activite</Localized>
+    <Localized id="192" key="ValueStreamActivity" lang="Dutch">Activiteit</Localized>
+    <Localized id="193" key="drop_Value_Stream_Activity_In_Value_Stream" lang="English">Drop_Value_Stream_Activity_In_Value_Stream</Localized>
+    <Localized id="194" key="drop_Value_Stream_Activity_In_Value_Stream" lang="French">Mettre_Une_Activite_Dans_La_Chaine_de_Valeur</Localized>
+    <Localized id="195" key="drop_Value_Stream_Activity_In_Value_Stream" lang="Dutch">Plaats_Activiteit_In_De_Waardeketen</Localized>
+  </LocalizedDictionary>
+</ViewPoint>

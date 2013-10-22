@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl" owlFile="ObjectivesOfCosta.owl">
+  <EditionPattern id="2" name="ServiceBreakdownContainer">
+    <DropScheme id="3" target="top" name="dropServiceBreakdownContainerAtTopLevel" label="drop_Service_Breakdown_Container_At_Top_Level" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="4" name="name" label="name" defaultValue="&quot;ServiceBeakdownContainer&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="5" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddIndividual id="6" individualName="serviceBreakdownContainer.name" assignation="serviceBreakdownContainer">
+        <DataPropertyAssertion id="7" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddShape id="8" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeServiceBreakDownContainer" />
+    </DropScheme>
+    <DeletionScheme id="9" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="10" object="serviceBreakdownContainer" />
+      <DeleteAction id="11" object="shapeServiceBreakDownContainer" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="12" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ServiceBreakdownContainer" patternRole="serviceBreakdownContainer" />
+    <ContainedShapePatternRole id="13" exampleLabel="" patternRole="shapeServiceBreakDownContainer">
+      <ShapeGraphicalRepresentation id="14" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-100.0" y="-270.0" width="500.0" height="400.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="15" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="16" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="17" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="18" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="19" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="20" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="21" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="22" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="23" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="24" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="12" />
+    <PrimaryRepresentationShapePatternRole idref="13" />
+    <Inspector id="25" inspectorTitle="ServiceBreakdownContainer">
+      <TextField id="26" label="name_of_serviceBreakdownContainer" name="name" readOnly="false" data="serviceBreakdownContainer.name" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="27" name="ProductSegmentationContainer">
+    <DropScheme id="28" target="top" name="dropProductSegmentationContainerAtTopLevel" label="dropProductSegmentationContainerAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="29" name="name" label="name_of_productSegmentationContainer" defaultValue="&quot;ProductSegmentationContainer&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="30" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddIndividual id="31" individualName="productSegmentationContainer.name" assignation="productSegmentationContainer">
+        <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddShape id="33" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeProductSegmentationContainer" />
+    </DropScheme>
+    <DeletionScheme id="34" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="35" object="productSegmentationContainer" />
+      <DeleteAction id="36" object="shapeProductSegmentationContainer" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="37" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ProductSegmentationContainer" patternRole="productSegmentationContainer" />
+    <ContainedShapePatternRole id="38" exampleLabel="" patternRole="shapeProductSegmentationContainer">
+      <ShapeGraphicalRepresentation id="39" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="500.0" height="400.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.0" relativeTextY="0.0" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="3" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="40" noStroke="false" color="153,153,153" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="41" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="42" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="43" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="44" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="45" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="46" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="22" />
+        <ShadowStyle id="47" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="48" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="37" />
+    <PrimaryRepresentationShapePatternRole idref="38" />
+    <Inspector id="49" inspectorTitle="ProductSegmentationContainer">
+      <TextField id="50" label="name_of_productSegmentationContainer" name="name" readOnly="false" data="productSegmentationContainer.name" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="51" name="ProductSegmentation">
+    <DropScheme id="52" target="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl#ProductSegmentationContainer" name="dropProductSegmentationInProductSegmentationContainer" label="drop_ProductSegmentation_In_Product_Segmentation_Container" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="53" name="name" label="name_of_productSegmentation" defaultValue="&quot;Product Segment&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="54" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextAreaParameter id="55" name="description" label="description" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="56" individualName="parameters.uri" assignation="productSegmentation">
+        <DataPropertyAssertion id="57" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+        <DataPropertyAssertion id="58" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#description" value="parameters.description" />
+      </AddIndividual>
+      <AddObjectPropertyStatement id="59" object="productSegmentation" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasProductSegmentation" subject="target.productSegmentationContainer" />
+      <AddShape id="60" container="target.shapeProductSegmentationContainer" extendParentBoundsToHostThisShape="false" assignation="shape" />
+    </DropScheme>
+    <DeletionScheme id="61" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="62" object="productSegmentation" />
+      <DeleteAction id="63" object="shape" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="64" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ProductSegmentation" patternRole="productSegmentation" />
+    <ContainedShapePatternRole id="65" exampleLabel="Product Segment" patternRole="shape">
+      <ShapeGraphicalRepresentation id="66" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="110.0" y="6.5" width="110.0" height="123.5" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.029999999776482583" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="HEIGHT_FIXED" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" xConstraints="((this.index * 120) + 110)" yConstraints="(parent.absoluteTextY + 60)" heightConstraints="(parent.height * 0.95)" xInitialConstraints="((this.index * 120) + 110)" yInitialConstraints="(parent.absoluteTextY + 60)" heightInitialConstraints="(parent.height * 0.95)" identifier="object_0" layer="3" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="75.0" absoluteTextY="45.36326157795991" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="67" noStroke="false" color="0,102,153" lineWidth="2.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="68" color1="0,153,204" color2="147,216,235" direction="WEST_EAST" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="69" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="70" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="71" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="72" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="73" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="74" isRounded="true" arcSize="25.0" />
+        <ShadowStyle id="75" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="76" font="Lucida Sans Demibold,1,14" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <GRSpec id="77" featureName="label" value="productSegmentation.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="64" />
+    <PrimaryRepresentationShapePatternRole idref="65" />
+    <Inspector id="78" inspectorTitle="ProductSegmentation">
+      <TextField id="79" label="name_of_productSegmentation" name="name" readOnly="false" data="productSegmentation.name" />
+      <TextArea id="80" label="description" name="description" readOnly="false" data="productSegmentation.description" />
+      <Integer id="81" label="index" name="index" readOnly="false" data="shape.indexRelativeToEPType" />
+      <TextField id="82" label="uri" name="uri" readOnly="true" data="productSegmentation.uriName" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="83" name="ServiceBreakdown">
+    <DropScheme id="84" target="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl#ServiceBreakdownContainer" name="dropServiceBreakdownInServiceBreakdownContainer" label="dropServiceBreakdownInServiceBreakdownContainer" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="85" name="name" label="name_of_serviceBreakdown" defaultValue="&quot;Service&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="86" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddIndividual id="87" individualName="parameters.uri" assignation="serviceBreakdown">
+        <DataPropertyAssertion id="88" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddObjectPropertyStatement id="89" object="serviceBreakdown" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasServiceBreakdown" subject="target.serviceBreakdownContainer" />
+      <AddShape id="90" container="target.shapeServiceBreakDownContainer" extendParentBoundsToHostThisShape="false" assignation="shapeService" />
+      <AddShape id="91" extendParentBoundsToHostThisShape="false" assignation="shapeServiceBody" />
+      <AddShape id="92" extendParentBoundsToHostThisShape="false" assignation="shapeServiceTitleBackground" />
+      <AddShape id="93" extendParentBoundsToHostThisShape="false" assignation="shapeServiceTitleRound" />
+      <AddShape id="94" container="target.shapeServiceBreakDownContainer" extendParentBoundsToHostThisShape="false" assignation="shapeServiceTitle" />
+    </DropScheme>
+    <DeletionScheme id="95" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="96" object="serviceBreakdown" />
+      <DeleteAction id="97" object="shapeServiceTitleRound" />
+      <DeleteAction id="98" object="shapeServiceTitleBackground" />
+      <DeleteAction id="99" object="shapeServiceBody" />
+      <DeleteAction id="100" object="shapeServiceTitle" />
+      <DeleteAction id="101" object="shapeService" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="102" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ServiceBreakdown" patternRole="serviceBreakdown" />
+    <ContainedShapePatternRole id="103" exampleLabel="" patternRole="shapeService">
+      <ShapeGraphicalRepresentation id="104" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="10.0" width="380.0" height="120.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.27000000022351744" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="(parent.absoluteTextX + 10)" yConstraints="((this.index * 130) + 90)" widthConstraints="(parent.width * 0.95)" heightConstraints="120" xInitialConstraints="(parent.absoluteTextX + 10)" yInitialConstraints="((this.index * 130) + 90)" widthInitialConstraints="(parent.width * 0.95)" heightInitialConstraints="120" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="105" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="106" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="107" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="108" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="109" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="110" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="111" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="22" />
+        <ShadowStyle id="112" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="113" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="114" exampleLabel="" patternRole="shapeServiceTitleRound">
+      <ShapeGraphicalRepresentation id="115" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="40.0" height="120.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" widthConstraints="40" heightConstraints="parent.height" widthInitialConstraints="40" heightInitialConstraints="parent.height" identifier="object_0_0" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="116" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="117" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="118" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="119" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="120" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="121" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="122" top="20" bottom="20" left="20" right="20" />
+        <ArcShape id="123" angleExtent="180" angleStart="90" arcType="PIE" />
+        <ShadowStyle id="124" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="125" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="103" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="126" exampleLabel="" patternRole="shapeServiceTitleBackground">
+      <ShapeGraphicalRepresentation id="127" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="20.0" y="0.0" width="70.0" height="120.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="X_FIXED" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="20" widthConstraints="70" heightConstraints="parent.height" xInitialConstraints="20" widthInitialConstraints="70" heightInitialConstraints="parent.height" identifier="object_0_1" layer="4" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="128" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="129" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="130" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="131" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="132" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="133" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="134" top="20" bottom="20" left="20" right="20" />
+        <SquareShape id="135" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="136" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="137" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="103" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="138" exampleLabel="" patternRole="shapeServiceBody">
+      <ShapeGraphicalRepresentation id="139" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="90.0" y="0.0" width="290.0" height="120.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="X_FIXED" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="90" widthConstraints="(parent.width - 90)" heightConstraints="parent.height" xInitialConstraints="90" widthInitialConstraints="(parent.width - 90)" heightInitialConstraints="parent.height" identifier="object_0_2" layer="3" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="false" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="140" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="141" color1="226,221,221" color2="186,185,185" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="142" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="143" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="144" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="145" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="146" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="22" />
+        <ShadowStyle id="147" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="148" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="103" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="149" exampleLabel="Service" patternRole="shapeServiceTitle">
+      <ShapeGraphicalRepresentation id="150" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="5.0" y="3.2977667493796554" width="90.0" height="108.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.03" relativeTextY="0.4999999997764826" lineWrap="true" locationConstraints="X_FIXED" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="5" widthConstraints="90" heightConstraints="(parent.height * 0.9)" xInitialConstraints="5" widthInitialConstraints="80" heightInitialConstraints="(parent.height * 0.9)" identifier="object_0_3" layer="5" hasText="true" text="Service" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="72.0" absoluteTextY="74.0" paragraphAlignment="LEFT" horizontalTextAlignment="LEFT" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="151" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="152" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="153" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="154" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="155" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="156" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="157" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="22" />
+        <ShadowStyle id="158" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="159" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="103" />
+      <GRSpec id="160" featureName="label" value="serviceBreakdown.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="102" />
+    <PrimaryRepresentationShapePatternRole idref="103" />
+    <Inspector id="161" inspectorTitle="ServiceBreakdown">
+      <TextField id="162" label="name_of_serviceBreakdown" name="name_of_serviceBreakdown" readOnly="false" data="serviceBreakdown.name" />
+      <TextArea id="163" label="description" name="description" readOnly="false" data="serviceBreakdown.description" />
+      <Integer id="164" label="index" name="index" readOnly="false" data="shapeService.indexRelativeToEPType" />
+      <TextField id="165" label="uri" name="uri" readOnly="true" data="serviceBreakdown.uriName" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="166" name="Goal">
+    <DropScheme id="167" target="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl#ProductSegmentation" name="dropGoalInProductSegmentation" label="dropGoalInProductSegmentation" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="168" name="name" label="name_of_goal" defaultValue="&quot;Objective&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="169" name="valueStreamName" label="valueStreamName" defaultValue="&quot;Value Stream&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="170" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <URIParameter id="171" base="parameters.valueStreamName" name="uriValueStream" label="uriValueStream" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddIndividual id="172" individualName="parameters.uri" assignation="goal">
+        <DataPropertyAssertion id="173" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddIndividual id="174" individualName="parameters.uriValueStream" assignation="valueStream">
+        <DataPropertyAssertion id="175" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.valueStreamName" />
+        <DataPropertyAssertion id="176" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#valueStreamTriggeringStakeholder" value="&quot;Initiating Stakeholder&quot;" />
+        <DataPropertyAssertion id="177" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#valueStrealReceivingStakeholder" value="&quot;Receiving Stakeholder&quot;" />
+        <ObjectPropertyAssertion id="178" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasActivity" object="goal" />
+      </AddIndividual>
+      <AddShape id="179" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shapeGoal" />
+      <AddObjectPropertyStatement id="180" object="target.productSegmentation" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasProductSegmentation" />
+    </DropScheme>
+    <DeletionScheme id="181" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="182" object="goal" />
+      <DeleteAction id="183" object="valueStream" />
+      <DeleteAction id="184" object="shapeGoal" />
+      <DeleteAction id="185" object="diagramValueStream" />
+    </DeletionScheme>
+    <NavigationScheme id="186" targetObject="diagramValueStream" name="openValueStream" label="openValueStream" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="187" name="valueStreamName" label="valueStreamName" defaultValue="(&quot;VP &quot; + goal.name)" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddDiagram id="188" diagramName="parameters.valueStreamName" assignation="diagramValueStream" />
+      <AddEditionPattern id="189" view="diagramValueStream" creationSchemeURI="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStream.valueStreamCreation">
+        <AddEditionPatternParameter id="190" paramName="valueStream" value="valueStream" />
+      </AddEditionPattern>
+    </NavigationScheme>
+    <ContainedIndividualPatternRole id="191" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#Goal" patternRole="goal" />
+    <ContainedShapePatternRole id="192" exampleLabel="Objective" patternRole="shapeGoal">
+      <ShapeGraphicalRepresentation id="193" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="1.0" y="89.0" width="100.0" height="41.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="CONTAINED_IN_SHAPE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="6" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="194" noStroke="false" color="0,51,153" lineWidth="1.300000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="195" color="255,255,255" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="196" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="197" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="198" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="199" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="200" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="201" isRounded="true" arcSize="25.0" />
+        <ShadowStyle id="202" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="203" font="Lucida Sans Regular,0,12" color="0,0,153" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <Action id="204" actionMask="DoubleClick">
+        <ExecutedNavigationScheme idref="186" />
+      </Action>
+      <GRSpec id="205" featureName="label" value="goal.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <ContainedIndividualPatternRole id="206" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStream" patternRole="valueStream" />
+    <ContainedDiagramPatternRole id="207" viewpointURI="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl" patternRole="diagramValueStream" />
+    <ContainedObjectPropertyStatementPatternRole id="208" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasProductSegmentation" patternRole="productSegmentHasGoalStatement" />
+    <ContainedObjectPropertyStatementPatternRole id="209" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasServiceBreakdown" patternRole="serviceBreakdownStatement" />
+    <PrimaryConceptIndividualPatternRole idref="191" />
+    <PrimaryRepresentationShapePatternRole idref="192" />
+    <Inspector id="210" inspectorTitle="Goal">
+      <TextField id="211" label="name_of_goal" name="name" readOnly="false" data="goal.name" />
+      <TextArea id="212" label="description" name="description" readOnly="false" data="goal.description" />
+      <Individual id="213" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#Goal" renderer="individual.name" label="individual" name="individual" readOnly="false" data="goal" />
+      <Individual id="214" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ProductSegmentation" renderer="individual.name" label="productSegment" name="productSegment" readOnly="false" data="goal.hasProductSegmentation" />
+      <ListInspectorEntry id="215" type="Individual" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ServiceBreakdown" format="object.name" label="serviceBreakdown" name="serviceBreakdown" readOnly="false" data="goal.hasServiceBreakdown" />
+      <Individual id="216" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ServiceBreakdown" renderer="individual.name" label="serviceBreakdown" name="serviceBreakdown" readOnly="false" data="goal.hasServiceBreakdown" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="217" name="GoalLink">
+    <LinkScheme id="218" fromTarget="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl#Goal" toTarget="http://www.agilebirds.com/openflexo/ontologies/ObjectivesOfCosta.owl#Goal" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkGoalToGoal" label="linkGoalToGoal" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="219" name="name" label="name_of_objectiveLink" defaultValue="&quot;goalLink&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="220" name="description" label="description_of_objectiveLink" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="221" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddObjectPropertyStatement id="222" object="toTarget.goal" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#nextObjective" subject="fromTarget.goal" />
+      <AddObjectPropertyStatement id="223" object="fromTarget.goal" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#previousObjective" subject="toTarget.goal" />
+      <AddConnector id="224" fromShape="fromTarget.shapeGoal" toShape="toTarget.shapeGoal" assignation="connectorGoal" />
+    </LinkScheme>
+    <DeletionScheme id="225" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="226" object="connectorGoal" />
+      <DeleteAction id="227" object="nextObjectiveStatement" />
+      <DeleteAction id="228" object="previousObjectiveStatement" />
+    </DeletionScheme>
+    <ContainedConnectorPatternRole id="229" exampleLabel="" patternRole="connectorGoal">
+      <ConnectorGraphicalRepresentation id="230" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="ARROW" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="8.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="231" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="232" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="233" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <LineConnector id="234" lineConnectorType="MINIMAL_LENGTH" cp1RelativeToStartObject="0.8999999999999999,0.6000000000000001" cp2RelativeToEndObject="0.017078581382665936,0.3704357169563248" />
+        <TextStyle id="235" font="Lucida Sans Regular,0,2" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation id="236" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="13.0" y="2.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="237" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="238" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="239" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="240" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="241" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="242" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="243" top="20" bottom="20" left="20" right="20" />
+        <CircleShape id="244" />
+        <ShadowStyle id="245" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="246" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="247" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="220.0" y="2.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="248" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="249" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="250" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="251" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="252" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="253" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="254" top="20" bottom="20" left="20" right="20" />
+        <CircleShape idref="244" />
+        <ShadowStyle id="255" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="256" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
+    </ContainedConnectorPatternRole>
+    <ContainedObjectPropertyStatementPatternRole id="257" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#nextObjective" patternRole="nextObjectiveStatement" />
+    <ContainedObjectPropertyStatementPatternRole id="258" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#previousObjective" patternRole="previousObjectiveStatement" />
+    <PrimaryConceptObjectPropertyStatementPatternRole idref="257" />
+    <PrimaryRepresentationConnectorPatternRole idref="229" />
+    <Inspector id="259" inspectorTitle="ObjectiveLink">
+      <TextField id="260" label="fromGoal" name="fromGoal" readOnly="false" data="previousObjectiveStatement.object.name" />
+      <TextField id="261" label="toGoal" name="toGoal" readOnly="false" data="nextObjectiveStatement.object.name" />
+    </Inspector>
+  </EditionPattern>
+  <LocalizedDictionary id="262">
+    <Localized id="263" key="ServiceBreakDownContainer" lang="English">Service Breakdown Container</Localized>
+    <Localized id="264" key="ServiceBreakDownContainer" lang="French">Service Breakdown Container</Localized>
+    <Localized id="265" key="ServiceBreakDownContainer" lang="Dutch">Service Breakdown Container</Localized>
+    <Localized id="266" key="ServiceBreakdownContainer" lang="English">Service Breakdown Container</Localized>
+    <Localized id="267" key="ServiceBreakdownContainer" lang="French">Service Breakdown Container</Localized>
+    <Localized id="268" key="ServiceBreakdownContainer" lang="Dutch">Service Breakdown Container</Localized>
+    <Localized id="269" key="drop_Service_Break_down_Container_At_Top_Level" lang="English">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="270" key="drop_Service_Break_down_Container_At_Top_Level" lang="French">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="271" key="drop_Service_Break_down_Container_At_Top_Level" lang="Dutch">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="272" key="name_of_service_Break_down_Container" lang="English">Name</Localized>
+    <Localized id="273" key="name_of_service_Break_down_Container" lang="French">Nom</Localized>
+    <Localized id="274" key="name_of_service_Break_down_Container" lang="Dutch">Naam</Localized>
+    <Localized id="275" key="description_of_serviceBreakdownContainer" lang="English">Description</Localized>
+    <Localized id="276" key="description_of_serviceBreakdownContainer" lang="French">Description</Localized>
+    <Localized id="277" key="description_of_serviceBreakdownContainer" lang="Dutch">Beschrijving</Localized>
+    <Localized id="278" key="uri" lang="English">URI</Localized>
+    <Localized id="279" key="uri" lang="French">URI</Localized>
+    <Localized id="280" key="uri" lang="Dutch">URI</Localized>
+    <Localized id="281" key="index" lang="English">Index</Localized>
+    <Localized id="282" key="index" lang="French">Index</Localized>
+    <Localized id="283" key="index" lang="Dutch">Index</Localized>
+    <Localized id="284" key="name_of_serviceBreakdownContainer" lang="English">Name</Localized>
+    <Localized id="285" key="name_of_serviceBreakdownContainer" lang="French">Nom</Localized>
+    <Localized id="286" key="name_of_serviceBreakdownContainer" lang="Dutch">Naam</Localized>
+    <Localized id="287" key="deletion" lang="English">Deletion</Localized>
+    <Localized id="288" key="deletion" lang="French">Suppression</Localized>
+    <Localized id="289" key="deletion" lang="Dutch">Verwijdering</Localized>
+    <Localized id="290" key="ProductSegmentationContainer" lang="English">Product Segmentation Container</Localized>
+    <Localized id="291" key="ProductSegmentationContainer" lang="French">Product Segmentation Container</Localized>
+    <Localized id="292" key="ProductSegmentationContainer" lang="Dutch">Product Segmentation Container</Localized>
+    <Localized id="293" key="dropProductSegmentationContainerAtTopLevel" lang="English">Drop Product Segmentation Container At Top Level</Localized>
+    <Localized id="294" key="dropProductSegmentationContainerAtTopLevel" lang="French">Drop Product Segmentation Container At Top Level</Localized>
+    <Localized id="295" key="dropProductSegmentationContainerAtTopLevel" lang="Dutch">Drop Product Segmentation Container At Top Level</Localized>
+    <Localized id="296" key="name_of_productSegmentationContainer" lang="English">Name</Localized>
+    <Localized id="297" key="name_of_productSegmentationContainer" lang="French">Nom</Localized>
+    <Localized id="298" key="name_of_productSegmentationContainer" lang="Dutch">Naam</Localized>
+    <Localized id="299" key="description_of_productSegmentationContainer" lang="English">Description</Localized>
+    <Localized id="300" key="description_of_productSegmentationContainer" lang="French">Description</Localized>
+    <Localized id="301" key="description_of_productSegmentationContainer" lang="Dutch">Beschrijving</Localized>
+    <Localized id="302" key="ToDELETE" lang="English">To DELETE</Localized>
+    <Localized id="303" key="ToDELETE" lang="French">To DELETE</Localized>
+    <Localized id="304" key="ToDELETE" lang="Dutch">To DELETE</Localized>
+    <Localized id="305" key="ServiceBreakdown" lang="English">Service Breakdown</Localized>
+    <Localized id="306" key="ServiceBreakdown" lang="French">Service Breakdown</Localized>
+    <Localized id="307" key="ServiceBreakdown" lang="Dutch">Service Breakdown</Localized>
+    <Localized id="308" key="dropServiceBreakdownInServiceBreakdownContainer" lang="English">Drop Service Breakdown In Service Breakdown Container</Localized>
+    <Localized id="309" key="dropServiceBreakdownInServiceBreakdownContainer" lang="French">Drop Service Breakdown In Service Breakdown Container</Localized>
+    <Localized id="310" key="dropServiceBreakdownInServiceBreakdownContainer" lang="Dutch">Drop Service Breakdown In Service Breakdown Container</Localized>
+    <Localized id="311" key="name_of_serviceBreakdown" lang="English">Name</Localized>
+    <Localized id="312" key="name_of_serviceBreakdown" lang="French">Nom</Localized>
+    <Localized id="313" key="name_of_serviceBreakdown" lang="Dutch">Naam</Localized>
+    <Localized id="314" key="description_of_serviceBreakdown" lang="English">Description</Localized>
+    <Localized id="315" key="description_of_serviceBreakdown" lang="French">Description</Localized>
+    <Localized id="316" key="description_of_serviceBreakdown" lang="Dutch">Beschrijving</Localized>
+    <Localized id="317" key="ProductSegmentation" lang="English">Product Segmentation</Localized>
+    <Localized id="318" key="ProductSegmentation" lang="French">Segmentation des produits</Localized>
+    <Localized id="319" key="ProductSegmentation" lang="Dutch">Product Segmentation</Localized>
+    <Localized id="320" key="dropProductSegmentationInProductSegmentationContainer" lang="English">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="321" key="dropProductSegmentationInProductSegmentationContainer" lang="French">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="322" key="dropProductSegmentationInProductSegmentationContainer" lang="Dutch">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="323" key="name_of_productSegmentation" lang="English">Name</Localized>
+    <Localized id="324" key="name_of_productSegmentation" lang="French">Nom</Localized>
+    <Localized id="325" key="name_of_productSegmentation" lang="Dutch">Naam</Localized>
+    <Localized id="326" key="description_of_productSegmentation" lang="English">Description</Localized>
+    <Localized id="327" key="description_of_productSegmentation" lang="French">Description</Localized>
+    <Localized id="328" key="description_of_productSegmentation" lang="Dutch">Beschrijving</Localized>
+    <Localized id="329" key="Goal" lang="English">Goal</Localized>
+    <Localized id="330" key="Goal" lang="French">But</Localized>
+    <Localized id="331" key="Goal" lang="Dutch">Doel</Localized>
+    <Localized id="332" key="dropGoalInProductSegmentation" lang="English">Drop Goal In Product Segmentation</Localized>
+    <Localized id="333" key="dropGoalInProductSegmentation" lang="French">Drop Goal In Product Segmentation</Localized>
+    <Localized id="334" key="dropGoalInProductSegmentation" lang="Dutch">Drop Goal In Product Segmentation</Localized>
+    <Localized id="335" key="name_of_goal" lang="English">Name</Localized>
+    <Localized id="336" key="name_of_goal" lang="French">Nom</Localized>
+    <Localized id="337" key="name_of_goal" lang="Dutch">Naam</Localized>
+    <Localized id="338" key="description_of_goal" lang="English">Description</Localized>
+    <Localized id="339" key="description_of_goal" lang="French">Description</Localized>
+    <Localized id="340" key="description_of_goal" lang="Dutch">Beschrijving</Localized>
+    <Localized id="341" key="drop_Service_Breakdown_Container_At_Top_Level" lang="English">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="342" key="drop_Service_Breakdown_Container_At_Top_Level" lang="French">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="343" key="drop_Service_Breakdown_Container_At_Top_Level" lang="Dutch">Drop Service Breakdown Container At Top Level</Localized>
+    <Localized id="344" key="name" lang="English">Name</Localized>
+    <Localized id="345" key="name" lang="French">Nom</Localized>
+    <Localized id="346" key="name" lang="Dutch">Naam</Localized>
+    <Localized id="347" key="drop_ProductSegmentation_In_Product_Segmentation_Container" lang="English">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="348" key="drop_ProductSegmentation_In_Product_Segmentation_Container" lang="French">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="349" key="drop_ProductSegmentation_In_Product_Segmentation_Container" lang="Dutch">Drop Product Segmentation In Product Segmentation Container</Localized>
+    <Localized id="350" key="valueStreamName" lang="English">Value Stream Name</Localized>
+    <Localized id="351" key="valueStreamName" lang="French">Value Stream Name</Localized>
+    <Localized id="352" key="valueStreamName" lang="Dutch">Waardeketen naam</Localized>
+    <Localized id="353" key="uriValueStream" lang="English">Uri Value Stream</Localized>
+    <Localized id="354" key="uriValueStream" lang="French">Uri Value Stream</Localized>
+    <Localized id="355" key="uriValueStream" lang="Dutch">Waardeketen uri</Localized>
+    <Localized id="356" key="individual" lang="English">Individual</Localized>
+    <Localized id="357" key="individual" lang="French">Individu</Localized>
+    <Localized id="358" key="individual" lang="Dutch">Individueel</Localized>
+    <Localized id="359" key="openValueStream" lang="English">Open Value Stream</Localized>
+    <Localized id="360" key="openValueStream" lang="French">Ouvrir la  "Value Stream"</Localized>
+    <Localized id="361" key="openValueStream" lang="Dutch">Waardeketen openen</Localized>
+    <Localized id="362" key="productSegment" lang="English">Product Segment</Localized>
+    <Localized id="363" key="productSegment" lang="French">Segment de produit</Localized>
+    <Localized id="364" key="productSegment" lang="Dutch">Product Segment</Localized>
+    <Localized id="365" key="serviceBreakdown" lang="English">Service Breakdown</Localized>
+    <Localized id="366" key="serviceBreakdown" lang="French">Service Breakdown</Localized>
+    <Localized id="367" key="serviceBreakdown" lang="Dutch">Service Breakdown</Localized>
+    <Localized id="368" key="GoalLink" lang="English">GoalLink</Localized>
+    <Localized id="369" key="GoalLink" lang="French">GoalLink</Localized>
+    <Localized id="370" key="GoalLink" lang="Dutch">GoalLink</Localized>
+    <Localized id="371" key="linkGoalToGoal" lang="English">link GoalToGoal</Localized>
+    <Localized id="372" key="linkGoalToGoal" lang="French">link GoalToGoal</Localized>
+    <Localized id="373" key="linkGoalToGoal" lang="Dutch">link GoalToGoal</Localized>
+    <Localized id="374" key="name_of_objectiveLink" lang="English">Name</Localized>
+    <Localized id="375" key="name_of_objectiveLink" lang="French">Nom</Localized>
+    <Localized id="376" key="name_of_objectiveLink" lang="Dutch">Naam</Localized>
+    <Localized id="377" key="description_of_objectiveLink" lang="English">Description</Localized>
+    <Localized id="378" key="description_of_objectiveLink" lang="French">Description</Localized>
+    <Localized id="379" key="description_of_objectiveLink" lang="Dutch">Beschrijving</Localized>
+    <Localized id="380" key="fromGoal" lang="English">From goal</Localized>
+    <Localized id="381" key="fromGoal" lang="French">From goal</Localized>
+    <Localized id="382" key="fromGoal" lang="Dutch">Van doel</Localized>
+    <Localized id="383" key="toGoal" lang="English">To Goal</Localized>
+    <Localized id="384" key="toGoal" lang="French">To Goal</Localized>
+    <Localized id="385" key="toGoal" lang="Dutch">To Goal</Localized>
+    <Localized id="386" key="description" lang="English">Description</Localized>
+    <Localized id="387" key="description" lang="French">Description</Localized>
+    <Localized id="388" key="description" lang="Dutch">Beschrijving</Localized>
+  </LocalizedDictionary>
+</ViewPoint>

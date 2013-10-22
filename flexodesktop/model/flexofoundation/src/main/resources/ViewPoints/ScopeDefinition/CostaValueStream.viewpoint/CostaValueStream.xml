@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl" owlFile="CostaValueStream.owl">
+  <EditionPattern id="2" name="ValueStreamActivity">
+    <DropScheme id="3" target="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStream" name="dropValueStreamActivityInValueStream" label="drop_Value_Stream_Activity_In_Value_Stream" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <ContextShapePatternRole id="4" exampleLabel="label" patternRole="shapeValueStream">
+        <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-350.0" y="-45.0" width="750.0" height="175.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="393.0" absoluteTextY="57.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+          <ForegroundStyle id="6" noStroke="false" color="0,0,255" lineWidth="1.2000000014901162" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="7" color1="131,161,227" color2="193,208,241" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedForegroundStyle id="8" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <SelectedColorBackgroundStyle id="9" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedForegroundStyle id="10" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <FocusedColorBackgroundStyle id="11" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="12" top="20" bottom="20" left="20" right="20" />
+          <CustomPolygon id="13">
+            <FGEPoint id="14" x="0.09431524547803619" y="0.15765765765765766" />
+            <FGEPoint id="15" x="0.8527131782945737" y="0.15765765765765766" />
+            <FGEPoint id="16" x="0.8527131782945737" y="0.0" />
+            <FGEPoint id="17" x="1.0" y="0.5" />
+            <FGEPoint id="18" x="0.8527131782945737" y="1.0" />
+            <FGEPoint id="19" x="0.8527131782945737" y="0.8423423423423423" />
+            <FGEPoint id="20" x="0.09431524547803619" y="0.8423423423423423" />
+            <FGEPoint id="21" x="0.0" y="0.7072072072072072" />
+            <FGEPoint id="22" x="0.0" y="0.2882882882882883" />
+            <FGEPoint idref="22" />
+          </CustomPolygon>
+          <ShadowStyle id="23" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <TextStyle id="24" font="Lucida Sans Demibold,1,14" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <GRSpec id="25" featureName="label" value="valueStream.name" readOnly="false" />
+      </ContextShapePatternRole>
+      <description>Allow you to put the activity in the value stream</description>
+      <TextFieldParameter id="26" name="name" label="name" defaultValue="&quot;Activity&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false">
+        <description>Allow to give a name to an activity</description>
+      </TextFieldParameter>
+      <TextFieldParameter id="27" name="description" label="description" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="28" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true">
+        <description>Allow to give a unique URI to an activity</description>
+      </URIParameter>
+      <URIParameter id="29" base="parameters.nameContainer" name="uriContainer" label="uriContainer" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextFieldParameter id="30" name="nameContainer" label="nameContainer" defaultValue="&quot;Capability Container&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="31" individualName="parameters.uri" assignation="valueStreamActivity">
+        <DataPropertyAssertion id="32" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+        <DataPropertyAssertion id="33" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#description" value="parameters.description" />
+      </AddIndividual>
+      <AddIndividual id="34" individualName="parameters.uriContainer" assignation="capacityContainer" />
+      <AddObjectPropertyStatement id="35" object="target.valueStream" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#isActivityOf" subject="valueStreamActivity" />
+      <AddShape id="36" container="target.shapeValueStream" extendParentBoundsToHostThisShape="false" assignation="shapeActivity" />
+      <AddShape id="37" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeCapacityContainer" />
+      <AddShape id="38" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeCapacityContainerHeader" />
+      <GraphicalAction id="39" subject="shapeCapacityContainerHeader" value="&quot;Capabilities&quot;" feature="label" />
+      <GraphicalAction id="40" subject="shapeCapacityContainer" value="false" feature="visible" />
+    </DropScheme>
+    <DeletionScheme id="41" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="42" object="shapeActivity" />
+      <DeleteAction id="43" object="shapeCapacityContainer" />
+      <DeleteAction id="44" object="shapeCapacityContainerHeader" />
+      <DeleteAction id="45" object="valueStreamActivity" />
+      <DeleteAction id="46" object="capacityContainer" />
+    </DeletionScheme>
+    <ActionScheme id="47" name="Show Capabilities" label="Show Capabilities" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <GraphicalAction id="48" subject="shapeCapacityContainer" value="true" feature="visible" />
+    </ActionScheme>
+    <ActionScheme id="49" name="Hide Capabilities" label="Hide Capabilities" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <GraphicalAction id="50" subject="shapeCapacityContainer" value="false" feature="visible" />
+    </ActionScheme>
+    <ContainedIndividualPatternRole id="51" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStreamActivity" patternRole="valueStreamActivity" />
+    <ContainedShapePatternRole id="52" exampleLabel="Activity" patternRole="shapeActivity">
+      <ShapeGraphicalRepresentation id="53" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="160.0" height="60.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.4900000002235174" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" text="Activity" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="54" noStroke="false" color="51,102,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="55" color1="21,94,175" color2="43,131,230" direction="SOUTH_WEST_NORTH_EAST" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="56" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="57" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="58" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="59" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="60" top="20" bottom="20" left="20" right="20" />
+        <CustomPolygon id="61">
+          <FGEPoint id="62" x="0.0027624309392265192" y="0.0" />
+          <FGEPoint id="63" x="0.8784530386740331" y="0.011428571428571429" />
+          <FGEPoint id="64" x="1.0" y="0.5085714285714286" />
+          <FGEPoint id="65" x="0.8756906077348066" y="1.0" />
+          <FGEPoint id="66" x="0.0" y="1.0" />
+          <FGEPoint id="67" x="0.1270718232044199" y="0.49714285714285716" />
+        </CustomPolygon>
+        <ShadowStyle id="68" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="69" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <Variable id="70" name="positionX" value="0" type="Integer" />
+      </ShapeGraphicalRepresentation>
+      <Action id="71" actionMask="DoubleClick">
+        <ExecutedActionScheme idref="47" />
+      </Action>
+      <GRSpec id="72" featureName="label" value="valueStreamActivity.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="73" exampleLabel="" patternRole="shapeCapacityContainer">
+      <ShapeGraphicalRepresentation id="74" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="-220.0" width="200.0" height="350.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="(components.object_0.positionX - 50)" yConstraints="200" xInitialConstraints="(components.object_0.positionX - 50)" yInitialConstraints="200" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="75" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="76" color1="204,204,204" color2="204,204,204" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="77" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="78" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="79" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="80" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="81" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="82" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="83" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="84" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="85" exampleLabel="" patternRole="shapeCapacityContainerHeader">
+      <ShapeGraphicalRepresentation id="86" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="0.0" width="200.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" widthConstraints="parent.width" heightConstraints="50" widthInitialConstraints="parent.width" heightInitialConstraints="50" identifier="object_1_0" layer="3" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="120.0" absoluteTextY="45.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="87" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="88" color="153,153,153" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="89" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="90" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="91" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="92" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="93" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="82" />
+        <ShadowStyle id="94" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="95" font="Lucida Sans Demibold,1,14" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="73" />
+      <GRSpec id="96" featureName="label" value="shapeCapacityContainerHeader.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <ContainedIndividualPatternRole id="97" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#CapacityContrainer" patternRole="capacityContainer" />
+    <PrimaryConceptIndividualPatternRole idref="51" />
+    <PrimaryRepresentationShapePatternRole idref="52" />
+    <Inspector id="98" inspectorTitle="ValueStreamActivity">
+      <TextField id="99" label="name" name="name" readOnly="false" data="valueStreamActivity.name" />
+      <TextArea id="100" label="description" name="description" readOnly="false" data="valueStreamActivity.description" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="101" name="ActivityLink">
+    <LinkScheme id="102" fromTarget="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStreamActivity" toTarget="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStreamActivity" isAvailableWithFloatingPalette="true" northDirectionSupported="true" eastDirectionSupported="true" southDirectionSupported="true" westDirectionSupported="true" name="linkValueStreamActivityToValueStreamActivity" label="linkValueStreamActivityToValueStreamActivity" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <URIParameter id="103" base="&quot;activityLink&quot;" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddConnector id="104" fromShape="fromTarget.shapeActivity" toShape="toTarget.shapeActivity" assignation="connector" />
+      <AddObjectPropertyStatement id="105" object="toTarget.valueStreamActivity" assignation="nextActivityStatement" subject="fromTarget.valueStreamActivity">
+        <description>Allow to create a link between two activities.</description>
+      </AddObjectPropertyStatement>
+      <AddObjectPropertyStatement id="106" object="toTarget.valueStreamActivity" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#previousActivity" subject="fromTarget.valueStreamActivity">
+        <description>Allow to create a link between two activities.</description>
+      </AddObjectPropertyStatement>
+    </LinkScheme>
+    <DeletionScheme id="107" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="108" object="connector" />
+      <DeleteAction id="109" object="nextActivityStatement" />
+      <DeleteAction id="110" object="previousActivityStatement" />
+    </DeletionScheme>
+    <ContainedObjectPropertyStatementPatternRole id="111" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#nextActivity" patternRole="nextActivityStatement" />
+    <ContainedConnectorPatternRole id="112" exampleLabel="" patternRole="connector">
+      <ConnectorGraphicalRepresentation id="113" className="org.openflexo.vpm.view.widget.EditionPatternPreviewConnectorGR" hasSelectedForeground="false" hasFocusedForeground="false" startSymbol="NONE" endSymbol="NONE" middleSymbol="NONE" startSymbolSize="10.0" endSymbolSize="10.0" middleSymbolSize="10.0" relativeMiddleSymbolLocation="0.5" applyForegroundToSymbols="true" identifier="object_2" layer="64" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="114" noStroke="true" color="255,255,255" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="115" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="116" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <RectPolylinConnector id="117" rectPolylinConstraints="NONE" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="EAST" endOrientation="WEST" isRounded="false" arcSize="5" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="false" isEndingLocationDraggable="false" />
+        <TextStyle id="118" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ConnectorGraphicalRepresentation>
+      <ArtifactFromShapeGraphicalRepresentation id="119" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="80.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="120" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="121" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="122" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="123" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="124" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="125" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="126" top="20" bottom="20" left="20" right="20" />
+        <CircleShape id="127" />
+        <ShadowStyle id="128" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="129" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactFromShapeGraphicalRepresentation>
+      <ArtifactToShapeGraphicalRepresentation id="130" className="org.openflexo.vpm.view.widget.EditionPatternConnectorToArtefactGR" x="350.0" y="80.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_1" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="131" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="132" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="133" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="134" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="135" noStroke="false" color="255,204,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="136" color="255,255,204" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="137" top="20" bottom="20" left="20" right="20" />
+        <CircleShape idref="127" />
+        <ShadowStyle id="138" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="139" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ArtifactToShapeGraphicalRepresentation>
+      <GRSpec id="140" featureName="label" value="&quot;&quot;" readOnly="true" />
+    </ContainedConnectorPatternRole>
+    <ContainedObjectPropertyStatementPatternRole id="141" objectProperty="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#previousActivity" patternRole="previousActivityStatement" />
+    <PrimaryConceptObjectPropertyStatementPatternRole idref="111" />
+    <PrimaryRepresentationConnectorPatternRole idref="112" />
+    <Inspector id="142" inspectorTitle="ActivityLink">
+      <TextField id="143" label="FromActivity" name="FromActivity" readOnly="true" data="nextActivityStatement.subject.name" />
+      <TextField id="144" label="ToActivity" name="ToActivity" readOnly="true" data="nextActivityStatement.object.name" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="145" name="Capability">
+    <DropScheme id="146" target="http://www.agilebirds.com/openflexo/ontologies/CostaValueStream.owl#ValueStreamActivity" name="dropCapabilityInCapacityContainer" label="dropCapabilityInCapacityContainer" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <ContextShapePatternRole idref="73" />
+      <TextFieldParameter id="147" name="name" label="name_of_capability" defaultValue="&quot;Capability Label&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="148" name="description" label="description_of_capability" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="149" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <AddIndividual id="150" individualName="parameters.uri" assignation="capability">
+        <DataPropertyAssertion id="151" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#description" value="parameters.description" />
+        <DataPropertyAssertion id="152" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+      </AddIndividual>
+      <AddObjectPropertyStatement id="153" object="capability" objectPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#hasCapability" subject="target.capacityContainer" />
+      <AddShape id="154" container="target.shapeCapacityContainer" extendParentBoundsToHostThisShape="false" assignation="shapeCapability" />
+    </DropScheme>
+    <DeletionScheme id="155" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="156" object="shapeCapability" />
+      <DeleteAction id="157" object="capability" />
+    </DeletionScheme>
+    <ContainedIndividualPatternRole id="158" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#Capability" patternRole="capability" />
+    <ContainedShapePatternRole id="159" exampleLabel="Capability" patternRole="shapeCapability">
+      <ShapeGraphicalRepresentation id="160" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="16.0" width="400.0" height="35.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.4999999997764826" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="0" yConstraints="((this.index * 35) + 16)" widthConstraints="parent.width" heightConstraints="35" xInitialConstraints="0" yInitialConstraints="((this.index * 35) + 16)" widthInitialConstraints="parent.width" heightInitialConstraints="35" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="161" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="162" color1="153,153,153" color2="204,204,204" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="163" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="164" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="165" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="166" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="167" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="82" />
+        <ShadowStyle id="168" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="169" font="Lucida Sans Regular,0,12" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <GRSpec id="170" featureName="label" value="capability.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="158" />
+    <PrimaryRepresentationShapePatternRole idref="159" />
+    <Inspector id="171" inspectorTitle="Capability">
+      <TextField id="172" label="name_of_capability" name="name" readOnly="false" data="capability.name" />
+      <TextArea id="173" label="description" name="description" readOnly="false" data="capability.description" />
+      <Individual id="174" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#Capability" renderer="individual.name" label="individual" name="individual" readOnly="false" data="capability" />
+      <Integer id="175" label="index" name="index" readOnly="false" data="shapeCapability.indexRelativeToEPType" />
+    </Inspector>
+  </EditionPattern>
+  <EditionPattern id="176" name="ValueStream">
+    <DropScheme id="177" target="top" name="dropValueStreamAtTopLevel" label="dropValueStreamAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
+      <description>Allow to create a new value stream at top level</description>
+      <TextFieldParameter id="178" name="name" label="name_of_valueStream" defaultValue="&quot;Value Stream&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="179" name="description" label="description_of_valueStream" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <URIParameter id="180" base="parameters.name" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
+      <TextFieldParameter id="181" name="initiatingStakeholder" label="initiating_stakeholder" defaultValue="&quot;Initiating Stakeholder&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <TextFieldParameter id="182" name="receivingStakeholder" label="receiving_stakeholder" defaultValue="&quot;Receiving Stakeholder&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <AddIndividual id="183" individualName="parameters.uri" assignation="valueStream">
+        <DataPropertyAssertion id="184" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#name" value="parameters.name" />
+        <DataPropertyAssertion id="185" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#description" value="parameters.description" />
+        <DataPropertyAssertion id="186" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#valueStreamTriggeringStakeholder" value="parameters.initiatingStakeholder" />
+        <DataPropertyAssertion id="187" dataPropertyURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#valueStrealReceivingStakeholder" value="parameters.receivingStakeholder" />
+      </AddIndividual>
+      <AddShape id="188" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeValueStream" />
+      <AddShape id="189" extendParentBoundsToHostThisShape="false" assignation="shapeLeftText" />
+      <AddShape id="190" extendParentBoundsToHostThisShape="false" assignation="shapeRightText" />
+    </DropScheme>
+    <DeletionScheme id="191" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <DeleteAction id="192" object="shapeLeftText" />
+      <DeleteAction id="193" object="shapeRightText" />
+      <DeleteAction id="194" object="shapeValueStream" />
+      <DeleteAction id="195" object="valueStream" />
+    </DeletionScheme>
+    <CreationScheme id="196" name="valueStreamCreation" label="valueStreamCreation" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <IndividualParameter id="197" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStream" name="valueStream" label="valueStream" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <DeclarePatternRole id="198" object="parameters.valueStream" assignation="valueStream" />
+      <AddShape id="199" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shapeValueStream" />
+      <AddShape id="200" extendParentBoundsToHostThisShape="false" assignation="shapeLeftText" />
+      <AddShape id="201" extendParentBoundsToHostThisShape="false" assignation="shapeRightText" />
+    </CreationScheme>
+    <ContainedIndividualPatternRole id="202" ontologicType="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStream" patternRole="valueStream" />
+    <ContainedShapePatternRole idref="4" />
+    <ContainedShapePatternRole id="203" exampleLabel="Initiating Stakeholder" patternRole="shapeLeftText">
+      <ShapeGraphicalRepresentation id="204" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="0.0" y="26.515151515151516" width="75.0" height="122.32499999999999" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="Y_FIXED" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" yConstraints="(parent.height / 6.6)" widthConstraints="(parent.width * 0.1)" heightConstraints="(parent.height * 0.699)" yInitialConstraints="(parent.height / 6.6)" widthInitialConstraints="(parent.width * 0.1)" heightInitialConstraints="(parent.height * 0.699)" identifier="object_0_0" layer="1" hasText="true" text="Initiating Stakeholder" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="205" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="206" color="102,102,102" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="207" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="208" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="209" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="210" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="211" top="20" bottom="20" left="20" right="20" />
+        <CustomPolygon id="212">
+          <FGEPoint id="213" x="1.0" y="0.0" />
+          <FGEPoint id="214" x="1.0" y="1.0" />
+          <FGEPoint id="215" x="0.0" y="0.8046875" />
+          <FGEPoint id="216" x="0.0" y="0.1953125" />
+          <FGEPoint idref="216" />
+        </CustomPolygon>
+        <ShadowStyle id="217" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="218" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="4" />
+      <GRSpec id="219" featureName="label" value="valueStream.valueStreamTriggeringStakeholder" readOnly="false" />
+    </ContainedShapePatternRole>
+    <ContainedShapePatternRole id="220" exampleLabel="Receiving&#xA;Stakeholder" patternRole="shapeRightText">
+      <ShapeGraphicalRepresentation id="221" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="630.0" y="43.75" width="75.0" height="87.5" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="UNMOVABLE" dimensionConstraints="UNRESIZABLE" adjustMinimalWidthToLabelWidth="false" adjustMinimalHeightToLabelHeight="false" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="false" xConstraints="(parent.width - (this.width * 1.6))" yConstraints="(parent.height / 4)" widthConstraints="(parent.width * 0.1)" heightConstraints="(parent.height * 0.5)" xInitialConstraints="(parent.width - (this.width * 1.6))" yInitialConstraints="(parent.height / 4)" widthInitialConstraints="(parent.width * 0.1)" heightInitialConstraints="(parent.height * 0.5)" identifier="object_0_1" layer="2" hasText="true" text="Receiving&#xA;Stakeholder" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="222" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <NoneBackgroundStyle id="223" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="224" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="225" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="226" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="227" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="228" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="82" />
+        <ShadowStyle id="229" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="230" font="Lucida Sans Demibold,1,12" color="255,255,255" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ParentShapePatternRole idref="4" />
+      <GRSpec id="231" featureName="label" value="valueStream.valueStrealReceivingStakeholder" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptIndividualPatternRole idref="202" />
+    <PrimaryRepresentationShapePatternRole idref="4" />
+    <Inspector id="232" inspectorTitle="ValueStream">
+      <TextField id="233" label="name_of_valueStream" name="name" readOnly="false" data="valueStream.name" />
+      <TextArea id="234" label="description_of_valueStream" name="description" readOnly="false" data="valueStream.description" />
+      <TextField id="235" label="Receiving Stakeholder" name="receivingstakeholder" readOnly="false" data="valueStream.valueStrealReceivingStakeholder" />
+      <TextField id="236" label="Initiating Stakeholder" name="initiatingstakeholder" readOnly="false" data="valueStream.valueStreamTriggeringStakeholder" />
+      <Individual id="237" conceptURI="http://www.agilebirds.com/ontologies/CostaBusinessArchitecture.owl#ValueStream" renderer="individual.name" label="valueStream" name="valueStream" readOnly="true" data="valueStream" />
+    </Inspector>
+  </EditionPattern>
+  <LocalizedDictionary id="238">
+    <Localized id="239" key="ValueStream" lang="English">Value Stream</Localized>
+    <Localized id="240" key="ValueStream" lang="French">Chaine de Valeur</Localized>
+    <Localized id="241" key="ValueStream" lang="Dutch">Waardeketen</Localized>
+    <Localized id="242" key="drop_Value_Stream_At_Top_Level" lang="English">Drop Value Stream At Top Level</Localized>
+    <Localized id="243" key="drop_Value_Stream_At_Top_Level" lang="French">Mettre une activite dans la racine</Localized>
+    <Localized id="244" key="drop_Value_Stream_At_Top_Level" lang="Dutch">Drop een activiteit op het hoogste niveau</Localized>
+    <Localized id="245" key="name" lang="English">Name</Localized>
+    <Localized id="246" key="name" lang="French">Nom</Localized>
+    <Localized id="247" key="name" lang="Dutch">Naam</Localized>
+    <Localized id="248" key="uri" lang="English">URI</Localized>
+    <Localized id="249" key="uri" lang="French">URI</Localized>
+    <Localized id="250" key="uri" lang="Dutch">URI</Localized>
+    <Localized id="251" key="index" lang="English">Index</Localized>
+    <Localized id="252" key="index" lang="French">Index</Localized>
+    <Localized id="253" key="index" lang="Dutch">Index</Localized>
+    <Localized id="254" key="description" lang="English">Description</Localized>
+    <Localized id="255" key="description" lang="French">Description</Localized>
+    <Localized id="256" key="description" lang="Dutch">Beschrijving</Localized>
+    <Localized id="257" key="initiatingstakeholder" lang="English">Initiating stakeholder</Localized>
+    <Localized id="258" key="initiatingstakeholder" lang="French">Partie prenante initiatrice</Localized>
+    <Localized id="259" key="initiatingstakeholder" lang="Dutch">Initiatiefnemer belanghebbenden</Localized>
+    <Localized id="260" key="receivingstakeholder" lang="English">Receiving Stakeholder</Localized>
+    <Localized id="261" key="receivingstakeholder" lang="French">Partie prenante receptrice</Localized>
+    <Localized id="262" key="receivingstakeholder" lang="Dutch">Ontvangende belanghebbenden</Localized>
+    <Localized id="263" key="deletion" lang="English">Deletion</Localized>
+    <Localized id="264" key="deletion" lang="French">Suppression</Localized>
+    <Localized id="265" key="deletion" lang="Dutch">Verwijdering</Localized>
+    <Localized id="266" key="ValueStreamActivity" lang="English">Activity</Localized>
+    <Localized id="267" key="ValueStreamActivity" lang="French">Activité</Localized>
+    <Localized id="268" key="ValueStreamActivity" lang="Dutch">Activiteit</Localized>
+    <Localized id="269" key="drop_Value_Stream_Activity_In_Value_Stream" lang="English">Drop value Stream Activity In Value Stream</Localized>
+    <Localized id="270" key="drop_Value_Stream_Activity_In_Value_Stream" lang="French">Mettre une activite dans la chaine de valeur</Localized>
+    <Localized id="271" key="drop_Value_Stream_Activity_In_Value_Stream" lang="Dutch">Drop een activiteit in the waardeketen</Localized>
+    <Localized id="272" key="Allow to create a new value stream at top level" lang="English">Allow to create a new value stream at top level</Localized>
+    <Localized id="273" key="Allow to create a new value stream at top level" lang="French">Allow to create a new value stream at top level</Localized>
+    <Localized id="274" key="Allow to create a new value stream at top level" lang="Dutch">Allow to create a new value stream at top level (NL)</Localized>
+    <Localized id="275" key="Name" lang="English">Name</Localized>
+    <Localized id="276" key="Name" lang="French">Nom</Localized>
+    <Localized id="277" key="Name" lang="Dutch">Naam</Localized>
+    <Localized id="278" key="Description" lang="English">Description</Localized>
+    <Localized id="279" key="Description" lang="French">Description</Localized>
+    <Localized id="280" key="Description" lang="Dutch">Beschrijving</Localized>
+    <Localized id="281" key="Initiating Stakeholder" lang="English">Initiating stakeholder</Localized>
+    <Localized id="282" key="Initiating Stakeholder" lang="French">Partie prenante initiatrice</Localized>
+    <Localized id="283" key="Initiating Stakeholder" lang="Dutch">Initiatiefnemer belanghebbenden</Localized>
+    <Localized id="284" key="Receiving Stakeholder" lang="English">Receiving Stakeholder</Localized>
+    <Localized id="285" key="Receiving Stakeholder" lang="French">Partie prenante receptrice</Localized>
+    <Localized id="286" key="Receiving Stakeholder" lang="Dutch">Ontvangende belanghebbenden</Localized>
+    <Localized id="287" key="Allow to delete a value stream from top level" lang="English">Allow to delete a value stream from top level</Localized>
+    <Localized id="288" key="Allow to delete a value stream from top level" lang="French">Allow to delete a value stream from top level</Localized>
+    <Localized id="289" key="Allow to delete a value stream from top level" lang="Dutch">Allow to delete a value stream from top level (NL)</Localized>
+    <Localized id="290" key="Allow to put the activity in the value stream" lang="English">Allow to put the activity in the value stream</Localized>
+    <Localized id="291" key="Allow to put the activity in the value stream" lang="French">Allow to put the activity in the value stream</Localized>
+    <Localized id="292" key="Allow to put the activity in the value stream" lang="Dutch">Allow to put the activity in the value stream (NL</Localized>
+    <Localized id="293" key="Allow to delete the activity from a value stream" lang="English">Allow to delete the activity from a value stream</Localized>
+    <Localized id="294" key="Allow to delete the activity from a value stream" lang="French">Allow to delete the activity from a value stream</Localized>
+    <Localized id="295" key="Allow to delete the activity from a value stream" lang="Dutch">Allow to delete the activity from a value stream (NL)</Localized>
+    <Localized id="296" key="ActivityLink" lang="English">Activity Link</Localized>
+    <Localized id="297" key="ActivityLink" lang="French">Activity Link</Localized>
+    <Localized id="298" key="ActivityLink" lang="Dutch">Activiteit Link</Localized>
+    <Localized id="299" key="linkValueStreamActivityToValueStreamActivity" lang="English">Link Value Stream Activity To Value Stream Activity</Localized>
+    <Localized id="300" key="linkValueStreamActivityToValueStreamActivity" lang="French">Link Value Stream Activity To Value Stream Activity</Localized>
+    <Localized id="301" key="linkValueStreamActivityToValueStreamActivity" lang="Dutch">Link Value Stream Activity To Value Stream Activity</Localized>
+    <Localized id="302" key="FromActivity" lang="English">From Activity</Localized>
+    <Localized id="303" key="FromActivity" lang="French">From Activity</Localized>
+    <Localized id="304" key="FromActivity" lang="Dutch">From Activity</Localized>
+    <Localized id="305" key="ToActivity" lang="English">To Activity</Localized>
+    <Localized id="306" key="ToActivity" lang="French">To Activity</Localized>
+    <Localized id="307" key="ToActivity" lang="Dutch">To Activity</Localized>
+    <Localized id="308" key="CapacityContainer" lang="English">CapacityContainer</Localized>
+    <Localized id="309" key="CapacityContainer" lang="French">CapacityContainer</Localized>
+    <Localized id="310" key="CapacityContainer" lang="Dutch">BekwaamheidContainer</Localized>
+    <Localized id="311" key="drop_Capacity_Contrainer_At_Top_Level" lang="English">Drop Capacity Contrainer At Top Level</Localized>
+    <Localized id="312" key="drop_Capacity_Contrainer_At_Top_Level" lang="French">Drop Capacity Contrainer At Top Level</Localized>
+    <Localized id="313" key="drop_Capacity_Contrainer_At_Top_Level" lang="Dutch">Drop Capacity contrainer het hoogste niveau</Localized>
+    <Localized id="314" key="Allow to create a new capacity container at top level" lang="English">Allow to create a new capacity container at top level</Localized>
+    <Localized id="315" key="Allow to create a new capacity container at top level" lang="French">Allow to create a new capacity container at top level</Localized>
+    <Localized id="316" key="Allow to create a new capacity container at top level" lang="Dutch">Allow to create a new capacity container at top level (NL)</Localized>
+    <Localized id="317" key="name_of_capacityContrainer" lang="English">Name</Localized>
+    <Localized id="318" key="name_of_capacityContrainer" lang="French">Nom</Localized>
+    <Localized id="319" key="name_of_capacityContrainer" lang="Dutch">Naam</Localized>
+    <Localized id="320" key="description_of_capacityContrainer" lang="English">Description</Localized>
+    <Localized id="321" key="description_of_capacityContrainer" lang="French">Description</Localized>
+    <Localized id="322" key="description_of_capacityContrainer" lang="Dutch">Beschrijving</Localized>
+    <Localized id="323" key="creationDate_of_capacityContrainer" lang="English">Creation date</Localized>
+    <Localized id="324" key="creationDate_of_capacityContrainer" lang="French">Date de création</Localized>
+    <Localized id="325" key="creationDate_of_capacityContrainer" lang="Dutch">Aanmaakdatum</Localized>
+    <Localized id="326" key="Name of the Capacity Contrainer" lang="English">Name</Localized>
+    <Localized id="327" key="Name of the Capacity Contrainer" lang="French">Nom</Localized>
+    <Localized id="328" key="Name of the Capacity Contrainer" lang="Dutch">Naam</Localized>
+    <Localized id="329" key="Description of the Capacity Contrainer" lang="English">Description</Localized>
+    <Localized id="330" key="Description of the Capacity Contrainer" lang="French">Description</Localized>
+    <Localized id="331" key="Description of the Capacity Contrainer" lang="Dutch">Beschrijving</Localized>
+    <Localized id="332" key="Creation Date of the Capacity Contrainer" lang="English">Creation date</Localized>
+    <Localized id="333" key="Creation Date of the Capacity Contrainer" lang="French">Date de création</Localized>
+    <Localized id="334" key="Creation Date of the Capacity Contrainer" lang="Dutch">Aanmaakdatum</Localized>
+    <Localized id="335" key="Allow to delete a new capacity container from top level" lang="English">Allow to delete a new capacity container from top level</Localized>
+    <Localized id="336" key="Allow to delete a new capacity container from top level" lang="French">Allow to delete a new capacity container from top level</Localized>
+    <Localized id="337" key="Allow to delete a new capacity container from top level" lang="Dutch">Allow to delete a new capacity container from top level (NL)</Localized>
+    <Localized id="338" key="Capability" lang="English">Capability</Localized>
+    <Localized id="339" key="Capability" lang="French">Capability</Localized>
+    <Localized id="340" key="Capability" lang="Dutch">Bekwaamheid</Localized>
+    <Localized id="341" key="dropCapabilityInCapacityContainer" lang="English">dropCapabilityInCapacityContainer</Localized>
+    <Localized id="342" key="dropCapabilityInCapacityContainer" lang="French">dropCapabilityInCapacityContainer</Localized>
+    <Localized id="343" key="dropCapabilityInCapacityContainer" lang="Dutch">dropCapabilityInCapacityContainer</Localized>
+    <Localized id="344" key="name_of_capability" lang="English">Name</Localized>
+    <Localized id="345" key="name_of_capability" lang="French">Nom</Localized>
+    <Localized id="346" key="name_of_capability" lang="Dutch">Naam</Localized>
+    <Localized id="347" key="description_of_capability" lang="English">Description</Localized>
+    <Localized id="348" key="description_of_capability" lang="French">Description</Localized>
+    <Localized id="349" key="description_of_capability" lang="Dutch">Beschrijving</Localized>
+    <Localized id="350" key="creationDate_of_capability" lang="English">Creation date</Localized>
+    <Localized id="351" key="creationDate_of_capability" lang="French">Date de création</Localized>
+    <Localized id="352" key="creationDate_of_capability" lang="Dutch">Aanmaakdatum</Localized>
+    <Localized id="353" key="dropValueStreamAtTopLevel" lang="English">dropValueStreamAtTopLevel</Localized>
+    <Localized id="354" key="dropValueStreamAtTopLevel" lang="French">dropValueStreamAtTopLevel</Localized>
+    <Localized id="355" key="dropValueStreamAtTopLevel" lang="Dutch">dropValueStreamAtTopLevel</Localized>
+    <Localized id="356" key="name_of_valueStream" lang="English">Name</Localized>
+    <Localized id="357" key="name_of_valueStream" lang="French">Nom</Localized>
+    <Localized id="358" key="name_of_valueStream" lang="Dutch">Naam</Localized>
+    <Localized id="359" key="description_of_valueStream" lang="English">Description</Localized>
+    <Localized id="360" key="description_of_valueStream" lang="French">Description</Localized>
+    <Localized id="361" key="description_of_valueStream" lang="Dutch">Beschrijving</Localized>
+    <Localized id="362" key="CapabilityContainer" lang="English">CapabilityContainer</Localized>
+    <Localized id="363" key="CapabilityContainer" lang="French">CapabilityContainer</Localized>
+    <Localized id="364" key="CapabilityContainer" lang="Dutch">BekwaamheidContainer</Localized>
+    <Localized id="365" key="individual" lang="English">Individual</Localized>
+    <Localized id="366" key="individual" lang="French">Individu</Localized>
+    <Localized id="367" key="individual" lang="Dutch">Individueel</Localized>
+    <Localized id="368" key="initiating_stakeholder" lang="English">Initiating stakeholder</Localized>
+    <Localized id="369" key="initiating_stakeholder" lang="French">Partie prenante initiatrice</Localized>
+    <Localized id="370" key="initiating_stakeholder" lang="Dutch">Initiatiefnemer belanghebbenden</Localized>
+    <Localized id="371" key="receiving_stakeholder" lang="English">Receiving Stakeholder</Localized>
+    <Localized id="372" key="receiving_stakeholder" lang="French">Partie prenante receptrice</Localized>
+    <Localized id="373" key="receiving_stakeholder" lang="Dutch">Ontvangende belanghebbenden</Localized>
+    <Localized id="374" key="Show Capabilities" lang="English">Show Capabilities</Localized>
+    <Localized id="375" key="Show Capabilities" lang="French">Show Capabilities</Localized>
+    <Localized id="376" key="Show Capabilities" lang="Dutch">Tonen bekwaamheden</Localized>
+    <Localized id="377" key="Hide Capabilities" lang="English">Hide Capabilities</Localized>
+    <Localized id="378" key="Hide Capabilities" lang="French">Hide Capabilities</Localized>
+    <Localized id="379" key="Hide Capabilities" lang="Dutch">Verberg bekwaamheden</Localized>
+    <Localized id="380" key="valueStreamCreation" lang="English">value Stream Creation</Localized>
+    <Localized id="381" key="valueStreamCreation" lang="French">value Stream Creation</Localized>
+    <Localized id="382" key="valueStreamCreation" lang="Dutch">Waardeketencreatie</Localized>
+    <Localized id="383" key="valueStream" lang="English">Value Stream</Localized>
+    <Localized id="384" key="valueStream" lang="French">Chaine de Valeur</Localized>
+    <Localized id="385" key="valueStream" lang="Dutch">Waardeketen</Localized>
+    <Localized id="386" key="Allow you to put the activity in the value stream" lang="English">Allow you to put the activity in the value stream</Localized>
+    <Localized id="387" key="Allow you to put the activity in the value stream" lang="French">Allow you to put the activity in the value stream</Localized>
+    <Localized id="388" key="Allow you to put the activity in the value stream" lang="Dutch">Allow you to put the activity in the value stream (NL)</Localized>
+    <Localized id="389" key="fromView" lang="English">From View</Localized>
+    <Localized id="390" key="fromView" lang="French">From View</Localized>
+    <Localized id="391" key="fromView" lang="Dutch">From View</Localized>
+    <Localized id="392" key="CostaValueStream" lang="English">Value Stream</Localized>
+    <Localized id="393" key="CostaValueStream" lang="Dutch">Waardeketen</Localized>
+    <Localized id="394" key="CostaValueStream" lang="French">Chaîne de Valeurs</Localized>
+  </LocalizedDictionary>
+</ViewPoint>

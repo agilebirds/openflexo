@@ -62,7 +62,7 @@
       <Individual id="48" conceptURI="http://www.agilebirds.com/ontologies/bdn#OriginType" renderer="" label="origin_of_objective" name="Origin" readOnly="false" data="individual.hasOrigin" />
       <Individual id="49" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="stakeholder_of_objective" name="Stakeholder" readOnly="false" data="individual.hasStakeholder" />
       <Individual id="50" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="sponsor_of_objective" name="Sponsor" readOnly="false" data="individual.hasSponsor" />
-      <TextField id="51" label="uri_of_objective" name="Uri" readOnly="false" data="individual.uriName" />
+      <TextField id="51" label="uri_of_objective" name="Uri" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="52" name="Benefit" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/BDN/NewBDN.owl#FlexoConcepts">
@@ -108,7 +108,7 @@
       <Individual id="85" conceptURI="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue" renderer="" label="individual_of_benefit" name="Driver" readOnly="false" data="individual.hasDriverType" />
       <Individual id="86" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="stakeholder_of_benefit" name="Stakeholder" readOnly="false" data="individual.hasStakeholder" />
       <Individual id="87" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="sponsor_of_benefit" name="Sponsor" readOnly="false" data="individual.hasSponsor" />
-      <TextField id="88" label="uri_of_benefit" name="URI" readOnly="false" data="individual.uriName" />
+      <TextField id="88" label="uri_of_benefit" name="URI" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="89" name="BusinesssChange" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/BDN/NewBDN.owl#FlexoConcepts">
@@ -152,7 +152,7 @@
       <Individual id="119" conceptURI="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoProcess" renderer="" label="process_of_business_change" name="Process" readOnly="false" data="individual.isAssociatedWithProcess" />
       <Individual id="120" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="stakeholder_of_business_change" name="Stakeholder" readOnly="false" data="individual.hasStakeholder" />
       <Individual id="121" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="sponsor_of_business_change" name="Sponsor" readOnly="false" data="individual.hasSponsor" />
-      <TextField id="122" label="uri_of_business_change" name="URI" readOnly="false" data="individual.uriName" />
+      <TextField id="122" label="uri_of_business_change" name="URI" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="123" name="EnablingChange" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/BDN/NewBDN.owl#FlexoConcepts">
@@ -194,7 +194,7 @@
       <Individual id="151" conceptURI="http://www.agilebirds.com/ontologies/bdn#Project" renderer="individual.name" label="project_of_enabling_change" name="Project" readOnly="false" data="individual.isFromProject" />
       <Individual id="152" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="stakeholder_of_enabling_change" name="Stakeholder" readOnly="false" data="individual.hasStakeholder" />
       <Individual id="153" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + ' ' + individual.lastName" label="sponsor_of_enabling_change" name="Sponsor" readOnly="false" data="individual.hasSponsor" />
-      <TextField id="154" label="uri_of_enabling_change" name="URI" readOnly="false" data="individual.uriName" />
+      <TextField id="154" label="uri_of_enabling_change" name="URI" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="155" name="Enabler" parentEditionPattern="http://www.agilebirds.com/openflexo/ViewPoints/BDN/NewBDN.owl#FlexoConcepts">
@@ -231,7 +231,7 @@
     <Inspector id="178" inspectorTitle="Enabler">
       <TextArea id="179" label="description_of_enabler" name="Description" readOnly="false" data="individual.description" />
       <Individual id="180" conceptURI="http://www.agilebirds.com/ontologies/bdn#Project" renderer="individual.name" label="project" name="Project" readOnly="false" data="individual.isFromProject" />
-      <TextField id="181" label="uri_of_enabler" name="URI" readOnly="false" data="individual.uriName" />
+      <TextField id="181" label="uri_of_enabler" name="URI" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="182" name="Link">
@@ -320,7 +320,7 @@
       <Individual id="245" conceptURI="http://www.agilebirds.com/ontologies/bdn#Project" renderer="individual.name" label="project_of_driver" name="Project" readOnly="false" data="individual.isFromProject" />
       <Individual id="246" conceptURI="http://www.agilebirds.com/ontologies/bdn#DriverTypeValue" renderer="" label="individual_of_driver" name="Driver" readOnly="false" data="individual.hasDriverType" />
       <Individual id="247" conceptURI="http://www.agilebirds.com/ontologies/bdn#OriginType" renderer="" label="origin_of_driver" name="Origin" readOnly="false" data="individual.hasOrigin" />
-      <TextField id="248" label="uri_of_driver" name="URI" readOnly="false" data="individual.uriName" />
+      <TextField id="248" label="uri_of_driver" name="URI" readOnly="true" data="individual.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="249" name="DriverLink">
@@ -372,7 +372,7 @@
     <PrimaryConceptObjectPropertyStatementPatternRole idref="256" />
     <PrimaryRepresentationConnectorPatternRole idref="257" />
     <Inspector id="285" inspectorTitle="DriverLink">
-      <TextField id="286" label="uri_of_driver_link" name="URI" readOnly="false" data="isDriverOfStatement.predicate.uriName" />
+      <TextField id="286" label="uri_of_driver_link" name="URI" readOnly="true" data="isDriverOfStatement.predicate.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="287" name="ProjectHeading">
@@ -482,7 +482,7 @@
       <TextArea id="368" label="description_of_project" name="Description" readOnly="false" data="project.description" />
       <Individual id="369" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" renderer="individual.firstName + &quot; &quot; + individual.lastName" label="owner_of_project" name="Owner" readOnly="false" data="project.hasOwner" />
       <TextField id="370" label="creation_date_of_project" name="Creation Date" readOnly="false" data="project.creationDate.asString" />
-      <TextField id="371" label="uri_of_project_heading" name="URI" readOnly="false" data="project.uriName" />
+      <TextField id="371" label="uri_of_project_heading" name="URI" readOnly="true" data="project.uriName" />
     </Inspector>
   </EditionPattern>
   <LocalizedDictionary id="372">
@@ -540,11 +540,11 @@
     <Localized id="424" key="Link" lang="English">Link</Localized>
     <Localized id="425" key="Link" lang="French">Lien</Localized>
     <Localized id="426" key="Link" lang="Dutch">Link</Localized>
-    <Localized id="427" key="linkFlexoConceptsToFlexoConcepts" lang="English">LinkFlexoConcepts to FlexoConcepts</Localized>
-    <Localized id="428" key="linkFlexoConceptsToFlexoConcepts" lang="French">LinkFlexoConcepts to FlexoConcepts</Localized>
-    <Localized id="429" key="linkFlexoConceptsToFlexoConcepts" lang="Dutch">LinkFlexoConcepts to FlexoConcepts</Localized>
+    <Localized id="427" key="linkFlexoConceptsToFlexoConcepts" lang="English">Link FlexoConcepts to FlexoConcepts</Localized>
+    <Localized id="428" key="linkFlexoConceptsToFlexoConcepts" lang="French">Lier un FlexoConcepts à un FlexoConcepts</Localized>
+    <Localized id="429" key="linkFlexoConceptsToFlexoConcepts" lang="Dutch">Link FlexoConcepts to FlexoConcepts</Localized>
     <Localized id="430" key="individual_name" lang="English">Name</Localized>
-    <Localized id="431" key="individual_name" lang="French">Label</Localized>
+    <Localized id="431" key="individual_name" lang="French">Etiquette</Localized>
     <Localized id="432" key="individual_name" lang="Dutch">Name</Localized>
     <Localized id="433" key="name_of_benefit" lang="English">Name</Localized>
     <Localized id="434" key="name_of_benefit" lang="French">Label</Localized>
@@ -571,7 +571,7 @@
     <Localized id="455" key="owner_of_objective" lang="French">Responsable</Localized>
     <Localized id="456" key="owner_of_objective" lang="Dutch">Owner</Localized>
     <Localized id="457" key="stakeholder_of_objective" lang="English">Stakeholder</Localized>
-    <Localized id="458" key="stakeholder_of_objective" lang="French">Stakeholder</Localized>
+    <Localized id="458" key="stakeholder_of_objective" lang="French">Partie prenante</Localized>
     <Localized id="459" key="stakeholder_of_objective" lang="Dutch">Stakeholder</Localized>
     <Localized id="460" key="sponsor_of_objective" lang="English">Sponsor</Localized>
     <Localized id="461" key="sponsor_of_objective" lang="French">Sponsor</Localized>
@@ -580,7 +580,7 @@
     <Localized id="464" key="uri_of_objective" lang="French">URI</Localized>
     <Localized id="465" key="uri_of_objective" lang="Dutch">URI</Localized>
     <Localized id="466" key="deletion" lang="English">Deletion</Localized>
-    <Localized id="467" key="deletion" lang="French">Deletion</Localized>
+    <Localized id="467" key="deletion" lang="French">Effacement</Localized>
     <Localized id="468" key="deletion" lang="Dutch">Deletion</Localized>
     <Localized id="469" key="description_of_benefit" lang="English">Description</Localized>
     <Localized id="470" key="description_of_benefit" lang="French">Description</Localized>
@@ -598,7 +598,7 @@
     <Localized id="482" key="Owner_of_benefit" lang="French">Responsable</Localized>
     <Localized id="483" key="Owner_of_benefit" lang="Dutch">Owner</Localized>
     <Localized id="484" key="stakeholder_of_benefit" lang="English">Stakeholder</Localized>
-    <Localized id="485" key="stakeholder_of_benefit" lang="French">Stakeholder</Localized>
+    <Localized id="485" key="stakeholder_of_benefit" lang="French">Partie prenante</Localized>
     <Localized id="486" key="stakeholder_of_benefit" lang="Dutch">Stakeholder</Localized>
     <Localized id="487" key="sponsor_of_benefit" lang="English">Sponsor</Localized>
     <Localized id="488" key="sponsor_of_benefit" lang="French">Sponsor</Localized>
@@ -622,7 +622,7 @@
     <Localized id="506" key="owner_of_business_change" lang="French">Responsable</Localized>
     <Localized id="507" key="owner_of_business_change" lang="Dutch">Owner</Localized>
     <Localized id="508" key="stakeholder_of_business_change" lang="English">Stakeholder</Localized>
-    <Localized id="509" key="stakeholder_of_business_change" lang="French">Stakeholder</Localized>
+    <Localized id="509" key="stakeholder_of_business_change" lang="French">Partie prenante</Localized>
     <Localized id="510" key="stakeholder_of_business_change" lang="Dutch">Stakeholder</Localized>
     <Localized id="511" key="sponsor_of_business_change" lang="English">Sponsor</Localized>
     <Localized id="512" key="sponsor_of_business_change" lang="French">Sponsor</Localized>
@@ -637,7 +637,7 @@
     <Localized id="521" key="owner_of_enabling_change" lang="French">Responsable</Localized>
     <Localized id="522" key="owner_of_enabling_change" lang="Dutch">Owner</Localized>
     <Localized id="523" key="stakeholder_of_enabling_change" lang="English">Stakeholder</Localized>
-    <Localized id="524" key="stakeholder_of_enabling_change" lang="French">Stakeholder</Localized>
+    <Localized id="524" key="stakeholder_of_enabling_change" lang="French">Partie prenante</Localized>
     <Localized id="525" key="stakeholder_of_enabling_change" lang="Dutch">Stakeholder</Localized>
     <Localized id="526" key="sponsor_of_enabling_change" lang="English">Sponsor</Localized>
     <Localized id="527" key="sponsor_of_enabling_change" lang="French">Sponsor</Localized>
@@ -672,9 +672,9 @@
     <Localized id="556" key="DriverLink" lang="English">Driver Link</Localized>
     <Localized id="557" key="DriverLink" lang="French">Driver Link</Localized>
     <Localized id="558" key="DriverLink" lang="Dutch">Driver Link</Localized>
-    <Localized id="559" key="linkDriverToFlexoConcepts" lang="English">LinkDriver to FlexoConcepts</Localized>
-    <Localized id="560" key="linkDriverToFlexoConcepts" lang="French">LinkDriver to FlexoConcepts</Localized>
-    <Localized id="561" key="linkDriverToFlexoConcepts" lang="Dutch">LinkDriver to FlexoConcepts</Localized>
+    <Localized id="559" key="linkDriverToFlexoConcepts" lang="English">Link Driver to FlexoConcepts</Localized>
+    <Localized id="560" key="linkDriverToFlexoConcepts" lang="French">Lier un Driver à un  FlexoConcepts</Localized>
+    <Localized id="561" key="linkDriverToFlexoConcepts" lang="Dutch">Link Driver to FlexoConcepts</Localized>
     <Localized id="562" key="ProjectHeading" lang="English">Project Heading</Localized>
     <Localized id="563" key="ProjectHeading" lang="French">Titre du projet</Localized>
     <Localized id="564" key="ProjectHeading" lang="Dutch">Project Heading</Localized>
@@ -736,7 +736,7 @@
     <Localized id="620" key="individual_change_type" lang="French">Type de Bénéfice</Localized>
     <Localized id="621" key="individual_change_type" lang="Dutch">Benefit Type</Localized>
     <Localized id="622" key="BDNElements" lang="English">BDN Elements</Localized>
-    <Localized id="623" key="BDNElements" lang="French">BDN Elements</Localized>
+    <Localized id="623" key="BDNElements" lang="French">Eléments du BDN</Localized>
     <Localized id="624" key="BDNElements" lang="Dutch">BDN Elements</Localized>
     <Localized id="625" key="Expected_value" lang="English">Expected value</Localized>
     <Localized id="626" key="Expected_value" lang="French">Valeur attendue de la mesure</Localized>
