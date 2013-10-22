@@ -21,7 +21,6 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
-import java.awt.Stroke;
 
 import javax.swing.ImageIcon;
 
@@ -289,7 +288,7 @@ public interface ForegroundStyle extends FGEStyle {
 	public void setColorNoNotification(Color aColor);
 
 	// TODO remove this
-	public Stroke getStroke(double scale);
+	// public Stroke getStroke(double scale);
 
 	// public ForegroundStyle clone();
 

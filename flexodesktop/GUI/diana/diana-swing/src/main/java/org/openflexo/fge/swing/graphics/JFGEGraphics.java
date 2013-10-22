@@ -25,6 +25,8 @@ import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.NoneBackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -111,7 +113,7 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 		// logger.info("Apply "+currentForeground);
 
 		g2d.setColor(getCurrentForeground().getColor());
-		g2d.setStroke(getCurrentForeground().getStroke(getScale()));
+		g2d.setStroke(getStroke(getCurrentForeground(), getScale()));
 
 		if (getCurrentForeground().getUseTransparency()) {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentForeground().getTransparencyLevel()));
@@ -563,6 +565,38 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 		g2d.setFont(oldFont);
 		return convertViewCoordinatesToNormalizedRectangle((int) (bounds.getX() + p.x - bounds.getWidth() / 2),
 				(int) (bounds.getY() + p.y + bounds.getHeight() / 2), (int) bounds.getWidth(), (int) bounds.getHeight());
+	}
+
+	private Stroke cachedStroke = null;
+	private ForegroundStyle cachedStrokeFS = null;
+	private double cachedStokeScale = 0;
+
+	/**
+	 * Computes and return stroke for supplied ForegroundStyle and scale<br>
+	 * Stores a cached value when possible
+	 * 
+	 * @param foregroundStyle
+	 * @param scale
+	 * @return
+	 */
+	public Stroke getStroke(ForegroundStyle foregroundStyle, double scale) {
+		if (cachedStroke == null || cachedStrokeFS == null || !cachedStrokeFS.equalsObject(foregroundStyle) || scale != cachedStokeScale) {
+			if (foregroundStyle.getDashStyle() == DashStyle.PLAIN_STROKE) {
+				cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
+						foregroundStyle.getJoinStyle().ordinal());
+			} else {
+				float[] scaledDashArray = new float[foregroundStyle.getDashStyle().getDashArray().length];
+				for (int i = 0; i < foregroundStyle.getDashStyle().getDashArray().length; i++) {
+					scaledDashArray[i] = (float) (foregroundStyle.getDashStyle().getDashArray()[i] * scale * foregroundStyle.getLineWidth());
+				}
+				float scaledDashedPhase = (float) (foregroundStyle.getDashStyle().getDashPhase() * scale * foregroundStyle.getLineWidth());
+				cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
+						foregroundStyle.getJoinStyle().ordinal(), 10, scaledDashArray, scaledDashedPhase);
+			}
+			cachedStrokeFS = (ForegroundStyle) foregroundStyle.cloneObject();
+			cachedStokeScale = scale;
+		}
+		return cachedStroke;
 	}
 
 }

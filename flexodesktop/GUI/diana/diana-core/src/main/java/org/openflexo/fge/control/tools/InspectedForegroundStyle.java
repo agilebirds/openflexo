@@ -20,7 +20,6 @@
 package org.openflexo.fge.control.tools;
 
 import java.awt.Color;
-import java.awt.Stroke;
 import java.util.List;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -145,12 +144,6 @@ public class InspectedForegroundStyle extends InspectedStyle<ForegroundStyle> im
 	@Override
 	public void setColorNoNotification(Color aColor) {
 		// TODO remove this
-	}
-
-	@Override
-	public Stroke getStroke(double scale) {
-		// TODO remove this
-		return null;
 	}
 
 	@Override

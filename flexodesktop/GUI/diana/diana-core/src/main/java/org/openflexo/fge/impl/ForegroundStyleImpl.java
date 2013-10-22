@@ -1,8 +1,6 @@
 package org.openflexo.fge.impl;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Stroke;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGECoreUtils;
@@ -26,8 +24,8 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 	private boolean useTransparency = false;
 	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
 
-	private Stroke stroke;
-	private double strokeScale;
+	// private Stroke stroke;
+	// private double strokeScale;
 
 	public ForegroundStyleImpl() {
 		super();
@@ -97,7 +95,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 		if (requireChange(this.capStyle, aCapStyle)) {
 			CapStyle oldCapStyle = capStyle;
 			this.capStyle = aCapStyle;
-			stroke = null;
+			// stroke = null;
 			setChanged();
 			notifyObservers(new FGENotification(CAP_STYLE, oldCapStyle, aCapStyle));
 		}
@@ -133,7 +131,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 		if (requireChange(this.color, aDashStyle)) {
 			DashStyle oldDashStyle = dashStyle;
 			this.dashStyle = aDashStyle;
-			stroke = null;
+			// stroke = null;
 			setChanged();
 			notifyObservers(new FGENotification(DASH_STYLE, oldDashStyle, dashStyle));
 		}
@@ -149,7 +147,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 		if (requireChange(this.joinStyle, aJoinStyle)) {
 			JoinStyle oldJoinStyle = joinStyle;
 			this.joinStyle = aJoinStyle;
-			stroke = null;
+			// stroke = null;
 			setChanged();
 			notifyObservers(new FGENotification(JOIN_STYLE, oldJoinStyle, aJoinStyle));
 		}
@@ -165,7 +163,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 		if (requireChange(this.lineWidth, aLineWidth)) {
 			double oldLineWidth = lineWidth;
 			lineWidth = aLineWidth;
-			stroke = null;
+			// stroke = null;
 			setChanged();
 			notifyObservers(new FGENotification(LINE_WIDTH, oldLineWidth, aLineWidth));
 		}
@@ -186,7 +184,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 		}
 	}
 
-	@Override
+	/*@Override
 	public Stroke getStroke(double scale) {
 		if (stroke == null || scale != strokeScale) {
 			if (dashStyle == DashStyle.PLAIN_STROKE) {
@@ -203,7 +201,7 @@ public abstract class ForegroundStyleImpl extends FGEStyleImpl implements Foregr
 			strokeScale = scale;
 		}
 		return stroke;
-	}
+	}*/
 
 	@Override
 	public float getTransparencyLevel() {
