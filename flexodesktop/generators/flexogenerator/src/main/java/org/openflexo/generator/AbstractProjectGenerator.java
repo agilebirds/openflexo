@@ -141,7 +141,7 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		getRepository().disableObserving();
 		Vector<CGRepositoryFileResource> returned = super.refreshConcernedResources(forResources);
 		for (CGFile file : getRepository().getFiles()) {
-			if (file.getResource() == null) {
+			if (file.getResource() == null || file.getResource().getCGFile() != file) {
 				file.setMarkedForDeletion(true);
 			} else {
 				CGRepositoryFileResource resource = file.getResource();
