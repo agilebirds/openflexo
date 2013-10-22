@@ -1373,8 +1373,9 @@ public class XMLCoder {
 			} else {
 				reference = getNextReference();
 			}
-			if (serializationIdentifierForObject.get(reference) != null && serializationIdentifierForObject.get(reference) != anObject) {
-				throw new DuplicateSerializationIdentifierException(reference, serializationIdentifierForObject.get(reference), anObject,
+			Object objectForReference = serializationIdentifierForObject.get(reference);
+			if (objectForReference != null && objectForReference != anObject) {
+				throw new DuplicateSerializationIdentifierException(reference, objectForReference, anObject,
 						aModelEntity, xmlTag);
 			}
 			alreadySerialized.put(anObject, reference);
