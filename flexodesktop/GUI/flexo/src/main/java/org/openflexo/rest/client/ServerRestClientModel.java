@@ -919,11 +919,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					watchedRemoteJob.setRemoteJobId(returned.getJobId());
 					watchedRemoteJob.setProjectID(version.getProject());
 					watchedRemoteJob.setProjectVersionID(version.getVersionID());
+					watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
+					watchedRemoteJob.setLogin(getUser().getLogin());
 					watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
 					watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
 					watchedRemoteJob.setUnzip(job.getDocFormat() == DocFormat.HTML);
-					watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
-					watchedRemoteJob.setLogin(getUser().getLogin());
 					EntityManager em = LocalDBAccess.getInstance().getEntityManager();
 					try {
 						em.getTransaction().begin();
@@ -977,6 +977,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				watchedRemoteJob.setLogin(getUser().getLogin());
 				watchedRemoteJob.setProjectID(version.getProject());
 				watchedRemoteJob.setProjectVersionID(version.getVersionID());
+				watchedRemoteJob.setRemoteJobId(returned.getJobId());
 				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
 				try {
 					em.getTransaction().begin();

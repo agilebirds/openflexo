@@ -155,6 +155,9 @@ public class ServerRestService implements HasPropertyChangeSupport {
 		}
 
 		private boolean handleRemoteProtoJob(ServerRestClient client, Client createClient, WatchedRemoteProtoJob job) {
+			if (job.getRemoteJobId() == null) {
+				return true;
+			}
 			JobHistory history;
 			try {
 				history = client.jobsHistory(createClient, client.getBASE_URI()).jobsIdHistory(job.getRemoteJobId()).getAsJobHistoryXml();
@@ -216,7 +219,6 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				history = client.jobsHistory(createClient, client.getBASE_URI()).jobsIdHistory(watchedRemoteJob.getRemoteJobId())
 						.getAsJobHistoryXml();
 			} catch (WebApplicationException e) {
-				e.printStackTrace();
 				if (e.getResponse().getStatus() == 404) {
 					// This is normal, it just means that the jobs is not finished
 					return false;
