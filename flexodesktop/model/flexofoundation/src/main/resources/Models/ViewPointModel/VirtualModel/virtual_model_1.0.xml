@@ -250,6 +250,12 @@
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole" xmlTag="ExcelSheetPatternRole">
 	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole" xmlTag="ExcelRowPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole" xmlTag="ExcelCellPatternRole">
+	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" abstract="yes">
 			<property name="dataType" xmlTag="dataType" attribute="YES" />
@@ -568,6 +574,24 @@
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet"
 		xmlTag="AddExcelSheet">
+		<property name="sheetName" xmlTag="sheetName" attribute="YES" />
+		<property name="sheetRows" xmlTag="sheetRows" primary="yes" />
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell"
+		xmlTag="AddExcelCell">
+		<property name="row" xmlTag="row" attribute="YES" />
+		<property name="value" xmlTag="value" primary="yes" />
+		<property name="cellType" xmlTag="cellType" attribute="YES" />
+		<property name="columnIndex" xmlTag="columnIndex" primary="yes" />
+		<property name="rowIndex" xmlTag="rowIndex" primary="yes" />
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow"
+		xmlTag="AddExcelRow">
+		<property name="excelSheet" xmlTag="excelSheet" attribute="YES" />
+		<property name="excelCells" xmlTag="excelCells" primary="yes" />
+		<property name="rowIndex" xmlTag="rowIndex" primary="yes" />
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual"
