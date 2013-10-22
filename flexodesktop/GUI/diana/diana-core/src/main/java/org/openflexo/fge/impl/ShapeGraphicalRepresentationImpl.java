@@ -271,6 +271,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 			notifyAttributeChange(BACKGROUND);
 		}
 		if (observable instanceof ForegroundStyle) {
+			System.out.println("Hop, je recois " + notification + " pour " + this);
 			notifyAttributeChange(FOREGROUND);
 		}
 		if (observable instanceof ShadowStyle) {

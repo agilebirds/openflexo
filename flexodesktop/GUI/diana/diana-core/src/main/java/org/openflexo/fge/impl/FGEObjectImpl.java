@@ -44,6 +44,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 
 	public FGEObjectImpl() {
 		index = INDEX++;
+		pcSupport = new PropertyChangeSupport(this);
 	}
 
 	@Override
@@ -268,5 +269,14 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 			}
 		}
 		return super.toString();
+	}
+
+	@Override
+	public void notifyObservers(Object arg) {
+		super.notifyObservers(arg);
+		if (arg instanceof FGENotification) {
+			FGENotification notification = (FGENotification) arg;
+			pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+		}
 	}
 }

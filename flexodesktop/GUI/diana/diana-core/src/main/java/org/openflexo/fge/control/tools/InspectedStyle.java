@@ -190,18 +190,13 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	private List<S> inspectedStyles = new ArrayList<S>();
 
+	/**
+	 * Called to "tell" inspected style that the selection has changed and then resulting inspected style might be updated<br>
+	 * 
+	 */
 	public void fireSelectionUpdated() {
-		Class<?> styleClass = TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
-		System.out.println("Selection changed for inspected style " + styleClass);
-		for (GRParameter<?> p : GRParameter.getGRParameters(styleClass)) {
-			Object storedValue = storedPropertyValues.get(p);
-			Object newValue = _getPropertyValue(p);
-			if (requireChange(storedValue, newValue)) {
-				System.out.println("Notifying " + p.getName());
-				pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
-			}
-		}
 
+		// We first unregister all existing observing scheme
 		for (S s : inspectedStyles) {
 			if (s instanceof HasPropertyChangeSupport) {
 				((HasPropertyChangeSupport) s).getPropertyChangeSupport().removePropertyChangeListener(this);
@@ -210,22 +205,50 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 				}*/
 		}
 		inspectedStyles.clear();
+
+		// Then, we observe all styles being selected
 		for (DrawingTreeNode<?, ?> n : getSelection()) {
 			S s = getStyle(n);
 			if (s instanceof HasPropertyChangeSupport) {
 				inspectedStyles.add(s);
-				System.out.println("!!!!!!!!!!!!!!! Observing " + s + " for " + n);
+				// System.out.println("!!!!!!!!!!!!!!! Observing " + s + " for " + n);
 				((HasPropertyChangeSupport) s).getPropertyChangeSupport().addPropertyChangeListener(this);
 			}/* else if (s instanceof Observable) {
 				inspectedStyles.add(s);
 				((Observable) s).addObserver(this);
 				}*/
 		}
+
+		// Then we look if some properties have changed due to new selection
+		fireChangedProperties();
 	}
 
+	/**
+	 * Internally called to fire change events between previously registered values and current resulting values
+	 */
+	private void fireChangedProperties() {
+		Class<?> styleClass = TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
+		System.out.println("Selection changed for inspected style " + styleClass);
+		for (GRParameter<?> p : GRParameter.getGRParameters(styleClass)) {
+			Object storedValue = storedPropertyValues.get(p);
+			Object newValue = _getPropertyValue(p);
+			if (requireChange(storedValue, newValue)) {
+				System.out.println("Notifying " + p.getName());
+				pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
+				setChanged();
+				notifyObservers(new FGENotification(p.getName(), storedValue, newValue));
+			}
+		}
+	}
+
+	/**
+	 * Called when a style composing current selection has changed a property.<br>
+	 * We just call #fireChangedProperties()
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("****************** PropertyChange with " + evt);
+		fireChangedProperties();
 	}
 
 	public PropertyChangeSupport getPropertyChangeSupport() {

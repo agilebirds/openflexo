@@ -328,6 +328,8 @@ public class JFIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> im
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(factory.makeShapeBorder(10, 10, 10, 10));
 
+			System.out.println("lineGR setForeground with " + getEditedObject());
+
 			controller = new JDianaViewer<ForegroundStylePreviewPanel>(drawing, factory, SwingToolFactory.DEFAULT);
 			add((JComponent) controller.getDrawingView());
 		}
@@ -346,6 +348,8 @@ public class JFIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> im
 			if (getEditedObject() == null) {
 				return;
 			}
+			System.out.println("update() in PreviewPanel, lineGR setForeground with " + getEditedObject());
+			System.out.println("lineGR=" + lineGR);
 			lineGR.setForeground(getEditedObject());
 		}
 

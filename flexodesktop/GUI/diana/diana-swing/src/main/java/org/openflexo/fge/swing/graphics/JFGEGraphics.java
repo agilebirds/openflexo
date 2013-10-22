@@ -580,22 +580,23 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 	 * @return
 	 */
 	public Stroke getStroke(ForegroundStyle foregroundStyle, double scale) {
-		if (cachedStroke == null || cachedStrokeFS == null || !cachedStrokeFS.equalsObject(foregroundStyle) || scale != cachedStokeScale) {
-			if (foregroundStyle.getDashStyle() == DashStyle.PLAIN_STROKE) {
-				cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
-						foregroundStyle.getJoinStyle().ordinal());
-			} else {
-				float[] scaledDashArray = new float[foregroundStyle.getDashStyle().getDashArray().length];
-				for (int i = 0; i < foregroundStyle.getDashStyle().getDashArray().length; i++) {
-					scaledDashArray[i] = (float) (foregroundStyle.getDashStyle().getDashArray()[i] * scale * foregroundStyle.getLineWidth());
-				}
-				float scaledDashedPhase = (float) (foregroundStyle.getDashStyle().getDashPhase() * scale * foregroundStyle.getLineWidth());
-				cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
-						foregroundStyle.getJoinStyle().ordinal(), 10, scaledDashArray, scaledDashedPhase);
+		// if (cachedStroke == null || cachedStrokeFS == null || !cachedStrokeFS.equalsObject(foregroundStyle) || scale != cachedStokeScale)
+		// {
+		if (foregroundStyle.getDashStyle() == DashStyle.PLAIN_STROKE) {
+			cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
+					foregroundStyle.getJoinStyle().ordinal());
+		} else {
+			float[] scaledDashArray = new float[foregroundStyle.getDashStyle().getDashArray().length];
+			for (int i = 0; i < foregroundStyle.getDashStyle().getDashArray().length; i++) {
+				scaledDashArray[i] = (float) (foregroundStyle.getDashStyle().getDashArray()[i] * scale * foregroundStyle.getLineWidth());
 			}
-			cachedStrokeFS = (ForegroundStyle) foregroundStyle.cloneObject();
-			cachedStokeScale = scale;
+			float scaledDashedPhase = (float) (foregroundStyle.getDashStyle().getDashPhase() * scale * foregroundStyle.getLineWidth());
+			cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
+					foregroundStyle.getJoinStyle().ordinal(), 10, scaledDashArray, scaledDashedPhase);
 		}
+		cachedStrokeFS = (ForegroundStyle) foregroundStyle.cloneObject();
+		cachedStokeScale = scale;
+		// }
 		return cachedStroke;
 	}
 
