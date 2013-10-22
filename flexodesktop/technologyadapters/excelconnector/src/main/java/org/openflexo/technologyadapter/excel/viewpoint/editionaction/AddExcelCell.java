@@ -56,8 +56,8 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 			
 			try {
 				ExcelRow excelRow = getRow().getBindingValue(action);
-				Integer rowIndex = getRowIndex().getBindingValue(action);
-				Cell cell = excelRow.getRow().createCell(rowIndex);
+				Integer columnIndex = getColumnIndex().getBindingValue(action);
+				Cell cell = excelRow.getRow().createCell(columnIndex);
 				exceCell = modelSlotInstance.getResourceData().getConverter()
 					.convertExcelCellToCell(cell, excelRow, null);
 				exceCell.setCellValue(getValue().getBindingValue(action));
