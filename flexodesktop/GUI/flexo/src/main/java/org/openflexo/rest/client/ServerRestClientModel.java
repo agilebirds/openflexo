@@ -1552,8 +1552,8 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 					+ FlexoLocalization.localizedForKey("has_no_prototype_generated"));
 			return;
 		}
-		FlexoController.notify(FlexoLocalization.localizedForKey("login") + " " + version.getProtoLogin() + "\n"
-				+ FlexoLocalization.localizedForKey("password") + " " + version.getProtoPassword());
+		FlexoController.notify(FlexoLocalization.localizedForKey("login") + ": " + version.getProtoLogin() + "\n"
+				+ FlexoLocalization.localizedForKey("password") + ": " + version.getProtoPassword());
 		if (Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().browse(new URI(version.getProtoUrl()));
