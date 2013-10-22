@@ -1,10 +1,15 @@
 package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
@@ -19,6 +24,8 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 @FIBPanel("Fib/AddExcelCellPanel.fib")
 public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCell> {
 
+	private static final Logger logger = Logger.getLogger(AddExcelCell.class.getPackage().getName());
+	
 	private DataBinding<String> value;
 	
 	private DataBinding<Integer> columnIndex;
@@ -41,8 +48,36 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	@Override
 	public ExcelCell performAction(EditionSchemeAction action) {
+		
+		ExcelCell exceCell = null;
+		
 		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		return null;
+		if(modelSlotInstance.getResourceData()!=null){
+			
+			try {
+				ExcelRow excelRow = getRow().getBindingValue(action);
+				Integer rowIndex = getRowIndex().getBindingValue(action);
+				Cell cell = excelRow.getRow().createCell(rowIndex);
+				exceCell = modelSlotInstance.getResourceData().getConverter()
+					.convertExcelCellToCell(cell, excelRow, null);
+				exceCell.setCellValue(getValue().getBindingValue(action));
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		} else {
+			logger.warning("Model slot not correctly initialised : model is null");
+			return null;
+		}
+
+		return exceCell;
 	}
 
 	@Override
@@ -144,6 +179,24 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	public void _setCellTypeName(String cellTypeName) {
 		_cellTypeName = cellTypeName;
+	}
+
+	public DataBinding<ExcelRow> getRow() {
+		if (row == null) {
+			row = new DataBinding<ExcelRow>(this, ExcelRow.class, DataBinding.BindingDefinitionType.GET);
+			row.setBindingName("row");
+		}
+		return row;
+	}
+
+	public void setRow(DataBinding<ExcelRow> row) {
+		if (row != null) {
+			row.setOwner(this);
+			row.setDeclaredType(ExcelRow.class);
+			row.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			row.setBindingName("row");
+		}
+		this.row = row;
 	}
 
 	
