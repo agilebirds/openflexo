@@ -8,7 +8,7 @@ import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements RectPolylinConnectorSpecification {
 
@@ -57,7 +57,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setRectPolylinConstraints(RectPolylinConstraints aRectPolylinConstraints) {
-		FGENotification notification = requireChange(RECT_POLYLIN_CONSTRAINTS, aRectPolylinConstraints);
+		FGEAttributeNotification notification = requireChange(RECT_POLYLIN_CONSTRAINTS, aRectPolylinConstraints);
 		if (notification != null) {
 			rectPolylinConstraints = aRectPolylinConstraints;
 			hasChanged(notification);
@@ -83,7 +83,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setStraightLineWhenPossible(boolean aFlag) {
-		FGENotification notification = requireChange(STRAIGHT_LINE_WHEN_POSSIBLE, aFlag);
+		FGEAttributeNotification notification = requireChange(STRAIGHT_LINE_WHEN_POSSIBLE, aFlag);
 		if (notification != null) {
 			straightLineWhenPossible = aFlag;
 			hasChanged(notification);
@@ -107,7 +107,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setAdjustability(RectPolylinAdjustability anAdjustability) {
-		FGENotification notification = requireChange(ADJUSTABILITY, anAdjustability);
+		FGEAttributeNotification notification = requireChange(ADJUSTABILITY, anAdjustability);
 		if (notification != null) {
 			adjustability = anAdjustability;
 			hasChanged(notification);
@@ -121,7 +121,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setEndOrientation(SimplifiedCardinalDirection anOrientation) {
-		FGENotification notification = requireChange(END_ORIENTATION, anOrientation);
+		FGEAttributeNotification notification = requireChange(END_ORIENTATION, anOrientation);
 		if (notification != null) {
 			endOrientation = anOrientation;
 			hasChanged(notification);
@@ -135,7 +135,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setStartOrientation(SimplifiedCardinalDirection anOrientation) {
-		FGENotification notification = requireChange(START_ORIENTATION, anOrientation);
+		FGEAttributeNotification notification = requireChange(START_ORIENTATION, anOrientation);
 		if (notification != null) {
 			startOrientation = anOrientation;
 			hasChanged(notification);
@@ -149,7 +149,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setPixelOverlap(int aPixelOverlap) {
-		FGENotification notification = requireChange(PIXEL_OVERLAP, aPixelOverlap);
+		FGEAttributeNotification notification = requireChange(PIXEL_OVERLAP, aPixelOverlap);
 		if (notification != null) {
 			pixelOverlap = aPixelOverlap;
 			hasChanged(notification);
@@ -163,7 +163,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setIsRounded(boolean aFlag) {
-		FGENotification notification = requireChange(IS_ROUNDED, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_ROUNDED, aFlag);
 		if (notification != null) {
 			isRounded = aFlag;
 			hasChanged(notification);
@@ -178,7 +178,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setArcSize(int anArcSize) {
-		FGENotification notification = requireChange(ARC_SIZE, anArcSize);
+		FGEAttributeNotification notification = requireChange(ARC_SIZE, anArcSize);
 		if (notification != null) {
 			arcSize = anArcSize;
 			hasChanged(notification);
@@ -192,7 +192,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setIsStartingLocationFixed(boolean aFlag) {
-		FGENotification notification = requireChange(IS_STARTING_LOCATION_FIXED, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_STARTING_LOCATION_FIXED, aFlag);
 		if (notification != null) {
 			isStartingLocationFixed = aFlag;
 			hasChanged(notification);
@@ -206,7 +206,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setIsStartingLocationDraggable(boolean aFlag) {
-		FGENotification notification = requireChange(IS_STARTING_LOCATION_DRAGGABLE, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_STARTING_LOCATION_DRAGGABLE, aFlag);
 		if (notification != null) {
 			isStartingLocationDraggable = aFlag;
 			hasChanged(notification);
@@ -220,7 +220,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setIsEndingLocationFixed(boolean aFlag) {
-		FGENotification notification = requireChange(IS_ENDING_LOCATION_FIXED, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_ENDING_LOCATION_FIXED, aFlag);
 		if (notification != null) {
 			isEndingLocationFixed = aFlag;
 			hasChanged(notification);
@@ -234,7 +234,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setIsEndingLocationDraggable(boolean aFlag) {
-		FGENotification notification = requireChange(IS_ENDING_LOCATION_DRAGGABLE, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_ENDING_LOCATION_DRAGGABLE, aFlag);
 		if (notification != null) {
 			isEndingLocationDraggable = aFlag;
 			hasChanged(notification);
@@ -277,7 +277,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 	 */
 	@Override
 	public void setFixedStartLocation(FGEPoint aPoint) {
-		FGENotification notification = requireChange(FIXED_START_LOCATION, aPoint);
+		FGEAttributeNotification notification = requireChange(FIXED_START_LOCATION, aPoint);
 		if (notification != null) {
 			if (!getIsStartingLocationFixed() && aPoint != null) {
 				setIsStartingLocationFixed(true);
@@ -318,7 +318,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 	 */
 	@Override
 	public void setFixedEndLocation(FGEPoint aPoint) {
-		FGENotification notification = requireChange(FIXED_END_LOCATION, aPoint);
+		FGEAttributeNotification notification = requireChange(FIXED_END_LOCATION, aPoint);
 		if (notification != null) {
 			if (!getIsEndingLocationFixed() && aPoint != null) {
 				setIsEndingLocationFixed(true);
@@ -356,7 +356,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 	@Override
 	public RectPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {
 		RectPolylinConnector returned = new RectPolylinConnector(connectorNode);
-		addObserver(returned);
+		getPropertyChangeSupport().addPropertyChangeListener(returned);
 		return returned;
 	}
 
@@ -367,7 +367,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setCrossedControlPoint(FGEPoint aPoint) {
-		FGENotification notification = requireChange(CROSSED_CONTROL_POINT, aPoint);
+		FGEAttributeNotification notification = requireChange(CROSSED_CONTROL_POINT, aPoint);
 		if (notification != null) {
 			crossedControlPoint = aPoint;
 			hasChanged(notification);
@@ -381,7 +381,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public void setPolylin(FGERectPolylin aPolylin) {
-		FGENotification notification = requireChange(POLYLIN, aPolylin);
+		FGEAttributeNotification notification = requireChange(POLYLIN, aPolylin);
 		if (notification != null) {
 			polylin = aPolylin;
 			hasChanged(notification);

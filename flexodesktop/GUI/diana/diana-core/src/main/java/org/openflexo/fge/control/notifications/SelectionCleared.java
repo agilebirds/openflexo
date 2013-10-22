@@ -19,24 +19,18 @@
  */
 package org.openflexo.fge.control.notifications;
 
-import org.openflexo.fge.notifications.FGENotification;
-
-
 /**
  * This notification is thrown when the selection is cleared
  * 
  * @author sylvain
  * 
  */
-public class SelectionCleared extends FGENotification {
+public class SelectionCleared extends ControlNotification {
+
+	public static final String EVENT_NAME = "SelectionCleared";
 
 	public SelectionCleared() {
-		super("selection", null, new Object());
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME, null, new Object());
 	}
 
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.fge.control.tools;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -30,7 +30,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.view.DianaViewFactory;
 
-public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> implements DianaTool<C, F>, Observer {
+public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> implements DianaTool<C, F>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DianaToolImpl.class.getPackage().getName());
@@ -57,11 +57,11 @@ public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> impleme
 		if (this.editor != editor) {
 			if (this.editor != null) {
 				// This tool was associated to another editor, disconnect it
-				this.editor.deleteObserver(this);
+				this.editor.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			if (editor != null) {
 				// Connect this tool to the new editor
-				editor.addObserver(this);
+				editor.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			this.editor = editor;
 		}

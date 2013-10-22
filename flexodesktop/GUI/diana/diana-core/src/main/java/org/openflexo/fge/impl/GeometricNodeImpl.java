@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,7 +40,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 
 public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphicalRepresentation> implements GeometricNode<O> {
@@ -803,34 +802,30 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 	// Hack: for the inspector !!!
 	private void notifyChange(final String string) {
-		setChanged();
-		notifyObservers(new FGENotification(string, null, null));
+		// setChanged();
+		// notifyObservers(new FGEAttributeNotification(string, null, null));
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
+	public void propertyChange(PropertyChangeEvent evt) {
 
-		if (temporaryIgnoredObservables.contains(observable)) {
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
 		}
 
-		super.update(observable, notification);
+		super.propertyChange(evt);
 
-		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
-			// Those notifications are forwarded by my graphical representation
-			FGENotification notif = (FGENotification) notification;
-
-			if (notif.getParameter() == GeometricGraphicalRepresentation.GEOMETRIC_OBJECT) {
+		if (evt.getSource() == getGraphicalRepresentation()) {
+			if (evt.getPropertyName().equals(GeometricGraphicalRepresentation.GEOMETRIC_OBJECT.getName())) {
 				notifyGeometryChanged();
 			}
 		}
 
-		if (observable instanceof BackgroundStyle) {
+		if (evt.getSource() instanceof BackgroundStyle) {
 			notifyAttributeChanged(GeometricGraphicalRepresentation.BACKGROUND, null, getGraphicalRepresentation().getBackground());
 		}
-		if (observable instanceof ForegroundStyle) {
+		if (evt.getSource() instanceof ForegroundStyle) {
 			notifyAttributeChanged(GeometricGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 

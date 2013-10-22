@@ -25,7 +25,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -111,7 +111,7 @@ public class ExampleDiagramConnectorGR extends ConnectorGraphicalRepresentation<
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+		if (arg instanceof FGEAttributeNotification && ((FGEAttributeNotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcDrawingConnector() != null
 				&& !getCalcDrawingConnector().getExampleDiagram().ignoreNotifications()) {
 			getCalcDrawingConnector().setChanged();

@@ -20,40 +20,49 @@
  */
 package org.openflexo.fge.notifications;
 
+import org.openflexo.fge.GRParameter;
+
 /**
- * Notification thrown in the context of Diana
+ * Notification thrown when an attribute changed its value from a value to another value
  * 
  * @author sylvain
  * 
+ * @param <T>
  */
-public class FGENotification {
+public class FGEAttributeNotification<T> extends FGENotification {
 
-	private String propertyName;
-	public Object oldValue;
-	public Object newValue;
+	public GRParameter<T> parameter;
 
-	public FGENotification(String propertyName, Object oldValue, Object newValue) {
-		super();
-		this.propertyName = propertyName;
+	public FGEAttributeNotification(GRParameter<T> parameter, T oldValue, T newValue) {
+		super(parameter != null ? parameter.getName() : null, oldValue, newValue);
+		this.parameter = parameter;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
 	}
 
 	@Override
 	public String toString() {
-		return "FGENotification of " + getClass().getSimpleName() + " " + propertyName() + " old: " + oldValue + " new: " + newValue;
+		return "FGEAttributeNotification of " + getClass().getSimpleName() + " " + getParameter() + " old: " + oldValue + " new: "
+				+ newValue;
+	}
+
+	public GRParameter<T> getParameter() {
+		return parameter;
 	}
 
 	public String propertyName() {
-		return propertyName;
+		if (parameter != null) {
+			return parameter.getName();
+		}
+		return null;
 	}
 
-	public Object oldValue() {
-		return oldValue;
+	public T newValue() {
+		return (T) newValue;
 	}
 
-	public Object newValue() {
-		return newValue;
+	@Override
+	public T oldValue() {
+		return (T) super.oldValue();
 	}
-
 }

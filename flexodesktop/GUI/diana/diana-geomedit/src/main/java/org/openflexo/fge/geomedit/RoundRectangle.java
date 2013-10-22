@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.RoundRectangleConstruction;
 import org.openflexo.fge.geomedit.gr.RoundRectangleGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 
@@ -71,7 +71,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (x != getX()) {
 			double oldX = getX();
 			getGeometricObject().x = x;
-			getGraphicalRepresentation().notify(new FGENotification("x", oldX, x));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x", oldX, x));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -84,7 +84,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (width != getWidth()) {
 			double oldWidth = getWidth();
 			getGeometricObject().width = width;
-			getGraphicalRepresentation().notify(new FGENotification("width", oldWidth, width));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("width", oldWidth, width));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -97,7 +97,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (y != getY()) {
 			double oldY = getY();
 			getGeometricObject().y = y;
-			getGraphicalRepresentation().notify(new FGENotification("y", oldY, y));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y", oldY, y));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -110,7 +110,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (height != getHeight()) {
 			double oldHeight = getHeight();
 			getGeometricObject().height = height;
-			getGraphicalRepresentation().notify(new FGENotification("height", oldHeight, height));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("height", oldHeight, height));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -122,7 +122,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 	public void setIsFilled(boolean filled) {
 		if (filled != getIsFilled()) {
 			getConstruction().setIsFilled(filled);
-			getGraphicalRepresentation().notify(new FGENotification("isFilled", !filled, filled));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("isFilled", !filled, filled));
 		}
 	}
 
@@ -134,7 +134,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (arcHeight != getArcHeight()) {
 			double oldArcHeight = getArcHeight();
 			getConstruction().setArcHeight(arcHeight);
-			getGraphicalRepresentation().notify(new FGENotification("arcHeight", oldArcHeight, arcHeight));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("arcHeight", oldArcHeight, arcHeight));
 		}
 	}
 
@@ -146,7 +146,7 @@ public class RoundRectangle extends GeometricObject<FGERoundRectangle> {
 		if (arcWidth != getArcHeight()) {
 			double oldArcWidth = getArcWidth();
 			getConstruction().setArcWidth(arcWidth);
-			getGraphicalRepresentation().notify(new FGENotification("arcWidth", oldArcWidth, arcWidth));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("arcWidth", oldArcWidth, arcWidth));
 		}
 	}
 }

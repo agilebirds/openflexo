@@ -19,23 +19,18 @@
  */
 package org.openflexo.fge.control.notifications;
 
-import org.openflexo.fge.notifications.FGENotification;
-
 /**
  * This notification is thrown when the scale of a DianaEditor has changed
  * 
  * @author sylvain
  * 
  */
-public class ScaleChanged extends FGENotification {
+public class ScaleChanged extends ControlNotification {
+
+	public static final String EVENT_NAME = "ScaleChanged";
 
 	public ScaleChanged(double oldValue, double newValue) {
-		super("scale", oldValue, newValue);
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME, oldValue, newValue);
 	}
 
 }

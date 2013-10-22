@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -117,7 +117,7 @@ public class DiagramPaletteElementGR extends ShapeGraphicalRepresentation<Diagra
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+		if (arg instanceof FGEAttributeNotification && ((FGEAttributeNotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcPaletteElement() != null
 				&& !getCalcPaletteElement().getPalette().ignoreNotifications()) {
 			getCalcPaletteElement().setChanged();

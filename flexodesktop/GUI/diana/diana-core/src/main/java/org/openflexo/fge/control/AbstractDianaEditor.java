@@ -19,10 +19,11 @@
  */
 package org.openflexo.fge.control;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.notifications.ControlNotification;
 import org.openflexo.fge.control.notifications.ScaleChanged;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.view.ConnectorView;
@@ -38,6 +40,7 @@ import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * This is the abstract core implementation of a {@link DianaEditor} representing and/or editing a {@link Drawing}
@@ -51,7 +54,8 @@ import org.openflexo.fge.view.ShapeView;
  * @param <C>
  *            type of components beeing managed as view (DianaView)
  */
-public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C> extends Observable implements DianaEditor<M>, Observer {
+public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C> implements DianaEditor<M>, PropertyChangeListener,
+		HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(AbstractDianaEditor.class.getPackage().getName());
 
@@ -78,8 +82,12 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	protected Map<DrawingTreeNode<?, ?>, FGEView<?, ? extends C>> contents;
 
+	private PropertyChangeSupport pcSupport;
+
 	public AbstractDianaEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		super();
+
+		pcSupport = new PropertyChangeSupport(this);
 
 		this.factory = factory;
 		this.dianaFactory = dianaFactory;
@@ -89,13 +97,24 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 		drawing = aDrawing;
 		if (drawing instanceof DrawingImpl<?>) {
-			((DrawingImpl<?>) drawing).addObserver(this);
+			((DrawingImpl<?>) drawing).getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Building AbstractDianaEditor: " + this);
 		}
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO
+		return null;
 	}
 
 	public FGEModelFactory getFactory() {
@@ -259,7 +278,7 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	public void delete() {
 		if (drawing instanceof DrawingImpl<?>) {
-			((DrawingImpl<?>) drawing).deleteObserver(this);
+			((DrawingImpl<?>) drawing).getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (drawingView != null) {
 			drawingView.delete();
@@ -268,7 +287,15 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void propertyChange(PropertyChangeEvent evt) {
+	}
+
+	@Deprecated
+	public void setChanged() {
+	}
+
+	public void notifyObservers(ControlNotification notification) {
+		getPropertyChangeSupport().firePropertyChange(notification.eventName(), notification.oldValue, notification.newValue);
 	}
 
 }

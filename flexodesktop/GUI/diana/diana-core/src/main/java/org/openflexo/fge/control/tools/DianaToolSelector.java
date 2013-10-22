@@ -1,6 +1,6 @@
 package org.openflexo.fge.control.tools;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
@@ -53,8 +53,8 @@ public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super
 	}
 
 	@Override
-	public void update(Observable o, Object notification) {
-		if (o == getEditor() && notification instanceof ToolChanged) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ToolChanged.EVENT_NAME)) {
 			handleToolChanged();
 		}
 	}

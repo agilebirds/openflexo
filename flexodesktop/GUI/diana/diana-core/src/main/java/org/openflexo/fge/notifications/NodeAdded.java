@@ -30,11 +30,13 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  */
 public class NodeAdded extends FGENotification {
 
+	public static final String EVENT_NAME = "NodeAdded";
+
 	private DrawingTreeNode<?, ?> addedNode;
 	private ContainerNode<?, ?> parent;
 
 	public NodeAdded(DrawingTreeNode<?, ?> addedNode, ContainerNode<?, ?> parent) {
-		super("object", null, addedNode);
+		super(EVENT_NAME, null, addedNode);
 		this.addedNode = addedNode;
 		this.parent = parent;
 	}
@@ -45,11 +47,6 @@ public class NodeAdded extends FGENotification {
 
 	public ContainerNode<?, ?> getParent() {
 		return parent;
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
 	}
 
 }

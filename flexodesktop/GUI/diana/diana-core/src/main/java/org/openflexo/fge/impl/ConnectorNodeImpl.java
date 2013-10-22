@@ -4,9 +4,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
@@ -29,7 +29,6 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.ConnectorModified;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -121,7 +120,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 
 		if (aStartNode != null /*&& !enabledStartObjectObserving*/) {
-			aStartNode.addObserver(this);
+			aStartNode.getPropertyChangeSupport().addPropertyChangeListener(this);
 			observedStartObjects.add(aStartNode);
 			System.out.println("Je suis " + this + " et j'observe " + aStartNode);
 			// if (!isDeserializing()) {
@@ -131,7 +130,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 					observedStartObjects.add((Observable) getGraphicalRepresentation(o));
 				}*/
 				if (node != null) {
-					node.addObserver(this);
+					node.getPropertyChangeSupport().addPropertyChangeListener(this);
 					observedStartObjects.add(node);
 				}
 			}
@@ -144,7 +143,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		if (enabledStartObjectObserving) {
 
 			for (DrawingTreeNode<?, ?> node : observedStartObjects) {
-				node.deleteObserver(this);
+				node.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 
 			enabledStartObjectObserving = false;
@@ -162,7 +161,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 
 		if (aEndNode != null /*&& !enabledEndObjectObserving*/) {
-			aEndNode.addObserver(this);
+			aEndNode.getPropertyChangeSupport().addPropertyChangeListener(this);
 			observedEndObjects.add(aEndNode);
 			// if (!isDeserializing()) {
 			for (DrawingTreeNode<?, ?> node : aEndNode.getAncestors()) {
@@ -171,7 +170,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 					observedEndObjects.add((Observable) getGraphicalRepresentation(o));
 				}*/
 				if (node != null) {
-					node.addObserver(this);
+					node.getPropertyChangeSupport().addPropertyChangeListener(this);
 					observedEndObjects.add(node);
 				}
 			}
@@ -188,7 +187,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
 			}*/
 			for (DrawingTreeNode<?, ?> node : observedEndObjects) {
-				node.deleteObserver(this);
+				node.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			enabledEndObjectObserving = false;
 		}
@@ -364,45 +363,38 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
+	public void propertyChange(PropertyChangeEvent evt) {
 
-		if (temporaryIgnoredObservables.contains(observable)) {
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
 		}
 
-		super.update(observable, notification);
+		super.propertyChange(evt);
 
-		if (notification instanceof FGENotification) {
-			// Those notifications are forwarded by my graphical representation
-			// FGENotification notif = (FGENotification) notification;
-
-			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
-				((ConnectorImpl<?>) getConnector()).connectorWillBeModified();
-				// Propagate notification to views
-				setChanged();
-				notifyObservers(notification);
-			}
-			if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
-				((ConnectorImpl<?>) getConnector()).connectorHasBeenModified();
-				// Propagate notification to views
-				setChanged();
-				notifyObservers(notification);
-			}
-			if (notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
-				// if (observable == startObject || observable == endObject) {
-				// !!! or any of ancestors
-				refreshConnector();
-				// }
-			}
+		if (evt.getPropertyName().equals(ObjectWillMove.EVENT_NAME) || evt.getPropertyName().equals(ObjectWillResize.EVENT_NAME)) {
+			((ConnectorImpl<?>) getConnector()).connectorWillBeModified();
+			// Propagate notification to views
+			forward(evt);
+		}
+		if (evt.getPropertyName().equals(ObjectHasMoved.EVENT_NAME) || evt.getPropertyName().equals(ObjectHasResized.EVENT_NAME)) {
+			((ConnectorImpl<?>) getConnector()).connectorHasBeenModified();
+			// Propagate notification to views
+			forward(evt);
+		}
+		if (evt.getPropertyName().equals(ObjectMove.PROPERTY_NAME) || evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)
+				|| evt.getPropertyName().equals(ShapeChanged.EVENT_NAME)) {
+			// if (observable == startObject || observable == endObject) {
+			// !!! or any of ancestors
+			refreshConnector();
+			// }
 		}
 
 		/*if (notification instanceof ConnectorModified) {
 			updateControlAreas();
 		}*/
 
-		if (observable instanceof ForegroundStyle) {
+		if (evt.getSource() instanceof ForegroundStyle) {
 			notifyAttributeChanged(ConnectorGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 

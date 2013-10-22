@@ -19,7 +19,7 @@
  */
 package org.openflexo.fge.control.tools;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ForegroundStyle;
@@ -91,12 +91,11 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 	}
 
 	@Override
-	public void update(Observable o, Object notification) {
-		if (o == getEditor()) {
-			if (notification instanceof ObjectAddedToSelection || notification instanceof ObjectRemovedFromSelection
-					|| notification instanceof SelectionCleared) {
-				updateSelection();
-			}
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ObjectAddedToSelection.EVENT_NAME)
+				|| evt.getPropertyName().equals(ObjectRemovedFromSelection.EVENT_NAME)
+				|| evt.getPropertyName().equals(SelectionCleared.EVENT_NAME)) {
+			updateSelection();
 		}
 	}
 

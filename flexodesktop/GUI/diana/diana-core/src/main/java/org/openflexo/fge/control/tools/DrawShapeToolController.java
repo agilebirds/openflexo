@@ -20,9 +20,10 @@
 package org.openflexo.fge.control.tools;
 
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.TypeUtils;
@@ -44,8 +45,9 @@ import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.GeometricNodeImpl;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends Observable implements Observer {
+public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> implements PropertyChangeListener, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(DrawShapeToolController.class.getPackage().getName());
 
@@ -63,8 +65,11 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 
 	private FGEGeometricGraphics graphics;
 
+	private PropertyChangeSupport pcSupport;
+
 	public DrawShapeToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super();
+		pcSupport = new PropertyChangeSupport(this);
 		this.controller = controller;
 		this.control = control;
 		editionHasBeenStarted = false;
@@ -100,10 +105,10 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 		GeometricGraphicalRepresentation geomGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape);
 		currentEditedShapeGeometricNode = new GeometricNodeImpl<S>((DrawingImpl<?>) getController().getDrawing(), shape,
 				editedGeometricObjectBinding, (ContainerNodeImpl<?, ?>) getController().getDrawing().getRoot());
-		currentEditedShapeGeometricNode.addObserver(new Observer() {
+		currentEditedShapeGeometricNode.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
-			public void update(Observable observable, Object dataModification) {
-				if (dataModification instanceof GeometryModified) {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(GeometryModified.EVENT_NAME)) {
 					geometryChanged();
 				}
 			}
@@ -165,8 +170,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		logger.info("update in DrawShapeToolController");
+	public void propertyChange(PropertyChangeEvent evt) {
+		logger.info("propertyChange in DrawShapeToolController with " + evt);
 	}
 
 	public void mouseClicked(ME e) {
@@ -216,4 +221,15 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> extends
 			logger.warning("No DrawShapeAction defined !");
 		}
 	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
 }

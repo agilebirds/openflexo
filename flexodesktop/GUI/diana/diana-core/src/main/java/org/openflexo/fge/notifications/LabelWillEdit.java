@@ -19,17 +19,13 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation;
 
-public class LabelWillEdit extends FGENotification {
+public class LabelWillEdit extends FGEEvent {
+
+	public static final String EVENT_NAME = "LabelWillEdit";
 
 	public LabelWillEdit() {
-		super(GraphicalRepresentation.TEXT, null, null);
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME);
 	}
 
 }

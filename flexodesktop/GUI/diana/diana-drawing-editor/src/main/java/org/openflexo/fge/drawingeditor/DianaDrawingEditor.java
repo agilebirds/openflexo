@@ -162,49 +162,6 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		contextualMenu.show((Component) view, p.x, p.y);
 	}
 
-	@Override
-	public void addToSelectedObjects(DrawingTreeNode<?, ?> anObject) {
-		if (anObject == null) {
-			return;
-		}
-		super.addToSelectedObjects(anObject);
-		if (getSelectedObjects().size() == 1) {
-			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0).getGraphicalRepresentation(), null));
-		} else {
-			setChanged();
-			notifyObservers(new MultipleSelection());
-		}
-	}
-
-	@Override
-	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> anObject) {
-		if (anObject == null) {
-			return;
-		}
-		super.removeFromSelectedObjects(anObject);
-		if (getSelectedObjects().size() == 1) {
-			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0).getGraphicalRepresentation(), null));
-		} else {
-			setChanged();
-			notifyObservers(new MultipleSelection());
-		}
-	}
-
-	@Override
-	public void clearSelection() {
-		super.clearSelection();
-		notifyObservers(new EmptySelection());
-	}
-
-	@Override
-	public void selectDrawing() {
-		super.selectDrawing();
-		setChanged();
-		notifyObservers(new UniqueSelection(getDrawing().getRoot(), null));
-	}
-
 	/*@Override
 	public JDrawingView<DiagramDrawing> makeDrawingView() {
 		return new DiagramEditorView(drawing, this);

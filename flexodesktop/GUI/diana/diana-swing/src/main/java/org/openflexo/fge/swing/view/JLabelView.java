@@ -31,8 +31,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
-import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,7 +70,6 @@ import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.fge.notifications.ObjectHasMoved;
@@ -167,7 +166,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 		textComponent.setLocation(0, 0);
 		updateFont();
 		updateText();
-		node.addObserver(this);
+		node.getPropertyChangeSupport().addPropertyChangeListener(this);
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
@@ -247,7 +246,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 			}
 		}
 		if (node != null) {
-			node.deleteObserver(this);
+			node.getPropertyChangeSupport().removePropertyChangeListener(this);
 			node.setLabelMetricsProvider(null);
 		}
 		isDeleted = true;
@@ -329,9 +328,9 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 	}
 
 	@Override
-	public synchronized void update(final Observable o, final Object aNotification) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if (isDeleted) {
-			// logger.warning("Received notifications for deleted view: observable="+(o!=null?o.getClass().getSimpleName():"null"));
+			logger.warning("Received notifications for deleted view: " + evt);
 			return;
 		}
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -339,50 +338,47 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 
 				@Override
 				public void run() {
-					update(o, aNotification);
+					propertyChange(evt);
 				}
 			});
 		} else {
-			// System.out.println("Received event in JLabelView: " + aNotification + " observers=" + o.countObservers());
+			// logger.info("Received: "+notification);
 
-			if (aNotification instanceof FGENotification) {
-				FGENotification notification = (FGENotification) aNotification;
-				if (notification.getParameter() == GraphicalRepresentation.TEXT
-				// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
-				// properly use appropriate bindings
-						|| aNotification instanceof ShapeNeedsToBeRedrawn) {
-					updateText();
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.TEXT_STYLE) {
-					updateFont();
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.PARAGRAPH_ALIGNEMENT) {
-					updateFont();
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT
-						|| notification.getParameter() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT) {
-					updateBounds();
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ShapeGraphicalRepresentation.RELATIVE_TEXT_X
-						|| notification.getParameter() == ShapeGraphicalRepresentation.RELATIVE_TEXT_Y
-						|| notification.getParameter() == GraphicalRepresentation.ABSOLUTE_TEXT_X
-						|| notification.getParameter() == GraphicalRepresentation.ABSOLUTE_TEXT_Y
-						|| notification.getParameter() == ShapeGraphicalRepresentation.IS_FLOATING_LABEL) {
-					updateBounds();
-					getPaintManager().repaint(this);
-				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
-						|| notification instanceof LabelWillMove) {
-					setDoubleBuffered(false);
-					if (notification instanceof LabelWillMove) {
-						getPaintManager().addToTemporaryObjects(node);
-						getPaintManager().invalidate(node);
-					}
-				} else if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
-						|| notification instanceof LabelHasMoved) {
-					setDoubleBuffered(true);
-					if (notification instanceof LabelHasMoved) {
-						getPaintManager().removeFromTemporaryObjects(node);
-					}
+			if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())
+			// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
+			// properly use appropriate bindings
+					|| evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
+				updateText();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT_STYLE.getName())) {
+				updateFont();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.PARAGRAPH_ALIGNEMENT.getName())) {
+				updateFont();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT.getName())
+					|| evt.getPropertyName().equals(GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT.getName())) {
+				updateBounds();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(ShapeGraphicalRepresentation.RELATIVE_TEXT_X.getName())
+					|| evt.getPropertyName().equals(ShapeGraphicalRepresentation.RELATIVE_TEXT_Y.getName())
+					|| evt.getPropertyName().equals(GraphicalRepresentation.ABSOLUTE_TEXT_X.getName())
+					|| evt.getPropertyName().equals(GraphicalRepresentation.ABSOLUTE_TEXT_Y.getName())
+					|| evt.getPropertyName().equals(ShapeGraphicalRepresentation.IS_FLOATING_LABEL.getName())) {
+				updateBounds();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(ObjectWillMove.EVENT_NAME) || evt.getPropertyName().equals(ObjectWillResize.EVENT_NAME)
+					|| evt.getPropertyName().equals(LabelWillMove.EVENT_NAME)) {
+				setDoubleBuffered(false);
+				if (evt.getPropertyName().equals(LabelWillMove.EVENT_NAME)) {
+					getPaintManager().addToTemporaryObjects(node);
+					getPaintManager().invalidate(node);
+				}
+			} else if (evt.getPropertyName().equals(ObjectHasMoved.EVENT_NAME) || evt.getPropertyName().equals(ObjectHasResized.EVENT_NAME)
+					|| evt.getPropertyName().equals(LabelHasMoved.EVENT_NAME)) {
+				setDoubleBuffered(true);
+				if (evt.getPropertyName().equals(LabelHasMoved.EVENT_NAME)) {
+					getPaintManager().removeFromTemporaryObjects(node);
 				}
 			}
 		}

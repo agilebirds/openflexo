@@ -25,7 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,8 +42,6 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.notifications.ConnectorModified;
-import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -86,7 +84,7 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 		mouseListener = controller.getDianaFactory().makeViewMouseListener(connectorNode, this, controller);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-		connectorNode.addObserver(this);
+		connectorNode.getPropertyChangeSupport().addPropertyChangeListener(this);
 		setOpaque(false);
 
 		updateVisibility();
@@ -118,7 +116,7 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 			}
 		}
 		if (connectorNode != null) {
-			connectorNode.deleteObserver(this);
+			connectorNode.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		setDropTarget(null);
 		removeMouseListener(mouseListener);
@@ -330,36 +328,36 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 		return controller;
 	}
 
-	protected void handleNodeDeleted(NodeDeleted notification) {
-		DrawingTreeNode<?, ?> deletedNode = notification.getDeletedNode();
-		if (deletedNode == getNode()) {
-			// If was not removed, try to do it now
-			// TODO: is this necessary ???
-			if (deletedNode != null && deletedNode.getParentNode() != null
-					&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
-				deletedNode.getParentNode().removeChild(deletedNode);
-			}
-			if (getController() instanceof DianaInteractiveViewer) {
-				if (getNode() != null
-						&& ((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).getFocusedObjects().contains(
-								getNode())) {
-					((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).removeFromFocusedObjects(getNode());
+	/*	protected void handleNodeDeleted(NodeDeleted notification) {
+			DrawingTreeNode<?, ?> deletedNode = notification.getDeletedNode();
+			if (deletedNode == getNode()) {
+				// If was not removed, try to do it now
+				// TODO: is this necessary ???
+				if (deletedNode != null && deletedNode.getParentNode() != null
+						&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
+					deletedNode.getParentNode().removeChild(deletedNode);
 				}
-				if (getNode() != null
-						&& ((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).getSelectedObjects().contains(
-								getNode())) {
-					((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).removeFromSelectedObjects(getNode());
+				if (getController() instanceof DianaInteractiveViewer) {
+					if (getNode() != null
+							&& ((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).getFocusedObjects().contains(
+									getNode())) {
+						((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).removeFromFocusedObjects(getNode());
+					}
+					if (getNode() != null
+							&& ((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).getSelectedObjects().contains(
+									getNode())) {
+						((DianaInteractiveViewer<?, SwingViewFactory, JComponent>) getController()).removeFromSelectedObjects(getNode());
+					}
 				}
+				// Now delete the view
+				delete();
 			}
-			// Now delete the view
-			delete();
-		}
-	}
+		}*/
 
 	@Override
-	public void update(final Observable o, final Object aNotification) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if (isDeleted) {
-			logger.warning("Received notifications for deleted view: observable=" + o);
+			logger.warning("Received notifications for deleted view " + evt);
 			return;
 		}
 
@@ -369,93 +367,87 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 
 				@Override
 				public void run() {
-					update(o, aNotification);
+					propertyChange(evt);
 				}
 			});
 		} else {
-			if (aNotification instanceof FGENotification) {
-				FGENotification notification = (FGENotification) aNotification;
-				if (notification instanceof ConnectorModified) {
+			if (evt.getPropertyName().equals(ConnectorModified.EVENT_NAME)) {
+				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+					getPaintManager().invalidate(connectorNode);
+				}
+				relocateAndResizeView();
+				revalidate();
+				getPaintManager().repaint(this);
+			} /*else if (notification instanceof NodeDeleted) {
+				handleNodeDeleted((NodeDeleted) notification);
+				}*/else if (evt.getPropertyName().equals(GraphicalRepresentation.LAYER.getName())) {
+				updateLayer();
+				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+					getPaintManager().invalidate(connectorNode);
+				}
+				getPaintManager().repaint(this);
+				/*if (getParentView() != null) {
+					getParentView().revalidate();
+					getPaintManager().repaint(this);
+				}*/
+			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_FOCUSED.getName())) {
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_SELECTED.getName())) {
+				// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
+				if (connectorNode.getIsSelected()) {
+					requestFocusInWindow();
+				}
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())) {
+				updateLabelView();
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.IS_VISIBLE.getName())) {
+				updateVisibility();
+				if (getPaintManager().isPaintingCacheEnabled()) {
 					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
 						getPaintManager().invalidate(connectorNode);
 					}
-					relocateAndResizeView();
-					revalidate();
-					getPaintManager().repaint(this);
-				} else if (notification instanceof NodeDeleted) {
-					handleNodeDeleted((NodeDeleted) notification);
-				} else if (notification.getParameter() == GraphicalRepresentation.LAYER) {
-					updateLayer();
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
-						getPaintManager().invalidate(connectorNode);
-					}
-					getPaintManager().repaint(this);
-					/*if (getParentView() != null) {
-						getParentView().revalidate();
-						getPaintManager().repaint(this);
-					}*/
-				} else if (notification.getParameter() == DrawingTreeNode.IS_FOCUSED) {
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == DrawingTreeNode.IS_SELECTED) {
-					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
-					if (connectorNode.getIsSelected()) {
-						requestFocusInWindow();
-					}
-				} else if (notification.getParameter() == GraphicalRepresentation.TEXT) {
-					updateLabelView();
-				} else if (notification.getParameter() == GraphicalRepresentation.IS_VISIBLE) {
-					updateVisibility();
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
-							getPaintManager().invalidate(connectorNode);
-						}
-					}
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.APPLY_FOREGROUND_TO_SYMBOLS) {
-					getPaintManager().repaint(this);
-				} else if (notification instanceof ObjectWillMove) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(connectorNode);
-						getPaintManager().invalidate(connectorNode);
-					}
-				} else if (notification instanceof ObjectMove) {
-					relocateView();
-					if (getParentView() != null) {
-						// getParentView().revalidate();
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof ObjectHasMoved) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(connectorNode);
-						getPaintManager().invalidate(connectorNode);
-						getPaintManager().repaint(getParentView());
-					}
-				} else if (notification instanceof ObjectWillResize) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(connectorNode);
-						getPaintManager().invalidate(connectorNode);
-					}
-				} else if (notification instanceof ObjectResized) {
-					relocateView();
-					if (getParentView() != null) {
-						// getParentView().revalidate();
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof ObjectHasResized) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(connectorNode);
-						getPaintManager().invalidate(connectorNode);
-						getPaintManager().repaint(getParentView());
-					}
-				} else {
-					// revalidate();
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
-						getPaintManager().invalidate(connectorNode);
-					}
+				}
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(ConnectorGraphicalRepresentation.APPLY_FOREGROUND_TO_SYMBOLS.getName())) {
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(ObjectWillMove.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().addToTemporaryObjects(connectorNode);
+					getPaintManager().invalidate(connectorNode);
+				}
+			} else if (evt.getPropertyName().equals(ObjectMove.PROPERTY_NAME)) {
+				relocateView();
+				if (getParentView() != null) {
+					// getParentView().revalidate();
 					getPaintManager().repaint(this);
 				}
+			} else if (evt.getPropertyName().equals(ObjectHasMoved.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().removeFromTemporaryObjects(connectorNode);
+					getPaintManager().invalidate(connectorNode);
+					getPaintManager().repaint(getParentView());
+				}
+			} else if (evt.getPropertyName().equals(ObjectWillResize.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().addToTemporaryObjects(connectorNode);
+					getPaintManager().invalidate(connectorNode);
+				}
+			} else if (evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)) {
+				relocateView();
+				if (getParentView() != null) {
+					// getParentView().revalidate();
+					getPaintManager().repaint(this);
+				}
+			} else if (evt.getPropertyName().equals(ObjectHasResized.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().removeFromTemporaryObjects(connectorNode);
+					getPaintManager().invalidate(connectorNode);
+					getPaintManager().repaint(getParentView());
+				}
 			} else {
-				revalidate();
+				// revalidate();
+				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+					getPaintManager().invalidate(connectorNode);
+				}
 				getPaintManager().repaint(this);
 			}
 		}
@@ -467,7 +459,7 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 	}
 
 	@Override
-	public void activatePalette(DianaPalette aPalette) {
+	public void activatePalette(DianaPalette<?, ?> aPalette) {
 		if (aPalette instanceof JDianaPalette) {
 			// A palette is registered, listen to drag'n'drop events
 			setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, ((JDianaPalette) aPalette).buildPaletteDropListener(this,

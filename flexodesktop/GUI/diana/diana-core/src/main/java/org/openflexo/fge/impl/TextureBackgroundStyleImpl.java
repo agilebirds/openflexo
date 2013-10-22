@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.TextureBackgroundStyle;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 import sun.awt.image.ImageRepresentation;
 import sun.awt.image.ToolkitImage;
@@ -153,7 +153,7 @@ public abstract class TextureBackgroundStyleImpl extends BackgroundStyleImpl imp
 			this.textureType = aTextureType;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(TEXTURE_TYPE, oldTexture, aTextureType));
+			notifyObservers(new FGEAttributeNotification(TEXTURE_TYPE, oldTexture, aTextureType));
 		}
 	}
 
@@ -169,7 +169,7 @@ public abstract class TextureBackgroundStyleImpl extends BackgroundStyleImpl imp
 			this.color1 = aColor;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(COLOR1, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR1, oldColor, aColor));
 		}
 	}
 
@@ -185,7 +185,7 @@ public abstract class TextureBackgroundStyleImpl extends BackgroundStyleImpl imp
 			this.color2 = aColor;
 			rebuildColoredTexture();
 			setChanged();
-			notifyObservers(new FGENotification(COLOR2, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR2, oldColor, aColor));
 		}
 	}
 

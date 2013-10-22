@@ -1,7 +1,7 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -12,7 +12,7 @@ import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.toolbox.ToolBox;
 
 public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements GeometricGraphicalRepresentation {
@@ -54,11 +54,11 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 
 		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
-		foreground.addObserver(this);
+		foreground.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
-		background.addObserver(this);
+		background.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		setGeometricObject(anObject);
 
@@ -90,10 +90,10 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 	@Override
 	public boolean delete() {
 		if (background != null) {
-			background.deleteObserver(this);
+			background.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (foreground != null) {
-			foreground.deleteObserver(this);
+			foreground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		return super.delete();
 	}
@@ -109,14 +109,14 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(FOREGROUND, aForeground, false);
+		FGEAttributeNotification notification = requireChange(FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
-				foreground.deleteObserver(this);
+				foreground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			foreground = aForeground;
 			if (aForeground != null) {
-				aForeground.addObserver(this);
+				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -139,16 +139,16 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(BACKGROUND, aBackground, false);
+		FGEAttributeNotification notification = requireChange(BACKGROUND, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
-				background.deleteObserver(this);
+				background.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			background = aBackground;
 			// background.setGraphicalRepresentation(this);
 			if (aBackground != null) {
-				aBackground.addObserver(this);
+				aBackground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -185,13 +185,13 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 	// *******************************************************************************
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		super.update(observable, notification);
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 
-		if (observable instanceof BackgroundStyle) {
+		if (evt.getSource() instanceof BackgroundStyle) {
 			notifyAttributeChange(BACKGROUND);
 		}
-		if (observable instanceof ForegroundStyle) {
+		if (evt.getSource() instanceof ForegroundStyle) {
 			notifyAttributeChange(FOREGROUND);
 		}
 	}
@@ -203,7 +203,7 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setGeometricObject(FGEArea geometricObject) {
-		FGENotification notification = requireChange(GEOMETRIC_OBJECT, geometricObject);
+		FGEAttributeNotification notification = requireChange(GEOMETRIC_OBJECT, geometricObject);
 		if (notification != null) {
 			this.geometricObject = geometricObject;
 			hasChanged(notification);

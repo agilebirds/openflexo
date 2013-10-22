@@ -4,13 +4,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -44,8 +43,6 @@ import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapeDecorationPainter;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.notifications.BindingChanged;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -287,56 +284,54 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		// System.out.println("update() in ShapeNodeImpl, received " + notification + " from " + observable);
+	public void propertyChange(PropertyChangeEvent evt) {
 
-		if (temporaryIgnoredObservables.contains(observable)) {
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
 		}
 
-		super.update(observable, notification);
+		super.propertyChange(evt);
 
-		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
+		if (evt.getSource() == getGraphicalRepresentation()) {
 			// Those notifications are forwarded by my graphical representation
-			FGENotification notif = (FGENotification) notification;
 
-			if (notif.getParameter() == GraphicalRepresentation.TEXT) {
+			if (evt.getPropertyName() == GraphicalRepresentation.TEXT.getName()) {
 				checkAndUpdateDimensionIfRequired();
-			} else if (notif.getParameter() == GraphicalRepresentation.TEXT_STYLE) {
+			} else if (evt.getPropertyName() == GraphicalRepresentation.TEXT_STYLE.getName()) {
 				checkAndUpdateDimensionIfRequired();
-			} else if (notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT
-					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH
-					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT
-					|| notif.getParameter() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH) {
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MAXIMAL_WIDTH_TO_LABEL_WIDTH.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH.getName()) {
 				checkAndUpdateDimensionIfRequired();
-			} else if (notif.getParameter() == ContainerGraphicalRepresentation.WIDTH
-					|| notif.getParameter() == ContainerGraphicalRepresentation.HEIGHT
-					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_HEIGHT
-					|| notif.getParameter() == ShapeGraphicalRepresentation.MINIMAL_WIDTH
-					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_HEIGHT
-					|| notif.getParameter() == ShapeGraphicalRepresentation.MAXIMAL_WIDTH) {
+			} else if (evt.getPropertyName() == ContainerGraphicalRepresentation.WIDTH.getName()
+					|| evt.getPropertyName() == ContainerGraphicalRepresentation.HEIGHT.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.MINIMAL_HEIGHT.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.MINIMAL_WIDTH.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.MAXIMAL_HEIGHT.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.MAXIMAL_WIDTH.getName()) {
 				checkAndUpdateDimensionIfRequired();
-			} else if (notif.getParameter() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT
-					|| notif.getParameter() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT) {
+			} else if (evt.getPropertyName() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT.getName()
+					|| evt.getPropertyName() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT.getName()) {
 				checkAndUpdateDimensionIfRequired();
-			} else if (notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINTS
-					|| notif.getParameter() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINED_AREA
-					|| notif.getParameter() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINT_STEP
-					|| notif.getParameter() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINTS) {
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINTS.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINED_AREA.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINT_STEP.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINTS.getName()) {
 				checkAndUpdateLocationIfRequired();
 				getShape().updateControlPoints();
-			} else if (notif.getParameter() == ShapeGraphicalRepresentation.ADAPT_BOUNDS_TO_CONTENTS) {
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.ADAPT_BOUNDS_TO_CONTENTS.getName()) {
 				extendBoundsToHostContents();
-			} else if (notif.getParameter() == ShapeGraphicalRepresentation.BORDER) {
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.BORDER.getName()) {
 				notifyObjectResized();
-			} else if (notif.getParameter() == ShapeGraphicalRepresentation.SHAPE
-					|| notif.getParameter() == ShapeGraphicalRepresentation.SHAPE_TYPE) {
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.SHAPE.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.SHAPE_TYPE.getName()) {
 				getShape().updateShape();
 				notifyShapeChanged();
 			}
 
-			if (notif instanceof BindingChanged) {
+			/*if (notif instanceof BindingChanged) {
 				DataBinding<?> dataBinding = ((BindingChanged) notif).getBinding();
 				if (dataBinding == getGraphicalRepresentation().getXConstraints() && dataBinding.isValid()) {
 					updateXPosition();
@@ -348,25 +343,26 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 					updateHeightPosition();
 				}
 
-			}
+			}*/
 
 		}
 
 		if (observeParentGRBecauseMyLocationReferToIt /*&& observable == getContainerGraphicalRepresentation()*/) {
-			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
-					|| notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
-					|| notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
+			if (evt.getPropertyName().equals(ObjectWillMove.EVENT_NAME) || evt.getPropertyName().equals(ObjectWillResize.EVENT_NAME)
+					|| evt.getPropertyName().equals(ObjectHasMoved.EVENT_NAME) || evt.getPropertyName().equals(ObjectHasResized.EVENT_NAME)
+					|| evt.getPropertyName().equals(ObjectMove.PROPERTY_NAME) || evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)
+					|| evt.getPropertyName().equals(ShapeChanged.EVENT_NAME)) {
 				checkAndUpdateLocationIfRequired();
 			}
 		}
 
-		if (observable instanceof BackgroundStyle) {
+		if (evt.getSource() instanceof BackgroundStyle) {
 			notifyAttributeChanged(ShapeGraphicalRepresentation.BACKGROUND, null, getGraphicalRepresentation().getBackground());
 		}
-		if (observable instanceof ForegroundStyle) {
+		if (evt.getSource() instanceof ForegroundStyle) {
 			notifyAttributeChanged(ShapeGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
-		if (observable instanceof ShadowStyle) {
+		if (evt.getSource() instanceof ShadowStyle) {
 			notifyAttributeChanged(ShapeGraphicalRepresentation.SHADOW_STYLE, null, getGraphicalRepresentation().getShadowStyle());
 		}
 	}
@@ -635,7 +631,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		}
 		if (!observeParentGRBecauseMyLocationReferToIt) {
 			if (getGraphicalRepresentation().getLocationConstraints() == LocationConstraints.AREA_CONSTRAINED && getParentNode() != null) {
-				getParentNode().addObserver(this);
+				getParentNode().getPropertyChangeSupport().addPropertyChangeListener(this);
 				observeParentGRBecauseMyLocationReferToIt = true;
 				// logger.info("Start observe my father");
 			}

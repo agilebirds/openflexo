@@ -21,20 +21,17 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.Drawing;
 
-public class DrawingTreeNodeHierarchyRebuildEnded extends FGENotification {
+public class DrawingTreeNodeHierarchyRebuildEnded extends FGEEvent {
+
+	public static final String EVENT_NAME = "DrawingTreeNodeHierarchyRebuildEnded";
 
 	public DrawingTreeNodeHierarchyRebuildEnded(Drawing<?> drawing) {
-		super("graphicalObjectsHierarchy", null, drawing);
+		super(EVENT_NAME, drawing);
 
 	}
 
 	public Drawing<?> getDrawing() {
 		return (Drawing<?>) newValue();
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
 	}
 
 }

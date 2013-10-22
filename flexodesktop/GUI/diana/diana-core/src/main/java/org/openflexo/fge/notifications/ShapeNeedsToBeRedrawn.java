@@ -19,15 +19,12 @@
  */
 package org.openflexo.fge.notifications;
 
-public class ShapeNeedsToBeRedrawn extends FGENotification {
+public class ShapeNeedsToBeRedrawn extends FGEEvent {
+
+	public static final String EVENT_NAME = "ShapeNeedsToBeRedrawn";
 
 	public ShapeNeedsToBeRedrawn() {
-		super("repaint", null, null);
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME);
 	}
 
 }

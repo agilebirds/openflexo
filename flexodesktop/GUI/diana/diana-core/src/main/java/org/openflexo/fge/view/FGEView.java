@@ -19,7 +19,7 @@
  */
 package org.openflexo.fge.view;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
@@ -41,7 +41,7 @@ import org.openflexo.fge.graphics.FGEGraphics;
  * @param <C>
  *            type of component this view is beeing instance (technology-specific)
  */
-public interface FGEView<O, C> extends Observer, FGEConstants {
+public interface FGEView<O, C> extends PropertyChangeListener, FGEConstants {
 
 	public AbstractDianaEditor<?, ?, ? super C> getController();
 

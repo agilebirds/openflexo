@@ -27,7 +27,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.Rectangle;
 
 public abstract class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
@@ -81,7 +81,7 @@ public abstract class RectangleImpl extends ShapeSpecificationImpl implements Re
 	 */
 	@Override
 	public void setArcSize(double anArcSize) {
-		FGENotification notification = requireChange(ARC_SIZE, anArcSize);
+		FGEAttributeNotification notification = requireChange(ARC_SIZE, anArcSize);
 		if (notification != null) {
 			arcSize = anArcSize;
 			hasChanged(notification);
@@ -95,7 +95,7 @@ public abstract class RectangleImpl extends ShapeSpecificationImpl implements Re
 
 	@Override
 	public void setIsRounded(boolean aFlag) {
-		FGENotification notification = requireChange(IS_ROUNDED, aFlag);
+		FGEAttributeNotification notification = requireChange(IS_ROUNDED, aFlag);
 		if (notification != null) {
 			isRounded = aFlag;
 			hasChanged(notification);

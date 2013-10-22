@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,32 +18,34 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.notifications;
-
-import org.openflexo.fge.Drawing.DrawingTreeNode;
+package org.openflexo.fge.control.notifications;
 
 /**
- * This notification is thrown when a node has been deleted
+ * Such notification are thrown by tools
  * 
  * @author sylvain
  * 
  */
-public class NodeDeleted extends FGENotification {
+public class ControlNotification {
 
-	private DrawingTreeNode<?, ?> deletedNode;
+	public Object oldValue;
+	public Object newValue;
+	private String eventName;
 
-	public NodeDeleted(DrawingTreeNode<?, ?> node) {
-		super("delete", node, null);
-		deletedNode = node;
-	}
-
-	public DrawingTreeNode<?, ?> getDeletedNode() {
-		return deletedNode;
+	public ControlNotification(String eventName, Object oldValue, Object newValue) {
+		super();
+		this.eventName = eventName;
+		this.oldValue = oldValue;
+		this.newValue = newValue;
 	}
 
 	@Override
-	public boolean isModelNotification() {
-		return false;
+	public String toString() {
+		return "ControlNotification of " + getClass().getSimpleName() + " " + eventName() + " old: " + oldValue + " new: " + newValue;
+	}
+
+	public String eventName() {
+		return eventName;
 	}
 
 }

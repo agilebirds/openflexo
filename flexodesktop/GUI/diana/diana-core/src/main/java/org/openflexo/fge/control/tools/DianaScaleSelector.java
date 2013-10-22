@@ -1,6 +1,6 @@
 package org.openflexo.fge.control.tools;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.notifications.ScaleChanged;
@@ -36,8 +36,8 @@ public abstract class DianaScaleSelector<C, F extends DianaViewFactory<F, ? supe
 	public abstract C getComponent();
 
 	@Override
-	public void update(Observable o, Object notification) {
-		if (notification instanceof ScaleChanged) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ScaleChanged.EVENT_NAME)) {
 			handleScaleChanged();
 		}
 	}

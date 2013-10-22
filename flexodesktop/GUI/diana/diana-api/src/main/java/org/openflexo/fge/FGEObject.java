@@ -20,15 +20,15 @@
  */
 package org.openflexo.fge;
 
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public interface FGEObject extends AccessibleProxyObject, CloneableProxyObject, XMLSerializable, Cloneable, IObservable, KeyValueCoding,
-		FGEConstants, HasPropertyChangeSupport {
+public interface FGEObject extends AccessibleProxyObject, CloneableProxyObject, XMLSerializable, Cloneable, KeyValueCoding, FGEConstants,
+		HasPropertyChangeSupport {
 
 	public FGEModelFactory getFactory();
 
@@ -40,7 +40,7 @@ public interface FGEObject extends AccessibleProxyObject, CloneableProxyObject, 
 
 	public <T> void notifyAttributeChange(GRParameter<T> parameter);
 
-	public void notify(FGENotification notification);
+	public void notify(FGEAttributeNotification notification);
 
 	// *******************************************************************************
 	// * Deletion management

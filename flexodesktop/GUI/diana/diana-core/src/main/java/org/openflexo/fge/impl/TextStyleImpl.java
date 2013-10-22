@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 
@@ -53,7 +53,7 @@ public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Color oldColor = color;
 			this.color = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(COLOR, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR, oldColor, aColor));
 		}
 	}
 
@@ -68,7 +68,7 @@ public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Font oldFont = this.font;
 			this.font = aFont;
 			setChanged();
-			notifyObservers(new FGENotification(FONT, oldFont, aFont));
+			notifyObservers(new FGEAttributeNotification(FONT, oldFont, aFont));
 		}
 	}
 
@@ -83,7 +83,7 @@ public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			int oldOrientation = this.orientation;
 			orientation = anOrientation;
 			setChanged();
-			notifyObservers(new FGENotification(ORIENTATION, oldOrientation, anOrientation));
+			notifyObservers(new FGEAttributeNotification(ORIENTATION, oldOrientation, anOrientation));
 		}
 	}
 
@@ -98,7 +98,7 @@ public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			Color oldColor = backgroundColor;
 			this.backgroundColor = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(BACKGROUND_COLOR, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(BACKGROUND_COLOR, oldColor, aColor));
 		}
 	}
 
@@ -113,7 +113,7 @@ public abstract class TextStyleImpl extends FGEStyleImpl implements TextStyle {
 			boolean oldValue = backgroundColored;
 			this.backgroundColored = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(IS_BACKGROUND_COLORED, oldValue, aFlag));
+			notifyObservers(new FGEAttributeNotification(IS_BACKGROUND_COLORED, oldValue, aFlag));
 		}
 	}
 

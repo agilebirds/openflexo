@@ -128,7 +128,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	public void setGraphicalRepresentation(G graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 		// graphicalRepresentation.setDrawable((M) this);
-		graphicalRepresentation.addObserver(this);
+		// graphicalRepresentation.addObserver(this);
 	}
 
 	/*private boolean isDeserializing = false;

@@ -20,7 +20,6 @@
 package org.openflexo.fge.control.notifications;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.notifications.FGENotification;
 
 /**
  * This notification is thrown when a node has been removed from selection
@@ -28,22 +27,19 @@ import org.openflexo.fge.notifications.FGENotification;
  * @author sylvain
  * 
  */
-public class ObjectRemovedFromSelection extends FGENotification {
+public class ObjectRemovedFromSelection extends ControlNotification {
+
+	public static final String EVENT_NAME = "ObjectRemovedFromSelection";
 
 	private DrawingTreeNode<?, ?> newDeselectedNode;
 
 	public ObjectRemovedFromSelection(DrawingTreeNode<?, ?> newDeselectedNode) {
-		super("selection", newDeselectedNode, null);
+		super(EVENT_NAME, newDeselectedNode, null);
 		this.newDeselectedNode = newDeselectedNode;
 	}
 
 	public DrawingTreeNode<?, ?> getNewDeselectedNode() {
 		return newDeselectedNode;
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
 	}
 
 }

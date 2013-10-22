@@ -23,7 +23,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEArc.ArcType;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.Arc;
 
 public abstract class ArcImpl extends ShapeSpecificationImpl implements Arc {
@@ -58,7 +58,7 @@ public abstract class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setAngleStart(int anAngle) {
-		FGENotification notification = requireChange(ANGLE_START, anAngle);
+		FGEAttributeNotification notification = requireChange(ANGLE_START, anAngle);
 		if (notification != null) {
 			angleStart = anAngle;
 			hasChanged(notification);
@@ -72,7 +72,7 @@ public abstract class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setAngleExtent(int anAngle) {
-		FGENotification notification = requireChange(ANGLE_EXTENT, anAngle);
+		FGEAttributeNotification notification = requireChange(ANGLE_EXTENT, anAngle);
 		if (notification != null) {
 			angleExtent = anAngle;
 			hasChanged(notification);
@@ -86,7 +86,7 @@ public abstract class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	@Override
 	public void setArcType(ArcType anArcType) {
-		FGENotification notification = requireChange(ARC_TYPE, anArcType);
+		FGEAttributeNotification notification = requireChange(ARC_TYPE, anArcType);
 		if (notification != null) {
 			arcType = anArcType;
 			hasChanged(notification);

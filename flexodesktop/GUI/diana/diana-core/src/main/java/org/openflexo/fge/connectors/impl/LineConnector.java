@@ -4,9 +4,9 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -29,7 +29,6 @@ import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 
 public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 
@@ -517,6 +516,24 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	}
 
 	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
+
+		if (evt.getSource() == getConnectorSpecification()) {
+			if (evt.getPropertyName().equals(LineConnectorSpecification.LINE_CONNECTOR_TYPE.getName())) {
+				refreshConnector(true);
+			}
+		}
+
+		// if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+		// Those notifications are forwarded by the connector specification
+		// FGENotification notif = (FGENotification) notification;
+
+		// }
+
+	}
+
+	/*@Override
 	public void update(Observable observable, Object notification) {
 		super.update(observable, notification);
 
@@ -528,6 +545,6 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 				refreshConnector(true);
 			}
 		}
-	}
+	}*/
 
 }

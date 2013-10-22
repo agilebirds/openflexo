@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.gr.PointGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class Point extends GeometricObject<FGEPoint> {
 
@@ -71,7 +71,7 @@ public class Point extends GeometricObject<FGEPoint> {
 		if (x != getX()) {
 			double oldX = getX();
 			getGeometricObject().x = x;
-			getGraphicalRepresentation().notify(new FGENotification("x", oldX, x));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x", oldX, x));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -84,7 +84,7 @@ public class Point extends GeometricObject<FGEPoint> {
 		if (y != getY()) {
 			double oldY = getY();
 			getGeometricObject().y = y;
-			getGraphicalRepresentation().notify(new FGENotification("y", oldY, y));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y", oldY, y));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}

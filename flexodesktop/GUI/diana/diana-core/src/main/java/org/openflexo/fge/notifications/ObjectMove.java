@@ -21,9 +21,16 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.geom.FGEPoint;
 
-public class ObjectMove extends FGENotification {
+public class ObjectMove extends FGEAttributeNotification<FGEPoint> {
+
+	public static final String PROPERTY_NAME = "location";
 
 	public ObjectMove(FGEPoint oldLocation, FGEPoint newLocation) {
-		super("location", oldLocation, newLocation);
+		super(null, oldLocation, newLocation);
+	}
+
+	@Override
+	public String propertyName() {
+		return PROPERTY_NAME;
 	}
 }

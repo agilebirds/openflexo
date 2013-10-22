@@ -31,7 +31,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
@@ -46,9 +47,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
-import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
@@ -97,7 +96,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		mouseListener = controller.getDianaFactory().makeViewMouseListener(node, this, controller);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-		shapeNode.addObserver(this);
+		shapeNode.getPropertyChangeSupport().addPropertyChangeListener(this);
 		setOpaque(false);
 		updateVisibility();
 		setFocusable(true);
@@ -143,7 +142,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 			}
 		}
 		if (shapeNode != null) {
-			shapeNode.deleteObserver(this);
+			shapeNode.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		setDropTarget(null);
 		removeMouseListener(mouseListener);
@@ -336,9 +335,9 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 	}
 
 	@Override
-	public void update(final Observable o, final Object aNotification) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if (isDeleted) {
-			logger.warning("Received notifications for deleted view: observable=" + o);
+			logger.warning("Received notifications for deleted view: " + evt);
 			return;
 		}
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -346,103 +345,95 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 
 				@Override
 				public void run() {
-					update(o, aNotification);
+					propertyChange(evt);
 				}
 			});
 		} else {
-			// logger.info("update() in JShapeView for " + getNode() + " received: " + aNotification);
+			// logger.info("Received: "+notification);
 
-			if (aNotification instanceof FGENotification) {
-				FGENotification notification = (FGENotification) aNotification;
-				if (notification instanceof NodeAdded) {
-					handleNodeAdded((NodeAdded) notification);
-				} else if (notification instanceof NodeRemoved) {
-					handleNodeRemoved((NodeRemoved) notification);
-				} else if (notification instanceof NodeDeleted) {
-					handleNodeDeleted((NodeDeleted) notification);
-				} else if (notification instanceof ObjectWillMove) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(shapeNode);
-						getPaintManager().invalidate(shapeNode);
-					}
-				} else if (notification instanceof ObjectMove) {
-					relocateView();
-					if (getParentView() != null) {
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof ObjectHasMoved) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(shapeNode);
-						getPaintManager().invalidate(shapeNode);
-						getPaintManager().repaint(getParentView());
-					}
-				} else if (notification instanceof ObjectWillResize) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(shapeNode);
-						getPaintManager().invalidate(shapeNode);
-					}
-				} else if (notification instanceof ObjectResized) {
-					resizeView();
-					if (getParentView() != null) {
-						getParentView().revalidate();
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof ObjectHasResized) {
-					resizeView();
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(shapeNode);
-						getPaintManager().invalidate(shapeNode);
-						getPaintManager().repaint(getParentView());
-					}
-				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
+			if (evt.getPropertyName().equals(NodeAdded.EVENT_NAME)) {
+				handleNodeAdded((DrawingTreeNode<?, ?>) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(NodeRemoved.EVENT_NAME)) {
+				handleNodeRemoved((DrawingTreeNode<?, ?>) evt.getOldValue(), (ContainerNode<?, ?>) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(ObjectWillMove.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().addToTemporaryObjects(shapeNode);
 					getPaintManager().invalidate(shapeNode);
+				}
+			} else if (evt.getPropertyName().equals(ObjectMove.PROPERTY_NAME)) {
+				relocateView();
+				if (getParentView() != null) {
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.LAYER) {
-					updateLayer();
+				}
+			} else if (evt.getPropertyName().equals(ObjectHasMoved.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().removeFromTemporaryObjects(shapeNode);
+					getPaintManager().invalidate(shapeNode);
+					getPaintManager().repaint(getParentView());
+				}
+			} else if (evt.getPropertyName().equals(ObjectWillResize.EVENT_NAME)) {
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().addToTemporaryObjects(shapeNode);
+					getPaintManager().invalidate(shapeNode);
+				}
+			} else if (evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)) {
+				resizeView();
+				if (getParentView() != null) {
+					getParentView().revalidate();
+					getPaintManager().repaint(this);
+				}
+			} else if (evt.getPropertyName().equals(ObjectHasResized.EVENT_NAME)) {
+				resizeView();
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					getPaintManager().removeFromTemporaryObjects(shapeNode);
+					getPaintManager().invalidate(shapeNode);
+					getPaintManager().repaint(getParentView());
+				}
+			} else if (evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
+				getPaintManager().invalidate(shapeNode);
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.LAYER.getName())) {
+				updateLayer();
+				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
+					getPaintManager().invalidate(shapeNode);
+				}
+				getPaintManager().repaint(this);
+
+			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_FOCUSED.getName())) {
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())) {
+				updateLabelView();
+			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_SELECTED.getName())) {
+				if (getParent() != null) {
+					getParent().moveToFront(this);
+				}
+				if (getParent() != null && getLabelView() != null) {
+					getParent().moveToFront(getLabelView());
+				}
+				getPaintManager().repaint(this);
+				if (shapeNode.getIsSelected()) {
+					requestFocusInWindow();
+					// requestFocus();
+				}
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.IS_VISIBLE.getName())) {
+				updateVisibility();
+				if (getPaintManager().isPaintingCacheEnabled()) {
 					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
 						getPaintManager().invalidate(shapeNode);
 					}
-					getPaintManager().repaint(this);
-
-				} else if (notification.getParameter() == DrawingTreeNode.IS_FOCUSED) {
-					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == GraphicalRepresentation.TEXT) {
-					updateLabelView();
-				} else if (notification.getParameter() == DrawingTreeNode.IS_SELECTED) {
-					if (getParent() != null) {
-						getParent().moveToFront(this);
-					}
-					if (getParent() != null && getLabelView() != null) {
-						getParent().moveToFront(getLabelView());
-					}
-					getPaintManager().repaint(this);
-					if (shapeNode.getIsSelected()) {
-						requestFocusInWindow();
-						// requestFocus();
-					}
-				} else if (notification.getParameter() == GraphicalRepresentation.IS_VISIBLE) {
-					updateVisibility();
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
-							getPaintManager().invalidate(shapeNode);
-						}
-					}
-					getPaintManager().repaint(this);
-
-				} else {
-					// revalidate();
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
-							getPaintManager().invalidate(shapeNode);
-						}
-					}
-					getPaintManager().repaint(this);
-					// revalidate();
-					// getPaintManager().repaint(this);
 				}
-			} else {
-				revalidate();
 				getPaintManager().repaint(this);
+
+			} else {
+				// revalidate();
+				if (getPaintManager().isPaintingCacheEnabled()) {
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
+						getPaintManager().invalidate(shapeNode);
+					}
+				}
+				getPaintManager().repaint(this);
+				// revalidate();
+				// getPaintManager().repaint(this);
 			}
 		}
 	}

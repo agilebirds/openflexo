@@ -26,12 +26,13 @@ import java.util.logging.Logger;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.GRParameter;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.kvc.KVCObservableObject;
+import org.openflexo.kvc.KVCObject;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public abstract class FGEObjectImpl extends KVCObservableObject implements FGEObject {
+public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
 	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
 
 	private FGEModelFactory factory;
@@ -62,7 +63,8 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 		if (!isDeleted) {
 			isDeleted = true;
 			performSuperDelete();
-			deleteObservers();
+			// TODO: remove all listeners of PropertyChangedSupport
+			// deleteObservers();
 			if (getPropertyChangeSupport() != null) {
 				// Property change support can be null if noone is listening. I noone is listening,
 				// it is not needed to fire a property change.
@@ -71,6 +73,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 				// TODO: Now we can really set the pcSupport to null here
 				// Until now, it still create big issues
 				// pcSupport = null;
+				pcSupport = null;
 			}
 			return true;
 		}
@@ -105,7 +108,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
-		hasChanged(new FGENotification(parameter, oldValue, newValue));
+		hasChanged(new FGEAttributeNotification(parameter, oldValue, newValue));
 		/*propagateConstraintsAfterModification(parameter);
 		setChanged();
 		notifyObservers(new FGENotification(parameter, oldValue, newValue));*/
@@ -130,7 +133,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 	 * @param useEquals
 	 * @return
 	 */
-	protected <T> FGENotification requireChange(GRParameter<T> parameter, T value) {
+	protected <T> FGEAttributeNotification requireChange(GRParameter<T> parameter, T value) {
 		return requireChange(parameter, value, true);
 	}
 
@@ -148,7 +151,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 	 * @param useEquals
 	 * @return
 	 */
-	protected <T> FGENotification requireChange(GRParameter<T> parameter, T value, boolean useEquals) {
+	protected <T> FGEAttributeNotification requireChange(GRParameter<T> parameter, T value, boolean useEquals) {
 		T oldValue = valueForParameter(parameter);
 		if (value == oldValue && value != null && !value.getClass().isEnum()) {
 			// logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
@@ -158,20 +161,20 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 			if (value == null) {
 				return null; // No change
 			} else {
-				return new FGENotification(parameter, oldValue, value);
+				return new FGEAttributeNotification(parameter, oldValue, value);
 			}
 		} else {
 			if (useEquals) {
 				if (oldValue.equals(value)) {
 					return null; // No change
 				} else {
-					return new FGENotification(parameter, oldValue, value);
+					return new FGEAttributeNotification(parameter, oldValue, value);
 				}
 			} else {
 				if (oldValue == value) {
 					return null; // No change
 				} else {
-					return new FGENotification(parameter, oldValue, value);
+					return new FGEAttributeNotification(parameter, oldValue, value);
 				}
 			}
 		}
@@ -219,7 +222,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 	}
 
 	@Override
-	public void notify(FGENotification notification) {
+	public void notify(FGEAttributeNotification notification) {
 		hasChanged(notification);
 	}
 
@@ -228,7 +231,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 	 * 
 	 * @param notification
 	 */
-	protected void hasChanged(FGENotification notification) {
+	protected void hasChanged(FGEAttributeNotification notification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue
 					+ " is now: " + notification.newValue);
@@ -236,7 +239,7 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 		// propagateConstraintsAfterModification(notification.parameter);
 		setChanged();
 		notifyObservers(notification);
-		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+		// getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 
 	@Override
@@ -271,12 +274,11 @@ public abstract class FGEObjectImpl extends KVCObservableObject implements FGEOb
 		return super.toString();
 	}
 
-	@Override
-	public void notifyObservers(Object arg) {
-		super.notifyObservers(arg);
-		if (arg instanceof FGENotification) {
-			FGENotification notification = (FGENotification) arg;
-			pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
-		}
+	public void notifyObservers(FGENotification notification) {
+		pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+	}
+
+	@Deprecated
+	public void setChanged() {
 	}
 }

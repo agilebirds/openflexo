@@ -19,10 +19,10 @@
  */
 package org.openflexo.fge.shapes.impl;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ShapeNode;
@@ -35,7 +35,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
@@ -51,7 +50,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
  * @author sylvain
  * 
  */
-public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape<SS> {
+public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeListener, Shape<SS> {
 
 	private static final Logger logger = Logger.getLogger(ShapeImpl.class.getPackage().getName());
 
@@ -79,7 +78,7 @@ public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape
 
 	public void delete() {
 		if (getShapeSpecification() != null) {
-			getShapeSpecification().deleteObserver(this);
+			getShapeSpecification().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		shapeNode = null;
 		controlPoints.clear();
@@ -421,10 +420,9 @@ public class ShapeImpl<SS extends ShapeSpecification> implements Observer, Shape
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		if (notification instanceof FGENotification && observable == getShapeSpecification()) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getShapeSpecification()) {
 			// Those notifications are forwarded by the shape specification
-			FGENotification notif = (FGENotification) notification;
 			updateShape();
 		}
 	}

@@ -40,9 +40,4 @@ public class GRDeleted extends FGENotification {
 		return deletedGR;
 	}
 
-	@Override
-	public boolean isModelNotification() {
-		return false;
-	}
-
 }

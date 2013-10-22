@@ -4,9 +4,9 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -31,7 +31,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 
 public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
@@ -467,14 +466,17 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		super.update(observable, notification);
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 
-		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
-			// Those notifications are forwarded by the connector specification
-			// FGENotification notif = (FGENotification) notification;
-
+		if (evt.getSource() == getConnectorSpecification()) {
 		}
-	}
 
+		// if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+		// Those notifications are forwarded by the connector specification
+		// FGENotification notif = (FGENotification) notification;
+
+		// }
+
+	}
 }

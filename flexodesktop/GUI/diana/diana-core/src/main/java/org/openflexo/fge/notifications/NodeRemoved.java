@@ -30,11 +30,14 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
  */
 public class NodeRemoved extends FGENotification {
 
+	public static final String EVENT_NAME = "NodeRemoved";
+
 	private DrawingTreeNode<?, ?> removedNode;
 	private ContainerNode<?, ?> parent;
 
+	// Hack: stores the ex-parent in new value
 	public NodeRemoved(DrawingTreeNode<?, ?> removedNode, ContainerNode<?, ?> parent) {
-		super("node", removedNode, null);
+		super(EVENT_NAME, removedNode, parent);
 		this.removedNode = removedNode;
 		this.parent = parent;
 	}
@@ -45,11 +48,6 @@ public class NodeRemoved extends FGENotification {
 
 	public ContainerNode<?, ?> getParent() {
 		return parent;
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
 	}
 
 }

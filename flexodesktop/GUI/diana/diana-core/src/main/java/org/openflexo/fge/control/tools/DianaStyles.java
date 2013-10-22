@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.control.tools;
 
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -30,6 +31,9 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
+import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
+import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
+import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -291,4 +295,41 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		}
 		return defaultShape;
 	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ObjectAddedToSelection.EVENT_NAME)
+				|| evt.getPropertyName().equals(ObjectRemovedFromSelection.EVENT_NAME)
+				|| evt.getPropertyName().equals(SelectionCleared.EVENT_NAME)) {
+			updateSelection();
+		}
+	}
+
+	private void updateSelection() {
+		if (getSelection().size() > 0) {
+			getTextStyleSelector().setEditedObject(getSelection().get(0).getTextStyle());
+			/*if (getSelectedShapes().size() > 0) {
+				getForegroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getForeground());
+			} else if (getSelectedConnectors().size() > 0) {
+				getForegroundSelector().setEditedObject(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
+			}*/
+		} else {
+			getTextStyleSelector().setEditedObject(getEditor().getCurrentTextStyle());
+			// getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
+		}
+		if (getSelectedShapes().size() > 0) {
+			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
+		} else {
+			shapeFactory.setShape(getEditor().getCurrentShape());
+			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
+			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
+			getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
+		}
+	}
+
 }

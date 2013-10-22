@@ -2,7 +2,7 @@ package org.openflexo.fge.impl;
 
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyle {
 	private boolean drawShadow;
@@ -43,7 +43,7 @@ public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyl
 			boolean oldValue = drawShadow;
 			this.drawShadow = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(DRAW_SHADOW, oldValue, aFlag));
+			notifyObservers(new FGEAttributeNotification(DRAW_SHADOW, oldValue, aFlag));
 		}
 	}
 
@@ -58,7 +58,7 @@ public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyl
 			int oldShadowDarkness = shadowDarkness;
 			shadowDarkness = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(SHADOW_DARKNESS, oldShadowDarkness, aValue));
+			notifyObservers(new FGEAttributeNotification(SHADOW_DARKNESS, oldShadowDarkness, aValue));
 		}
 	}
 
@@ -78,7 +78,7 @@ public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyl
 			int oldShadowDeep = shadowDepth;
 			shadowDepth = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(SHADOW_DEPTH, oldShadowDeep, aValue));
+			notifyObservers(new FGEAttributeNotification(SHADOW_DEPTH, oldShadowDeep, aValue));
 		}
 	}
 
@@ -93,7 +93,7 @@ public abstract class ShadowStyleImpl extends FGEStyleImpl implements ShadowStyl
 			int oldShadowBlur = shadowBlur;
 			shadowBlur = aValue;
 			setChanged();
-			notifyObservers(new FGENotification(SHADOW_BLUR, oldShadowBlur, aValue));
+			notifyObservers(new FGEAttributeNotification(SHADOW_BLUR, oldShadowBlur, aValue));
 		}
 	}
 

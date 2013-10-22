@@ -21,9 +21,17 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.geom.FGEDimension;
 
-public class ObjectResized extends FGENotification {
+public class ObjectResized extends FGEAttributeNotification<FGEDimension> {
+
+	public static final String PROPERTY_NAME = "size";
 
 	public ObjectResized(FGEDimension oldSize, FGEDimension newSize) {
-		super("size", oldSize, newSize);
+		super(null, oldSize, newSize);
 	}
+
+	@Override
+	public String propertyName() {
+		return PROPERTY_NAME;
+	}
+
 }

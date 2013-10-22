@@ -19,11 +19,12 @@
  */
 package org.openflexo.fge.notifications;
 
+public class DrawingNeedsToBeRedrawn extends FGEEvent {
 
-public class DrawingNeedsToBeRedrawn extends FGENotification {
+	public static final String EVENT_NAME = "DrawingNeedsToBeRedrawn";
 
 	public DrawingNeedsToBeRedrawn() {
-		super("repaint", null, null);
+		super(EVENT_NAME);
 	}
 
 }

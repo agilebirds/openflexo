@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurveConnectorSpecification {
 
@@ -34,7 +34,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 
 	@Override
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(CP1_RELATIVE_TO_START_OBJECT, cp1RelativeToStartObject);
+		FGEAttributeNotification notification = requireChange(CP1_RELATIVE_TO_START_OBJECT, cp1RelativeToStartObject);
 		if (notification != null) {
 			this.cp1RelativeToStartObject = aPoint;
 			hasChanged(notification);
@@ -48,7 +48,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 
 	@Override
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(CP2_RELATIVE_TO_END_OBJECT, cp2RelativeToEndObject);
+		FGEAttributeNotification notification = requireChange(CP2_RELATIVE_TO_END_OBJECT, cp2RelativeToEndObject);
 		if (notification != null) {
 			this.cp2RelativeToEndObject = aPoint;
 			hasChanged(notification);
@@ -62,7 +62,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 
 	@Override
 	public void setCpPosition(FGEPoint cpPosition) {
-		FGENotification notification = requireChange(CP_POSITION, cpPosition);
+		FGEAttributeNotification notification = requireChange(CP_POSITION, cpPosition);
 		if (notification != null) {
 			this.cpPosition = cpPosition;
 			hasChanged(notification);
@@ -76,7 +76,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 
 	@Override
 	public void setAreBoundsAdjustable(boolean aFlag) {
-		FGENotification notification = requireChange(ARE_BOUNDS_ADJUSTABLE, aFlag);
+		FGEAttributeNotification notification = requireChange(ARE_BOUNDS_ADJUSTABLE, aFlag);
 		if (notification != null) {
 			areBoundsAdjustable = aFlag;
 			hasChanged(notification);
@@ -101,7 +101,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 	@Override
 	public CurveConnector makeConnector(ConnectorNode<?> connectorNode) {
 		CurveConnector returned = new CurveConnector(connectorNode);
-		addObserver(returned);
+		getPropertyChangeSupport().addPropertyChangeListener(returned);
 		return returned;
 	}
 

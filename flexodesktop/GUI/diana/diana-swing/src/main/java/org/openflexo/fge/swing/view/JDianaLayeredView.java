@@ -29,16 +29,13 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaEditor;
-import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.notifications.NodeAdded;
-import org.openflexo.fge.notifications.NodeDeleted;
-import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.swing.graphics.DrawUtils;
 import org.openflexo.fge.swing.graphics.JFGEGraphics;
 import org.openflexo.fge.swing.paint.FGEPaintManager;
@@ -155,15 +152,15 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 		}
 	}
 
-	protected void handleNodeAdded(NodeAdded notification) {
-		DrawingTreeNode<?, ?> newNode = notification.getAddedNode();
+	protected void handleNodeAdded(DrawingTreeNode<?, ?> newNode) {
+		DrawingTreeNode<?, ?> parentNode = newNode.getParentNode();
 		logger.fine("JShapeView: Received NodeAdded notification, creating view for " + newNode);
 		if (newNode instanceof ShapeNode) {
 			ShapeNode<?> shapeNode = (ShapeNode<?>) newNode;
 			JShapeView<?> shapeView = (JShapeView<?>) getController().makeShapeView(shapeNode);
 			addView(shapeView);
 			revalidate();
-			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().invalidate(parentNode);
 			getPaintManager().repaint(this);
 			shapeNode.notifyShapeNeedsToBeRedrawn(); // TODO: is this necessary ?
 		} else if (newNode instanceof ConnectorNode) {
@@ -171,25 +168,24 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 			JConnectorView<?> connectorView = (JConnectorView<?>) getController().makeConnectorView(connectorNode);
 			addView(connectorView);
 			revalidate();
-			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().invalidate(parentNode);
 			getPaintManager().repaint(this);
 		} else if (newNode instanceof GeometricNode) {
-			newNode.addObserver(this);
+			newNode.getPropertyChangeSupport().addPropertyChangeListener(this);
 			revalidate();
-			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().invalidate(parentNode);
 			getPaintManager().repaint(this);
 		}
 	}
 
-	protected void handleNodeRemoved(NodeRemoved notification) {
-		DrawingTreeNode<?, ?> removedNode = notification.getRemovedNode();
+	protected void handleNodeRemoved(DrawingTreeNode<?, ?> removedNode, ContainerNode<?, ?> parentNode) {
 		if (removedNode instanceof ShapeNode) {
 			ShapeNode<?> removedShapeNode = (ShapeNode<?>) removedNode;
 			JShapeView<?> view = (JShapeView<?>) getDrawingView().shapeViewForNode(removedShapeNode);
 			if (view != null) {
 				remove(view);
 				revalidate();
-				getPaintManager().invalidate(notification.getParent());
+				getPaintManager().invalidate(parentNode);
 				getPaintManager().invalidate(removedShapeNode);
 				getPaintManager().repaint(this);
 			} else {
@@ -201,20 +197,20 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 			if (view != null) {
 				remove(view);
 				revalidate();
-				getPaintManager().invalidate(notification.getParent());
+				getPaintManager().invalidate(parentNode);
 				getPaintManager().invalidate(removedConnectorNode);
 				getPaintManager().repaint(this);
 			} else {
 				logger.warning("Cannot find view for " + removedConnectorNode);
 			}
 		} else if (removedNode instanceof GeometricNode) {
-			removedNode.deleteObserver(this);
+			removedNode.getPropertyChangeSupport().removePropertyChangeListener(this);
 			revalidate();
 			getPaintManager().repaint(this);
 		}
 	}
 
-	protected void handleNodeDeleted(NodeDeleted notification) {
+	/*protected void handleNodeDeleted(NodeDeleted notification) {
 		DrawingTreeNode<?, ?> deletedNode = notification.getDeletedNode();
 		if (deletedNode == getNode()) {
 			// If was not removed, try to do it now
@@ -234,12 +230,11 @@ public abstract class JDianaLayeredView<O> extends JLayeredPane implements FGECo
 			// Now delete the view
 			delete();
 		}
-	}
+	}*/
 
 	@Override
 	public AbstractDianaEditor<?, ?, ? super JLayeredPane> getController() {
-		// TODO Auto-generated method stub
-		return null;
+		return getDrawingView().getController();
 	}
 
 	public List<FGEView<?, ? extends JComponent>> getChildViews() {

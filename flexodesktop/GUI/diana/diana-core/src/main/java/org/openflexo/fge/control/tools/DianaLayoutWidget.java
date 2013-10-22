@@ -2,9 +2,9 @@ package org.openflexo.fge.control.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 import javax.swing.Timer;
 
@@ -173,7 +173,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void propertyChange(PropertyChangeEvent evt) {
 	}
 
 }

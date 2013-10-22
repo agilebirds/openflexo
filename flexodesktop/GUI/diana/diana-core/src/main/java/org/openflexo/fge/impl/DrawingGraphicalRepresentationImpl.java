@@ -13,7 +13,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.notifications.DrawingNeedsToBeRedrawn;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillResize;
@@ -150,7 +150,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 	public void setBackgroundColor(Color backgroundColor) {
 		// logger.info("For "+this+" Set bg color to "+backgroundColor);
 
-		FGENotification notification = requireChange(BACKGROUND_COLOR, backgroundColor);
+		FGEAttributeNotification notification = requireChange(BACKGROUND_COLOR, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
 			// bgStyle = getFactory().makeColoredBackground(backgroundColor);
@@ -165,7 +165,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 
 	@Override
 	public void setFocusColor(Color focusColor) {
-		FGENotification notification = requireChange(FOCUS_COLOR, focusColor);
+		FGEAttributeNotification notification = requireChange(FOCUS_COLOR, focusColor);
 		if (notification != null) {
 			this.focusColor = focusColor;
 			hasChanged(notification);
@@ -179,7 +179,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 
 	@Override
 	public void setSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(SELECTION_COLOR, selectionColor);
+		FGEAttributeNotification notification = requireChange(SELECTION_COLOR, selectionColor);
 		if (notification != null) {
 			this.selectionColor = selectionColor;
 			hasChanged(notification);
@@ -193,7 +193,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 
 	@Override
 	public void setRectangleSelectingSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(RECTANGLE_SELECTING_SELECTION_COLOR, selectionColor);
+		FGEAttributeNotification notification = requireChange(RECTANGLE_SELECTING_SELECTION_COLOR, selectionColor);
 		if (notification != null) {
 			this.rectangleSelectingSelectionColor = selectionColor;
 			hasChanged(notification);
@@ -230,7 +230,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 	public void setDrawWorkingArea(boolean drawWorkingArea) {
 		// logger.info("setDrawWorkingArea with "+drawWorkingArea);
 
-		FGENotification notification = requireChange(DRAW_WORKING_AREA, drawWorkingArea);
+		FGEAttributeNotification notification = requireChange(DRAW_WORKING_AREA, drawWorkingArea);
 		if (notification != null) {
 			this.drawWorkingArea = drawWorkingArea;
 			hasChanged(notification);
@@ -244,7 +244,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 
 	@Override
 	public void setIsResizable(boolean isResizable) {
-		FGENotification notification = requireChange(IS_RESIZABLE, isResizable);
+		FGEAttributeNotification notification = requireChange(IS_RESIZABLE, isResizable);
 		if (notification != null) {
 			this.isResizable = isResizable;
 			hasChanged(notification);

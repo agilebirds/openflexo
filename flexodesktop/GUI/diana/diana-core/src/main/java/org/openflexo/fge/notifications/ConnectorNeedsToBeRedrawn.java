@@ -19,15 +19,12 @@
  */
 package org.openflexo.fge.notifications;
 
-public class ConnectorNeedsToBeRedrawn extends FGENotification {
+public class ConnectorNeedsToBeRedrawn extends FGEEvent {
+
+	public static final String EVENT_NAME = "ConnectorNeedsToBeRedrawn";
 
 	public ConnectorNeedsToBeRedrawn() {
-		super("repaint", null, null);
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME);
 	}
 
 }

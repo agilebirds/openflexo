@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.LineConstruction;
 import org.openflexo.fge.geomedit.gr.LineGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class Line extends GeometricObject<FGELine> {
 
@@ -71,7 +71,7 @@ public class Line extends GeometricObject<FGELine> {
 		if (x1 != getX1()) {
 			double oldX1 = getX1();
 			getGeometricObject().setX1(x1);
-			getGraphicalRepresentation().notify(new FGENotification("x1", oldX1, x1));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x1", oldX1, x1));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -84,7 +84,7 @@ public class Line extends GeometricObject<FGELine> {
 		if (x2 != getX2()) {
 			double oldX2 = getX2();
 			getGeometricObject().setX2(x2);
-			getGraphicalRepresentation().notify(new FGENotification("x2", oldX2, x2));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x2", oldX2, x2));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -97,7 +97,7 @@ public class Line extends GeometricObject<FGELine> {
 		if (y1 != getY1()) {
 			double oldY1 = getY1();
 			getGeometricObject().setY1(y1);
-			getGraphicalRepresentation().notify(new FGENotification("y1", oldY1, y1));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y1", oldY1, y1));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -110,7 +110,7 @@ public class Line extends GeometricObject<FGELine> {
 		if (y2 != getY2()) {
 			double oldY2 = getY2();
 			getGeometricObject().setY2(y2);
-			getGraphicalRepresentation().notify(new FGENotification("y2", oldY2, y2));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y2", oldY2, y2));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}

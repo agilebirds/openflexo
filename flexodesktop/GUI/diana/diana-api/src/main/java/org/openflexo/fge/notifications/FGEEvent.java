@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,30 +18,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.drawingeditor;
-
-import java.util.Hashtable;
+package org.openflexo.fge.notifications;
 
 /**
- * Used to "tell" the inspector that one object were selected
+ * Simple event identified by a string id
  * 
- * @author sguerin
+ * @author sylvain
+ * 
  */
-public class UniqueSelection extends InspectorSelection {
+public class FGEEvent extends FGENotification {
 
-	private Object _inspectedObject;
-
-	public UniqueSelection(Object inspectedObject, Hashtable<String, Object> inspectionContext) {
-		super();
-		_inspectedObject = inspectedObject;
+	public <T> FGEEvent(String eventName) {
+		super(eventName, null, null);
+		newValue = this;
 	}
 
-	public Object getInspectedObject() {
-		return _inspectedObject;
+	public <T> FGEEvent(String eventName, Object sourceObject) {
+		super(eventName, null, sourceObject);
 	}
 
-	@Override
-	public String toString() {
-		return "UniqueSelection: " + _inspectedObject;
-	}
 }

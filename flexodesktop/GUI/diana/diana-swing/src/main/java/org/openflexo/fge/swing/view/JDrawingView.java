@@ -37,11 +37,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,9 +72,7 @@ import org.openflexo.fge.control.actions.RectangleSelectingAction;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.notifications.DrawingNeedsToBeRedrawn;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.NodeAdded;
-import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.swing.SwingEditorDelegate;
@@ -153,13 +151,13 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		addMouseMotionListener(mouseListener);
 		installKeyBindings();
 		resizeView();
-		drawing.getRoot().addObserver(this);
+		drawing.getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		graphics = new JFGEDrawingGraphics(drawing.getRoot());
 
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof GeometricNode<?>) {
-				((GeometricNode<?>) dtn).addObserver(this);
+				((GeometricNode<?>) dtn).getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 		}
 
@@ -330,9 +328,9 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 	}
 
 	@Override
-	public void update(final Observable o, final Object notification) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if (isDeleted) {
-			logger.warning("Received notifications for deleted view: observable=" + o);
+			logger.warning("Received notifications for deleted view: " + evt);
 			return;
 		}
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -340,115 +338,60 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 
 				@Override
 				public void run() {
-					update(o, notification);
+					propertyChange(evt);
 				}
 			});
 		} else {
 			// logger.info("Received: "+notification);
 
-			if (notification instanceof FGENotification) {
-				FGENotification notif = (FGENotification) notification;
-				if (notification instanceof NodeAdded) {
-					handleNodeAdded((NodeAdded) notification);
-				} else if (notification instanceof NodeRemoved) {
-					handleNodeRemoved((NodeRemoved) notification);
-				} else if (notification instanceof NodeDeleted) {
-					handleNodeDeleted((NodeDeleted) notification);
-				}
-				/*if (notification instanceof NodeAdded) {
-					GraphicalRepresentation newGR = ((NodeAdded) notification).getAddedGraphicalRepresentation();
-					logger.fine("JDrawingView: Received ObjectAdded notification, creating view for " + newGR);
-					if (newGR instanceof ShapeGraphicalRepresentation) {
-						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
-						add(shapeGR.makeShapeView(getController()));
-						revalidate();
-						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
-						add(connectorGR.makeConnectorView(getController()));
-						revalidate();
-						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					} else if (newGR instanceof GeometricGraphicalRepresentation) {
-						newGR.addObserver(this);
-						revalidate();
-						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof NodeRemoved) {
-					GraphicalRepresentation removedGR = ((NodeRemoved) notification).getRemovedGraphicalRepresentation();
-					if (removedGR instanceof ShapeGraphicalRepresentation) {
-						JShapeView view = shapeViewForNode((ShapeGraphicalRepresentation) removedGR);
-						if (view != null) {
-							remove(view);
-							revalidate();
-							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-							getPaintManager().repaint(this);
-						} else {
-							// That may happen, remove warning
-							// logger.warning("Cannot find view for " + removedGR);
-						}
-					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-						JConnectorView view = connectorViewForNode((ConnectorGraphicalRepresentation) removedGR);
-						if (view != null) {
-							remove(view);
-							revalidate();
-							getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-							getPaintManager().repaint(this);
-						} else {
-							// That may happen, remove warning
-							// logger.warning("Cannot find view for " + removedGR);
-						}
-					} else if (removedGR instanceof GeometricGraphicalRepresentation) {
-						removedGR.deleteObserver(this);
-						revalidate();
-						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					}
-				}*/else if (notification instanceof ObjectResized) {
-					rescale();
-					getPaintManager().invalidate(getDrawing().getRoot());
-					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.BACKGROUND_COLOR) {
-					getPaintManager().invalidate(getDrawing().getRoot());
-					updateBackground();
-					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.DRAW_WORKING_AREA) {
-					getPaintManager().invalidate(getDrawing().getRoot());
-					updateBackground();
-					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.WIDTH) {
-					rescale();
-					getPaintManager().invalidate(getDrawing().getRoot());
-					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.HEIGHT) {
-					rescale();
-					getPaintManager().invalidate(getDrawing().getRoot());
-					getPaintManager().repaint(this);
-				} else if (notif.getParameter() == DrawingGraphicalRepresentation.IS_RESIZABLE) {
-					if (getDrawing().getRoot().getGraphicalRepresentation().isResizable()) {
-						removeMouseListener(mouseListener); // We remove the mouse
-															// listener, so that the
-															// mouse resizer is
-															// called before
-															// mouseListener
-						if (resizer == null) {
-							resizer = new DrawingViewResizer();
-						} else {
-							addMouseListener(resizer);
-						}
-						addMouseListener(mouseListener);
+			if (evt.getPropertyName().equals(NodeAdded.EVENT_NAME)) {
+				handleNodeAdded((DrawingTreeNode<?, ?>) evt.getNewValue());
+			} else if (evt.getPropertyName().equals(NodeRemoved.EVENT_NAME)) {
+				handleNodeRemoved((DrawingTreeNode<?, ?>) evt.getOldValue(), (ContainerNode<?, ?>) evt.getNewValue());
+			} /*else if (notification instanceof NodeDeleted) {
+				handleNodeDeleted((NodeDeleted) notification);
+				}*/else if (evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)) {
+				rescale();
+				getPaintManager().invalidate(getDrawing().getRoot());
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingGraphicalRepresentation.BACKGROUND_COLOR.getName())) {
+				getPaintManager().invalidate(getDrawing().getRoot());
+				updateBackground();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingGraphicalRepresentation.DRAW_WORKING_AREA.getName())) {
+				getPaintManager().invalidate(getDrawing().getRoot());
+				updateBackground();
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingGraphicalRepresentation.WIDTH.getName())) {
+				rescale();
+				getPaintManager().invalidate(getDrawing().getRoot());
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingGraphicalRepresentation.HEIGHT.getName())) {
+				rescale();
+				getPaintManager().invalidate(getDrawing().getRoot());
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(DrawingGraphicalRepresentation.IS_RESIZABLE.getName())) {
+				if (getDrawing().getRoot().getGraphicalRepresentation().isResizable()) {
+					removeMouseListener(mouseListener); // We remove the mouse
+														// listener, so that the
+														// mouse resizer is
+														// called before
+														// mouseListener
+					if (resizer == null) {
+						resizer = new DrawingViewResizer();
 					} else {
-						removeMouseListener(resizer);
+						addMouseListener(resizer);
 					}
-				} else if (notif instanceof DrawingNeedsToBeRedrawn) {
-					getPaintManager().invalidate(getDrawing().getRoot());
-					getPaintManager().repaint(this);
-				} else if (o instanceof GeometricGraphicalRepresentation) {
-					getPaintManager().invalidate(getDrawing().getRoot());
-					getPaintManager().repaint(this);
+					addMouseListener(mouseListener);
+				} else {
+					removeMouseListener(resizer);
 				}
+			} else if (evt.getPropertyName().equals(DrawingNeedsToBeRedrawn.EVENT_NAME)) {
+				getPaintManager().invalidate(getDrawing().getRoot());
+				getPaintManager().repaint(this);
+			} else if (evt.getSource() instanceof GeometricGraphicalRepresentation) {
+				getPaintManager().invalidate(getDrawing().getRoot());
+				getPaintManager().repaint(this);
 			}
 		}
 	}
@@ -949,11 +892,13 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			// logger.info("Deleted view "+v);
 		}
 		// contents.clear();
-		getGraphicalRepresentation().deleteObserver(this);
+
+		// TODO ???
+		getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
 
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof GeometricNode<?>) {
-				((GeometricNode<?>) dtn).deleteObserver(this);
+				((GeometricNode<?>) dtn).getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 		}
 

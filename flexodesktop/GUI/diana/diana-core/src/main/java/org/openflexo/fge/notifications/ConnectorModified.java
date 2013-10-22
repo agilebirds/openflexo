@@ -19,16 +19,13 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 
-public class ConnectorModified extends FGENotification {
+public class ConnectorModified extends FGEEvent {
+
+	public static final String EVENT_NAME = "ConnectorModified";
 
 	public ConnectorModified() {
-		super(ConnectorGraphicalRepresentation.CONNECTOR, null, null);
+		super(EVENT_NAME);
 	}
 
-	@Override
-	public boolean isModelNotification() {
-		return false;
-	}
 }

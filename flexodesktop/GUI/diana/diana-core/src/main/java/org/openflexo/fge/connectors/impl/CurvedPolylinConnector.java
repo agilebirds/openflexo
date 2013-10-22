@@ -2,9 +2,9 @@ package org.openflexo.fge.connectors.impl;
 
 import java.awt.Point;
 import java.awt.geom.Line2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
@@ -16,7 +16,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.GeomUtils;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 
 public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnectorSpecification> {
 
@@ -135,14 +134,18 @@ public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnector
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		super.update(observable, notification);
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 
-		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
-			// Those notifications are forwarded by the connector specification
-			// FGENotification notif = (FGENotification) notification;
-
+		if (evt.getSource() == getConnectorSpecification()) {
 		}
+
+		// if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+		// Those notifications are forwarded by the connector specification
+		// FGENotification notif = (FGENotification) notification;
+
+		// }
+
 	}
 
 }

@@ -19,9 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-public class ObjectWillMove extends FGENotification {
+public class ObjectWillMove extends FGEEvent {
+
+	public static final String EVENT_NAME = "ObjectWillMove";
 
 	public ObjectWillMove() {
-		super("location", null, null);
+		super(EVENT_NAME);
 	}
 }

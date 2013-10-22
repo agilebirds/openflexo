@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl implements BackgroundImageBackgroundStyle {
 
@@ -57,7 +57,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 				image = null;
 			}
 			setChanged();
-			notifyObservers(new FGENotification(IMAGE_FILE, oldFile, anImageFile));
+			notifyObservers(new FGEAttributeNotification(IMAGE_FILE, oldFile, anImageFile));
 		}
 	}
 
@@ -90,7 +90,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			java.awt.Color oldColor = imageBackgroundColor;
 			this.imageBackgroundColor = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(IMAGE_BACKGROUND_COLOR, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(IMAGE_BACKGROUND_COLOR, oldColor, aColor));
 		}
 	}
 
@@ -105,7 +105,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			double oldDeltaX = this.deltaX;
 			this.deltaX = aDeltaX;
 			setChanged();
-			notifyObservers(new FGENotification(DELTA_X, oldDeltaX, deltaX));
+			notifyObservers(new FGEAttributeNotification(DELTA_X, oldDeltaX, deltaX));
 		}
 	}
 
@@ -120,7 +120,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			double oldDeltaY = this.deltaY;
 			this.deltaY = aDeltaY;
 			setChanged();
-			notifyObservers(new FGENotification(DELTA_Y, oldDeltaY, deltaY));
+			notifyObservers(new FGEAttributeNotification(DELTA_Y, oldDeltaY, deltaY));
 		}
 	}
 
@@ -135,7 +135,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			BackgroundImageBackgroundStyle.ImageBackgroundType oldImageBackgroundType = this.imageBackgroundType;
 			this.imageBackgroundType = anImageBackgroundType;
 			setChanged();
-			notifyObservers(new FGENotification(IMAGE_BACKGROUND_TYPE, oldImageBackgroundType, anImageBackgroundType));
+			notifyObservers(new FGEAttributeNotification(IMAGE_BACKGROUND_TYPE, oldImageBackgroundType, anImageBackgroundType));
 		}
 	}
 
@@ -151,7 +151,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			// logger.info(toString()+": Sets scaleX from "+oldScaleX+" to "+aScaleX);
 			this.scaleX = aScaleX;
 			setChanged();
-			notifyObservers(new FGENotification(SCALE_X, oldScaleX, scaleX));
+			notifyObservers(new FGEAttributeNotification(SCALE_X, oldScaleX, scaleX));
 		}
 	}
 
@@ -174,7 +174,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			// logger.info(toString()+": Sets scaleY from "+oldScaleY+" to "+aScaleY);
 			this.scaleY = aScaleY;
 			setChanged();
-			notifyObservers(new FGENotification(SCALE_Y, oldScaleY, scaleY));
+			notifyObservers(new FGEAttributeNotification(SCALE_Y, oldScaleY, scaleY));
 		}
 	}
 
@@ -196,7 +196,7 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 			boolean oldValue = fitToShape;
 			this.fitToShape = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(FIT_TO_SHAPE, oldValue, aFlag));
+			notifyObservers(new FGEAttributeNotification(FIT_TO_SHAPE, oldValue, aFlag));
 		}
 	}
 

@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.PolygonConstruction;
 import org.openflexo.fge.geomedit.gr.PolygonGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class Polygon extends GeometricObject<FGEPolygon> {
 
@@ -70,7 +70,7 @@ public class Polygon extends GeometricObject<FGEPolygon> {
 	public void setIsFilled(boolean filled) {
 		if (filled != getIsFilled()) {
 			getConstruction().setIsFilled(filled);
-			getGraphicalRepresentation().notify(new FGENotification("isFilled", !filled, filled));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("isFilled", !filled, filled));
 		}
 	}
 }

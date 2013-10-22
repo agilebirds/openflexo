@@ -4,7 +4,7 @@ import java.awt.Paint;
 
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
 
@@ -39,7 +39,7 @@ public abstract class ColorBackgroundStyleImpl extends BackgroundStyleImpl imple
 			java.awt.Color oldColor = color;
 			this.color = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(COLOR, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR, oldColor, aColor));
 		}
 	}
 

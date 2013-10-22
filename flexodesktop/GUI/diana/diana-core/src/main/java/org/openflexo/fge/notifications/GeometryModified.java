@@ -19,9 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-public class GeometryModified extends FGENotification {
+public class GeometryModified extends FGEEvent {
+
+	public static final String EVENT_NAME = "geometry";
 
 	public GeometryModified() {
-		super("geometry", null, null);
+		super(EVENT_NAME);
 	}
 }

@@ -34,7 +34,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.kvc.KVCObservableObject;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.logging.FlexoLogger;
@@ -230,14 +230,23 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		Class<?> styleClass = TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
 		System.out.println("Selection changed for inspected style " + styleClass);
 		for (GRParameter<?> p : GRParameter.getGRParameters(styleClass)) {
-			Object storedValue = storedPropertyValues.get(p);
-			Object newValue = _getPropertyValue(p);
-			if (requireChange(storedValue, newValue)) {
-				System.out.println("Notifying " + p.getName());
-				pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
-				setChanged();
-				notifyObservers(new FGENotification(p.getName(), storedValue, newValue));
-			}
+			fireChangedProperty(p);
+		}
+	}
+
+	/**
+	 * Internally called to fire change events between previously registered values and current resulting values<br>
+	 * Do this only when needed on supplied GRParameter
+	 */
+	private <T> void fireChangedProperty(GRParameter<T> p) {
+		@SuppressWarnings("unchecked")
+		T storedValue = (T) storedPropertyValues.get(p);
+		T newValue = _getPropertyValue(p);
+		if (requireChange(storedValue, newValue)) {
+			System.out.println("Notifying " + p.getName());
+			pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
+			setChanged();
+			notifyObservers(new FGEAttributeNotification<T>(p, storedValue, newValue));
 		}
 	}
 
@@ -285,7 +294,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	}
 
-	public void notify(FGENotification notification) {
+	public void notify(FGEAttributeNotification notification) {
 		// Not relevant
 
 	}

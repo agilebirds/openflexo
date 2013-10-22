@@ -5,7 +5,7 @@ import java.awt.Paint;
 
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implements ColorGradientBackgroundStyle {
 
@@ -60,7 +60,7 @@ public abstract class ColorGradientBackgroundStyleImpl extends BackgroundStyleIm
 			java.awt.Color oldColor = color1;
 			this.color1 = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(COLOR1, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR1, oldColor, aColor));
 		}
 	}
 
@@ -75,7 +75,7 @@ public abstract class ColorGradientBackgroundStyleImpl extends BackgroundStyleIm
 			java.awt.Color oldColor = color2;
 			this.color2 = aColor;
 			setChanged();
-			notifyObservers(new FGENotification(COLOR2, oldColor, aColor));
+			notifyObservers(new FGEAttributeNotification(COLOR2, oldColor, aColor));
 		}
 	}
 
@@ -90,7 +90,7 @@ public abstract class ColorGradientBackgroundStyleImpl extends BackgroundStyleIm
 			ColorGradientBackgroundStyle.ColorGradientDirection oldTexture = direction;
 			this.direction = aDirection;
 			setChanged();
-			notifyObservers(new FGENotification(DIRECTION, oldTexture, aDirection));
+			notifyObservers(new FGEAttributeNotification(DIRECTION, oldTexture, aDirection));
 		}
 	}
 

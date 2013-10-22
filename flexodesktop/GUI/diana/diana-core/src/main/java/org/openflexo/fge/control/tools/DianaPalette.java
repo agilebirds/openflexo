@@ -25,7 +25,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
@@ -199,9 +199,7 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-
+	public void propertyChange(PropertyChangeEvent evt) {
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl implements LineConnectorSpecification {
 
@@ -28,7 +28,7 @@ public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificat
 
 	@Override
 	public void setLineConnectorType(LineConnectorType aLineConnectorType) {
-		FGENotification notification = requireChange(LINE_CONNECTOR_TYPE, aLineConnectorType);
+		FGEAttributeNotification notification = requireChange(LINE_CONNECTOR_TYPE, aLineConnectorType);
 		if (notification != null) {
 			lineConnectorType = aLineConnectorType;
 			hasChanged(notification);
@@ -42,7 +42,7 @@ public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificat
 
 	@Override
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(CP1_RELATIVE_TO_START_OBJECT, cp1RelativeToStartObject);
+		FGEAttributeNotification notification = requireChange(CP1_RELATIVE_TO_START_OBJECT, cp1RelativeToStartObject);
 		if (notification != null) {
 			this.cp1RelativeToStartObject = aPoint;
 			hasChanged(notification);
@@ -56,7 +56,7 @@ public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificat
 
 	@Override
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		FGENotification notification = requireChange(CP2_RELATIVE_TO_END_OBJECT, cp2RelativeToEndObject);
+		FGEAttributeNotification notification = requireChange(CP2_RELATIVE_TO_END_OBJECT, cp2RelativeToEndObject);
 		if (notification != null) {
 			this.cp2RelativeToEndObject = aPoint;
 			hasChanged(notification);
@@ -80,7 +80,7 @@ public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificat
 	@Override
 	public LineConnector makeConnector(ConnectorNode<?> connectorNode) {
 		LineConnector returned = new LineConnector(connectorNode);
-		addObserver(returned);
+		getPropertyChangeSupport().addPropertyChangeListener(returned);
 		return returned;
 	}
 

@@ -19,16 +19,12 @@
  */
 package org.openflexo.fge.swing.control.tools;
 
-import java.util.Observable;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
 
-import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
-import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
-import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaStyles;
 import org.openflexo.fge.swing.SwingViewFactory;
 
@@ -58,43 +54,6 @@ public class JDianaStyles extends DianaStyles<JToolBar, SwingViewFactory> {
 			component.validate();
 		}
 		return component;
-	}
-
-	@Override
-	public void update(Observable o, Object notification) {
-		if (o == getEditor()) {
-			if (notification instanceof ObjectAddedToSelection || notification instanceof ObjectRemovedFromSelection
-					|| notification instanceof SelectionCleared) {
-				updateSelection();
-			}
-		}
-	}
-
-	private void updateSelection() {
-		if (getSelection().size() > 0) {
-			getTextStyleSelector().setEditedObject(getSelection().get(0).getTextStyle());
-			/*if (getSelectedShapes().size() > 0) {
-				getForegroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getForeground());
-			} else if (getSelectedConnectors().size() > 0) {
-				getForegroundSelector().setEditedObject(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
-			}*/
-		} else {
-			getTextStyleSelector().setEditedObject(getEditor().getCurrentTextStyle());
-			// getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
-		}
-		if (getSelectedShapes().size() > 0) {
-			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
-		} else {
-			shapeFactory.setShape(getEditor().getCurrentShape());
-			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
-			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
-			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
-			getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
-		}
 	}
 
 	@Override

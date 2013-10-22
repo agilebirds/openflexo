@@ -1,10 +1,10 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Stroke;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +24,7 @@ import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseControl.MouseButton;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.notifications.BindingChanged;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.GRDeleted;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
@@ -123,7 +123,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		textStyle = getFactory().makeDefaultTextStyle();
 		// textStyle.setGraphicalRepresentation(this);
 		if (textStyle != null) {
-			textStyle.addObserver(this);
+			textStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 	}
@@ -136,7 +136,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	public boolean delete() {
 		if (!isDeleted()) {
 			if (textStyle != null) {
-				textStyle.deleteObserver(this);
+				textStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			_bindingModel = null;
 			boolean returned = super.delete();
@@ -306,7 +306,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIdentifier(String identifier) {
-		FGENotification notification = requireChange(IDENTIFIER, identifier);
+		FGEAttributeNotification notification = requireChange(IDENTIFIER, identifier);
 		if (notification != null) {
 			this.identifier = identifier;
 			hasChanged(notification);
@@ -331,7 +331,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		 * layer); if (notification != null) { this.layer = layer; hasChanged(notification); } } else { for (GraphicalRepresentation
 		 * child : allGRInSameLayer) { child.proceedSetLayer(layer); } }
 		 */
-		FGENotification notification = requireChange(LAYER, layer);
+		FGEAttributeNotification notification = requireChange(LAYER, layer);
 		if (notification != null) {
 			this.layer = layer;
 			hasChanged(notification);
@@ -345,7 +345,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setTransparency(Double transparency) {
-		FGENotification notification = requireChange(TRANSPARENCY, transparency);
+		FGEAttributeNotification notification = requireChange(TRANSPARENCY, transparency);
 		if (notification != null) {
 			this.transparency = transparency;
 			hasChanged(notification);
@@ -751,14 +751,14 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setTextStyle(TextStyle aTextStyle) {
-		FGENotification notification = requireChange(TEXT_STYLE, aTextStyle, false);
+		FGEAttributeNotification notification = requireChange(TEXT_STYLE, aTextStyle, false);
 		if (notification != null) {
 			if (textStyle != null) {
-				textStyle.deleteObserver(this);
+				textStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			this.textStyle = aTextStyle;
 			if (aTextStyle != null) {
-				aTextStyle.addObserver(this);
+				aTextStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -777,7 +777,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		 * <?>)getContainerGraphicalRepresentation()).getWidth()) { absoluteTextX =
 		 * ((ShapeGraphicalRepresentation)getContainerGraphicalRepresentation ()).getWidth(); }
 		 */
-		FGENotification notification = requireChange(ABSOLUTE_TEXT_X, absoluteTextX);
+		FGEAttributeNotification notification = requireChange(ABSOLUTE_TEXT_X, absoluteTextX);
 		if (notification != null) {
 			setAbsoluteTextXNoNotification(absoluteTextX);
 			hasChanged(notification);
@@ -795,7 +795,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public final void setAbsoluteTextY(double absoluteTextY) {
-		FGENotification notification = requireChange(ABSOLUTE_TEXT_Y, absoluteTextY);
+		FGEAttributeNotification notification = requireChange(ABSOLUTE_TEXT_Y, absoluteTextY);
 		if (notification != null) {
 			setAbsoluteTextYNoNotification(absoluteTextY);
 			hasChanged(notification);
@@ -813,7 +813,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsFocusable(boolean isFocusable) {
-		FGENotification notification = requireChange(IS_FOCUSABLE, isFocusable);
+		FGEAttributeNotification notification = requireChange(IS_FOCUSABLE, isFocusable);
 		if (notification != null) {
 			this.isFocusable = isFocusable;
 			hasChanged(notification);
@@ -827,7 +827,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setDrawControlPointsWhenFocused(boolean aFlag) {
-		FGENotification notification = requireChange(DRAW_CONTROL_POINTS_WHEN_FOCUSED, aFlag);
+		FGEAttributeNotification notification = requireChange(DRAW_CONTROL_POINTS_WHEN_FOCUSED, aFlag);
 		if (notification != null) {
 			drawControlPointsWhenFocused = aFlag;
 			hasChanged(notification);
@@ -841,7 +841,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsSelectable(boolean isSelectable) {
-		FGENotification notification = requireChange(IS_SELECTABLE, isSelectable);
+		FGEAttributeNotification notification = requireChange(IS_SELECTABLE, isSelectable);
 		if (notification != null) {
 			this.isSelectable = isSelectable;
 			hasChanged(notification);
@@ -855,7 +855,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setDrawControlPointsWhenSelected(boolean aFlag) {
-		FGENotification notification = requireChange(DRAW_CONTROL_POINTS_WHEN_SELECTED, aFlag);
+		FGEAttributeNotification notification = requireChange(DRAW_CONTROL_POINTS_WHEN_SELECTED, aFlag);
 		if (notification != null) {
 			drawControlPointsWhenSelected = aFlag;
 			hasChanged(notification);
@@ -871,7 +871,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// TODO: should disappear ??? May be no, a GR may carry contextual data
 	@Override
 	public void setText(String text) {
-		FGENotification notification = requireChange(TEXT, text);
+		FGEAttributeNotification notification = requireChange(TEXT, text);
 		if (notification != null) {
 			setTextNoNotification(text);
 			hasChanged(notification);
@@ -914,7 +914,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsMultilineAllowed(boolean multilineAllowed) {
-		FGENotification notification = requireChange(IS_MULTILINE_ALLOWED, multilineAllowed);
+		FGEAttributeNotification notification = requireChange(IS_MULTILINE_ALLOWED, multilineAllowed);
 		if (notification != null) {
 			this.multilineAllowed = multilineAllowed;
 			hasChanged(notification);
@@ -931,7 +931,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setLineWrap(boolean lineWrap) {
-		FGENotification notification = requireChange(LINE_WRAP, lineWrap);
+		FGEAttributeNotification notification = requireChange(LINE_WRAP, lineWrap);
 		if (notification != null) {
 			this.lineWrap = lineWrap;
 			hasChanged(notification);
@@ -945,7 +945,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setContinuousTextEditing(boolean continuousTextEditing) {
-		FGENotification notification = requireChange(CONTINUOUS_TEXT_EDITING, continuousTextEditing);
+		FGEAttributeNotification notification = requireChange(CONTINUOUS_TEXT_EDITING, continuousTextEditing);
 		if (notification != null) {
 			this.continuousTextEditing = continuousTextEditing;
 			hasChanged(notification);
@@ -990,7 +990,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsReadOnly(boolean readOnly) {
-		FGENotification notification = requireChange(IS_READ_ONLY, readOnly);
+		FGEAttributeNotification notification = requireChange(IS_READ_ONLY, readOnly);
 		if (notification != null) {
 			this.readOnly = readOnly;
 			hasChanged(notification);
@@ -1004,7 +1004,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsLabelEditable(boolean labelEditable) {
-		FGENotification notification = requireChange(IS_LABEL_EDITABLE, labelEditable);
+		FGEAttributeNotification notification = requireChange(IS_LABEL_EDITABLE, labelEditable);
 		if (notification != null) {
 			this.labelEditable = labelEditable;
 			hasChanged(notification);
@@ -1027,7 +1027,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setIsVisible(boolean isVisible) {
-		FGENotification notification = requireChange(IS_VISIBLE, isVisible);
+		FGEAttributeNotification notification = requireChange(IS_VISIBLE, isVisible);
 		if (notification != null) {
 			this.isVisible = isVisible;
 			hasChanged(notification);
@@ -1148,8 +1148,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// *******************************************************************************
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		if (observable instanceof TextStyle) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof TextStyle) {
 			notifyAttributeChange(TEXT_STYLE);
 		}
 	}
@@ -1215,7 +1215,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setMouseClickControls(List<MouseClickControl<?>> mouseClickControls) {
-		FGENotification notification = requireChange(MOUSE_CLICK_CONTROLS, mouseClickControls);
+		FGEAttributeNotification notification = requireChange(MOUSE_CLICK_CONTROLS, mouseClickControls);
 		if (notification != null) {
 			this.mouseClickControls.addAll(mouseClickControls);
 			hasChanged(notification);
@@ -1235,14 +1235,14 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			mouseClickControls.add(mouseClickControl);
 		}
 		setChanged();
-		notifyObservers(new FGENotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
+		notifyObservers(new FGEAttributeNotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
 	}
 
 	@Override
 	public void removeFromMouseClickControls(MouseClickControl<?> mouseClickControl) {
 		mouseClickControls.remove(mouseClickControl);
 		setChanged();
-		notifyObservers(new FGENotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
+		notifyObservers(new FGEAttributeNotification(MOUSE_CLICK_CONTROLS, mouseClickControls, mouseClickControls));
 	}
 
 	@Override
@@ -1252,7 +1252,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setMouseDragControls(List<MouseDragControl<?>> mouseDragControls) {
-		FGENotification notification = requireChange(MOUSE_DRAG_CONTROLS, mouseDragControls);
+		FGEAttributeNotification notification = requireChange(MOUSE_DRAG_CONTROLS, mouseDragControls);
 		if (notification != null) {
 			this.mouseDragControls.addAll(mouseDragControls);
 			hasChanged(notification);
@@ -1272,14 +1272,14 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			mouseDragControls.add(mouseDragControl);
 		}
 		setChanged();
-		notifyObservers(new FGENotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
+		notifyObservers(new FGEAttributeNotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
 	}
 
 	@Override
 	public void removeFromMouseDragControls(MouseDragControl<?> mouseDragControl) {
 		mouseDragControls.remove(mouseDragControl);
 		setChanged();
-		notifyObservers(new FGENotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
+		notifyObservers(new FGEAttributeNotification(MOUSE_DRAG_CONTROLS, mouseDragControls, mouseDragControls));
 	}
 
 	@Override
@@ -1370,7 +1370,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setToolTipText(String tooltipText) {
-		FGENotification notification = requireChange(TOOLTIP_TEXT, tooltipText);
+		FGEAttributeNotification notification = requireChange(TOOLTIP_TEXT, tooltipText);
 		if (notification != null) {
 			this.toolTipText = tooltipText;
 			hasChanged(notification);
@@ -1384,7 +1384,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setHorizontalTextAlignment(HorizontalTextAlignment horizontalTextAlignment) {
-		FGENotification notification = requireChange(HORIZONTAL_TEXT_ALIGNEMENT, horizontalTextAlignment);
+		FGEAttributeNotification notification = requireChange(HORIZONTAL_TEXT_ALIGNEMENT, horizontalTextAlignment);
 		if (notification != null) {
 			this.horizontalTextAlignment = horizontalTextAlignment;
 			hasChanged(notification);
@@ -1398,7 +1398,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setVerticalTextAlignment(VerticalTextAlignment verticalTextAlignment) {
-		FGENotification notification = requireChange(VERTICAL_TEXT_ALIGNEMENT, verticalTextAlignment);
+		FGEAttributeNotification notification = requireChange(VERTICAL_TEXT_ALIGNEMENT, verticalTextAlignment);
 		if (notification != null) {
 			this.verticalTextAlignment = verticalTextAlignment;
 			hasChanged(notification);
@@ -1412,7 +1412,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@Override
 	public void setParagraphAlignment(ParagraphAlignment paragraphAlignment) {
-		FGENotification notification = requireChange(PARAGRAPH_ALIGNEMENT, paragraphAlignment);
+		FGEAttributeNotification notification = requireChange(PARAGRAPH_ALIGNEMENT, paragraphAlignment);
 		if (notification != null) {
 			this.paragraphAlignment = paragraphAlignment;
 			hasChanged(notification);

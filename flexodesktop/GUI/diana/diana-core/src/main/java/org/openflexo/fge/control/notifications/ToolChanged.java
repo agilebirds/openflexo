@@ -20,7 +20,6 @@
 package org.openflexo.fge.control.notifications;
 
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
-import org.openflexo.fge.notifications.FGENotification;
 
 /**
  * This notification is thrown when the tool of a DianaInteractiveEditor has changed
@@ -28,15 +27,12 @@ import org.openflexo.fge.notifications.FGENotification;
  * @author sylvain
  * 
  */
-public class ToolChanged extends FGENotification {
+public class ToolChanged extends ControlNotification {
+
+	public static final String EVENT_NAME = "ToolChanged";
 
 	public ToolChanged(EditorTool oldValue, EditorTool newValue) {
-		super("tool", oldValue, newValue);
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
+		super(EVENT_NAME, oldValue, newValue);
 	}
 
 }

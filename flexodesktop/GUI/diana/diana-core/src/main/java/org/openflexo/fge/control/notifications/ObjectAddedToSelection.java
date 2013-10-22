@@ -20,7 +20,6 @@
 package org.openflexo.fge.control.notifications;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.notifications.FGENotification;
 
 /**
  * This notification is thrown when a node has been added to selection
@@ -28,22 +27,19 @@ import org.openflexo.fge.notifications.FGENotification;
  * @author sylvain
  * 
  */
-public class ObjectAddedToSelection extends FGENotification {
+public class ObjectAddedToSelection extends ControlNotification {
+
+	public static final String EVENT_NAME = "ObjectAddedToSelection";
 
 	private DrawingTreeNode<?, ?> newSelectedNode;
 
 	public ObjectAddedToSelection(DrawingTreeNode<?, ?> newSelectedNode) {
-		super("selection", null, newSelectedNode);
+		super(EVENT_NAME, null, newSelectedNode);
 		this.newSelectedNode = newSelectedNode;
 	}
 
 	public DrawingTreeNode<?, ?> getNewSelectedNode() {
 		return newSelectedNode;
-	}
-
-	@Override
-	public boolean isModelNotification() {
-		return false;
 	}
 
 }

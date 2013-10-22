@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -146,7 +146,7 @@ public class EditionPatternPreviewShapeGR extends ShapeGraphicalRepresentation<S
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+		if (arg instanceof FGEAttributeNotification && ((FGEAttributeNotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getPatternRole() != null) {
 			getPatternRole().setChanged();
 		}

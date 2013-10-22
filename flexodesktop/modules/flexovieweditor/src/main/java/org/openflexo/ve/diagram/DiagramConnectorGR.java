@@ -31,7 +31,7 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -171,7 +171,7 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentationImpl imp
 	 * 
 	 */
 	@Override
-	protected void hasChanged(FGENotification notification) {
+	protected void hasChanged(FGEAttributeNotification notification) {
 		super.hasChanged(notification);
 		if (isUpdating) {
 			return;

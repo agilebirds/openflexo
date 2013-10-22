@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.EllipsConstruction;
 import org.openflexo.fge.geomedit.gr.EllipsGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class Ellips extends GeometricObject<FGEEllips> {
 
@@ -71,7 +71,7 @@ public class Ellips extends GeometricObject<FGEEllips> {
 		if (x != getX()) {
 			double oldX = getX();
 			getGeometricObject().x = x;
-			getGraphicalRepresentation().notify(new FGENotification("x", oldX, x));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x", oldX, x));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -84,7 +84,7 @@ public class Ellips extends GeometricObject<FGEEllips> {
 		if (width != getWidth()) {
 			double oldWidth = getWidth();
 			getGeometricObject().width = width;
-			getGraphicalRepresentation().notify(new FGENotification("width", oldWidth, width));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("width", oldWidth, width));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -97,7 +97,7 @@ public class Ellips extends GeometricObject<FGEEllips> {
 		if (y != getY()) {
 			double oldY = getY();
 			getGeometricObject().y = y;
-			getGraphicalRepresentation().notify(new FGENotification("y", oldY, y));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y", oldY, y));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -110,7 +110,7 @@ public class Ellips extends GeometricObject<FGEEllips> {
 		if (height != getHeight()) {
 			double oldHeight = getHeight();
 			getGeometricObject().height = height;
-			getGraphicalRepresentation().notify(new FGENotification("height", oldHeight, height));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("height", oldHeight, height));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -122,7 +122,7 @@ public class Ellips extends GeometricObject<FGEEllips> {
 	public void setIsFilled(boolean filled) {
 		if (filled != getIsFilled()) {
 			getConstruction().setIsFilled(filled);
-			getGraphicalRepresentation().notify(new FGENotification("isFilled", !filled, filled));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("isFilled", !filled, filled));
 		}
 	}
 }

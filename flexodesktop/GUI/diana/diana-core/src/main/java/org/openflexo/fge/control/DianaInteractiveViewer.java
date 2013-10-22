@@ -20,10 +20,10 @@
 
 package org.openflexo.fge.control;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -550,12 +550,12 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		super.update(o, arg);
-		if (o == getDrawing()) {
-			if (arg instanceof DrawingTreeNodeHierarchyRebuildStarted) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
+		if (evt.getSource() == getDrawing()) {
+			if (evt.getPropertyName().equals(DrawingTreeNodeHierarchyRebuildStarted.EVENT_NAME)) {
 				storeCurrentSelection();
-			} else if (arg instanceof DrawingTreeNodeHierarchyRebuildEnded && storedSelection != null) {
+			} else if (evt.getPropertyName().equals(DrawingTreeNodeHierarchyRebuildEnded.EVENT_NAME) && storedSelection != null) {
 				restoreStoredSelection();
 			}
 		}

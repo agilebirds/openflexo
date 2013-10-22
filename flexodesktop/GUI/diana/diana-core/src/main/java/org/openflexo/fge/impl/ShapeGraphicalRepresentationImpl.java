@@ -1,7 +1,7 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
@@ -18,7 +18,7 @@ import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.shapes.ShapeSpecification;
@@ -102,13 +102,13 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
 		foreground = getFactory().makeDefaultForegroundStyle();
 		// foreground.setGraphicalRepresentation(this);
-		foreground.addObserver(this);
+		foreground.getPropertyChangeSupport().addPropertyChangeListener(this);
 		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
-		background.addObserver(this);
+		background.getPropertyChangeSupport().addPropertyChangeListener(this);
 		shadowStyle = getFactory().makeDefaultShadowStyle();
 		// background.setGraphicalRepresentation(this);
-		shadowStyle.addObserver(this);
+		shadowStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		// graphics = new FGEShapeGraphicsImpl(this);
 
@@ -174,25 +174,25 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	@Override
 	public boolean delete() {
 		if (background != null) {
-			background.deleteObserver(this);
+			background.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (foreground != null) {
-			foreground.deleteObserver(this);
+			foreground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (selectedBackground != null) {
-			selectedBackground.deleteObserver(this);
+			selectedBackground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (selectedForeground != null) {
-			selectedForeground.deleteObserver(this);
+			selectedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (focusedBackground != null) {
-			focusedBackground.deleteObserver(this);
+			focusedBackground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (focusedForeground != null) {
-			focusedForeground.deleteObserver(this);
+			focusedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		if (shadowStyle != null) {
-			shadowStyle.deleteObserver(this);
+			shadowStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		return super.delete();
 	}
@@ -241,40 +241,29 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	// * Observer implementation *
 	// *******************************************************************************
 
-	// This might be very dangerous to override this (this has been done in the past)
+	// This might be very dangerous to override this
 	// SGU: Developer really need to think about what he's doing while overriding this
 	@Override
-	public void update(Observable observable, Object notification) {
-		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 
-		super.update(observable, notification);
-
-		/*if (observeParentGRBecauseMyLocationReferToIt) {
-			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
-					|| notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
-					|| notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
-				checkAndUpdateLocationIfRequired();
-			}
-		}*/
-
-		if (notification instanceof ShapeChanged) {
+		if (evt.getPropertyName().equals(ShapeChanged.EVENT_NAME)) {
 			// Reforward notification
 			notifyShapeChanged();
 		}
 
-		if (notification instanceof ShapeNeedsToBeRedrawn) {
+		if (evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
 			// Reforward notification
 			notifyShapeNeedsToBeRedrawn();
 		}
 
-		if (observable instanceof BackgroundStyle) {
+		if (evt.getSource() instanceof BackgroundStyle) {
 			notifyAttributeChange(BACKGROUND);
 		}
-		if (observable instanceof ForegroundStyle) {
-			System.out.println("Hop, je recois " + notification + " pour " + this);
+		if (evt.getSource() instanceof ForegroundStyle) {
 			notifyAttributeChange(FOREGROUND);
 		}
-		if (observable instanceof ShadowStyle) {
+		if (evt.getSource() instanceof ShadowStyle) {
 			notifyAttributeChange(SHADOW_STYLE);
 		}
 	}
@@ -444,7 +433,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public final void setX(double aValue) {
-		FGENotification notification = requireChange(X, aValue);
+		FGEAttributeNotification notification = requireChange(X, aValue);
 		if (notification != null) {
 			// FGEPoint oldLocation = getLocation();
 			x = aValue;
@@ -480,7 +469,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public final void setY(double aValue) {
-		FGENotification notification = requireChange(Y, aValue);
+		FGEAttributeNotification notification = requireChange(Y, aValue);
 		if (notification != null) {
 			// FGEPoint oldLocation = getLocation();
 			y = aValue;
@@ -689,7 +678,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setLocationConstraints(LocationConstraints locationConstraints) {
-		FGENotification notification = requireChange(LOCATION_CONSTRAINTS, locationConstraints);
+		FGEAttributeNotification notification = requireChange(LOCATION_CONSTRAINTS, locationConstraints);
 		if (notification != null) {
 			this.locationConstraints = locationConstraints;
 			hasChanged(notification);
@@ -703,7 +692,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setLocationConstrainedArea(FGEArea locationConstrainedArea) {
-		FGENotification notification = requireChange(LOCATION_CONSTRAINED_AREA, locationConstrainedArea);
+		FGEAttributeNotification notification = requireChange(LOCATION_CONSTRAINED_AREA, locationConstrainedArea);
 		if (notification != null) {
 			this.locationConstrainedArea = locationConstrainedArea;
 			hasChanged(notification);
@@ -872,7 +861,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setAllowToLeaveBounds(boolean allowToLeaveBounds) {
-		FGENotification notification = requireChange(ALLOW_TO_LEAVE_BOUNDS, allowToLeaveBounds);
+		FGEAttributeNotification notification = requireChange(ALLOW_TO_LEAVE_BOUNDS, allowToLeaveBounds);
 		if (notification != null) {
 			this.allowToLeaveBounds = allowToLeaveBounds;
 			hasChanged(notification);
@@ -886,7 +875,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setAdaptBoundsToContents(boolean adaptBoundsToContents) {
-		FGENotification notification = requireChange(ADAPT_BOUNDS_TO_CONTENTS, adaptBoundsToContents);
+		FGEAttributeNotification notification = requireChange(ADAPT_BOUNDS_TO_CONTENTS, adaptBoundsToContents);
 		if (notification != null) {
 			this.adaptBoundsToContents = adaptBoundsToContents;
 			hasChanged(notification);
@@ -1174,7 +1163,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	@Deprecated
 	@Override
 	public void setXConstraints(DataBinding<Double> xConstraints) {
-		FGENotification notification = requireChange(X_CONSTRAINTS, xConstraints);
+		FGEAttributeNotification notification = requireChange(X_CONSTRAINTS, xConstraints);
 		if (notification != null) {
 			if (xConstraints != null) {
 				xConstraints.setOwner(this);
@@ -1198,7 +1187,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	@Deprecated
 	@Override
 	public void setYConstraints(DataBinding<Double> yConstraints) {
-		FGENotification notification = requireChange(Y_CONSTRAINTS, yConstraints);
+		FGEAttributeNotification notification = requireChange(Y_CONSTRAINTS, yConstraints);
 		if (notification != null) {
 			if (yConstraints != null) {
 				yConstraints.setOwner(this);
@@ -1222,7 +1211,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	@Deprecated
 	@Override
 	public void setWidthConstraints(DataBinding<Double> widthConstraints) {
-		FGENotification notification = requireChange(WIDTH_CONSTRAINTS, widthConstraints);
+		FGEAttributeNotification notification = requireChange(WIDTH_CONSTRAINTS, widthConstraints);
 		if (notification != null) {
 			if (widthConstraints != null) {
 				widthConstraints.setOwner(this);
@@ -1246,7 +1235,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	@Deprecated
 	@Override
 	public void setHeightConstraints(DataBinding<Double> heightConstraints) {
-		FGENotification notification = requireChange(HEIGHT_CONSTRAINTS, heightConstraints);
+		FGEAttributeNotification notification = requireChange(HEIGHT_CONSTRAINTS, heightConstraints);
 		if (notification != null) {
 			if (heightConstraints != null) {
 				heightConstraints.setOwner(this);
@@ -1448,14 +1437,14 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(FOREGROUND, aForeground, false);
+		FGEAttributeNotification notification = requireChange(FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
-				foreground.deleteObserver(this);
+				foreground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			foreground = aForeground;
 			if (aForeground != null) {
-				aForeground.addObserver(this);
+				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1471,14 +1460,14 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setSelectedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(SELECTED_FOREGROUND, aForeground, false);
+		FGEAttributeNotification notification = requireChange(SELECTED_FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (selectedForeground != null) {
-				selectedForeground.deleteObserver(this);
+				selectedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			selectedForeground = aForeground;
 			if (aForeground != null) {
-				aForeground.addObserver(this);
+				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1504,14 +1493,14 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setFocusedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(FOCUSED_FOREGROUND, aForeground, false);
+		FGEAttributeNotification notification = requireChange(FOCUSED_FOREGROUND, aForeground, false);
 		if (notification != null) {
 			if (focusedForeground != null) {
-				focusedForeground.deleteObserver(this);
+				focusedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			focusedForeground = aForeground;
 			if (aForeground != null) {
-				aForeground.addObserver(this);
+				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1544,16 +1533,16 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(BACKGROUND, aBackground, false);
+		FGEAttributeNotification notification = requireChange(BACKGROUND, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
-				background.deleteObserver(this);
+				background.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			background = aBackground;
 			// background.setGraphicalRepresentation(this);
 			if (aBackground != null) {
-				aBackground.addObserver(this);
+				aBackground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1581,16 +1570,16 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setSelectedBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(SELECTED_BACKGROUND, aBackground, false);
+		FGEAttributeNotification notification = requireChange(SELECTED_BACKGROUND, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (selectedBackground != null) {
-				selectedBackground.deleteObserver(this);
+				selectedBackground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			selectedBackground = aBackground;
 			// background.setGraphicalRepresentation(this);
 			if (aBackground != null) {
-				aBackground.addObserver(this);
+				aBackground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1616,16 +1605,16 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setFocusedBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(FOCUSED_BACKGROUND, aBackground, false);
+		FGEAttributeNotification notification = requireChange(FOCUSED_BACKGROUND, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (focusedBackground != null) {
-				focusedBackground.deleteObserver(this);
+				focusedBackground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			focusedBackground = aBackground;
 			// background.setGraphicalRepresentation(this);
 			if (aBackground != null) {
-				aBackground.addObserver(this);
+				aBackground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1648,7 +1637,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setBorder(ShapeBorder border) {
-		FGENotification notification = requireChange(BORDER, border);
+		FGEAttributeNotification notification = requireChange(BORDER, border);
 		if (notification != null) {
 			this.border = border;
 			hasChanged(notification);
@@ -1663,14 +1652,14 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setShadowStyle(ShadowStyle aShadowStyle) {
-		FGENotification notification = requireChange(SHADOW_STYLE, aShadowStyle);
+		FGEAttributeNotification notification = requireChange(SHADOW_STYLE, aShadowStyle);
 		if (notification != null) {
 			if (shadowStyle != null) {
-				shadowStyle.deleteObserver(this);
+				shadowStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			this.shadowStyle = aShadowStyle;
 			if (aShadowStyle != null) {
-				aShadowStyle.addObserver(this);
+				aShadowStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
 		}
@@ -1746,17 +1735,17 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	public void setShapeSpecification(ShapeSpecification aShape) {
 		if (shape != aShape) {
 			if (shape != null) {
-				shape.deleteObserver(this);
+				shape.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
-			aShape.addObserver(this);
-			FGENotification notification = requireChange(SHAPE, aShape);
+			aShape.getPropertyChangeSupport().addPropertyChangeListener(this);
+			FGEAttributeNotification notification = requireChange(SHAPE, aShape);
 			if (notification != null) {
 				ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
 				this.shape = aShape;
 				// shape.rebuildControlPoints();
 				hasChanged(notification);
 				setChanged();
-				notifyObservers(new FGENotification(SHAPE_TYPE, oldType, aShape.getShapeType()));
+				notifyObservers(new FGEAttributeNotification(SHAPE_TYPE, oldType, aShape.getShapeType()));
 				// notifyShapeChanged();
 			}
 		}
@@ -1876,7 +1865,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setIsFloatingLabel(boolean isFloatingLabel) {
-		FGENotification notification = requireChange(IS_FLOATING_LABEL, isFloatingLabel);
+		FGEAttributeNotification notification = requireChange(IS_FLOATING_LABEL, isFloatingLabel);
 		if (notification != null) {
 			this.isFloatingLabel = isFloatingLabel;
 			hasChanged(notification);
@@ -1890,7 +1879,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setRelativeTextX(double textX) {
-		FGENotification notification = requireChange(RELATIVE_TEXT_X, textX);
+		FGEAttributeNotification notification = requireChange(RELATIVE_TEXT_X, textX);
 		if (notification != null) {
 			this.relativeTextX = textX;
 			hasChanged(notification);
@@ -1904,7 +1893,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setRelativeTextY(double textY) {
-		FGENotification notification = requireChange(RELATIVE_TEXT_Y, textY);
+		FGEAttributeNotification notification = requireChange(RELATIVE_TEXT_Y, textY);
 		if (notification != null) {
 			this.relativeTextY = textY;
 			hasChanged(notification);

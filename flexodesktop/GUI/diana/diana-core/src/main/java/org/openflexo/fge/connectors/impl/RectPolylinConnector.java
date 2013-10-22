@@ -6,8 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +50,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ConcatenedList;
 
 public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpecification> {
@@ -84,9 +83,10 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 
 	private FGERectPolylin _deserializedPolylin;
 
-	//private static final FGEModelFactory DEBUG_FACTORY = FGECoreUtils.TOOLS_FACTORY;
-	//private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
-	//private static final ForegroundStyle DEBUG_BLACK_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.BLACK, 3.0f, DashStyle.PLAIN_STROKE);
+	// private static final FGEModelFactory DEBUG_FACTORY = FGECoreUtils.TOOLS_FACTORY;
+	// private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
+	// private static final ForegroundStyle DEBUG_BLACK_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.BLACK, 3.0f,
+	// DashStyle.PLAIN_STROKE);
 
 	// *******************************************************************************
 	// * Constructor *
@@ -147,15 +147,15 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 				polylin.debugPaint(g);
 			}
 		} else {*/
-			g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getForeground());
-			if (polylin != null) {
-				if (getConnectorSpecification().getIsRounded()) {
-					polylin.paintWithRounds(g, getConnectorSpecification().getArcSize());
-				} else {
-					polylin.paint(g);
-				}
+		g.setDefaultForeground(connectorNode.getGraphicalRepresentation().getForeground());
+		if (polylin != null) {
+			if (getConnectorSpecification().getIsRounded()) {
+				polylin.paintWithRounds(g, getConnectorSpecification().getArcSize());
+			} else {
+				polylin.paint(g);
 			}
-		//}
+		}
+		// }
 
 		/*
 		 * if (debugPolylin != null) { g.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1.0f, DashStyle.PLAIN_STROKE));
@@ -2137,37 +2137,33 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-		super.update(observable, notification);
+	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
 
-		// TODO: manage crossedControlPoint and polylin (see _deserializedPolylin)
+		if (evt.getSource() == getConnectorSpecification()) {
 
-		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
-			// Those notifications are forwarded by the connector specification
-			FGENotification notif = (FGENotification) notification;
-
-			if (notif.getParameter() == RectPolylinConnectorSpecification.RECT_POLYLIN_CONSTRAINTS) {
+			if (evt.getPropertyName() == RectPolylinConnectorSpecification.RECT_POLYLIN_CONSTRAINTS.getName()) {
 				p_start = null;
 				p_end = null;
 				updateLayout();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorSpecification.STRAIGHT_LINE_WHEN_POSSIBLE
-					|| notif.getParameter() == RectPolylinConnectorSpecification.START_ORIENTATION
-					|| notif.getParameter() == RectPolylinConnectorSpecification.END_ORIENTATION
-					|| notif.getParameter() == RectPolylinConnectorSpecification.PIXEL_OVERLAP
-					|| notif.getParameter() == RectPolylinConnectorSpecification.IS_ROUNDED
-					|| notif.getParameter() == RectPolylinConnectorSpecification.ARC_SIZE) {
+			} else if (evt.getPropertyName() == RectPolylinConnectorSpecification.STRAIGHT_LINE_WHEN_POSSIBLE.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.START_ORIENTATION.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.END_ORIENTATION.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.PIXEL_OVERLAP.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.IS_ROUNDED.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.ARC_SIZE.getName()) {
 				updateLayout();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_DRAGGABLE
-					|| notif.getParameter() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_DRAGGABLE
-					|| notif.getParameter() == RectPolylinConnectorSpecification.FIXED_START_LOCATION
-					|| notif.getParameter() == RectPolylinConnectorSpecification.FIXED_END_LOCATION) {
+			} else if (evt.getPropertyName() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_DRAGGABLE.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_DRAGGABLE.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.FIXED_START_LOCATION.getName()
+					|| evt.getPropertyName() == RectPolylinConnectorSpecification.FIXED_END_LOCATION.getName()) {
 				updateLayout();
 				// Force control points to be rebuild in order to get draggable feature
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_FIXED) {
+			} else if (evt.getPropertyName() == RectPolylinConnectorSpecification.IS_STARTING_LOCATION_FIXED.getName()) {
 				if (getConnectorSpecification().getIsStartingLocationFixed() && fixedStartLocationRelativeToStartObject == null
 						&& p_start != null) {
 					// In this case, we can initialize fixed start location to its current value
@@ -2177,7 +2173,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 				updateLayout();
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_FIXED) {
+			} else if (evt.getPropertyName() == RectPolylinConnectorSpecification.IS_ENDING_LOCATION_FIXED.getName()) {
 				if (getConnectorSpecification().getIsEndingLocationFixed() && fixedEndLocationRelativeToEndObject == null && p_end != null) {
 					// In this case, we can initialize fixed start location to its current value
 					fixedEndLocationRelativeToEndObject = FGEUtils.convertNormalizedPoint(connectorNode, p_end.getPoint(), getEndNode());
@@ -2185,7 +2181,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 				updateLayout();
 				_rebuildControlPoints();
 				connectorNode.notifyConnectorModified();
-			} else if (notif.getParameter() == RectPolylinConnectorSpecification.ADJUSTABILITY) {
+			} else if (evt.getPropertyName() == RectPolylinConnectorSpecification.ADJUSTABILITY.getName()) {
 				if (polylin != null) {
 					updateWithNewPolylin(polylin);
 				}

@@ -22,10 +22,9 @@ package org.openflexo.fge;
 
 import java.awt.Dimension;
 import java.awt.Stroke;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
@@ -53,7 +52,7 @@ import org.openflexo.model.annotations.XMLElement;
  *            the represented type
  */
 @ModelEntity(isAbstract = true)
-public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
+public interface GraphicalRepresentation extends FGEObject, Bindable, PropertyChangeListener {
 
 	// Property keys
 
@@ -544,8 +543,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public void notifyDrawableRemoved(GraphicalRepresentation removedGR);
 
-	@Override
-	public void update(Observable observable, Object notification);
+	// @Override
+	// public void update(Observable observable, Object notification);
 
 	/*public Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
 

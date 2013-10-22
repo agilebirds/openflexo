@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -120,7 +120,7 @@ public class ExampleDiagramShapeGR extends ShapeGraphicalRepresentation<ExampleD
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+		if (arg instanceof FGEAttributeNotification && ((FGEAttributeNotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getCalcDrawingShape() != null
 				&& getCalcDrawingShape().getExampleDiagram() != null && !getCalcDrawingShape().getExampleDiagram().ignoreNotifications()) {
 			getCalcDrawingShape().setChanged();

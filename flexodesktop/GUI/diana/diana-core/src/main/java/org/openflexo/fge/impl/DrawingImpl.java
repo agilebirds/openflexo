@@ -19,10 +19,10 @@
  */
 package org.openflexo.fge.impl;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +42,7 @@ import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
+import org.openflexo.fge.notifications.FGENotification;
 
 /**
  * This class is the default implementation for all objects representing a graphical drawing, that is a complex graphical representation
@@ -52,7 +53,7 @@ import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
  * @param <M>
  *            Type of object which is handled as root object
  */
-public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
+public abstract class DrawingImpl<M> implements Drawing<M> {
 
 	static final Logger logger = Logger.getLogger(DrawingImpl.class.getPackage().getName());
 
@@ -68,7 +69,10 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	private FGEModelFactory factory;
 	private PersistenceMode persistenceMode;
 
+	private PropertyChangeSupport pcSupport;
+
 	public DrawingImpl(M model, FGEModelFactory factory, PersistenceMode persistenceMode) {
+		pcSupport = new PropertyChangeSupport(this);
 		this.model = model;
 		this.factory = factory;
 		this.persistenceMode = persistenceMode;
@@ -325,6 +329,14 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	public final void disableGraphicalHierarchy() {
 		isGraphicalHierarchyEnabled = false;
 	}*/
+
+	@Deprecated
+	public void setChanged() {
+	}
+
+	public void notifyObservers(FGENotification notification) {
+		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+	}
 
 	private void fireGraphicalObjectHierarchyRebuildStarted() {
 		setChanged();
@@ -894,4 +906,13 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	public void prepareVisualization() {
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
 }

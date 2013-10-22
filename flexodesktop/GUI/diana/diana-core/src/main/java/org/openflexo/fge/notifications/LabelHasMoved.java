@@ -19,9 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-public class LabelHasMoved extends FGENotification {
+public class LabelHasMoved extends FGEEvent {
+
+	public static final String EVENT_NAME = "LabelHasMoved";
 
 	public LabelHasMoved() {
-		super("location", null, null);
+		super(EVENT_NAME);
 	}
 }

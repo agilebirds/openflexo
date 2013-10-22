@@ -24,7 +24,7 @@ import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.ComplexCurveConstruction;
 import org.openflexo.fge.geomedit.gr.ComplexCurveGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class ComplexCurve extends GeometricObject<FGEComplexCurve> {
 
@@ -72,7 +72,7 @@ public class ComplexCurve extends GeometricObject<FGEComplexCurve> {
 		if (aClosure != getClosure()) {
 			Closure oldClosure = getClosure();
 			getConstruction().setClosure(aClosure);
-			getGraphicalRepresentation().notify(new FGENotification("closure", oldClosure, aClosure));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("closure", oldClosure, aClosure));
 		}
 	}
 

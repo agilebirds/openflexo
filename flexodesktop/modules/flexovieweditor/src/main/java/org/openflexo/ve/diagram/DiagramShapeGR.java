@@ -26,7 +26,7 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -175,7 +175,7 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentationImpl implements 
 	 * 
 	 */
 	@Override
-	protected void hasChanged(FGENotification notification) {
+	protected void hasChanged(FGEAttributeNotification notification) {
 		super.hasChanged(notification);
 		if (isUpdating) {
 			return;

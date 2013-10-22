@@ -19,9 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-public class LabelWillMove extends FGENotification {
+public class LabelWillMove extends FGEEvent {
+
+	public static final String EVENT_NAME = "ConnectorModified";
 
 	public LabelWillMove() {
-		super("location", null, null);
+		super(EVENT_NAME);
 	}
 }

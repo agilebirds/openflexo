@@ -19,9 +19,11 @@
  */
 package org.openflexo.fge.notifications;
 
-public class ObjectHasResized extends FGENotification {
+public class ObjectHasResized extends FGEEvent {
+
+	public static final String EVENT_NAME = "ObjectHasResized";
 
 	public ObjectHasResized() {
-		super("location", null, null);
+		super(EVENT_NAME);
 	}
 }

@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.gr.EllipsGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class Circle extends Ellips {
 
@@ -77,7 +77,7 @@ public class Circle extends Ellips {
 		if (centerX != getCenterX()) {
 			double oldCenterX = getCenterX();
 			getGeometricObject().x = centerX - getGeometricObject().getRadius();
-			getGraphicalRepresentation().notify(new FGENotification("centerX", oldCenterX, centerX));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("centerX", oldCenterX, centerX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -90,7 +90,7 @@ public class Circle extends Ellips {
 		if (centerY != getCenterY()) {
 			double oldCenterY = getCenterY();
 			getGeometricObject().y = centerY - getGeometricObject().getRadius();
-			getGraphicalRepresentation().notify(new FGENotification("centerY", oldCenterY, centerY));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("centerY", oldCenterY, centerY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -103,7 +103,7 @@ public class Circle extends Ellips {
 		if (aRadius != getRadius()) {
 			double oldRadius = getRadius();
 			getGeometricObject().setRadius(aRadius);
-			getGraphicalRepresentation().notify(new FGENotification("radius", oldRadius, aRadius));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("radius", oldRadius, aRadius));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}

@@ -25,7 +25,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -58,6 +60,7 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * This interface is implemented by all objects representing a graphical drawing<br>
@@ -75,7 +78,7 @@ import org.openflexo.model.annotations.PropertyIdentifier;
  * @param <M>
  *            Type of object which is handled as root object: this is the model represented by the drawing
  */
-public interface Drawing<M> {
+public interface Drawing<M> extends HasPropertyChangeSupport {
 
 	/**
 	 * Encode the way the internal persistance of values for graphical properties is performed.<br>
@@ -97,10 +100,16 @@ public interface Drawing<M> {
 	}
 
 	/**
-	 * This interfaces encodes a node in the drawing tree. A node essentially references {@link GraphicalRepresentation} and the represented
-	 * drawable (an arbitrary java {@link Object}).<br>
+	 * This interfaces encodes a node in the drawing tree.<br>
+	 * A node essentially references {@link GraphicalRepresentation} and the represented drawable (an arbitrary java {@link Object}).<br>
+	 * The {@link GraphicalRepresentation} is observed using {@link PropertyChangeSupport} scheme<br>
+	 * The drawable object may be observed both ways:
+	 * <ul>
+	 * <li>(preferably)using {@link PropertyChangeSupport} scheme, if drawable implements {@link HasPropertyChangeSupport} mechanism</li>
+	 * <li>(preferably)using classical {@link Observer}/{@link Observable} scheme, if drawable extends {@link Observable}</li>
+	 * </ul>
 	 * 
-	 * Also reference the {@link GRBinding} which is the specification of a node in the drawing tree
+	 * Also referenceq the {@link GRBinding} which is the specification of a node in the drawing tree
 	 * 
 	 * @author sylvain
 	 * 
@@ -109,8 +118,8 @@ public interface Drawing<M> {
 	 * @param <GR>
 	 *            Type of GraphicalRepresentation represented by this node
 	 */
-	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer,
-			PropertyChangeListener, IObservable {
+	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, PropertyChangeListener,
+			Observer, HasPropertyChangeSupport {
 
 		public static GRParameter<Boolean> IS_FOCUSED = GRParameter.getGRParameter(DrawingTreeNode.class, DrawingTreeNode.IS_FOCUSED_KEY,
 				Boolean.class);

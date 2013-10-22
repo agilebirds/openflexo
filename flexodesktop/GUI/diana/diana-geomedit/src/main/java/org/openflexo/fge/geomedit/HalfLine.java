@@ -23,7 +23,7 @@ import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.construction.HalfLineConstruction;
 import org.openflexo.fge.geomedit.gr.HalfLineGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public class HalfLine extends GeometricObject<FGEHalfLine> {
 
@@ -71,7 +71,7 @@ public class HalfLine extends GeometricObject<FGEHalfLine> {
 		if (limitX != getLimitX()) {
 			double oldLimitX = getLimitX();
 			getGeometricObject().setX1(limitX);
-			getGraphicalRepresentation().notify(new FGENotification("x1", oldLimitX, limitX));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x1", oldLimitX, limitX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -84,7 +84,7 @@ public class HalfLine extends GeometricObject<FGEHalfLine> {
 		if (limitY != getLimitY()) {
 			double oldLimitY = getLimitY();
 			getGeometricObject().setY1(limitY);
-			getGraphicalRepresentation().notify(new FGENotification("y1", oldLimitY, limitY));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y1", oldLimitY, limitY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -97,7 +97,7 @@ public class HalfLine extends GeometricObject<FGEHalfLine> {
 		if (oppositeX != getOppositeX()) {
 			double oldOppositeX = getOppositeX();
 			getGeometricObject().setX2(oppositeX);
-			getGraphicalRepresentation().notify(new FGENotification("x2", oldOppositeX, oppositeX));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("x2", oldOppositeX, oppositeX));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}
@@ -110,7 +110,7 @@ public class HalfLine extends GeometricObject<FGEHalfLine> {
 		if (oppositeY != getOppositeY()) {
 			double oldOppositeY = getOppositeY();
 			getGeometricObject().setY2(oppositeY);
-			getGraphicalRepresentation().notify(new FGENotification("y2", oldOppositeY, oppositeY));
+			getGraphicalRepresentation().notify(new FGEAttributeNotification("y2", oldOppositeY, oppositeY));
 			getGraphicalRepresentation().notifyGeometryChanged();
 		}
 	}

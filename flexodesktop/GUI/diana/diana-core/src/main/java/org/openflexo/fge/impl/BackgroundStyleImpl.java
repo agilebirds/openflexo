@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GRParameter;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class BackgroundStyleImpl extends FGEStyleImpl implements BackgroundStyle {
 
@@ -106,7 +106,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			float oldValue = transparencyLevel;
 			this.transparencyLevel = aLevel;
 			setChanged();
-			notifyObservers(new FGENotification(TRANSPARENCY_LEVEL, oldValue, aLevel));
+			notifyObservers(new FGEAttributeNotification(TRANSPARENCY_LEVEL, oldValue, aLevel));
 		}
 	}
 
@@ -121,7 +121,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			boolean oldValue = useTransparency;
 			this.useTransparency = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(USE_TRANSPARENCY, oldValue, aFlag));
+			notifyObservers(new FGEAttributeNotification(USE_TRANSPARENCY, oldValue, aFlag));
 		}
 	}
 

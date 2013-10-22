@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -41,7 +43,7 @@ import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.notifications.BindingChanged;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
@@ -49,7 +51,24 @@ import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> extends Observable implements DrawingTreeNode<O, GR> {
+/**
+ * This is the base implementation of a node in the drawing tree. (see DrawingTreeNode<O,GR)<br>
+ * A node essentially references {@link GraphicalRepresentation} and the represented drawable (an arbitrary java {@link Object}).<br>
+ * The {@link GraphicalRepresentation} is observed using {@link PropertyChangeSupport} scheme<br>
+ * The drawable object may be observed both ways:
+ * <ul>
+ * <li>(preferably)using {@link PropertyChangeSupport} scheme, if drawable implements {@link HasPropertyChangeSupport} mechanism</li>
+ * <li>(preferably)using classical {@link Observer}/{@link Observable} scheme, if drawable extends {@link Observable}</li>
+ * </ul>
+ * 
+ * Also referenceq the {@link GRBinding} which is the specification of a node in the drawing tree
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ * @param <GR>
+ */
+public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> implements DrawingTreeNode<O, GR> {
 
 	private static final Logger logger = Logger.getLogger(DrawingTreeNodeImpl.class.getPackage().getName());
 
@@ -73,12 +92,17 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private boolean isSelected = false;
 	private boolean isFocused = false;
 
+	private PropertyChangeSupport pcSupport;
+
 	/**
 	 * Store temporary properties that may not be serialized
 	 */
 	private Map<GRParameter, Object> propertyValues = new HashMap<GRParameter, Object>();
 
 	protected DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
+
+		pcSupport = new PropertyChangeSupport(this);
+
 		this.drawing = drawingImpl;
 		// logger.info("New DrawingTreeNode for "+aDrawable+" under "+aParentDrawable+" (is "+this+")");
 		this.drawable = drawable;
@@ -93,7 +117,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		// parentNode.addChild(this);
 
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
-		graphicalRepresentation.addObserver(this);
+		graphicalRepresentation.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		// System.out.println("Hop");
 
@@ -107,6 +131,17 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		alterings = new ArrayList<ConstraintDependency>();
 
 		// controlAreas = new ArrayList<ControlArea<?>>();
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO check this
+		return null;
 	}
 
 	@Override
@@ -231,7 +266,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		parentNode = null;
 
 		if (graphicalRepresentation != null) {
-			graphicalRepresentation.deleteObserver(this);
+			graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		graphicalRepresentation = null;
 
@@ -366,14 +401,14 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	// * Observer implementation *
 	// *******************************************************************************
 
-	protected Set<Observable> temporaryIgnoredObservables = new HashSet<Observable>();
+	protected Set<HasPropertyChangeSupport> temporaryIgnoredObservables = new HashSet<HasPropertyChangeSupport>();
 
 	/**
 	 * 
 	 * @param observable
 	 * @return a flag indicating if observable was added to the list of ignored observables
 	 */
-	protected boolean ignoreNotificationsFrom(Observable observable) {
+	protected boolean ignoreNotificationsFrom(HasPropertyChangeSupport observable) {
 		if (temporaryIgnoredObservables.contains(observable)) {
 			return false;
 		}
@@ -381,7 +416,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		return true;
 	}
 
-	protected void observeAgain(Observable observable) {
+	protected void observeAgain(HasPropertyChangeSupport observable) {
 		temporaryIgnoredObservables.remove(observable);
 	}
 
@@ -404,52 +439,70 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		logger.warning("NOT IMPLEMENTED: received: " + evt);
+	public void update(Observable o, Object arg) {
+		if (o == getDrawable()) {
+			logger.info("Received a notification from my drawable that something change: " + arg);
+			getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
+			getDrawing().updateGraphicalObjectsHierarchy(drawable);
+		}
 	}
 
 	@Override
-	public void update(Observable observable, Object notification) {
-
-		if (temporaryIgnoredObservables.contains(observable)) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
 		}
 
-		if (observable == getDrawable()) {
-			logger.info("Received a notification from my drawable that something change: " + notification);
+		if (evt.getSource() == getDrawable()) {
+			logger.info("Received a notification from my drawable that something change: " + evt);
 			getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
 			getDrawing().updateGraphicalObjectsHierarchy(drawable);
 		}
 
-		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
+		if (evt.getSource() == getGraphicalRepresentation()) {
 			// Those notifications are forwarded by my graphical representation
-			FGENotification notif = (FGENotification) notification;
 
 			setChanged();
-			notifyObservers(notification);
+			notifyObservers(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 
-			if (notif instanceof BindingChanged) {
+			/*if (notif instanceof BindingChanged) {
 				updateDependanciesForBinding(((BindingChanged) notif).getBinding());
-			}
+			}*/
 
 			/*if (notif.getParameter() == Parameters.text) {
 				checkAndUpdateDimensionBoundsIfRequired();
 			}*/
 		}
 
-		if (observable instanceof TextStyle) {
+		if (evt.getSource() instanceof TextStyle) {
 			notifyAttributeChanged(GraphicalRepresentation.TEXT_STYLE, null, getGraphicalRepresentation().getTextStyle());
 		}
 	}
 
-	public void notifyAttributeChanged(GRParameter parameter, Object oldValue, Object newValue) {
-		propagateConstraintsAfterModification(parameter);
-		setChanged();
-		notifyObservers(new FGENotification(parameter, oldValue, newValue));
+	@Deprecated
+	public void setChanged() {
 	}
 
-	protected void propagateConstraintsAfterModification(GRParameter parameter) {
+	public void notifyObservers(FGENotification notification) {
+		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+	}
+
+	public void notifyObservers(String propertyName, Object oldValue, Object newValue) {
+		getPropertyChangeSupport().firePropertyChange(propertyName, oldValue, newValue);
+	}
+
+	public <T> void notifyAttributeChanged(GRParameter<T> parameter, T oldValue, T newValue) {
+		propagateConstraintsAfterModification(parameter);
+		setChanged();
+		notifyObservers(new FGEAttributeNotification<T>(parameter, oldValue, newValue));
+	}
+
+	public void forward(PropertyChangeEvent evt) {
+		getPropertyChangeSupport().firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+	}
+
+	protected <T> void propagateConstraintsAfterModification(GRParameter<T> parameter) {
 		for (ConstraintDependency dependency : alterings) {
 			if (dependency.requiredParameter == parameter) {
 				((DrawingTreeNodeImpl<?, ?>) dependency.requiringGR).computeNewConstraint(dependency);
@@ -768,7 +821,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		if (aFlag != isFocused) {
 			isFocused = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(IS_FOCUSED, !isFocused, isFocused));
+			notifyObservers(new FGEAttributeNotification(IS_FOCUSED, !isFocused, isFocused));
 		}
 	}
 
@@ -782,7 +835,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		if (aFlag != isSelected) {
 			isSelected = aFlag;
 			setChanged();
-			notifyObservers(new FGENotification(IS_SELECTED, !isSelected, isSelected));
+			notifyObservers(new FGEAttributeNotification(IS_SELECTED, !isSelected, isSelected));
 		}
 	}
 
@@ -926,10 +979,10 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		// If UniqueGraphicalRepresentations is active, use GR to store graphical properties
 
 		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
-			boolean wasObserving = ignoreNotificationsFrom((Observable) getGraphicalRepresentation());
+			boolean wasObserving = ignoreNotificationsFrom(getGraphicalRepresentation());
 			getGraphicalRepresentation().setObjectForKey(value, parameter.getName());
 			if (wasObserving) {
-				observeAgain((Observable) getGraphicalRepresentation());
+				observeAgain(getGraphicalRepresentation());
 			}
 		}
 

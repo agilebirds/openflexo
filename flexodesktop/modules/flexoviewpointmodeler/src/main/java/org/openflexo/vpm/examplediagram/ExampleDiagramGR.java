@@ -22,7 +22,7 @@ package org.openflexo.vpm.examplediagram;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -88,7 +88,7 @@ public class ExampleDiagramGR extends DrawingGraphicalRepresentation<ExampleDiag
 	@Override
 	public void notifyObservers(Object arg) {
 		super.notifyObservers(arg);
-		if (arg instanceof FGENotification && ((FGENotification) arg).isModelNotification() && getDrawing() != null
+		if (arg instanceof FGEAttributeNotification && ((FGEAttributeNotification) arg).isModelNotification() && getDrawing() != null
 				&& !getDrawing().ignoreNotifications() && getShema() != null && !getShema().ignoreNotifications()) {
 			getShema().setChanged();
 		}
