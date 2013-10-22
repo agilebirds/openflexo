@@ -9,6 +9,6 @@
 #foreach($v in $views)
     #if(!$v.getDontGenerate())
 	    #set($object = $v)
-	    #parse($generator.getTemplatePath("docx_tocentry_view.xml"))
+	    #parse($generator.getTemplatePath("docx_tocentry_view.xml.vm"))
 	#end
 #end 
