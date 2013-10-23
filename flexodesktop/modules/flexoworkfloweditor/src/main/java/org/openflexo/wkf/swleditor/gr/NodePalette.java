@@ -29,6 +29,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -60,6 +62,7 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.Role;
+import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.action.CreateAssociation;
 import org.openflexo.foundation.wkf.action.CreateEdge;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
@@ -67,7 +70,9 @@ import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.FlexoNode;
+import org.openflexo.foundation.wkf.node.NodeCompound;
 import org.openflexo.foundation.wkf.node.OperationNode;
+import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.swleditor.AbstractWKFPalette.WKFPaletteElement;
@@ -432,7 +437,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 	}
 
 	private WKFNode clone(FlexoNode flexoNode) {
-		return (WKFNode) flexoNode.cloneUsingXMLMapping(true);
+		NodeCompound node = new NodeCompound(flexoNode.getProcess(), Arrays.asList((PetriGraphNode) flexoNode),
+				Collections.<WKFArtefact> emptyList());
+		return ((NodeCompound) node.cloneUsingXMLMapping()).getFirstNode();
 	}
 
 	private void resetVariables() {
