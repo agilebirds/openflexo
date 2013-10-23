@@ -1411,14 +1411,36 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	}
 
+	/**
+	 * Convenient method used to retrieve foreground style property value
+	 */
 	@Override
 	public ForegroundStyle getForegroundStyle() {
 		return getPropertyValue(ShapeGraphicalRepresentation.FOREGROUND);
 	}
 
+	/**
+	 * Convenient method used to set foreground style property value
+	 */
 	@Override
 	public void setForegroundStyle(ForegroundStyle aValue) {
 		setPropertyValue(ShapeGraphicalRepresentation.FOREGROUND, aValue);
+	}
+
+	/**
+	 * Convenient method used to retrieve shadow style property value
+	 */
+	@Override
+	public ShadowStyle getShadowStyle() {
+		return getPropertyValue(ShapeGraphicalRepresentation.SHADOW_STYLE);
+	}
+
+	/**
+	 * Convenient method used to set shadow style property value
+	 */
+	@Override
+	public void setShadowStyle(ShadowStyle style) {
+		setPropertyValue(ShapeGraphicalRepresentation.SHADOW_STYLE, style);
 	}
 
 }

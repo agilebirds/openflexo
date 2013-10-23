@@ -42,7 +42,7 @@ import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
- * Abstraction of a graphical property container synchronized with a selection<br>
+ * Abstraction of a graphical property container synchronized with and reflecting a selection<br>
  * <ul>
  * <li>If selection is empty, then manage a default value (this value will be used to build new objects)</li>
  * <li>If selection is unique, manage value of unique selection</li>
@@ -127,12 +127,14 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	public <T> void setPropertyValue(GRParameter<T> parameter, T value) {
 		T oldValue = getPropertyValue(parameter);
+		// System.out.println("Sets from " + oldValue + " to " + value);
 		if (requireChange(oldValue, value)) {
 			if (getSelection().size() == 0) {
 				defaultValue.setObjectForKey(value, parameter.getName());
 			} else {
 				for (DrawingTreeNode<?, ?> n : getSelection()) {
 					S style = getStyle(n);
+					// System.out.println("For " + n + " use " + style + " and sets value of " + parameter.getName() + " with " + value);
 					style.setObjectForKey(value, parameter.getName());
 				}
 			}
@@ -164,7 +166,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 * 
 	 * @return
 	 */
-	public abstract List<DrawingTreeNode<?, ?>> getSelection();
+	public abstract List<? extends DrawingTreeNode<?, ?>> getSelection();
 
 	/**
 	 * Return relevant style for a given {@link DrawingTreeNode}
@@ -173,6 +175,15 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 * @return
 	 */
 	public abstract S getStyle(DrawingTreeNode<?, ?> node);
+
+	/**
+	 * Return value identified as default values (values that are used when selection is empty)
+	 * 
+	 * @return
+	 */
+	public S getDefaultValue() {
+		return defaultValue;
+	}
 
 	/**
 	 * Generate new style using supplied factory and inspected property values
@@ -228,7 +239,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	private void fireChangedProperties() {
 		Class<?> styleClass = TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
-		System.out.println("Selection changed for inspected style " + styleClass);
+		// System.out.println("Selection changed for inspected style " + styleClass);
 		for (GRParameter<?> p : GRParameter.getGRParameters(styleClass)) {
 			fireChangedProperty(p);
 		}
@@ -243,7 +254,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		T storedValue = (T) storedPropertyValues.get(p);
 		T newValue = _getPropertyValue(p);
 		if (requireChange(storedValue, newValue)) {
-			System.out.println("Notifying " + p.getName());
+			// System.out.println("Notifying " + p.getName());
 			pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
 			setChanged();
 			notifyObservers(new FGEAttributeNotification<T>(p, storedValue, newValue));

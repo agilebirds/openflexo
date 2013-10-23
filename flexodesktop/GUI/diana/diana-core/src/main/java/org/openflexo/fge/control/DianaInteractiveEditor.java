@@ -24,16 +24,15 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
+import org.openflexo.fge.control.tools.InspectedShadowStyle;
+import org.openflexo.fge.control.tools.InspectedTextStyle;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
@@ -63,8 +62,10 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	// private ForegroundStyle currentForegroundStyle;
 	private InspectedForegroundStyle inspectedForegroundStyle;
 	private BackgroundStyle currentBackgroundStyle;
-	private TextStyle currentTextStyle;
-	private ShadowStyle currentShadowStyle;
+	// private TextStyle currentTextStyle;
+	private InspectedTextStyle inspectedTextStyle;
+	// private ShadowStyle currentShadowStyle;
+	private InspectedShadowStyle inspectedShadowStyle;
 	private ShapeSpecification currentShape;
 
 	// private Vector<DrawingPalette> palettes;
@@ -75,10 +76,11 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
 		// currentForegroundStyle = factory.makeDefaultForegroundStyle();
 		inspectedForegroundStyle = new InspectedForegroundStyle(this);
-
 		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		currentTextStyle = factory.makeDefaultTextStyle();
-		currentShadowStyle = factory.makeDefaultShadowStyle();
+		// currentTextStyle = factory.makeDefaultTextStyle();
+		inspectedTextStyle = new InspectedTextStyle(this);
+		// currentShadowStyle = factory.makeDefaultShadowStyle();
+		inspectedShadowStyle = new InspectedShadowStyle(this);
 		currentShape = factory.makeShape(ShapeType.RECTANGLE);
 		setCurrentTool(EditorTool.SelectionTool);
 		// palettes = new Vector<DrawingPalette>();
@@ -99,22 +101,10 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		palettes = null;*/
 	}
 
-	@Override
-	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
-		super.addToSelectedObjects(aNode);
+	protected void fireSelectionUpdated() {
 		inspectedForegroundStyle.fireSelectionUpdated();
-	}
-
-	@Override
-	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
-		super.removeFromSelectedObjects(aNode);
-		inspectedForegroundStyle.fireSelectionUpdated();
-	}
-
-	@Override
-	public void clearSelection() {
-		super.clearSelection();
-		inspectedForegroundStyle.fireSelectionUpdated();
+		inspectedTextStyle.fireSelectionUpdated();
+		inspectedShadowStyle.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -173,21 +163,29 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		this.currentBackgroundStyle = currentBackgroundStyle;
 	}
 
-	public TextStyle getCurrentTextStyle() {
+	/*public TextStyle getCurrentTextStyle() {
 		return currentTextStyle;
 	}
 
 	public void setCurrentTextStyle(TextStyle currentTextStyle) {
 		this.currentTextStyle = currentTextStyle;
+	}*/
+
+	public InspectedTextStyle getInspectedTextStyle() {
+		return inspectedTextStyle;
 	}
 
-	public ShadowStyle getCurrentShadowStyle() {
+	public InspectedShadowStyle getInspectedShadowStyle() {
+		return inspectedShadowStyle;
+	}
+
+	/*public ShadowStyle getCurrentShadowStyle() {
 		return currentShadowStyle;
 	}
 
 	public void setCurrentShadowStyle(ShadowStyle currentShadowStyle) {
 		this.currentShadowStyle = currentShadowStyle;
-	}
+	}*/
 
 	public ShapeSpecification getCurrentShape() {
 		return currentShape;

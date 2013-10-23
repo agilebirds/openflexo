@@ -633,6 +633,10 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 
 		public void setForegroundStyle(ForegroundStyle aValue);
 
+		public ShadowStyle getShadowStyle();
+
+		public void setShadowStyle(ShadowStyle style);
+
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {

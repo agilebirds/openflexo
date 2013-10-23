@@ -26,9 +26,6 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
-import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
-import org.openflexo.fge.control.notifications.ObjectRemovedFromSelection;
-import org.openflexo.fge.control.notifications.SelectionCleared;
 import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
@@ -70,6 +67,20 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 		return null;
 	}
 
+	public InspectedTextStyle getInspectedTextStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedTextStyle();
+		}
+		return null;
+	}
+
+	public InspectedShadowStyle getInspectedShadowStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedShadowStyle();
+		}
+		return null;
+	}
+
 	/*@Override
 	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
 		super.attachToEditor(editor);
@@ -92,11 +103,11 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(ObjectAddedToSelection.EVENT_NAME)
+		/*if (evt.getPropertyName().equals(ObjectAddedToSelection.EVENT_NAME)
 				|| evt.getPropertyName().equals(ObjectRemovedFromSelection.EVENT_NAME)
 				|| evt.getPropertyName().equals(SelectionCleared.EVENT_NAME)) {
 			updateSelection();
-		}
+		}*/
 	}
 
 	private void updateSelection() {
@@ -104,14 +115,14 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 		// getForegroundStyleInspector().setData(inspectedForegroundStyle);
 		// inspectedForegroundStyle.fireSelectionUpdated();
 		if (getSelection().size() > 0) {
-			getTextStyleInspector().setData(getSelection().get(0).getTextStyle());
+			// getTextStyleInspector().setData(getSelection().get(0).getTextStyle());
 			/*if (getSelectedShapes().size() > 0) {
 				getForegroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getForeground());
 			} else if (getSelectedConnectors().size() > 0) {
 				getForegroundStyleInspector().setData(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
 			}*/
 		} else {
-			getTextStyleInspector().setData(getEditor().getCurrentTextStyle());
+			// getTextStyleInspector().setData(getEditor().getCurrentTextStyle());
 			// getForegroundStyleInspector().setData(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
@@ -119,13 +130,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
+			// getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
 			shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeInspector().setData(getEditor().getCurrentShape());
 			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
-			getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
+			// getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
 		}
 	}
 

@@ -222,10 +222,10 @@ public class DiagramEditorPalette extends DrawingPalette {
 					shapeGR.setBackground((BackgroundStyle) getEditor().getCurrentBackgroundStyle().clone());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle((TextStyle) getEditor().getCurrentTextStyle().clone());
+					shapeGR.setTextStyle((TextStyle) getEditor().getInspectedTextStyle().cloneStyle());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle((ShadowStyle) getEditor().getCurrentShadowStyle().clone());
+					shapeGR.setShadowStyle((ShadowStyle) getEditor().getInspectedShadowStyle().cloneStyle());
 				}
 
 				container.addToShapes(newShape);

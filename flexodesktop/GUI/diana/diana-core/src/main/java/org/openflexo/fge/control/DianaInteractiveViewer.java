@@ -231,6 +231,8 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		/*if (getInspectors() != null) {
 			getInspectors().update();
 		}*/
+
+		fireSelectionUpdated();
 	}
 
 	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
@@ -250,6 +252,8 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		/*if (getInspectors() != null) {
 			getInspectors().update();
 		}*/
+		fireSelectionUpdated();
+
 	}
 
 	public void toggleSelection(DrawingTreeNode<?, ?> aNode) {
@@ -278,6 +282,14 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		/*if (getInspectors() != null) {
 			getInspectors().update();
 		}*/
+		fireSelectionUpdated();
+	}
+
+	/**
+	 * Called when selection was updated<br>
+	 * Override when required
+	 */
+	protected void fireSelectionUpdated() {
 	}
 
 	/**

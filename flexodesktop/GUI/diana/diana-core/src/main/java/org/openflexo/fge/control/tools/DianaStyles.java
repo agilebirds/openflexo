@@ -23,12 +23,9 @@ import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGECoreUtils;
-import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.notifications.ObjectAddedToSelection;
@@ -69,8 +66,8 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	// protected InspectedForegroundStyle inspectedForegroundStyle;
 	// private ForegroundStyle defaultForegroundStyle;
 	private BackgroundStyle defaultBackgroundStyle;
-	private TextStyle defaultTextStyle;
-	private ShadowStyle defaultShadowStyle;
+	// private TextStyle defaultTextStyle;
+	// private ShadowStyle defaultShadowStyle;
 	private ShapeSpecification defaultShape;
 
 	protected BackgroundStyleFactory bsFactory;
@@ -79,8 +76,8 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	public DianaStyles() {
 		// defaultForegroundStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultForegroundStyle();
 		defaultBackgroundStyle = FGECoreUtils.TOOLS_FACTORY.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		defaultTextStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultTextStyle();
-		defaultShadowStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultShadowStyle();
+		// defaultTextStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultTextStyle();
+		// defaultShadowStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultShadowStyle();
 		defaultShape = FGECoreUtils.TOOLS_FACTORY.makeShape(ShapeType.RECTANGLE);
 	}
 
@@ -126,11 +123,31 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		if (foregroundSelector != null && getInspectedForegroundStyle() != null) {
 			foregroundSelector.setEditedObject(getInspectedForegroundStyle());
 		}
+		if (textStyleSelector != null && getInspectedTextStyle() != null) {
+			textStyleSelector.setEditedObject(getInspectedTextStyle());
+		}
+		if (shadowStyleSelector != null && getInspectedShadowStyle() != null) {
+			shadowStyleSelector.setEditedObject(getInspectedShadowStyle());
+		}
 	}
 
 	public InspectedForegroundStyle getInspectedForegroundStyle() {
 		if (getEditor() != null) {
 			return getEditor().getInspectedForegroundStyle();
+		}
+		return null;
+	}
+
+	public InspectedTextStyle getInspectedTextStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedTextStyle();
+		}
+		return null;
+	}
+
+	public InspectedShadowStyle getInspectedShadowStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedShadowStyle();
 		}
 		return null;
 	}
@@ -191,17 +208,18 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBTextStyleSelector<?> getTextStyleSelector() {
 		if (textStyleSelector == null) {
-			textStyleSelector = getDianaFactory().makeFIBTextStyleSelector(getCurrentTextStyle());
+			textStyleSelector = getDianaFactory()
+					.makeFIBTextStyleSelector(getEditor() != null ? getEditor().getInspectedTextStyle() : null);
 			textStyleSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
-					if (getSelection().size() > 0) {
+					/*if (getSelection().size() > 0) {
 						for (DrawingTreeNode<?, ?> gr : getSelection()) {
 							gr.getGraphicalRepresentation().setTextStyle((TextStyle) textStyleSelector.getEditedObject().clone());
 						}
 					} else {
 						getEditor().setCurrentTextStyle((TextStyle) textStyleSelector.getEditedObject().clone());
-					}
+					}*/
 				}
 
 				@Override
@@ -214,17 +232,18 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBShadowStyleSelector<?> getShadowStyleSelector() {
 		if (shadowStyleSelector == null) {
-			shadowStyleSelector = getDianaFactory().makeFIBShadowStyleSelector(getCurrentShadowStyle());
+			shadowStyleSelector = getDianaFactory().makeFIBShadowStyleSelector(
+					getEditor() != null ? getEditor().getInspectedShadowStyle() : null);
 			shadowStyleSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
-					if (getSelectedShapes().size() > 0) {
+					/*if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
 							shape.getGraphicalRepresentation().setShadowStyle((ShadowStyle) shadowStyleSelector.getEditedObject().clone());
 						}
 					} else {
 						getEditor().setCurrentShadowStyle((ShadowStyle) shadowStyleSelector.getEditedObject().clone());
-					}
+					}*/
 				}
 
 				@Override
@@ -275,19 +294,19 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		return defaultBackgroundStyle;
 	}
 
-	public TextStyle getCurrentTextStyle() {
+	/*public TextStyle getCurrentTextStyle() {
 		if (getEditor() != null) {
 			return getEditor().getCurrentTextStyle();
 		}
 		return defaultTextStyle;
-	}
+	}*/
 
-	public ShadowStyle getCurrentShadowStyle() {
+	/*public ShadowStyle getCurrentShadowStyle() {
 		if (getEditor() != null) {
 			return getEditor().getCurrentShadowStyle();
 		}
 		return defaultShadowStyle;
-	}
+	}*/
 
 	public ShapeSpecification getCurrentShape() {
 		if (getEditor() != null) {
@@ -301,7 +320,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		if (evt.getPropertyName().equals(ObjectAddedToSelection.EVENT_NAME)
 				|| evt.getPropertyName().equals(ObjectRemovedFromSelection.EVENT_NAME)
 				|| evt.getPropertyName().equals(SelectionCleared.EVENT_NAME)) {
-			updateSelection();
+			// updateSelection();
 		}
 	}
 
@@ -314,7 +333,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 				getForegroundSelector().setEditedObject(getSelectedConnectors().get(0).getGraphicalRepresentation().getForeground());
 			}*/
 		} else {
-			getTextStyleSelector().setEditedObject(getEditor().getCurrentTextStyle());
+			// getTextStyleSelector().setEditedObject(getEditor().getCurrentTextStyle());
 			// getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
@@ -322,13 +341,13 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
-			getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
+			// getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
 			shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
 			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
-			getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
+			// getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
 		}
 	}
 

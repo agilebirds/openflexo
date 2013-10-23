@@ -56,21 +56,10 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	@Override
 	public void addToShapes(Shape aShape) {
 
-		System.out.println("addToShapes with " + aShape);
-		System.out.println("GR=" + aShape.getGraphicalRepresentation());
-
 		shapes.add(aShape);
 		setChanged();
 		notifyObservers();
 
-		System.out.println("Apres ajout" + aShape);
-		System.out.println("GR=" + aShape.getGraphicalRepresentation());
-		System.out.println("SS=" + aShape.getGraphicalRepresentation().getShapeSpecification());
-
-		// System.out.println("Add "+aShape+" isDeserializing="+isDeserializing());
-		/*if (!isDeserializing()) {
-			getDiagram().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
-		}*/
 	}
 
 	@Override
@@ -92,11 +81,6 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 
 	@Override
 	public void addToConnectors(Connector aConnector) {
-		System.out.println("************ OK, j'arrive bien la");
-		System.out.println("la start shape = " + aConnector.getStartShape() + " contenue="
-				+ getShapes().contains(aConnector.getStartShape()) + " shapes=" + getShapes());
-		System.out.println("la end shape = " + aConnector.getEndShape() + " contenue=" + getShapes().contains(aConnector.getEndShape())
-				+ " shapes=" + getShapes());
 		connectors.add(aConnector);
 		setChanged();
 		notifyObservers();

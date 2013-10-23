@@ -32,10 +32,8 @@ import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
-import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
-import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
@@ -71,9 +69,17 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (foregroundStyleInspector != null) {
 			foregroundStyleInspector.setData(getInspectedForegroundStyle(), true);
 		}
+		if (textStyleInspector != null) {
+			textStyleInspector.setData(getInspectedTextStyle(), true);
+		}
+		if (shadowInspector != null) {
+			shadowInspector.setData(getInspectedShadowStyle(), true);
+		}
 	}
 
 	public static FileResource FOREGROUND_STYLE_FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
+	public static FileResource TEXT_STYLE_FIB_FILE = new FileResource("Fib/TextStylePanel.fib");
+	public static FileResource SHADOW_STYLE_FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
@@ -94,16 +100,16 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 
 	public JInspector<TextStyle> getTextStyleInspector() {
 		if (textStyleInspector == null) {
-			textStyleInspector = new JInspector<TextStyle>(FIBLibrary.instance().retrieveFIBComponent(FIBTextStyleSelector.FIB_FILE),
-					getEditor().getCurrentTextStyle(), frame, "Text");
+			textStyleInspector = new JInspector<TextStyle>(FIBLibrary.instance().retrieveFIBComponent(TEXT_STYLE_FIB_FILE),
+					getInspectedTextStyle(), frame, "Text");
 		}
 		return textStyleInspector;
 	}
 
 	public JInspector<ShadowStyle> getShadowStyleInspector() {
 		if (shadowInspector == null) {
-			shadowInspector = new JInspector<ShadowStyle>(FIBLibrary.instance().retrieveFIBComponent(FIBShadowStyleSelector.FIB_FILE),
-					getEditor().getCurrentShadowStyle(), frame, "Shadow");
+			shadowInspector = new JInspector<ShadowStyle>(FIBLibrary.instance().retrieveFIBComponent(SHADOW_STYLE_FIB_FILE),
+					getInspectedShadowStyle(), frame, "Shadow");
 		}
 		return shadowInspector;
 	}

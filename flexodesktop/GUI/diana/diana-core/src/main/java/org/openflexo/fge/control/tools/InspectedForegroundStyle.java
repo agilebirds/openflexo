@@ -30,7 +30,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 
 /**
- * Implementation of {@link ForegroundStyle}, as a container of graphical properties synchronized with a selection<br>
+ * Implementation of {@link ForegroundStyle}, as a container of graphical properties synchronized with and reflecting a selection<br>
  * This is the object beeing represented in tool inspectors
  * 
  * @author sylvain
