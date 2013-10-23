@@ -1,11 +1,9 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Paint;
 import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 
@@ -75,8 +73,8 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		}
 		return null;
 	}*/
-	@Override
-	public abstract Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
+	// @Override
+	// public abstract Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
 
 	@Override
 	public abstract BackgroundStyleType getBackgroundStyleType();

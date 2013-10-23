@@ -69,7 +69,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	// private ShadowStyle defaultShadowStyle;
 	private ShapeSpecification defaultShape;
 
-	protected BackgroundStyleFactory bsFactory;
+	// protected BackgroundStyleFactory bsFactory;
 	protected ShapeFactory shapeFactory;
 
 	public DianaStyles() {
@@ -128,6 +128,9 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		if (shadowStyleSelector != null && getInspectedShadowStyle() != null) {
 			shadowStyleSelector.setEditedObject(getInspectedShadowStyle());
 		}
+		if (backgroundSelector != null) {
+			backgroundSelector.setEditedObject(getInspectedBackgroundStyle().getDefaultValue());
+		}
 	}
 
 	public InspectedForegroundStyle getInspectedForegroundStyle() {
@@ -147,6 +150,13 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	public InspectedShadowStyle getInspectedShadowStyle() {
 		if (getEditor() != null) {
 			return getEditor().getInspectedShadowStyle();
+		}
+		return null;
+	}
+
+	public InspectedBackgroundStyle getInspectedBackgroundStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedBackgroundStyle();
 		}
 		return null;
 	}
@@ -182,19 +192,20 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBBackgroundStyleSelector<?> getBackgroundSelector() {
 		if (backgroundSelector == null) {
-			bsFactory = new BackgroundStyleFactory(getCurrentBackgroundStyle());
-			backgroundSelector = getDianaFactory().makeFIBBackgroundStyleSelector(bsFactory);
+			// bsFactory = new BackgroundStyleFactory(getInspectedBackgroundStyle());
+			backgroundSelector = getDianaFactory().makeFIBBackgroundStyleSelector(
+					getInspectedBackgroundStyle() != null ? getInspectedBackgroundStyle().getStyleFactory() : null);
 			backgroundSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
-					if (getSelectedShapes().size() > 0) {
+					/*if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
 							shape.getGraphicalRepresentation()
 									.setBackground((BackgroundStyle) backgroundSelector.getEditedObject().clone());
 						}
 					} else {
 						getEditor().setCurrentBackgroundStyle((BackgroundStyle) backgroundSelector.getEditedObject().clone());
-					}
+					}*/
 				}
 
 				@Override
@@ -286,12 +297,12 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		return defaultForegroundStyle;
 	}*/
 
-	public BackgroundStyle getCurrentBackgroundStyle() {
+	/*public BackgroundStyle getCurrentBackgroundStyle() {
 		if (getEditor() != null) {
 			return getEditor().getCurrentBackgroundStyle();
 		}
 		return defaultBackgroundStyle;
-	}
+	}*/
 
 	/*public TextStyle getCurrentTextStyle() {
 		if (getEditor() != null) {
@@ -338,13 +349,13 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		if (getSelectedShapes().size() > 0) {
 			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
 			shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
-			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());
 			// getShadowStyleSelector().setEditedObject(getEditor().getCurrentShadowStyle());
 		}

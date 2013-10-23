@@ -1,13 +1,11 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Image;
-import java.awt.Paint;
 import java.io.File;
 
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyleImpl implements BackgroundImageBackgroundStyle {
@@ -29,11 +27,6 @@ public abstract class BackgroundImageBackgroundStyleImpl extends BackgroundStyle
 		if (image != null) {
 			this.image = image.getImage();
 		}
-	}
-
-	@Override
-	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
-		return java.awt.Color.WHITE;
 	}
 
 	@Override

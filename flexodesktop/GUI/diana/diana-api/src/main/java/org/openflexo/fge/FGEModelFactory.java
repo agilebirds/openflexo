@@ -625,6 +625,15 @@ public abstract class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
+	 * Make a new colored background style initialized with default values as declared in FGEConstants
+	 * 
+	 * @return a newly created ForegroundStyle
+	 */
+	public BackgroundStyle makeDefaultBackgroundStyle() {
+		return makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+	}
+
+	/**
 	 * Make a new background style as empty background (invisible)
 	 * 
 	 * @return a newly created BackgroundStyle

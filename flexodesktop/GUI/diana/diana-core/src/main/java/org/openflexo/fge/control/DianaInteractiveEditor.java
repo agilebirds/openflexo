@@ -22,14 +22,13 @@ package org.openflexo.fge.control;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
 import org.openflexo.fge.control.tools.InspectedShadowStyle;
 import org.openflexo.fge.control.tools.InspectedTextStyle;
@@ -61,7 +60,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	// private ForegroundStyle currentForegroundStyle;
 	private InspectedForegroundStyle inspectedForegroundStyle;
-	private BackgroundStyle currentBackgroundStyle;
+	// private BackgroundStyle currentBackgroundStyle;
+	private InspectedBackgroundStyle inspectedBackgroundStyle;
 	// private TextStyle currentTextStyle;
 	private InspectedTextStyle inspectedTextStyle;
 	// private ShadowStyle currentShadowStyle;
@@ -76,7 +76,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
 		// currentForegroundStyle = factory.makeDefaultForegroundStyle();
 		inspectedForegroundStyle = new InspectedForegroundStyle(this);
-		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		inspectedBackgroundStyle = new InspectedBackgroundStyle(this);
+		// currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
 		// currentTextStyle = factory.makeDefaultTextStyle();
 		inspectedTextStyle = new InspectedTextStyle(this);
 		// currentShadowStyle = factory.makeDefaultShadowStyle();
@@ -105,6 +106,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedForegroundStyle.fireSelectionUpdated();
 		inspectedTextStyle.fireSelectionUpdated();
 		inspectedShadowStyle.fireSelectionUpdated();
+		inspectedBackgroundStyle.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -155,13 +157,17 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		this.currentForegroundStyle = currentForegroundStyle;
 	}*/
 
-	public BackgroundStyle getCurrentBackgroundStyle() {
+	public InspectedBackgroundStyle getInspectedBackgroundStyle() {
+		return inspectedBackgroundStyle;
+	}
+
+	/*public BackgroundStyle getCurrentBackgroundStyle() {
 		return currentBackgroundStyle;
 	}
 
 	public void setCurrentBackgroundStyle(BackgroundStyle currentBackgroundStyle) {
 		this.currentBackgroundStyle = currentBackgroundStyle;
-	}
+	}*/
 
 	/*public TextStyle getCurrentTextStyle() {
 		return currentTextStyle;

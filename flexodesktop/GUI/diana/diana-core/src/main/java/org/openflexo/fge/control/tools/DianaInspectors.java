@@ -46,11 +46,11 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 
 	// protected InspectedForegroundStyle inspectedForegroundStyle;
 
-	protected BackgroundStyleFactory bsFactory;
+	// protected BackgroundStyleFactory bsFactory;
 	protected ShapeFactory shapeFactory;
 
 	public DianaInspectors() {
-		bsFactory = new BackgroundStyleFactory(null);
+		// bsFactory = new BackgroundStyleFactory(null);
 		shapeFactory = new ShapeFactory(null);
 	}
 
@@ -76,6 +76,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 	public InspectedShadowStyle getInspectedShadowStyle() {
 		if (getEditor() != null) {
 			return getEditor().getInspectedShadowStyle();
+		}
+		return null;
+	}
+
+	public InspectedBackgroundStyle getInspectedBackgroundStyle() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedBackgroundStyle();
 		}
 		return null;
 	}
@@ -127,13 +134,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 		if (getSelectedShapes().size() > 0) {
 			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
-			bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
+			// bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
 			shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeInspector().setData(getEditor().getCurrentShape());
-			bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
+			// bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());
 			// getShadowStyleInspector().setData(getEditor().getCurrentShadowStyle());
 		}

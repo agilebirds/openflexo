@@ -136,7 +136,7 @@ public class DiagramEditorApplication {
 		inspectors.getForegroundStyleInspector().setVisible(true);
 		inspectors.getTextStyleInspector().setVisible(true);
 		inspectors.getShadowStyleInspector().setVisible(true);
-		// inspectors.getBackgroundStyleInspector().setVisible(true);
+		inspectors.getBackgroundStyleInspector().setVisible(true);
 		// inspectors.getShapeInspector().setVisible(true);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

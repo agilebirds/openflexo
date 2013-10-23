@@ -62,6 +62,8 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	private PropertyChangeSupport pcSupport;
 
+	private boolean isDeleted = false;
+
 	protected InspectedStyle(DianaInteractiveViewer<?, ?, ?> controller, S defaultValue) {
 		this.controller = controller;
 		this.defaultValue = defaultValue;
@@ -102,7 +104,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 * @param parameter
 	 * @return
 	 */
-	private <T> T _getPropertyValue(GRParameter<T> parameter) {
+	protected <T> T _getPropertyValue(GRParameter<T> parameter) {
 		T returned;
 		if (getSelection().size() == 0) {
 			returned = (T) defaultValue.objectForKey(parameter.getName());
@@ -150,7 +152,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 * @param newObject
 	 * @return
 	 */
-	private boolean requireChange(Object oldObject, Object newObject) {
+	protected boolean requireChange(Object oldObject, Object newObject) {
 		if (oldObject == null) {
 			if (newObject == null) {
 				return false;
@@ -237,28 +239,34 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	/**
 	 * Internally called to fire change events between previously registered values and current resulting values
 	 */
-	private void fireChangedProperties() {
-		Class<?> styleClass = TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
-		// System.out.println("Selection changed for inspected style " + styleClass);
-		for (GRParameter<?> p : GRParameter.getGRParameters(styleClass)) {
+	protected void fireChangedProperties() {
+
+		for (GRParameter<?> p : GRParameter.getGRParameters(getInspectedStyleClass())) {
 			fireChangedProperty(p);
 		}
+	}
+
+	protected Class<? extends S> getInspectedStyleClass() {
+		return (Class<? extends S>) TypeUtils.getBaseClass(TypeUtils.getTypeArgument(getClass(), InspectedStyle.class, 0));
 	}
 
 	/**
 	 * Internally called to fire change events between previously registered values and current resulting values<br>
 	 * Do this only when needed on supplied GRParameter
 	 */
-	private <T> void fireChangedProperty(GRParameter<T> p) {
+	protected <T> void fireChangedProperty(GRParameter<T> p) {
 		@SuppressWarnings("unchecked")
 		T storedValue = (T) storedPropertyValues.get(p);
 		T newValue = _getPropertyValue(p);
 		if (requireChange(storedValue, newValue)) {
-			// System.out.println("Notifying " + p.getName());
-			pcSupport.firePropertyChange(p.getName(), storedValue, newValue);
-			setChanged();
-			notifyObservers(new FGEAttributeNotification<T>(p, storedValue, newValue));
+			_doFireChangedProperty(p, storedValue, newValue);
 		}
+	}
+
+	protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
+		pcSupport.firePropertyChange(p.getName(), oldValue, newValue);
+		setChanged();
+		notifyObservers(new FGEAttributeNotification<T>(p, oldValue, newValue));
 	}
 
 	/**
@@ -273,6 +281,17 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		return pcSupport;
+	}
+
+	public boolean delete() {
+		// TODO: implement this
+		logger.warning("Delete() not implemented yet");
+		isDeleted = true;
+		return true;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
 	public String getDeletedProperty() {
@@ -308,16 +327,6 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	public void notify(FGEAttributeNotification notification) {
 		// Not relevant
 
-	}
-
-	public boolean delete() {
-		// Not relevant
-		return false;
-	}
-
-	public boolean isDeleted() {
-		// Not relevant
-		return false;
 	}
 
 	public Object performSuperGetter(String propertyIdentifier) {

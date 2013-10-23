@@ -20,9 +20,6 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Paint;
-
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
@@ -74,7 +71,7 @@ public interface BackgroundStyle extends FGEStyle {
 		NONE, COLOR, COLOR_GRADIENT, TEXTURE, IMAGE
 	}
 
-	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
+	// public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
 
 	public BackgroundStyleType getBackgroundStyleType();
 

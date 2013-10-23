@@ -79,15 +79,17 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 	private BackgroundStylePreviewPanel backgroundStylePreviewPanel;
 
 	public JFIBBackgroundStyleSelector(BackgroundStyleFactory factory) {
-		super(factory.getBackgroundStyle());
+		super(factory != null ? factory.getBackgroundStyle() : null);
 		this.factory = factory;
-		setRevertValue(factory.getBackgroundStyle() != null ? (BackgroundStyle) factory.getBackgroundStyle().clone() : null);
+		/*if (factory != null) {
+			setRevertValue(factory.getBackgroundStyle() != null ? (BackgroundStyle) factory.getBackgroundStyle().cloneObject() : null);
+		}*/
 		setFocusable(true);
 	}
 
 	public BackgroundStyleFactory getFactory() {
 		if (factory == null) {
-			factory = new BackgroundStyleFactory(getEditedObject());
+			factory = new BackgroundStyleFactory(null);
 		}
 		return factory;
 	}
@@ -179,7 +181,8 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 		public void update() {
 			// logger.info("Update with " + getEditedObject());
-			getFactory().setBackgroundStyle(getEditedObject());
+			logger.warning("Un truc a voir ici comment s'en sortir: ligne suivante commentee");
+			// getFactory().setBackgroundStyle(getEditedObject());
 			controller.setDataObject(getFactory(), true);
 		}
 

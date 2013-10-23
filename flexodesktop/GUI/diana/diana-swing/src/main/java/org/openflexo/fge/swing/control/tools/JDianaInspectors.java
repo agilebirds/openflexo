@@ -31,7 +31,6 @@ import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
-import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fib.FIBLibrary;
@@ -75,11 +74,15 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (shadowInspector != null) {
 			shadowInspector.setData(getInspectedShadowStyle(), true);
 		}
+		if (backgroundStyleInspector != null) {
+			backgroundStyleInspector.setData(getInspectedBackgroundStyle().getStyleFactory(), true);
+		}
 	}
 
 	public static FileResource FOREGROUND_STYLE_FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
 	public static FileResource TEXT_STYLE_FIB_FILE = new FileResource("Fib/TextStylePanel.fib");
 	public static FileResource SHADOW_STYLE_FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
+	public static FileResource BACKGROUND_STYLE_FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
@@ -93,7 +96,8 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (backgroundStyleInspector == null) {
 			// bsFactory = new BackgroundStyleFactory(getEditor().getCurrentBackgroundStyle());
 			backgroundStyleInspector = new JInspector<BackgroundStyleFactory>(FIBLibrary.instance().retrieveFIBComponent(
-					FIBBackgroundStyleSelector.FIB_FILE), bsFactory, frame, "Background");
+					BACKGROUND_STYLE_FIB_FILE), (getInspectedBackgroundStyle() != null ? getInspectedBackgroundStyle().getStyleFactory()
+					: null), frame, "Background");
 		}
 		return backgroundStyleInspector;
 	}

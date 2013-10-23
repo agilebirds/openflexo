@@ -2,14 +2,20 @@ package org.openflexo.fge.swing.graphics;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.TexturePaint;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.CubicCurve2D;
@@ -17,10 +23,15 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
+import java.awt.image.RGBImageFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
@@ -39,6 +50,9 @@ import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.FGEGraphicsImpl;
+
+import sun.awt.image.ImageRepresentation;
+import sun.awt.image.ToolkitImage;
 
 /**
  * This is the SWING base implementation of a {@link FGEGraphics}.<br>
@@ -134,7 +148,12 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			return; // Strange...
 		}
 
-		if (getCurrentBackground() instanceof NoneBackgroundStyle) {
+		Paint paint = getPaint(getCurrentBackground(), getScale());
+		if (paint != null) {
+			g2d.setPaint(paint);
+		}
+
+		/*if (getCurrentBackground() instanceof NoneBackgroundStyle) {
 			// Nothing to do
 		} else if (getCurrentBackground() instanceof ColorBackgroundStyle) {
 			g2d.setColor(((ColorBackgroundStyle) getCurrentBackground()).getColor());
@@ -144,7 +163,7 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			g2d.setPaint(getCurrentBackground().getPaint(getDrawingTreeNode(), _controller.getScale()));
 		} else if (getCurrentBackground() instanceof BackgroundImageBackgroundStyle) {
 			g2d.setPaint(getCurrentBackground().getPaint(getDrawingTreeNode(), _controller.getScale()));
-		}
+		}*/
 
 		if (getCurrentBackground().getUseTransparency()) {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentBackground().getTransparencyLevel()));
@@ -599,5 +618,147 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 		// }
 		return cachedStroke;
 	}
+
+	/**
+	 * Computes and return stroke for supplied ForegroundStyle and scale<br>
+	 * Stores a cached value when possible
+	 * 
+	 * @param foregroundStyle
+	 * @param scale
+	 * @return
+	 */
+	public Paint getPaint(BackgroundStyle backgroundStyle, double scale) {
+		if (backgroundStyle instanceof NoneBackgroundStyle) {
+			return null;
+		} else if (backgroundStyle instanceof ColorBackgroundStyle) {
+			return ((ColorBackgroundStyle) backgroundStyle).getColor();
+		} else if (getCurrentBackground() instanceof ColorGradientBackgroundStyle) {
+			return getGradientPaint((ColorGradientBackgroundStyle) backgroundStyle, scale);
+		} else if (getCurrentBackground() instanceof TextureBackgroundStyle) {
+			return getTexturePaint((TextureBackgroundStyle) backgroundStyle, scale);
+		} else if (getCurrentBackground() instanceof BackgroundImageBackgroundStyle) {
+			return Color.WHITE;
+		} else {
+			return null;
+		}
+	}
+
+	private GradientPaint getGradientPaint(ColorGradientBackgroundStyle bs, double scale) {
+		switch (bs.getDirection()) {
+		case SOUTH_EAST_NORTH_WEST:
+			return new GradientPaint(0, 0, bs.getColor1(), getNode().getViewWidth(scale), getNode().getViewHeight(scale), bs.getColor2());
+		case SOUTH_WEST_NORTH_EAST:
+			return new GradientPaint(0, getNode().getViewHeight(scale), bs.getColor1(), getNode().getViewWidth(scale), 0, bs.getColor2());
+		case WEST_EAST:
+			return new GradientPaint(0, 0.5f * getNode().getViewHeight(scale), bs.getColor1(), getNode().getViewWidth(scale),
+					0.5f * getNode().getViewHeight(scale), bs.getColor2());
+		case NORTH_SOUTH:
+			return new GradientPaint(0.5f * getNode().getViewWidth(scale), 0, bs.getColor1(), 0.5f * getNode().getViewWidth(scale),
+					getNode().getViewHeight(scale), bs.getColor2());
+		default:
+			return new GradientPaint(0, 0, bs.getColor1(), getNode().getViewWidth(scale), getNode().getViewHeight(scale), bs.getColor2());
+		}
+	}
+
+	private TexturePaint getTexturePaint(TextureBackgroundStyle bs, double scale) {
+		rebuildColoredTexture(bs);
+		return new TexturePaint(getColoredTexture(bs), new Rectangle(0, 0, getColoredTexture(bs).getWidth(), getColoredTexture(bs)
+				.getHeight()));
+	}
+
+	private void rebuildColoredTexture(TextureBackgroundStyle bs) {
+		if (bs.getTextureType() == null) {
+			return;
+		}
+		final Image initialImage = bs.getTextureType().getImageIcon().getImage();
+		ColorSwapFilter imgfilter = new ColorSwapFilter(java.awt.Color.BLACK, bs.getColor1(), java.awt.Color.WHITE, bs.getColor2()) {
+			@Override
+			public void imageComplete(int status) {
+				super.imageComplete(status);
+				coloredTexture = new BufferedImage(initialImage.getWidth(null), initialImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+				Graphics gi = coloredTexture.getGraphics();
+				gi.drawImage(coloredImage, 0, 0, null);
+			}
+		};
+
+		ImageProducer producer = new FilteredImageSource(initialImage.getSource(), imgfilter);
+		coloredImage = (ToolkitImage) Toolkit.getDefaultToolkit().createImage(producer);
+		ImageRepresentation consumer = new ImageRepresentation(coloredImage, null, true);
+		producer.addConsumer(consumer);
+		try {
+			producer.startProduction(consumer);
+		} catch (RuntimeException e) {
+			logger.warning("Unexpected exception: " + e);
+		}
+
+	}
+
+	private BufferedImage getColoredTexture(TextureBackgroundStyle bs) {
+		if (coloredTexture == null) {
+			rebuildColoredTexture(bs);
+			/*int tests = 10; // Time-out = 1s
+			while (coloredTexture == null && tests>=0) {
+				try {
+					tests--;
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (coloredTexture == null) {
+				logger.warning("Could not compute colored texture");
+				Image initialImage = textureType.getImageIcon().getImage();
+				System.out.println("initialImage="+initialImage+" initialImage.getWidth(null)="+initialImage.getWidth(null));
+				coloredTexture = 
+					new BufferedImage(
+							initialImage.getWidth(null), 
+							initialImage.getHeight(null), 
+							BufferedImage.TYPE_INT_ARGB);
+				Graphics gi = coloredTexture.getGraphics();
+				gi.drawImage(initialImage, 0, 0, null);
+			}*/
+		}
+		return coloredTexture;
+
+	}
+
+	static class ColorSwapFilter extends RGBImageFilter {
+		private int target1;
+		private int replacement1;
+		private int target2;
+		private int replacement2;
+
+		public ColorSwapFilter(java.awt.Color target1, java.awt.Color replacement1, java.awt.Color target2, java.awt.Color replacement2) {
+			this.target1 = target1.getRGB();
+			this.replacement1 = replacement1.getRGB();
+			this.target2 = target2.getRGB();
+			this.replacement2 = replacement2.getRGB();
+		}
+
+		@Override
+		public int filterRGB(int x, int y, int rgb) {
+			// if (x==0 && y==0) logger.info("Starting convert image");
+			// if (x==15 && y==15) logger.info("Finished convert image");
+			if (rgb == target1) {
+				return replacement1;
+			} else if (rgb == target2) {
+				return replacement2;
+			}
+			return rgb;
+		}
+
+		@Override
+		public void imageComplete(int status) {
+			super.imageComplete(status);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("imageComplete status=" + status);
+			}
+		}
+
+	}
+
+	private BufferedImage coloredTexture;
+	private ToolkitImage coloredImage;
 
 }

@@ -1,16 +1,8 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Paint;
-
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.NoneBackgroundStyle;
 
 public abstract class NoneBackgroundStyleImpl extends BackgroundStyleImpl implements NoneBackgroundStyle {
-
-	@Override
-	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
-		return null;
-	}
 
 	@Override
 	public BackgroundStyleType getBackgroundStyleType() {

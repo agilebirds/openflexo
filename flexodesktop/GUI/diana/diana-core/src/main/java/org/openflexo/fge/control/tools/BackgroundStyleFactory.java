@@ -3,6 +3,8 @@ package org.openflexo.fge.control.tools;
 import java.awt.Color;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.util.List;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
@@ -10,11 +12,13 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
-import org.openflexo.fge.FGECoreUtils;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.TextureBackgroundStyle.TextureType;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.fge.control.DianaInteractiveViewer;
 
 /**
  * Convenient class used to manipulate BackgroundStyle
@@ -22,9 +26,12 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sylvain
  * 
  */
-public class BackgroundStyleFactory implements HasPropertyChangeSupport {
+public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle> {
+
+	private static final Logger logger = Logger.getLogger(BackgroundStyleFactory.class.getPackage().getName());
+
 	private static final String DELETED = "deleted";
-	private BackgroundStyle backgroundStyle;
+	private AbstractInspectedBackgroundStyle<?> backgroundStyle;
 	private Color color1 = Color.RED;
 	private Color color2 = Color.WHITE;
 	private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
@@ -33,16 +40,22 @@ public class BackgroundStyleFactory implements HasPropertyChangeSupport {
 	private PropertyChangeSupport pcSupport;
 	private FGEModelFactory fgeFactory;
 
-	public BackgroundStyleFactory(BackgroundStyle backgroundStyle) {
+	private DianaInteractiveViewer<?, ?, ?> controller;
+
+	public BackgroundStyleFactory(DianaInteractiveViewer<?, ?, ?> controller) {
 		pcSupport = new PropertyChangeSupport(this);
-		this.backgroundStyle = backgroundStyle;
-		if (backgroundStyle != null) {
-			fgeFactory = backgroundStyle.getFactory();
-		}
-		if (fgeFactory == null) {
-			// logger.warning("Could not find any FGE factory, creating a default one");
-			fgeFactory = FGECoreUtils.TOOLS_FACTORY;
-		}
+		this.controller = controller;
+		fgeFactory = controller.getFactory();
+		backgroundStyle = new InspectedColorBackgroundStyle(controller, controller.getFactory().makeColoredBackground(
+				FGEConstants.DEFAULT_BACKGROUND_COLOR));
+	}
+
+	public FGEModelFactory getFGEFactory() {
+		return fgeFactory;
+	}
+
+	public void setFGEFactory(FGEModelFactory fgeFactory) {
+		this.fgeFactory = fgeFactory;
 	}
 
 	@Override
@@ -60,14 +73,39 @@ public class BackgroundStyleFactory implements HasPropertyChangeSupport {
 		return DELETED;
 	}
 
-	public BackgroundStyle getBackgroundStyle() {
+	@Override
+	public AbstractInspectedBackgroundStyle<?> getCurrentStyle() {
+		return getBackgroundStyle();
+	}
+
+	public AbstractInspectedBackgroundStyle<?> getBackgroundStyle() {
 		return backgroundStyle;
 	}
 
-	public void setBackgroundStyle(BackgroundStyle backgroundStyle) {
-		BackgroundStyle oldBackgroundStyle = this.backgroundStyle;
-		this.backgroundStyle = backgroundStyle;
-		pcSupport.firePropertyChange("backgroundStyle", oldBackgroundStyle, backgroundStyle);
+	public void setBackgroundStyle(AbstractInspectedBackgroundStyle<?> backgroundStyle) {
+		if (this.backgroundStyle != backgroundStyle) {
+			BackgroundStyle oldBackgroundStyle = this.backgroundStyle;
+			this.backgroundStyle = backgroundStyle;
+			pcSupport.firePropertyChange("backgroundStyle", oldBackgroundStyle, backgroundStyle);
+		}
+	}
+
+	/**
+	 * Equals method allowing null values
+	 * 
+	 * @param oldObject
+	 * @param newObject
+	 * @return
+	 */
+	protected boolean requireChange(Object oldObject, Object newObject) {
+		if (oldObject == null) {
+			if (newObject == null) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return !oldObject.equals(newObject);
 	}
 
 	public BackgroundStyleType getBackgroundStyleType() {
@@ -107,19 +145,19 @@ public class BackgroundStyleFactory implements HasPropertyChangeSupport {
 
 		switch (backgroundStyleType) {
 		case NONE:
-			setBackgroundStyle(fgeFactory.makeEmptyBackground());
+			setBackgroundStyle(makeEmptyBackground());
 			break;
 		case COLOR:
-			setBackgroundStyle(fgeFactory.makeColoredBackground(color1));
+			setBackgroundStyle(makeColoredBackground());
 			break;
 		case COLOR_GRADIENT:
-			setBackgroundStyle(fgeFactory.makeColorGradientBackground(color1, color2, gradientDirection));
+			setBackgroundStyle(makeColorGradientBackground());
 			break;
 		case TEXTURE:
-			setBackgroundStyle(fgeFactory.makeTexturedBackground(textureType, color1, color2));
+			setBackgroundStyle(makeTexturedBackground());
 			break;
 		case IMAGE:
-			setBackgroundStyle(fgeFactory.makeImageBackground(imageFile));
+			setBackgroundStyle(makeImageBackground());
 			break;
 		default:
 			break;
@@ -128,4 +166,124 @@ public class BackgroundStyleFactory implements HasPropertyChangeSupport {
 		pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getBackgroundStyleType());
 	}
 
+	@Override
+	public BackgroundStyle makeNewStyle() {
+		return fgeFactory.makeColoredBackground(color1);
+		// return (BackgroundStyle) getCurrentStyle().cloneObject();
+	}
+
+	/**
+	 * Make a new background style as empty background (invisible)
+	 * 
+	 * @return a newly created BackgroundStyle
+	 */
+	public InspectedColorBackgroundStyle makeEmptyBackground() {
+		return null;
+	}
+
+	/**
+	 * Make a new background style as plain colored background
+	 * 
+	 * @return a newly created BackgroundStyle
+	 */
+	public InspectedColorBackgroundStyle makeColoredBackground() {
+		return new InspectedColorBackgroundStyle(controller, fgeFactory.makeColoredBackground(color1));
+	}
+
+	/**
+	 * Make a new background style as color gradient with two colors
+	 * 
+	 * @return a newly created BackgroundStyle
+	 */
+	public InspectedColorBackgroundStyle makeColorGradientBackground() {
+		return null;
+	}
+
+	/**
+	 * Make a new background style as textured background with two colors
+	 * 
+	 * @return a newly created BackgroundStyle
+	 */
+	public InspectedColorBackgroundStyle makeTexturedBackground() {
+		return null;
+	}
+
+	/**
+	 * Make a new background style as image background, given a file encoding image
+	 * 
+	 * @param imageFile
+	 *            the file where image is located (most image format allowed)
+	 * 
+	 * @return a newly created BackgroundStyle
+	 */
+	public InspectedColorBackgroundStyle makeImageBackground() {
+		return null;
+	}
+
+	protected abstract class AbstractInspectedBackgroundStyle<BS extends BackgroundStyle> extends InspectedStyle<BS> implements
+			BackgroundStyle {
+
+		protected AbstractInspectedBackgroundStyle(DianaInteractiveViewer<?, ?, ?> controller, BS defaultValue) {
+			super(controller, defaultValue);
+		}
+
+		@Override
+		public float getTransparencyLevel() {
+			return getPropertyValue(BackgroundStyle.TRANSPARENCY_LEVEL);
+		}
+
+		@Override
+		public void setTransparencyLevel(float aLevel) {
+			setPropertyValue(BackgroundStyle.TRANSPARENCY_LEVEL, aLevel);
+		}
+
+		@Override
+		public boolean getUseTransparency() {
+			return getPropertyValue(BackgroundStyle.USE_TRANSPARENCY);
+		}
+
+		@Override
+		public void setUseTransparency(boolean aFlag) {
+			setPropertyValue(BackgroundStyle.USE_TRANSPARENCY, aFlag);
+		}
+
+		@Override
+		public List<ShapeNode<?>> getSelection() {
+			return getController().getSelectedShapes();
+		}
+
+	}
+
+	protected class InspectedColorBackgroundStyle extends AbstractInspectedBackgroundStyle<ColorBackgroundStyle> implements
+			ColorBackgroundStyle {
+
+		protected InspectedColorBackgroundStyle(DianaInteractiveViewer<?, ?, ?> controller, ColorBackgroundStyle defaultValue) {
+			super(controller, defaultValue);
+		}
+
+		@Override
+		public BackgroundStyleType getBackgroundStyleType() {
+			return BackgroundStyleType.COLOR;
+		}
+
+		@Override
+		public Color getColor() {
+			return getPropertyValue(ColorBackgroundStyle.COLOR);
+		}
+
+		@Override
+		public void setColor(Color aColor) {
+			setPropertyValue(ColorBackgroundStyle.COLOR, aColor);
+		}
+
+		@Override
+		public ColorBackgroundStyle getStyle(DrawingTreeNode<?, ?> node) {
+			if (node instanceof ShapeNode) {
+				if (((ShapeNode<?>) node).getBackgroundStyle() instanceof ColorBackgroundStyle) {
+					return (ColorBackgroundStyle) ((ShapeNode<?>) node).getBackgroundStyle();
+				}
+			}
+			return null;
+		}
+	}
 }

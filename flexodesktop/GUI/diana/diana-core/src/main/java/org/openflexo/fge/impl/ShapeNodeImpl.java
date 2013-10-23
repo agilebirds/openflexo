@@ -1428,6 +1428,20 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	/**
+	 * Convenient method used to retrieve background style property value
+	 */
+	public BackgroundStyle getBackgroundStyle() {
+		return getPropertyValue(ShapeGraphicalRepresentation.BACKGROUND);
+	}
+
+	/**
+	 * Convenient method used to set background style property value
+	 */
+	public void setBackgroundStyle(BackgroundStyle style) {
+		setPropertyValue(ShapeGraphicalRepresentation.BACKGROUND, style);
+	}
+
+	/**
 	 * Convenient method used to retrieve shadow style property value
 	 */
 	@Override

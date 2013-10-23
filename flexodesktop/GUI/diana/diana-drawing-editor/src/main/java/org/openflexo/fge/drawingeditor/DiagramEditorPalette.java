@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
@@ -219,7 +218,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 					shapeGR.setForeground(getEditor().getInspectedForegroundStyle().cloneStyle());
 				}
 				if (applyCurrentBackground) {
-					shapeGR.setBackground((BackgroundStyle) getEditor().getCurrentBackgroundStyle().clone());
+					shapeGR.setBackground(getEditor().getInspectedBackgroundStyle().cloneStyle());
 				}
 				if (applyCurrentTextStyle) {
 					shapeGR.setTextStyle((TextStyle) getEditor().getInspectedTextStyle().cloneStyle());

@@ -1,9 +1,6 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Paint;
-
 import org.openflexo.fge.ColorBackgroundStyle;
-import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 
 public abstract class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
@@ -16,11 +13,6 @@ public abstract class ColorBackgroundStyleImpl extends BackgroundStyleImpl imple
 
 	public ColorBackgroundStyleImpl(java.awt.Color aColor) {
 		color = aColor;
-	}
-
-	@Override
-	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
-		return color;
 	}
 
 	@Override
