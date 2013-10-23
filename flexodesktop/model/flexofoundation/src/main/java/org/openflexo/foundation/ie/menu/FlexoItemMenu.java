@@ -99,7 +99,7 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 
 	private TabComponentInstance _tabComponentInstance;
 
-	public FlexoItemMenu(FlexoProject project) {
+	private FlexoItemMenu(FlexoProject project) {
 		super(project);
 		_subItems = new Vector<FlexoItemMenu>();
 	}

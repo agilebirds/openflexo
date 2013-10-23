@@ -395,6 +395,10 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 		notifyObservers(new ComponentInserted(cd, this));
 	}
 
+	public FlexoComponentFolder getRootFolder() {
+		return getComponentLibrary().getRootFolder();
+	}
+
 	public void removeFromComponents(ComponentDefinition sub) {
 		_components.remove(sub);
 		sub.setFolder(null);
