@@ -751,9 +751,11 @@
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell" xmlTag="SelectExcelCell">
+		
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow" xmlTag="SelectExcelRow">
+		<property name="excelSheet" xmlTag="excelSheet" attribute="YES" />
 	</entity>
 	
 	<entity
