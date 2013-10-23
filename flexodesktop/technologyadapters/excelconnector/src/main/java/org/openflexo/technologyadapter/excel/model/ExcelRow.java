@@ -86,9 +86,10 @@ public class ExcelRow extends ExcelObject {
 		return getExcelCells().get(columnIndex);
 	}
 	
+	
 	@Override
 	public String getUri() {
-		return getExcelSheet().getUri()+"Row="+getName();
+		return getExcelSheet().getUri()+getName();
 	}
 
 }

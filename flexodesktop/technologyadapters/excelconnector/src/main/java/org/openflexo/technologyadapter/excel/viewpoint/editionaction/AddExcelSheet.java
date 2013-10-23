@@ -48,14 +48,24 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 			Workbook wb = modelSlotInstance.getResourceData().getWorkbook();
 			Sheet sheet = null;
 			try {
-				String name = getSheetName().getBindingValue(action);
-				// Create an Excel Sheet
-				sheet = wb.createSheet(name);
-				// Instanciate Wrapper.
-				result = modelSlotInstance.getResourceData().getConverter()
-						.convertExcelSheetToSheet(sheet, modelSlotInstance.getResourceData(), null);
-				modelSlotInstance.getResourceData().addToExcelSheets(result);
-				modelSlotInstance.getResourceData().setIsModified();
+				if(wb!=null){
+					String name = getSheetName().getBindingValue(action);
+					if(name!=null){
+						// Create an Excel Sheet
+						sheet = wb.createSheet(name);
+						// Instanciate Wrapper.
+						result = modelSlotInstance.getResourceData().getConverter()
+								.convertExcelSheetToSheet(sheet, modelSlotInstance.getResourceData(), null);
+						modelSlotInstance.getResourceData().addToExcelSheets(result);
+						modelSlotInstance.getResourceData().setIsModified();
+					}
+					else{
+						logger.warning("Create a sheet requires a name");
+					}
+				}
+				else{
+					logger.warning("Create a sheet requires a workbook");
+				}
 			} catch (TypeMismatchException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -67,7 +77,6 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 				e.printStackTrace();
 			}
 				
-
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
 			return null;

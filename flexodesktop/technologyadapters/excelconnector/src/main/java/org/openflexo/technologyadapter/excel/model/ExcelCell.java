@@ -505,7 +505,7 @@ public class ExcelCell extends ExcelObject {
 	
 	@Override
 	public String getUri() {
-		return getExcelRow().getUri()+"Cell"+getName();
+		return getExcelRow().getUri()+getName();
 	}
 
 }

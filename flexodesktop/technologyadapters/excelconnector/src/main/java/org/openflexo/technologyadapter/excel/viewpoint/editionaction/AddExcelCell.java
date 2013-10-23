@@ -19,6 +19,7 @@ import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelCell.CellType;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @FIBPanel("Fib/AddExcelCellPanel.fib")
@@ -34,8 +35,11 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 	
 	private DataBinding<ExcelRow> row;
 	
+	private DataBinding<ExcelSheet> sheet;
+	
 	private CellType cellType = null;
 	
+	private boolean isRowIndex = false;
 	
 	public AddExcelCell(VirtualModelBuilder builder) {
 		super(builder);
@@ -49,18 +53,52 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 	@Override
 	public ExcelCell performAction(EditionSchemeAction action) {
 		
-		ExcelCell exceCell = null;
+		ExcelCell excelCell = null;
 		
 		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		if(modelSlotInstance.getResourceData()!=null){
 			
 			try {
-				ExcelRow excelRow = getRow().getBindingValue(action);
+				ExcelRow excelRow=null;
+				if(isRowIndex){
+					Integer rowIndex = getRowIndex().getBindingValue(action);
+					ExcelSheet excelSheet = getSheet().getBindingValue(action);
+					excelRow = excelSheet.getRowAt(rowIndex);
+				}
+				else{
+					excelRow = getRow().getBindingValue(action);
+				}
+				
 				Integer columnIndex = getColumnIndex().getBindingValue(action);
-				Cell cell = excelRow.getRow().createCell(columnIndex);
-				exceCell = modelSlotInstance.getResourceData().getConverter()
-					.convertExcelCellToCell(cell, excelRow, null);
-				exceCell.setCellValue(getValue().getBindingValue(action));
+				// If this is possible, create the cell
+				if(columnIndex!=null){
+					if(excelRow!=null){
+						Cell cell = null;
+						String value = getValue().getBindingValue(action);
+						// If this cell exists, just get it
+						if(excelRow.getCellAt(columnIndex)!=null){
+							excelCell = excelRow.getCellAt(columnIndex);
+						}
+						else{
+							cell = excelRow.getRow().createCell(columnIndex);
+							excelCell = modelSlotInstance.getResourceData().getConverter()
+									.convertExcelCellToCell(cell, excelRow, null);
+						}
+						if(value!=null){
+							excelCell.setCellValue(value);
+						}
+						else{
+							logger.warning("Create a cell requires a value.");
+						}
+						modelSlotInstance.getResourceData().setIsModified();
+					}
+					else{
+						logger.warning("Create a cell requires a row.");
+					}
+				}
+				else{
+					logger.warning("Create a cell requires a column index.");
+				}
 			} catch (TypeMismatchException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,7 +115,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 			return null;
 		}
 
-		return exceCell;
+		return excelCell;
 	}
 
 	@Override
@@ -197,6 +235,32 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 			row.setBindingName("row");
 		}
 		this.row = row;
+	}
+	
+	public DataBinding<ExcelSheet> getSheet() {
+		if (sheet == null) {
+			sheet = new DataBinding<ExcelSheet>(this, ExcelSheet.class, DataBinding.BindingDefinitionType.GET);
+			sheet.setBindingName("sheet");
+		}
+		return sheet;
+	}
+
+	public void setSheet(DataBinding<ExcelSheet> sheet) {
+		if (sheet != null) {
+			sheet.setOwner(this);
+			sheet.setDeclaredType(ExcelSheet.class);
+			sheet.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			sheet.setBindingName("sheet");
+		}
+		this.sheet = sheet;
+	}
+
+	public boolean isRowIndex() {
+		return isRowIndex;
+	}
+
+	public void setRowIndex(boolean isRowIndex) {
+		this.isRowIndex = isRowIndex;
 	}
 
 	

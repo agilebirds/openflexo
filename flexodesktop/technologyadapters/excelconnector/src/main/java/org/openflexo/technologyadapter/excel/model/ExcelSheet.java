@@ -94,7 +94,7 @@ public class ExcelSheet extends ExcelObject {
 	
 	@Override
 	public String getUri() {
-		String uri = getWorkbook().getUri()+"Cell="+getName();
+		String uri = getWorkbook().getUri()+"Sheet="+getName();
 		return uri;
 	}
 

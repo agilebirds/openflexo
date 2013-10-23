@@ -53,6 +53,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell;
 
 /**
  * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
@@ -75,7 +76,9 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
 		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class) // Add sheet
 })
 @DeclareFetchRequests({ // All requests available through this model slot
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class) })
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), //Select Excel Sheet
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class)  //Select Excel Cell
+})
 public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
@@ -167,7 +170,10 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectExcelSheet.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelSheet(null);
-		} else {
+		} 
+		if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectExcelCell(null);
+		}else {
 			return null;
 		}
 	}

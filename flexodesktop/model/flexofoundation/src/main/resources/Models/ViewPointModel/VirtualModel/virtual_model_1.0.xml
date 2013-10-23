@@ -585,6 +585,8 @@
 		<property name="cellType" xmlTag="cellType" attribute="YES" />
 		<property name="columnIndex" xmlTag="columnIndex" primary="yes" />
 		<property name="rowIndex" xmlTag="rowIndex" primary="yes" />
+		<property name="sheet" xmlTag="sheet" primary="yes" />
+		<property name="isRowIndex" xmlTag="isRowIndex" attribute="YES" />
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow"
@@ -746,6 +748,9 @@
 	</entity>
 	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet" xmlTag="SelectExcelSheet">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell" xmlTag="SelectExcelCell">
 	</entity>
 	
 	<entity

@@ -50,12 +50,28 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 			
 			try {
 				ExcelSheet excelSheet = getExcelSheet().getBindingValue(action);
-				Integer rowIndex = getRowIndex().getBindingValue(action);
-				Row row = excelSheet.getSheet().createRow(rowIndex);
-				excelRow = modelSlotInstance.getResourceData().getConverter()
-					.convertExcelRowToRow(row, excelSheet, null);
-				if(getExcelCells().getBindingValue(action)!=null){
-					excelRow.getExcelCells().addAll(getExcelCells().getBindingValue(action));
+				if(excelSheet!=null){
+					Integer rowIndex = getRowIndex().getBindingValue(action);
+					if(rowIndex!=null){
+						if(excelSheet.getRowAt(rowIndex)!=null){
+							excelRow = excelSheet.getRowAt(rowIndex);
+						}
+						else{
+							Row row = excelSheet.getSheet().createRow(rowIndex);
+							excelRow = modelSlotInstance.getResourceData().getConverter()
+								.convertExcelRowToRow(row, excelSheet, null);
+						}
+						if(getExcelCells().getBindingValue(action)!=null){
+							excelRow.getExcelCells().addAll(getExcelCells().getBindingValue(action));
+						}
+						modelSlotInstance.getResourceData().setIsModified();
+					}
+					else{
+						logger.warning("Create a row requires a rowindex");
+					}
+				}
+				else{
+					logger.warning("Create a row requires a sheet");
 				}
 				
 			} catch (TypeMismatchException e) {

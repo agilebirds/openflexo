@@ -11,6 +11,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
@@ -44,6 +45,11 @@ public class SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell
 		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getResourceData();
 
 		List<ExcelCell> selectedExcelCells = new ArrayList<ExcelCell>(0);
+		for(ExcelSheet excelSheet : excelWorkbook.getExcelSheets()){
+			for(ExcelRow excelRow : excelSheet.getExcelRows()){
+				selectedExcelCells.addAll(excelRow.getExcelCells());
+			}
+		}
 
 		List<ExcelCell> returned = filterWithConditions(selectedExcelCells, action);
 
