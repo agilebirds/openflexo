@@ -53,6 +53,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell;
 
 /**
@@ -77,6 +78,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
 })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), //Select Excel Sheet
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelRow.class),  //Select Excel Row
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class)  //Select Excel Cell
 })
 public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
@@ -173,6 +175,8 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 		} 
 		if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelCell(null);
+		}if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectExcelRow(null);
 		}else {
 			return null;
 		}

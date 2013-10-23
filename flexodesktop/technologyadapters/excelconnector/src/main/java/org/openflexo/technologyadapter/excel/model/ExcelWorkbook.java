@@ -97,7 +97,7 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 
 	@Override
 	public String getUri() {
-		String uri = "Workbook="+getResource().getName().toString();
+		String uri = "Workbook="+getResource().getURI();
 		return uri;
 	}
 	
