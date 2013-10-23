@@ -23,6 +23,7 @@ import java.awt.geom.Point2D;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,7 +78,7 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 	/**
 	 * Default constructor
 	 */
-	public NodeCompound(FlexoProcess process, Vector<PetriGraphNode> nodes, Vector<WKFArtefact> artefacts) {
+	public NodeCompound(FlexoProcess process, List<PetriGraphNode> nodes, List<WKFArtefact> artefacts) {
 		this(process);
 		// 1. First we select only the elements that are that have a common petri-graph
 		FlexoPetriGraph parent = null;
@@ -126,7 +127,7 @@ public final class NodeCompound extends WKFObject implements LevelledObject {
 		}
 	}
 
-	private void makeConnex(NodeCompound clone, Vector<PetriGraphNode> originalSelectedNodes, Vector<WKFArtefact> originalSelectedArtefacts) {
+	private void makeConnex(NodeCompound clone, List<PetriGraphNode> originalSelectedNodes, List<WKFArtefact> originalSelectedArtefacts) {
 		XMLMapping mapping = new FlexoXMLMappings().getWKFMapping();
 		HashSet<WKFEdge> embedded = new HashSet<WKFEdge>();
 		mapping.getEmbeddedObjectsForObject(clone, embedded, WKFEdge.class, true);
