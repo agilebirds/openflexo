@@ -20,7 +20,6 @@
 package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
@@ -86,10 +85,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 				if (getOperationNode().hasWOComponent()) {
 					if (showWOName()) {
 						g.useTextStyle(screenNameLabelTextStyle);
-						Dimension labelSize = getNormalizedLabelSize();
-						double vGap = getVerticalGap();
-						double absoluteComponentLabelCenterY = vGap * 2 + labelSize.height + WKFPreferences.getComponentFont().getSize()
-								/ 2 - 3;
+						double absoluteComponentLabelCenterY = getHeight() - (MIN_SPACE + WKFPreferences.getComponentFont().getSize());
 						g.drawString(getOperationNode().getWOComponentName(),
 								new FGEPoint(0.5, absoluteComponentLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
 					}
@@ -115,19 +111,8 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		return BG_COLOR;
 	}
 
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - WKFPreferences.getComponentFont().getSize()) / 3;
-	}
-
 	@Override
 	public double getRelativeTextY() {
-		if (showWOName() && getOperationNode().hasWOComponent()) {
-			Dimension labelSize = getNormalizedLabelSize();
-			double vGap = getVerticalGap();
-			double absoluteCenterY = vGap + labelSize.height / 2;
-			return absoluteCenterY / getHeight();
-		}
 		return 0.5;
 	}
 
