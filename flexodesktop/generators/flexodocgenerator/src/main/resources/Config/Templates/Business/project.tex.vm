@@ -180,7 +180,7 @@ linkcolor=blue,
     &  \raisebox{-2pt}{\textbf{\doctitleShort}} & \raisebox{-2pt}{\thepage{}} \\
     \end{tabularx}
 }
-\fancyfoot[L]{\small Generated with \emph{OpenFlexo Tool Set} from Denali S.A. \yeardate\today{} \raisebox{0mm}{ \small \usebox{\denalilogofooter}} }
+\fancyfoot[L]{\small Generated with \emph{OpenFlexo Tool Set} from AgileBirds sprl. \yeardate\today{} \raisebox{0mm}{ \small \usebox{\denalilogofooter}} }
 \fancyfoot[R]{\small Version: \docversion}
 
 #foreach($entry in ${repository.getTocRepository().getSortedTocEntries()})

@@ -27,7 +27,7 @@ HEAD: WDLHead{
     usePrototypeJS = true;
     useScriptaculousControlsJS = true;
 	metaKeywords = "OpenFlexo";
-    metaDescription = "This website is powered by OpenFlexo from Agile Birds sprl (www.flexoBPM.com).";
+    metaDescription = "This website is powered by OpenFlexo from Agile Birds sprl (www.agilebirds.com).";
 }
 
 onLoadBody: WOString {
@@ -121,9 +121,9 @@ CASCADINGMENU : WDLJSMenu{
 }
 
 FOOTER: WDLFooter{
-	company = "www.openflexo.com";
-	infoEmail = "support@openflexo.com";
-	copyrightYear = 2012;
+	company = "www.agilebirds.com";
+	infoEmail = "support@agilebirds.com";
+	copyrightYear = 2013;
 	hideVersion = true;
 }
 
