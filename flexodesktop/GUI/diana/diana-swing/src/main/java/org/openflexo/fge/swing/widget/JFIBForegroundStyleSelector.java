@@ -174,7 +174,10 @@ public class JFIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> im
 
 		@Override
 		public Dimension getDefaultSize() {
-			return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+			if (fibComponent.getWidth() != null && fibComponent.getHeight() != null) {
+				return new Dimension(fibComponent.getWidth(), fibComponent.getHeight());
+			}
+			return null;
 		}
 
 		public void delete() {

@@ -33,6 +33,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.DNDInfo;
 import org.openflexo.fge.control.actions.MoveAction;
+import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.PaletteController;
 import org.openflexo.fge.shapes.ShapeSpecification;
@@ -52,7 +53,6 @@ import org.openflexo.fge.swing.widget.JFIBTextStyleSelector;
 import org.openflexo.fge.swing.widget.JShapePreviewPanel;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**

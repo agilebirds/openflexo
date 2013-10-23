@@ -35,7 +35,6 @@ import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
-import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;

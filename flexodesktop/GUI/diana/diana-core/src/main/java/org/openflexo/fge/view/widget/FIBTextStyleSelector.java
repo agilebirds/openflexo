@@ -34,6 +34,6 @@ import org.openflexo.toolbox.FileResource;
 // TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
 public interface FIBTextStyleSelector<C extends JComponent> extends FIBCustomComponent<TextStyle, C> {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/TextStylePanel.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/TextStyleSelector.fib");
 
 }

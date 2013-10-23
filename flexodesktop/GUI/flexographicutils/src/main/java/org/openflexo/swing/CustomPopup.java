@@ -245,22 +245,24 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		// dim.height = dim.height - 50;
 		posX = p.x;/* +getWidth()-getCustomPanel().getWidth(); */
 		posY = p.y + getHeight() - 1;
-		int newWidth;
+		int newWidth = -1;
 		if (getRequiredWidth() < 0) {
 			newWidth = getCustomPanel().getDefaultSize().width;
-		} else {
+		} else if (getCustomPanel().getDefaultSize() != null) {
 			if (getRequiredWidth() > getCustomPanel().getDefaultSize().width) {
 				newWidth = getRequiredWidth();
 			} else {
 				newWidth = getCustomPanel().getDefaultSize().width;
 			}
 		}
-		int newHeight = getCustomPanel().getDefaultSize().height;
+		int newHeight = (getCustomPanel().getDefaultSize() != null ? getCustomPanel().getDefaultSize().height : -1);
 		/*
 		 * if (posX + getCustomPanel().getDefaultSize().width > dim.width) { posX = dim.width - getCustomPanel().getDefaultSize().width -
 		 * 20; } if (posY + getCustomPanel().getDefaultSize().height > dim.height) { newHeight = dim.height - posY; }
 		 */
-		getCustomPanel().setPreferredSize(new Dimension(newWidth, newHeight));
+		if (newWidth > -1 && newWidth > -1) {
+			getCustomPanel().setPreferredSize(new Dimension(newWidth, newHeight));
+		}
 		// _customPopup = popupFactory.getPopup(this, getCustomPanel(), posX,
 		// posY);
 		_popup = new CustomJPopupMenu(this);

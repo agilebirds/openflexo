@@ -34,6 +34,6 @@ import org.openflexo.toolbox.FileResource;
 // TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
 public interface FIBShadowStyleSelector<C extends JComponent> extends FIBCustomComponent<ShadowStyle, C> {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ShadowStyleSelector.fib");
 
 }

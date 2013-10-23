@@ -28,7 +28,6 @@ import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
 import org.openflexo.fge.view.DianaViewFactory;
-import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**

@@ -42,6 +42,7 @@ import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaViewer;

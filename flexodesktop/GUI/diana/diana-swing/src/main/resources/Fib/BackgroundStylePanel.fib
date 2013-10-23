@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="" dataClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector$BackgroundStyleFactory" controllerClassName="org.openflexo.fge.swing.widget.JFIBBackgroundStyleSelector$BackgroundStyleDetailsPanel$CustomFIBController" visible="" font="SansSerif,0,11" width="310" height="350" name="BackgroundStylePanel" opaque="false">
+<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="" dataClassName="org.openflexo.fge.control.tools.BackgroundStyleFactory" font="SansSerif,0,11" width="310" height="350" name="BackgroundStylePanel" opaque="false">
   <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" width="80" height="60" opaque="false">
     <Label label="background" index="0" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
       <LocalizedDictionary />
@@ -135,14 +135,6 @@
     </Label>
     <Number allowsNull="false" minValue="0" maxValue="1" increment="0.05" numberType="FloatType" columns="3" index="3" data="data.backgroundStyle.transparencyLevel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=8;insetsRight=2;insetsTop=0;location=right)" visible="" name="Integer" format="" icon="" tooltip="" localize="true" enable="((data.backgroundStyleType != &quot;NONE&quot;) &amp; data.backgroundStyle.useTransparency)" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   </Panel>
-  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="7" data="" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ControlPanel" opaque="false">
-    <Button action="controller.apply()" buttonIcon="" buttonType="Trigger" label="apply" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="">
-      <LocalizedDictionary />
-    </Button>
-    <Button action="controller.cancel()" buttonIcon="" buttonType="Trigger" label="cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="">
-      <LocalizedDictionary />
-    </Button>
-  </Panel>
   <LocalizedDictionary>
     <Localized key="background" lang="English">Background</Localized>
     <Localized key="none" lang="English">None</Localized>
@@ -155,8 +147,6 @@
     <Localized key="fit_to_shape" lang="English">Fit to shape</Localized>
     <Localized key="x" lang="English">x</Localized>
     <Localized key="y" lang="English">y</Localized>
-    <Localized key="apply" lang="English">Apply</Localized>
-    <Localized key="cancel" lang="English">Cancel</Localized>
     <Localized key="background" lang="French">Arrière-plan</Localized>
     <Localized key="none" lang="French">Aucun</Localized>
     <Localized key="color" lang="French">Couleur</Localized>
@@ -168,8 +158,6 @@
     <Localized key="fit_to_shape" lang="French">Adapté à la forme</Localized>
     <Localized key="x" lang="French">x</Localized>
     <Localized key="y" lang="French">y</Localized>
-    <Localized key="apply" lang="French">Appliquer</Localized>
-    <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="background" lang="Dutch">Background</Localized>
     <Localized key="none" lang="Dutch">None</Localized>
     <Localized key="color" lang="Dutch">Color</Localized>
@@ -181,8 +169,6 @@
     <Localized key="fit_to_shape" lang="Dutch">Fit to shape</Localized>
     <Localized key="x" lang="Dutch">x</Localized>
     <Localized key="y" lang="Dutch">y</Localized>
-    <Localized key="apply" lang="Dutch">Apply</Localized>
-    <Localized key="cancel" lang="Dutch">Cancel</Localized>
     <Localized key="not_applicable" lang="English">Not applicable</Localized>
     <Localized key="not_applicable" lang="French">Sans objet</Localized>
     <Localized key="not_applicable" lang="Dutch">Not applicable</Localized>

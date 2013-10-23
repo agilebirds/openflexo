@@ -51,7 +51,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 // TODO: suppress reference to Swing (when FIB library will be independant from SWING technology)
 public interface FIBShapeSelector<C extends JComponent> extends FIBCustomComponent<ShapeSpecification, C> {
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelector.fib");
 
 	public static final FGEModelFactory SHAPE_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 

@@ -10,7 +10,7 @@
     <Label label="line_width" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="(!(data.noStroke))">
       <LocalizedDictionary />
     </Label>
-    <Number allowsNull="false" minValue="0.1" maxValue="50" increment="0.1" numberType="DoubleType" columns="3" index="1" data="data.lineWidth" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="LineWidth" localize="true" enable="(!(data.noStroke))"/>
+    <Number allowsNull="false" minValue="0.1" maxValue="50" increment="0.1" numberType="DoubleType" columns="3" index="1" data="data.lineWidth" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="LineWidth" localize="true" enable="(!(data.noStroke))" />
     <Label label="color" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="(!(data.noStroke))">
       <LocalizedDictionary />
     </Label>
@@ -40,7 +40,7 @@
     </Label>
     <CheckBox selected="true" index="1" data="data.useTransparency" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" enable="(!(data.noStroke))" />
     <Label label="transparency_level" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" />
-    <Number allowsNull="false" minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" index="3" data="data.transparencyLevel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=7;insetsRight=2;insetsTop=0;location=center)" name="TransparencyLevel" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)"/>
+    <Number allowsNull="false" minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" index="3" data="data.transparencyLevel" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=7;insetsRight=2;insetsTop=0;location=center)" name="TransparencyLevel" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="no_stroke" lang="English">No stroke</Localized>
