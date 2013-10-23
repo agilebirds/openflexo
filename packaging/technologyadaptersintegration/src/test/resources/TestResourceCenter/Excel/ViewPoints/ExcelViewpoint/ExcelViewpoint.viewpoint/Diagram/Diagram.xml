@@ -3,21 +3,21 @@
   <EditionPattern id="2" name="Sheet">
     <DropScheme id="3" target="top" name="drop" label="drop" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <TextFieldParameter id="4" name="name" label="name" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-      <AddShape id="5" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
-        <AddressedDiagramModelSlot id="6" isRequired="true" isReadOnly="false" />
-      </AddShape>
-      <AddExcelSheet id="7" sheetName="parameters.name" assignation="sheet">
-        <AddressedBasicExcelModelSlot idref="8" />
+      <AddExcelSheet id="5" sheetName="parameters.name" assignation="sheet">
+        <AddressedBasicExcelModelSlot idref="6" />
       </AddExcelSheet>
+      <AddShape id="7" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
+        <AddressedDiagramModelSlot id="8" isRequired="true" isReadOnly="false" />
+      </AddShape>
     </DropScheme>
     <CreationScheme id="9" name="creation" label="creation" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <TechnologyObjectParameter id="10" name="technologyObject" label="technologyObject" usePaletteLabelAsDefaultValue="false" isRequired="false">
-        <AddressedBasicExcelModelSlot id="8" isRequired="true" isReadOnly="false" name="excelMS" />
+        <AddressedBasicExcelModelSlot id="6" isRequired="true" isReadOnly="false" name="excelMS" />
       </TechnologyObjectParameter>
-      <AddShape id="11" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
-        <AddressedDiagramModelSlot idref="6" />
+      <DeclarePatternRole id="11" object="parameters.technologyObject" assignation="sheet" />
+      <AddShape id="12" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
+        <AddressedDiagramModelSlot idref="8" />
       </AddShape>
-      <DeclarePatternRole id="12" object="parameters.technologyObject" assignation="sheet" />
     </CreationScheme>
     <DeletionScheme id="13" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <DeleteAction id="14" object="shape" />
@@ -25,7 +25,7 @@
     <ContainedShapePatternRole id="15" patternRole="shape" name="shape" exampleLabel="label">
       <ShapeGraphicalRepresentation id="16" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-10.0" y="-12.0" width="78.86445281696307" height="83.67960651246767" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="17" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="18" imageFile="../../../icons_excel/48px-Crystal_Clear_mimetype_spreadsheet.png" scaleX="2.0625" scaleY="1.25" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="18" imageFile="../../../icons_excel/48px-Crystal_Clear_mimetype_spreadsheet.png" scaleX="1.6430094336867305" scaleY="1.74332513567641" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <SelectedForegroundStyle id="19" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <SelectedColorBackgroundStyle id="20" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
         <FocusedForegroundStyle id="21" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -36,10 +36,10 @@
         <TextStyle id="26" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <AddressedDiagramModelSlot id="27" isRequired="true" isReadOnly="false" name="this" virtualModelURI="http://ExcelViewpoint/Diagram" />
-      <GRSpec id="28" featureName="label" value="sheet.name" readOnly="false" />
+      <GRSpec id="28" featureName="label" value="sheet.name" readOnly="true" />
     </ContainedShapePatternRole>
     <ContainedExcelSheetPatternRole id="29" name="sheet" patternRole="sheet">
-      <AddressedBasicExcelModelSlot idref="8" />
+      <AddressedBasicExcelModelSlot idref="6" />
     </ContainedExcelSheetPatternRole>
     <PrimaryRepresentationShapePatternRole idref="15" />
     <Inspector id="30" inspectorTitle="Sheet" />
@@ -49,19 +49,19 @@
       <TextFieldParameter id="33" name="value" label="value" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <IntegerParameter id="34" name="column" label="column" defaultValue="1" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <AddShape id="35" container="target.shape" extendParentBoundsToHostThisShape="false" assignation="shape">
-        <AddressedDiagramModelSlot idref="6" />
+        <AddressedDiagramModelSlot idref="8" />
       </AddShape>
       <AddExcelCell id="36" row="target.row" cellType="String" assignation="cell">
         <value>parameters.value</value>
         <columnIndex>parameters.column</columnIndex>
-        <AddressedBasicExcelModelSlot idref="8" />
+        <AddressedBasicExcelModelSlot idref="6" />
       </AddExcelCell>
     </DropScheme>
     <DeletionScheme id="37" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <DeleteAction id="38" object="shape" />
     </DeletionScheme>
     <ContainedShapePatternRole id="39" patternRole="shape" name="shape" exampleLabel="label">
-      <ShapeGraphicalRepresentation id="40" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="79.0" y="8.0" width="48.11881188118812" height="44.06593406593407" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="40" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="79.0" y="8.0" width="48.11881188118812" height="44.06593406593407" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="41" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <ImageBackgroundStyle id="42" imageFile="../../../icons_excel/48px-Crystal_Clear_app_kpersonalizer.png" scaleX="1.0024752475247525" scaleY="0.9180402930402932" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
         <SelectedForegroundStyle id="43" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -74,10 +74,10 @@
         <TextStyle id="49" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <AddressedDiagramModelSlot idref="27" />
-      <GRSpec id="50" featureName="label" value="cell.cellValue.toString" readOnly="false" />
+      <GRSpec id="50" featureName="label" value="cell.cellValue.toString" readOnly="true" />
     </ContainedShapePatternRole>
     <ContainedExcelCellPatternRole id="51" name="cell" patternRole="cell">
-      <AddressedBasicExcelModelSlot idref="8" />
+      <AddressedBasicExcelModelSlot idref="6" />
     </ContainedExcelCellPatternRole>
     <PrimaryRepresentationShapePatternRole idref="39" />
     <Inspector id="52" inspectorTitle="Cell" />
@@ -89,18 +89,18 @@
         <AddressedDiagramModelSlot idref="27" />
       </EditionPatternInstanceParameter>
       <AddShape id="57" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
-        <AddressedDiagramModelSlot idref="6" />
+        <AddressedDiagramModelSlot idref="8" />
       </AddShape>
       <AddExcelRow id="58" excelSheet="parameters.editionPatternInstance.sheet" assignation="row">
         <rowIndex>parameters.index</rowIndex>
-        <AddressedBasicExcelModelSlot idref="8" />
+        <AddressedBasicExcelModelSlot idref="6" />
       </AddExcelRow>
     </DropScheme>
     <DeletionScheme id="59" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
       <DeleteAction id="60" object="shape" />
     </DeletionScheme>
     <ContainedShapePatternRole id="61" patternRole="shape" name="shape" exampleLabel="label">
-      <ShapeGraphicalRepresentation id="62" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-8.0" y="-12.0" width="153.66227831574366" height="60.879120879120876" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <ShapeGraphicalRepresentation id="62" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="-8.0" y="-12.0" width="153.66227831574366" height="60.879120879120876" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" text="label" isMultilineAllowed="true" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
         <ForegroundStyle id="63" noStroke="false" color="0,0,0" lineWidth="1.500000001490116" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="SMALL_DASHES" useTransparency="false" transparencyLevel="0.5" />
         <ColorGradientBackgroundStyle id="64" color1="204,204,255" color2="255,255,255" direction="NORTH_SOUTH" useTransparency="false" transparencyLevel="0.5" />
         <SelectedForegroundStyle id="65" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
@@ -113,28 +113,30 @@
         <TextStyle id="71" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <AddressedDiagramModelSlot idref="27" />
+      <GRSpec id="72" featureName="label" value="row.rowIndex.toString" readOnly="true" />
     </ContainedShapePatternRole>
-    <ContainedExcelRowPatternRole id="72" name="row" patternRole="row">
-      <AddressedBasicExcelModelSlot idref="8" />
+    <ContainedExcelRowPatternRole id="73" name="row" patternRole="row">
+      <AddressedBasicExcelModelSlot idref="6" />
     </ContainedExcelRowPatternRole>
     <PrimaryRepresentationShapePatternRole idref="61" />
-    <Inspector id="73" inspectorTitle="Row" />
+    <Inspector id="74" inspectorTitle="Row" />
   </EditionPattern>
-  <LocalizedDictionary id="74" />
+  <LocalizedDictionary id="75" />
   <DiagramModelSlot idref="27" />
-  <BasicExcelModelSlot idref="8" />
-  <SynchronizationScheme id="75" name="synchronization" label="synchronization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-    <FetchRequestIterationAction id="76" iteratorName="item">
-      <AddressedSelectExcelSheet id="77">
-        <AddressedBasicExcelModelSlot idref="8" />
+  <BasicExcelModelSlot idref="6" />
+  <SynchronizationScheme id="76" name="synchronization" label="synchronization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <FetchRequestIterationAction id="77" iteratorName="item">
+      <AddressedSelectExcelSheet id="78">
+        <AddressedBasicExcelModelSlot idref="6" />
       </AddressedSelectExcelSheet>
-      <AddressedBasicExcelModelSlot idref="8" />
-      <MatchEditionPatternInstance id="78" virtualModelInstance="diagram" creationSchemeURI="http://ExcelViewpoint/Diagram#Sheet.creation">
-        <MatchingCriteria id="79" patternRoleName="shape" />
-        <MatchingCriteria id="80" patternRoleName="sheet" value="item" />
-        <CreateEditionPatternInstanceParameter id="81" paramName="technologyObject" value="item" />
+      <AddressedBasicExcelModelSlot idref="6" />
+      <MatchEditionPatternInstance id="79" virtualModelInstance="diagram" creationSchemeURI="http://ExcelViewpoint/Diagram#Sheet.creation">
+        <MatchingCriteria id="80" patternRoleName="shape" />
+        <MatchingCriteria id="81" patternRoleName="sheet" value="item" />
+        <CreateEditionPatternInstanceParameter id="82" paramName="technologyObject" value="item" />
       </MatchEditionPatternInstance>
     </FetchRequestIterationAction>
   </SynchronizationScheme>
-  <Inspector id="82" inspectorTitle="Diagram" />
+  <DeletionScheme id="83" name="deletion" label="deletion" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+  <Inspector id="84" inspectorTitle="Diagram" />
 </DiagramSpecification>
