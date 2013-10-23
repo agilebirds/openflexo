@@ -94,6 +94,7 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 			noneForeground = ForegroundStyle.makeNone();
 			setLayer(SWLEditorConstants.ACTION_PG_LAYER);
 		}
+		setHasText(false);
 		setIsFocusable(false);
 		setIsSelectable(false);
 	}
