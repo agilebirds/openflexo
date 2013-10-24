@@ -484,6 +484,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				FlexoController.notify(FlexoLocalization.localizedForKey("sorry_but_document_file_has_been_removed"));
 				return;
 			}
+			goOnline();
 			FlexoFileChooser chooser = new FlexoFileChooser(parentWindow);
 			chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_where_to_save_document") + " " + document.getTitle());
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -1521,6 +1522,7 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 				if (comment == null) {
 					return;
 				}
+				goOnline();
 				List<ServerRestClientOperation> operations = new ArrayList<AbstractServerRestClientModel.ServerRestClientOperation>(4);
 				operations.add(new SendProjectToServer(comment, closeSession));
 				if (session == null || closeSession) {

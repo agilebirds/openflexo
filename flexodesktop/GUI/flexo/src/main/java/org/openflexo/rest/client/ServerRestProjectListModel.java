@@ -171,6 +171,7 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 	}
 
 	public void refresh() {
+		goOnline();
 		performOperationsInSwingWorker(true, false, new UpdateUserOperation(), new UpdateProjects());
 	}
 
