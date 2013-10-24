@@ -696,6 +696,9 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			ProjectVersion updateVersion = client.projectsProjectIDVersions(version.getProject()).id(version.getVersionID())
 					.getAsProjectVersionXml();
+			if (updateVersion == null) {
+				return;
+			}
 			List<ProjectVersion> versions = getVersions();
 			if (versions != null) {
 				int index = versions.indexOf(version);
