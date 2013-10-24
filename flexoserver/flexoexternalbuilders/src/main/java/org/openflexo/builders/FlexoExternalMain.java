@@ -16,10 +16,12 @@ import org.openflexo.FlexoProperties;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
@@ -121,6 +123,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		UserType.setCurrentUserType(UserType.DEVELOPER);
 		FlexoProperties.load();
 		initializeLoggingManager();
+		FlexoLocalization.initWith(new FlexoMainLocalizer());
 		if (!isDev) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("PreferredResourcePath is set to " + ResourceLocator.getPreferredResourcePath().getAbsolutePath());
