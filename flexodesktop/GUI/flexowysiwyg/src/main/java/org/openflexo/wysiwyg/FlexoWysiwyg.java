@@ -22,13 +22,27 @@ package org.openflexo.wysiwyg;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.SystemFlavorMap;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +69,8 @@ import sferyx.administration.editors.EditorHTMLDocument;
 import sferyx.administration.editors.HTMLEditor;
 
 public abstract class FlexoWysiwyg extends HTMLEditor {
+
+	private static String ZERO_CHAR_STRING = "" + (char) 0;
 
 	protected static final Logger logger = Logger.getLogger(FlexoWysiwyg.class.getPackage().getName());
 
@@ -112,8 +128,81 @@ public abstract class FlexoWysiwyg extends HTMLEditor {
 		if (!getIsViewSourceAvailable()) {
 			setSourceEditorVisible(false);
 		}
-
+		addDnDSupport();
 		addToConstructor();
+	}
+
+	private void addDnDSupport() {
+		new DropTarget(getInternalJEditorPane(), DnDConstants.ACTION_COPY, new DropTargetListener() {
+
+			@Override
+			public void dropActionChanged(DropTargetDragEvent dtde) {
+
+			}
+
+			@Override
+			public void drop(DropTargetDropEvent dtde) {
+				try {
+					Transferable tr = dtde.getTransferable();
+					dtde.acceptDrop(DnDConstants.ACTION_COPY);
+					StringBuilder sb = new StringBuilder();
+					if (tr.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor)) {
+						List<File> fileList = (List<File>) tr.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
+						Iterator<File> iterator = fileList.iterator();
+						while (iterator.hasNext()) {
+							File file = iterator.next();
+							insertImage(file.getAbsolutePath());
+						}
+					} else {
+						DataFlavor[] flavors = tr.getTransferDataFlavors();
+						boolean handled = false;
+						for (int i = 0; i < flavors.length; i++) {
+							if (flavors[i].isRepresentationClassReader()) {
+								Reader reader = flavors[i].getReaderForText(tr);
+								BufferedReader br = new BufferedReader(reader);
+								java.lang.String line = null;
+								while ((line = br.readLine()) != null) {
+									try {
+										// kde seems to append a 0 char to the end of the reader
+										if (ZERO_CHAR_STRING.equals(line)) {
+											continue;
+										}
+										File file = new File(new URI(line));
+										insertImage(file.getAbsolutePath());
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+					dtde.getDropTargetContext().dropComplete(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void dragOver(DropTargetDragEvent dtde) {
+
+			}
+
+			@Override
+			public void dragExit(DropTargetEvent dte) {
+
+			}
+
+			@Override
+			public void dragEnter(DropTargetDragEvent dtde) {
+				for (DataFlavor flavor : dtde.getCurrentDataFlavors()) {
+					if (flavor.isFlavorJavaFileListType() || flavor.isRepresentationClassReader()) {
+						dtde.acceptDrag(DnDConstants.ACTION_COPY);
+						return;
+					}
+				}
+				dtde.rejectDrag();
+			}
+		}, true, SystemFlavorMap.getDefaultFlavorMap());
 	}
 
 	protected Component getSourceEditorComponent() {
@@ -420,6 +509,7 @@ public abstract class FlexoWysiwyg extends HTMLEditor {
 	@Override
 	public void insertImage(String imageURL) {
 		String fileName = imageURL;
+		fileName = fileName.replace('\\', '/');
 		int index = fileName.lastIndexOf('/');
 		if (index > -1) {
 			fileName = fileName.substring(index + 1);
