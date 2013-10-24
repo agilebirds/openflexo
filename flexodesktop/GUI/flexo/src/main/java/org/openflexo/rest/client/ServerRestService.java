@@ -409,6 +409,9 @@ public class ServerRestService implements HasPropertyChangeSupport {
 			if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
 				params.setWSURL(params.getWSInstance().getRestURL());
 			}
+			if (isOffline()) {
+				return null;
+			}
 			if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
 					|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
 				try {
