@@ -54,6 +54,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoServerInstance;
 import org.openflexo.view.controller.FlexoServerInstanceManager;
 
+import com.google.common.io.Files;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 
@@ -235,6 +236,13 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				if (response.getStatus() == 404) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Impossible to download file: " + message);
+						// A file not found will never recover. So let's just drop this.
+						return true;
+					}
+				}
 				throw new WebApplicationException(Response.fromResponse(Response.status(response.getClientResponseStatus()).build())
 						.entity(message).build());
 			}
@@ -267,17 +275,19 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				bos = new BufferedOutputStream(fos);
 				input = response.getEntity(InputStream.class);
 				IOUtils.copy(input, bos);
+				IOUtils.closeQuietly(input);
+				IOUtils.closeQuietly(bos);
 				if (watchedRemoteJob.isUnzip()) {
-					saveToFolder = new File(saveToFile, saveToFile.getName().substring(0, saveToFile.getName().length() - 4));
-					saveToFolder.mkdir();
-					ZipUtils.unzip(saveToFile, saveToFolder);
-					Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);
+					File tmpSaveToFolder = Files.createTempDir();
+					ZipUtils.unzip(saveToFile, tmpSaveToFolder);
+					FileUtils.deleteQuietly(saveToFile);
+					Collection<File> listFiles = FileUtils.listFiles(tmpSaveToFolder, new String[] { "html" }, false);
 					if (listFiles.size() == 0) {
-						listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, true);
+						listFiles = FileUtils.listFiles(tmpSaveToFolder, new String[] { "html" }, true);
 					}
 					if (listFiles.size() == 0) {
 						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Could not find html file in zip extracted at: " + saveToFolder.getAbsolutePath());
+							logger.warning("Could not find html file in zip extracted at: " + tmpSaveToFolder.getAbsolutePath());
 						}
 						fileToOpen = saveToFile;
 					} else if (listFiles.size() == 1) {
@@ -297,12 +307,15 @@ public class ServerRestService implements HasPropertyChangeSupport {
 							}
 						}
 					}
+					org.openflexo.toolbox.FileUtils.copyContentDirToDir(fileToOpen.getParentFile(), saveToFolder);
+					fileToOpen = new File(saveToFolder, fileToOpen.getName());
+					FileUtils.deleteQuietly(tmpSaveToFolder);
 				}
 				return true;
 			} finally {
 				IOUtils.closeQuietly(input);
 				IOUtils.closeQuietly(bos);
-				if (watchedRemoteJob.isOpenDocument()) {
+				if (watchedRemoteJob.isOpenDocument() && fileToOpen != null) {
 					if (Desktop.isDesktopSupported()) {
 						try {
 							Desktop.getDesktop().open(fileToOpen);
