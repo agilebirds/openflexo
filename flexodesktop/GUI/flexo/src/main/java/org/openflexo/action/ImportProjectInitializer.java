@@ -118,6 +118,9 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 		}
 
 		private boolean loadAndSetProject(ImportProject action, File selectedFile) {
+			if (selectedFile == null) {
+				return false;
+			}
 			FlexoEditor editor = null;
 			try {
 				editor = getController().getApplicationContext().getProjectLoader().loadProject(selectedFile, true);
