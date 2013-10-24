@@ -1,0 +1,246 @@
+package org.openflexo.model.undo;
+
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+
+import org.openflexo.model.factory.ModelFactory;
+
+/**
+ * A PAMELA {@link UndoManager} tracks and record PAMELA atomic edits into aggregates named compound edit.<br>
+ * It provides a way to undo or redo the appropriate edits.<br>
+ * 
+ * To instanciate and enable an {@link UndoManager}, use the {@link ModelFactory#createUndoManager()} method.<br>
+ * 
+ * {@link UndoManager} internally manages a list of {@link CompoundEdit}, which are aggregates of PAMELA atomic events ({@link AtomicEdit}).<br>
+ * You should use {{@link #startRecording(String)} and {{@link #stopRecording(CompoundEdit)} methods to semantically control undo/redo
+ * sequences.<br>
+ * 
+ * The {@link UndoManager} is automatically tracking all PAMELA atomic events (see {@link AtomicEdit}). If an {@link AtomicEdit} is received
+ * outside a declared recording edit, then a new edition (a {@link CompoundEdit}) is automatically instantiated. No inconsisency should be
+ * raised because of unregistered edits.<br>
+ * 
+ * {@link UndoManager}> maintains an ordered list of edits and the index of the next edit in that list. The index of the next edit is either
+ * the size of the current list of edits, or if {@link UndoManager#undo()} has been invoked it corresponds to the index of the last
+ * significant edit that was undone. When {@link UndoManager#undo()} is invoked all edits from the index of the next edit to the last
+ * significant edit are undone, in reverse order. <br>
+ * 
+ * Invoking {@link UndoManager#redo()} results in invoking {@link UndoManager#redo()} on all edits between the index of the next edit and
+ * the next significant edit (or the end of the list). <br>
+ * 
+ * Adding an edit to an <code>UndoManager</code> results in removing all edits from the index of the next edit to the end of the list.<br>
+ * 
+ * This class is thread safe.
+ * 
+ * @author sylvain
+ */
+@SuppressWarnings("serial")
+public class UndoManager extends javax.swing.undo.UndoManager {
+
+	private CompoundEdit currentEdition = null;
+	private boolean undoIsProgress = false;
+	private boolean redoIsProgress = false;
+
+	/**
+	 * Start a new labelled edit tracking<br>
+	 * All PAMELA atomic events that will be received from now will be aggregated into newly created {@link CompoundEdit}
+	 * 
+	 * @param presentationName
+	 * @return the newly created {@link CompoundEdit}
+	 */
+	public synchronized CompoundEdit startRecording(String presentationName) {
+		if (currentEdition != null) {
+			System.out.println("!!!!!!!!!! ERROR: already recording !!!");
+			stopRecording(currentEdition);
+		}
+		currentEdition = new CompoundEdit(presentationName);
+		addEdit(currentEdition);
+
+		return currentEdition;
+	}
+
+	/**
+	 * Stops supplied edit tracking<br>
+	 * After this method, this edit will be available for undo/redo
+	 * 
+	 * @param edit
+	 * @return
+	 */
+	public synchronized CompoundEdit stopRecording(CompoundEdit edit) {
+		if (currentEdition == null) {
+			System.out.println("!!!!!!!!!! ERROR: was not recording !!!");
+			return null;
+		} else if (currentEdition != edit) {
+			System.out.println("!!!!!!!!!! ERROR: was not recording this edit !!!");
+			return null;
+		}
+
+		currentEdition.end();
+		System.out.println("----------------> Stop recording " + currentEdition.getPresentationName());
+		// System.out.println(currentEdition.describe());
+		currentEdition = null;
+		return currentEdition;
+	}
+
+	/**
+	 * Return flag indicating if {@link UndoManager} is currently recording.<br>
+	 * Return true if start recording has been called
+	 * 
+	 * @return
+	 */
+	public synchronized boolean isBeeingRecording() {
+		return currentEdition != null;
+	}
+
+	/**
+	 * Returns true if edits may be undone.
+	 * 
+	 * @return true if there are edits to be undone
+	 * @see CompoundEdit#canUndo
+	 * @see #editToBeUndone
+	 */
+	@Override
+	public synchronized boolean canUndo() {
+		if (undoIsProgress || redoIsProgress) {
+			return false;
+		}
+		return super.canUndo();
+	}
+
+	/**
+	 * Returns true if edits may be redone.
+	 * 
+	 * @return true if there are edits to be redone
+	 * @see CompoundEdit#canRedo
+	 * @see #editToBeRedone
+	 */
+	@Override
+	public synchronized boolean canRedo() {
+		if (undoIsProgress || redoIsProgress) {
+			return false;
+		}
+		return super.canRedo();
+	}
+
+	/**
+	 * Adds an <code>UndoableEdit</code> to this {@link UndoManager}, if it's possible.
+	 */
+	@Override
+	public synchronized boolean addEdit(UndoableEdit anEdit) {
+		if (anEdit instanceof AtomicEdit) {
+			if (undoIsProgress) {
+				// System.out.println("Ignoring " + anEdit.getPresentationName() + " because UNDO in progress");
+				anEdit.die();
+				return false;
+			}
+			if (redoIsProgress) {
+				// System.out.println("Ignoring " + anEdit.getPresentationName() + " because REDO in progress");
+				anEdit.die();
+				return false;
+			}
+			// This is an atomic edit, therefore, i should agglomerate it in current edition
+			if (currentEdition == null) {
+				System.out.println("!!!!!!!!!! PAMELA edit received outside official recording. Create a default one !!!");
+				startRecording("<Unidentified recording>");
+			}
+			currentEdition.addEdit(anEdit);
+			return true;
+		} else if (anEdit instanceof CompoundEdit) {
+			if (undoIsProgress) {
+				System.out.println("!!!!!!!!!! ERROR: received CompoundEdit while UNDO in progress !!!");
+				return false;
+			}
+			if (redoIsProgress) {
+				System.out.println("!!!!!!!!!! ERROR: received CompoundEdit while REDO in progress !!!");
+				return false;
+			}
+			return super.addEdit(anEdit);
+		} else {
+			System.out.println("???? Unexpected Edit " + anEdit);
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the the next significant edit to be undone if <code>undo</code> is invoked. This returns <code>null</code> if there are no
+	 * edits to be undone.
+	 * 
+	 * @return the next significant edit to be undone
+	 */
+	@Override
+	public CompoundEdit editToBeUndone() {
+		return (CompoundEdit) super.editToBeUndone();
+	}
+
+	/**
+	 * Returns the the next significant edit to be redone if <code>redo</code> is invoked. This returns <code>null</code> if there are no
+	 * edits to be redone.
+	 * 
+	 * @return the next significant edit to be redone
+	 */
+	@Override
+	public CompoundEdit editToBeRedone() {
+		return (CompoundEdit) super.editToBeRedone();
+	}
+
+	/**
+	 * Undoes the appropriate edits. If <code>end</code> has been invoked this calls through to the superclass, otherwise this invokes
+	 * <code>undo</code> on all edits between the index of the next edit and the last significant edit, updating the index of the next edit
+	 * appropriately.
+	 * 
+	 * @throws CannotUndoException
+	 *             if one of the edits throws <code>CannotUndoException</code> or there are no edits to be undone
+	 * @see CompoundEdit#end
+	 * @see #canUndo
+	 * @see #editToBeUndone
+	 */
+	@Override
+	public synchronized void undo() throws CannotUndoException {
+		undoIsProgress = true;
+		super.undo();
+		undoIsProgress = false;
+	}
+
+	/**
+	 * Redoes the appropriate edits. If <code>end</code> has been invoked this calls through to the superclass. Otherwise this invokes
+	 * <code>redo</code> on all edits between the index of the next edit and the next significant edit, updating the index of the next edit
+	 * appropriately.
+	 * 
+	 * @throws CannotRedoException
+	 *             if one of the edits throws <code>CannotRedoException</code> or there are no edits to be redone
+	 * @see CompoundEdit#end
+	 * @see #canRedo
+	 * @see #editToBeRedone
+	 */
+	@Override
+	public synchronized void redo() throws CannotUndoException {
+		redoIsProgress = true;
+		super.redo();
+		redoIsProgress = false;
+	}
+
+	/**
+	 * Return current edition
+	 * 
+	 * @return
+	 */
+	public CompoundEdit getCurrentEdition() {
+		return currentEdition;
+	}
+
+	// Debug
+	public void debug() {
+		if (currentEdition != null) {
+			System.out.println("UndoManager, currently recording " + currentEdition.getPresentationName());
+		} else {
+			System.out.println("UndoManager, currently NOT recording ");
+		}
+		System.out.println("Edits=" + edits.size());
+		for (UndoableEdit e : edits) {
+			if (e instanceof CompoundEdit) {
+				System.out.println(e.getPresentationName() + " with " + ((CompoundEdit) e).getEdits().size() + " atomic edits");
+			}
+		}
+
+	}
+}

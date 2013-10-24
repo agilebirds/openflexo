@@ -12,10 +12,11 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
+import org.openflexo.model.factory.DeletableProxyObject;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FlexoModelObjectImpl.class)
-public interface FlexoModelObject extends AccessibleProxyObject, CloneableProxyObject {
+public interface FlexoModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
 
 	public static final String FLEXO_ID = "flexoId";
 	public static final String NAME = "name";

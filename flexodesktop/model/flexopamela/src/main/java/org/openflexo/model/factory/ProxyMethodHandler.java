@@ -33,6 +33,8 @@ import org.openflexo.model.ModelContext;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.ComplexEmbedded;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Initializer;
@@ -45,6 +47,11 @@ import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.NoSuchEntityException;
 import org.openflexo.model.exceptions.UnitializedEntityException;
 import org.openflexo.model.factory.ModelFactory.PAMELAProxyFactory;
+import org.openflexo.model.undo.AddCommand;
+import org.openflexo.model.undo.CreateCommand;
+import org.openflexo.model.undo.DeleteCommand;
+import org.openflexo.model.undo.RemoveCommand;
+import org.openflexo.model.undo.SetCommand;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 import com.google.common.base.Defaults;
@@ -54,6 +61,7 @@ import com.google.common.collect.Collections2;
 public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListener {
 
 	private static final String DELETED = "deleted";
+	private static final String UNDELETED = "undeleted";
 	private static final String MODIFIED = "modified";
 	private static final String DESERIALIZING = "deserializing";
 	private static final String SERIALIZING = "serializing";
@@ -63,8 +71,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private Map<String, Object> values;
 	private Map<String, Object> oldValues;
 
-	private boolean deleting = false;
+	private boolean destroyed = false;
 	private boolean deleted = false;
+	private boolean deleting = false;
+	private boolean undeleting = false;
 	private boolean initialized = false;
 	private boolean serializing = false;
 	private boolean deserializing = false;
@@ -79,6 +89,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method PERFORM_SUPER_ADDER;
 	private static Method PERFORM_SUPER_REMOVER;
 	private static Method PERFORM_SUPER_DELETER;
+	private static Method PERFORM_SUPER_UNDELETER;
 	private static Method PERFORM_SUPER_FINDER;
 	private static Method PERFORM_SUPER_GETTER_ENTITY;
 	private static Method PERFORM_SUPER_SETTER_ENTITY;
@@ -100,8 +111,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_BEING_CLONED;
 	private static Method DELETE_OBJECT;
 	private static Method DELETE_OBJECT_WITH_CONTEXT;
+	private static Method UNDELETE_OBJECT;
 	private static Method IS_DELETED;
 	private static Method EQUALS_OBJECT;
+	private static Method DESTROY;
 	private final PAMELAProxyFactory<I> pamelaProxyFactory;
 
 	static {
@@ -110,7 +123,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			PERFORM_SUPER_SETTER = AccessibleProxyObject.class.getMethod("performSuperSetter", String.class, Object.class);
 			PERFORM_SUPER_ADDER = AccessibleProxyObject.class.getMethod("performSuperAdder", String.class, Object.class);
 			PERFORM_SUPER_REMOVER = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class);
-			PERFORM_SUPER_DELETER = AccessibleProxyObject.class.getMethod("performSuperDelete");
+			PERFORM_SUPER_DELETER = DeletableProxyObject.class.getMethod("performSuperDelete");
+			PERFORM_SUPER_UNDELETER = DeletableProxyObject.class.getMethod("performSuperUndelete");
 			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class);
 			PERFORM_SUPER_GETTER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperGetter", String.class, Class.class);
 			PERFORM_SUPER_SETTER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperSetter", String.class, Object.class,
@@ -119,17 +133,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					.getMethod("performSuperAdder", String.class, Object.class, Class.class);
 			PERFORM_SUPER_REMOVER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class,
 					Class.class);
-			PERFORM_SUPER_DELETER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperDelete", Class.class);
+			PERFORM_SUPER_DELETER_ENTITY = DeletableProxyObject.class.getMethod("performSuperDelete", Class.class);
 			PERFORM_SUPER_FINDER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class,
 					Class.class);
 			IS_SERIALIZING = AccessibleProxyObject.class.getMethod("isSerializing");
 			IS_DESERIALIZING = AccessibleProxyObject.class.getMethod("isDeserializing");
 			IS_MODIFIED = AccessibleProxyObject.class.getMethod("isModified");
-			IS_DELETED = AccessibleProxyObject.class.getMethod("isDeleted");
+			IS_DELETED = DeletableProxyObject.class.getMethod("isDeleted");
 			SET_MODIFIED = AccessibleProxyObject.class.getMethod("setModified", boolean.class);
 			PERFORM_SUPER_SET_MODIFIED = AccessibleProxyObject.class.getMethod("performSuperSetModified", boolean.class);
-			DELETE_OBJECT = AccessibleProxyObject.class.getMethod("delete");
-			DELETE_OBJECT_WITH_CONTEXT = AccessibleProxyObject.class.getMethod("delete", Array.newInstance(Object.class, 0).getClass());
+			DELETE_OBJECT = DeletableProxyObject.class.getMethod("delete");
+			DELETE_OBJECT_WITH_CONTEXT = DeletableProxyObject.class.getMethod("delete", Array.newInstance(Object.class, 0).getClass());
+			UNDELETE_OBJECT = DeletableProxyObject.class.getMethod("undelete");
 			GET_PROPERTY_CHANGE_SUPPORT = HasPropertyChangeSupport.class.getMethod("getPropertyChangeSupport");
 			GET_DELETED_PROPERTY = HasPropertyChangeSupport.class.getMethod("getDeletedProperty");
 			TO_STRING = Object.class.getMethod("toString");
@@ -138,6 +153,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			IS_CREATED_BY_CLONING = CloneableProxyObject.class.getMethod("isCreatedByCloning");
 			IS_BEING_CLONED = CloneableProxyObject.class.getMethod("isBeingCloned");
 			EQUALS_OBJECT = AccessibleProxyObject.class.getMethod("equalsObject", Object.class);
+			DESTROY = AccessibleProxyObject.class.getMethod("destroy");
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -191,6 +207,40 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
+		if (proceed != null) {
+			// System.out.println("Invoking " + proceed + " instead of " + method);
+			ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
+			if (property != null) {
+				if (methodIsEquivalentTo(method, property.getSetterMethod())) {
+					// System.out.println("DETECTS SET with " + proceed + " insteadof " + method);
+					Object oldValue = invokeGetter(property);
+					if (getModelFactory().getUndoManager() != null) {
+						getModelFactory().getUndoManager().addEdit(
+								new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, args[0], getModelFactory()));
+					}
+				}
+				if (methodIsEquivalentTo(method, property.getAdderMethod())) {
+					// System.out.println("DETECTS ADD with " + proceed + " insteadof " + method);
+					if (getModelFactory().getUndoManager() != null) {
+						getModelFactory().getUndoManager().addEdit(
+								new AddCommand<I>(getObject(), getModelEntity(), property, args[0], getModelFactory()));
+					}
+				}
+				if (methodIsEquivalentTo(method, property.getRemoverMethod())) {
+					// System.out.println("DETECTS REMOVE with " + proceed + " insteadof " + method);
+					if (getModelFactory().getUndoManager() != null) {
+						getModelFactory().getUndoManager().addEdit(
+								new RemoveCommand<I>(getObject(), getModelEntity(), property, args[0], getModelFactory()));
+					}
+				}
+			}
+			try {
+				return proceed.invoke(self, args);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+				throw new ModelExecutionException(e.getCause());
+			}
+		}
 		// System.out.println("Invoke " + method);
 		Initializer initializer = method.getAnnotation(Initializer.class);
 		if (initializer != null) {
@@ -295,6 +345,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return null;
 		} else if (methodIsEquivalentTo(method, TO_STRING)) {
 			return internallyInvokeToString();
+		} else if (methodIsEquivalentTo(method, DESTROY)) {
+			destroy();
+			return null;
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT)) {
 			return cloneObject();
 		} else if (methodIsEquivalentTo(method, EQUALS_OBJECT)) {
@@ -311,6 +364,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeDeleter();
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT)) {
 			return internallyInvokeDeleter();
+		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_UNDELETER)) {
+			return internallyInvokeUndeleter();
+		} else if (methodIsEquivalentTo(method, UNDELETE_OBJECT)) {
+			return internallyInvokeUndeleter();
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT_WITH_CONTEXT)) {
 			return internallyInvokeDeleter(args);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
@@ -402,11 +459,28 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		internallyInvokeRemover(property, args[0]);
 	}
 
+	/**
+	 * Deletes the current object and all its embedded properties as defined by the {@link Embedded} and {@link ComplexEmbedded}
+	 * annotations. Moreover, the provided <code>context</code> represents a list of objects that will also be eventually deleted and which
+	 * should be taken into account when computing embedded objects according to the deletion conditions. Invoking this method may result in
+	 * deleting indirectly the objects provided by the <code>context</code>, however the invoker should make sure that they have been
+	 * actually deleted.
+	 * 
+	 * @param context
+	 *            the list of objects that will also be deleted and which should be taken into account when computing embedded objects.
+	 * @see Embedded#deletionConditions()
+	 * @see ComplexEmbedded#deletionConditions()
+	 */
 	private boolean internallyInvokeDeleter(Object... context) throws ModelDefinitionException {
 
 		if (deleted || deleting) {
 			return false;
 		}
+
+		if (getModelFactory().getUndoManager() != null) {
+			getModelFactory().getUndoManager().addEdit(new DeleteCommand<I>(getObject(), getModelEntity(), getModelFactory()));
+		}
+
 		deleting = true;
 		if (context == null) {
 			context = new Object[] { getObject() };
@@ -425,17 +499,23 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		objects.addAll(embeddedObjects);
 		context = objects.toArray(new Object[objects.size()]);
 		for (Object object : embeddedObjects) {
-			if (object instanceof AccessibleProxyObject) {
-				((AccessibleProxyObject) object).delete(context);
+			if (object instanceof DeletableProxyObject) {
+				((DeletableProxyObject) object).delete(context);
 			}
 		}
 		Iterator<ModelProperty<? super I>> i = modelEntity.getProperties();
 		while (i.hasNext()) {
 			ModelProperty<? super I> property = i.next();
-			if (property.getSetterMethod() != null) {
-				invokeSetter(property, null);
+			if (property.getType().isPrimitive()) {
+				// Avoid to set null for primitives !!!
+				// Do nothing
 			} else {
-				internallyInvokeSetter(property, null);
+				// Otherwise nullify using setter
+				if (property.getSetterMethod() != null) {
+					invokeSetter(property, null);
+				} else {
+					internallyInvokeSetter(property, null);
+				}
 			}
 		}
 		deleted = true;
@@ -443,6 +523,61 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		getPropertyChangeSuppport().firePropertyChange(DELETED, false, true);
 		propertyChangeSupport = null;
 		return deleted;
+	}
+
+	private boolean internallyInvokeUndeleter() throws ModelDefinitionException {
+
+		if (!deleted || deleting) {
+			return false;
+		}
+
+		if (getModelFactory().getUndoManager() != null) {
+			getModelFactory().getUndoManager().addEdit(new CreateCommand<I>(getObject(), getModelEntity(), getModelFactory()));
+		}
+
+		undeleting = true;
+
+		ModelEntity<I> modelEntity = getModelEntity();
+		Iterator<ModelProperty<? super I>> i = modelEntity.getProperties();
+		while (i.hasNext()) {
+			ModelProperty<? super I> property = i.next();
+			if (property.getType().isPrimitive()) {
+				// No need to restore for primitives !!!
+				// Do nothing
+			} else {
+				// Otherwise nullify using setter
+				if (property.getSetterMethod() != null) {
+					invokeSetter(property, oldValues.get(property.getPropertyIdentifier()));
+				} else {
+					internallyInvokeSetter(property, oldValues.get(property.getPropertyIdentifier()));
+				}
+			}
+		}
+		deleted = false;
+		undeleting = false;
+		getPropertyChangeSuppport().firePropertyChange(UNDELETED, false, true);
+		return deleted;
+	}
+
+	/**
+	 * Destroy current object<br>
+	 * After invoking this, the object won't be accessible and all operation performed on this will be in undetermined state.<br>
+	 * To implements deleting/undeleting facilities, use {@link DeletableProxyObject} interface instead
+	 */
+	public void destroy() {
+		if (values != null) {
+			values.clear();
+		}
+		values = null;
+		if (oldValues != null) {
+			oldValues.clear();
+		}
+		oldValues = null;
+		destroyed = true;
+	}
+
+	public boolean isDestroyed() {
+		return destroyed;
 	}
 
 	public Object invokeGetter(ModelProperty<? super I> property) {
@@ -458,6 +593,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	public void invokeSetter(ModelProperty<? super I> property, Object value) {
+
 		try {
 			property.getSetterMethod().invoke(getObject(), value);
 		} catch (IllegalArgumentException e) {
@@ -490,6 +626,27 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
 			throw new ModelExecutionException(e);
+		}
+	}
+
+	public void invokeDeleter(Object... context) {
+		// TODO manage with deleter
+		if (getObject() instanceof DeletableProxyObject) {
+			((DeletableProxyObject) getObject()).delete(context);
+		}
+	}
+
+	public void invokeUndeleter() {
+		// TODO manage with deleter
+		if (getObject() instanceof DeletableProxyObject) {
+			((DeletableProxyObject) getObject()).undelete();
+		}
+	}
+
+	public void invokeDestroy() {
+		// TODO manage with deleter
+		if (getObject() instanceof AccessibleProxyObject) {
+			((AccessibleProxyObject) getObject()).destroy();
 		}
 	}
 
@@ -628,6 +785,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+		Object oldValue = invokeGetter(property);
+		if (getModelFactory().getUndoManager() != null) {
+			getModelFactory().getUndoManager().addEdit(
+					new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, value, getModelFactory()));
+		}
 		switch (property.getCardinality()) {
 		case SINGLE:
 			invokeSetterForSingleCardinality(property, value);
@@ -644,7 +806,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForSingleCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
-		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting) {
+		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting && !undeleting) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
 		// Object oldValue = invokeGetter(property);
@@ -771,7 +933,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeSetterForMapCardinality(ModelProperty<? super I> property, Object value) {
-		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting) {
+		if (property.getSetter() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting && !undeleting) {
 			throw new ModelExecutionException("Setter is not defined for property " + property);
 		}
 		// TODO implement this
@@ -788,6 +950,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
 		// System.out.println("Invoke ADDER "+property.getPropertyIdentifier());
+		if (getModelFactory().getUndoManager() != null) {
+			getModelFactory().getUndoManager()
+					.addEdit(new AddCommand<I>(getObject(), getModelEntity(), property, value, getModelFactory()));
+		}
 		switch (property.getCardinality()) {
 		case SINGLE:
 			throw new ModelExecutionException("Cannot invoke ADDER on " + property.getPropertyIdentifier() + ": Invalid cardinality SINGLE");
@@ -803,7 +969,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void invokeAdderForListCardinality(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
-		if (property.getAdder() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting) {
+		if (property.getAdder() == null && !isDeserializing() && !initializing && !createdByCloning && !deleting && !undeleting) {
 			throw new ModelExecutionException("Adder is not defined for property " + property);
 		}
 		List list = (List) invokeGetter(property);
@@ -849,6 +1015,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
 		// System.out.println("Invoke REMOVER "+property.getPropertyIdentifier());
+		if (getModelFactory().getUndoManager() != null) {
+			getModelFactory().getUndoManager().addEdit(
+					new RemoveCommand<I>(getObject(), getModelEntity(), property, value, getModelFactory()));
+		}
 		switch (property.getCardinality()) {
 		case SINGLE:
 			throw new ModelExecutionException("Cannot invoke REMOVER on " + property.getPropertyIdentifier()
@@ -872,6 +1042,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 		if (list.contains(value)) {
 			list.remove(value);
+			firePropertyChange(property.getPropertyIdentifier(), value, null);
 			// Handle inverse property for new value
 			if (property.hasInverseProperty() && value != null) {
 				ProxyMethodHandler<Object> oppositeHandler = getModelFactory().getHandler(value);

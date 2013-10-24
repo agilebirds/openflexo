@@ -1,5 +1,12 @@
 package org.openflexo.model.factory;
 
+/**
+ * Interface that PAMELA objects should extend in order to benefit from their default implementation handled by the
+ * {@link ProxyMethodHandler} cloning facilities
+ * 
+ * @author sylvain
+ * 
+ */
 public interface CloneableProxyObject {
 
 	/**
