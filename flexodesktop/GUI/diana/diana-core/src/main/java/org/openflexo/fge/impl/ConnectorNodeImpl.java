@@ -49,6 +49,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	protected ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
+		startDrawableObserving();
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public Connector<?> getConnector() {
-		if (connector == null && getGraphicalRepresentation() != null) {
+		if (connector == null && getGraphicalRepresentation() != null && getGraphicalRepresentation().getConnectorSpecification() != null) {
 			connector = getGraphicalRepresentation().getConnectorSpecification().makeConnector(this);
 		}
 		return connector;
@@ -419,7 +420,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			return;
 		}
 		try {
-			if (forceRefresh || ((ConnectorImpl<?>) getConnector()).needsRefresh()) {
+			if (forceRefresh || (getConnector() != null && ((ConnectorImpl<?>) getConnector()).needsRefresh())) {
 				((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
 				checkViewBounds();
 				notifyConnectorModified();
@@ -436,10 +437,20 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public void delete() {
-		super.delete();
-		disableStartObjectObserving();
-		disableEndObjectObserving();
+	public boolean delete() {
+		if (!isDeleted()) {
+			System.out.println("Hop, le connecteur se fait deleter !!!");
+			if (connector != null) {
+				connector.delete();
+			}
+			connector = null;
+			super.delete();
+			stopDrawableObserving();
+			disableStartObjectObserving();
+			disableEndObjectObserving();
+			return true;
+		}
+		return false;
 	}
 
 	/**

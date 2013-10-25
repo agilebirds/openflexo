@@ -113,6 +113,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String HEIGHT_CONSTRAINTS_KEY = "heightConstraints";
 
+	public static final String BACKGROUND_STYLE_TYPE_KEY = "BackgroundStyleType";
+
 	// *******************************************************************************
 	// * Inner concepts
 	// *******************************************************************************
@@ -314,6 +316,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = FOREGROUND_KEY)
 	@XMLElement
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public ForegroundStyle getForeground();
 
 	@Setter(value = FOREGROUND_KEY)
@@ -321,6 +325,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SELECTED_FOREGROUND_KEY)
 	@XMLElement(context = "Selected")
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public ForegroundStyle getSelectedForeground();
 
 	@Setter(value = SELECTED_FOREGROUND_KEY)
@@ -335,6 +341,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = FOCUSED_FOREGROUND_KEY)
 	@XMLElement(context = "Focused")
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public ForegroundStyle getFocusedForeground();
 
 	@Setter(value = FOCUSED_FOREGROUND_KEY)
@@ -348,6 +356,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	public void setHasFocusedForeground(boolean aFlag);
 
 	@Getter(value = BACKGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public BackgroundStyle getBackground();
 
@@ -356,6 +366,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SELECTED_BACKGROUND_KEY)
 	@XMLElement(context = "Selected")
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public BackgroundStyle getSelectedBackground();
 
 	@Setter(value = SELECTED_BACKGROUND_KEY)
@@ -370,6 +382,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = FOCUSED_BACKGROUND_KEY)
 	@XMLElement(context = "Focused")
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public BackgroundStyle getFocusedBackground();
 
 	@Setter(value = FOCUSED_BACKGROUND_KEY)
@@ -402,6 +416,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SHADOW_STYLE_KEY)
 	@XMLElement
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	public ShadowStyle getShadowStyle();
 
 	@Setter(value = SHADOW_STYLE_KEY)

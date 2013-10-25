@@ -24,7 +24,6 @@ import java.awt.Point;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
-import org.openflexo.fge.geom.FGEPoint;
 
 public class SelectionAction extends MouseClickControlActionImpl<DianaInteractiveViewer<?, ?, ?>> {
 
@@ -42,8 +41,9 @@ public class SelectionAction extends MouseClickControlActionImpl<DianaInteractiv
 					return false;
 				}
 				Point newPoint = getPointInView(node, controller, context);
-				controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 				controller.setLastSelectedNode(node);
+				controller.setLastClickedPoint(
+						node.convertLocalViewCoordinatesToRemoteNormalizedPoint(newPoint, node, controller.getScale()), node);
 				return false;
 			}
 		}

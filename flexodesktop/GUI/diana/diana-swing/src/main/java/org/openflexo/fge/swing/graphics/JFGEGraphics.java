@@ -126,13 +126,15 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 		// logger.info("Apply "+currentForeground);
 
-		g2d.setColor(getCurrentForeground().getColor());
-		g2d.setStroke(getStroke(getCurrentForeground(), getScale()));
+		if (getCurrentForeground() != null) {
+			g2d.setColor(getCurrentForeground().getColor());
+			g2d.setStroke(getStroke(getCurrentForeground(), getScale()));
 
-		if (getCurrentForeground().getUseTransparency()) {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentForeground().getTransparencyLevel()));
-		} else {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+			if (getCurrentForeground().getUseTransparency()) {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentForeground().getTransparencyLevel()));
+			} else {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+			}
 		}
 
 	}
@@ -148,29 +150,18 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			return; // Strange...
 		}
 
-		Paint paint = getPaint(getCurrentBackground(), getScale());
-		if (paint != null) {
-			g2d.setPaint(paint);
+		if (getCurrentBackground() != null) {
+			Paint paint = getPaint(getCurrentBackground(), getScale());
+			if (paint != null) {
+				g2d.setPaint(paint);
+			}
+
+			if (getCurrentBackground().getUseTransparency()) {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentBackground().getTransparencyLevel()));
+			} else {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+			}
 		}
-
-		/*if (getCurrentBackground() instanceof NoneBackgroundStyle) {
-			// Nothing to do
-		} else if (getCurrentBackground() instanceof ColorBackgroundStyle) {
-			g2d.setColor(((ColorBackgroundStyle) getCurrentBackground()).getColor());
-		} else if (getCurrentBackground() instanceof ColorGradientBackgroundStyle) {
-			g2d.setPaint(getCurrentBackground().getPaint(getDrawingTreeNode(), _controller.getScale()));
-		} else if (getCurrentBackground() instanceof TextureBackgroundStyle) {
-			g2d.setPaint(getCurrentBackground().getPaint(getDrawingTreeNode(), _controller.getScale()));
-		} else if (getCurrentBackground() instanceof BackgroundImageBackgroundStyle) {
-			g2d.setPaint(getCurrentBackground().getPaint(getDrawingTreeNode(), _controller.getScale()));
-		}*/
-
-		if (getCurrentBackground().getUseTransparency()) {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentBackground().getTransparencyLevel()));
-		} else {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
-		}
-
 	}
 
 	protected void applyCurrentTextStyle() {
@@ -363,7 +354,7 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 	@Override
 	public void drawLine(double x1, double y1, double x2, double y2) {
 		// logger.info("drawLine("+x1+","+y1+","+x2+","+y2+")"+" with "+debugForegroundStyle());
-		if (getCurrentForeground().getNoStroke()) {
+		if (getCurrentForeground() == null || getCurrentForeground().getNoStroke()) {
 			return;
 		}
 		Point p1 = convertNormalizedPointToViewCoordinates(x1, y1);
@@ -586,9 +577,8 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 				(int) (bounds.getY() + p.y + bounds.getHeight() / 2), (int) bounds.getWidth(), (int) bounds.getHeight());
 	}
 
+	// TODO: implements cache for stroke
 	private Stroke cachedStroke = null;
-	private ForegroundStyle cachedStrokeFS = null;
-	private double cachedStokeScale = 0;
 
 	/**
 	 * Computes and return stroke for supplied ForegroundStyle and scale<br>
@@ -613,8 +603,7 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
 					foregroundStyle.getJoinStyle().ordinal(), 10, scaledDashArray, scaledDashedPhase);
 		}
-		cachedStrokeFS = (ForegroundStyle) foregroundStyle.cloneObject();
-		cachedStokeScale = scale;
+		// cachedStokeScale = scale;
 		// }
 		return cachedStroke;
 	}
@@ -662,8 +651,12 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 	private TexturePaint getTexturePaint(TextureBackgroundStyle bs, double scale) {
 		rebuildColoredTexture(bs);
-		return new TexturePaint(getColoredTexture(bs), new Rectangle(0, 0, getColoredTexture(bs).getWidth(), getColoredTexture(bs)
-				.getHeight()));
+		BufferedImage coloredTexture = getColoredTexture(bs);
+		if (coloredTexture != null) {
+			return new TexturePaint(coloredTexture, new Rectangle(0, 0, coloredTexture.getWidth(), coloredTexture.getHeight()));
+		}
+		logger.warning("ColoredTexture not ready");
+		return null;
 	}
 
 	private void rebuildColoredTexture(TextureBackgroundStyle bs) {

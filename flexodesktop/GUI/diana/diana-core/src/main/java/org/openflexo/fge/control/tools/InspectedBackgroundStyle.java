@@ -26,6 +26,7 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.GRParameter;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 
 /**
@@ -89,6 +90,23 @@ public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<Backgro
 			getStyleFactory().setBackgroundStyleType(getBackgroundStyleType());
 		}
 		super.fireSelectionUpdated();
+	}
+
+	protected void applyNewStyleToSelection(Object aStyleType) {
+		if (aStyleType instanceof BackgroundStyleType) {
+			BackgroundStyleType newStyleType = (BackgroundStyleType) aStyleType;
+			System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
+			for (ShapeNode<?> n : getSelection()) {
+				BackgroundStyle nodeStyle = getStyle(n);
+				if (nodeStyle.getBackgroundStyleType() != newStyleType) {
+					System.out.println("Bon, je dois changer le type de " + n);
+					BackgroundStyle oldStyle = n.getBackgroundStyle();
+					n.setBackgroundStyle(getStyleFactory().makeNewStyle());
+					n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
+							oldStyle.getBackgroundStyleType(), newStyleType);
+				}
+			}
+		}
 	}
 
 }

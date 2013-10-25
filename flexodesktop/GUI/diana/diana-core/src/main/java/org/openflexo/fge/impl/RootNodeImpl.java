@@ -3,6 +3,7 @@ package org.openflexo.fge.impl;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -11,6 +12,8 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGECoreUtils;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -27,14 +30,37 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 
 	private BackgroundStyle bgStyle;
 
+	private static final FGEModelFactory BACKGROUND_FACTORY = FGECoreUtils.TOOLS_FACTORY;
+
 	protected RootNodeImpl(DrawingImpl<M> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding) {
 		super(drawing, drawable, grBinding, null);
 		startDrawableObserving();
 	}
 
+	@Override
+	public boolean delete() {
+		if (super.delete()) {
+			stopDrawableObserving();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	protected void stopDrawableObserving() {
+		System.out.println("????????  qui est le con qui m'empeche de regarder ???");
+		super.stopDrawableObserving();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		System.out.println("******************************** Received " + evt.getPropertyName() + " " + evt);
+		super.propertyChange(evt);
+	}
+
 	private BackgroundStyle getBGStyle() {
 		if (bgStyle == null && getGraphicalRepresentation() != null) {
-			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
+			bgStyle = BACKGROUND_FACTORY.makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
 		}
 		return bgStyle;
 	}
@@ -155,10 +181,10 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 
 		if (!(getBGStyle() instanceof ColorBackgroundStyle)
 				|| !((ColorBackgroundStyle) getBGStyle()).getColor().equals(getGraphicalRepresentation().getBackgroundColor())) {
-			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
+			bgStyle = BACKGROUND_FACTORY.makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
 		}
 
-		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
+		ForegroundStyle fgStyle = BACKGROUND_FACTORY.makeForegroundStyle(Color.DARK_GRAY);
 
 		g.setDefaultForeground(fgStyle);
 		g.setDefaultBackground(getBGStyle());

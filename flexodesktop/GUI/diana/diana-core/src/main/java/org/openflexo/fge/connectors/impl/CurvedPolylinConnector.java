@@ -34,6 +34,13 @@ public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnector
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		controlPoints.clear();
+		controlPoints = null;
+	}
+
+	@Override
 	public List<ControlPoint> getControlAreas() {
 		// TODO: perfs issue : do not update all the time !!!
 		updateControlPoints();

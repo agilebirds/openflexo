@@ -1,10 +1,13 @@
 package org.openflexo.model.undo;
 
+import java.beans.PropertyChangeSupport;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * A PAMELA {@link UndoManager} tracks and record PAMELA atomic edits into aggregates named compound edit.<br>
@@ -35,11 +38,17 @@ import org.openflexo.model.factory.ModelFactory;
  * @author sylvain
  */
 @SuppressWarnings("serial")
-public class UndoManager extends javax.swing.undo.UndoManager {
+public class UndoManager extends javax.swing.undo.UndoManager implements HasPropertyChangeSupport {
 
 	private CompoundEdit currentEdition = null;
 	private boolean undoIsProgress = false;
 	private boolean redoIsProgress = false;
+
+	private PropertyChangeSupport pcSupport;
+
+	public UndoManager() {
+		pcSupport = new PropertyChangeSupport(this);
+	}
 
 	/**
 	 * Start a new labelled edit tracking<br>
@@ -184,9 +193,9 @@ public class UndoManager extends javax.swing.undo.UndoManager {
 	}
 
 	/**
-	 * Undoes the appropriate edits. If <code>end</code> has been invoked this calls through to the superclass, otherwise this invokes
-	 * <code>undo</code> on all edits between the index of the next edit and the last significant edit, updating the index of the next edit
-	 * appropriately.
+	 * Undoes the appropriate edits.<br>
+	 * Invokes <code>undo</code> on all edits between the index of the next edit and the last significant edit, updating the index of the
+	 * next edit appropriately.
 	 * 
 	 * @throws CannotUndoException
 	 *             if one of the edits throws <code>CannotUndoException</code> or there are no edits to be undone
@@ -202,9 +211,9 @@ public class UndoManager extends javax.swing.undo.UndoManager {
 	}
 
 	/**
-	 * Redoes the appropriate edits. If <code>end</code> has been invoked this calls through to the superclass. Otherwise this invokes
-	 * <code>redo</code> on all edits between the index of the next edit and the next significant edit, updating the index of the next edit
-	 * appropriately.
+	 * Redoes the appropriate edits.<br>
+	 * Invokes <code>redo</code> on all edits between the index of the next edit and the next significant edit, updating the index of the
+	 * next edit appropriately.
 	 * 
 	 * @throws CannotRedoException
 	 *             if one of the edits throws <code>CannotRedoException</code> or there are no edits to be redone
@@ -243,4 +252,14 @@ public class UndoManager extends javax.swing.undo.UndoManager {
 		}
 
 	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	};
+
 }

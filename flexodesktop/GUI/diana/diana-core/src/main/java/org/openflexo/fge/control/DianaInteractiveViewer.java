@@ -502,7 +502,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		return lastClickedPoint;
 	}
 
-	public void setLastClickedPoint(FGEPoint lastClickedPoint) {
+	public void setLastClickedPoint(FGEPoint lastClickedPoint, DrawingTreeNode<?, ?> node) {
 		this.lastClickedPoint = lastClickedPoint;
 	}
 

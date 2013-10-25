@@ -77,9 +77,22 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	protected ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
+		startDrawableObserving();
 		// graphics = new FGEShapeGraphicsImpl(this);
 		// width = getGraphicalRepresentation().getMinimalWidth();
 		// height = getGraphicalRepresentation().getMinimalHeight();
+	}
+
+	@Override
+	public boolean delete() {
+		Object o = getDrawable();
+		if (!isDeleted()) {
+			super.delete();
+			stopDrawableObserving();
+			System.out.println("Hop, la shape " + o + " se fait deleter !!!");
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -356,7 +369,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}
 
-		if (evt.getSource() instanceof BackgroundStyle) {
+		if (evt.getSource() instanceof BackgroundStyle || evt.getPropertyName() == ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY) {
 			notifyAttributeChanged(ShapeGraphicalRepresentation.BACKGROUND, null, getGraphicalRepresentation().getBackground());
 		}
 		if (evt.getSource() instanceof ForegroundStyle) {
@@ -947,27 +960,31 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			point = convertLocalNormalizedPointToRemoteViewCoordinates(relativePosition, getParentNode(), scale);
 		}
 		Dimension d = getLabelDimension(scale);
-		switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
-		case CENTER:
-			point.x -= d.width / 2;
-			break;
-		case LEFT:
-			break;
-		case RIGHT:
-			point.x -= d.width;
-			break;
+		if (getGraphicalRepresentation().getHorizontalTextAlignment() != null) {
+			switch (getGraphicalRepresentation().getHorizontalTextAlignment()) {
+			case CENTER:
+				point.x -= d.width / 2;
+				break;
+			case LEFT:
+				break;
+			case RIGHT:
+				point.x -= d.width;
+				break;
 
+			}
 		}
-		switch (getGraphicalRepresentation().getVerticalTextAlignment()) {
-		case BOTTOM:
-			point.y -= d.height;
-			break;
-		case MIDDLE:
-			point.y -= d.height / 2;
-			break;
-		case TOP:
-			break;
+		if (getGraphicalRepresentation().getVerticalTextAlignment() != null) {
+			switch (getGraphicalRepresentation().getVerticalTextAlignment()) {
+			case BOTTOM:
+				point.y -= d.height;
+				break;
+			case MIDDLE:
+				point.y -= d.height / 2;
+				break;
+			case TOP:
+				break;
 
+			}
 		}
 		return point;
 	}
@@ -1392,7 +1409,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			}
 		}*/
 
-		if (getGraphicalRepresentation().getShapeSpecification() != null && getGraphicalRepresentation().getShadowStyle() != null) {
+		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getShapeSpecification() != null
+				&& getGraphicalRepresentation().getShadowStyle() != null) {
 			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
 				g.paintShadow();
 				// getShape().paintShadow(g);

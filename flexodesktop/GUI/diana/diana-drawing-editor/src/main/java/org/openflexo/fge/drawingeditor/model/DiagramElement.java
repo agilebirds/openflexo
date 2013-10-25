@@ -39,12 +39,13 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
+import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
 @ModelEntity
 @ImplementationClass(DiagramElementImpl.class)
 public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends XMLSerializable, Cloneable,
-		Observer, AccessibleProxyObject, CloneableProxyObject {
+		Observer, AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String DIAGRAM = "diagram";

@@ -232,7 +232,7 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 		/**
 		 * Recursively delete this DrawingTreeNode and all its descendants
 		 */
-		public void delete();
+		public boolean delete();
 
 		/**
 		 * Return a flag indicating if this node has been deleted

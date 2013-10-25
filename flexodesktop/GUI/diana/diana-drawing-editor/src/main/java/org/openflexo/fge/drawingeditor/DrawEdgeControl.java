@@ -36,6 +36,7 @@ import org.openflexo.fge.drawingeditor.model.DiagramElement;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.swing.control.JMouseControlContext;
+import org.openflexo.model.undo.CompoundEdit;
 
 public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 
@@ -72,11 +73,13 @@ public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
 					// System.out.println("Add ConnectorSpecification contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
+					CompoundEdit drawEdge = factory.getUndoManager().startRecording("Draw edge");
 					Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(), controller
 							.getDrawing().getModel());
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
 					((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
 					System.out.println("Add new connector !");
+					factory.getUndoManager().stopRecording(drawEdge);
 				}
 				drawEdge = false;
 				fromShape = null;

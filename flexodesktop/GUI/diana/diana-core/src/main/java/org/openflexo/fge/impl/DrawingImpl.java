@@ -478,6 +478,9 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	 * @param dtn
 	 */
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
+
+		System.out.println("updateGraphicalObjectsHierarchy for " + dtn);
+
 		if (dtn.isInvalidated()) {
 			// System.out.println("Updating " + dtn);
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
@@ -495,14 +498,31 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 				isUpdatingObjectHierarchy = true;
 			}*/
 
+			if (dtn instanceof ContainerNode) {
+				deletedNodes.addAll(((ContainerNode<?, ?>) dtn).getChildNodes());
+			}
+
 			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
 				walker.startWalking(dtn);
 				walker.walk(dtn.getDrawable());
 				walker.stopWalking();
 				createdNodes.addAll(walker.getCreatedNodes());
-				createdNodes.addAll(walker.getDeletedNodes());
-				createdNodes.addAll(walker.getUpdatedNodes());
+				deletedNodes.addAll(walker.getDeletedNodes());
+				updatedNodes.addAll(walker.getUpdatedNodes());
 			}
+
+			for (DrawingTreeNode<?, ?> createdNode : createdNodes) {
+				if (deletedNodes.contains(createdNode)) {
+					deletedNodes.remove(createdNode);
+				}
+			}
+			for (DrawingTreeNode<?, ?> updatedNode : updatedNodes) {
+				if (deletedNodes.contains(updatedNode)) {
+					deletedNodes.remove(updatedNode);
+				}
+			}
+
+			System.out.println("OK, j'ai fini de tout bien regarder, il me reste " + deletedNodes.size() + " nodes a detruire");
 			for (DrawingTreeNode<?, ?> nodeToRemove : deletedNodes) {
 				deleteNode(nodeToRemove);
 			}

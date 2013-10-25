@@ -20,4 +20,5 @@ public interface StyleFactory<S extends KeyValueCoding> extends HasPropertyChang
 
 	public void setFGEFactory(FGEModelFactory fgeFactory);
 
+	public static final String STYLE_CLASS_CHANGED = "StyleClassChanged";
 }

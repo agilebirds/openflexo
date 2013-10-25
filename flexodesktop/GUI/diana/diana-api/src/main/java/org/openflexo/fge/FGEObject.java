@@ -24,11 +24,12 @@ import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
+import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public interface FGEObject extends AccessibleProxyObject, CloneableProxyObject, XMLSerializable, Cloneable, KeyValueCoding, FGEConstants,
-		HasPropertyChangeSupport {
+public interface FGEObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject, XMLSerializable, Cloneable,
+		KeyValueCoding, FGEConstants, HasPropertyChangeSupport {
 
 	public FGEModelFactory getFactory();
 

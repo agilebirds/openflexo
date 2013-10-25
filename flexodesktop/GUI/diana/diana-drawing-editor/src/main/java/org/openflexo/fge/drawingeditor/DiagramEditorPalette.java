@@ -37,6 +37,7 @@ import org.openflexo.fge.drawingeditor.model.Shape;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.undo.CompoundEdit;
 
 public class DiagramEditorPalette extends DrawingPalette {
 
@@ -210,6 +211,8 @@ public class DiagramEditorPalette extends DrawingPalette {
 				// getController().addNewShape(new Shape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
 
+				CompoundEdit edit = getEditor().getFactory().getUndoManager().startRecording("Dragging new Element");
+
 				Shape newShape = getEditor().getFactory().makeNewShape(getGraphicalRepresentation(), dropLocation, container.getDiagram());
 
 				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
@@ -229,6 +232,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 
 				container.addToShapes(newShape);
 
+				getEditor().getFactory().getUndoManager().stopRecording(edit);
 				// getController().addNewShape(editorFactory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
 			}

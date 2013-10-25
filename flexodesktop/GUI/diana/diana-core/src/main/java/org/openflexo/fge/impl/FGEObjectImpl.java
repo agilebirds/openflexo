@@ -188,6 +188,9 @@ public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
 	 */
 	@SuppressWarnings("unchecked")
 	protected <T> T valueForParameter(GRParameter<T> parameter) {
+		if (parameter == null) {
+			return null;
+		}
 		Class<?> type = getTypeForKey(parameter.getName());
 		T returned = null;
 		if (type.isPrimitive()) {
@@ -275,7 +278,9 @@ public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
 	}
 
 	public void notifyObservers(FGENotification notification) {
-		pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+		if (!isDeleted) {
+			pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+		}
 	}
 
 	@Deprecated

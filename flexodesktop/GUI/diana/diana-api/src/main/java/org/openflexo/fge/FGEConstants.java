@@ -24,6 +24,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.Toolkit;
@@ -73,5 +74,7 @@ public interface FGEConstants {
 	public static final double DEFAULT_DRAWING_WIDTH = 1000;
 	public static final double DEFAULT_DRAWING_HEIGHT = 1000;
 	public static final Color DEFAULT_DRAWING_BACKGROUND_COLOR = Color.WHITE;
+
+	public static final Image DEFAULT_IMAGE = null;
 
 }

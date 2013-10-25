@@ -22,6 +22,9 @@ package org.openflexo.fge;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
@@ -65,6 +68,8 @@ public interface GeometricGraphicalRepresentation extends GraphicalRepresentatio
 	// *******************************************************************************
 
 	@Getter(value = FOREGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public ForegroundStyle getForeground();
 
@@ -72,6 +77,8 @@ public interface GeometricGraphicalRepresentation extends GraphicalRepresentatio
 	public void setForeground(ForegroundStyle aForeground);
 
 	@Getter(value = BACKGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public BackgroundStyle getBackground();
 

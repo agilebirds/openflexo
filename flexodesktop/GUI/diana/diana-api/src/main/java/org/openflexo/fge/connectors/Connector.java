@@ -82,4 +82,6 @@ public interface Connector<CS extends ConnectorSpecification> {
 
 	public abstract void paintConnector(FGEConnectorGraphics g);
 
+	public abstract void delete();
+
 }

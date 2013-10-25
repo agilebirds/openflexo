@@ -130,9 +130,11 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 
 	public void updateShape() {
 
-		shape = makeShape();
-		outline = makeOutline();
-		updateControlPoints();
+		if (getShapeSpecification() != null) {
+			shape = makeShape();
+			outline = makeOutline();
+			updateControlPoints();
+		}
 		shapeNode.notifyShapeChanged();
 	}
 
@@ -161,7 +163,10 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 	}
 
 	protected FGEShape<?> makeShape() {
-		return getShapeSpecification().makeFGEShape(shapeNode);
+		if (getShapeSpecification() != null) {
+			return getShapeSpecification().makeFGEShape(shapeNode);
+		}
+		return null;
 	}
 
 	/**

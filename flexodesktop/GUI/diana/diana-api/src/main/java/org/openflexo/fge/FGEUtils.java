@@ -138,6 +138,21 @@ public class FGEUtils {
 		System.err.println(emphasizedColor(grey));
 	}
 
+	public static DrawingTreeNode<?, ?> getFirstCommonAncestor(List<DrawingTreeNode<?, ?>> nodes) {
+		if (nodes.size() == 0) {
+			return null;
+		}
+		if (nodes.size() == 1) {
+			return nodes.get(0).getParentNode();
+		}
+		DrawingTreeNode<?, ?> returned = getFirstCommonAncestor(nodes.get(0), nodes.get(1));
+		for (int i = 2; i < nodes.size(); i++) {
+			returned = getFirstCommonAncestor(returned, nodes.get(i), true);
+		}
+
+		return returned;
+	}
+
 	public static DrawingTreeNode<?, ?> getFirstCommonAncestor(DrawingTreeNode<?, ?> child1, DrawingTreeNode<?, ?> child2) {
 		if (!child1.isValidated()) {
 			return null;

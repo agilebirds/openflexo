@@ -1,5 +1,6 @@
 package org.openflexo.fge.drawingeditor;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.List;
 
@@ -17,7 +18,13 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.factory.Clipboard;
 
-public class DrawingEditorTest extends TestCase {
+/**
+ * This test is actually testing PAMELA copy/paste features applied to Diana model
+ * 
+ * @author sylvain
+ * 
+ */
+public class TestCopyPaste extends TestCase {
 
 	private DiagramFactory factory;
 
@@ -51,8 +58,12 @@ public class DrawingEditorTest extends TestCase {
 		assertTrue(diagram instanceof Diagram);
 
 		Shape shape1 = factory.makeNewShape(ShapeType.RECTANGLE, new FGEPoint(100, 100), diagram);
+		shape1.getGraphicalRepresentation().setForeground(factory.makeForegroundStyle(Color.RED));
+		shape1.getGraphicalRepresentation().setBackground(factory.makeColoredBackground(Color.BLUE));
 		assertTrue(shape1 instanceof Shape);
 		Shape shape2 = factory.makeNewShape(ShapeType.RECTANGLE, new FGEPoint(200, 100), diagram);
+		shape2.getGraphicalRepresentation().setForeground(factory.makeForegroundStyle(Color.BLUE));
+		shape2.getGraphicalRepresentation().setBackground(factory.makeColoredBackground(Color.WHITE));
 		assertTrue(shape2 instanceof Shape);
 
 		Connector connector1 = factory.makeNewConnector(shape1, shape2, diagram);
@@ -92,9 +103,9 @@ public class DrawingEditorTest extends TestCase {
 		assertTrue(diagram.getConnectors().contains(connector1));
 		assertTrue(diagram.getConnectors().contains(connector2));
 
-		assertEquals(((List) pasted).get(0), shape3);
-		assertEquals(((List) pasted).get(1), shape4);
-		assertEquals(((List) pasted).get(2), connector2);
+		assertEquals(((List<?>) pasted).get(0), shape3);
+		assertEquals(((List<?>) pasted).get(1), shape4);
+		assertEquals(((List<?>) pasted).get(2), connector2);
 
 		assertEquals(connector1.getStartShape(), shape1);
 		assertEquals(connector1.getEndShape(), shape2);
@@ -119,75 +130,25 @@ public class DrawingEditorTest extends TestCase {
 		assertEquals(connector3.getStartShape(), shape5);
 		assertEquals(connector3.getEndShape(), shape6);
 
-		// System.out.println("shapes=" + diagram.getShapes());
-		// System.out.println("connectors=" + diagram.getConnectors());
+		assertNotSame(shape1.getGraphicalRepresentation().getForeground(), shape3.getGraphicalRepresentation().getForeground());
+		assertEquals(shape1.getGraphicalRepresentation().getForeground(), shape1.getGraphicalRepresentation().getForeground());
+		assertNotSame(shape1.getGraphicalRepresentation().getSelectedForeground(), shape3.getGraphicalRepresentation()
+				.getSelectedForeground());
+		assertEquals(shape1.getGraphicalRepresentation().getSelectedForeground(), shape1.getGraphicalRepresentation()
+				.getSelectedForeground());
+		assertNotSame(shape1.getGraphicalRepresentation().getFocusedForeground(), shape3.getGraphicalRepresentation()
+				.getFocusedForeground());
+		assertEquals(shape1.getGraphicalRepresentation().getFocusedForeground(), shape1.getGraphicalRepresentation().getFocusedForeground());
 
-		/*FlexoProcess process = factory.newInstance(FlexoProcess.class);
-		assertTrue(process instanceof FlexoProcess);
-		try {
-			process.getName();
-			fail("getName() should not be invokable until init() has been called");
-		} catch (UnitializedEntityException e) {
-			// OK this on purpose.
-		}
-		process.init("234XX");
-		System.out.println("process=" + process);
-		System.out.println("Id=" + process.getFlexoID());
-		process.setName("NewProcess");
-		process.setFoo(8);
-		assertEquals("NewProcess", process.getName());
-		assertEquals("234XX", process.getFlexoID());
-		assertEquals(8, process.getFoo());
-
-		ActivityNode activityNode = factory.newInstance(ActivityNode.class);
-		activityNode.init();
-		assertTrue(activityNode instanceof ActivityNode);
-		assertEquals("0000", activityNode.getFlexoID());
-
-		activityNode.setName("MyActivity");
-		process.addToNodes(activityNode);
-
-		System.out.println("activityNode=" + activityNode);
-		assertEquals("MyActivity", activityNode.getName());
-		assertTrue(process.getNodes().contains(activityNode));
-		assertEquals(process, activityNode.getProcess());
-		System.out.println("process: " + activityNode.getProcess());
-
-		StartNode startNode = factory.newInstance(StartNode.class);
-		startNode.setName("Start");
-		process.addToNodes(startNode);
-
-		EndNode endNode = factory.newInstance(EndNode.class);
-		endNode.init();
-		endNode.setName("End");
-		process.addToNodes(endNode);
-
-		System.out.println("process=" + process);
-
-		TokenEdge edge1 = (TokenEdge) factory.newInstance(TokenEdge.class).init(startNode, activityNode);
-		edge1.setName("edge1");
-		// startNode.addToOutgoingEdges(edge1);
-		// activityNode.addToIncomingEdges(edge1);
-		System.out.println("edge1=" + edge1);
-		assertEquals(process, edge1.getProcess());
-
-		TokenEdge edge2 = factory.newInstance(TokenEdge.class, "edge2", activityNode, endNode);
-		// edge2.setStartNode(activityNode);
-		// edge2.setEndNode(endNode);
-
-		System.out.println("edge2=" + edge2);
-		assertEquals(process, edge2.getProcess());
-
-		try {
-			FileOutputStream fos = new FileOutputStream("/tmp/TestFile.xml");
-			factory.serialize(process, fos);
-			fos.flush();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			fail(e.getMessage());
-		} catch (IOException e) {
-			fail(e.getMessage());
-		}*/
+		assertNotSame(shape1.getGraphicalRepresentation().getBackground(), shape3.getGraphicalRepresentation().getBackground());
+		assertEquals(shape1.getGraphicalRepresentation().getBackground(), shape1.getGraphicalRepresentation().getBackground());
+		assertNotSame(shape1.getGraphicalRepresentation().getSelectedBackground(), shape3.getGraphicalRepresentation()
+				.getSelectedBackground());
+		assertEquals(shape1.getGraphicalRepresentation().getSelectedBackground(), shape1.getGraphicalRepresentation()
+				.getSelectedBackground());
+		assertNotSame(shape1.getGraphicalRepresentation().getFocusedBackground(), shape3.getGraphicalRepresentation()
+				.getFocusedBackground());
+		assertEquals(shape1.getGraphicalRepresentation().getFocusedBackground(), shape1.getGraphicalRepresentation().getFocusedBackground());
 
 	}
 

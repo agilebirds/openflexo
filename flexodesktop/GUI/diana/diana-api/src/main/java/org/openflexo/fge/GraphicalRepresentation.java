@@ -33,6 +33,9 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
@@ -269,6 +272,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, PropertyCh
 	public void setContinuousTextEditing(boolean continuousTextEditing);
 
 	@Getter(value = TEXT_STYLE_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public TextStyle getTextStyle();
 
@@ -375,10 +380,10 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, PropertyCh
 
 	@Getter(value = TRANSPARENCY_KEY, defaultValue = "1.0")
 	@XMLAttribute
-	public Double getTransparency();
+	public double getTransparency();
 
 	@Setter(value = TRANSPARENCY_KEY)
-	public void setTransparency(Double transparency);
+	public void setTransparency(double transparency);
 
 	@Getter(value = MOUSE_CLICK_CONTROLS_KEY, cardinality = Cardinality.LIST, ignoreType = true)
 	public List<MouseClickControl<?>> getMouseClickControls();

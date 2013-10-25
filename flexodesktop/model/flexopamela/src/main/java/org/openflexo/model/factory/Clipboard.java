@@ -38,6 +38,15 @@ public class Clipboard {
 		return originalContents;
 	}
 
+	public boolean doesOriginalContentsContains(Object o) {
+		for (Object oc : originalContents) {
+			if (o == oc) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Object getSingleContents() {
 		return contents;
 	}

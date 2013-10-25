@@ -52,6 +52,16 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	}
 
 	@Override
+	public void delete() {
+		super.delete();
+		cp1 = null;
+		cp2 = null;
+		middleSymbolLocationControlPoint = null;
+		controlPoints.clear();
+		controlPoints = null;
+	}
+
+	@Override
 	public List<ControlPoint> getControlAreas() {
 		// TODO: perfs issue : do not update all the time !!!
 		// updateControlPoints();

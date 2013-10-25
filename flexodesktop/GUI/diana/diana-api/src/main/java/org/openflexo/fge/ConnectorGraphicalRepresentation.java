@@ -25,6 +25,9 @@ import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
@@ -154,6 +157,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public void setConnectorSpecification(ConnectorSpecification aConnector);
 
 	@Getter(value = FOREGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public ForegroundStyle getForeground();
 
@@ -161,6 +166,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public void setForeground(ForegroundStyle aForeground);
 
 	@Getter(value = SELECTED_FOREGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement(context = "Selected")
 	public ForegroundStyle getSelectedForeground();
 
@@ -175,6 +182,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public void setHasSelectedForeground(boolean aFlag);
 
 	@Getter(value = FOCUSED_FOREGROUND_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement(context = "Focused")
 	public ForegroundStyle getFocusedForeground();
 

@@ -57,6 +57,15 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 		controlPoints = new ArrayList<ControlPoint>();
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		cp1 = null;
+		cp2 = null;
+		controlPoints.clear();
+		controlPoints = null;
+	}
+
 	public FGEPoint getCp1RelativeToStartObject() {
 		return getConnectorSpecification().getCp1RelativeToStartObject();
 	}

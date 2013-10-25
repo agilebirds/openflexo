@@ -157,7 +157,9 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 			if (connector != null) {
 				connector.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
-			aConnector.getPropertyChangeSupport().addPropertyChangeListener(this);
+			if (aConnector != null) {
+				aConnector.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 			FGEAttributeNotification notification = requireChange(CONNECTOR, aConnector);
 			if (notification != null) {
 				this.connector = aConnector;

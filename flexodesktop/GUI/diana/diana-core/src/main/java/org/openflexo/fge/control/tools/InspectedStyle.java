@@ -283,10 +283,21 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		return pcSupport;
 	}
 
+	public void destroy() {
+		logger.warning("Destroy() not implemented yet");
+	}
+
 	public boolean delete() {
 		// TODO: implement this
 		logger.warning("Delete() not implemented yet");
 		isDeleted = true;
+		return true;
+	}
+
+	public boolean undelete() {
+		// TODO: implement this
+		logger.warning("Undelete() not implemented yet");
+		isDeleted = false;
 		return true;
 	}
 
@@ -355,6 +366,11 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	}
 
 	public boolean performSuperDelete(Object... context) {
+		// Not relevant
+		return false;
+	}
+
+	public boolean performSuperUndelete() {
 		// Not relevant
 		return false;
 	}

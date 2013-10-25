@@ -160,10 +160,13 @@ public abstract class GRStructureWalker<R> {
 
 		if (parent.hasShapeFor(binding, drawable)) {
 			// Already existing
+			System.out.println("% Found already existing node for " + drawable);
 			ShapeNode<O> returned = parent.getShapeFor(binding, drawable);
 			updatedNodes.add(returned);
+			// deletedNodes.remove(returned);
 			return returned;
 		} else {
+			System.out.println("% Creating new node for " + drawable);
 			ShapeNode<O> returned = drawing.createNewShapeNode(parent, binding, drawable);
 			// New node
 			createdNodes.add(returned);
@@ -350,7 +353,7 @@ public abstract class GRStructureWalker<R> {
 		Drawing<?> drawing = node.getDrawing();
 
 		if (parent.hasConnectorFor(binding, drawable)) {
-			//System.out.println("Ca existe deja");
+			// System.out.println("Ca existe deja");
 			ConnectorNode<O> returned = parent.getConnectorFor(binding, drawable);
 			if (returned.getStartNode() != fromNode || returned.getEndNode() != toNode) {
 				// the structure is incorrect

@@ -31,9 +31,11 @@ import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.actions.DrawShapeAction;
+import org.openflexo.fge.control.notifications.SelectionCopied;
 import org.openflexo.fge.drawingeditor.model.Connector;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
@@ -53,8 +55,9 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 	private static final Logger logger = Logger.getLogger(DianaDrawingEditor.class.getPackage().getName());
 
 	private JPopupMenu contextualMenu;
-	private DrawingTreeNode<?, ?> contextualMenuInvoker;
-	private Point contextualMenuClickedPoint;
+
+	// private DrawingTreeNode<?, ?> contextualMenuInvoker;
+	// private Point contextualMenuClickedPoint;
 
 	// private Shape copiedShape;
 
@@ -80,8 +83,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing().getModel());
-					addNewShape(newShape, (DiagramElement) contextualMenuInvoker.getDrawable());
+					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(getLastClickedPoint()), getDrawing().getModel());
+					getDrawing().getModel().addToShapes(newShape);
 				}
 			});
 			contextualMenu.add(menuItem);
@@ -99,7 +102,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		pasteItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				paste();
+				paste(/*contextualMenuInvoker,
+						FGEUtils.convertNormalizedPoint(getLastSelectedNode(), getLastClickedPoint(), contextualMenuInvoker)*/);
 			}
 		});
 		contextualMenu.add(pasteItem);
@@ -111,6 +115,25 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 			}
 		});
 		contextualMenu.add(cutItem);
+
+		contextualMenu.addSeparator();
+
+		JMenuItem undoItem = new JMenuItem("Undo");
+		undoItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				undo();
+			}
+		});
+		contextualMenu.add(undoItem);
+		JMenuItem redoItem = new JMenuItem("Redo");
+		redoItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				redo();
+			}
+		});
+		contextualMenu.add(redoItem);
 		// initPalette();
 	}
 
@@ -157,8 +180,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 	}
 
 	public void showContextualMenu(DrawingTreeNode<?, ?> dtn, FGEView view, Point p) {
-		contextualMenuInvoker = dtn;
-		contextualMenuClickedPoint = p;
+		// contextualMenuInvoker = dtn;
+		// contextualMenuClickedPoint = p;
 		contextualMenu.show((Component) view, p.x, p.y);
 	}
 
@@ -177,43 +200,37 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		return (DiagramEditorView) super.getDrawingView();
 	}
 
-	private Clipboard clipboard;
+	private Clipboard clipboard = null;
 
-	public void copy() {
-		/*if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
-			Shape copiedShape = (Shape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
-			System.out.println("Copied: " + copiedShape);
+	public Clipboard getClipboard() {
+		return clipboard;
+	}
 
-			XMLSerializer serializer = copiedShape.getDrawing().getEditedDrawing().getModel().getFactory().getSerializer();
-			System.out.println("Hop: " + serializer.serializeAsString(copiedShape));
-
-			try {
-				clipboard = getDrawing().getModel().getFactory().copy(copiedShape);
-			} catch (ModelExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ModelDefinitionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	/**
+	 * Return boolean indicating if the current selection is suitable for a COPY action
+	 * 
+	 * @return
+	 */
+	public boolean isCopiable() {
+		if (getSelectedObjects().size() == 1) {
+			if (getSelectedObjects().get(0) == getDrawing().getRoot()) {
+				return false;
 			}
-
-		}*/
-
-		System.out.println("Selected objects = " + getSelectedObjects());
-		Object[] objectsToBeCopied = new Object[getSelectedObjects().size()];
-
-		// XMLSerializer serializer = getDrawing().getModel().getFactory().getSerializer();
-		int i = 0;
-		for (DrawingTreeNode<?, ?> dtn : getSelectedObjects()) {
-			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
-			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
-			// System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
-			System.out.println("Copied: " + getFactory().stringRepresentation(objectsToBeCopied[i]));
-			i++;
+			return true;
 		}
+		return getSelectedObjects().size() > 0;
+	}
+
+	/**
+	 * Copy current selection in the clipboard
+	 */
+	public Clipboard copy() {
+		if (getSelectedObjects().size() == 0) {
+			System.out.println("Nothing to copy");
+			return null;
+		}
+
+		Object[] objectsToBeCopied = makeArrayOfObjectsToBeCopied(getSelectedObjects());
 
 		try {
 			clipboard = getFactory().copy(objectsToBeCopied);
@@ -230,6 +247,11 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 		System.out.println(clipboard.debug());
 
+		pastingContext = FGEUtils.getFirstCommonAncestor(getSelectedObjects());
+		System.out.println("Pasting context = " + pastingContext);
+
+		notifyObservers(new SelectionCopied(clipboard));
+
 		/*Shape shapeToCopy = (Shape) objectsToBeCopied[0];
 
 		System.out.println("Je viens de copier l'objet " + shapeToCopy);
@@ -242,17 +264,95 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		System.out.println("gr=" + copiedShape.getGraphicalRepresentation());
 		System.out.println("ss=" + copiedShape.getGraphicalRepresentation().getShapeSpecification());
 		System.out.println("controls=" + copiedShape.getGraphicalRepresentation().getMouseClickControls());*/
+
+		return clipboard;
 	}
 
+	/**
+	 * Return boolean indicating if the current selection is suitable for a PASTE action in supplied context and position
+	 * 
+	 * @return
+	 */
+	public boolean isPastable() {
+		System.out.println("pastable ?");
+		System.out.println("clipboard=" + clipboard);
+		System.out.println("pastingContext=" + pastingContext);
+		return clipboard != null && pastingContext != null;
+	}
+
+	/**
+	 * The drawing tree node hosting a potential paste
+	 */
+	private DrawingTreeNode<?, ?> pastingContext;
+
+	/**
+	 * The location where applying paste, relative to root
+	 */
+	private FGEPoint pastingLocation;
+
+	private boolean isSelectingAfterPaste = false;
+
+	public void setLastClickedPoint(FGEPoint lastClickedPoint, DrawingTreeNode<?, ?> node) {
+
+		System.out.println("On me dit avoir clique en " + lastClickedPoint + " par rapport a " + node);
+
+		super.setLastClickedPoint(lastClickedPoint, node);
+		pastingLocation = FGEUtils.convertNormalizedPoint(node, lastClickedPoint, getDrawing().getRoot());
+
+		System.out.println("Par rapport au root, je suis donc en " + pastingLocation);
+
+	};
+
+	@Override
+	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
+		super.addToSelectedObjects(aNode);
+		if (!isSelectingAfterPaste) {
+			System.out.println("le pasting context devient " + pastingContext);
+			pastingContext = aNode;
+		}
+	}
+
+	@Override
+	public void clearSelection() {
+		super.clearSelection();
+		if (!isSelectingAfterPaste) {
+			pastingContext = getDrawing().getRoot();
+		}
+	}
+
+	/**
+	 * Paste current Clipboard in supplied context and position
+	 * 
+	 */
 	public void paste() {
 
 		if (clipboard != null) {
 
 			// addNewShape((Shape) copiedShape.clone(), (DiagramElement) contextualMenuInvoker.getDrawable());
 
+			// If current selection is contained in original contents, paste on container
+			/*if (clipboard.doesOriginalContentsContains(context)) {
+				System.out.println("ooops, c'est pas une bonne idee de paster en " + context + " p=" + p);
+				p = FGEUtils.convertNormalizedPoint(context, p, context.getParentNode());
+				p.x = p.x + 20;
+				p.y = p.y + 20;
+				context = context.getParentNode();
+				System.out.println("Je propose de paster en " + context + " p=" + p);
+			}*/
+
+			System.out.println("Pasting at " + pastingContext);
+			System.out.println("Je paste en " + pastingLocation);
+			FGEPoint p = FGEUtils.convertNormalizedPoint(getDrawing().getRoot(), pastingLocation, pastingContext);
+			System.out.println("Du coup, par rapport a mon container je suis en " + p);
+
+			if (pastingContext instanceof ShapeNode) {
+				p.x = p.x * ((ShapeNode<?>) pastingContext).getWidth();
+				p.y = p.y * ((ShapeNode<?>) pastingContext).getHeight();
+			}
+			System.out.println("Je les recale en " + p);
+
 			try {
-				FGEPoint p = FGEUtils.convertNormalizedPoint(getLastSelectedNode(), getLastClickedPoint(), contextualMenuInvoker);
-				logger.info("Pasting in " + contextualMenuInvoker.getDrawable() + " at " + p);
+				logger.info("Pasting in " + pastingContext.getDrawable() + " at " + p);
 				if (clipboard.isSingleObject()) {
 					if (clipboard.getSingleContents() instanceof Shape) {
 						((Shape) clipboard.getSingleContents()).getGraphicalRepresentation().setX(p.x);
@@ -261,8 +361,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 				} else {
 					for (Object o : clipboard.getMultipleContents()) {
 						if (o instanceof Shape) {
-							((Shape) o).getGraphicalRepresentation().setX(((Shape) o).getGraphicalRepresentation().getX() + 10);
-							((Shape) o).getGraphicalRepresentation().setY(((Shape) o).getGraphicalRepresentation().getY() + 10);
+							((Shape) o).getGraphicalRepresentation().setX(((Shape) o).getGraphicalRepresentation().getX() + 20);
+							((Shape) o).getGraphicalRepresentation().setY(((Shape) o).getGraphicalRepresentation().getY() + 20);
 							((Shape) o).setName(((Shape) o).getName() + "-new");
 						} else if (o instanceof Connector) {
 							((Connector) o).setName(((Connector) o).getName() + "-new");
@@ -270,17 +370,27 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 					}
 				}
 
-				getLastClickedPoint();
+				// getLastClickedPoint();
 
-				Object pasted = getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+				// Prevent pastingContext to be changed
+				isSelectingAfterPaste = true;
+
+				// Do the paste
+				Object pasted = getFactory().paste(clipboard, pastingContext.getDrawable());
+
+				// Try to select newly created objects
+				clearSelection();
 				if (clipboard.isSingleObject()) {
 					addToSelectedObjects(getDrawing().getDrawingTreeNode(pasted));
 				} else {
-					clearSelection();
 					for (Object o : (List<?>) pasted) {
 						addToSelectedObjects(getDrawing().getDrawingTreeNode(o));
 					}
 				}
+				isSelectingAfterPaste = false;
+
+				pastingLocation.x = pastingLocation.x + 20;
+				pastingLocation.y = pastingLocation.y + 20;
 
 			} catch (ModelExecutionException e) {
 				// TODO Auto-generated catch block
@@ -296,8 +406,96 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		}
 	}
 
-	public void cut() {
+	/**
+	 * Return boolean indicating if the current selection is suitable for a CUT action
+	 * 
+	 * @return
+	 */
+	public boolean isCutable() {
+		return isCopiable();
+	}
 
+	/**
+	 * Cut current selection, by deleting selecting contents while copying it in the clipboard for a future use
+	 */
+	public Clipboard cut() {
+		if (getSelectedObjects().size() == 0) {
+			System.out.println("Nothing to cut");
+			return null;
+		}
+
+		Object[] objectsToBeCopied = makeArrayOfObjectsToBeCopied(getSelectedObjects());
+
+		try {
+			clipboard = getFactory().cut(objectsToBeCopied);
+		} catch (ModelExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(clipboard.debug());
+
+		return clipboard;
+
+	}
+
+	/**
+	 * Undoes appropriate edit
+	 */
+	public void undo() {
+		System.out.println("UNDO called !!!");
+		getFactory().getUndoManager().debug();
+		if (getFactory().getUndoManager().canUndo()) {
+			System.out.println("Effectivement, je peux faire un undo de: "
+					+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+			getFactory().getUndoManager().undo();
+		} else {
+			getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
+			System.out.println("Bon, j'arrete de force");
+			if (getFactory().getUndoManager().canUndo()) {
+				System.out.println("Effectivement, je peux faire un undo de: "
+						+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+				getFactory().getUndoManager().undo();
+			}
+		}
+	}
+
+	/**
+	 * Redoes appropriate edit
+	 */
+	public void redo() {
+		System.out.println("REDO called !!!");
+		if (getFactory().getUndoManager().canRedo()) {
+			System.out.println("Effectivement, je peux faire un redo de: "
+					+ getFactory().getUndoManager().editToBeRedone().getPresentationName());
+			getFactory().getUndoManager().redo();
+		}
+	}
+
+	/**
+	 * Internal method used to build an array with drawable objects
+	 * 
+	 * @param aSelection
+	 * @return
+	 */
+	private Object[] makeArrayOfObjectsToBeCopied(List<DrawingTreeNode<?, ?>> aSelection) {
+		System.out.println("Making copying selection with " + getSelectedObjects());
+		Object[] objectsToBeCopied = new Object[aSelection.size()];
+		int i = 0;
+		for (DrawingTreeNode<?, ?> dtn : aSelection) {
+			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
+			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
+			// System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
+			System.out.println("Copied: " + getFactory().stringRepresentation(objectsToBeCopied[i]));
+			i++;
+		}
+		return objectsToBeCopied;
 	}
 
 }

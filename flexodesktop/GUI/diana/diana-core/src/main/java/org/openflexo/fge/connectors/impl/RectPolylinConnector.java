@@ -99,6 +99,13 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 		potentialPolylin = new Vector<FGERectPolylin>();
 	}
 
+	@Override
+	public void delete() {
+		super.delete();
+		controlPoints.clear();
+		controlPoints = null;
+	}
+
 	public List<ControlPoint> getControlPoints() {
 		// TODO: perfs issue : do not update all the time !!!
 		updateLayout();

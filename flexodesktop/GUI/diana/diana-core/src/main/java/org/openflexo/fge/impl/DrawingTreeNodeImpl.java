@@ -49,6 +49,7 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
@@ -250,27 +251,31 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	 * Recursively delete this DrawingTreeNode and all its descendants
 	 */
 	@Override
-	public void delete() {
-		// Normally, it is already done, but check and do it when required...
-		if (parentNode instanceof ContainerNode && ((ContainerNode<?, ?>) parentNode).getChildNodes().contains(this)) {
-			parentNode.removeChild(this);
+	public boolean delete() {
+		if (!isDeleted) {
+			// Normally, it is already done, but check and do it when required...
+			if (parentNode instanceof ContainerNode && ((ContainerNode<?, ?>) parentNode).getChildNodes().contains(this)) {
+				parentNode.removeChild(this);
+			}
+
+			Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
+
+			if (drawable != null) {
+				hash.remove(drawable);
+			}
+
+			drawable = null;
+			parentNode = null;
+
+			if (graphicalRepresentation != null) {
+				graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
+			graphicalRepresentation = null;
+
+			isDeleted = true;
+			return true;
 		}
-
-		Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
-
-		if (drawable != null) {
-			hash.remove(drawable);
-		}
-
-		drawable = null;
-		parentNode = null;
-
-		if (graphicalRepresentation != null) {
-			graphicalRepresentation.getPropertyChangeSupport().removePropertyChangeListener(this);
-		}
-		graphicalRepresentation = null;
-
-		isDeleted = true;
+		return false;
 	}
 
 	@Override
@@ -442,9 +447,19 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	public void update(Observable o, Object arg) {
 		if (o == getDrawable()) {
 			logger.info("Received a notification from my drawable that something change: " + arg);
-			getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
-			getDrawing().updateGraphicalObjectsHierarchy(drawable);
+			fireStructureMayHaveChanged();
 		}
+	}
+
+	private void fireStructureMayHaveChanged() {
+		if (getDrawable() instanceof DeletableProxyObject) {
+			if (((DeletableProxyObject) getDrawable()).isDeleted()) {
+				// delete();
+				return;
+			}
+		}
+		getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
+		getDrawing().updateGraphicalObjectsHierarchy(getDrawable());
 	}
 
 	@Override
@@ -455,9 +470,8 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 
 		if (evt.getSource() == getDrawable()) {
-			logger.info("Received a notification from my drawable that something change: " + evt);
-			getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable());
-			getDrawing().updateGraphicalObjectsHierarchy(drawable);
+			logger.info("Received a notification from my drawable that " + evt.getPropertyName() + " change: " + evt);
+			fireStructureMayHaveChanged();
 		}
 
 		if (evt.getSource() == getGraphicalRepresentation()) {
@@ -930,6 +944,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		// If UniqueGraphicalRepresentations is active, use GR to store graphical properties
 
 		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
+			if (getGraphicalRepresentation() == null) {
+				return null;
+			}
 			return (T) getGraphicalRepresentation().objectForKey(parameter.getName());
 		}
 

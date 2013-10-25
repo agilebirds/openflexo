@@ -33,6 +33,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.undo.CompoundEdit;
 
 public class DiagramEditor {
 
@@ -110,7 +111,9 @@ public class DiagramEditor {
 
 	public DianaDrawingEditor getController() {
 		if (controller == null) {
+			CompoundEdit edit = factory.getUndoManager().startRecording("Initialize diagram");
 			controller = new DianaDrawingEditor(getDrawing(), factory, application.getToolFactory());
+			factory.getUndoManager().stopRecording(edit);
 		}
 		return controller;
 	}

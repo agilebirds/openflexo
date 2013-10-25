@@ -55,6 +55,16 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		// graphics = new FGEGeometricGraphicsImpl(this);
+		startDrawableObserving();
+	}
+
+	@Override
+	public boolean delete() {
+		if (super.delete()) {
+			stopDrawableObserving();
+			return true;
+		}
+		return false;
 	}
 
 	@Override

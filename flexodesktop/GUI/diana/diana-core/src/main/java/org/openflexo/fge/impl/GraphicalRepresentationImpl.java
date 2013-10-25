@@ -339,12 +339,12 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	}
 
 	@Override
-	public Double getTransparency() {
+	public double getTransparency() {
 		return transparency;
 	}
 
 	@Override
-	public void setTransparency(Double transparency) {
+	public void setTransparency(double transparency) {
 		FGEAttributeNotification notification = requireChange(TRANSPARENCY, transparency);
 		if (notification != null) {
 			this.transparency = transparency;

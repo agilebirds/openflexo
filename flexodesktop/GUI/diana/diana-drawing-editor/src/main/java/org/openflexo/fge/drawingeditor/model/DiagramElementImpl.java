@@ -19,64 +19,84 @@
  */
 package org.openflexo.fge.drawingeditor.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
-
-import javax.inject.Inject;
 
 import org.openflexo.fge.GraphicalRepresentation;
 
-public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends Observable implements
-		DiagramElement<M, G> {
+public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> implements DiagramElement<M, G> {
 
 	private Diagram diagram;
-	private List<Shape> shapes;
-	private List<Connector> connectors;
 
-	@Inject
-	private G graphicalRepresentation;
+	// private List<Shape> shapes;
+	// private List<Connector> connectors;
 
-	public DiagramElementImpl(Diagram drawing) {
-		shapes = new ArrayList<Shape>();
-		connectors = new ArrayList<Connector>();
-		diagram = drawing;
+	// @Inject
+	// private G graphicalRepresentation;
+
+	public DiagramElementImpl(Diagram diagram) {
+		// shapes = new ArrayList<Shape>();
+		// connectors = new ArrayList<Connector>();
+		this.diagram = diagram;
 	}
 
 	@Override
+	public void addToShapes(Shape aShape) {
+		System.out.println("J'ajoute la shape, je dois notifier juste apres.");
+		performSuperAdder(SHAPES, aShape);
+		System.out.println("C'est bon, j'ai ajoute la shape. Ca a marche la notif ?");
+	}
+
+	@Override
+	public void removeFromShapes(Shape aShape) {
+		System.out.println("Je supprime la shape, je dois notifier juste apres.");
+		performSuperRemover(SHAPES, aShape);
+		System.out.println("C'est bon, j'ai supprime la shape. Ca a marche la notif ?");
+	}
+
+	/*@Override
 	public List<Shape> getShapes() {
 		return shapes;
 	}
 
 	@Override
 	public void setShapes(List<Shape> someShapes) {
-		shapes.addAll(someShapes);
+		if (someShapes != null) {
+			shapes.addAll(someShapes);
+		} else {
+			shapes.clear();
+		}
 	}
 
 	@Override
 	public void addToShapes(Shape aShape) {
-
 		shapes.add(aShape);
 		setChanged();
 		notifyObservers();
-
+		getPropertyChangeSupport().firePropertyChange(SHAPES, null, shapes);
 	}
 
 	@Override
 	public void removeFromShapes(Shape aShape) {
+		System.out.println("!!!!!!!!!!!!!!!!!! Remove Shape " + aShape);
 		shapes.remove(aShape);
 		setChanged();
 		notifyObservers();
+		getPropertyChangeSupport().firePropertyChange(SHAPES, null, shapes);
 	}
+	*/
 
-	@Override
+	/*@Override
 	public List<Connector> getConnectors() {
 		return connectors;
 	}
 
 	@Override
 	public void setConnectors(List<Connector> someConnectors) {
-		connectors.addAll(someConnectors);
+		if (someConnectors != null) {
+			connectors.addAll(someConnectors);
+		} else {
+			connectors.clear();
+		}
 	}
 
 	@Override
@@ -84,6 +104,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		connectors.add(aConnector);
 		setChanged();
 		notifyObservers();
+		getPropertyChangeSupport().firePropertyChange(CONNECTORS, null, shapes);
 	}
 
 	@Override
@@ -91,7 +112,8 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		connectors.remove(aConnector);
 		setChanged();
 		notifyObservers();
-	}
+		getPropertyChangeSupport().firePropertyChange(CONNECTORS, null, shapes);
+	}*/
 
 	@Override
 	public Diagram getDiagram() {
@@ -103,7 +125,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		diagram = drawing;
 	}
 
-	@Override
+	/*@Override
 	public final G getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
@@ -113,7 +135,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		this.graphicalRepresentation = graphicalRepresentation;
 		// graphicalRepresentation.setDrawable((M) this);
 		// graphicalRepresentation.addObserver(this);
-	}
+	}*/
 
 	/*private boolean isDeserializing = false;
 
@@ -133,14 +155,16 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	}*/
 
 	@Override
-	public DiagramElementImpl<M, G> clone() {
-		try {
+	public DiagramElement<M, G> clone() {
+		return (DiagramElement<M, G>) cloneObject();
+
+		/*try {
 			return (DiagramElementImpl<M, G>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			// cannot happen since we are clonable
 			return null;
-		}
+		}*/
 	}
 
 	@Override
@@ -152,10 +176,10 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 	}
 
-	@Override
+	/*@Override
 	public void setChanged() {
 		super.setChanged();
-	}
+	}*/
 
 	@Override
 	public String getName() {

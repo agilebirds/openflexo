@@ -11,6 +11,7 @@ import org.openflexo.fge.drawingeditor.ShowContextualMenuControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.undo.CompoundEdit;
 
 public class DiagramFactory extends FGEModelFactoryImpl {
 
@@ -19,14 +20,17 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public DiagramFactory() throws ModelDefinitionException {
 		super(Diagram.class, Shape.class, Connector.class);
+		createUndoManager();
 	}
 
 	// Called for NEW
 	public Diagram makeNewDiagram() {
+		CompoundEdit edit = getUndoManager().startRecording("Create empty diagram");
 		Diagram returned = newInstance(Diagram.class);
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
 		// returned.getEditedDrawing().init();
+		getUndoManager().stopRecording(edit);
 		return returned;
 	}
 

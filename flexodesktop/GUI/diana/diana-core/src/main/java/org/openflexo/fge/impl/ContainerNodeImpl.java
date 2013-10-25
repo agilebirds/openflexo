@@ -154,29 +154,36 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 	 * Recursively delete this DrawingTreeNode and all its descendants
 	 */
 	@Override
-	public void delete() {
-		if (childNodes != null) {
-			for (DrawingTreeNode<?, ?> n : new ArrayList<DrawingTreeNode<?, ?>>(childNodes)) {
-				removeChild(n);
+	public boolean delete() {
+		if (!isDeleted()) {
+			if (childNodes != null) {
+				for (DrawingTreeNode<?, ?> n : new ArrayList<DrawingTreeNode<?, ?>>(childNodes)) {
+					removeChild(n);
+				}
+				childNodes.clear();
 			}
-			childNodes.clear();
+
+			childNodes = null;
+
+			return super.delete();
 		}
-
-		childNodes = null;
-
-		super.delete();
+		return false;
 	}
 
 	@Override
 	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode) {
-		addedNode.getGraphicalRepresentation().updateBindingModel();
+		if (addedNode.getGraphicalRepresentation() != null) {
+			addedNode.getGraphicalRepresentation().updateBindingModel();
+		}
 		setChanged();
 		notifyObservers(new NodeAdded(addedNode, this));
 	}
 
 	@Override
 	public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode) {
-		removedNode.getGraphicalRepresentation().updateBindingModel();
+		if (removedNode.getGraphicalRepresentation() != null) {
+			removedNode.getGraphicalRepresentation().updateBindingModel();
+		}
 		setChanged();
 		notifyObservers(new NodeRemoved(removedNode, this));
 	}

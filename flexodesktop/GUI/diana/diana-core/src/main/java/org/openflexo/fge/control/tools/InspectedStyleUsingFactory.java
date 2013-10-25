@@ -19,6 +19,9 @@
  */
 package org.openflexo.fge.control.tools;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.kvc.KeyValueCoding;
@@ -32,18 +35,18 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S>, S ex
 
 	private F styleFactory;
 
-	// private FactoryPropertyChangeListener factoryListener;
+	private FactoryPropertyChangeListener factoryListener;
 
 	public InspectedStyleUsingFactory(DianaInteractiveViewer<?, ?, ?> controller, F styleFactory) {
 		super(controller, styleFactory.makeNewStyle());
 		this.styleFactory = styleFactory;
-		// factoryListener = new FactoryPropertyChangeListener();
-		// styleFactory.getPropertyChangeSupport().addPropertyChangeListener(factoryListener);
+		factoryListener = new FactoryPropertyChangeListener();
+		styleFactory.getPropertyChangeSupport().addPropertyChangeListener(factoryListener);
 	}
 
 	@Override
 	public boolean delete() {
-		// styleFactory.getPropertyChangeSupport().removePropertyChangeListener(factoryListener);
+		styleFactory.getPropertyChangeSupport().removePropertyChangeListener(factoryListener);
 		return super.delete();
 	}
 
@@ -93,18 +96,23 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S>, S ex
 		super._doFireChangedProperty(p, oldValue, newValue);
 	}*/
 
-	/*protected class FactoryPropertyChangeListener implements PropertyChangeListener {
+	protected abstract void applyNewStyleToSelection(Object newStyleType);
+
+	protected class FactoryPropertyChangeListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(StyleFactory.STYLE_CLASS_CHANGED)) {
+				applyNewStyleToSelection(evt.getNewValue());
+			}
+
 			System.out.println("Tiens, on me previent que " + evt + " pour " + evt.getPropertyName());
-			Class<?> inspectedStyleClass = getStyleFactory().getCurrentStyle().getClass();
+			/*Class<?> inspectedStyleClass = getStyleFactory().getCurrentStyle().getClass();
 			GRParameter param = GRParameter.getGRParameter(inspectedStyleClass, evt.getPropertyName());
 			System.out.println("Found param = " + param);
 			if (param != null) {
 				setPropertyValue(param, evt.getNewValue());
-			}
+			}*/
 		}
-
-	}*/
+	}
 
 }
