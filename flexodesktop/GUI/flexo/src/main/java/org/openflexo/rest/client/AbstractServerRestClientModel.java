@@ -318,13 +318,29 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 			case 501:
 			case 502:
 			case 503:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
+				boolean confirm = FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				if (!confirm) {
+					goOffline();
+				}
+				return confirm;
 			case 401:
-			case 403:
-			case 404:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
+				boolean confirm2 = FlexoController.confirm(FlexoLocalization.localizedForKey("authentication_failed") + entity + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				if (!confirm2) {
+					goOffline();
+				}
+				return confirm2;
+			case 403:
+				boolean confirm3 = FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity
+						+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				if (!confirm3) {
+					goOffline();
+				}
+				return confirm3;
+			case 404:
+				FlexoController.notify(FlexoLocalization.localizedForKey("not_found") + entity);
+				return false;
 			default:
 				if (entity != null) {
 					FlexoController.notify(entity.toString());
@@ -335,31 +351,51 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 			}
 		}
 		if (e.getCause() instanceof ConnectException) {
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error")
+			boolean confirm = FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error")
 					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : "") + "\n"
 					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			if (!confirm) {
+				goOffline();
+			}
+			return confirm;
 		} else if (e.toString() != null && e.toString().startsWith("javax.net.ssl.SSLHandshakeException")) {
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": " + e + "\n"
+			boolean confirm = FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": " + e + "\n"
 					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			if (!confirm) {
+				goOffline();
+			}
+			return confirm;
 		} else if (e instanceof SocketTimeoutException) {
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_timeout") + "\n"
+			boolean confirm = FlexoController.confirm(FlexoLocalization.localizedForKey("connection_timeout") + "\n"
 					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			if (!confirm) {
+				goOffline();
+			}
+			return confirm;
 		} else if (e instanceof IOException || e.getCause() instanceof IOException) {
 			IOException ioEx = (IOException) (e instanceof IOException ? e : e.getCause());
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": "
+			boolean confirm = FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": "
 					+ FlexoLocalization.localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage() + "\n"
 					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+			if (!confirm) {
+				goOffline();
+			}
+			return confirm;
 		} else {
 			if (e.getMessage() != null && e.getMessage().indexOf("Content is not allowed in prolog") > -1) {
 				FlexoController
 						.notify("Check your connection url in FlexoPreferences > Advanced.\n It seems wrong.\nsee logs for details.");
 				return false;
 			} else {
-				return FlexoController
+				boolean confirm = FlexoController
 						.confirm(FlexoLocalization.localizedForKey("webservice_remote_error")
 								+ " \n"
 								+ (e.getMessage() == null || "java.lang.NullPointerException".equals(e.getMessage()) ? "Check your connection parameters.\nThe service may be temporary unavailable."
 										: e.getMessage()) + "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
+				if (!confirm) {
+					goOffline();
+				}
+				return confirm;
 			}
 		}
 		/*FlexoController.notify(FlexoLocalization.localizedForKey("webservice_connection_failed"));
@@ -445,6 +481,10 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 
 	public void goOnline() {
 		serverRestService.setOffline(false);
+	}
+
+	public void goOffline() {
+		serverRestService.setOffline(true);
 	}
 
 	@Override
