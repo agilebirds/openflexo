@@ -61,8 +61,8 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	private static final Logger logger = Logger.getLogger(RoleGR.class.getPackage().getName());
 
-	public static final int WIDTH = 100;
-	public static final int HEIGHT = 40;
+	public static final int WIDTH = 160;
+	public static final int HEIGHT = 60;
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
@@ -92,7 +92,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	@Override
 	public double getWidth() {
-		return getRole().getWidth(RepresentableFlexoModelObject.DEFAULT, 100);
+		return getRole().getWidth(RepresentableFlexoModelObject.DEFAULT, WIDTH);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	@Override
 	public double getHeight() {
-		return getRole().getHeight(RepresentableFlexoModelObject.DEFAULT, 40);
+		return getRole().getHeight(RepresentableFlexoModelObject.DEFAULT, HEIGHT);
 	}
 
 	@Override

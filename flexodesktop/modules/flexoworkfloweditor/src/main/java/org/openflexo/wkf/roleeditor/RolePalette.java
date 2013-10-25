@@ -39,18 +39,23 @@ import org.openflexo.foundation.wkf.action.AddRole;
 
 public class RolePalette extends DrawingPalette {
 
+	private static final int H_GAP = 0;
+	private static final int ROWS = 4;
+	private static final int COLS = 2;
 	private static final Logger logger = Logger.getLogger(RolePalette.class.getPackage().getName());
 
 	public RolePalette() {
-		super(300, 230, "default");
+		super(380, 340, "default");
 		int n = 1;
 		int m = 1;
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < COLS; i++) {
+			for (int j = 0; j < ROWS; j++) {
 				if (j < 3) {
-					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "Role" + n++, false));
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + H_GAP, j * (RoleGR.HEIGHT + 20), "Role" + n++,
+							false));
 				} else {
-					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + 25, j * (RoleGR.HEIGHT + 20), "System" + m++, true));
+					addElement(makeRoleElement(colorFor(i, j), i * (RoleGR.WIDTH + 20) + H_GAP, j * (RoleGR.HEIGHT + 20), "System" + m++,
+							true));
 				}
 			}
 		}
