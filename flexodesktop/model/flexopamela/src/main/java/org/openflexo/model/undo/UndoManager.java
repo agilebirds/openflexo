@@ -33,6 +33,9 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * 
  * Adding an edit to an <code>UndoManager</code> results in removing all edits from the index of the next edit to the end of the list.<br>
  * 
+ * TODO: WARNING: if you are dealing with custom implementation of PAMELA objects with methods involved in setter/adder/remover and declared
+ * as final, those calls won't be intercepted by the UndoManager, and thus results will be of undetermined state. Please fix this.<br>
+ * 
  * This class is thread safe.
  * 
  * @author sylvain
@@ -65,6 +68,8 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		currentEdition = new CompoundEdit(presentationName);
 		addEdit(currentEdition);
 
+		getPropertyChangeSupport().firePropertyChange("StartRecording", null, currentEdition);
+
 		return currentEdition;
 	}
 
@@ -88,6 +93,9 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		System.out.println("----------------> Stop recording " + currentEdition.getPresentationName());
 		// System.out.println(currentEdition.describe());
 		currentEdition = null;
+
+		getPropertyChangeSupport().firePropertyChange("StopRecording", null, edit);
+
 		return currentEdition;
 	}
 
@@ -110,6 +118,25 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	@Override
 	public synchronized boolean canUndo() {
+		if (currentEdition != null) {
+			return false;
+		}
+		if (undoIsProgress || redoIsProgress) {
+			return false;
+		}
+		return super.canUndo();
+	}
+
+	/**
+	 * Returns true if edits may be undone.<br>
+	 * If en edition is in progress, return true if stopping this edition will cause UndoManager to be able to undo
+	 * 
+	 * 
+	 * @return true if there are edits to be undone
+	 * @see CompoundEdit#canUndo
+	 * @see #editToBeUndone
+	 */
+	public synchronized boolean canUndoIfStoppingCurrentEdition() {
 		if (undoIsProgress || redoIsProgress) {
 			return false;
 		}
@@ -125,6 +152,9 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	@Override
 	public synchronized boolean canRedo() {
+		if (currentEdition != null) {
+			return false;
+		}
 		if (undoIsProgress || redoIsProgress) {
 			return false;
 		}
@@ -152,6 +182,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 				System.out.println("!!!!!!!!!! PAMELA edit received outside official recording. Create a default one !!!");
 				startRecording("<Unidentified recording>");
 			}
+			// System.out.println("[PAMELA] Received: " + anEdit.getPresentationName());
 			currentEdition.addEdit(anEdit);
 			return true;
 		} else if (anEdit instanceof CompoundEdit) {
@@ -208,6 +239,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		undoIsProgress = true;
 		super.undo();
 		undoIsProgress = false;
+		getPropertyChangeSupport().firePropertyChange("undone", null, this);
 	}
 
 	/**
@@ -226,6 +258,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		redoIsProgress = true;
 		super.redo();
 		redoIsProgress = false;
+		getPropertyChangeSupport().firePropertyChange("redone", null, this);
 	}
 
 	/**
@@ -262,4 +295,11 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		return pcSupport;
 	};
 
+	@Override
+	public synchronized String getUndoPresentationName() {
+		if (currentEdition != null) {
+			return currentEdition.getPresentationName();
+		}
+		return super.getUndoPresentationName();
+	}
 }

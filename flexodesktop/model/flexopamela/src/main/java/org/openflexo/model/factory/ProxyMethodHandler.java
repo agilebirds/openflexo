@@ -115,6 +115,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_DELETED;
 	private static Method EQUALS_OBJECT;
 	private static Method DESTROY;
+	private static Method OBJECT_FOR_KEY;
+	private static Method SET_OBJECT_FOR_KEY;
+	private static Method GET_TYPE_FOR_KEY;
 	private final PAMELAProxyFactory<I> pamelaProxyFactory;
 
 	static {
@@ -154,6 +157,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			IS_BEING_CLONED = CloneableProxyObject.class.getMethod("isBeingCloned");
 			EQUALS_OBJECT = AccessibleProxyObject.class.getMethod("equalsObject", Object.class);
 			DESTROY = AccessibleProxyObject.class.getMethod("destroy");
+			OBJECT_FOR_KEY = KeyValueCoding.class.getMethod("objectForKey", String.class);
+			SET_OBJECT_FOR_KEY = KeyValueCoding.class.getMethod("setObjectForKey", Object.class, String.class);
+			GET_TYPE_FOR_KEY = KeyValueCoding.class.getMethod("getTypeForKey", String.class);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -208,7 +214,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
 		if (proceed != null) {
-			// System.out.println("Invoking " + proceed + " instead of " + method);
 			ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 			if (property != null) {
 				if (methodIsEquivalentTo(method, property.getSetterMethod())) {
@@ -372,6 +377,37 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeDeleter(args);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
+		} else if (methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
+			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
+			if (property != null) {
+				return invokeGetter(property);
+			} else {
+				System.err.println("Cannot handle property " + args[0] + " for " + getObject());
+				return null;
+			}
+		} else if (methodIsEquivalentTo(method, SET_OBJECT_FOR_KEY)) {
+			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[1]);
+			if (property != null) {
+				Object newValue = args[0];
+				/*Object oldValue = invokeGetter(property);
+				if (getModelFactory().getUndoManager() != null) {
+					getModelFactory().getUndoManager().addEdit(
+							new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, newValue, getModelFactory()));
+				}*/
+				invokeSetter(property, newValue);
+				return null;
+			} else {
+				System.err.println("Cannot handle property " + args[0] + " for " + getObject());
+				return null;
+			}
+		} else if (methodIsEquivalentTo(method, GET_TYPE_FOR_KEY)) {
+			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
+			if (property != null) {
+				return property.getType();
+			} else {
+				System.err.println("Cannot handle property " + args[0] + " for " + getObject());
+				return null;
+			}
 		}
 		ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 		if (property != null) {
@@ -589,6 +625,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			throw new ModelExecutionException(e);
 		} catch (InvocationTargetException e) {
 			throw new ModelExecutionException(e);
+		} catch (NullPointerException e) {
+			System.out.println("Zobui");
+			return null;
 		}
 	}
 

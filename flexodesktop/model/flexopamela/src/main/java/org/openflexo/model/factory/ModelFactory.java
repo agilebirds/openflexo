@@ -60,6 +60,11 @@ public class ModelFactory {
 			setFilter(new MethodFilter() {
 				@Override
 				public boolean isHandled(Method method) {
+
+					if (method.getName().contains("setX")) {
+						System.out.println("OK je l'ai");
+					}
+
 					if (Modifier.isAbstract(method.getModifiers()))
 						return true;
 					if (method.getName().equals("toString")) {

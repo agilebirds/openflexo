@@ -11,7 +11,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author Guillaume
  * 
  */
-public interface AccessibleProxyObject extends HasPropertyChangeSupport {
+public interface AccessibleProxyObject extends HasPropertyChangeSupport, KeyValueCoding {
 
 	/**
 	 * Invokes the getter for the property with the given <code>propertyIdentifier</code>.

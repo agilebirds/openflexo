@@ -201,12 +201,12 @@ public class CompoundEdit extends AbstractUndoableEdit {
 
 	@Override
 	public String getUndoPresentationName() {
-		return "UNDO " + getPresentationName();
+		return "Undo " + getPresentationName();
 	}
 
 	@Override
 	public String getRedoPresentationName() {
-		return "REDO" + getPresentationName();
+		return "Redo " + getPresentationName();
 	}
 
 	/**
