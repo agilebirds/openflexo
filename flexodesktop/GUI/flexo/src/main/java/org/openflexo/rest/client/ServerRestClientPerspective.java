@@ -40,7 +40,7 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
 		if (object instanceof FlexoProject) {
-			ServerRestClientModel model = new ServerRestClientModel(controller, object.getProject(), editable);
+			final ServerRestClientModel model = new ServerRestClientModel(controller, object.getProject(), editable);
 			controller.getApplicationContext().getServerRestService().init();
 			model.refresh();
 			FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(ServerRestClientModel.FIB_FILE);
@@ -52,7 +52,13 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 			}
 			FIBView<?, ?> view = fibController.buildView(component);
 			fibController.setDataObject(model);
-			return new DefaultModuleView<FlexoProject>(controller, (FlexoProject) object, view, this);
+			return new DefaultModuleView<FlexoProject>(controller, (FlexoProject) object, view, this) {
+				@Override
+				public void deleteModuleView() {
+					super.deleteModuleView();
+					model.delete();
+				}
+			};
 		} else {
 			return null;
 		}
