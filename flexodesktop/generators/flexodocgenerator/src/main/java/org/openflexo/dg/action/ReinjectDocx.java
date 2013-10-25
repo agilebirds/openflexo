@@ -37,6 +37,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openflexo.docxparser.DocxFileParser;
 import org.openflexo.docxparser.dto.api.IParsedDocx;
@@ -174,12 +175,8 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 		} catch (IOException e) {
 			throw new FlexoException("IO exception while trying to handle docx reinjection file resources", e);
 		} finally {
+			IOUtils.closeQuietly(in);
 			hideFlexoProgress();
-			try {
-				in.close();
-			} catch (IOException e) {
-				throw new IOFlexoException(e);
-			}
 		}
 	}
 
