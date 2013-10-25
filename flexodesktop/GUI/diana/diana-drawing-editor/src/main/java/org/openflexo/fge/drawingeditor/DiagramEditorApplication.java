@@ -22,10 +22,13 @@ package org.openflexo.fge.drawingeditor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -36,6 +39,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -52,6 +56,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.fge.control.exceptions.CopyException;
+import org.openflexo.fge.control.exceptions.CutException;
+import org.openflexo.fge.control.exceptions.PasteException;
 import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.swing.control.SwingToolFactory;
@@ -66,6 +73,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.undo.UndoManager;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -159,10 +167,10 @@ public class DiagramEditorApplication {
 		scaleSelector = toolFactory.makeDianaScaleSelector(null);
 		inspectors = toolFactory.makeDianaInspectors();
 
-		inspectors.getForegroundStyleInspector().setVisible(true);
-		inspectors.getTextStyleInspector().setVisible(true);
-		inspectors.getShadowStyleInspector().setVisible(true);
-		inspectors.getBackgroundStyleInspector().setVisible(true);
+		inspectors.getForegroundStyleInspector().setLocation(1000, 100);
+		inspectors.getTextStyleInspector().setLocation(1000, 300);
+		inspectors.getShadowStyleInspector().setLocation(1000, 400);
+		inspectors.getBackgroundStyleInspector().setLocation(1000, 500);
 		// inspectors.getShapeInspector().setVisible(true);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -180,12 +188,14 @@ public class DiagramEditorApplication {
 		paletteDialog.setLocation(1010, 0);
 		paletteDialog.pack();
 		paletteDialog.setVisible(true);
+		paletteDialog.setFocusableWindowState(false);
 
 		manager = new PropertyChangeListenerRegistrationManager();
 
 		JMenuBar mb = new JMenuBar();
 		JMenu fileMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "file"));
 		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "edit"));
+		JMenu viewMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "view"));
 		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "tools"));
 		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey(LOCALIZATION, "help"));
 
@@ -245,7 +255,11 @@ public class DiagramEditorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("copy");
-				currentDiagramEditor.getController().copy();
+				try {
+					currentDiagramEditor.getController().copy();
+				} catch (CopyException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}, new Synchronizer() {
 			@Override
@@ -260,7 +274,11 @@ public class DiagramEditorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("cut");
-				currentDiagramEditor.getController().cut();
+				try {
+					currentDiagramEditor.getController().cut();
+				} catch (CutException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}, new Synchronizer() {
 			@Override
@@ -276,7 +294,11 @@ public class DiagramEditorApplication {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("paste");
 				if (currentDiagramEditor != null) {
-					currentDiagramEditor.getController().paste();
+					try {
+						currentDiagramEditor.getController().paste();
+					} catch (PasteException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		}, new Synchronizer() {
@@ -292,11 +314,19 @@ public class DiagramEditorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("undo");
+				currentDiagramEditor.getController().undo();
 			}
 		}, new Synchronizer() {
 			@Override
 			public void synchronize(HasPropertyChangeSupport observable, SynchronizedMenuItem menuItem) {
-				System.out.println("UNDO: Je dois me synchroniser");
+				if (observable instanceof UndoManager) {
+					menuItem.setEnabled(currentDiagramEditor.getController().canUndo());
+					if (currentDiagramEditor.getController().canUndo()) {
+						menuItem.setText(currentDiagramEditor.getController().getFactory().getUndoManager().getUndoPresentationName());
+					} else {
+						menuItem.setText(FlexoLocalization.localizedForKey(LOCALIZATION, "undo"));
+					}
+				}
 			}
 		});
 
@@ -304,11 +334,19 @@ public class DiagramEditorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("redo");
+				currentDiagramEditor.getController().getFactory().getUndoManager().redo();
 			}
 		}, new Synchronizer() {
 			@Override
 			public void synchronize(HasPropertyChangeSupport observable, SynchronizedMenuItem menuItem) {
-				System.out.println("REDO: Je dois me synchroniser");
+				if (observable instanceof UndoManager) {
+					menuItem.setEnabled(currentDiagramEditor.getController().canRedo());
+					if (currentDiagramEditor.getController().canRedo()) {
+						menuItem.setText(currentDiagramEditor.getController().getFactory().getUndoManager().getRedoPresentationName());
+					} else {
+						menuItem.setText(FlexoLocalization.localizedForKey(LOCALIZATION, "redo"));
+					}
+				}
 			}
 		});
 
@@ -319,21 +357,23 @@ public class DiagramEditorApplication {
 		editMenu.add(undoItem);
 		editMenu.add(redoItem);
 
-		/*JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "inspect"));
-		inspectItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				inspector.setVisible(true);
-			}
-		});*/
+		WindowMenuItem foregroundInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "foreground"),
+				inspectors.getForegroundStyleInspector());
+		WindowMenuItem backgroundInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "background"),
+				inspectors.getBackgroundStyleInspector());
+		WindowMenuItem textInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "text"),
+				inspectors.getTextStyleInspector());
+		WindowMenuItem shadowInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shadow"),
+				inspectors.getShadowStyleInspector());
 
-		JMenuItem paletteItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "show_palette"));
-		paletteItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				paletteDialog.setVisible(true);
-			}
-		});
+		WindowMenuItem paletteItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "palette"), paletteDialog);
+
+		viewMenu.add(foregroundInspectorItem);
+		viewMenu.add(backgroundInspectorItem);
+		viewMenu.add(textInspectorItem);
+		viewMenu.add(shadowInspectorItem);
+		viewMenu.addSeparator();
+		viewMenu.add(paletteItem);
 
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
@@ -351,13 +391,12 @@ public class DiagramEditorApplication {
 			}
 		});
 
-		// toolsMenu.add(inspectItem);
-		toolsMenu.add(paletteItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
 
 		mb.add(fileMenu);
 		mb.add(editMenu);
+		mb.add(viewMenu);
 		mb.add(toolsMenu);
 		mb.add(helpMenu);
 
@@ -634,7 +673,6 @@ public class DiagramEditorApplication {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			System.out.println("Coucou ca change avec " + evt);
 			synchronizer.synchronize(observable, this);
 		}
 
@@ -642,6 +680,54 @@ public class DiagramEditorApplication {
 		public void setEnabled(boolean b) {
 			super.setEnabled(b);
 			getAction().setEnabled(b);
+		}
+
+	}
+
+	public class WindowMenuItem extends JCheckBoxMenuItem implements WindowListener {
+
+		private Window window;
+
+		public WindowMenuItem(String menuName, Window aWindow) {
+			super(menuName);
+			this.window = aWindow;
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					window.setVisible(!window.isVisible());
+				}
+			});
+			aWindow.addWindowListener(this);
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			setState(window.isVisible());
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			setState(window.isVisible());
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
 		}
 
 	}

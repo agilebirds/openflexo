@@ -262,7 +262,6 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 		if (scale != aScale) {
 			double oldValue = scale;
 			scale = aScale;
-			setChanged();
 			notifyObservers(new ScaleChanged(oldValue, aScale));
 			drawingView.rescale();
 		}
@@ -288,10 +287,6 @@ public abstract class AbstractDianaEditor<M, F extends DianaViewFactory<F, C>, C
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-	}
-
-	@Deprecated
-	public void setChanged() {
 	}
 
 	public void notifyObservers(ControlNotification notification) {

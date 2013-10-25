@@ -37,6 +37,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.model.undo.CompoundEdit;
 
 /**
  * Utility class used to store a move
@@ -109,7 +110,14 @@ public class MoveInfo {
 		return (DrawingView<?, ?>) view.getDrawingView();
 	}
 
+	private CompoundEdit moveEdit;
+
 	private void startDragging() {
+
+		if (getMovedObject().getFactory().getUndoManager() != null) {
+			moveEdit = getMovedObject().getFactory().getUndoManager().startRecording("Moving " + movedObjects.size() + " objects");
+		}
+
 		for (ShapeNode<?> shapeNode : movedObjects.keySet()) {
 			shapeNode.notifyObjectWillMove();
 		}
@@ -148,6 +156,8 @@ public class MoveInfo {
 			d.setLocation(newLocation.clone());*/
 
 			d.setLocation(desiredLocation);
+			// d.getGraphicalRepresentation().setX(desiredLocation.x);
+			// d.getGraphicalRepresentation().setY(desiredLocation.y);
 
 			if (d.isParentLayoutedAsContainer()) {
 				FGEPoint resultingLocation = d.getLocation();
@@ -177,6 +187,11 @@ public class MoveInfo {
 				}
 			}
 		}
+
+		if (getMovedObject().getFactory().getUndoManager() != null) {
+			getMovedObject().getFactory().getUndoManager().stopRecording(moveEdit);
+		}
+
 	}
 
 	boolean isDnDPattern(Point newLocationInDrawingView, MouseControlContext context) {

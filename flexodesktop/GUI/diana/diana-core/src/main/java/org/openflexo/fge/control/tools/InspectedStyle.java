@@ -36,9 +36,10 @@ import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.kvc.KVCObservableObject;
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.factory.CloneableProxyObject;
+import org.openflexo.model.factory.KeyValueCoding;
+import org.openflexo.model.undo.CompoundEdit;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
@@ -131,6 +132,10 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		T oldValue = getPropertyValue(parameter);
 		// System.out.println("Sets from " + oldValue + " to " + value);
 		if (requireChange(oldValue, value)) {
+			CompoundEdit setValueEdit = null;
+			if (getController().getFactory().getUndoManager() != null) {
+				setValueEdit = getController().getFactory().getUndoManager().startRecording("Set " + parameter.getName() + " to " + value);
+			}
 			if (getSelection().size() == 0) {
 				defaultValue.setObjectForKey(value, parameter.getName());
 			} else {
@@ -142,6 +147,9 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 			}
 			storedPropertyValues.put(parameter, value);
 			pcSupport.firePropertyChange(parameter.getName(), oldValue, value);
+			if (getController().getFactory().getUndoManager() != null) {
+				getController().getFactory().getUndoManager().stopRecording(setValueEdit);
+			}
 		}
 	}
 

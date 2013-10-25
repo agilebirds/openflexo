@@ -20,11 +20,20 @@
 
 package org.openflexo.fge.control;
 
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.control.actions.DrawShapeAction;
+import org.openflexo.fge.control.exceptions.CopyException;
+import org.openflexo.fge.control.exceptions.CutException;
+import org.openflexo.fge.control.exceptions.PasteException;
+import org.openflexo.fge.control.notifications.SelectionCopied;
 import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
@@ -32,14 +41,18 @@ import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
 import org.openflexo.fge.control.tools.InspectedShadowStyle;
 import org.openflexo.fge.control.tools.InspectedTextStyle;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.model.factory.Clipboard;
 
 /**
  * Represents an editor of a {@link Drawing}<br>
  * 
- * The {@link Drawing} can be fully edited. A {@link DianaInteractiveEditor} generally declares some palettes
+ * The {@link Drawing} can be fully edited. A {@link DianaInteractiveEditor} generally declares some palettes.<br>
+ * 
+ * Additionnaly, a {@link DianaInteractiveEditor} manage clipboard operations (copy/cut/paste), and undo/redo operations
  * 
  * @author sylvain
  * 
@@ -52,6 +65,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	public enum EditorTool {
 		SelectionTool, DrawShapeTool, DrawConnectorTool, DrawTextTool
 	}
+
+	public static final int PASTE_DELTA = 10;
 
 	private EditorTool currentTool;
 
@@ -68,9 +83,22 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private InspectedShadowStyle inspectedShadowStyle;
 	private ShapeSpecification currentShape;
 
-	// private Vector<DrawingPalette> palettes;
+	/**
+	 * The clipboard beeing managed by this editor
+	 */
+	private Clipboard clipboard = null;
 
-	// private EditorToolbox toolbox;
+	/**
+	 * The drawing tree node hosting a potential paste
+	 */
+	private DrawingTreeNode<?, ?> pastingContext;
+
+	/**
+	 * The location where applying paste, relative to root
+	 */
+	private FGEPoint pastingLocation;
+
+	private boolean isSelectingAfterPaste = false;
 
 	public DianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
@@ -140,7 +168,6 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 				break;
 			}
 			currentTool = aTool;
-			setChanged();
 			notifyObservers(new ToolChanged(oldTool, currentTool));
 		}
 	}
@@ -232,43 +259,273 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		}
 	}
 
-	/*public EditorToolbox getToolbox() {
-		return toolbox;
-	}*/
+	public Clipboard getClipboard() {
+		return clipboard;
+	}
 
-	/*public void setSelectedObject(DrawingTreeNode<?, ?> aNode) {
-		super.setSelectedObject(aNode);
-		if (getToolbox() != null) {
-			getToolbox().update();
+	/**
+	 * Return boolean indicating if the current selection is suitable for a COPY action
+	 * 
+	 * @return
+	 */
+	public boolean isCopiable() {
+		if (getSelectedObjects().size() == 1) {
+			if (getSelectedObjects().get(0) == getDrawing().getRoot()) {
+				return false;
+			}
+			return true;
+		}
+		return getSelectedObjects().size() > 0;
+	}
+
+	/**
+	 * Copy current selection in the clipboard
+	 * 
+	 * @throws CopyException
+	 */
+	public Clipboard copy() throws CopyException {
+		if (getSelectedObjects().size() == 0) {
+			System.out.println("Nothing to copy");
+			return null;
+		}
+
+		Object[] objectsToBeCopied = makeArrayOfObjectsToBeCopied(getSelectedObjects());
+
+		try {
+			clipboard = getFactory().copy(objectsToBeCopied);
+		} catch (Throwable e) {
+			throw new CopyException(e, getFactory());
+		}
+
+		// System.out.println(clipboard.debug());
+
+		pastingContext = FGEUtils.getFirstCommonAncestor(getSelectedObjects());
+		// System.out.println("Pasting context = " + pastingContext);
+
+		notifyObservers(new SelectionCopied(clipboard));
+
+		return clipboard;
+	}
+
+	/**
+	 * Return boolean indicating if the current selection is suitable for a PASTE action in supplied context and position
+	 * 
+	 * @return
+	 */
+	public boolean isPastable() {
+		return clipboard != null && pastingContext != null;
+	}
+
+	/**
+	 * Paste current Clipboard in supplied context and position
+	 * 
+	 * @throws PasteException
+	 * 
+	 */
+	public void paste() throws PasteException {
+
+		if (clipboard != null) {
+
+			// System.out.println("Pasting in " + pastingContext + " at "+pastingLocation);
+			FGEPoint p = FGEUtils.convertNormalizedPoint(getDrawing().getRoot(), pastingLocation, pastingContext);
+
+			// This point is valid for RootNode, but need to be translated in a ShapeNode
+			if (pastingContext instanceof ShapeNode) {
+				p.x = p.x * ((ShapeNode<?>) pastingContext).getWidth();
+				p.y = p.y * ((ShapeNode<?>) pastingContext).getHeight();
+			}
+
+			prepareClipboardForPasting(p);
+
+			// Prevent pastingContext to be changed
+			isSelectingAfterPaste = true;
+
+			// Do the paste
+			try {
+				Object pasted = getFactory().paste(clipboard, pastingContext.getDrawable());
+
+				// Try to select newly created objects
+				clearSelection();
+				if (clipboard.isSingleObject()) {
+					addToSelectedObjects(getDrawing().getDrawingTreeNode(pasted));
+				} else {
+					for (Object o : (List<?>) pasted) {
+						addToSelectedObjects(getDrawing().getDrawingTreeNode(o));
+					}
+				}
+			} catch (Throwable e) {
+				throw new PasteException(e, getFactory());
+			}
+
+			// OK, now we can track again new selection to set pastingContext
+			isSelectingAfterPaste = false;
+
+			pastingLocation.x = pastingLocation.x + PASTE_DELTA;
+			pastingLocation.y = pastingLocation.y + PASTE_DELTA;
+
 		}
 	}
 
+	/**
+	 * Return boolean indicating if the current selection is suitable for a CUT action
+	 * 
+	 * @return
+	 */
+	public boolean isCutable() {
+		return isCopiable();
+	}
+
+	/**
+	 * Cut current selection, by deleting selecting contents while copying it in the clipboard for a future use
+	 * 
+	 * @throws CutException
+	 */
+	public Clipboard cut() throws CutException {
+		if (getSelectedObjects().size() == 0) {
+			System.out.println("Nothing to cut");
+			return null;
+		}
+
+		Object[] objectsToBeCopied = makeArrayOfObjectsToBeCopied(getSelectedObjects());
+
+		try {
+			clipboard = getFactory().cut(objectsToBeCopied);
+		} catch (Throwable e) {
+			throw new CutException(e, getFactory());
+		}
+
+		// System.out.println(clipboard.debug());
+
+		return clipboard;
+
+	}
+
+	/**
+	 * Returns true if edits may be undone.<br>
+	 * If en edition is in progress, return true if stopping this edition will cause UndoManager to be able to undo
+	 * 
+	 * 
+	 * @return true if there are edits to be undone
+	 */
+	public boolean canUndo() {
+		return getFactory() != null && getFactory().getUndoManager() != null
+				&& getFactory().getUndoManager().canUndoIfStoppingCurrentEdition();
+	}
+
+	/**
+	 * Undoes appropriate edit
+	 */
+	public void undo() {
+		System.out.println("UNDO called !!!");
+		getFactory().getUndoManager().debug();
+		if (getFactory().getUndoManager().canUndo()) {
+			System.out.println("Effectivement, je peux faire un undo de: "
+					+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+			getFactory().getUndoManager().undo();
+		} else {
+			getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
+			System.out.println("Bon, j'arrete de force");
+			if (getFactory().getUndoManager().canUndo()) {
+				System.out.println("Effectivement, je peux faire un undo de: "
+						+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+				getFactory().getUndoManager().undo();
+			}
+		}
+	}
+
+	/**
+	 * Returns true if edits may be redone.<br>
+	 * 
+	 * @return true if there are edits to be undone
+	 */
+	public boolean canRedo() {
+		return getFactory() != null && getFactory().getUndoManager() != null && getFactory().getUndoManager().canRedo();
+	}
+
+	/**
+	 * Redoes appropriate edit
+	 */
+	public void redo() {
+		System.out.println("REDO called !!!");
+		if (getFactory().getUndoManager().canRedo()) {
+			System.out.println("Effectivement, je peux faire un redo de: "
+					+ getFactory().getUndoManager().editToBeRedone().getPresentationName());
+			getFactory().getUndoManager().redo();
+		}
+	}
+
+	/**
+	 * Internal method used to build an array with drawable objects
+	 * 
+	 * @param aSelection
+	 * @return
+	 */
+	private Object[] makeArrayOfObjectsToBeCopied(List<DrawingTreeNode<?, ?>> aSelection) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Making copying selection with " + getSelectedObjects());
+		}
+		Object[] objectsToBeCopied = new Object[aSelection.size()];
+		int i = 0;
+		for (DrawingTreeNode<?, ?> dtn : aSelection) {
+			objectsToBeCopied[i] = dtn.getDrawable();
+			// System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
+			// System.out.println("Copied: " + getFactory().stringRepresentation(objectsToBeCopied[i]));
+			i++;
+		}
+		return objectsToBeCopied;
+	}
+
+	/**
+	 * Return the drawing tree node hosting a potential paste
+	 * 
+	 * @return
+	 */
+	public DrawingTreeNode<?, ?> getPastingContext() {
+		return pastingContext;
+	}
+
+	/**
+	 * Return the location where applying paste, relative to root
+	 * 
+	 * @return
+	 */
+	public FGEPoint getPastingLocation() {
+		return pastingLocation;
+	}
+
+	public void setLastClickedPoint(FGEPoint lastClickedPoint, DrawingTreeNode<?, ?> node) {
+
+		super.setLastClickedPoint(lastClickedPoint, node);
+		pastingLocation = FGEUtils.convertNormalizedPoint(node, lastClickedPoint, getDrawing().getRoot());
+
+	};
+
+	@Override
 	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
 		super.addToSelectedObjects(aNode);
-		if (getToolbox() != null) {
-			getToolbox().update();
+		if (!isSelectingAfterPaste) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Pasting context set to " + pastingContext);
+			}
+			pastingContext = aNode;
 		}
 	}
 
-	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
-		super.removeFromSelectedObjects(aNode);
-		if (getToolbox() != null) {
-			getToolbox().update();
-		}
-	}
-
-	public void toggleSelection(DrawingTreeNode<?, ?> aNode) {
-		super.toggleSelection(aNode);
-		if (getToolbox() != null) {
-			getToolbox().update();
-		}
-	}
-
+	@Override
 	public void clearSelection() {
 		super.clearSelection();
-		if (getToolbox() != null) {
-			getToolbox().update();
+		if (!isSelectingAfterPaste) {
+			pastingContext = getDrawing().getRoot();
 		}
-	}*/
+	}
+
+	/**
+	 * This is a hook to set and/or translate some properties of clipboard beeing pasted<br>
+	 * This is model-specific, and thus, default implementation does nothing. Please override this
+	 * 
+	 * @param proposedPastingLocation
+	 */
+	protected void prepareClipboardForPasting(FGEPoint proposedPastingLocation) {
+	}
 
 }

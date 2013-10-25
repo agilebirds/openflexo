@@ -1,7 +1,7 @@
 package org.openflexo.fge.control.tools;
 
 import org.openflexo.fge.FGEModelFactory;
-import org.openflexo.kvc.KeyValueCoding;
+import org.openflexo.model.factory.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**

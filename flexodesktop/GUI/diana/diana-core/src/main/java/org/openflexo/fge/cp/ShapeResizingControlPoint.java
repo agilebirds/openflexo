@@ -36,6 +36,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.geom.area.FGEQuarterPlane;
 import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.model.undo.CompoundEdit;
 
 /**
  * A {@link LabelControlPoint} encodes an interactive control point which purpose is to resize a shape<br>
@@ -202,11 +203,18 @@ public class ShapeResizingControlPoint extends ControlPoint {
 				&& getNode().getGraphicalRepresentation().getDimensionConstraints() != DimensionConstraints.CONTAINER;
 	}
 
+	private CompoundEdit resizeEdit = null;
+
 	@Override
 	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
 		if (!isDraggable()) {
 			return;
 		}
+
+		if (getNode().getFactory().getUndoManager() != null) {
+			resizeEdit = getNode().getFactory().getUndoManager().startRecording("Resizing shape");
+		}
+
 		initialWidth = getNode().getUnscaledViewWidth();
 		initialHeight = getNode().getUnscaledViewHeight();
 		if (initialWidth < FGEGeometricObject.EPSILON) {
@@ -322,5 +330,10 @@ public class ShapeResizingControlPoint extends ControlPoint {
 		}*/
 
 		getNode().notifyObjectHasResized();
+
+		if (getNode().getFactory().getUndoManager() != null) {
+			getNode().getFactory().getUndoManager().stopRecording(resizeEdit);
+		}
+
 	}
 }

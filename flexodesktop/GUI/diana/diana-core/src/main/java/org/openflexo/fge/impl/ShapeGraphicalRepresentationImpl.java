@@ -432,7 +432,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	}
 
 	@Override
-	public final void setX(double aValue) {
+	public void setX(double aValue) {
 		FGEAttributeNotification notification = requireChange(X, aValue);
 		if (notification != null) {
 			// FGEPoint oldLocation = getLocation();
@@ -468,7 +468,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	}
 
 	@Override
-	public final void setY(double aValue) {
+	public void setY(double aValue) {
 		FGEAttributeNotification notification = requireChange(Y, aValue);
 		if (notification != null) {
 			// FGEPoint oldLocation = getLocation();
@@ -1547,7 +1547,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 			hasChanged(notification);
 			BackgroundStyle oldBS = notification.oldValue();
 			BackgroundStyle newBS = notification.newValue();
-			//System.out.println("ET HOP (1) on balance un event " + BACKGROUND_STYLE_TYPE_KEY + " de " + oldBS + " a " + newBS);
+			// System.out.println("ET HOP (1) on balance un event " + BACKGROUND_STYLE_TYPE_KEY + " de " + oldBS + " a " + newBS);
 			getPropertyChangeSupport().firePropertyChange(BACKGROUND_STYLE_TYPE_KEY,
 					notification.oldValue() != null ? notification.oldValue().getBackgroundStyleType() : null,
 					notification.newValue() != null ? notification.newValue().getBackgroundStyleType() : null);

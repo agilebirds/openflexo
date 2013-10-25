@@ -21,10 +21,10 @@
 package org.openflexo.fge;
 
 import org.openflexo.fge.notifications.FGEAttributeNotification;
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.DeletableProxyObject;
+import org.openflexo.model.factory.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.xmlcode.XMLSerializable;
 

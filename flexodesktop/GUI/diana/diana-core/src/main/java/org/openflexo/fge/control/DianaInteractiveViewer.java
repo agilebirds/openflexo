@@ -223,7 +223,6 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		aNode.setIsSelected(true);
 		if (!selectedObjects.contains(aNode)) {
 			selectedObjects.add(aNode);
-			setChanged();
 			notifyObservers(new ObjectAddedToSelection(aNode));
 			selectedShapes = null;
 			selectedConnectors = null;
@@ -244,7 +243,6 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		aNode.setIsSelected(false);
 		if (selectedObjects.contains(aNode)) {
 			selectedObjects.remove(aNode);
-			setChanged();
 			notifyObservers(new ObjectRemovedFromSelection(aNode));
 			selectedShapes = null;
 			selectedConnectors = null;
@@ -274,7 +272,6 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			s.setIsSelected(false);
 		}
 		selectedObjects.clear();
-		setChanged();
 		notifyObservers(new SelectionCleared());
 		selectedShapes = null;
 		selectedConnectors = null;

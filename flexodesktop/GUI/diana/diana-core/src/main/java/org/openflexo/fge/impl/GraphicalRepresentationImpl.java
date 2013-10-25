@@ -2,7 +2,6 @@ package org.openflexo.fge.impl;
 
 import java.awt.Stroke;
 import java.beans.PropertyChangeEvent;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -185,62 +184,64 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	@SuppressWarnings("unchecked")
 	protected final void _setParameterValueWith(GRParameter<?> parameter, GraphicalRepresentation gr) {
-		Class<?> type = getTypeForKey(parameter.getName());
-		if (type.isPrimitive()) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Primitive: " + parameter.getName() + " of " + type + " values " + gr.valueForKey(parameter.getName()));
-			}
-			if (type == Boolean.TYPE) {
-				setBooleanValueForKey(gr.booleanValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Integer.TYPE) {
-				setIntegerValueForKey(gr.integerValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Short.TYPE) {
-				setShortValueForKey(gr.shortValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Long.TYPE) {
-				setLongValueForKey(gr.longValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Float.TYPE) {
-				setFloatValueForKey(gr.floatValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Double.TYPE) {
-				setDoubleValueForKey(gr.doubleValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Byte.TYPE) {
-				setByteValueForKey(gr.byteValueForKey(parameter.getName()), parameter.getName());
-			}
-			if (type == Character.TYPE) {
-				setCharacterForKey(gr.characterForKey(parameter.getName()), parameter.getName());
-			}
-		} else {
-			Object value = gr.objectForKey(parameter.getName());
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Object: " + parameter.getName() + " of " + type);
-			}
-			if (value instanceof Cloneable) { // Try to clone...
-				try {
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Cloning object: " + parameter.getName() + " of " + type);
-					}
-					Method cloneMethod = value.getClass().getMethod("clone", (Class[]) null);
-					value = cloneMethod.invoke(value, (Object[]) null);
-				} catch (Exception e) {
-					logger.warning("Cannot clone parameter: " + value);
-					e.printStackTrace();
+		setObjectForKey(gr.objectForKey(parameter.getName()), parameter.getName());
+
+		/*	Class<?> type = getTypeForKey(parameter.getName());
+			if (type.isPrimitive()) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Primitive: " + parameter.getName() + " of " + type + " values " + gr.valueForKey(parameter.getName()));
 				}
-			}
-			// IMPORTANT !!!!!!
-			// Special case for DataBinding, just copy unparsed string, and let framework recompute the binding
-			if (type.equals(DataBinding.class)) {
-				value = new DataBinding<Object>(((DataBinding<Object>) value).toString());
-			}
-			Object currentValue = objectForKey(parameter.getName());
-			if (value != currentValue) {
-				setObjectForKey(value, parameter.getName());
-			}
-		}
+				if (type == Boolean.TYPE) {
+					setBooleanValueForKey(gr.booleanValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Integer.TYPE) {
+					setIntegerValueForKey(gr.integerValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Short.TYPE) {
+					setShortValueForKey(gr.shortValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Long.TYPE) {
+					setLongValueForKey(gr.longValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Float.TYPE) {
+					setFloatValueForKey(gr.floatValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Double.TYPE) {
+					setDoubleValueForKey(gr.doubleValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Byte.TYPE) {
+					setByteValueForKey(gr.byteValueForKey(parameter.getName()), parameter.getName());
+				}
+				if (type == Character.TYPE) {
+					setCharacterForKey(gr.characterForKey(parameter.getName()), parameter.getName());
+				}
+			} else {
+				Object value = gr.objectForKey(parameter.getName());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Object: " + parameter.getName() + " of " + type);
+				}
+				if (value instanceof Cloneable) { // Try to clone...
+					try {
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Cloning object: " + parameter.getName() + " of " + type);
+						}
+						Method cloneMethod = value.getClass().getMethod("clone", (Class[]) null);
+						value = cloneMethod.invoke(value, (Object[]) null);
+					} catch (Exception e) {
+						logger.warning("Cannot clone parameter: " + value);
+						e.printStackTrace();
+					}
+				}
+				// IMPORTANT !!!!!!
+				// Special case for DataBinding, just copy unparsed string, and let framework recompute the binding
+				if (type.equals(DataBinding.class)) {
+					value = new DataBinding<Object>(((DataBinding<Object>) value).toString());
+				}
+				Object currentValue = objectForKey(parameter.getName());
+				if (value != currentValue) {
+					setObjectForKey(value, parameter.getName());
+				}
+			}*/
 	}
 
 	// *************************************************************************

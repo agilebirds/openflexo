@@ -28,11 +28,10 @@ import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
+public abstract class FGEObjectImpl implements FGEObject {
 	private static final Logger logger = Logger.getLogger(FGEObjectImpl.class.getPackage().getName());
 
 	private FGEModelFactory factory;
@@ -191,7 +190,17 @@ public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
 		if (parameter == null) {
 			return null;
 		}
-		Class<?> type = getTypeForKey(parameter.getName());
+
+		try {
+			if (getFactory() != null && getFactory().getHandler(this) != null) {
+				return (T) getFactory().getHandler(this).invokeGetter(parameter.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+		/*Class<?> type = getTypeForKey(parameter.getName());
 		T returned = null;
 		if (type.isPrimitive()) {
 			if (type == Boolean.TYPE) {
@@ -221,7 +230,7 @@ public abstract class FGEObjectImpl extends KVCObject implements FGEObject {
 		} else {
 			returned = (T) objectForKey(parameter.getName());
 		}
-		return returned;
+		return returned;*/
 	}
 
 	@Override

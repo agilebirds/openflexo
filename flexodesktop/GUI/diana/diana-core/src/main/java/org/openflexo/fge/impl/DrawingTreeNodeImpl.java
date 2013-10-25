@@ -780,6 +780,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 		// logger.info("For " + this + " getIsVisible()=" + getGraphicalRepresentation().getIsVisible() + " getParentNode()="
 		// + getParentNode());
+		if (isDeleted()) {
+			return false;
+		}
 		return getGraphicalRepresentation().getIsVisible() && getParentNode() != null && getParentNode().shouldBeDisplayed();
 	}
 

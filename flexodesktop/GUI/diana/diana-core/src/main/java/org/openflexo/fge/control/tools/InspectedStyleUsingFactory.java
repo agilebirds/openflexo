@@ -24,7 +24,7 @@ import java.beans.PropertyChangeListener;
 
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
-import org.openflexo.kvc.KeyValueCoding;
+import org.openflexo.model.factory.KeyValueCoding;
 
 /**
  * 
