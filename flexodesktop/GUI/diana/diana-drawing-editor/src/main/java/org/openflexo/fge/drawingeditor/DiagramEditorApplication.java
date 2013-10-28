@@ -363,6 +363,8 @@ public class DiagramEditorApplication {
 				inspectors.getBackgroundStyleInspector());
 		WindowMenuItem textInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "text"),
 				inspectors.getTextStyleInspector());
+		WindowMenuItem shapeInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shape"),
+				inspectors.getShapeInspector());
 		WindowMenuItem shadowInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shadow"),
 				inspectors.getShadowStyleInspector());
 
@@ -371,6 +373,7 @@ public class DiagramEditorApplication {
 		viewMenu.add(foregroundInspectorItem);
 		viewMenu.add(backgroundInspectorItem);
 		viewMenu.add(textInspectorItem);
+		viewMenu.add(shapeInspectorItem);
 		viewMenu.add(shadowInspectorItem);
 		viewMenu.addSeparator();
 		viewMenu.add(paletteItem);

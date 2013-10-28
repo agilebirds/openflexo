@@ -484,8 +484,6 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 
 	public interface ShapeNode<O> extends ContainerNode<O, ShapeGraphicalRepresentation> {
 
-		public ShapeSpecification getShapeSpecification();
-
 		public Shape<?> getShape();
 
 		public double getUnscaledViewWidth();
@@ -641,6 +639,9 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 
 		public void setBackgroundStyle(BackgroundStyle style);
 
+		public ShapeSpecification getShapeSpecification();
+
+		public void setShapeSpecification(ShapeSpecification shapeSpecification);
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {

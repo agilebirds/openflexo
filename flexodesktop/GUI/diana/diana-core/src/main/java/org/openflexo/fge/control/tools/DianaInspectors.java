@@ -28,7 +28,6 @@ import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.tools.DianaInspectors.Inspector;
 import org.openflexo.fge.view.DianaViewFactory;
-import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**
  * Represents a tool allowing to manage style inspectors
@@ -47,11 +46,11 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 	// protected InspectedForegroundStyle inspectedForegroundStyle;
 
 	// protected BackgroundStyleFactory bsFactory;
-	protected ShapeFactory shapeFactory;
+	// protected ShapeSpecificationFactory shapeFactory;
 
 	public DianaInspectors() {
 		// bsFactory = new BackgroundStyleFactory(null);
-		shapeFactory = new ShapeFactory(null);
+		// shapeFactory = new ShapeSpecificationFactory(null);
 	}
 
 	@Override
@@ -87,6 +86,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 		return null;
 	}
 
+	public InspectedShapeSpecification getInspectedShapeSpecification() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedShapeSpecification();
+		}
+		return null;
+	}
+
 	/*@Override
 	public void attachToEditor(AbstractDianaEditor<?, F, ?> editor) {
 		super.attachToEditor(editor);
@@ -101,7 +107,7 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 
 	public abstract Inspector<ShadowStyle> getShadowStyleInspector();
 
-	public abstract Inspector<ShapeFactory> getShapeInspector();
+	public abstract Inspector<ShapeSpecificationFactory> getShapeInspector();
 
 	public static interface Inspector<D> {
 		public void setData(D data);
@@ -132,13 +138,13 @@ public abstract class DianaInspectors<C extends Inspector<?>, F extends DianaVie
 			// getForegroundStyleInspector().setData(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
-			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// getShapeInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getShadowStyleInspector().setData(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
-			shapeFactory.setShape(getEditor().getCurrentShape());
+			// shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeInspector().setData(getEditor().getCurrentShape());
 			// bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundStyleInspector().setData(getEditor().getCurrentBackgroundStyle());

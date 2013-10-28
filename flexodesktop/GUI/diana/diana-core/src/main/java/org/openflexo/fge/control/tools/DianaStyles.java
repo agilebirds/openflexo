@@ -23,7 +23,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.control.AbstractDianaEditor;
@@ -38,7 +37,6 @@ import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
-import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
@@ -70,7 +68,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	private ShapeSpecification defaultShape;
 
 	// protected BackgroundStyleFactory bsFactory;
-	protected ShapeFactory shapeFactory;
+	protected ShapeSpecificationFactory shapeFactory;
 
 	public DianaStyles() {
 		// defaultForegroundStyle = FGECoreUtils.TOOLS_FACTORY.makeDefaultForegroundStyle();
@@ -131,6 +129,9 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		if (backgroundSelector != null) {
 			backgroundSelector.setEditedObject(getInspectedBackgroundStyle().getDefaultValue());
 		}
+		if (shapeSelector != null) {
+			shapeSelector.setEditedObject(getInspectedShapeSpecification().getDefaultValue());
+		}
 	}
 
 	public InspectedForegroundStyle getInspectedForegroundStyle() {
@@ -157,6 +158,13 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 	public InspectedBackgroundStyle getInspectedBackgroundStyle() {
 		if (getEditor() != null) {
 			return getEditor().getInspectedBackgroundStyle();
+		}
+		return null;
+	}
+
+	public InspectedShapeSpecification getInspectedShapeSpecification() {
+		if (getEditor() != null) {
+			return getEditor().getInspectedShapeSpecification();
 		}
 		return null;
 	}
@@ -266,12 +274,12 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 	public FIBShapeSelector<?> getShapeSelector() {
 		if (shapeSelector == null) {
-			shapeFactory = new ShapeFactory(getCurrentShape());
-			shapeSelector = getDianaFactory().makeFIBShapeSelector(shapeFactory);
+			shapeSelector = getDianaFactory().makeFIBShapeSelector(
+					getInspectedShapeSpecification() != null ? getInspectedShapeSpecification().getStyleFactory() : null);
 			shapeSelector.addApplyCancelListener(new ApplyCancelListener() {
 				@Override
 				public void fireApplyPerformed() {
-					if (getSelectedShapes().size() > 0) {
+					/*if (getSelectedShapes().size() > 0) {
 						for (ShapeNode<?> shape : getSelectedShapes()) {
 							shape.getGraphicalRepresentation().setShapeSpecification(
 									(ShapeSpecification) shapeSelector.getEditedObject().clone());
@@ -279,7 +287,7 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 
 					} else {
 						getEditor().setCurrentShape((ShapeSpecification) shapeSelector.getEditedObject().clone());
-					}
+					}*/
 				}
 
 				@Override
@@ -318,12 +326,12 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 		return defaultShadowStyle;
 	}*/
 
-	public ShapeSpecification getCurrentShape() {
+	/*public ShapeSpecification getCurrentShape() {
 		if (getEditor() != null) {
 			return getEditor().getCurrentShape();
 		}
 		return defaultShape;
-	}
+	}*/
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -347,13 +355,13 @@ public abstract class DianaStyles<C, F extends DianaViewFactory<F, ? super C>> e
 			// getForegroundSelector().setEditedObject(getEditor().getCurrentForegroundStyle());
 		}
 		if (getSelectedShapes().size() > 0) {
-			shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
+			// shapeFactory.setShape(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// getShapeSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShapeSpecification());
 			// bsFactory.setBackgroundStyle(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getBackgroundSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getBackground());
 			// getShadowStyleSelector().setEditedObject(getSelectedShapes().get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
-			shapeFactory.setShape(getEditor().getCurrentShape());
+			// shapeFactory.setShape(getEditor().getCurrentShape());
 			// getShapeSelector().setEditedObject(getEditor().getCurrentShape());
 			// bsFactory.setBackgroundStyle(getEditor().getCurrentBackgroundStyle());
 			// getBackgroundSelector().setEditedObject(getEditor().getCurrentBackgroundStyle());

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.ShapePreviewPanel;
@@ -53,23 +54,23 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 	protected ShapeDetailsPanel _selectorPanel;
 	private JShapePreviewPanel frontComponent;
 
-	private ShapeFactory factory;
+	private ShapeSpecificationFactory factory;
 
-	public JFIBShapeSelector(ShapeFactory factory) {
-		super(factory.getShape());
+	public JFIBShapeSelector(ShapeSpecificationFactory factory) {
+		super(factory != null ? factory.getShapeSpecification() : null);
 		this.factory = factory;
-		setRevertValue(factory.getShape() != null ? (ShapeSpecification) factory.getShape().clone() : null);
+		// setRevertValue(factory.getShape() != null ? (ShapeSpecification) factory.getShape().clone() : null);
 		setFocusable(true);
 	}
 
-	public ShapeFactory getFactory() {
+	public ShapeSpecificationFactory getFactory() {
 		if (factory == null) {
-			factory = new ShapeFactory(getEditedObject());
+			factory = new ShapeSpecificationFactory(null);
 		}
 		return factory;
 	}
 
-	public void setFactory(ShapeFactory factory) {
+	public void setFactory(ShapeSpecificationFactory factory) {
 		this.factory = factory;
 	}
 
@@ -144,7 +145,8 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 		public void update() {
 			// logger.info("Update with " + getEditedObject());
-			getFactory().setShape(getEditedObject());
+			logger.warning("Un truc a voir ici comment s'en sortir: ligne suivante commentee");
+			// getFactory().setShape(getEditedObject());
 			controller.setDataObject(getFactory(), true);
 		}
 
@@ -169,7 +171,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 			}
 
 			public void apply() {
-				setEditedObject(getFactory().getShape());
+				setEditedObject(getFactory().getShapeSpecification());
 				JFIBShapeSelector.this.apply();
 			}
 
@@ -179,14 +181,14 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 			public void shapeChanged() {
 
-				getFrontComponent().setShape(getFactory().getShape());
+				getFrontComponent().setShape(getFactory().getShapeSpecification());
 				// getFrontComponent().update();
 
 				FIBView<?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
 					JComponent customComponent = ((FIBCustomWidget<?, ?>) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
-						((JShapePreviewPanel) customComponent).setShape(getFactory().getShape());
+						((JShapePreviewPanel) customComponent).setShape(getFactory().getShapeSpecification());
 						// ((ShapePreviewPanel) customComponent).update();
 					}
 				}

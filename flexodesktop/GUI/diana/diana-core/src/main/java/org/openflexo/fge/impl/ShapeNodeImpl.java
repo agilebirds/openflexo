@@ -96,17 +96,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public ShapeSpecification getShapeSpecification() {
-		if (getGraphicalRepresentation() != null) {
-			return getGraphicalRepresentation().getShapeSpecification();
-		}
-		return null;
-	}
-
-	@Override
 	public ShapeImpl<?> getShape() {
-		if (shape == null && getGraphicalRepresentation() != null && getGraphicalRepresentation().getShapeSpecification() != null) {
-			shape = (ShapeImpl<?>) getGraphicalRepresentation().getShapeSpecification().makeShape(this);
+		if (shape == null && getShapeSpecification() != null) {
+			shape = (ShapeImpl<?>) getShapeSpecification().makeShape(this);
 		}
 		return shape;
 	}
@@ -1473,6 +1465,22 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public void setShadowStyle(ShadowStyle style) {
 		setPropertyValue(ShapeGraphicalRepresentation.SHADOW_STYLE, style);
+	}
+
+	/**
+	 * Convenient method used to retrieve shape specification property value
+	 */
+	@Override
+	public ShapeSpecification getShapeSpecification() {
+		return getPropertyValue(ShapeGraphicalRepresentation.SHAPE);
+	}
+
+	/**
+	 * Convenient method used to set shape specification property value
+	 */
+	@Override
+	public void setShapeSpecification(ShapeSpecification shapeSpecification) {
+		setPropertyValue(ShapeGraphicalRepresentation.SHAPE, shapeSpecification);
 	}
 
 }

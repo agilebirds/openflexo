@@ -36,6 +36,7 @@ import org.openflexo.fge.control.actions.MoveAction;
 import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.PaletteController;
+import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.swing.control.JDNDInfo;
 import org.openflexo.fge.swing.control.JMouseControlContext;
@@ -53,7 +54,6 @@ import org.openflexo.fge.swing.widget.JFIBTextStyleSelector;
 import org.openflexo.fge.swing.widget.JShapePreviewPanel;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.fge.view.FGEView;
-import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 
 /**
  * Represent the view factory for Swing technology
@@ -146,7 +146,7 @@ public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JCom
 	}
 
 	@Override
-	public JFIBShapeSelector makeFIBShapeSelector(ShapeFactory shapeFactory) {
+	public JFIBShapeSelector makeFIBShapeSelector(ShapeSpecificationFactory shapeFactory) {
 		return new JFIBShapeSelector(shapeFactory);
 	}
 

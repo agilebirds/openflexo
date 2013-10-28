@@ -33,12 +33,12 @@ import org.openflexo.fge.control.actions.MoveAction;
 import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.PaletteController;
+import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
-import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fge.view.widget.ShapePreviewPanel;
 
@@ -102,7 +102,7 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 
 	public FIBShadowStyleSelector<? extends C> makeFIBShadowStyleSelector(ShadowStyle shadowStyle);
 
-	public FIBShapeSelector<? extends C> makeFIBShapeSelector(ShapeFactory shapeFactory);
+	public FIBShapeSelector<? extends C> makeFIBShapeSelector(ShapeSpecificationFactory shapeFactory);
 
 	public ShapePreviewPanel<? extends C> makeShapePreviewPanel(ShapeSpecification shapeSpecification);
 

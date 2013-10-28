@@ -43,12 +43,6 @@ public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle, Bac
 	private InspectedTextureBackgroundStyle textureBackgroundStyle;
 	private InspectedBackgroundImageBackgroundStyle backgroundImageBackgroundStyle;
 
-	/*private Color color1 = Color.RED;
-	private Color color2 = Color.WHITE;
-	private ColorGradientDirection gradientDirection = ColorGradientDirection.NORTH_SOUTH;
-	private TextureType textureType = TextureType.TEXTURE1;
-	private File imageFile;*/
-
 	private PropertyChangeSupport pcSupport;
 	private FGEModelFactory fgeFactory;
 
@@ -205,26 +199,6 @@ public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle, Bac
 		return returned;
 
 	}
-
-	/*public InspectedColorBackgroundStyle makeEmptyBackground() {
-		return null;
-	}
-
-	public InspectedColorBackgroundStyle makeColoredBackground() {
-		return new InspectedColorBackgroundStyle(controller, fgeFactory.makeColoredBackground(color1));
-	}
-
-	public InspectedColorBackgroundStyle makeColorGradientBackground() {
-		return null;
-	}
-
-	public InspectedColorBackgroundStyle makeTexturedBackground() {
-		return null;
-	}
-
-	public InspectedColorBackgroundStyle makeImageBackground() {
-		return null;
-	}*/
 
 	protected abstract class AbstractInspectedBackgroundStyle<BS extends BackgroundStyle> extends InspectedStyle<BS> implements
 			BackgroundStyle {

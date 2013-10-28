@@ -40,10 +40,9 @@ import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
 import org.openflexo.fge.control.tools.InspectedShadowStyle;
+import org.openflexo.fge.control.tools.InspectedShapeSpecification;
 import org.openflexo.fge.control.tools.InspectedTextStyle;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.ShapeSpecification;
-import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DianaViewFactory;
 import org.openflexo.model.factory.Clipboard;
 
@@ -81,7 +80,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private InspectedTextStyle inspectedTextStyle;
 	// private ShadowStyle currentShadowStyle;
 	private InspectedShadowStyle inspectedShadowStyle;
-	private ShapeSpecification currentShape;
+	// private ShapeSpecification currentShape;
+	private InspectedShapeSpecification inspectedShapeSpecification;
 
 	/**
 	 * The clipboard beeing managed by this editor
@@ -110,7 +110,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedTextStyle = new InspectedTextStyle(this);
 		// currentShadowStyle = factory.makeDefaultShadowStyle();
 		inspectedShadowStyle = new InspectedShadowStyle(this);
-		currentShape = factory.makeShape(ShapeType.RECTANGLE);
+		// currentShape = factory.makeShape(ShapeType.RECTANGLE);
+		inspectedShapeSpecification = new InspectedShapeSpecification(this);
 		setCurrentTool(EditorTool.SelectionTool);
 		// palettes = new Vector<DrawingPalette>();
 		// toolbox = new EditorToolbox(this);
@@ -220,13 +221,18 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		this.currentShadowStyle = currentShadowStyle;
 	}*/
 
-	public ShapeSpecification getCurrentShape() {
-		return currentShape;
+	public InspectedShapeSpecification getInspectedShapeSpecification() {
+		return inspectedShapeSpecification;
 	}
 
-	public void setCurrentShape(ShapeSpecification currentShape) {
-		this.currentShape = currentShape;
-	}
+	/*
+		public ShapeSpecification getCurrentShape() {
+			return currentShape;
+		}
+
+		public void setCurrentShape(ShapeSpecification currentShape) {
+			this.currentShape = currentShape;
+		}*/
 
 	public DrawShapeAction getDrawShapeAction() {
 		return drawShapeAction;

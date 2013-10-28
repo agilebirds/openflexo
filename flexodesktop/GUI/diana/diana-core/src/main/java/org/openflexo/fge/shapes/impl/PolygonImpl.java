@@ -59,39 +59,6 @@ public abstract class PolygonImpl extends ShapeSpecificationImpl implements Poly
 		}
 	}
 
-	/*@Deprecated
-	private PolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-	}
-
-	@Deprecated
-	private PolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-		updateShape();
-	}
-
-	@Deprecated
-	private PolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon polygon) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-		for (FGEPoint pt : polygon.getPoints()) {
-			points.add(pt);
-		}
-		updateShape();
-	}
-
-	@Deprecated
-	private PolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPoint... points) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-		for (FGEPoint pt : points) {
-			this.points.add(pt);
-		}
-		updateShape();
-	}*/
-
 	@Override
 	public List<FGEPoint> getPoints() {
 		return points;
@@ -104,21 +71,18 @@ public abstract class PolygonImpl extends ShapeSpecificationImpl implements Poly
 		} else {
 			this.points = null;
 		}
-		setChanged();
 		notifyChange(POINTS);
 	}
 
 	@Override
 	public void addToPoints(FGEPoint aPoint) {
 		points.add(aPoint);
-		setChanged();
 		notifyChange(POINTS);
 	}
 
 	@Override
 	public void removeFromPoints(FGEPoint aPoint) {
 		points.remove(aPoint);
-		setChanged();
 		notifyChange(POINTS);
 	}
 
