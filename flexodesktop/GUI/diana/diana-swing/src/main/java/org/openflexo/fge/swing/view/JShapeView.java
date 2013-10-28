@@ -353,7 +353,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 			// logger.info("Received: "+notification);
 
 			if (evt.getPropertyName().equals(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY)) {
-				System.out.println("Laaaaaaaaaaaaaaaaaaaaa !");
+				System.out.println("Received BACKGROUND_STYLE changed !");
 			}
 
 			if (evt.getPropertyName().equals(NodeAdded.EVENT_NAME)) {

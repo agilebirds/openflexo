@@ -28,6 +28,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveViewer;
+import org.openflexo.model.undo.CompoundEdit;
 
 /**
  * Implementation of {@link BackgroundStyle}, as a container of graphical properties synchronized with and reflecting a selection<br>
@@ -36,7 +37,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
  * @author sylvain
  * 
  */
-public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<BackgroundStyleFactory, BackgroundStyle> {
+public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<BackgroundStyleFactory, BackgroundStyle, BackgroundStyleType> {
 
 	public InspectedBackgroundStyle(DianaInteractiveViewer<?, ?, ?> controller) {
 		super(controller, new BackgroundStyleFactory(controller));
@@ -55,13 +56,13 @@ public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<Backgro
 		return null;
 	}
 
-	private BackgroundStyleType getBackgroundStyleType() {
-		if (getSelection().size() == 0) {
-			return getDefaultValue().getBackgroundStyleType();
-		} else {
-			BackgroundStyle style = getStyle(getSelection().get(0));
+	@Override
+	protected BackgroundStyleType getStyleType(BackgroundStyle style) {
+		System.out.println("called getStyleType for " + style);
+		if (style != null) {
 			return style.getBackgroundStyleType();
 		}
+		return null;
 	}
 
 	/**
@@ -77,36 +78,35 @@ public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<Backgro
 		}
 	}
 
-	@Override
+	/*@Override
 	protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
 		System.out.println("Ah, y'a " + p.getName() + " qui change");
 		super._doFireChangedProperty(p, oldValue, newValue);
-	}
+	}*/
 
 	public void fireSelectionUpdated() {
-		System.out.println("Hop, une nouvelle selection");
-		if (requireChange(getStyleFactory().getBackgroundStyleType(), getBackgroundStyleType())) {
-			System.out.println("Tiens, je dois changer pour " + getBackgroundStyleType());
-			getStyleFactory().setBackgroundStyleType(getBackgroundStyleType());
+		// System.out.println("Hop, une nouvelle selection");
+		if (requireChange(getStyleFactory().getStyleType(), getStyleType())) {
+			System.out.println("Tiens, je dois changer pour " + getStyleType());
+			getStyleFactory().setStyleType(getStyleType());
 		}
 		super.fireSelectionUpdated();
 	}
 
-	protected void applyNewStyleToSelection(Object aStyleType) {
-		if (aStyleType instanceof BackgroundStyleType) {
-			BackgroundStyleType newStyleType = (BackgroundStyleType) aStyleType;
-			System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
-			for (ShapeNode<?> n : getSelection()) {
-				BackgroundStyle nodeStyle = getStyle(n);
-				if (nodeStyle.getBackgroundStyleType() != newStyleType) {
-					System.out.println("Bon, je dois changer le type de " + n);
-					BackgroundStyle oldStyle = n.getBackgroundStyle();
-					n.setBackgroundStyle(getStyleFactory().makeNewStyle());
-					n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
-							oldStyle.getBackgroundStyleType(), newStyleType);
-				}
+	protected void applyNewStyleTypeToSelection(BackgroundStyleType aStyleType) {
+		BackgroundStyleType newStyleType = (BackgroundStyleType) aStyleType;
+		// System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
+		for (ShapeNode<?> n : getSelection()) {
+			BackgroundStyle nodeStyle = getStyle(n);
+			if (nodeStyle.getBackgroundStyleType() != newStyleType) {
+				System.out.println("Should change type of " + n);
+				BackgroundStyle oldStyle = n.getBackgroundStyle();
+				CompoundEdit setValueEdit = startRecordEdit("Set BackgroundStyleType to " + aStyleType);
+				n.setBackgroundStyle(getStyleFactory().makeNewStyle(oldStyle));
+				n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
+						oldStyle.getBackgroundStyleType(), newStyleType);
+				stopRecordEdit(setValueEdit);
 			}
 		}
 	}
-
 }

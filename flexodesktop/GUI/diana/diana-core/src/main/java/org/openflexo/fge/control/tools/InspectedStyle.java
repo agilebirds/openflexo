@@ -132,24 +132,34 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		T oldValue = getPropertyValue(parameter);
 		// System.out.println("Sets from " + oldValue + " to " + value);
 		if (requireChange(oldValue, value)) {
-			CompoundEdit setValueEdit = null;
-			if (getController().getFactory().getUndoManager() != null) {
-				setValueEdit = getController().getFactory().getUndoManager().startRecording("Set " + parameter.getName() + " to " + value);
-			}
+			CompoundEdit setValueEdit = startRecordEdit("Set " + parameter.getName() + " to " + value);
 			if (getSelection().size() == 0) {
 				defaultValue.setObjectForKey(value, parameter.getName());
 			} else {
 				for (DrawingTreeNode<?, ?> n : getSelection()) {
 					S style = getStyle(n);
 					// System.out.println("For " + n + " use " + style + " and sets value of " + parameter.getName() + " with " + value);
-					style.setObjectForKey(value, parameter.getName());
+					if (style != null) {
+						style.setObjectForKey(value, parameter.getName());
+					}
 				}
 			}
 			storedPropertyValues.put(parameter, value);
 			pcSupport.firePropertyChange(parameter.getName(), oldValue, value);
-			if (getController().getFactory().getUndoManager() != null) {
-				getController().getFactory().getUndoManager().stopRecording(setValueEdit);
-			}
+			stopRecordEdit(setValueEdit);
+		}
+	}
+
+	protected CompoundEdit startRecordEdit(String editName) {
+		if (getController().getFactory().getUndoManager() != null) {
+			return getController().getFactory().getUndoManager().startRecording(editName);
+		}
+		return null;
+	}
+
+	protected void stopRecordEdit(CompoundEdit edit) {
+		if (getController().getFactory().getUndoManager() != null) {
+			getController().getFactory().getUndoManager().stopRecording(edit);
 		}
 	}
 

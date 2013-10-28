@@ -5,16 +5,20 @@ import org.openflexo.model.factory.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
- * Convenient class used to manipulate BackgroundStyle
+ * Convenient class used to manipulate mutable style
  * 
  * @author sylvain
  * 
  */
-public interface StyleFactory<S extends KeyValueCoding> extends HasPropertyChangeSupport {
+public interface StyleFactory<S extends KeyValueCoding, ST> extends HasPropertyChangeSupport {
 
 	public InspectedStyle<? extends S> getCurrentStyle();
 
-	public S makeNewStyle();
+	public S makeNewStyle(S oldStyle);
+
+	public ST getStyleType();
+
+	public void setStyleType(ST styleType);
 
 	public FGEModelFactory getFGEFactory();
 

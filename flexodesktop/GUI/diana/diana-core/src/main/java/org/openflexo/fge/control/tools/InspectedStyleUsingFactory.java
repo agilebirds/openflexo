@@ -30,15 +30,18 @@ import org.openflexo.model.factory.KeyValueCoding;
  * 
  * @author sylvain
  * 
+ * @param <F>
+ * @param <S>
+ * @param <ST>
  */
-public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S>, S extends KeyValueCoding> extends InspectedStyle<S> {
+public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, S extends KeyValueCoding, ST> extends InspectedStyle<S> {
 
 	private F styleFactory;
 
 	private FactoryPropertyChangeListener factoryListener;
 
 	public InspectedStyleUsingFactory(DianaInteractiveViewer<?, ?, ?> controller, F styleFactory) {
-		super(controller, styleFactory.makeNewStyle());
+		super(controller, styleFactory.makeNewStyle(null));
 		this.styleFactory = styleFactory;
 		factoryListener = new FactoryPropertyChangeListener();
 		styleFactory.getPropertyChangeSupport().addPropertyChangeListener(factoryListener);
@@ -56,7 +59,7 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S>, S ex
 
 	@Override
 	public S cloneStyle() {
-		return styleFactory.makeNewStyle();
+		return styleFactory.makeNewStyle(null);
 	}
 
 	protected Class<? extends S> getInspectedStyleClass() {
@@ -91,18 +94,24 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S>, S ex
 		}
 	}
 
-	/*protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
-		getStyleFactory().getCurrentStyle().setObjectForKey(newValue, p.getName());
-		super._doFireChangedProperty(p, oldValue, newValue);
-	}*/
+	public ST getStyleType() {
 
-	protected abstract void applyNewStyleToSelection(Object newStyleType);
+		if (getSelection().size() == 0) {
+			return getStyleType(getDefaultValue());
+		} else {
+			return getStyleType(getStyle(getSelection().get(0)));
+		}
+	}
+
+	protected abstract ST getStyleType(S style);
+
+	protected abstract void applyNewStyleTypeToSelection(ST newStyleType);
 
 	protected class FactoryPropertyChangeListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(StyleFactory.STYLE_CLASS_CHANGED)) {
-				applyNewStyleToSelection(evt.getNewValue());
+				applyNewStyleTypeToSelection((ST) evt.getNewValue());
 			}
 
 			System.out.println("Tiens, on me previent que " + evt + " pour " + evt.getPropertyName());

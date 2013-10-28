@@ -28,7 +28,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
  * @author sylvain
  * 
  */
-public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle> {
+public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle, BackgroundStyleType> {
 
 	private static final Logger logger = Logger.getLogger(BackgroundStyleFactory.class.getPackage().getName());
 
@@ -135,39 +135,75 @@ public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle> {
 		return !oldObject.equals(newObject);
 	}
 
-	public BackgroundStyleType getBackgroundStyleType() {
+	public BackgroundStyleType getStyleType() {
 		return backgroundStyleType;
 	}
 
-	public void setBackgroundStyleType(BackgroundStyleType backgroundStyleType) {
-		// logger.info("setBackgroundStyleType with " + backgroundStyleType);
-		BackgroundStyleType oldBackgroundStyleType = getBackgroundStyleType();
+	public void setStyleType(BackgroundStyleType backgroundStyleType) {
+		BackgroundStyleType oldBackgroundStyleType = getStyleType();
 
 		if (oldBackgroundStyleType == backgroundStyleType) {
 			return;
 		}
 
 		this.backgroundStyleType = backgroundStyleType;
-		pcSupport.firePropertyChange(STYLE_CLASS_CHANGED, oldBackgroundStyleType, getBackgroundStyleType());
-		pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getBackgroundStyleType());
+		pcSupport.firePropertyChange(STYLE_CLASS_CHANGED, oldBackgroundStyleType, getStyleType());
+		pcSupport.firePropertyChange("backgroundStyleType", oldBackgroundStyleType, getStyleType());
 	}
 
 	@Override
-	public BackgroundStyle makeNewStyle() {
+	public BackgroundStyle makeNewStyle(BackgroundStyle oldStyle) {
+		BackgroundStyle returned = null;
 		switch (backgroundStyleType) {
 		case NONE:
-			return noneBackgroundStyle.cloneStyle();
+			returned = noneBackgroundStyle.cloneStyle();
+			break;
 		case COLOR:
-			return colorBackgroundStyle.cloneStyle();
+			ColorBackgroundStyle returnedColor = (ColorBackgroundStyle) colorBackgroundStyle.cloneStyle();
+			if (oldStyle instanceof ColorGradientBackgroundStyle) {
+				returnedColor.setColor(((ColorGradientBackgroundStyle) oldStyle).getColor1());
+			}
+			if (oldStyle instanceof TextureBackgroundStyle) {
+				returnedColor.setColor(((TextureBackgroundStyle) oldStyle).getColor1());
+			}
+			returned = returnedColor;
+			break;
 		case COLOR_GRADIENT:
-			return colorGradientBackgroundStyle.cloneStyle();
+			ColorGradientBackgroundStyle returnedColorGradient = (ColorGradientBackgroundStyle) colorGradientBackgroundStyle.cloneStyle();
+			if (oldStyle instanceof ColorBackgroundStyle) {
+				returnedColorGradient.setColor1(((ColorBackgroundStyle) oldStyle).getColor());
+			}
+			if (oldStyle instanceof TextureBackgroundStyle) {
+				returnedColorGradient.setColor1(((TextureBackgroundStyle) oldStyle).getColor1());
+				returnedColorGradient.setColor2(((TextureBackgroundStyle) oldStyle).getColor2());
+			}
+			returned = returnedColorGradient;
+			break;
 		case TEXTURE:
-			return textureBackgroundStyle.cloneStyle();
+			TextureBackgroundStyle returnedTexture = (TextureBackgroundStyle) textureBackgroundStyle.cloneStyle();
+			if (oldStyle instanceof ColorBackgroundStyle) {
+				returnedTexture.setColor1(((ColorBackgroundStyle) oldStyle).getColor());
+			}
+			if (oldStyle instanceof ColorGradientBackgroundStyle) {
+				returnedTexture.setColor1(((ColorGradientBackgroundStyle) oldStyle).getColor1());
+				returnedTexture.setColor2(((ColorGradientBackgroundStyle) oldStyle).getColor2());
+			}
+			returned = returnedTexture;
+			break;
 		case IMAGE:
-			return backgroundImageBackgroundStyle.cloneStyle();
+			returned = backgroundImageBackgroundStyle.cloneStyle();
+			break;
 		default:
-			return null;
+			break;
 		}
+
+		if (oldStyle != null) {
+			returned.setUseTransparency(oldStyle.getUseTransparency());
+			returned.setTransparencyLevel(oldStyle.getTransparencyLevel());
+		}
+
+		return returned;
+
 	}
 
 	/*public InspectedColorBackgroundStyle makeEmptyBackground() {
