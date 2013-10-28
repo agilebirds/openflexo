@@ -293,7 +293,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("****************** PropertyChange with " + evt);
+		// System.out.println("****************** PropertyChange with " + evt);
 		fireChangedProperties();
 	}
 

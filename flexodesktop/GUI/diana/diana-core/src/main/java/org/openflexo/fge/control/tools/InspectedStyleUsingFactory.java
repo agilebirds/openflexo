@@ -22,6 +22,7 @@ package org.openflexo.fge.control.tools;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.model.factory.KeyValueCoding;
@@ -105,7 +106,24 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 
 	protected abstract ST getStyleType(S style);
 
-	protected abstract void applyNewStyleTypeToSelection(ST newStyleType);
+	public void fireSelectionUpdated() {
+		if (requireChange(getStyleFactory().getStyleType(), getStyleType())) {
+			getStyleFactory().setStyleType(getStyleType());
+		}
+		super.fireSelectionUpdated();
+	}
+
+	protected void applyNewStyleTypeToSelection(ST newStyleType) {
+		// System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
+		for (DrawingTreeNode<?, ?> n : getSelection()) {
+			S nodeStyle = getStyle(n);
+			if (getStyleType(nodeStyle) != newStyleType) {
+				applyNewStyle(newStyleType, n);
+			}
+		}
+	}
+
+	protected abstract void applyNewStyle(ST aStyleType, DrawingTreeNode<?, ?> node);
 
 	protected class FactoryPropertyChangeListener implements PropertyChangeListener {
 		@Override

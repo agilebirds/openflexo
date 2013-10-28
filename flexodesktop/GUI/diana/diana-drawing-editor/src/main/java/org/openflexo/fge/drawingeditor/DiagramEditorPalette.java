@@ -233,7 +233,9 @@ public class DiagramEditorPalette extends DrawingPalette {
 				container.addToShapes(newShape);
 
 				getEditor().getFactory().getUndoManager().stopRecording(edit);
-				// getController().addNewShape(editorFactory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
+
+				getEditor().setSelectedObject(getEditor().getDrawing().getDrawingTreeNode(newShape));
+
 				return true;
 			}
 

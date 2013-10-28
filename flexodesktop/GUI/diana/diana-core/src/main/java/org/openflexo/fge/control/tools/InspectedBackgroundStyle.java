@@ -25,7 +25,6 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.model.undo.CompoundEdit;
@@ -58,55 +57,19 @@ public class InspectedBackgroundStyle extends InspectedStyleUsingFactory<Backgro
 
 	@Override
 	protected BackgroundStyleType getStyleType(BackgroundStyle style) {
-		System.out.println("called getStyleType for " + style);
 		if (style != null) {
 			return style.getBackgroundStyleType();
 		}
 		return null;
 	}
 
-	/**
-	 * Internally called to fire change events between previously registered values and current resulting values
-	 */
-	protected void fireChangedProperties() {
-
-		System.out.println("Ok, on regarde ce qui change, a priori on affiche une " + getInspectedStyleClass());
-
-		for (GRParameter<?> p : GRParameter.getGRParameters(getInspectedStyleClass())) {
-			System.out.println("Propriete " + p);
-			fireChangedProperty(p);
-		}
-	}
-
-	/*@Override
-	protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
-		System.out.println("Ah, y'a " + p.getName() + " qui change");
-		super._doFireChangedProperty(p, oldValue, newValue);
-	}*/
-
-	public void fireSelectionUpdated() {
-		// System.out.println("Hop, une nouvelle selection");
-		if (requireChange(getStyleFactory().getStyleType(), getStyleType())) {
-			System.out.println("Tiens, je dois changer pour " + getStyleType());
-			getStyleFactory().setStyleType(getStyleType());
-		}
-		super.fireSelectionUpdated();
-	}
-
-	protected void applyNewStyleTypeToSelection(BackgroundStyleType aStyleType) {
-		BackgroundStyleType newStyleType = (BackgroundStyleType) aStyleType;
-		// System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
-		for (ShapeNode<?> n : getSelection()) {
-			BackgroundStyle nodeStyle = getStyle(n);
-			if (nodeStyle.getBackgroundStyleType() != newStyleType) {
-				System.out.println("Should change type of " + n);
-				BackgroundStyle oldStyle = n.getBackgroundStyle();
-				CompoundEdit setValueEdit = startRecordEdit("Set BackgroundStyleType to " + aStyleType);
-				n.setBackgroundStyle(getStyleFactory().makeNewStyle(oldStyle));
-				n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
-						oldStyle.getBackgroundStyleType(), newStyleType);
-				stopRecordEdit(setValueEdit);
-			}
-		}
+	protected void applyNewStyle(BackgroundStyleType aStyleType, DrawingTreeNode<?, ?> node) {
+		ShapeNode<?> n = (ShapeNode<?>) node;
+		BackgroundStyle oldStyle = n.getBackgroundStyle();
+		CompoundEdit setValueEdit = startRecordEdit("Set BackgroundStyleType to " + aStyleType);
+		n.setBackgroundStyle(getStyleFactory().makeNewStyle(oldStyle));
+		n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
+				oldStyle.getBackgroundStyleType(), aStyleType);
+		stopRecordEdit(setValueEdit);
 	}
 }
