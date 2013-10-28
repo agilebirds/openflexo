@@ -20,6 +20,7 @@
  */
 package org.openflexo.technologyadapter.excel;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -43,6 +44,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
@@ -208,9 +210,14 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	}
 
 	@Override
-	public TechnologyAdapterResource<ExcelWorkbook> createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExcelTechnologyAdapter getTechnologyAdapter() {
+		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
+	}
+	
+	
+	@Override
+	public ExcelWorkbookResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
+		return getTechnologyAdapter().createNewWorkbook(view.getProject(),filename, modelUri);
 	}
 
 	@Override

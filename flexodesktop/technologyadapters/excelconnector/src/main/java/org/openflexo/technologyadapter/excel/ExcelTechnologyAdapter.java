@@ -24,10 +24,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
@@ -35,8 +38,10 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelMetaModelRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelModelRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
@@ -217,6 +222,29 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		ExcelWorkbookRepository returned = new ExcelWorkbookRepository(this, resourceCenter);
 		resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
 		return returned;
+	}
+	
+	
+	/**
+	 * Create empty model.
+	 * 
+	 * @param modelFile
+	 * @param modelUri
+	 * @param metaModelResource
+	 * @param technologyContextManager
+	 * @return
+	 */
+	public ExcelWorkbookResource createNewWorkbook(FlexoProject project, String excelFilename, String modelUri) {
+
+		File excelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), excelFilename);
+
+		modelUri = excelFile.toURI().toString();
+
+		ExcelWorkbookResource workbookResource = ExcelWorkbookResourceImpl.makeExcelWorkbookResource(modelUri, excelFile, getTechnologyContextManager());
+
+		getTechnologyContextManager().registerResource(workbookResource);
+
+		return workbookResource;
 	}
 
 }

@@ -62,7 +62,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingResource);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewResource);
-		options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource);
+		//options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -99,21 +99,21 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 					logger.warning("No resource for model slot " + getModelSlot());
 				}
 			} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewResource) {
-				// resource = createProjectSpecificEmptyModel(msInstance, getModelSlot());
+				resource = createProjectSpecificEmptyResource(msInstance, getModelSlot());
 				System.out.println("***** modelResource = " + resource);
 				if (resource != null) {
 					msInstance.setResourceData(getResource().getResourceData(null));
 				} else {
 					logger.warning("Could not create ProjectSpecificEmtpyResource for model slot " + getModelSlot());
 				}
-			} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource) {
+			}/* else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource) {
 				// resource = createSharedEmptyResource(msInstance, getModelSlot());
 				if (resource != null) {
 					msInstance.setResourceData(getResource().getResourceData(null));
 				}
 			} else {
 				logger.warning("Could not create SharedEmptyResource for model slot " + getModelSlot());
-			}
+			}*/
 			return msInstance;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -196,11 +196,11 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 			return StringUtils.isNotEmpty(getResourceUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource) {
+		} /*else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource) {
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getResourceUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		}
+		}*/
 		return false;
 	}
 }

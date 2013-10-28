@@ -28,6 +28,13 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 		excelSheets = new ArrayList<ExcelSheet>();
 	}
 
+	public ExcelWorkbook(ExcelTechnologyAdapter adapter) {
+		super(adapter);
+		
+		this.workbook = workbook;
+		excelSheets = new ArrayList<ExcelSheet>();
+	}
+	
 	public ExcelWorkbook(Workbook workbook, BasicExcelModelConverter converter, ExcelTechnologyAdapter adapter) {
 		super(adapter);
 		this.workbook = workbook;
