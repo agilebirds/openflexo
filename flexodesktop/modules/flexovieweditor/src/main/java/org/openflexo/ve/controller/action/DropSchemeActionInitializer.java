@@ -92,7 +92,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 								.shapeViewForObject(action.getPrimaryShape().getGraphicalRepresentation());
 						if (shape != null) {
 							if (shape.getLabelView() != null) {
-								shape.getLabelView().startEdition();
+								shape.getLabelView().continueEdition();
 							}
 						}
 
