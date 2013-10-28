@@ -111,7 +111,11 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 			returned = (T) defaultValue.objectForKey(parameter.getName());
 		} else {
 			S style = getStyle(getSelection().get(0));
-			returned = (T) style.objectForKey(parameter.getName());
+			if (style != null) {
+				returned = (T) style.objectForKey(parameter.getName());
+			} else {
+				returned = null;
+			}
 		}
 		return returned;
 	}

@@ -266,6 +266,9 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		if (evt.getSource() instanceof ShadowStyle) {
 			notifyAttributeChange(SHADOW_STYLE);
 		}
+		if (evt.getSource() instanceof ShapeSpecification) {
+			notifyAttributeChange(SHAPE);
+		}
 	}
 
 	// *******************************************************************************

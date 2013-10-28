@@ -136,6 +136,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedTextStyle.fireSelectionUpdated();
 		inspectedShadowStyle.fireSelectionUpdated();
 		inspectedBackgroundStyle.fireSelectionUpdated();
+		inspectedShapeSpecification.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {

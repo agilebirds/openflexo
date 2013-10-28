@@ -107,6 +107,9 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 	protected abstract ST getStyleType(S style);
 
 	public void fireSelectionUpdated() {
+		// System.out.println("Selection mise a jour, je veux un " + getStyleType() + " alors que je suis a "
+		// + getStyleFactory().getStyleType());
+
 		if (requireChange(getStyleFactory().getStyleType(), getStyleType())) {
 			getStyleFactory().setStyleType(getStyleType());
 		}

@@ -16,6 +16,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Arc;
@@ -153,8 +154,6 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 	}
 
 	public ShapeType getStyleType() {
-
-		System.out.println(">>>>>>>>>>> getStyleType() returns " + shapeType);
 		return shapeType;
 	}
 
@@ -418,6 +417,13 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 				}
 			}
 			return null;
+		}
+
+		public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
+			if (getNPoints() > 2) {
+				return new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, getNPoints(), getStartAngle());
+			}
+			return new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 		}
 
 	}

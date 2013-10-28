@@ -26,6 +26,7 @@ import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGEAttributeNotification;
 import org.openflexo.fge.notifications.GRDeleted;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
+import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.toolbox.FileResource;
 
 public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implements GraphicalRepresentation {
@@ -182,9 +183,13 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected final void _setParameterValueWith(GRParameter<?> parameter, GraphicalRepresentation gr) {
-		setObjectForKey(gr.objectForKey(parameter.getName()), parameter.getName());
+		Object value = gr.objectForKey(parameter.getName());
+		if (value instanceof CloneableProxyObject) {
+			value = ((CloneableProxyObject) value).cloneObject();
+		}
+
+		setObjectForKey(value, parameter.getName());
 
 		/*	Class<?> type = getTypeForKey(parameter.getName());
 			if (type.isPrimitive()) {
