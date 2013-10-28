@@ -30,6 +30,8 @@ import java.awt.image.RGBImageFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
@@ -42,6 +44,7 @@ import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.NoneBackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextureBackgroundStyle;
+import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEGeneralShape;
@@ -50,6 +53,7 @@ import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.FGEGraphicsImpl;
+import org.openflexo.fge.swing.view.JFGEView;
 
 import sun.awt.image.ImageRepresentation;
 import sun.awt.image.ToolkitImage;
@@ -69,8 +73,13 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 	private static final int TRANSPARENT_COMPOSITE_RULE = AlphaComposite.SRC_OVER;
 
-	protected JFGEGraphics(DrawingTreeNode<?, ?> dtn) {
-		super(dtn);
+	protected JFGEGraphics(DrawingTreeNode<?, ?> dtn, JFGEView<?, ?> view) {
+		super(dtn, view);
+	}
+
+	@Override
+	public JFGEView<?, ?> getView() {
+		return (JFGEView<?, ?>) super.getView();
 	}
 
 	@Override
@@ -154,12 +163,15 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			Paint paint = getPaint(getCurrentBackground(), getScale());
 			if (paint != null) {
 				g2d.setPaint(paint);
-			}
-
-			if (getCurrentBackground().getUseTransparency()) {
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentBackground().getTransparencyLevel()));
+				if (getCurrentBackground().getUseTransparency()) {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentBackground().getTransparencyLevel()));
+				} else {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+				}
 			} else {
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+				// paint was null, meaning that Paint could not been obtained yet (texture not ready yet)
+				// the best is to paint it totally transparent
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0));
 			}
 		}
 	}
@@ -649,17 +661,64 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 		}
 	}
 
-	private TexturePaint getTexturePaint(TextureBackgroundStyle bs, double scale) {
-		rebuildColoredTexture(bs);
-		BufferedImage coloredTexture = getColoredTexture(bs);
+	private synchronized TexturePaint getTexturePaint(TextureBackgroundStyle bs, double scale) {
+		final BufferedImage coloredTexture = getColoredTexture(bs);
 		if (coloredTexture != null) {
 			return new TexturePaint(coloredTexture, new Rectangle(0, 0, coloredTexture.getWidth(), coloredTexture.getHeight()));
 		}
+		// Since image building take some time, colored texture might not be ready yet
+		// In this case, invoke repaint later
 		logger.warning("ColoredTexture not ready");
+		repaintWhenColoredTextureHasBeenComputed();
 		return null;
 	}
 
-	private void rebuildColoredTexture(TextureBackgroundStyle bs) {
+	private synchronized void repaintWhenColoredTextureHasBeenComputed() {
+		if (coloredTexture != null) {
+			// Now it's ok, proceed repaint
+			getView().getPaintManager().invalidate(getNode());
+			getView().getPaintManager().repaint(getView());
+		} else {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					repaintWhenColoredTextureHasBeenComputed();
+				}
+			});
+		}
+	}
+
+	private BufferedImage coloredTexture;
+	private ToolkitImage coloredImage;
+	private ToolkitImage requestedColoredImage;
+	private TextureType coloredTextureMadeForThisTextureType = null;
+	private Color coloredTextureMadeForThisColor1 = null;
+	private Color coloredTextureMadeForThisColor2 = null;
+
+	/**
+	 * Internally called to rebuild colored texture if cached value is not up-to-date (parameters have changed)
+	 * 
+	 * @param bs
+	 */
+	private synchronized void rebuildColoredTextureWhenRequired(TextureBackgroundStyle bs) {
+		if (coloredTexture == null || coloredTextureMadeForThisTextureType == null || coloredTextureMadeForThisColor1 == null
+				|| coloredTextureMadeForThisColor2 == null || coloredTextureMadeForThisTextureType != bs.getTextureType()
+				|| coloredTextureMadeForThisColor1 != bs.getColor1() || coloredTextureMadeForThisColor2 != bs.getColor2()) {
+			// Texture needs to be rebuilt
+			rebuildColoredTexture(bs);
+		} else {
+			logger.fine("Texture is still valid");
+		}
+	}
+
+	/**
+	 * Internnly called to rebuild colored texture
+	 * 
+	 * @param bs
+	 */
+	private synchronized void rebuildColoredTexture(final TextureBackgroundStyle bs) {
+		coloredTexture = null;
+		coloredImage = null;
 		if (bs.getTextureType() == null) {
 			return;
 		}
@@ -668,12 +727,22 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 			@Override
 			public void imageComplete(int status) {
 				super.imageComplete(status);
-				coloredTexture = new BufferedImage(initialImage.getWidth(null), initialImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-				Graphics gi = coloredTexture.getGraphics();
-				gi.drawImage(coloredImage, 0, 0, null);
+				synchronized (JFGEGraphics.this) {
+					coloredTexture = new BufferedImage(coloredImage.getWidth(null), coloredImage.getHeight(null),
+							BufferedImage.TYPE_INT_ARGB);
+					Graphics gi = coloredTexture.getGraphics();
+					if (coloredImage != null) {
+						gi.drawImage(coloredImage, 0, 0, null);
+					}
+					coloredTextureMadeForThisTextureType = bs.getTextureType();
+					coloredTextureMadeForThisColor1 = bs.getColor1();
+					coloredTextureMadeForThisColor2 = bs.getColor2();
+					logger.fine("Image has been computed, status=" + status);
+				}
 			}
 		};
 
+		// Launch a background job building a new image with specified two colors
 		ImageProducer producer = new FilteredImageSource(initialImage.getSource(), imgfilter);
 		coloredImage = (ToolkitImage) Toolkit.getDefaultToolkit().createImage(producer);
 		ImageRepresentation consumer = new ImageRepresentation(coloredImage, null, true);
@@ -687,32 +756,13 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 	}
 
 	private BufferedImage getColoredTexture(TextureBackgroundStyle bs) {
-		if (coloredTexture == null) {
-			rebuildColoredTexture(bs);
-			/*int tests = 10; // Time-out = 1s
-			while (coloredTexture == null && tests>=0) {
-				try {
-					tests--;
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (coloredTexture == null) {
-				logger.warning("Could not compute colored texture");
-				Image initialImage = textureType.getImageIcon().getImage();
-				System.out.println("initialImage="+initialImage+" initialImage.getWidth(null)="+initialImage.getWidth(null));
-				coloredTexture = 
-					new BufferedImage(
-							initialImage.getWidth(null), 
-							initialImage.getHeight(null), 
-							BufferedImage.TYPE_INT_ARGB);
-				Graphics gi = coloredTexture.getGraphics();
-				gi.drawImage(initialImage, 0, 0, null);
-			}*/
-		}
+		rebuildColoredTextureWhenRequired(bs);
 		return coloredTexture;
+
+		/*if (coloredTexture == null) {
+			rebuildColoredTexture(bs);
+		} 
+		return coloredTexture;*/
 
 	}
 
@@ -750,8 +800,5 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 		}
 
 	}
-
-	private BufferedImage coloredTexture;
-	private ToolkitImage coloredImage;
 
 }

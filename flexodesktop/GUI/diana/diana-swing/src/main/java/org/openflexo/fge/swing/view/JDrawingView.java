@@ -141,7 +141,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		drawing = controller.getDrawing();
 		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
 		// contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?,?>>();
-		graphics = new JFGEDrawingGraphics(drawing.getRoot());
+		graphics = new JFGEDrawingGraphics(drawing.getRoot(), this);
 		_focusRetriever = new JFocusRetriever(this);
 		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
@@ -153,7 +153,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		resizeView();
 		drawing.getRoot().getPropertyChangeSupport().addPropertyChangeListener(this);
 
-		graphics = new JFGEDrawingGraphics(drawing.getRoot());
+		// graphics = new JFGEDrawingGraphics(drawing.getRoot());
 
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof GeometricNode<?>) {
@@ -630,7 +630,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			});
 			for (GeometricNode<?> gn : geomList) {
 				// TODO: use the same graphics, just change DrawingTreeNode
-				JFGEGeometricGraphics geometricGraphics = new JFGEGeometricGraphics(gn);
+				JFGEGeometricGraphics geometricGraphics = new JFGEGeometricGraphics(gn, this);
 				geometricGraphics.createGraphics(g2, controller);
 				gn.paint(geometricGraphics);
 				geometricGraphics.releaseGraphics();

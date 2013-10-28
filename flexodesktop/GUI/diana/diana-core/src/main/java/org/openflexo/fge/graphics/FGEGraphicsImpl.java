@@ -43,6 +43,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.view.FGEView;
 
 /**
  * This is the generic base implementation of a {@link FGEGraphics}
@@ -57,6 +58,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	// TODO: do we need this ?
 	protected AbstractDianaEditor<?, ?, ?> _controller;
 	private DrawingTreeNode<?, ?> dtn;
+	private FGEView<?, ?> view;
 
 	private static final FGEModelFactory GRAPHICS_FACTORY = FGECoreUtils.TOOLS_FACTORY;
 	private static final ForegroundStyle DEFAULT_FG = GRAPHICS_FACTORY.makeDefaultForegroundStyle();
@@ -71,9 +73,10 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	private BackgroundStyle currentBackground = defaultBackground;
 	private TextStyle currentTextStyle = defaultTextStyle;
 
-	public FGEGraphicsImpl(DrawingTreeNode<?, ?> dtn) {
+	public FGEGraphicsImpl(DrawingTreeNode<?, ?> dtn, FGEView<?, ?> view) {
 		super();
 		this.dtn = dtn;
+		this.view = view;
 	}
 
 	public FGEModelFactory getFactory() {
@@ -86,6 +89,10 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 
 	public DrawingTreeNode<?, ?> getNode() {
 		return getDrawingTreeNode();
+	}
+
+	public FGEView<?, ?> getView() {
+		return view;
 	}
 
 	public GraphicalRepresentation getGraphicalRepresentation() {

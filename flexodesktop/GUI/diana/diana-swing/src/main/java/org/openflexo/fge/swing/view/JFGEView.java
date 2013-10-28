@@ -22,6 +22,7 @@ package org.openflexo.fge.swing.view;
 import javax.swing.JComponent;
 
 import org.openflexo.fge.swing.graphics.JFGEGraphics;
+import org.openflexo.fge.swing.paint.FGEPaintManager;
 import org.openflexo.fge.view.FGEView;
 
 /**
@@ -41,5 +42,7 @@ public interface JFGEView<O, C extends JComponent> extends FGEView<O, C> {
 	public JLabelView<O> getLabelView();
 
 	public JFGEGraphics getFGEGraphics();
+
+	public FGEPaintManager getPaintManager();
 
 }

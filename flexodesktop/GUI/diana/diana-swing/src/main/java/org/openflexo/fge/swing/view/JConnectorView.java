@@ -89,7 +89,7 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 
 		updateVisibility();
 
-		graphics = new JFGEConnectorGraphics(node);
+		graphics = new JFGEConnectorGraphics(node, this);
 
 	}
 

@@ -24,14 +24,15 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
+import org.openflexo.fge.swing.view.JFGEView;
 
 public class JFGEGeometricGraphics extends JFGEGraphics implements FGEGeometricGraphics {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(JFGEGeometricGraphics.class.getPackage().getName());
 
-	public JFGEGeometricGraphics(GeometricNode<?> geometricNode) {
-		super(geometricNode);
+	public <O> JFGEGeometricGraphics(GeometricNode<O> geometricNode, JFGEView<?, ?> containerView) {
+		super(geometricNode, containerView);
 	}
 
 	@Override

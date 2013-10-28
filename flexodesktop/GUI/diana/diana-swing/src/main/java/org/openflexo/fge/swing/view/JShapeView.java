@@ -102,7 +102,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		updateVisibility();
 		setFocusable(true);
 
-		graphics = new JFGEShapeGraphics(node);
+		graphics = new JFGEShapeGraphics(node, this);
 
 	}
 

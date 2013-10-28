@@ -44,7 +44,6 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
@@ -69,7 +68,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
+		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -310,12 +309,11 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 			return getVirtualModelInstance();
 		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
 			return getVirtualModelInstance();
-		}else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
-			if(getVirtualModelInstance() instanceof Diagram){
-				return ((Diagram)getVirtualModelInstance()).getRootPane();
+		} else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			if (getVirtualModelInstance() instanceof Diagram) {
+				return ((Diagram) getVirtualModelInstance()).getRootPane();
 			}
 		}
-
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
 			return getVirtualModelInstance().getValueForVariable(variable);
@@ -343,7 +341,7 @@ FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEva
 				+ variable.getClass());
 	}
 
-	public GraphicalRepresentation<? extends DiagramElement> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;

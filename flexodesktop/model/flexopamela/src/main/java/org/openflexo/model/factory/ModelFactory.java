@@ -61,20 +61,17 @@ public class ModelFactory {
 				@Override
 				public boolean isHandled(Method method) {
 
-					if (method.getName().contains("setX")) {
-						System.out.println("OK je l'ai");
-					}
-
 					if (Modifier.isAbstract(method.getModifiers()))
 						return true;
 					if (method.getName().equals("toString")) {
 						return true;
 					}
-					// TODO perf issue
+					// TODO perf issue ??? Check this !
 					if (modelEntity.getPropertyForMethod(method) != null) {
 						return true;
 					}
 					return false;
+					// Old code
 					/*return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
 							&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;*/
 				}

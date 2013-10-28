@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGESymbolGraphics;
+import org.openflexo.fge.swing.view.JConnectorView;
 
 //import org.openflexo.fge.ShapeGraphicalRepresentation;
 
@@ -32,8 +33,8 @@ public class JFGESymbolGraphics extends JFGEGraphics implements FGESymbolGraphic
 
 	private static final Logger logger = Logger.getLogger(JFGESymbolGraphics.class.getPackage().getName());
 
-	public JFGESymbolGraphics(ConnectorNode<?> node) {
-		super(node);
+	public <O> JFGESymbolGraphics(ConnectorNode<O> node, JConnectorView<O> view) {
+		super(node, view);
 	}
 
 	// sometimes this method throw a class cast exception with a TokenEdgeGR instead of a

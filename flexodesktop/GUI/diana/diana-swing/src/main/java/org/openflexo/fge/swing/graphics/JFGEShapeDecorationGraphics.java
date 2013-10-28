@@ -26,13 +26,14 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
+import org.openflexo.fge.swing.view.JShapeView;
 
 public class JFGEShapeDecorationGraphics extends JFGEGraphics implements FGEShapeDecorationGraphics {
 
 	private static final Logger logger = Logger.getLogger(JFGEShapeDecorationGraphics.class.getPackage().getName());
 
-	public JFGEShapeDecorationGraphics(ShapeNode<?> node) {
-		super(node);
+	public <O> JFGEShapeDecorationGraphics(ShapeNode<O> node, JShapeView<O> view) {
+		super(node, view);
 	}
 
 	@Override

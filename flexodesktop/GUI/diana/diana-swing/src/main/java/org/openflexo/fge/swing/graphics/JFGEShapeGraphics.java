@@ -34,6 +34,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
+import org.openflexo.fge.swing.view.JShapeView;
 
 public class JFGEShapeGraphics extends JFGEGraphics implements FGEShapeGraphics {
 
@@ -41,9 +42,9 @@ public class JFGEShapeGraphics extends JFGEGraphics implements FGEShapeGraphics 
 
 	private JFGEShapeDecorationGraphics shapeDecorationGraphics;
 
-	public JFGEShapeGraphics(ShapeNode<?> node) {
-		super(node);
-		shapeDecorationGraphics = new JFGEShapeDecorationGraphics(node);
+	public <O> JFGEShapeGraphics(ShapeNode<O> node, JShapeView<O> view) {
+		super(node, view);
+		shapeDecorationGraphics = new JFGEShapeDecorationGraphics(node, view);
 	}
 
 	@Override

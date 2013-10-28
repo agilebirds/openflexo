@@ -32,6 +32,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.swing.view.JConnectorView;
 
 public class JFGEConnectorGraphics extends JFGEGraphics implements FGEConnectorGraphics {
 
@@ -39,9 +40,9 @@ public class JFGEConnectorGraphics extends JFGEGraphics implements FGEConnectorG
 
 	private JFGESymbolGraphics symbolGraphics;
 
-	public JFGEConnectorGraphics(ConnectorNode<?> node) {
-		super(node);
-		symbolGraphics = new JFGESymbolGraphics(node);
+	public <O> JFGEConnectorGraphics(ConnectorNode<O> node, JConnectorView<O> view) {
+		super(node, view);
+		symbolGraphics = new JFGESymbolGraphics(node, view);
 	}
 
 	@Override

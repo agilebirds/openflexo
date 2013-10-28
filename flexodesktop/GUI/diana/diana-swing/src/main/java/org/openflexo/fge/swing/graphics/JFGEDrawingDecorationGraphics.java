@@ -26,13 +26,14 @@ import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
+import org.openflexo.fge.swing.view.JDrawingView;
 
 public class JFGEDrawingDecorationGraphics extends JFGEGraphics implements FGEDrawingDecorationGraphics {
 
 	private static final Logger logger = Logger.getLogger(JFGEDrawingDecorationGraphics.class.getPackage().getName());
 
-	public JFGEDrawingDecorationGraphics(RootNode<?> rootNode) {
-		super(rootNode);
+	public <O> JFGEDrawingDecorationGraphics(RootNode<O> rootNode, JDrawingView<O> view) {
+		super(rootNode, view);
 	}
 
 	@Override

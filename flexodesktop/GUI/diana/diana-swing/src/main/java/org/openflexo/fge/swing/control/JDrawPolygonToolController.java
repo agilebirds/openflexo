@@ -70,7 +70,7 @@ public class JDrawPolygonToolController extends DrawPolygonToolController<MouseE
 
 	@Override
 	public JFGEGeometricGraphics makeGraphics(ForegroundStyle foregroundStyle) {
-		JFGEGeometricGraphics returned = new JFGEGeometricGraphics(getCurrentEditedShape());
+		JFGEGeometricGraphics returned = new JFGEGeometricGraphics(getCurrentEditedShape(), getDrawingView());
 		returned.setDefaultForeground(foregroundStyle);
 		return returned;
 	}

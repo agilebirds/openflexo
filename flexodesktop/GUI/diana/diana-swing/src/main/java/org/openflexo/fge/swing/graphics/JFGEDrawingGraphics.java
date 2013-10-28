@@ -29,6 +29,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
+import org.openflexo.fge.swing.view.JDrawingView;
 
 public class JFGEDrawingGraphics extends JFGEGraphics implements FGEDrawingGraphics {
 
@@ -36,9 +37,9 @@ public class JFGEDrawingGraphics extends JFGEGraphics implements FGEDrawingGraph
 
 	private JFGEDrawingDecorationGraphics drawingDecorationGraphics;
 
-	public JFGEDrawingGraphics(RootNode<?> rootNode) {
-		super(rootNode);
-		drawingDecorationGraphics = new JFGEDrawingDecorationGraphics(rootNode);
+	public <O> JFGEDrawingGraphics(RootNode<O> rootNode, JDrawingView<O> view) {
+		super(rootNode, view);
+		drawingDecorationGraphics = new JFGEDrawingDecorationGraphics(rootNode, view);
 	}
 
 	@Override
