@@ -520,7 +520,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		return screenshot;
 	}
 
-	private void captureScreenshot() {
+	public void captureScreenshot() {
 		JComponent lbl = this;
 		getController().disablePaintingCache();
 		try {
