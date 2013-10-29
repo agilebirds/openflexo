@@ -17,4 +17,12 @@ public class ExcelColumn extends ExcelObject {
 		return "Column"+colNumber;
 	}
 
+	public int getColNumber() {
+		return colNumber;
+	}
+
+	public void setColNumber(int colNumber) {
+		this.colNumber = colNumber;
+	}
+
 }
