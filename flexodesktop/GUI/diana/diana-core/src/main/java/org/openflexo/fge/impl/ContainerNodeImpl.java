@@ -112,6 +112,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		if (childNodes.contains(aChildNode)) {
 			logger.warning("Node already present");
 		} else {
+			System.out.println("Add child " + aChildNode + " as child as " + this);
 			((DrawingTreeNodeImpl<?, ?>) aChildNode).setParentNode(this);
 			childNodes.add((DrawingTreeNodeImpl<?, ?>) aChildNode);
 		}

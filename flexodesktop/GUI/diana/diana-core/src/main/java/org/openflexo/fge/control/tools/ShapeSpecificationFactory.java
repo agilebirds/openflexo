@@ -34,7 +34,7 @@ import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.fge.shapes.impl.ShapeImpl;
 
 /**
- * Convenient class use to manipulate BackgroundStyle
+ * Convenient class used to manipulate ShapeSpecification instances over ShapeSpecification class hierarchy
  * 
  * @author sylvain
  * 

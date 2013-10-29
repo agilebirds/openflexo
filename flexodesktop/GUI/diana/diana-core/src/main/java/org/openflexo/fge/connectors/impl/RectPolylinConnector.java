@@ -114,7 +114,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 
 	@Override
 	public List<? extends ControlArea<?>> getControlAreas() {
-		if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() == MiddleSymbolType.NONE && controlAreas.size() == 0) {
+		if (connectorNode.getConnectorSpecification().getMiddleSymbol() == MiddleSymbolType.NONE && controlAreas.size() == 0) {
 			return controlPoints;
 		}
 
@@ -122,7 +122,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 		if (allControlAreas == null) {
 			allControlAreas = new ConcatenedList<ControlArea<?>>();
 			allControlAreas.addElementList(controlPoints);
-			if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE
+			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE
 					&& middleSymbolLocationControlPoint != null) {
 				allControlAreas.add(0, middleSymbolLocationControlPoint);
 			}
@@ -173,23 +173,23 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 		if (polylin != null && polylin.getSegments() != null && polylin.getSegments().size() > 0) {
 			// Segments are here all orthogonal, we can can then rely on getAngle() computation performed on geom layer
 			// (we dont need to convert to view first)
-			if (connectorNode.getGraphicalRepresentation().getStartSymbol() != StartSymbolType.NONE) {
+			if (connectorNode.getConnectorSpecification().getStartSymbol() != StartSymbolType.NONE) {
 				FGESegment firstSegment = polylin.getSegments().firstElement();
 				if (firstSegment != null) {
-					g.drawSymbol(firstSegment.getP1(), connectorNode.getGraphicalRepresentation().getStartSymbol(), connectorNode
-							.getGraphicalRepresentation().getStartSymbolSize(), firstSegment.getAngle());
+					g.drawSymbol(firstSegment.getP1(), connectorNode.getConnectorSpecification().getStartSymbol(), connectorNode
+							.getConnectorSpecification().getStartSymbolSize(), firstSegment.getAngle());
 				}
 			}
-			if (connectorNode.getGraphicalRepresentation().getEndSymbol() != EndSymbolType.NONE) {
+			if (connectorNode.getConnectorSpecification().getEndSymbol() != EndSymbolType.NONE) {
 				FGESegment lastSegment = polylin.getSegments().lastElement();
 				if (lastSegment != null) {
-					g.drawSymbol(lastSegment.getP2(), connectorNode.getGraphicalRepresentation().getEndSymbol(), connectorNode
-							.getGraphicalRepresentation().getEndSymbolSize(), lastSegment.getAngle() + Math.PI);
+					g.drawSymbol(lastSegment.getP2(), connectorNode.getConnectorSpecification().getEndSymbol(), connectorNode
+							.getConnectorSpecification().getEndSymbolSize(), lastSegment.getAngle() + Math.PI);
 				}
 			}
-			if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
-				g.drawSymbol(getMiddleSymbolLocation(), connectorNode.getGraphicalRepresentation().getMiddleSymbol(), connectorNode
-						.getGraphicalRepresentation().getMiddleSymbolSize(), getMiddleSymbolAngle());
+			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+				g.drawSymbol(getMiddleSymbolLocation(), connectorNode.getConnectorSpecification().getMiddleSymbol(), connectorNode
+						.getConnectorSpecification().getMiddleSymbolSize(), getMiddleSymbolAngle());
 			}
 		}
 
@@ -203,7 +203,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 		AffineTransform at = connectorNode.convertNormalizedPointToViewCoordinatesAT(1.0);
 
 		FGERectPolylin transformedPolylin = polylin.transform(at);
-		FGEPoint point = transformedPolylin.getPointAtRelativePosition(connectorNode.getGraphicalRepresentation()
+		FGEPoint point = transformedPolylin.getPointAtRelativePosition(connectorNode.getConnectorSpecification()
 				.getRelativeMiddleSymbolLocation());
 		try {
 			point = point.transform(at.createInverse());
@@ -274,7 +274,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 
 		updateLayout();
 
-		if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
+		if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
 			updateMiddleSymbolLocationControlPoint();
 		}
 
@@ -343,8 +343,8 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 			FGERectangle returned = new FGERectangle(Filling.FILLED);
 
 			// Compute required space to draw symbols, eg arrows
-			double maxSymbolSize = Math.max(connectorNode.getGraphicalRepresentation().getStartSymbolSize(), Math.max(connectorNode
-					.getGraphicalRepresentation().getMiddleSymbolSize(), connectorNode.getGraphicalRepresentation().getEndSymbolSize()));
+			double maxSymbolSize = Math.max(connectorNode.getConnectorSpecification().getStartSymbolSize(), Math.max(connectorNode
+					.getConnectorSpecification().getMiddleSymbolSize(), connectorNode.getConnectorSpecification().getEndSymbolSize()));
 			double relativeWidthToAdd = maxSymbolSize * 2 / connectorNode.getViewWidth(1.0);
 			double relativeHeightToAdd = maxSymbolSize * 2 / connectorNode.getViewHeight(1.0);
 
@@ -437,7 +437,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 					FGERectPolylin transformedPolylin = polylin.transform(at);
 
 					// FGESegment segment = new FGESegment(cp1.getPoint(),cp2.getPoint());
-					connectorNode.getGraphicalRepresentation().setRelativeMiddleSymbolLocation(transformedPolylin.getRelativeLocation(pt));
+					connectorNode.getConnectorSpecification().setRelativeMiddleSymbolLocation(transformedPolylin.getRelativeLocation(pt));
 
 					/*
 					 * cp1RelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint( getGraphicalRepresentation(), pt,
@@ -1227,8 +1227,13 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 			}
 		}
 
-		getConnectorSpecification().setStartOrientation(polylin.getStartOrientation());
-		getConnectorSpecification().setEndOrientation(polylin.getEndOrientation());
+		if (polylin != null) {
+
+			getConnectorSpecification().setStartOrientation(polylin.getStartOrientation());
+			getConnectorSpecification().setEndOrientation(polylin.getEndOrientation());
+		} else {
+			logger.warning("polylin=null !!!!!!");
+		}
 
 		// logger.info("Best polylin found from/to "+startOrientation+"/"+endOrientation+" with "+polylin.getPointsNb()+" points");
 		// logger.info("Polylin="+polylin);
@@ -1656,7 +1661,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 			p_end = controlPoints.lastElement();
 		}
 
-		if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
+		if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
 			updateMiddleSymbolLocationControlPoint();
 		}
 

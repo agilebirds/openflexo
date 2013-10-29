@@ -21,17 +21,16 @@ package org.openflexo.fge.control.tools;
 
 import java.util.List;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.undo.CompoundEdit;
 
 /**
- * Implementation of {@link BackgroundStyle}, as a container of graphical properties synchronized with and reflecting a selection<br>
+ * Implementation of {@link ShapeSpecification}, as a mutable container over {@link ShapeSpecification} class hierarchy.<br>
+ * It presents graphical properties synchronized with and reflecting a selection<br>
  * This is the object beeing represented in tool inspectors
  * 
  * @author sylvain
@@ -68,9 +67,10 @@ public class InspectedShapeSpecification extends InspectedStyleUsingFactory<Shap
 		ShapeNode<?> n = (ShapeNode<?>) node;
 		ShapeSpecification oldShapeSpecification = n.getShapeSpecification();
 		CompoundEdit setValueEdit = startRecordEdit("Set ShapeType to " + newShapeType);
-		n.setShapeSpecification(getStyleFactory().makeNewStyle(oldShapeSpecification));
-		n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
-				oldShapeSpecification.getShapeType(), newShapeType);
+		ShapeSpecification newShapeSpecification = getStyleFactory().makeNewStyle(oldShapeSpecification);
+		n.setShapeSpecification(newShapeSpecification);
+		// n.getPropertyChangeSupport().firePropertyChange(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY,
+		// oldShapeSpecification.getShapeType(), newShapeType);
 		stopRecordEdit(setValueEdit);
 	}
 }

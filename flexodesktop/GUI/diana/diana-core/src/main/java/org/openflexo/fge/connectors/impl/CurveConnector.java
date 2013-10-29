@@ -360,23 +360,23 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 			curve.paint(g);
 
 			// Draw eventual symbols
-			if (connectorNode.getGraphicalRepresentation().getStartSymbol() != StartSymbolType.NONE) {
+			if (connectorNode.getConnectorSpecification().getStartSymbol() != StartSymbolType.NONE) {
 				FGESegment firstSegment = curve.getApproximatedStartTangent();
 				FGESegment viewSegment = firstSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(firstSegment.getP1(), connectorNode.getGraphicalRepresentation().getStartSymbol(), connectorNode
-						.getGraphicalRepresentation().getStartSymbolSize(), viewSegment.getAngle());
+				g.drawSymbol(firstSegment.getP1(), connectorNode.getConnectorSpecification().getStartSymbol(), connectorNode
+						.getConnectorSpecification().getStartSymbolSize(), viewSegment.getAngle());
 			}
-			if (connectorNode.getGraphicalRepresentation().getEndSymbol() != EndSymbolType.NONE) {
+			if (connectorNode.getConnectorSpecification().getEndSymbol() != EndSymbolType.NONE) {
 				FGESegment lastSegment = curve.getApproximatedEndTangent();
 				FGESegment viewSegment = lastSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(lastSegment.getP2(), connectorNode.getGraphicalRepresentation().getEndSymbol(), connectorNode
-						.getGraphicalRepresentation().getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
+				g.drawSymbol(lastSegment.getP2(), connectorNode.getConnectorSpecification().getEndSymbol(), connectorNode
+						.getConnectorSpecification().getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
-			if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
 				FGESegment cpSegment = curve.getApproximatedControlPointTangent();
 				FGESegment viewSegment = cpSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(curve.getP3(), connectorNode.getGraphicalRepresentation().getMiddleSymbol(), connectorNode
-						.getGraphicalRepresentation().getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
+				g.drawSymbol(curve.getP3(), connectorNode.getConnectorSpecification().getMiddleSymbol(), connectorNode
+						.getConnectorSpecification().getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
 		}
 

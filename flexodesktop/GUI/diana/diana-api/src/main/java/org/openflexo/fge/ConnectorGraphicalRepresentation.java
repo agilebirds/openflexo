@@ -22,9 +22,6 @@ package org.openflexo.fge;
 
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
-import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
-import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
-import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
@@ -52,6 +49,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	// public static final String END_OBJECT = "endObject";
 	@PropertyIdentifier(type = ConnectorSpecification.class)
 	public static final String CONNECTOR_SPECIFICATION_KEY = "connectorSpecification";
+	@PropertyIdentifier(type = ConnectorType.class)
+	public static final String CONNECTOR_TYPE_KEY = "connectorType";
 
 	@PropertyIdentifier(type = ForegroundStyle.class)
 	public static final String FOREGROUND_KEY = "foreground";
@@ -64,20 +63,6 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	@PropertyIdentifier(type = Boolean.class)
 	public static final String HAS_FOCUSED_FOREGROUND_KEY = "hasFocusedForeground";
 
-	@PropertyIdentifier(type = StartSymbolType.class)
-	public static final String START_SYMBOL_KEY = "startSymbol";
-	@PropertyIdentifier(type = EndSymbolType.class)
-	public static final String END_SYMBOL_KEY = "endSymbol";
-	@PropertyIdentifier(type = MiddleSymbolType.class)
-	public static final String MIDDLE_SYMBOL_KEY = "middleSymbol";
-	@PropertyIdentifier(type = Double.class)
-	public static final String START_SYMBOL_SIZE_KEY = "startSymbolSize";
-	@PropertyIdentifier(type = Double.class)
-	public static final String END_SYMBOL_SIZE_KEY = "endSymbolSize";
-	@PropertyIdentifier(type = Double.class)
-	public static final String MIDDLE_SYMBOL_SIZE_KEY = "middleSymbolSize";
-	@PropertyIdentifier(type = Double.class)
-	public static final String RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY = "relativeMiddleSymbolLocation";
 	@PropertyIdentifier(type = Boolean.class)
 	public static final String APPLY_FOREGROUND_TO_SYMBOLS_KEY = "applyForegroundToSymbols";
 	@PropertyIdentifier(type = Boolean.class)
@@ -85,6 +70,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	public static GRParameter<ConnectorSpecification> CONNECTOR = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
 			ConnectorGraphicalRepresentation.CONNECTOR_SPECIFICATION_KEY, ConnectorSpecification.class);
+	public static GRParameter<ConnectorType> CONNECTOR_TYPE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
+			CONNECTOR_TYPE_KEY, ConnectorType.class);
 
 	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
 			ConnectorGraphicalRepresentation.FOREGROUND_KEY, ForegroundStyle.class);
@@ -93,21 +80,6 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public static GRParameter<ForegroundStyle> FOCUSED_FOREGROUND = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
 			ConnectorGraphicalRepresentation.FOCUSED_FOREGROUND_KEY, ForegroundStyle.class);
 
-	public static GRParameter<StartSymbolType> START_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.START_SYMBOL_KEY, StartSymbolType.class);
-	public static GRParameter<Double> START_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.START_SYMBOL_SIZE_KEY, Double.class);
-	public static GRParameter<MiddleSymbolType> MIDDLE_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.MIDDLE_SYMBOL_KEY, MiddleSymbolType.class);
-	public static GRParameter<Double> MIDDLE_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.MIDDLE_SYMBOL_SIZE_KEY, Double.class);
-	public static GRParameter<EndSymbolType> END_SYMBOL = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.END_SYMBOL_KEY, EndSymbolType.class);
-	public static GRParameter<Double> END_SYMBOL_SIZE = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.END_SYMBOL_SIZE_KEY, Double.class);
-
-	public static GRParameter<Double> RELATIVE_MIDDLE_SYMBOL_LOCATION = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
-			ConnectorGraphicalRepresentation.RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY, Double.class);
 	public static GRParameter<Boolean> APPLY_FOREGROUND_TO_SYMBOLS = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
 			ConnectorGraphicalRepresentation.APPLY_FOREGROUND_TO_SYMBOLS_KEY, Boolean.class);
 	public static GRParameter<Boolean> DEBUG_COVERING_AREA = GRParameter.getGRParameter(ConnectorGraphicalRepresentation.class,
@@ -196,55 +168,6 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	@Setter(value = HAS_FOCUSED_FOREGROUND_KEY)
 	public void setHasFocusedForeground(boolean aFlag);
-
-	@Getter(value = START_SYMBOL_KEY)
-	@XMLAttribute
-	public StartSymbolType getStartSymbol();
-
-	@Setter(value = START_SYMBOL_KEY)
-	public void setStartSymbol(StartSymbolType startSymbol);
-
-	@Getter(value = END_SYMBOL_KEY)
-	@XMLAttribute
-	public EndSymbolType getEndSymbol();
-
-	@Setter(value = END_SYMBOL_KEY)
-	public void setEndSymbol(EndSymbolType endSymbol);
-
-	@Getter(value = MIDDLE_SYMBOL_KEY)
-	@XMLAttribute
-	public MiddleSymbolType getMiddleSymbol();
-
-	@Setter(value = MIDDLE_SYMBOL_KEY)
-	public void setMiddleSymbol(MiddleSymbolType middleSymbol);
-
-	@Getter(value = START_SYMBOL_SIZE_KEY, defaultValue = "10.0")
-	@XMLAttribute
-	public double getStartSymbolSize();
-
-	@Setter(value = START_SYMBOL_SIZE_KEY)
-	public void setStartSymbolSize(double startSymbolSize);
-
-	@Getter(value = END_SYMBOL_SIZE_KEY, defaultValue = "10.0")
-	@XMLAttribute
-	public double getEndSymbolSize();
-
-	@Setter(value = END_SYMBOL_SIZE_KEY)
-	public void setEndSymbolSize(double endSymbolSize);
-
-	@Getter(value = MIDDLE_SYMBOL_SIZE_KEY, defaultValue = "10.0")
-	@XMLAttribute
-	public double getMiddleSymbolSize();
-
-	@Setter(value = MIDDLE_SYMBOL_SIZE_KEY)
-	public void setMiddleSymbolSize(double middleSymbolSize);
-
-	@Getter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY, defaultValue = "0.5")
-	@XMLAttribute
-	public double getRelativeMiddleSymbolLocation();
-
-	@Setter(value = RELATIVE_MIDDLE_SYMBOL_LOCATION_KEY)
-	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation);
 
 	@Getter(value = APPLY_FOREGROUND_TO_SYMBOLS_KEY, defaultValue = "true")
 	@XMLAttribute

@@ -28,6 +28,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
@@ -46,6 +47,7 @@ import org.openflexo.fge.swing.view.JConnectorView;
 import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.fge.swing.view.JFGEView;
 import org.openflexo.fge.swing.view.JShapeView;
+import org.openflexo.fge.swing.widget.JConnectorPreviewPanel;
 import org.openflexo.fge.swing.widget.JFIBBackgroundStyleSelector;
 import org.openflexo.fge.swing.widget.JFIBForegroundStyleSelector;
 import org.openflexo.fge.swing.widget.JFIBShadowStyleSelector;
@@ -154,33 +156,10 @@ public class SwingViewFactory implements DianaViewFactory<SwingViewFactory, JCom
 	public JShapePreviewPanel makeShapePreviewPanel(ShapeSpecification shapeSpecification) {
 		return new JShapePreviewPanel(shapeSpecification);
 	}
-	/*
-		public JFGEDrawingGraphics makeDrawingGraphics(RootNode<?> rootNode) {
-			return new JFGEDrawingGraphics(rootNode);
-		}
 
-		public JFGEShapeGraphics makeShapeGraphics(ShapeNode<?> shapeNode) {
-			return new JFGEShapeGraphics(shapeNode);
-		}
+	@Override
+	public JConnectorPreviewPanel makeConnectorPreviewPanel(ConnectorSpecification connectorSpecification) {
+		return new JConnectorPreviewPanel(connectorSpecification);
+	}
 
-		public JFGEConnectorGraphics makeConnectorGraphics(ConnectorNode<?> connectorNode) {
-			return new JFGEConnectorGraphics(connectorNode);
-		}
-
-		public JFGEGeometricGraphics makeGeometricGraphics(GeometricNode<?> geometricNode) {
-			return new JFGEGeometricGraphics(geometricNode);
-		}
-
-		public JFGEDrawingDecorationGraphics makeDrawingDecorationGraphics(RootNode<?> rootNode) {
-			return new JFGEDrawingDecorationGraphics(rootNode);
-		}
-
-		public JFGEShapeDecorationGraphics makeShapeDecorationGraphics(ShapeNode<?> shapeNode) {
-			return new JFGEShapeDecorationGraphics(shapeNode);
-		}
-
-		public JFGESymbolGraphics makeSymbolGraphics(ConnectorNode<?> connectorNode) {
-			return new JFGESymbolGraphics(connectorNode);
-		}
-	*/
 }

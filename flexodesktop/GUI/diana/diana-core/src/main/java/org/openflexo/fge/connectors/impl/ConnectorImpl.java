@@ -2,7 +2,6 @@ package org.openflexo.fge.connectors.impl;
 
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +30,7 @@ import org.openflexo.fge.shapes.Shape;
  * @author sylvain
  * 
  */
-public abstract class ConnectorImpl<CS extends ConnectorSpecification> implements PropertyChangeListener, Connector<CS> {
+public abstract class ConnectorImpl<CS extends ConnectorSpecification> implements Connector<CS> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
@@ -73,8 +72,8 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	@Override
 	@SuppressWarnings("unchecked")
 	public CS getConnectorSpecification() {
-		if (connectorNode != null && connectorNode.getGraphicalRepresentation() != null) {
-			return (CS) connectorNode.getGraphicalRepresentation().getConnectorSpecification();
+		if (connectorNode != null) {
+			return (CS) connectorNode.getConnectorSpecification();
 		}
 		return null;
 	}

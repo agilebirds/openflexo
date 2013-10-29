@@ -100,9 +100,7 @@ public abstract class CurveConnectorSpecificationImpl extends ConnectorSpecifica
 
 	@Override
 	public CurveConnector makeConnector(ConnectorNode<?> connectorNode) {
-		CurveConnector returned = new CurveConnector(connectorNode);
-		getPropertyChangeSupport().addPropertyChangeListener(returned);
-		return returned;
+		return new CurveConnector(connectorNode);
 	}
 
 }

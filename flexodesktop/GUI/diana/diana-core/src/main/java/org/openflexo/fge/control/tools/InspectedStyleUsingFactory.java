@@ -117,7 +117,7 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 	}
 
 	protected void applyNewStyleTypeToSelection(ST newStyleType) {
-		// System.out.println("OK, je dis a tout le monde que c'est un " + newStyleType);
+		// System.out.println("Changing for " + newStyleType);
 		for (DrawingTreeNode<?, ?> n : getSelection()) {
 			S nodeStyle = getStyle(n);
 			if (getStyleType(nodeStyle) != newStyleType) {

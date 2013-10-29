@@ -16,7 +16,6 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
@@ -79,17 +78,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public ConnectorSpecification getConnectorSpecification() {
-		if (getGraphicalRepresentation() != null) {
-			return getGraphicalRepresentation().getConnectorSpecification();
-		}
-		return null;
-	}
-
-	@Override
 	public Connector<?> getConnector() {
-		if (connector == null && getGraphicalRepresentation() != null && getGraphicalRepresentation().getConnectorSpecification() != null) {
-			connector = getGraphicalRepresentation().getConnectorSpecification().makeConnector(this);
+		if (connector == null && getConnectorSpecification() != null) {
+			System.out.println("################# MAKE NEW CONNECTOR with " + getConnectorSpecification());
+			connector = getConnectorSpecification().makeConnector(this);
+			getConnectorSpecification().getPropertyChangeSupport().addPropertyChangeListener(connector);
 		}
 		return connector;
 	}
@@ -391,6 +384,12 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			// }
 		}
 
+		if (evt.getPropertyName().equals(ConnectorGraphicalRepresentation.CONNECTOR.getName())
+				|| evt.getPropertyName().equals(ConnectorGraphicalRepresentation.CONNECTOR_TYPE.getName())) {
+			// Connector Specification has changed
+			fireConnectorSpecificationChanged();
+		}
+
 		/*if (notification instanceof ConnectorModified) {
 			updateControlAreas();
 		}*/
@@ -399,6 +398,18 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			notifyAttributeChanged(ConnectorGraphicalRepresentation.FOREGROUND, null, getGraphicalRepresentation().getForeground());
 		}
 
+	}
+
+	private void fireConnectorSpecificationChanged() {
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!! Changing ConnectorSpecification");
+		if (connector != null && getConnectorSpecification() != null) {
+			System.out.println("Hop, le connecteur se fait deleter pour le ConnectorNodeImpl " + hashCode());
+			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(connector);
+			connector.delete();
+			connector = null;
+		}
+		refreshConnector(true);
+		System.out.println("Nouveau connecteur: " + getConnector());
 	}
 
 	@Override
@@ -421,7 +432,15 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 		try {
 			if (forceRefresh || (getConnector() != null && ((ConnectorImpl<?>) getConnector()).needsRefresh())) {
-				((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
+				try {
+					((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
+					System.out.println("Tout se passe bien avec le ConnectorNodeImpl " + hashCode() + " et le connector " + getConnector());
+				} catch (Exception e) {
+					e.printStackTrace();
+					ConnectorSpecification cs = getConnectorSpecification();
+					Connector c = getConnector();
+					System.out.println("OK, j'ai un pb avec le ConnectorNodeImpl " + hashCode() + " et le connector " + getConnector());
+				}
 				checkViewBounds();
 				notifyConnectorModified();
 			}
@@ -505,7 +524,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			g2.drawRect(0, 0, getNode().getViewWidth(controller.getScale()) - 1, getNode().getViewHeight(controller.getScale()) - 1);
 		}*/
 
-		if (getGraphicalRepresentation().getConnectorSpecification() != null) {
+		if (getConnectorSpecification() != null) {
 
 			if (!isValidated()) {
 				logger.warning("paint connector requested for not validated connector graphical representation: " + this);
@@ -521,6 +540,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 						+ " end=" + getEndNode());
 				return;
 			}
+
+			if (getConnector() == null) {
+				logger.warning("null connector for connector specification " + getConnectorSpecification());
+			}
+
 			getConnector().paintConnector(g);
 		}
 
@@ -528,12 +552,31 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public ForegroundStyle getForegroundStyle() {
-		return getPropertyValue(ShapeGraphicalRepresentation.FOREGROUND);
+		return getPropertyValue(ConnectorGraphicalRepresentation.FOREGROUND);
 	}
 
 	@Override
 	public void setForegroundStyle(ForegroundStyle aValue) {
-		setPropertyValue(ShapeGraphicalRepresentation.FOREGROUND, aValue);
+		setPropertyValue(ConnectorGraphicalRepresentation.FOREGROUND, aValue);
+	}
+
+	/**
+	 * Convenient method used to retrieve shape specification property value
+	 */
+	@Override
+	public ConnectorSpecification getConnectorSpecification() {
+		return getPropertyValue(ConnectorGraphicalRepresentation.CONNECTOR);
+	}
+
+	/**
+	 * Convenient method used to set shape specification property value
+	 */
+	@Override
+	public void setConnectorSpecification(ConnectorSpecification connectorSpecification) {
+		if (connectorSpecification != getConnectorSpecification()) {
+			setPropertyValue(ConnectorGraphicalRepresentation.CONNECTOR, connectorSpecification);
+			fireConnectorSpecificationChanged();
+		}
 	}
 
 }

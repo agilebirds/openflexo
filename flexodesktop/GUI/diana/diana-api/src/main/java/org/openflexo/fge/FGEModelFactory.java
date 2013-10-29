@@ -439,18 +439,16 @@ public abstract class FGEModelFactory extends ModelFactory {
 		}
 	}
 
-	public ConnectorSpecification makeConnector(ConnectorType type, ConnectorGraphicalRepresentation aGraphicalRepresentation) {
+	public ConnectorSpecification makeConnector(ConnectorType type) {
 
 		if (type == ConnectorType.LINE) {
-			return makeLineConnector(aGraphicalRepresentation);
+			return makeLineConnector();
 		} else if (type == ConnectorType.RECT_POLYLIN) {
-			return makeRectPolylinConnector(aGraphicalRepresentation);
+			return makeRectPolylinConnector();
 		} else if (type == ConnectorType.CURVE) {
-			return makeCurveConnector(aGraphicalRepresentation);
+			return makeCurveConnector();
 		} else if (type == ConnectorType.CURVED_POLYLIN) {
-			return makeCurvedPolylinConnector(aGraphicalRepresentation);
-		} else if (type == ConnectorType.CUSTOM) {
-			return null;
+			return makeCurvedPolylinConnector();
 		}
 		logger.warning("Unexpected type: " + type);
 		return null;
@@ -463,10 +461,10 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created LineConnectorSpecification
 	 */
-	public LineConnectorSpecification makeLineConnector(ConnectorGraphicalRepresentation aGR) {
+	public LineConnectorSpecification makeLineConnector() {
 		LineConnectorSpecification returned = newInstance(LineConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnectorSpecification(returned);
+		// aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -477,10 +475,10 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created CurveConnectorSpecification
 	 */
-	public CurveConnectorSpecification makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
+	public CurveConnectorSpecification makeCurveConnector() {
 		CurveConnectorSpecification returned = newInstance(CurveConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnectorSpecification(returned);
+		// aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -491,10 +489,10 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created RectPolylinConnectorSpecification
 	 */
-	public RectPolylinConnectorSpecification makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
+	public RectPolylinConnectorSpecification makeRectPolylinConnector() {
 		RectPolylinConnectorSpecification returned = newInstance(RectPolylinConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnectorSpecification(returned);
+		// aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -505,10 +503,10 @@ public abstract class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created CurvedPolylinConnectorSpecification
 	 */
-	public CurvedPolylinConnectorSpecification makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
+	public CurvedPolylinConnectorSpecification makeCurvedPolylinConnector() {
 		CurvedPolylinConnectorSpecification returned = newInstance(CurvedPolylinConnectorSpecification.class);
 		returned.setFactory(this);
-		aGR.setConnectorSpecification(returned);
+		// aGR.setConnectorSpecification(returned);
 		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}

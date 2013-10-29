@@ -298,6 +298,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 		super.propertyChange(evt);
 
+		logger.info("Received for " + getDrawable() + " in ShapeNodeImpl: " + evt.getPropertyName() + " evt=" + evt);
+
 		if (evt.getSource() == getGraphicalRepresentation()) {
 			// Those notifications are forwarded by my graphical representation
 
@@ -332,8 +334,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				notifyObjectResized();
 			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.SHAPE.getName()
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.SHAPE_TYPE.getName()) {
-				getShape().updateShape();
-				notifyShapeChanged();
+				fireShapeSpecificationChanged();
 			}
 
 			/*if (notif instanceof BindingChanged) {
@@ -370,6 +371,11 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		if (evt.getSource() instanceof ShadowStyle) {
 			notifyAttributeChanged(ShapeGraphicalRepresentation.SHADOW_STYLE, null, getGraphicalRepresentation().getShadowStyle());
 		}
+	}
+
+	private void fireShapeSpecificationChanged() {
+		getShape().updateShape();
+		notifyShapeChanged();
 	}
 
 	@Override
@@ -465,6 +471,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getX() {
+		if (getPropertyValue(ShapeGraphicalRepresentation.X) == null) {
+			System.out.println("Ca chie grave la");
+		}
 		return getPropertyValue(ShapeGraphicalRepresentation.X);
 	}
 
@@ -1480,7 +1489,10 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	 */
 	@Override
 	public void setShapeSpecification(ShapeSpecification shapeSpecification) {
-		setPropertyValue(ShapeGraphicalRepresentation.SHAPE, shapeSpecification);
+		if (shapeSpecification != getShapeSpecification()) {
+			setPropertyValue(ShapeGraphicalRepresentation.SHAPE, shapeSpecification);
+			fireShapeSpecificationChanged();
+		}
 	}
 
 }

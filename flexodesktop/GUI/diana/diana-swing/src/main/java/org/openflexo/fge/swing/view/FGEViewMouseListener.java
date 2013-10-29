@@ -340,6 +340,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+
 		if (view.isDeleted()) {
 			return;
 		}
@@ -349,6 +350,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (focusedObject == null) {
 			focusedObject = node.getDrawing().getRoot();
 		}
+
 		editable &= !focusedObject.getGraphicalRepresentation().getIsReadOnly();
 
 		if (editable && getFocusRetriever() != null) {

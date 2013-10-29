@@ -355,9 +355,7 @@ public abstract class RectPolylinConnectorSpecificationImpl extends ConnectorSpe
 
 	@Override
 	public RectPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {
-		RectPolylinConnector returned = new RectPolylinConnector(connectorNode);
-		getPropertyChangeSupport().addPropertyChangeListener(returned);
-		return returned;
+		return new RectPolylinConnector(connectorNode);
 	}
 
 	@Override

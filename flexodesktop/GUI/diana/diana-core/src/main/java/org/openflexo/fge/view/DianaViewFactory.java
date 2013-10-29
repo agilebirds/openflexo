@@ -25,6 +25,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseControlContext;
@@ -35,6 +36,7 @@ import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.PaletteController;
 import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.view.widget.ConnectorPreviewPanel;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
@@ -105,6 +107,8 @@ public interface DianaViewFactory<F extends DianaViewFactory<F, C>, C> {
 	public FIBShapeSelector<? extends C> makeFIBShapeSelector(ShapeSpecificationFactory shapeFactory);
 
 	public ShapePreviewPanel<? extends C> makeShapePreviewPanel(ShapeSpecification shapeSpecification);
+
+	public ConnectorPreviewPanel<? extends C> makeConnectorPreviewPanel(ConnectorSpecification shapeSpecification);
 
 	public DNDInfo makeDNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DianaInteractiveViewer<?, ?, ?> controller,
 			final MouseControlContext initialContext);

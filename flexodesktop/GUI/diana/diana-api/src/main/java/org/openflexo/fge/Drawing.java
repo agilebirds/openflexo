@@ -650,8 +650,6 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 
 		public ShapeNode<?> getEndNode();
 
-		public ConnectorSpecification getConnectorSpecification();
-
 		public Connector<?> getConnector();
 
 		public void notifyConnectorModified();
@@ -683,6 +681,9 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 
 		public void setForegroundStyle(ForegroundStyle aValue);
 
+		public ConnectorSpecification getConnectorSpecification();
+
+		public void setConnectorSpecification(ConnectorSpecification connectorSpecification);
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {

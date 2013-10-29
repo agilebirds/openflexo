@@ -28,9 +28,7 @@ public abstract class CurvedPolylinConnectorSpecificationImpl extends ConnectorS
 
 	@Override
 	public CurvedPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {
-		CurvedPolylinConnector returned = new CurvedPolylinConnector(connectorNode);
-		getPropertyChangeSupport().addPropertyChangeListener(returned);
-		return returned;
+		return new CurvedPolylinConnector(connectorNode);
 	}
 
 }

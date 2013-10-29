@@ -38,6 +38,7 @@ import org.openflexo.fge.control.notifications.ToolChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
+import org.openflexo.fge.control.tools.InspectedConnectorSpecification;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
 import org.openflexo.fge.control.tools.InspectedShadowStyle;
 import org.openflexo.fge.control.tools.InspectedShapeSpecification;
@@ -72,16 +73,12 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private DrawShapeToolController<?, ?> drawShapeToolController;
 	private DrawShapeAction drawShapeAction;
 
-	// private ForegroundStyle currentForegroundStyle;
 	private InspectedForegroundStyle inspectedForegroundStyle;
-	// private BackgroundStyle currentBackgroundStyle;
 	private InspectedBackgroundStyle inspectedBackgroundStyle;
-	// private TextStyle currentTextStyle;
 	private InspectedTextStyle inspectedTextStyle;
-	// private ShadowStyle currentShadowStyle;
 	private InspectedShadowStyle inspectedShadowStyle;
-	// private ShapeSpecification currentShape;
 	private InspectedShapeSpecification inspectedShapeSpecification;
+	private InspectedConnectorSpecification inspectedConnectorSpecification;
 
 	/**
 	 * The clipboard beeing managed by this editor
@@ -102,19 +99,13 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	public DianaInteractiveEditor(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		super(aDrawing, factory, dianaFactory, toolFactory, true, true, true, true, true);
-		// currentForegroundStyle = factory.makeDefaultForegroundStyle();
 		inspectedForegroundStyle = new InspectedForegroundStyle(this);
 		inspectedBackgroundStyle = new InspectedBackgroundStyle(this);
-		// currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		// currentTextStyle = factory.makeDefaultTextStyle();
 		inspectedTextStyle = new InspectedTextStyle(this);
-		// currentShadowStyle = factory.makeDefaultShadowStyle();
 		inspectedShadowStyle = new InspectedShadowStyle(this);
-		// currentShape = factory.makeShape(ShapeType.RECTANGLE);
 		inspectedShapeSpecification = new InspectedShapeSpecification(this);
+		inspectedConnectorSpecification = new InspectedConnectorSpecification(this);
 		setCurrentTool(EditorTool.SelectionTool);
-		// palettes = new Vector<DrawingPalette>();
-		// toolbox = new EditorToolbox(this);
 	}
 
 	public void delete() {
@@ -137,6 +128,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedShadowStyle.fireSelectionUpdated();
 		inspectedBackgroundStyle.fireSelectionUpdated();
 		inspectedShapeSpecification.fireSelectionUpdated();
+		inspectedConnectorSpecification.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -178,33 +170,9 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		return inspectedForegroundStyle;
 	}
 
-	/*public ForegroundStyle getCurrentForegroundStyle() {
-		return currentForegroundStyle;
-	}
-
-	public void setCurrentForegroundStyle(ForegroundStyle currentForegroundStyle) {
-		this.currentForegroundStyle = currentForegroundStyle;
-	}*/
-
 	public InspectedBackgroundStyle getInspectedBackgroundStyle() {
 		return inspectedBackgroundStyle;
 	}
-
-	/*public BackgroundStyle getCurrentBackgroundStyle() {
-		return currentBackgroundStyle;
-	}
-
-	public void setCurrentBackgroundStyle(BackgroundStyle currentBackgroundStyle) {
-		this.currentBackgroundStyle = currentBackgroundStyle;
-	}*/
-
-	/*public TextStyle getCurrentTextStyle() {
-		return currentTextStyle;
-	}
-
-	public void setCurrentTextStyle(TextStyle currentTextStyle) {
-		this.currentTextStyle = currentTextStyle;
-	}*/
 
 	public InspectedTextStyle getInspectedTextStyle() {
 		return inspectedTextStyle;
@@ -214,26 +182,13 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		return inspectedShadowStyle;
 	}
 
-	/*public ShadowStyle getCurrentShadowStyle() {
-		return currentShadowStyle;
-	}
-
-	public void setCurrentShadowStyle(ShadowStyle currentShadowStyle) {
-		this.currentShadowStyle = currentShadowStyle;
-	}*/
-
 	public InspectedShapeSpecification getInspectedShapeSpecification() {
 		return inspectedShapeSpecification;
 	}
 
-	/*
-		public ShapeSpecification getCurrentShape() {
-			return currentShape;
-		}
-
-		public void setCurrentShape(ShapeSpecification currentShape) {
-			this.currentShape = currentShape;
-		}*/
+	public InspectedConnectorSpecification getInspectedConnectorSpecification() {
+		return inspectedConnectorSpecification;
+	}
 
 	public DrawShapeAction getDrawShapeAction() {
 		return drawShapeAction;
@@ -242,23 +197,6 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	public void setDrawShapeAction(DrawShapeAction drawShapeAction) {
 		this.drawShapeAction = drawShapeAction;
 	}
-
-	/*public Vector<DrawingPalette> getPalettes() {
-		return palettes;
-	}
-
-	public void registerPalette(DrawingPalette aPalette) {
-		logger.fine("Register palette for " + this);
-		palettes.add(aPalette);
-		aPalette.registerController(this);
-		// if (getDrawingView() != null)
-		// getDrawingView().registerPalette(aPalette);
-	}
-
-	public void unregisterPalette(DrawingPalette aPalette) {
-		logger.fine("Un-Register palette for " + this);
-		palettes.remove(aPalette);
-	}*/
 
 	public void activatePalette(DianaPalette<?, ?> aPalette) {
 		if (getDrawingView() != null) {

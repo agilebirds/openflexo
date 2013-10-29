@@ -464,6 +464,12 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+
+		if (isDeleted()) {
+			logger.warning("Received PropertyChangeEvent " + evt + " for DELETED node !!!!");
+			return;
+		}
+
 		if (temporaryIgnoredObservables.contains(evt.getSource())) {
 			// System.out.println("IGORE NOTIFICATION " + notification);
 			return;
@@ -1000,10 +1006,13 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
 			boolean wasObserving = ignoreNotificationsFrom(getGraphicalRepresentation());
+			T oldValue = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
 			getGraphicalRepresentation().setObjectForKey(value, parameter.getName());
 			if (wasObserving) {
 				observeAgain(getGraphicalRepresentation());
 			}
+			// Since GR is prevented to fire notifications, do it myself
+			getPropertyChangeSupport().firePropertyChange(parameter.getName(), oldValue, value);
 		}
 
 		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties

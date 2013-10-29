@@ -1751,11 +1751,10 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 			}
 			FGEAttributeNotification notification = requireChange(SHAPE, aShape);
 			if (notification != null) {
-				ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
+				ShapeType oldType = shape != null ? shape.getShapeType() : null;
 				this.shape = aShape;
 				// shape.rebuildControlPoints();
 				hasChanged(notification);
-				setChanged();
 				notifyObservers(new FGEAttributeNotification(SHAPE_TYPE, oldType, (aShape != null ? aShape.getShapeType() : null)));
 				// notifyShapeChanged();
 			}

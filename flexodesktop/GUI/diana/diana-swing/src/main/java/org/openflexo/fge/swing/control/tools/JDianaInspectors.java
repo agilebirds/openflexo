@@ -28,6 +28,7 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.BackgroundStyleFactory;
+import org.openflexo.fge.control.tools.ConnectorSpecificationFactory;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.swing.SwingViewFactory;
@@ -54,6 +55,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	private JInspector<TextStyle> textStyleInspector;
 	private JInspector<ShadowStyle> shadowInspector;
 	private JInspector<ShapeSpecificationFactory> shapeInspector;
+	private JInspector<ConnectorSpecificationFactory> connectorInspector;
 
 	private JFrame frame;
 
@@ -79,6 +81,9 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (shapeInspector != null) {
 			shapeInspector.setData(getInspectedShapeSpecification().getStyleFactory(), true);
 		}
+		if (connectorInspector != null) {
+			connectorInspector.setData(getInspectedConnectorSpecification().getStyleFactory(), true);
+		}
 	}
 
 	public static FileResource FOREGROUND_STYLE_FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
@@ -86,6 +91,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	public static FileResource SHADOW_STYLE_FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
 	public static FileResource BACKGROUND_STYLE_FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
 	public static FileResource SHAPE_SPECIFICATION_PANEL_FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
+	public static FileResource CONNECTOR_SPECIFICATION_PANEL_FIB_FILE = new FileResource("Fib/ConnectorSelectorPanel.fib");
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
@@ -123,12 +129,21 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 
 	public JInspector<ShapeSpecificationFactory> getShapeInspector() {
 		if (shapeInspector == null) {
-			// shapeFactory = new ShapeSpecificationFactory(getEditor().getCurrentShape());
 			shapeInspector = new JInspector<ShapeSpecificationFactory>(FIBLibrary.instance().retrieveFIBComponent(
 					SHAPE_SPECIFICATION_PANEL_FIB_FILE), (getInspectedShapeSpecification() != null ? getInspectedShapeSpecification()
 					.getStyleFactory() : null), frame, "Shape");
 		}
 		return shapeInspector;
+	}
+
+	public JInspector<ConnectorSpecificationFactory> getConnectorInspector() {
+		if (connectorInspector == null) {
+			connectorInspector = new JInspector<ConnectorSpecificationFactory>(FIBLibrary.instance().retrieveFIBComponent(
+					CONNECTOR_SPECIFICATION_PANEL_FIB_FILE),
+					(getInspectedConnectorSpecification() != null ? getInspectedConnectorSpecification().getStyleFactory() : null), frame,
+					"Connector");
+		}
+		return connectorInspector;
 	}
 
 	@SuppressWarnings("serial")

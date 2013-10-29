@@ -20,6 +20,7 @@
  */
 package org.openflexo.fge.connectors;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -30,7 +31,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public interface Connector<CS extends ConnectorSpecification> {
+public interface Connector<CS extends ConnectorSpecification> extends PropertyChangeListener {
 
 	@SuppressWarnings("unchecked")
 	public abstract CS getConnectorSpecification();

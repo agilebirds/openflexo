@@ -171,7 +171,8 @@ public class DiagramEditorApplication {
 		inspectors.getTextStyleInspector().setLocation(1000, 300);
 		inspectors.getShadowStyleInspector().setLocation(1000, 400);
 		inspectors.getBackgroundStyleInspector().setLocation(1000, 500);
-		// inspectors.getShapeInspector().setVisible(true);
+		inspectors.getShapeInspector().setLocation(1000, 600);
+		inspectors.getConnectorInspector().setLocation(1000, 700);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(toolSelector.getComponent());
@@ -365,6 +366,8 @@ public class DiagramEditorApplication {
 				inspectors.getTextStyleInspector());
 		WindowMenuItem shapeInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shape"),
 				inspectors.getShapeInspector());
+		WindowMenuItem connectorInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "connector"),
+				inspectors.getConnectorInspector());
 		WindowMenuItem shadowInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shadow"),
 				inspectors.getShadowStyleInspector());
 
@@ -374,6 +377,7 @@ public class DiagramEditorApplication {
 		viewMenu.add(backgroundInspectorItem);
 		viewMenu.add(textInspectorItem);
 		viewMenu.add(shapeInspectorItem);
+		viewMenu.add(connectorInspectorItem);
 		viewMenu.add(shadowInspectorItem);
 		viewMenu.addSeparator();
 		viewMenu.add(paletteItem);

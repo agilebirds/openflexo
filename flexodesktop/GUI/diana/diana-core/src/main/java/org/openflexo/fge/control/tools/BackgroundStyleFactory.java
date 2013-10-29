@@ -23,7 +23,7 @@ import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 
 /**
- * Convenient class used to manipulate BackgroundStyle
+ * Convenient class used to manipulate BackgroundStyle instances over BackgroundStyle class hierarchy
  * 
  * @author sylvain
  * 

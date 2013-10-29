@@ -479,24 +479,15 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	 */
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 
-		System.out.println("updateGraphicalObjectsHierarchy for " + dtn);
+		logger.fine("updateGraphicalObjectsHierarchy for " + dtn);
 
 		if (dtn.isInvalidated()) {
 			// System.out.println("Updating " + dtn);
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
-			// List<DrawingTreeNode<?, ?>> nodesToRemove;
-			// if (dtn instanceof ContainerNode) {
-			// nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(((ContainerNode<?, ?>) dtn).getChildNodes());
 
 			List<DrawingTreeNode<?, ?>> createdNodes = new ArrayList<DrawingTreeNode<?, ?>>();
 			List<DrawingTreeNode<?, ?>> deletedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
 			List<DrawingTreeNode<?, ?>> updatedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
-
-			// boolean wasUpdatingObjectHierarchy = isUpdatingObjectHierarchy;
-
-			/*if (!wasUpdatingObjectHierarchy) {
-				isUpdatingObjectHierarchy = true;
-			}*/
 
 			if (dtn instanceof ContainerNode) {
 				deletedNodes.addAll(((ContainerNode<?, ?>) dtn).getChildNodes());
@@ -522,37 +513,30 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 				}
 			}
 
-			System.out.println("OK, j'ai fini de tout bien regarder, il me reste " + deletedNodes.size() + " nodes a detruire");
+			// Now the deleted nodes are relevant, delete them
+
 			for (DrawingTreeNode<?, ?> nodeToRemove : deletedNodes) {
 				deleteNode(nodeToRemove);
 			}
 			for (DrawingTreeNode<?, ?> createdNode : createdNodes) {
 				updateGraphicalObjectsHierarchy(createdNode);
-				// nodesToRemove.remove(updatedNode);
 			}
 			for (DrawingTreeNode<?, ?> updatedNode : updatedNodes) {
 				updateGraphicalObjectsHierarchy(updatedNode);
-				// nodesToRemove.remove(updatedNode);
 			}
-			// } else {
-			// nodesToRemove = Collections.emptyList();
-			// }
 
 			// Try now to handle pending connectors
 			for (PendingConnector<?> pendingConnector : new ArrayList<PendingConnector<?>>(pendingConnectors)) {
 				if (pendingConnector.tryToResolve(this)) {
-					System.out.println("Resolved " + pendingConnector);
+					// System.out.println("Resolved " + pendingConnector);
 					pendingConnectors.remove(pendingConnector);
 				} else {
-					System.out.println("I cannot resolve " + pendingConnector);
+					// System.out.println("I cannot resolve " + pendingConnector);
 				}
 			}
 
 			((DrawingTreeNodeImpl<?, ?>) dtn).validate();
 
-			/*if (!wasUpdatingObjectHierarchy) {
-				isUpdatingObjectHierarchy = false;
-			}*/
 		} else {
 			if (dtn instanceof ContainerNode) {
 				for (DrawingTreeNode<?, ?> child : ((ContainerNode<?, ?>) dtn).getChildNodes()) {
@@ -561,19 +545,6 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 			}
 		}
 	}
-
-	/*public <O> void updateDrawable(O aDrawable) {
-		DrawingTreeNode<?> alreadyExistingNode = _hashMap.get(aDrawable);
-		if (alreadyExistingNode == null) {
-			logger.warning("Cannot find DrawingTreeNode for " + aDrawable);
-			return;
-		}
-		if (alreadyExistingNode.parentNode != null) {
-			Object parentDrawable = alreadyExistingNode.parentNode.drawable;
-			removeDrawable(aDrawable, parentDrawable);
-			addDrawable(aDrawable, parentDrawable);
-		}
-	}*/
 
 	private <O> boolean deleteNode(DrawingTreeNode<?, ?> node) {
 		ContainerNode<?, ?> parentNode = node.getParentNode();
@@ -618,40 +589,6 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		// }
 		return returned;
 
-		/*if (parentNode.childs.contains(aDrawable)) {
-			DrawingTreeNode<?> alreadyExistingNode = _hashMap.get(aDrawable);
-			if (alreadyExistingNode == null) {
-				logger.warning("Cannot find DrawingTreeNode for " + aDrawable);
-				return;
-			}
-			if (parentNode.nodesToRemove == null) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("parentNode.nodesToRemove == null");
-					logger.fine("Adding drawable " + aDrawable + " under " + aParentDrawable);
-				}
-			}
-			parentNode.nodesToRemove.remove(alreadyExistingNode);
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("No need to insert " + aDrawable + " under " + aParentDrawable + " as it is already done");
-			}
-			return;
-		} else {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("add drawable " + aDrawable + " under " + aParentDrawable);
-			}
-			new DrawingTreeNode<O>(aDrawable, aParentDrawable);
-			if (getGraphicalRepresentation(aDrawable) == null) {
-				logger.warning("Could not find graphical representation for " + aDrawable);
-			} else {
-				if (isUpdatingObjectHierarchy) {
-					graphicalRepresentationToNotifyAdding.add(getGraphicalRepresentation(aDrawable));
-				} else {
-					// Do it now
-					getGraphicalRepresentation(aDrawable).setValidated(true);
-					getGraphicalRepresentation(aParentDrawable).notifyDrawableAdded(getGraphicalRepresentation(aDrawable));
-				}
-			}
-		}*/
 	}
 
 	@Override
@@ -720,166 +657,10 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		return returned;
 	}
 
-	/*public <O> void removeDrawable(O aDrawable, Object aParentDrawable) {
-		if (aParentDrawable == null) {
-			logger.warning("Cannot unregister drawable above null parent");
-			return;
-		}
-		DrawingTreeNode<?> parentNode = _hashMap.get(aParentDrawable);
-		if (parentNode == null) {
-			logger.warning("Cannot find DrawingTreeNode for " + aParentDrawable);
-			return;
-		}
-		if (!parentNode.childs.contains(aDrawable)) {
-			logger.warning("Cannot remove " + aDrawable + " under " + aParentDrawable + " as it is not registered");
-			return;
-		} else {
-			DrawingTreeNode<?> nodeToRemove = _hashMap.get(aDrawable);
-			if (nodeToRemove == null) {
-				logger.warning("Cannot find DrawingTreeNode for " + nodeToRemove);
-				return;
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("remove drawable " + aDrawable + " under " + aParentDrawable);
-			}
-			GraphicalRepresentation parentNode = getGraphicalRepresentation(aParentDrawable);
-			GraphicalRepresentation removedGR = getGraphicalRepresentation(aDrawable);
-			parentNode.removeChild(nodeToRemove);
-			parentNode.notifyDrawableRemoved(removedGR);
-			removedGR.delete();
-		}
-	}*/
-
-	/*protected void beginUpdateObjectHierarchy() {
-
-		// System.out.println("*************** Hop, DEBUT pour " + this);
-
-		nodesToUpdate = new Vector<DrawingTreeNode<?>>();
-		Enumeration<DrawingTreeNode<?>> allNodes = getAllSortedNodes();
-		while (allNodes.hasMoreElements()) {
-			DrawingTreeNode<?> next = allNodes.nextElement();
-			if (next.getGraphicalRepresentation() != null) {
-				// logger.info("What about "+next.getClass().getSimpleName());
-				next.getGraphicalRepresentation().notifyObjectHierarchyWillBeUpdated();
-			}
-			nodesToUpdate.add(next);
-		}
-		isUpdatingObjectHierarchy = true;
-
-		for (DrawingTreeNode<?> n : nodesToUpdate) {
-			if (n.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
-				ConnectorGraphicalRepresentation connector = (ConnectorGraphicalRepresentation) n.getGraphicalRepresentation();
-				if (!connector.isConnectorConsistent()) {
-					n.invalidate();
-					continue;
-				}
-				DrawingTreeNode<?> startTreeNode = _hashMap.get(connector.getStartObject().getDrawable());
-				DrawingTreeNode<?> endTreeNode = _hashMap.get(connector.getEndObject().getDrawable());
-				if (startTreeNode != null && startTreeNode.isInvalidated) {
-					// System.out.println("Invalidate "+n.graphicalRepresentation.getDrawable()+" because "+startTreeNode.graphicalRepresentation.getDrawable()+" is invalidated");
-					n.invalidate();
-				}
-				if (endTreeNode != null && endTreeNode.isInvalidated) {
-					// System.out.println("Invalidate "+n.graphicalRepresentation.getDrawable()+" because "+endTreeNode.graphicalRepresentation.getDrawable()+" is invalidated");
-					n.invalidate();
-				}
-			}
-		}
-
-		for (DrawingTreeNode<?> n : nodesToUpdate) {
-			n.beginUpdateObjectHierarchy();
-		}
-		graphicalRepresentationToNotifyAdding = new Vector<GraphicalRepresentation>();
-	}*/
-
-	/*protected void endUpdateObjectHierarchy() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Called endUpdateObjectHierarchy()");
-		}
-
-		// First validate all shape graphical representations
-		Enumeration<GraphicalRepresentation> allGr = getAllSortedGraphicalRepresentations();
-		while (allGr.hasMoreElements()) {
-			GraphicalRepresentation next = allGr.nextElement();
-			if (next instanceof ShapeGraphicalRepresentation) {
-				next.setValidated(true);
-			}
-		}
-
-		// First validate all connector graphical representations
-		allGr = getAllSortedGraphicalRepresentations();
-		while (allGr.hasMoreElements()) {
-			GraphicalRepresentation next = allGr.nextElement();
-			if (next instanceof ConnectorGraphicalRepresentation) {
-				next.setValidated(true);
-			}
-		}
-
-		for (DrawingTreeNode<?> n : nodesToUpdate) {
-			n.endUpdateObjectHierarchy();
-		}
-		for (GraphicalRepresentation gr : graphicalRepresentationToNotifyAdding) {
-			if (gr.getContainerGraphicalRepresentation() != null) {
-				gr.getContainerGraphicalRepresentation().notifyDrawableAdded(gr);
-			} else {
-				logger.warning("null ContainerGraphicalRepresentation for " + gr);
-			}
-		}
-		graphicalRepresentationToNotifyAdding.clear();
-		isUpdatingObjectHierarchy = false;
-
-		// logger.info("**************************** endUpdateObjectHierarchy()");
-		allGr = getAllSortedGraphicalRepresentations();
-		while (allGr.hasMoreElements()) {
-			GraphicalRepresentation next = allGr.nextElement();
-			if (next != null) {
-				// logger.info("> notifyObjectHierarchyHasBeenUpdated() for "+next);
-				next.notifyObjectHierarchyHasBeenUpdated();
-			}
-		}
-
-		// System.out.println("*************** Hop, FIN pour " + this);
-
-		// printGraphicalObjectHierarchy();
-	}*/
-
-	/*@Override
-	public List<?> getContainedObjects(Object aDrawable) {
-		DrawingTreeNode<?> treeNode = _hashMap.get(aDrawable);
-		// logger.info("getContainedObjects() for "+aDrawable+" > "+ _hashMap.get(aDrawable)+" childs="+treeNode.childs);
-		if (treeNode != null) {
-			return new Vector<Object>(treeNode.childs);
-		}
-		return null;
-	}*/
-
-	/*@Override
-	public Object getContainer(Object aDrawable) {
-		DrawingTreeNode<?> treeNode = _hashMap.get(aDrawable);
-		if (treeNode != null && treeNode.parentNode != null) {
-			return treeNode.parentNode.drawable;
-		}
-		return null;
-	}*/
-
 	@Override
 	public M getModel() {
 		return model;
 	}
-
-	/*@Override
-	public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
-		if (aDrawable == getModel()) {
-			return getDrawingGraphicalRepresentation();
-		}
-		DrawingTreeNode<O> treeNode = (DrawingTreeNode<O>) _hashMap.get(aDrawable);
-		if (treeNode != null) {
-			return treeNode.getGraphicalRepresentation();
-		}
-		return null;
-	}*/
-
-	// public abstract <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable);
 
 	@Override
 	public String toString() {
@@ -898,26 +679,9 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 				}
 			}
 
-			/*for (Entry<Object, DrawingTreeNode<?>> e : new ArrayList<Entry<Object, DrawingTreeNode<?>>>(_hashMap.entrySet())) {
-				DrawingTreeNode<?> dtn = e.getValue();
-				if (dtn != null) {
-					if (dtn.graphicalRepresentation != null) {
-						dtn.graphicalRepresentation.delete();
-					} else {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("No GR for " + e.getKey());
-						}
-					}
-					dtn.delete();
-				}
-			}
-			if (getDrawingGraphicalRepresentation() != null) {
-				getDrawingGraphicalRepresentation().delete();
-			}*/
 			nodes.clear();
 		}
 		model = null;
-		// _hashMap = null;
 	}
 
 	/**

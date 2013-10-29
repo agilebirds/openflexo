@@ -79,9 +79,7 @@ public abstract class LineConnectorSpecificationImpl extends ConnectorSpecificat
 
 	@Override
 	public LineConnector makeConnector(ConnectorNode<?> connectorNode) {
-		LineConnector returned = new LineConnector(connectorNode);
-		getPropertyChangeSupport().addPropertyChangeListener(returned);
-		return returned;
+		return new LineConnector(connectorNode);
 	}
 
 }

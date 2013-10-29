@@ -56,6 +56,7 @@ import org.openflexo.fge.notifications.ObjectMove;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
+import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
@@ -350,7 +351,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 				}
 			});
 		} else {
-			// logger.info("Received: "+notification);
+			logger.info("Received for " + getNode().getDrawable() + " in JShapeView: " + evt.getPropertyName() + " evt=" + evt);
 
 			if (evt.getPropertyName().equals(ShapeGraphicalRepresentation.BACKGROUND_STYLE_TYPE_KEY)) {
 				System.out.println("Received BACKGROUND_STYLE changed !");
@@ -395,6 +396,10 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 					getPaintManager().repaint(getParentView());
 				}
 			} else if (evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
+				getPaintManager().invalidate(shapeNode);
+				getPaintManager().repaint(this);
+			} else if (evt.getPropertyName().equals(ShapeChanged.EVENT_NAME)) {
+				System.out.println("Hop, on redessine la shape " + getNode().getFGEShape());
 				getPaintManager().invalidate(shapeNode);
 				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(GraphicalRepresentation.LAYER.getName())) {
