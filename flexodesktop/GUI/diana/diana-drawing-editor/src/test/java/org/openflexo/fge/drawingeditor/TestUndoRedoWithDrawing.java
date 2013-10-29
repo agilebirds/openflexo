@@ -94,7 +94,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		assertFalse(factory.getUndoManager().isBeeingRecording());
 		System.out.println("PERFORMED: " + addFirstShape.getPresentationName());
 		System.out.println("edits nb=" + addFirstShape.getEdits().size());
-		assertEquals(356, addFirstShape.getEdits().size());
+		assertEquals(355, addFirstShape.getEdits().size());
 
 		addSecondShape = factory.getUndoManager().startRecording("Create second shape");
 		Shape shape2 = factory.makeNewShape(ShapeType.RECTANGLE, new FGEPoint(200, 100), diagram);
@@ -105,7 +105,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		assertFalse(factory.getUndoManager().isBeeingRecording());
 		System.out.println("PERFORMED: " + addSecondShape.getPresentationName());
 		System.out.println("edits nb=" + addSecondShape.getEdits().size());
-		assertEquals(356, addSecondShape.getEdits().size());
+		assertEquals(355, addSecondShape.getEdits().size());
 
 		addConnector = factory.getUndoManager().startRecording("Add connector");
 		Connector connector1 = factory.makeNewConnector(shape1, shape2, diagram);

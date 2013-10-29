@@ -293,13 +293,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_GETTER)) {
 			return internallyInvokeGetter(getModelEntity().getModelProperty((String) args[0]));
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_SETTER)) {
-			internallyInvokeSetter(getModelEntity().getModelProperty((String) args[0]), args[1]);
+			internallyInvokeSetter(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_ADDER)) {
-			internallyInvokeAdder(getModelEntity().getModelProperty((String) args[0]), args[1]);
+			internallyInvokeAdder(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER)) {
-			internallyInvokeRemover(getModelEntity().getModelProperty((String) args[0]), args[1]);
+			internallyInvokeRemover(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
 			internallyInvokeFinder(finder, args);
@@ -309,18 +309,18 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeGetter(e.getModelProperty((String) args[0]));
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_SETTER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
-			internallyInvokeSetter(e.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeSetter(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_ADDER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
-			internallyInvokeAdder(e.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeAdder(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
-			internallyInvokeRemover(e.getModelProperty((String) args[0]), args[1]);
+			internallyInvokeRemover(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER_ENTITY)) {
-			return internallyInvokeDeleter();
+			return internallyInvokeDeleter(false);
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER_ENTITY)) {
 			Class<?> class1 = (Class<?>) args[2];
 			ModelEntity<? super I> e = getModelEntityFromArg(class1);
@@ -366,15 +366,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
 			return DELETED;
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
-			return internallyInvokeDeleter();
+			return internallyInvokeDeleter(false);
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT)) {
-			return internallyInvokeDeleter();
+			return internallyInvokeDeleter(true);
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_UNDELETER)) {
-			return internallyInvokeUndeleter();
+			return internallyInvokeUndeleter(false);
 		} else if (methodIsEquivalentTo(method, UNDELETE_OBJECT)) {
-			return internallyInvokeUndeleter();
+			return internallyInvokeUndeleter(true);
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT_WITH_CONTEXT)) {
-			return internallyInvokeDeleter(args);
+			return internallyInvokeDeleter(true, args);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		} else if (methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
@@ -414,13 +414,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			if (methodIsEquivalentTo(method, property.getGetterMethod())) {
 				return internallyInvokeGetter(property);
 			} else if (methodIsEquivalentTo(method, property.getSetterMethod())) {
-				internallyInvokeSetter(property, args[0]);
+				internallyInvokeSetter(property, args[0], true);
 				return null;
 			} else if (methodIsEquivalentTo(method, property.getAdderMethod())) {
-				internallyInvokeAdder(property, args[0]);
+				internallyInvokeAdder(property, args[0], true);
 				return null;
 			} else if (methodIsEquivalentTo(method, property.getRemoverMethod())) {
-				internallyInvokeRemover(property, args[0]);
+				internallyInvokeRemover(property, args[0], true);
 				return null;
 			}
 
@@ -451,7 +451,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			for (int i = 0; i < parameters.size(); i++) {
 				String parameter = parameters.get(i);
 				if (parameter != null) {
-					internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i]);
+					internallyInvokeSetter(getModelEntity().getModelProperty(parameter), args[i], true);
 				}
 			}
 		} finally {
@@ -482,17 +482,17 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeSetter(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
 		ModelProperty<? super I> property = getModelEntity().getModelProperty(propertyIdentifier);
-		internallyInvokeSetter(property, args[0]);
+		internallyInvokeSetter(property, args[0], true);
 	}
 
 	private void internallyInvokeAdder(String propertyIdentifier, Object[] args) throws ModelDefinitionException {
 		ModelProperty<? super I> property = getModelEntity().getModelProperty(propertyIdentifier);
-		internallyInvokeAdder(property, args[0]);
+		internallyInvokeAdder(property, args[0], true);
 	}
 
 	private void internallyInvokerRemover(String id, Object[] args) throws ModelDefinitionException {
 		ModelProperty<? super I> property = getModelEntity().getModelProperty(id);
-		internallyInvokeRemover(property, args[0]);
+		internallyInvokeRemover(property, args[0], true);
 	}
 
 	/**
@@ -507,13 +507,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	 * @see Embedded#deletionConditions()
 	 * @see ComplexEmbedded#deletionConditions()
 	 */
-	private boolean internallyInvokeDeleter(Object... context) throws ModelDefinitionException {
+	private boolean internallyInvokeDeleter(boolean trackAtomicEdit, Object... context) throws ModelDefinitionException {
 
 		if (deleted || deleting) {
 			return false;
 		}
 
-		if (getModelFactory().getUndoManager() != null) {
+		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			getModelFactory().getUndoManager().addEdit(new DeleteCommand<I>(getObject(), getModelEntity(), getModelFactory()));
 		}
 
@@ -550,7 +550,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				if (property.getSetterMethod() != null) {
 					invokeSetter(property, null);
 				} else {
-					internallyInvokeSetter(property, null);
+					internallyInvokeSetter(property, null, true);
 				}
 			}
 		}
@@ -561,13 +561,13 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		return deleted;
 	}
 
-	private boolean internallyInvokeUndeleter() throws ModelDefinitionException {
+	private boolean internallyInvokeUndeleter(boolean trackAtomicEdit) throws ModelDefinitionException {
 
 		if (!deleted || deleting) {
 			return false;
 		}
 
-		if (getModelFactory().getUndoManager() != null) {
+		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			getModelFactory().getUndoManager().addEdit(new CreateCommand<I>(getObject(), getModelEntity(), getModelFactory()));
 		}
 
@@ -585,7 +585,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				if (property.getSetterMethod() != null) {
 					invokeSetter(property, oldValues.get(property.getPropertyIdentifier()));
 				} else {
-					internallyInvokeSetter(property, oldValues.get(property.getPropertyIdentifier()));
+					internallyInvokeSetter(property, oldValues.get(property.getPropertyIdentifier()), true);
 				}
 			}
 		}
@@ -819,13 +819,14 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (property.getSetterMethod() != null) {
 			invokeSetter(property, value);
 		} else {
-			internallyInvokeSetter(property, value);
+			internallyInvokeSetter(property, value, true);
 		}
 	}
 
-	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
+			throws ModelDefinitionException {
 		Object oldValue = invokeGetter(property);
-		if (getModelFactory().getUndoManager() != null) {
+		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			getModelFactory().getUndoManager().addEdit(
 					new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, value, getModelFactory()));
 		}
@@ -983,13 +984,14 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		if (property.getAdderMethod() != null) {
 			invokeAdder(property, value);
 		} else {
-			internallyInvokeAdder(property, value);
+			internallyInvokeAdder(property, value, true);
 		}
 	}
 
-	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+	private void internallyInvokeAdder(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
+			throws ModelDefinitionException {
 		// System.out.println("Invoke ADDER "+property.getPropertyIdentifier());
-		if (getModelFactory().getUndoManager() != null) {
+		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			getModelFactory().getUndoManager()
 					.addEdit(new AddCommand<I>(getObject(), getModelEntity(), property, value, getModelFactory()));
 		}
@@ -1052,9 +1054,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		throw new UnsupportedOperationException("Adder for MAP: not implemented yet");
 	}
 
-	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value) throws ModelDefinitionException {
+	private void internallyInvokeRemover(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
+			throws ModelDefinitionException {
 		// System.out.println("Invoke REMOVER "+property.getPropertyIdentifier());
-		if (getModelFactory().getUndoManager() != null) {
+		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			getModelFactory().getUndoManager().addEdit(
 					new RemoveCommand<I>(getObject(), getModelEntity(), property, value, getModelFactory()));
 		}
@@ -1645,7 +1648,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 									clonedValue = null;
 								}
 								if (clonedValue != null) {
-									clonedObjectHandler.internallyInvokeAdder(p, clonedValue);
+									clonedObjectHandler.internallyInvokeAdder(p, clonedValue, true);
 								}
 							}
 							break;
@@ -1654,7 +1657,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 							if (referenceValue == null) {
 								referenceValue = value;
 							}
-							clonedObjectHandler.internallyInvokeAdder(p, referenceValue);
+							clonedObjectHandler.internallyInvokeAdder(p, referenceValue, true);
 							break;
 						case FACTORY:
 							// TODO Not implemented
