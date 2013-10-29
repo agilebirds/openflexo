@@ -342,6 +342,12 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 			logger.warning("Received notifications for deleted view: " + evt);
 			return;
 		}
+
+		if (getNode().isDeleted()) {
+			logger.warning("Received notifications for deleted ShapeNode " + evt);
+			return;
+		}
+
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 

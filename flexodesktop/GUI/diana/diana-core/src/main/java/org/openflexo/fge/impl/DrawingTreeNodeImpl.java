@@ -115,6 +115,8 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		hash.put(drawable, this);
 
+		propertyValues = new HashMap<GRParameter, Object>();
+
 		// parentNode.addChild(this);
 
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
@@ -932,9 +934,13 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	/**
 	 * Returns the property value for supplied parameter<br>
 	 * If a dynamic property was set, compute and return this value, according to binding declared as dynamic property value<br>
-	 * Otherwise, use the GraphicalRepresentation as a support for this value.
+	 * If many {@link DrawingTreeNode} share same {@link GraphicalRepresentation} (as indicated by {@link Drawing#getPersistenceMode()), do
+	 * not store value in GraphicalRepresentation, but store it in the {@link DrawingTreeNode} itself.<br>
+	 * This implies that this value is not persistent (not serializable) Otherwise, use the {@link GraphicalRepresentation} as a support for
+	 * this value.
 	 * 
 	 * @param parameter
+	 *            parameter which is to be set
 	 * @return
 	 */
 	@Override
@@ -984,9 +990,15 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	/**
 	 * Sets the property value for supplied parameter<br>
 	 * If a dynamic property was set, sets this value according to binding declared as dynamic property value<br>
-	 * Otherwise, use the GraphicalRepresentation as a support for this value.
+	 * If many {@link DrawingTreeNode} share same {@link GraphicalRepresentation} (as indicated by {@link Drawing#getPersistenceMode()), do
+	 * not store value in GraphicalRepresentation, but store it in the {@link DrawingTreeNode} itself.<br>
+	 * This implies that this value is not persistent (not serializable) Otherwise, use the {@link GraphicalRepresentation} as a support for
+	 * this value.
 	 * 
 	 * @param parameter
+	 *            parameter which is to be set
+	 * @param value
+	 *            value to be set
 	 * @return
 	 */
 	@Override

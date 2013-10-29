@@ -153,7 +153,6 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 				ConnectorType oldType = connector != null ? connector.getConnectorType() : null;
 				this.connector = aConnector;
 				hasChanged(notification);
-				System.out.println("On notifie " + oldType + " to " + aConnector.getConnectorType());
 				notifyObservers(new FGEAttributeNotification(CONNECTOR_TYPE, oldType, (aConnector != null ? aConnector.getConnectorType()
 						: null)));
 			}

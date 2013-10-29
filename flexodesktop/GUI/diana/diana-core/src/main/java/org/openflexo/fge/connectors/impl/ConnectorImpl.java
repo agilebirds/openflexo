@@ -2,16 +2,23 @@ package org.openflexo.fge.connectors.impl;
 
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
+import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -22,6 +29,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.shapes.Shape;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}. A {@link ConnectorImpl}
@@ -50,12 +58,22 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	private FGEPoint endShapeLocation;
 	private FGERectangle knownConnectorUsedBounds;
 
+	/**
+	 * Store temporary properties that may not be serialized
+	 */
+	private Map<GRParameter, Object> propertyValues = new HashMap<GRParameter, Object>();
+
 	public ConnectorImpl(ConnectorNode<?> connectorNode) {
 		super();
 		this.connectorNode = connectorNode;
+		propertyValues = new HashMap<GRParameter, Object>();
+
 	}
 
 	public void delete() {
+
+		System.out.println("Le connecteur se fait deleter");
+
 		if (getConnectorSpecification() != null) {
 			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
@@ -328,6 +346,112 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
+	}
+
+/**
+	 * Returns the property value for supplied parameter<br>
+	 * If many Connectors share same ConnectorSpecification (as indicated by {@link Drawing#getPersistenceMode()), do not store value in ConnectorSpecification, but store it in the Connector itself.<br>
+	 * This implies that this value is not persistent (not serializable)
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	@Override
+	public <T> T getPropertyValue(GRParameter<T> parameter) {
+
+		// Now we have to think of this:
+		// New architecture of FGE now authorizes a ConnectorSpecification to be shared by many Connectors
+		// If UniqueGraphicalRepresentations is active, use ConnectorSpecification to store graphical properties
+
+		if (getConnectorNode().getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
+			if (getConnectorSpecification() == null) {
+				return null;
+			}
+			return (T) getConnectorSpecification().objectForKey(parameter.getName());
+		}
+
+		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties
+
+		else if (getConnectorNode().getDrawing().getPersistenceMode() == PersistenceMode.SharedGraphicalRepresentations) {
+
+			T returned = (T) propertyValues.get(parameter);
+			if (returned == null) {
+				// Init default value with GR
+				returned = (T) getConnectorSpecification().objectForKey(parameter.getName());
+				if (returned != null) {
+					propertyValues.put(parameter, returned);
+				}
+			}
+
+			return returned;
+		}
+
+		else {
+			logger.warning("Not implemented: " + getConnectorNode().getDrawing().getPersistenceMode());
+			return null;
+		}
+	}
+
+/**
+	 * Sets the property value for supplied parameter<br>
+	 * If many Connectors share same ConnectorSpecification (as indicated by {@link Drawing#getPersistenceMode()), do not store value in ConnectorSpecification, but store it in the Connector itself.<br>
+	 * This implies that this value is not persistent (not serializable)
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	@Override
+	public <T> void setPropertyValue(GRParameter<T> parameter, T value) {
+
+		// Now we have to think of this:
+		// New architecture of FGE now authorizes a ConnectorSpecification to be shared by many Connectors
+		// If UniqueGraphicalRepresentations is active, use ConnectorSpecification to store graphical properties
+
+		if (getConnectorNode().getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
+			boolean wasObserving = ignoreNotificationsFrom(getConnectorSpecification());
+			// This line is really important, since it avoid GR to be notified of this set
+			// Otherwise GR forward notification to DTN whiich will delete current connector
+			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(connectorNode.getGraphicalRepresentation());
+			T oldValue = (T) getConnectorSpecification().objectForKey(parameter.getName());
+				getConnectorSpecification().setObjectForKey(value, parameter.getName());
+			if (wasObserving) {
+				observeAgain(getConnectorSpecification());
+			}
+			// At the end, let the GR observes again the CS
+			getConnectorSpecification().getPropertyChangeSupport().addPropertyChangeListener(connectorNode.getGraphicalRepresentation());
+			// Since CS is prevented to fire notifications, do it myself
+			// getPropertyChangeSupport().firePropertyChange(parameter.getName(), oldValue, value);
+		}
+
+		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties
+
+		else if (getConnectorNode().getDrawing().getPersistenceMode() == PersistenceMode.SharedGraphicalRepresentations) {
+			propertyValues.put(parameter, value);
+		}
+
+		else {
+			logger.warning("Not implemented: " + getConnectorNode().getDrawing().getPersistenceMode());
+		}
 
 	}
+
+	protected Set<HasPropertyChangeSupport> temporaryIgnoredObservables = new HashSet<HasPropertyChangeSupport>();
+
+	/**
+	 * 
+	 * @param observable
+	 * @return a flag indicating if observable was added to the list of ignored observables
+	 */
+	protected boolean ignoreNotificationsFrom(HasPropertyChangeSupport observable) {
+		if (temporaryIgnoredObservables.contains(observable)) {
+			return false;
+		}
+		temporaryIgnoredObservables.add(observable);
+		return true;
+	}
+
+	protected void observeAgain(HasPropertyChangeSupport observable) {
+		temporaryIgnoredObservables.remove(observable);
+	}
+
 }

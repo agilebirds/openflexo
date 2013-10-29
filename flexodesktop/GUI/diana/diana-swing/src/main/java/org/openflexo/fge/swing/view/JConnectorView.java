@@ -361,6 +361,11 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 			return;
 		}
 
+		if (getNode().isDeleted()) {
+			logger.warning("Received notifications for deleted ConnectorNode " + evt);
+			return;
+		}
+
 		// System.out.println("JConnectorView, received: "+aNotification);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {

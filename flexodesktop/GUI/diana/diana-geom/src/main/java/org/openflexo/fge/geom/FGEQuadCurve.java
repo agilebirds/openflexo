@@ -65,7 +65,12 @@ public class FGEQuadCurve extends Double implements FGEGeneralShape.GeneralShape
 	 */
 	public FGEQuadCurve(FGEPoint p1, FGEPoint ctrlP, FGEPoint p2) {
 		super();
-		setCurve(p1.x, p1.y, ctrlP.x, ctrlP.y, p2.x, p2.y);
+		try {
+			setCurve(p1.x, p1.y, ctrlP.x, ctrlP.y, p2.x, p2.y);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			logger.warning("Unexpected NPE");
+		}
 	}
 
 	/**

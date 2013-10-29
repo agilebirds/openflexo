@@ -77,7 +77,7 @@ public class JConnectorPreviewPanel extends JPanel implements ConnectorPreviewPa
 		// final Vector<RepresentedShape> singleton = new Vector<RepresentedShape>();
 		// singleton.add(representedShape);
 
-		drawing = new DrawingImpl<JConnectorPreviewPanel>(this, factory, PersistenceMode.UniqueGraphicalRepresentations) {
+		drawing = new DrawingImpl<JConnectorPreviewPanel>(this, factory, PersistenceMode.SharedGraphicalRepresentations) {
 			@Override
 			public void init() {
 				final DrawingGRBinding<JConnectorPreviewPanel> previewPanelBinding = bindDrawing(JConnectorPreviewPanel.class,

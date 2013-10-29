@@ -1,3 +1,4 @@
+<html>type_mismatch_on_operator_($0)<br>supplied_types_are_($1)_and_($2)<br>while_expected_types_are_($3)</html>=<html>Type mismatch op operator ($0)<br>Gegeven types zijn ($1) en ($2)<br>wanneer de verwachte ($3) zijn.</html>
 ARITHMETIC_INTEGER=[INTEGER]
 BOOLEAN=BOOLEAN
 DATE=[Datum]
@@ -8,6 +9,7 @@ STRING=[TEKST]
 background=Achtergrond
 cancel=Cancel
 close_drawing=Close drawing
+connector=connectie
 edit=Edit
 file=File
 foreground=Voorgrond
