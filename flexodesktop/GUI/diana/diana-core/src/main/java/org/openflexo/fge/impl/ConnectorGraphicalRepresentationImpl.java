@@ -191,11 +191,11 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 	public void setSelectedForeground(ForegroundStyle aForeground) {
 		FGEAttributeNotification notification = requireChange(SELECTED_FOREGROUND, aForeground, false);
 		if (notification != null) {
-			if (selectedForeground != null && focusedForeground.getPropertyChangeSupport() != null) {
+			if (selectedForeground != null && selectedForeground.getPropertyChangeSupport() != null) {
 				selectedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			selectedForeground = aForeground;
-			if (aForeground != null) {
+			if (aForeground != null && aForeground.getPropertyChangeSupport() != null) {
 				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
@@ -228,7 +228,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 				focusedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			focusedForeground = aForeground;
-			if (aForeground != null) {
+			if (aForeground != null && aForeground.getPropertyChangeSupport() != null) {
 				aForeground.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
@@ -625,11 +625,13 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 		}
 
 		if (evt.getSource() instanceof ForegroundStyle) {
-			notifyAttributeChange(FOREGROUND);
+			// notifyAttributeChange(FOREGROUND);
+			forward(evt);
 		}
 
 		if (evt.getSource() instanceof ConnectorSpecification) {
-			notifyAttributeChange(CONNECTOR);
+			// notifyAttributeChange(CONNECTOR);
+			forward(evt);
 		}
 
 		/*if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {

@@ -269,16 +269,20 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		}
 
 		if (evt.getSource() instanceof BackgroundStyle) {
-			notifyAttributeChange(BACKGROUND);
+			forward(evt);
+			// notifyAttributeChange(BACKGROUND);
 		}
 		if (evt.getSource() instanceof ForegroundStyle) {
-			notifyAttributeChange(FOREGROUND);
+			forward(evt);
+			// notifyAttributeChange(FOREGROUND);
 		}
 		if (evt.getSource() instanceof ShadowStyle) {
-			notifyAttributeChange(SHADOW_STYLE);
+			forward(evt);
+			// notifyAttributeChange(SHADOW_STYLE);
 		}
 		if (evt.getSource() instanceof ShapeSpecification) {
-			notifyAttributeChange(SHAPE);
+			forward(evt);
+			// notifyAttributeChange(SHAPE);
 		}
 	}
 

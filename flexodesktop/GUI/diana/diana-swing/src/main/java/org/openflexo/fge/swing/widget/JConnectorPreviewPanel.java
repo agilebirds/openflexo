@@ -214,7 +214,7 @@ public class JConnectorPreviewPanel extends JPanel implements ConnectorPreviewPa
 		if (connectorSpecification != null
 				&& (connectorSpecification != connectorGR.getConnectorSpecification() || !connectorSpecification.equals(connectorGR
 						.getConnectorSpecification()))) {
-			connectorGR.setConnectorSpecification((ConnectorSpecification) connectorSpecification.clone());
+			connectorGR.setConnectorSpecification(/*(ConnectorSpecification)*/connectorSpecification/*.clone()*/);
 			/*
 			 * if (shape.getShapeType() == ShapeType.CUSTOM_POLYGON) {
 			 * System.out.println("Go to edition mode");

@@ -80,6 +80,7 @@ public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 					((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
 					System.out.println("Add new connector !");
 					factory.getUndoManager().stopRecording(drawEdge);
+					((DianaDrawingEditor) controller).setSelectedObject(controller.getDrawing().getDrawingTreeNode(newConnector));
 				}
 				drawEdge = false;
 				fromShape = null;

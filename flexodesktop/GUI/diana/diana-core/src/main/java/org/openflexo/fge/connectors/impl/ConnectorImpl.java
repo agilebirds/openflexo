@@ -18,7 +18,9 @@ import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
-import org.openflexo.fge.connectors.CurveConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
+import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
+import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -85,6 +87,13 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 		endShape = null;
 		endShape = null;
 		knownConnectorUsedBounds = null;
+		isDeleted = true;
+	}
+
+	private boolean isDeleted = false;
+
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
 	@Override
@@ -413,7 +422,7 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 			// Otherwise GR forward notification to DTN whiich will delete current connector
 			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(connectorNode.getGraphicalRepresentation());
 			T oldValue = (T) getConnectorSpecification().objectForKey(parameter.getName());
-				getConnectorSpecification().setObjectForKey(value, parameter.getName());
+			getConnectorSpecification().setObjectForKey(value, parameter.getName());
 			if (wasObserving) {
 				observeAgain(getConnectorSpecification());
 			}
@@ -452,6 +461,62 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 
 	protected void observeAgain(HasPropertyChangeSupport observable) {
 		temporaryIgnoredObservables.remove(observable);
+	}
+
+	public StartSymbolType getStartSymbol() {
+		return getPropertyValue(ConnectorSpecification.START_SYMBOL);
+	}
+
+	public void setStartSymbol(StartSymbolType startSymbol) {
+		setPropertyValue(ConnectorSpecification.START_SYMBOL, startSymbol);
+	}
+
+	public EndSymbolType getEndSymbol() {
+		return getPropertyValue(ConnectorSpecification.END_SYMBOL);
+	}
+
+	public void setEndSymbol(EndSymbolType endSymbol) {
+		setPropertyValue(ConnectorSpecification.END_SYMBOL, endSymbol);
+	}
+
+	public MiddleSymbolType getMiddleSymbol() {
+		return getPropertyValue(ConnectorSpecification.MIDDLE_SYMBOL);
+	}
+
+	public void setMiddleSymbol(MiddleSymbolType middleSymbol) {
+		setPropertyValue(ConnectorSpecification.MIDDLE_SYMBOL, middleSymbol);
+	}
+
+	public double getStartSymbolSize() {
+		return getPropertyValue(ConnectorSpecification.START_SYMBOL_SIZE);
+	}
+
+	public void setStartSymbolSize(double startSymbolSize) {
+		setPropertyValue(ConnectorSpecification.START_SYMBOL_SIZE, startSymbolSize);
+	}
+
+	public double getEndSymbolSize() {
+		return getPropertyValue(ConnectorSpecification.END_SYMBOL_SIZE);
+	}
+
+	public void setEndSymbolSize(double endSymbolSize) {
+		setPropertyValue(ConnectorSpecification.END_SYMBOL_SIZE, endSymbolSize);
+	}
+
+	public double getMiddleSymbolSize() {
+		return getPropertyValue(ConnectorSpecification.MIDDLE_SYMBOL_SIZE);
+	}
+
+	public void setMiddleSymbolSize(double middleSymbolSize) {
+		setPropertyValue(ConnectorSpecification.MIDDLE_SYMBOL_SIZE, middleSymbolSize);
+	}
+
+	public double getRelativeMiddleSymbolLocation() {
+		return getPropertyValue(ConnectorSpecification.RELATIVE_MIDDLE_SYMBOL_LOCATION);
+	}
+
+	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation) {
+		setPropertyValue(ConnectorSpecification.RELATIVE_MIDDLE_SYMBOL_LOCATION, relativeMiddleSymbolLocation);
 	}
 
 }

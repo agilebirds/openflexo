@@ -432,15 +432,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		}
 		try {
 			if (forceRefresh || (getConnector() != null && ((ConnectorImpl<?>) getConnector()).needsRefresh())) {
-				try {
-					((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
-					System.out.println("Tout se passe bien avec le ConnectorNodeImpl " + hashCode() + " et le connector " + getConnector());
-				} catch (Exception e) {
-					e.printStackTrace();
-					ConnectorSpecification cs = getConnectorSpecification();
-					Connector c = getConnector();
-					System.out.println("OK, j'ai un pb avec le ConnectorNodeImpl " + hashCode() + " et le connector " + getConnector());
-				}
+				((ConnectorImpl<?>) getConnector()).refreshConnector(forceRefresh);
 				checkViewBounds();
 				notifyConnectorModified();
 			}

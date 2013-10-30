@@ -69,19 +69,27 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	}
 
 	public FGEPoint getCp1RelativeToStartObject() {
-		return getConnectorSpecification().getCp1RelativeToStartObject();
+		return getPropertyValue(LineConnectorSpecification.CP1_RELATIVE_TO_START_OBJECT);
 	}
 
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		getConnectorSpecification().setCp1RelativeToStartObject(aPoint);
+		setPropertyValue(LineConnectorSpecification.CP1_RELATIVE_TO_START_OBJECT, aPoint);
 	}
 
 	public FGEPoint getCp2RelativeToEndObject() {
-		return getConnectorSpecification().getCp2RelativeToEndObject();
+		return getPropertyValue(LineConnectorSpecification.CP2_RELATIVE_TO_END_OBJECT);
 	}
 
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		getConnectorSpecification().setCp2RelativeToEndObject(aPoint);
+		setPropertyValue(LineConnectorSpecification.CP2_RELATIVE_TO_END_OBJECT, aPoint);
+	}
+
+	public LineConnectorType getLineConnectorType() {
+		return getPropertyValue(LineConnectorSpecification.LINE_CONNECTOR_TYPE);
+	}
+
+	public void setLineConnectorType(LineConnectorType aLineConnectorType) {
+		setPropertyValue(LineConnectorSpecification.LINE_CONNECTOR_TYPE, aLineConnectorType);
 	}
 
 	private ConnectorAdjustingControlPoint makeMiddleSymbolLocationControlPoint() {
@@ -98,7 +106,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 				FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 				setPoint(pt);
 				FGESegment segment = new FGESegment(cp1.getPoint(), cp2.getPoint());
-				connectorNode.getConnectorSpecification().setRelativeMiddleSymbolLocation(segment.getRelativeLocation(pt));
+				setRelativeMiddleSymbolLocation(segment.getRelativeLocation(pt));
 
 				/*
 				 * cp1RelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint( getGraphicalRepresentation(), pt,
@@ -113,7 +121,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	}
 
 	private void updateControlPoints() {
-		if (getConnectorSpecification().getLineConnectorType() == LineConnectorType.CENTER_TO_CENTER) {
+		if (getLineConnectorType() == LineConnectorType.CENTER_TO_CENTER) {
 
 			// With this connection type, we try to draw a line joining both center
 			// We have to compute the intersection between this line and the outline
@@ -144,7 +152,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 			cp2 = new ConnectorControlPoint(connectorNode, newP2);
 
 			controlPoints.clear();
-			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 				controlPoints.add(makeMiddleSymbolLocationControlPoint());
 			}
 			controlPoints.add(cp2);
@@ -152,7 +160,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 
 		}
 
-		else if (getConnectorSpecification().getLineConnectorType() == LineConnectorType.MINIMAL_LENGTH) {
+		else if (getLineConnectorType() == LineConnectorType.MINIMAL_LENGTH) {
 
 			// First obtain the two affine transform allowing to convert from
 			// extremity objects coordinates to connector drawable
@@ -218,7 +226,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 				cp1 = new ConnectorControlPoint(connectorNode, newP1);
 				cp2 = new ConnectorControlPoint(connectorNode, newP2);
 				controlPoints.clear();
-				if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+				if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 					controlPoints.add(makeMiddleSymbolLocationControlPoint());
 				}
 				controlPoints.add(cp2);
@@ -271,7 +279,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 				controlPoints.add(cp2);
 				controlPoints.add(cp1);
 
-				if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+				if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 					controlPoints.add(makeMiddleSymbolLocationControlPoint());
 				}
 			}
@@ -281,7 +289,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 			}
 		}
 
-		else if (getConnectorSpecification().getLineConnectorType() == LineConnectorType.FUNNY) {
+		else if (getLineConnectorType() == LineConnectorType.FUNNY) {
 
 			FGEPoint newP1 = connectorNode.getEndNode().getShape()
 					.nearestOutlinePoint(FGEUtils.convertNormalizedPoint(getStartNode(), new FGEPoint(0.5, 0.5), getEndNode()));
@@ -300,18 +308,18 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 			controlPoints.add(cp2);
 			controlPoints.add(cp1);
 
-			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 				controlPoints.add(makeMiddleSymbolLocationControlPoint());
 			}
 		}
 
-		else if (getConnectorSpecification().getLineConnectorType() == LineConnectorType.ADJUSTABLE) {
+		else if (getLineConnectorType() == LineConnectorType.ADJUSTABLE) {
 
 			if (getCp1RelativeToStartObject() == null || getCp2RelativeToEndObject() == null) {
 				// In this case default location is obtained by center_to_center type
-				getConnectorSpecification().setLineConnectorType(LineConnectorType.CENTER_TO_CENTER);
+				setLineConnectorType(LineConnectorType.CENTER_TO_CENTER);
 				updateControlPoints();
-				getConnectorSpecification().setLineConnectorType(LineConnectorType.ADJUSTABLE);
+				setLineConnectorType(LineConnectorType.ADJUSTABLE);
 				setCp1RelativeToStartObject(FGEUtils.convertNormalizedPoint(connectorNode, cp1.getPoint(), getStartNode()));
 				setCp2RelativeToEndObject(FGEUtils.convertNormalizedPoint(connectorNode, cp2.getPoint(), getEndNode()));
 			}
@@ -372,7 +380,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
 					setCp2RelativeToEndObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getEndNode()));
-					if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+					if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 						if (middleSymbolLocationControlPoint != null) {
 							middleSymbolLocationControlPoint.setPoint(getMiddleSymbolLocation());
 						}
@@ -386,14 +394,14 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 			controlPoints.add(cp2);
 			controlPoints.add(cp1);
 
-			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 				controlPoints.add(makeMiddleSymbolLocationControlPoint());
 			}
 		}
 
 		else {
 
-			logger.warning("Unexpected lineConnectorType=" + getConnectorSpecification().getLineConnectorType());
+			logger.warning("Unexpected lineConnectorType=" + getLineConnectorType());
 		}
 	}
 
@@ -423,6 +431,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 
 	@Override
 	public void drawConnector(FGEConnectorGraphics g) {
+		boolean wasFirstUpdated = firstUpdated;
 		if (!firstUpdated) {
 			refreshConnector();
 		}
@@ -453,19 +462,16 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 		// System.out.println("Angle1="+Math.toDegrees(angle));
 		// System.out.println("Angle2="+Math.toDegrees(angle+Math.PI));
 
-		if (connectorNode.getConnectorSpecification().getStartSymbol() != StartSymbolType.NONE) {
-			g.drawSymbol(cp1.getPoint(), connectorNode.getConnectorSpecification().getStartSymbol(), connectorNode
-					.getConnectorSpecification().getStartSymbolSize(), angle);
+		if (getStartSymbol() != StartSymbolType.NONE) {
+			g.drawSymbol(cp1.getPoint(), getStartSymbol(), getStartSymbolSize(), angle);
 		}
 
-		if (connectorNode.getConnectorSpecification().getEndSymbol() != EndSymbolType.NONE) {
-			g.drawSymbol(cp2.getPoint(), connectorNode.getConnectorSpecification().getEndSymbol(), connectorNode
-					.getConnectorSpecification().getEndSymbolSize(), angle + Math.PI);
+		if (getEndSymbol() != EndSymbolType.NONE) {
+			g.drawSymbol(cp2.getPoint(), getEndSymbol(), getEndSymbolSize(), angle + Math.PI);
 		}
 
-		if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
-			g.drawSymbol(getMiddleSymbolLocation(), connectorNode.getConnectorSpecification().getMiddleSymbol(), connectorNode
-					.getConnectorSpecification().getMiddleSymbolSize(), angle + Math.PI);
+		if (getMiddleSymbol() != MiddleSymbolType.NONE) {
+			g.drawSymbol(getMiddleSymbolLocation(), getMiddleSymbol(), getMiddleSymbolSize(), angle + Math.PI);
 		}
 	}
 
@@ -484,8 +490,7 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 		if (cp1 == null || cp2 == null) {
 			return new FGEPoint(0, 0);
 		}
-		return new FGESegment(cp1.getPoint(), cp2.getPoint()).getScaledPoint(connectorNode.getConnectorSpecification()
-				.getRelativeMiddleSymbolLocation());
+		return new FGESegment(cp1.getPoint(), cp2.getPoint()).getScaledPoint(getRelativeMiddleSymbolLocation());
 	}
 
 	@Override
@@ -535,26 +540,6 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 			}
 		}
 
-		// if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
-		// Those notifications are forwarded by the connector specification
-		// FGENotification notif = (FGENotification) notification;
-
-		// }
-
 	}
-
-	/*@Override
-	public void update(Observable observable, Object notification) {
-		super.update(observable, notification);
-
-		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
-			// Those notifications are forwarded by the connector specification
-			FGENotification notif = (FGENotification) notification;
-
-			if (notif.getParameter() == LineConnectorSpecification.LINE_CONNECTOR_TYPE) {
-				refreshConnector(true);
-			}
-		}
-	}*/
 
 }

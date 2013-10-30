@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.impl;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -298,6 +299,10 @@ public abstract class FGEObjectImpl implements FGEObject {
 		if (!isDeleted && getPropertyChangeSupport() != null) {
 			getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 		}
+	}
+
+	public void forward(PropertyChangeEvent evt) {
+		getPropertyChangeSupport().firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 	}
 
 	@Deprecated

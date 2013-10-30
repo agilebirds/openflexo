@@ -86,6 +86,8 @@ public interface Connector<CS extends ConnectorSpecification> extends PropertyCh
 
 	public abstract void delete();
 
+	public boolean isDeleted();
+
 /**
 	 * Returns the property value for supplied parameter<br>
 	 * If many Connectors share same ConnectorSpecification (as indicated by {@link Drawing#getPersistenceMode()), do not store value in ConnectorSpecification, but store it in the Connector itself.<br>

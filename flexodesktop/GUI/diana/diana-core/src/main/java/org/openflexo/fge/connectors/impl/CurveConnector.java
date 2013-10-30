@@ -90,6 +90,14 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 		setPropertyValue(CurveConnectorSpecification.CP_POSITION, cpPosition);
 	}
 
+	public boolean getAreBoundsAdjustable() {
+		return getPropertyValue(CurveConnectorSpecification.ARE_BOUNDS_ADJUSTABLE);
+	}
+
+	public void setAreBoundsAdjustable(boolean aFlag) {
+		setPropertyValue(CurveConnectorSpecification.ARE_BOUNDS_ADJUSTABLE, aFlag);
+	}
+
 	@Override
 	public List<ControlPoint> getControlAreas() {
 		// TODO: perfs issue : do not update all the time !!!
@@ -101,11 +109,9 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 		FGEPoint newP1 = null;
 		FGEPoint newP2 = null;
 
-		if (getConnectorSpecification().getAreBoundsAdjustable()) {
+		if (getAreBoundsAdjustable()) {
 
-			System.out.println("Passe par la");
-			if (getConnectorSpecification().getCp1RelativeToStartObject() == null
-					|| getConnectorSpecification().getCp2RelativeToEndObject() == null) {
+			if (getCp1RelativeToStartObject() == null || getCp2RelativeToEndObject() == null) {
 
 				// To compute initial locations, we try to draw a line joining both center
 				// We have to compute the intersection between this line and the outline
@@ -156,8 +162,6 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
 		else {
 
-			System.out.println("Passe par ici");
-
 			// Not adjustable bounds
 
 			if (getCpPosition() == null) {
@@ -167,10 +171,6 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 			updateCPPositionIfNeeded();
 
 			FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getStartNode());
-
-			System.out.println("cpPositionSeenFromStartObject=" + cpPositionSeenFromStartObject);
-			System.out.println("getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject)="
-					+ getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject));
 
 			setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject));
 			if (getCp1RelativeToStartObject() == null) {
@@ -190,22 +190,10 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
 		}
 
-		System.out.println("newP1=" + newP1);
-		System.out.println("newP2=" + newP2);
-		if (newP1 == null) {
-			System.out.println("Quel est le pb ???");
-			FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getStartNode());
-			FGEPoint newPoint = getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject);
-			setCp1RelativeToStartObject(newPoint);
-			System.out.println("Et il me renvoit " + getCp1RelativeToStartObject());
-			System.out.println("Bon, on regarde ????");
-			setCp1RelativeToStartObject(newPoint);
-		}
-
 		cp1 = new ConnectorAdjustingControlPoint(connectorNode, newP1) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
-				if (getConnectorSpecification().getAreBoundsAdjustable()) {
+				if (getAreBoundsAdjustable()) {
 					FGEShape<?> shape = getStartNode().getFGEShape();
 					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(getStartNode(),
 							connectorNode));
@@ -219,7 +207,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 			@Override
 			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 					FGEPoint initialPoint, MouseEvent event) {
-				if (getConnectorSpecification().getAreBoundsAdjustable()) {
+				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
 					setCp1RelativeToStartObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getStartNode()));
@@ -234,7 +222,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 		cp2 = new ConnectorAdjustingControlPoint(connectorNode, newP2) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
-				if (getConnectorSpecification().getAreBoundsAdjustable()) {
+				if (getAreBoundsAdjustable()) {
 					FGEShape<?> shape = getEndNode().getFGEShape();
 					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(getEndNode(),
 							connectorNode));
@@ -248,7 +236,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 			@Override
 			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 					FGEPoint initialPoint, MouseEvent event) {
-				if (getConnectorSpecification().getAreBoundsAdjustable()) {
+				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
 					setCp2RelativeToEndObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getEndNode()));
@@ -277,7 +265,7 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 				FGEPoint pt = getNearestPointOnAuthorizedArea(/* pointRelativeToInitialConfiguration */newRelativePoint);
 				setPoint(pt);
 				setCpPosition(pt);
-				if (!getConnectorSpecification().getAreBoundsAdjustable()) {
+				if (!getAreBoundsAdjustable()) {
 					updateFromNewCPPosition();
 				}
 				refreshCurve();
@@ -381,23 +369,20 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 			curve.paint(g);
 
 			// Draw eventual symbols
-			if (connectorNode.getConnectorSpecification().getStartSymbol() != StartSymbolType.NONE) {
+			if (getStartSymbol() != StartSymbolType.NONE) {
 				FGESegment firstSegment = curve.getApproximatedStartTangent();
 				FGESegment viewSegment = firstSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(firstSegment.getP1(), connectorNode.getConnectorSpecification().getStartSymbol(), connectorNode
-						.getConnectorSpecification().getStartSymbolSize(), viewSegment.getAngle());
+				g.drawSymbol(firstSegment.getP1(), getStartSymbol(), getStartSymbolSize(), viewSegment.getAngle());
 			}
-			if (connectorNode.getConnectorSpecification().getEndSymbol() != EndSymbolType.NONE) {
+			if (getEndSymbol() != EndSymbolType.NONE) {
 				FGESegment lastSegment = curve.getApproximatedEndTangent();
 				FGESegment viewSegment = lastSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(lastSegment.getP2(), connectorNode.getConnectorSpecification().getEndSymbol(), connectorNode
-						.getConnectorSpecification().getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
+				g.drawSymbol(lastSegment.getP2(), getEndSymbol(), getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
-			if (connectorNode.getConnectorSpecification().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (getMiddleSymbol() != MiddleSymbolType.NONE) {
 				FGESegment cpSegment = curve.getApproximatedControlPointTangent();
 				FGESegment viewSegment = cpSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
-				g.drawSymbol(curve.getP3(), connectorNode.getConnectorSpecification().getMiddleSymbol(), connectorNode
-						.getConnectorSpecification().getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
+				g.drawSymbol(curve.getP3(), getMiddleSymbol(), getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
 		}
 

@@ -368,12 +368,16 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 					+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
 			getFactory().getUndoManager().undo();
 		} else {
-			getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
-			System.out.println("Bon, j'arrete de force");
-			if (getFactory().getUndoManager().canUndo()) {
-				System.out.println("Effectivement, je peux faire un undo de: "
-						+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
-				getFactory().getUndoManager().undo();
+			if (getFactory().getUndoManager().canUndoIfStoppingCurrentEdition()) {
+				getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
+				System.out.println("Bon, j'arrete de force");
+				if (getFactory().getUndoManager().canUndo()) {
+					System.out.println("Effectivement, je peux faire un undo de: "
+							+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+					getFactory().getUndoManager().undo();
+				}
+			} else {
+				System.out.println("JE peux pas faire d'UNDO et puis c'est tout !");
 			}
 		}
 	}

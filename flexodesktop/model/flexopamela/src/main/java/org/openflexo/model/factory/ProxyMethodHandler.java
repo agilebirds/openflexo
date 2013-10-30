@@ -558,10 +558,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					internallyInvokeSetter(property, null, true);
 				}
 			}
-			if (property.getType().isEnum()) {
-				System.err.println("DELETE / Maintenant la " + property + " vaut " + invokeGetter(property));
-				System.err.println("DELETE / mais j'ai garde en memoire " + oldValues.get(property.getPropertyIdentifier()));
-			}
 		}
 		deleted = true;
 		deleting = false;

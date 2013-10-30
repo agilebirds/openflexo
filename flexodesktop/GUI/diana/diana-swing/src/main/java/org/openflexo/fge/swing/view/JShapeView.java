@@ -408,7 +408,6 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 				getPaintManager().invalidate(shapeNode);
 				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(ShapeChanged.EVENT_NAME)) {
-				System.out.println("Hop, on redessine la shape " + getNode().getFGEShape());
 				getPaintManager().invalidate(shapeNode);
 				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(GraphicalRepresentation.LAYER.getName())) {

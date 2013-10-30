@@ -510,10 +510,24 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 
 		if (evt.getSource() == getGraphicalRepresentation()) {
-			// Those notifications are forwarded by my graphical representation
 
-			setChanged();
-			notifyObservers(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+			if (getDrawing().getPersistenceMode() == PersistenceMode.SharedGraphicalRepresentations) {
+				// This is a tricky area
+				// We share GR, which means that we don't use GR to store values, but we store them in propertyValues hashtable
+				GRParameter<?> parameter = GRParameter.getGRParameter(evt.getSource().getClass(), evt.getPropertyName());
+				// System.out.println("!!!!!!!!! Merde, faut que je mette a jour la valeur du parametre " + evt.getPropertyName()
+				// + " parameter=" + parameter);
+				if (parameter != null && propertyValues.get(parameter) != evt.getNewValue()) {
+					propertyValues.put(parameter, evt.getNewValue());
+					System.out.println("Value for " + parameter.getName() + " changed for " + evt.getNewValue());
+				}
+			}
+
+			// Those notifications comes from my graphical representation, forward them
+			forward(evt);
+
+			// setChanged();
+			// notifyObservers(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 
 			/*if (notif instanceof BindingChanged) {
 				updateDependanciesForBinding(((BindingChanged) notif).getBinding());
@@ -527,6 +541,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		if (evt.getSource() instanceof TextStyle) {
 			notifyAttributeChanged(GraphicalRepresentation.TEXT_STYLE, null, getGraphicalRepresentation().getTextStyle());
 		}
+
 	}
 
 	@Deprecated
