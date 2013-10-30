@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -350,6 +351,10 @@ public class ExcelCell extends ExcelObject {
 		getExcelSheet().getEvaluator().clearAllCachedResultValues();
 	}
 
+	private CellValue evaluateFormula(){
+		return getExcelSheet().getEvaluator().evaluate(cell);
+	}
+	
 	protected void createCellWhenNonExistant() {
 		if (cell == null) {
 			getExcelRow().createRowWhenNonExistant();
@@ -363,6 +368,7 @@ public class ExcelCell extends ExcelObject {
 
 		if (value.startsWith("=")) {
 			setCellFormula(value);
+			setCellValue(evaluateFormula().formatAsString());
 			return;
 		}
 		if (value.equalsIgnoreCase("true")) {

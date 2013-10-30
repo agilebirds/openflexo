@@ -86,6 +86,16 @@ public class ExcelRow extends ExcelObject {
 		return getExcelCells().get(columnIndex);
 	}
 	
+	public ExcelCell getCellAtExcelColumn(ExcelColumn column) {
+		if (column.getColNumber() < 0) {
+			return null;
+		}
+		// Append missing cells
+		while (getExcelCells().size() <= column.getColNumber()) {
+			addToExcelCells(new ExcelCell(null, this, getTechnologyAdapter()));
+		}
+		return getExcelCells().get(column.getColNumber());
+	}
 	
 	@Override
 	public String getUri() {
