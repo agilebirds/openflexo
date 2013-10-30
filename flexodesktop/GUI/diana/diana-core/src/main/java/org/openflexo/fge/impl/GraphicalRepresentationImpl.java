@@ -133,7 +133,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// ***************************************************************************
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
 		if (!isDeleted()) {
 			if (textStyle != null) {
 				textStyle.getPropertyChangeSupport().removePropertyChangeListener(this);

@@ -23,7 +23,7 @@ public interface DeletableProxyObject {
 	 * @see DeletableProxyObject#delete()
 	 * @see DeletableProxyObject#isDeleted()
 	 */
-	public boolean performSuperDelete();
+	// public boolean performSuperDelete();
 
 	/**
 	 * Invokes the default deletion code handled by {@link ProxyMethodHandler} with the provided <code>context</code>.
@@ -53,7 +53,7 @@ public interface DeletableProxyObject {
 	 * @see DeletableProxyObject#delete()
 	 * @see DeletableProxyObject#isDeleted()
 	 */
-	public void performSuperDelete(Class<?> modelEntityInterface);
+	// public void performSuperDelete(Class<?> modelEntityInterface);
 
 	/**
 	 * Invokes the delete method as defined by the model entity associated with the class <code>modelEntityInterface</code>
@@ -76,7 +76,7 @@ public interface DeletableProxyObject {
 	 * @see Embedded#deletionConditions()
 	 * @see ComplexEmbedded#deletionConditions()
 	 */
-	public boolean delete();
+	// public boolean delete();
 
 	/**
 	 * Deletes the current object and all its embedded properties as defined by the {@link Embedded} and {@link ComplexEmbedded}

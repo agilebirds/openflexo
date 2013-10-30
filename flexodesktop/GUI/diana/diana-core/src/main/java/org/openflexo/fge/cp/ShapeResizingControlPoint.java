@@ -150,6 +150,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
 			} else {
 				setDraggingAuthorizedArea(new FGEEmptyArea());
+				logger.warning("Created SOUTH_EAST ShapeResizingControlPoint with EMPTY dragging authorized area");
 			}
 		} else {
 			setDraggingAuthorizedArea(new FGEEmptyArea());

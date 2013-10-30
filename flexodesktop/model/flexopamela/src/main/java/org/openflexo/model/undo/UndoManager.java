@@ -246,9 +246,9 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 			System.out.println("START UNDO " + editToBeUndone().getPresentationName());
 			undoInProgress = true;
 			super.undo();
-			System.out.println("END UNDO ");
 			undoInProgress = false;
 			getPropertyChangeSupport().firePropertyChange("undone", null, this);
+			System.out.println("END UNDO ");
 		} catch (Exception e) {
 			e.printStackTrace();
 			undoInProgress = false;
@@ -271,10 +271,14 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	@Override
 	public synchronized void redo() throws CannotUndoException {
 		try {
+			System.out.println("Will REDO " + editToBeRedone().getPresentationName());
+			System.out.println(editToBeUndone().describe());
+			System.out.println("START REDO " + editToBeRedone().getPresentationName());
 			redoInProgress = true;
 			super.redo();
 			redoInProgress = false;
 			getPropertyChangeSupport().firePropertyChange("redone", null, this);
+			System.out.println("END REDO ");
 		} catch (Exception e) {
 			e.printStackTrace();
 			redoInProgress = false;

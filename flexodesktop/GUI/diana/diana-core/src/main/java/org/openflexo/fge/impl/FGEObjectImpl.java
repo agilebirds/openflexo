@@ -58,7 +58,7 @@ public abstract class FGEObjectImpl implements FGEObject {
 	}
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
 		if (!isDeleted) {
 			isDeleted = true;
 			performSuperDelete();
@@ -295,8 +295,8 @@ public abstract class FGEObjectImpl implements FGEObject {
 	}
 
 	public void notifyObservers(FGENotification notification) {
-		if (!isDeleted) {
-			pcSupport.firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
+		if (!isDeleted && getPropertyChangeSupport() != null) {
+			getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 		}
 	}
 

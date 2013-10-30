@@ -335,7 +335,7 @@ public class DiagramEditorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("redo");
-				currentDiagramEditor.getController().getFactory().getUndoManager().redo();
+				currentDiagramEditor.getController().redo();
 			}
 		}, new Synchronizer() {
 			@Override

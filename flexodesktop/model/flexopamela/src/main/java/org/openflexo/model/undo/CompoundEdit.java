@@ -65,7 +65,9 @@ public class CompoundEdit extends AbstractUndoableEdit {
 		super.redo();
 		Enumeration<AtomicEdit<?>> cursor = edits.elements();
 		while (cursor.hasMoreElements()) {
-			((AtomicEdit<?>) cursor.nextElement()).redo();
+			AtomicEdit<?> e = ((AtomicEdit<?>) cursor.nextElement());
+			System.out.println("> REDO AtomicEdit " + e.getPresentationName());
+			e.redo();
 		}
 	}
 

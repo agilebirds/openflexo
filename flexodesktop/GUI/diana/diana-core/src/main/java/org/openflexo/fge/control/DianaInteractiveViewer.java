@@ -269,7 +269,9 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
 		for (DrawingTreeNode<?, ?> s : selectedObjects) {
-			s.setIsSelected(false);
+			if (!s.isDeleted()) {
+				s.setIsSelected(false);
+			}
 		}
 		selectedObjects.clear();
 		notifyObservers(new SelectionCleared());
@@ -399,7 +401,9 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	public void clearFocusSelection() {
 		// stopEditionOfEditedLabelIfAny();
 		for (DrawingTreeNode<?, ?> node : focusedObjects) {
-			node.setIsFocused(false);
+			if (!node.isDeleted()) {
+				node.setIsFocused(false);
+			}
 		}
 		focusedObjects.clear();
 	}

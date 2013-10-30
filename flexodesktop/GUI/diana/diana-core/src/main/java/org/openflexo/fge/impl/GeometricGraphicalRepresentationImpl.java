@@ -88,7 +88,7 @@ public abstract class GeometricGraphicalRepresentationImpl extends GraphicalRepr
 	// ***************************************************************************
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
 		if (background != null) {
 			background.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}

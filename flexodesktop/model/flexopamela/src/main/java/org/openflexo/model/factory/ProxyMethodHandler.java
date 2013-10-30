@@ -110,7 +110,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_CREATED_BY_CLONING;
 	private static Method IS_BEING_CLONED;
 	private static Method DELETE_OBJECT;
-	private static Method DELETE_OBJECT_WITH_CONTEXT;
+	// private static Method DELETE_OBJECT_WITH_CONTEXT;
 	private static Method UNDELETE_OBJECT;
 	private static Method IS_DELETED;
 	private static Method EQUALS_OBJECT;
@@ -126,7 +126,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			PERFORM_SUPER_SETTER = AccessibleProxyObject.class.getMethod("performSuperSetter", String.class, Object.class);
 			PERFORM_SUPER_ADDER = AccessibleProxyObject.class.getMethod("performSuperAdder", String.class, Object.class);
 			PERFORM_SUPER_REMOVER = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class);
-			PERFORM_SUPER_DELETER = DeletableProxyObject.class.getMethod("performSuperDelete");
+			PERFORM_SUPER_DELETER = DeletableProxyObject.class.getMethod("performSuperDelete", Array.newInstance(Object.class, 0)
+					.getClass());
 			PERFORM_SUPER_UNDELETER = DeletableProxyObject.class.getMethod("performSuperUndelete");
 			PERFORM_SUPER_FINDER = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class);
 			PERFORM_SUPER_GETTER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperGetter", String.class, Class.class);
@@ -136,7 +137,8 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					.getMethod("performSuperAdder", String.class, Object.class, Class.class);
 			PERFORM_SUPER_REMOVER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperRemover", String.class, Object.class,
 					Class.class);
-			PERFORM_SUPER_DELETER_ENTITY = DeletableProxyObject.class.getMethod("performSuperDelete", Class.class);
+			PERFORM_SUPER_DELETER_ENTITY = DeletableProxyObject.class.getMethod("performSuperDelete", Class.class,
+					Array.newInstance(Object.class, 0).getClass());
 			PERFORM_SUPER_FINDER_ENTITY = AccessibleProxyObject.class.getMethod("performSuperFinder", String.class, Object.class,
 					Class.class);
 			IS_SERIALIZING = AccessibleProxyObject.class.getMethod("isSerializing");
@@ -145,8 +147,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			IS_DELETED = DeletableProxyObject.class.getMethod("isDeleted");
 			SET_MODIFIED = AccessibleProxyObject.class.getMethod("setModified", boolean.class);
 			PERFORM_SUPER_SET_MODIFIED = AccessibleProxyObject.class.getMethod("performSuperSetModified", boolean.class);
-			DELETE_OBJECT = DeletableProxyObject.class.getMethod("delete");
-			DELETE_OBJECT_WITH_CONTEXT = DeletableProxyObject.class.getMethod("delete", Array.newInstance(Object.class, 0).getClass());
+			DELETE_OBJECT = DeletableProxyObject.class.getMethod("delete", Array.newInstance(Object.class, 0).getClass());
 			UNDELETE_OBJECT = DeletableProxyObject.class.getMethod("undelete");
 			GET_PROPERTY_CHANGE_SUPPORT = HasPropertyChangeSupport.class.getMethod("getPropertyChangeSupport");
 			GET_DELETED_PROPERTY = HasPropertyChangeSupport.class.getMethod("getDeletedProperty");
@@ -370,13 +371,11 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
 			return internallyInvokeDeleter(false);
 		} else if (methodIsEquivalentTo(method, DELETE_OBJECT)) {
-			return internallyInvokeDeleter(true);
+			return internallyInvokeDeleter(true, args);
 		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_UNDELETER)) {
 			return internallyInvokeUndeleter(false);
 		} else if (methodIsEquivalentTo(method, UNDELETE_OBJECT)) {
 			return internallyInvokeUndeleter(true);
-		} else if (methodIsEquivalentTo(method, DELETE_OBJECT_WITH_CONTEXT)) {
-			return internallyInvokeDeleter(true, args);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
 		} else if (methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
@@ -526,7 +525,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			context = Arrays.copyOf(context, context.length + 1);
 			context[context.length - 1] = getObject();
 		}
-		oldValues = new HashMap<String, Object>(values);
+		oldValues = new HashMap<String, Object>();
 		ModelEntity<I> modelEntity = getModelEntity();
 		Set<Object> objects = new HashSet<Object>();
 		for (Object o : context) {
@@ -541,19 +540,27 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				((DeletableProxyObject) object).delete(context);
 			}
 		}
+		// We iterate on all properties conform to PAMELA meta-model
 		Iterator<ModelProperty<? super I>> i = modelEntity.getProperties();
 		while (i.hasNext()) {
 			ModelProperty<? super I> property = i.next();
 			if (property.getType().isPrimitive()) {
-				// Avoid to set null for primitives !!!
+				// Primitive do not need to be nullified
 				// Do nothing
 			} else {
+				// We retrieve and store old value for a potential undelete
+				Object oldValue = invokeGetter(property);
+				oldValues.put(property.getPropertyIdentifier(), oldValue);
 				// Otherwise nullify using setter
 				if (property.getSetterMethod() != null) {
 					invokeSetter(property, null);
 				} else {
 					internallyInvokeSetter(property, null, true);
 				}
+			}
+			if (property.getType().isEnum()) {
+				System.err.println("DELETE / Maintenant la " + property + " vaut " + invokeGetter(property));
+				System.err.println("DELETE / mais j'ai garde en memoire " + oldValues.get(property.getPropertyIdentifier()));
 			}
 		}
 		deleted = true;
@@ -580,7 +587,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		while (i.hasNext()) {
 			ModelProperty<? super I> property = i.next();
 			if (property.getType().isPrimitive()) {
-				// No need to restore for primitives !!!
+				// No need to restore for primitives
 				// Do nothing
 			} else {
 				// Otherwise nullify using setter

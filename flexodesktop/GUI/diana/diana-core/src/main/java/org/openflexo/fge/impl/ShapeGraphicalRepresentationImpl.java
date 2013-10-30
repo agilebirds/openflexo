@@ -172,7 +172,8 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	// ***************************************************************************
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
+		System.err.println("%%%%%%%%%%%%%%%%%%% Avant DELETE, DimensionConstraints=" + getDimensionConstraints());
 		if (background != null && background.getPropertyChangeSupport() != null) {
 			background.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
@@ -194,7 +195,17 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		if (shadowStyle != null && shadowStyle.getPropertyChangeSupport() != null) {
 			shadowStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
-		return super.delete();
+		super.delete();
+		System.err.println("%%%%%%%%%%%%%%%%%%% Apres DELETE, DimensionConstraints=" + getDimensionConstraints());
+		return true;
+	}
+
+	@Override
+	public boolean undelete() {
+		System.err.println("%%%%%%%%%%%%%%%%%%% Avant UNDELETE, DimensionConstraints=" + getDimensionConstraints());
+		super.undelete();
+		System.err.println("%%%%%%%%%%%%%%%%%%% Apres UNDELETE, DimensionConstraints=" + getDimensionConstraints());
+		return true;
 	}
 
 	// ***************************************************************************

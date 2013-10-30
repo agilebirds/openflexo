@@ -84,7 +84,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 	// ***************************************************************************
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
 		if (foreground != null) {
 			foreground.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
@@ -191,7 +191,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 	public void setSelectedForeground(ForegroundStyle aForeground) {
 		FGEAttributeNotification notification = requireChange(SELECTED_FOREGROUND, aForeground, false);
 		if (notification != null) {
-			if (selectedForeground != null) {
+			if (selectedForeground != null && focusedForeground.getPropertyChangeSupport() != null) {
 				selectedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			selectedForeground = aForeground;
@@ -224,7 +224,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 	public void setFocusedForeground(ForegroundStyle aForeground) {
 		FGEAttributeNotification notification = requireChange(FOCUSED_FOREGROUND, aForeground, false);
 		if (notification != null) {
-			if (focusedForeground != null) {
+			if (focusedForeground != null && focusedForeground.getPropertyChangeSupport() != null) {
 				focusedForeground.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			focusedForeground = aForeground;

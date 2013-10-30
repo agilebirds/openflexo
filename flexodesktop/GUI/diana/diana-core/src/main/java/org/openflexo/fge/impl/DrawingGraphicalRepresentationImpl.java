@@ -65,7 +65,7 @@ public abstract class DrawingGraphicalRepresentationImpl extends ContainerGraphi
 	}
 
 	@Override
-	public boolean delete() {
+	public boolean delete(Object... context) {
 		boolean returned = super.delete();
 		/*if (graphics != null) {
 			graphics.delete();

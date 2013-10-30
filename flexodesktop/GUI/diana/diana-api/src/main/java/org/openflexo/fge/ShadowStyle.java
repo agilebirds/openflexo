@@ -49,10 +49,10 @@ public interface ShadowStyle extends FGEStyle {
 	@PropertyIdentifier(type = Integer.class)
 	public static final String SHADOW_BLUR_KEY = "shadowBlur";
 
-	public static GRParameter<Boolean> DRAW_SHADOW = GRParameter.getGRParameter(ShadowStyle.class, DRAW_SHADOW_KEY, Boolean.class);
-	public static GRParameter<Integer> SHADOW_DARKNESS = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DARKNESS_KEY, Integer.class);
-	public static GRParameter<Integer> SHADOW_DEPTH = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DEPTH_KEY, Integer.class);
-	public static GRParameter<Integer> SHADOW_BLUR = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_BLUR_KEY, Integer.class);
+	public static GRParameter<Boolean> DRAW_SHADOW = GRParameter.getGRParameter(ShadowStyle.class, DRAW_SHADOW_KEY, Boolean.TYPE);
+	public static GRParameter<Integer> SHADOW_DARKNESS = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DARKNESS_KEY, Integer.TYPE);
+	public static GRParameter<Integer> SHADOW_DEPTH = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_DEPTH_KEY, Integer.TYPE);
+	public static GRParameter<Integer> SHADOW_BLUR = GRParameter.getGRParameter(ShadowStyle.class, SHADOW_BLUR_KEY, Integer.TYPE);
 
 	/*public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur

@@ -50,7 +50,7 @@ public interface FGEObject extends AccessibleProxyObject, DeletableProxyObject, 
 	/**
 	 * Delete this object
 	 */
-	public boolean delete();
+	public boolean delete(Object... context);
 
 	/**
 	 * Return a flag indicating if this object has been deleted
