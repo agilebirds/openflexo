@@ -88,7 +88,10 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 	@Override
 	@SuppressWarnings("unchecked")
 	public SS getShapeSpecification() {
-		return (SS) shapeNode.getGraphicalRepresentation().getShapeSpecification();
+		if (shapeNode != null && shapeNode.getGraphicalRepresentation() != null) {
+			return (SS) shapeNode.getGraphicalRepresentation().getShapeSpecification();
+		}
+		return null;
 	}
 
 	/**
