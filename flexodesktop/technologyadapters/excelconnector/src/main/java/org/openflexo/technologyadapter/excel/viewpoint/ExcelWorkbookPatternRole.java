@@ -44,7 +44,7 @@ public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
 
 	@Override
 	public String getPreciseType() {
-		return ExcelWorkbook.class.getName();
+		return ExcelWorkbook.class.getSimpleName();
 	}
 
 	@Override

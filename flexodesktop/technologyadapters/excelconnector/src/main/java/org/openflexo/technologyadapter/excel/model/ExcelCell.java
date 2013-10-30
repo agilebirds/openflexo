@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellValue;
@@ -29,6 +30,10 @@ public class ExcelCell extends ExcelObject {
 
 	public enum CellType {
 		Blank, Numeric, String, NumericFormula, StringFormula, Boolean, Error, Empty, Unknown
+	}
+	
+	public enum CellStyleFeature {
+		Foreground, Background, Pattern, Alignment
 	}
 
 	public Cell getCell() {
@@ -507,6 +512,44 @@ public class ExcelCell extends ExcelObject {
 			return getCell().getCellStyle();
 		}
 		return null;
+	}
+	
+	public void setCellStyle(CellStyleFeature cellStyle, Object value) {
+		if (getCell() != null && cellStyle!=null) {
+			CellStyle style = getCellStyle();
+			style.setLocked(false);
+			switch (cellStyle) {
+			case Alignment:
+				break;
+			case Foreground:
+				//style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				if(value instanceof String){
+					style.setFillForegroundColor(Short.parseShort((String)value));
+				}
+				if(value instanceof Long){
+					
+					style.setFillForegroundColor(((Long)value).shortValue());
+				}
+				else{
+					break;
+				}
+			case Background:
+				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				/*if(value instanceof String){
+					style.setFillBackgroundColor(Short.parseShort((String)value));
+				}*/
+				if(value instanceof Long){
+					style.setFillBackgroundColor(((Long)value).shortValue());
+				}
+				else{
+					break;
+				}
+			default:
+				break;
+			}
+			//getCell().setCellStyle(style);
+		}
+		return;
 	}
 	
 	@Override

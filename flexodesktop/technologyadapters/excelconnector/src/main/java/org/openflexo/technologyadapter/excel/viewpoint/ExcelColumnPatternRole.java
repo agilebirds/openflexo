@@ -41,7 +41,7 @@ public class ExcelColumnPatternRole extends PatternRole<ExcelColumn> {
 
 	@Override
 	public String getPreciseType() {
-		return ExcelColumn.class.getName();
+		return ExcelColumn.class.getSimpleName();
 	}
 
 	@Override

@@ -20,7 +20,6 @@
  */
 package org.openflexo.technologyadapter.excel;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -54,6 +53,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCel
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell;
@@ -76,7 +76,8 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
 @DeclareEditionAction(FML = "AddExcelWorkbook", editionActionClass = AddExcelWorkbook.class), // Add workbook
 		@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
 		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
-		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class) // Add sheet
+		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class), // Add sheet
+		@DeclareEditionAction(FML = "CellStyleAction", editionActionClass = CellStyleAction.class) // Cell Style
 })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), //Select Excel Sheet
@@ -160,7 +161,9 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 			return (EA) new AddExcelCell(null);
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelRow(null);
-		} else {
+		} else if (CellStyleAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new CellStyleAction(null);
+		}else {
 			return null;
 		}
 	}

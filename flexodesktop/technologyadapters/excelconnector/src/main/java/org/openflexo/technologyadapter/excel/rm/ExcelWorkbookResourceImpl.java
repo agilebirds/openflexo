@@ -82,21 +82,15 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			technologyContextManager.registerResource(returned);
 			
 			try {
-			//	if(excelFile.exists()){
-					logger.warning("will load an existing File: " + excelFile.getCanonicalPath());
-					ExcelWorkbook resourceData = returned.loadResourceData(null);
-					returned.setResourceData(resourceData);
-					resourceData.setResource(returned);
-					returned.save(null);
-					returned.isLoaded = true;
-			//	}
+				ExcelWorkbook resourceData = returned.loadResourceData(null);
+				returned.setResourceData(resourceData);
+				resourceData.setResource(returned);
+				returned.save(null);
+				returned.isLoaded = true;
 			} catch (SaveResourceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}catch (InvalidExcelFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -110,11 +104,7 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	/**
 	 * Instanciates a new {@link OWLOntologyResource} asserting we are about to built a resource matching an existing file in the file
 	 * system<br>
-	 * This method should not be used to explicitely build a new ontology
 	 * 
-	 * @param owlFile
-	 * @param ontologyLibrary
-	 * @return
 	 */
 	public static ExcelWorkbookResource retrieveExcelWorkbookResource(File modelFile, ExcelTechnologyContextManager technologyContextManager) {
 		try {

@@ -568,6 +568,13 @@
 		xmlTag="AddEMFObjectIndividual">
 	</entity>
 	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction"
+		xmlTag="CellStyleAction">
+		<property name="subject" xmlTag="subject" attribute="YES" />
+		<property name="value" xmlTag="value" attribute="YES" />
+		<property name="cellStyle" xmlTag="cellStyle" attribute="YES" />
+	</entity>
+	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook"
 		xmlTag="AddExcelWorkbook">
 	</entity>
