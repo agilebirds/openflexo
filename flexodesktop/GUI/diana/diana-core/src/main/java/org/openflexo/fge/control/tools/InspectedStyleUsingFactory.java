@@ -67,7 +67,11 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 		if (getSelection().size() == 0) {
 			return (Class<? extends S>) getStyleFactory().getCurrentStyle().getClass();
 		} else {
-			return (Class<? extends S>) getStyle(getSelection().get(0)).getClass();
+			S style = getStyle(getSelection().get(0));
+			if (style != null) {
+				return (Class<? extends S>) style.getClass();
+			}
+			return null;
 		}
 	}
 

@@ -137,7 +137,10 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 		if (getCurrentForeground() != null) {
 			g2d.setColor(getCurrentForeground().getColor());
-			g2d.setStroke(getStroke(getCurrentForeground(), getScale()));
+			Stroke stroke = getStroke(getCurrentForeground(), getScale());
+			if (stroke != null) {
+				g2d.setStroke(stroke);
+			}
 
 			if (getCurrentForeground().getUseTransparency()) {
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getCurrentForeground().getTransparencyLevel()));
@@ -603,6 +606,9 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 	public Stroke getStroke(ForegroundStyle foregroundStyle, double scale) {
 		// if (cachedStroke == null || cachedStrokeFS == null || !cachedStrokeFS.equalsObject(foregroundStyle) || scale != cachedStokeScale)
 		// {
+		if (foregroundStyle.getDashStyle() == null) {
+			return null;
+		}
 		if (foregroundStyle.getDashStyle() == DashStyle.PLAIN_STROKE) {
 			cachedStroke = new BasicStroke((float) (foregroundStyle.getLineWidth() * scale), foregroundStyle.getCapStyle().ordinal(),
 					foregroundStyle.getJoinStyle().ordinal());

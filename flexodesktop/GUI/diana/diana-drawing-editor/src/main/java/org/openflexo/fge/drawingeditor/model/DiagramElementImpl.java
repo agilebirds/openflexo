@@ -39,18 +39,16 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		this.diagram = diagram;
 	}
 
+	// This method has no functional effect, it is just to test super calls over internal PAMELA management
 	@Override
 	public void addToShapes(Shape aShape) {
-		System.out.println("J'ajoute la shape, je dois notifier juste apres.");
 		performSuperAdder(SHAPES, aShape);
-		System.out.println("C'est bon, j'ai ajoute la shape. Ca a marche la notif ?");
 	}
 
+	// This method has no functional effect, it is just to test super calls over internal PAMELA management
 	@Override
 	public void removeFromShapes(Shape aShape) {
-		System.out.println("Je supprime la shape, je dois notifier juste apres.");
 		performSuperRemover(SHAPES, aShape);
-		System.out.println("C'est bon, j'ai supprime la shape. Ca a marche la notif ?");
 	}
 
 	/*@Override

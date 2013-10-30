@@ -60,7 +60,11 @@ public class GRParameter<T> {
 	private static Map<Class<?>, Map<String, GRParameter<?>>> cachedParameters = new HashMap<Class<?>, Map<String, GRParameter<?>>>();
 
 	public static <T> GRParameter<T> getGRParameter(Class<?> declaringClass, String name, Class<T> type) {
-		return (GRParameter<T>) getGRParameter(declaringClass, name);
+		GRParameter<T> returned = (GRParameter<T>) getGRParameter(declaringClass, name);
+		if (returned != null) {
+			returned.type = type;
+		}
+		return returned;
 	}
 
 	public static GRParameter<?> getGRParameter(Class<?> declaringClass, String name) {
@@ -107,6 +111,25 @@ public class GRParameter<T> {
 			name = field.getName();
 		}
 		type = (Class<T>) p.type();
+		if (p.isPrimitive()) {
+			if (type.equals(Integer.class)) {
+				type = (Class<T>) Integer.TYPE;
+			} else if (type.equals(Short.class)) {
+				type = (Class<T>) Short.TYPE;
+			} else if (type.equals(Long.class)) {
+				type = (Class<T>) Long.TYPE;
+			} else if (type.equals(Byte.class)) {
+				type = (Class<T>) Byte.TYPE;
+			} else if (type.equals(Double.class)) {
+				type = (Class<T>) Double.TYPE;
+			} else if (type.equals(Float.class)) {
+				type = (Class<T>) Float.TYPE;
+			} else if (type.equals(Character.class)) {
+				type = (Class<T>) Character.TYPE;
+			} else if (type.equals(Boolean.class)) {
+				type = (Class<T>) Boolean.TYPE;
+			}
+		}
 	}
 
 	public String getFieldName() {
@@ -128,5 +151,33 @@ public class GRParameter<T> {
 	@Override
 	public String toString() {
 		return "GRParameter: " + getFieldName() + " " + getName() + " " + getType().getSimpleName();
+	}
+
+	public T getDefaultValue() {
+		if (type.equals(Integer.TYPE)) {
+			return (T) new Integer(0);
+		}
+		if (type.equals(Short.TYPE)) {
+			return (T) new Short((short) 0);
+		}
+		if (type.equals(Long.TYPE)) {
+			return (T) new Long(0);
+		}
+		if (type.equals(Byte.TYPE)) {
+			return (T) new Byte((byte) 0);
+		}
+		if (type.equals(Double.TYPE)) {
+			return (T) new Double(0);
+		}
+		if (type.equals(Float.TYPE)) {
+			return (T) new Float(0);
+		}
+		if (type.equals(Character.TYPE)) {
+			return (T) new Character('a');
+		}
+		if (type.equals(Boolean.TYPE)) {
+			return (T) new Boolean(false);
+		}
+		return null;
 	}
 }

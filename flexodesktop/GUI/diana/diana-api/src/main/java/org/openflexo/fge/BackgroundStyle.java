@@ -45,9 +45,9 @@ public interface BackgroundStyle extends FGEStyle {
 	public static final String USE_TRANSPARENCY_KEY = "useTransparency";
 
 	public static GRParameter<Float> TRANSPARENCY_LEVEL = GRParameter.getGRParameter(BackgroundStyle.class, TRANSPARENCY_LEVEL_KEY,
-			Float.class);
+			Float.TYPE);
 	public static GRParameter<Boolean> USE_TRANSPARENCY = GRParameter.getGRParameter(BackgroundStyle.class, USE_TRANSPARENCY_KEY,
-			Boolean.class);
+			Boolean.TYPE);
 
 	/*public static enum Parameters implements GRParameter {
 		color,

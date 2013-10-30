@@ -42,6 +42,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.notifications.ConnectorModified;
+import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -376,7 +377,9 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 				}
 			});
 		} else {
-			if (evt.getPropertyName().equals(ConnectorModified.EVENT_NAME)) {
+			if (evt.getPropertyName().equals(NodeDeleted.EVENT_NAME)) {
+				delete();
+			} else if (evt.getPropertyName().equals(ConnectorModified.EVENT_NAME)) {
 				if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
 					getPaintManager().invalidate(connectorNode);
 				}

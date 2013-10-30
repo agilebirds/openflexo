@@ -85,7 +85,14 @@ public class InspectedTextStyle extends InspectedStyle<TextStyle> implements Tex
 
 	@Override
 	public int getOrientation() {
-		return getPropertyValue(TextStyle.ORIENTATION);
+		try {
+			return getPropertyValue(TextStyle.ORIENTATION);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			System.out.println("OK, je vois que ca chie la");
+			System.out.println("En pas a pas");
+			return getPropertyValue(TextStyle.ORIENTATION);
+		}
 	}
 
 	@Override

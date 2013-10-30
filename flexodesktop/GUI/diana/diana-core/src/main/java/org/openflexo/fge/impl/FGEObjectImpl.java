@@ -80,6 +80,14 @@ public abstract class FGEObjectImpl implements FGEObject {
 	}
 
 	@Override
+	public boolean undelete() {
+		System.out.println("Undeleting " + this);
+		performSuperUndelete();
+		isDeleted = false;
+		return false;
+	}
+
+	@Override
 	public boolean isDeleted() {
 		return isDeleted;
 	}

@@ -48,17 +48,17 @@ public interface TextStyle extends FGEStyle {
 	public static final String BACKGROUND_COLOR_KEY = "backgroundColor";
 	@PropertyIdentifier(type = Font.class)
 	public static final String FONT_KEY = "font";
-	@PropertyIdentifier(type = Integer.class)
+	@PropertyIdentifier(type = Integer.class, isPrimitive = true)
 	public static final String ORIENTATION_KEY = "orientation";
-	@PropertyIdentifier(type = Boolean.class)
+	@PropertyIdentifier(type = Boolean.class, isPrimitive = true)
 	public static final String IS_BACKGROUND_COLORED_KEY = "isBackgroundColored";
 
 	public static GRParameter<Color> COLOR = GRParameter.getGRParameter(TextStyle.class, COLOR_KEY, Color.class);
 	public static GRParameter<Color> BACKGROUND_COLOR = GRParameter.getGRParameter(TextStyle.class, BACKGROUND_COLOR_KEY, Color.class);
 	public static GRParameter<Font> FONT = GRParameter.getGRParameter(TextStyle.class, FONT_KEY, Font.class);
-	public static GRParameter<Integer> ORIENTATION = GRParameter.getGRParameter(TextStyle.class, ORIENTATION_KEY, Integer.class);
+	public static GRParameter<Integer> ORIENTATION = GRParameter.getGRParameter(TextStyle.class, ORIENTATION_KEY, Integer.TYPE);
 	public static GRParameter<Boolean> IS_BACKGROUND_COLORED = GRParameter.getGRParameter(TextStyle.class, IS_BACKGROUND_COLORED_KEY,
-			Boolean.class);
+			Boolean.TYPE);
 
 	/*public static enum Parameters implements GRParameter {
 		color, backgroundColor, font, orientation, backgroundColored

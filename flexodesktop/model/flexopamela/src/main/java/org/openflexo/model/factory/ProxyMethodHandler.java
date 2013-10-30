@@ -220,8 +220,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 					// System.out.println("DETECTS SET with " + proceed + " insteadof " + method);
 					Object oldValue = invokeGetter(property);
 					if (getModelFactory().getUndoManager() != null) {
-						getModelFactory().getUndoManager().addEdit(
-								new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, args[0], getModelFactory()));
+						if (oldValue != args[0]) {
+							getModelFactory().getUndoManager().addEdit(
+									new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, args[0], getModelFactory()));
+						}
 					}
 				}
 				if (methodIsEquivalentTo(method, property.getAdderMethod())) {
@@ -827,8 +829,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			throws ModelDefinitionException {
 		Object oldValue = invokeGetter(property);
 		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
-			getModelFactory().getUndoManager().addEdit(
-					new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, value, getModelFactory()));
+			if (oldValue != value) {
+				getModelFactory().getUndoManager().addEdit(
+						new SetCommand<I>(getObject(), getModelEntity(), property, oldValue, value, getModelFactory()));
+			}
 		}
 		switch (property.getCardinality()) {
 		case SINGLE:

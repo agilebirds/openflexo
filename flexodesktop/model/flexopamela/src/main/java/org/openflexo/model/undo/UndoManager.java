@@ -44,8 +44,8 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 public class UndoManager extends javax.swing.undo.UndoManager implements HasPropertyChangeSupport {
 
 	private CompoundEdit currentEdition = null;
-	private boolean undoIsProgress = false;
-	private boolean redoIsProgress = false;
+	private boolean undoInProgress = false;
+	private boolean redoInProgress = false;
 
 	private PropertyChangeSupport pcSupport;
 
@@ -62,7 +62,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	public synchronized CompoundEdit startRecording(String presentationName) {
 		if (currentEdition != null) {
-			System.out.println("!!!!!!!!!! ERROR: already recording !!!");
+			(new Exception("UndoManager exception: already recording")).printStackTrace();
 			stopRecording(currentEdition);
 		}
 		currentEdition = new CompoundEdit(presentationName);
@@ -82,10 +82,10 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	public synchronized CompoundEdit stopRecording(CompoundEdit edit) {
 		if (currentEdition == null) {
-			System.out.println("!!!!!!!!!! ERROR: was not recording !!!");
+			(new Exception("UndoManager exception: was not recording")).printStackTrace();
 			return null;
 		} else if (currentEdition != edit) {
-			System.out.println("!!!!!!!!!! ERROR: was not recording this edit !!!");
+			(new Exception("UndoManager exception: was not recording this edit")).printStackTrace();
 			return null;
 		}
 
@@ -121,7 +121,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		if (currentEdition != null) {
 			return false;
 		}
-		if (undoIsProgress || redoIsProgress) {
+		if (undoInProgress || redoInProgress) {
 			return false;
 		}
 		return super.canUndo();
@@ -137,7 +137,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 * @see #editToBeUndone
 	 */
 	public synchronized boolean canUndoIfStoppingCurrentEdition() {
-		if (undoIsProgress || redoIsProgress) {
+		if (undoInProgress || redoInProgress) {
 			return false;
 		}
 		return super.canUndo();
@@ -155,7 +155,7 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		if (currentEdition != null) {
 			return false;
 		}
-		if (undoIsProgress || redoIsProgress) {
+		if (undoInProgress || redoInProgress) {
 			return false;
 		}
 		return super.canRedo();
@@ -167,13 +167,17 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	@Override
 	public synchronized boolean addEdit(UndoableEdit anEdit) {
 		if (anEdit instanceof AtomicEdit) {
-			if (undoIsProgress) {
+			if (undoInProgress) {
 				// System.out.println("Ignoring " + anEdit.getPresentationName() + " because UNDO in progress");
 				anEdit.die();
 				return false;
 			}
-			if (redoIsProgress) {
+			if (redoInProgress) {
 				// System.out.println("Ignoring " + anEdit.getPresentationName() + " because REDO in progress");
+				anEdit.die();
+				return false;
+			}
+			if (!anEdit.isSignificant()) {
 				anEdit.die();
 				return false;
 			}
@@ -186,12 +190,12 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 			currentEdition.addEdit(anEdit);
 			return true;
 		} else if (anEdit instanceof CompoundEdit) {
-			if (undoIsProgress) {
-				System.out.println("!!!!!!!!!! ERROR: received CompoundEdit while UNDO in progress !!!");
+			if (undoInProgress) {
+				(new Exception("UndoManager exception: received CompoundEdit while UNDO in progress")).printStackTrace();
 				return false;
 			}
-			if (redoIsProgress) {
-				System.out.println("!!!!!!!!!! ERROR: received CompoundEdit while REDO in progress !!!");
+			if (redoInProgress) {
+				(new Exception("UndoManager exception: received CompoundEdit while REDO in progress")).printStackTrace();
 				return false;
 			}
 			return super.addEdit(anEdit);
@@ -236,10 +240,21 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	@Override
 	public synchronized void undo() throws CannotUndoException {
-		undoIsProgress = true;
-		super.undo();
-		undoIsProgress = false;
-		getPropertyChangeSupport().firePropertyChange("undone", null, this);
+		try {
+			System.out.println("Will UNDO " + editToBeUndone().getPresentationName());
+			System.out.println(editToBeUndone().describe());
+			System.out.println("START UNDO " + editToBeUndone().getPresentationName());
+			undoInProgress = true;
+			super.undo();
+			System.out.println("END UNDO ");
+			undoInProgress = false;
+			getPropertyChangeSupport().firePropertyChange("undone", null, this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			undoInProgress = false;
+			discardAllEdits();
+			throw new CannotUndoException();
+		}
 	}
 
 	/**
@@ -255,10 +270,17 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 	 */
 	@Override
 	public synchronized void redo() throws CannotUndoException {
-		redoIsProgress = true;
-		super.redo();
-		redoIsProgress = false;
-		getPropertyChangeSupport().firePropertyChange("redone", null, this);
+		try {
+			redoInProgress = true;
+			super.redo();
+			redoInProgress = false;
+			getPropertyChangeSupport().firePropertyChange("redone", null, this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			redoInProgress = false;
+			discardAllEdits();
+			throw new CannotRedoException();
+		}
 	}
 
 	/**
@@ -295,11 +317,34 @@ public class UndoManager extends javax.swing.undo.UndoManager implements HasProp
 		return pcSupport;
 	};
 
+	/**
+	 * Returns a description of the undoable form of this edit.
+	 * 
+	 * @return a description of the undoable form of this edit
+	 */
 	@Override
 	public synchronized String getUndoPresentationName() {
 		if (currentEdition != null) {
 			return currentEdition.getPresentationName();
 		}
 		return super.getUndoPresentationName();
+	}
+
+	/**
+	 * Return boolean indicating if undo is currently beeing processed
+	 * 
+	 * @return
+	 */
+	public boolean isUndoInProgress() {
+		return undoInProgress;
+	}
+
+	/**
+	 * Return boolean indicating if redo is currently beeing processed
+	 * 
+	 * @return
+	 */
+	public boolean isRedoInProgress() {
+		return redoInProgress;
 	}
 }

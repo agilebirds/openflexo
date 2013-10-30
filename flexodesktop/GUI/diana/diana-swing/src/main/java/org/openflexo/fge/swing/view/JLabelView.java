@@ -72,6 +72,7 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
@@ -333,6 +334,10 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 			logger.warning("Received notifications for deleted view: " + evt);
 			return;
 		}
+		if (getNode().isDeleted()) {
+			logger.warning("Received notifications for deleted Node " + evt);
+			return;
+		}
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -344,7 +349,9 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 		} else {
 			// logger.info("Received: "+notification);
 
-			if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())
+			if (evt.getPropertyName().equals(NodeDeleted.EVENT_NAME)) {
+				delete();
+			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())
 			// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
 			// properly use appropriate bindings
 					|| evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
@@ -519,7 +526,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 		textComponent.setOpaque(ts.getIsBackgroundColored());
 		textComponent.setBackground(ts.getBackgroundColor());
 		StyleConstants.setFontFamily(set, font.getFamily());
-		StyleConstants.setFontSize(set, (int) (ts.getFont().getSize() * getScale()));
+		StyleConstants.setFontSize(set, (int) (font.getSize() * getScale()));
 		if (font.isBold()) {
 			StyleConstants.setBold(set, true);
 		}

@@ -70,8 +70,8 @@ public interface ContainerGraphicalRepresentation extends GraphicalRepresentatio
 	@PropertyIdentifier(type = Boolean.class)
 	public static final String ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY = "adjustMaximalHeightToLabelHeight";
 
-	public static GRParameter<Double> WIDTH = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, WIDTH_KEY, Double.class);
-	public static GRParameter<Double> HEIGHT = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, HEIGHT_KEY, Double.class);
+	public static GRParameter<Double> WIDTH = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, WIDTH_KEY, Double.TYPE);
+	public static GRParameter<Double> HEIGHT = GRParameter.getGRParameter(ContainerGraphicalRepresentation.class, HEIGHT_KEY, Double.TYPE);
 
 	public static GRParameter<Boolean> ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT = GRParameter.getGRParameter(
 			ShapeGraphicalRepresentation.class, ADJUST_MAXIMAL_HEIGHT_TO_LABEL_HEIGHT_KEY, Boolean.class);

@@ -39,8 +39,10 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 
 	@Override
 	public boolean delete() {
-		if (super.delete()) {
+		if (!isDeleted()) {
 			stopDrawableObserving();
+			super.delete();
+			finalizeDeletion();
 			return true;
 		}
 		return false;

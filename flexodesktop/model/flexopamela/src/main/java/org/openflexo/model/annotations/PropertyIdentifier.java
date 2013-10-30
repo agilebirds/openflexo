@@ -17,6 +17,8 @@ import org.openflexo.model.annotations.Getter.Cardinality;
 @Target(value = ElementType.FIELD)
 public @interface PropertyIdentifier {
 
+	public static final String UNDEFINED = "";
+
 	/**
 	 * The type of this parameter
 	 * 
@@ -31,4 +33,5 @@ public @interface PropertyIdentifier {
 	 */
 	public Cardinality cardinality() default Cardinality.SINGLE;
 
+	public boolean isPrimitive() default false;
 }

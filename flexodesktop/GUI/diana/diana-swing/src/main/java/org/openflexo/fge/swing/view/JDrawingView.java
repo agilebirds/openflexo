@@ -73,6 +73,7 @@ import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.notifications.DrawingNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.NodeAdded;
+import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.swing.SwingEditorDelegate;
@@ -348,9 +349,9 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 				handleNodeAdded((DrawingTreeNode<?, ?>) evt.getNewValue());
 			} else if (evt.getPropertyName().equals(NodeRemoved.EVENT_NAME)) {
 				handleNodeRemoved((DrawingTreeNode<?, ?>) evt.getOldValue(), (ContainerNode<?, ?>) evt.getNewValue());
-			} /*else if (notification instanceof NodeDeleted) {
-				handleNodeDeleted((NodeDeleted) notification);
-				}*/else if (evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)) {
+			} else if (evt.getPropertyName().equals(NodeDeleted.EVENT_NAME)) {
+				delete();
+			} else if (evt.getPropertyName().equals(ObjectResized.PROPERTY_NAME)) {
 				rescale();
 				getPaintManager().invalidate(getDrawing().getRoot());
 				getPaintManager().repaint(this);

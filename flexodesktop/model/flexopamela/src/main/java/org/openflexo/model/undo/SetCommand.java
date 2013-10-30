@@ -5,6 +5,7 @@ import javax.swing.undo.CannotUndoException;
 
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
+import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.ModelFactory;
 
 /**
@@ -61,9 +62,26 @@ public class SetCommand<I> extends AtomicEdit<I> {
 		newValue = null;
 	}
 
+	/**
+	 * Returns true if this edit is considered significant.<br>
+	 * A significant SET command is a set changing the current value for a new value. If both values are equals, edit is not signifiant. If
+	 * both values equals, but declare to be {@link CloneableProxyObject}, edit is considered to be signifiant. Otherwise, the edit is
+	 * signifiant
+	 * 
+	 * @return true if this edit is significant
+	 */
 	@Override
 	public boolean isSignificant() {
-		return oldValue != newValue;
+		if (oldValue == newValue) {
+			return false;
+		}
+		if (oldValue == null) {
+			return newValue != null;
+		}
+		if (oldValue instanceof CloneableProxyObject) {
+			return true;
+		}
+		return !oldValue.equals(newValue);
 	}
 
 	@Override

@@ -62,15 +62,15 @@ public interface ForegroundStyle extends FGEStyle {
 	public static final String TRANSPARENCY_LEVEL_KEY = "transparencyLevel";
 
 	public static GRParameter<Color> COLOR = GRParameter.getGRParameter(ForegroundStyle.class, COLOR_KEY, Color.class);
-	public static GRParameter<Double> LINE_WIDTH = GRParameter.getGRParameter(ForegroundStyle.class, LINE_WIDTH_KEY, Double.class);
+	public static GRParameter<Double> LINE_WIDTH = GRParameter.getGRParameter(ForegroundStyle.class, LINE_WIDTH_KEY, Double.TYPE);
 	public static GRParameter<CapStyle> CAP_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, CAP_STYLE_KEY, CapStyle.class);
 	public static GRParameter<JoinStyle> JOIN_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, JOIN_STYLE_KEY, JoinStyle.class);
 	public static GRParameter<DashStyle> DASH_STYLE = GRParameter.getGRParameter(ForegroundStyle.class, DASH_STYLE_KEY, DashStyle.class);
-	public static GRParameter<Boolean> NO_STROKE = GRParameter.getGRParameter(ForegroundStyle.class, NO_STROKE_KEY, Boolean.class);
+	public static GRParameter<Boolean> NO_STROKE = GRParameter.getGRParameter(ForegroundStyle.class, NO_STROKE_KEY, Boolean.TYPE);
 	public static GRParameter<Boolean> USE_TRANSPARENCY = GRParameter.getGRParameter(ForegroundStyle.class, USE_TRANSPARENCY_KEY,
-			Boolean.class);
+			Boolean.TYPE);
 	public static GRParameter<Float> TRANSPARENCY_LEVEL = GRParameter.getGRParameter(ForegroundStyle.class, TRANSPARENCY_LEVEL_KEY,
-			Float.class);
+			Float.TYPE);
 
 	/*public static enum Parameters implements GRParameter {
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel

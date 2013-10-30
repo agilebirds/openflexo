@@ -463,10 +463,11 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 				connector.delete();
 			}
 			connector = null;
-			super.delete();
 			stopDrawableObserving();
 			disableStartObjectObserving();
 			disableEndObjectObserving();
+			super.delete();
+			finalizeDeletion();
 			return true;
 		}
 		return false;

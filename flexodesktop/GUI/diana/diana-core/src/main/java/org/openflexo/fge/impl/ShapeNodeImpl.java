@@ -87,9 +87,10 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	public boolean delete() {
 		Object o = getDrawable();
 		if (!isDeleted()) {
-			super.delete();
 			stopDrawableObserving();
-			System.out.println("Hop, la shape " + o + " se fait deleter !!!");
+			super.delete();
+			finalizeDeletion();
+			logger.info("Deleted ShapeNodeImpl for drawable " + o);
 			return true;
 		}
 		return false;
@@ -298,7 +299,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 		super.propertyChange(evt);
 
-		logger.info("Received for " + getDrawable() + " in ShapeNodeImpl: " + evt.getPropertyName() + " evt=" + evt);
+		// logger.info("Received for " + getDrawable() + " in ShapeNodeImpl: " + evt.getPropertyName() + " evt=" + evt);
 
 		if (evt.getSource() == getGraphicalRepresentation()) {
 			// Those notifications are forwarded by my graphical representation
@@ -312,6 +313,10 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_HEIGHT_TO_LABEL_HEIGHT.getName()
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.ADJUST_MINIMAL_WIDTH_TO_LABEL_WIDTH.getName()) {
 				checkAndUpdateDimensionIfRequired();
+			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.X.getName()
+					|| evt.getPropertyName() == ShapeGraphicalRepresentation.Y.getName()) {
+				forward(evt);
+				notifyObjectMoved(null);
 			} else if (evt.getPropertyName() == ContainerGraphicalRepresentation.WIDTH.getName()
 					|| evt.getPropertyName() == ContainerGraphicalRepresentation.HEIGHT.getName()
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.MINIMAL_HEIGHT.getName()
@@ -471,9 +476,6 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public double getX() {
-		if (getPropertyValue(ShapeGraphicalRepresentation.X) == null) {
-			System.out.println("Ca chie grave la");
-		}
 		return getPropertyValue(ShapeGraphicalRepresentation.X);
 	}
 

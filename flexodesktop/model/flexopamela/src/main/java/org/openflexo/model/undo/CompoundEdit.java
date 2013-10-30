@@ -53,6 +53,7 @@ public class CompoundEdit extends AbstractUndoableEdit {
 		int i = edits.size();
 		while (i-- > 0) {
 			AtomicEdit<?> e = (AtomicEdit<?>) edits.elementAt(i);
+			System.out.println("> UNDO AtomicEdit " + e.getPresentationName());
 			e.undo();
 		}
 	}

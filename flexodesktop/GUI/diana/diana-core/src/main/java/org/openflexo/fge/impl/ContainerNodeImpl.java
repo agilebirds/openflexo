@@ -129,7 +129,8 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		} else {
 			DrawingImpl.logger.warning("Cannot remove node: not present");
 		}
-		aChildNode.delete();
+		notifyNodeRemoved(aChildNode);
+		// aChildNode.delete();
 	}
 
 	@Override

@@ -83,7 +83,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		System.out.println("PERFORMED: " + initDiagram.getPresentationName());
 		System.out.println("edits nb=" + initDiagram.getEdits().size());
 		System.out.println(initDiagram.describe());
-		assertEquals(20, initDiagram.getEdits().size());
+		assertEquals(17, initDiagram.getEdits().size());
 
 		addFirstShape = factory.getUndoManager().startRecording("Create first shape");
 		Shape shape1 = factory.makeNewShape(ShapeType.RECTANGLE, new FGEPoint(100, 100), diagram);
@@ -94,7 +94,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		assertFalse(factory.getUndoManager().isBeeingRecording());
 		System.out.println("PERFORMED: " + addFirstShape.getPresentationName());
 		System.out.println("edits nb=" + addFirstShape.getEdits().size());
-		assertEquals(355, addFirstShape.getEdits().size());
+		assertEquals(99, addFirstShape.getEdits().size());
 
 		addSecondShape = factory.getUndoManager().startRecording("Create second shape");
 		Shape shape2 = factory.makeNewShape(ShapeType.RECTANGLE, new FGEPoint(200, 100), diagram);
@@ -105,7 +105,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		assertFalse(factory.getUndoManager().isBeeingRecording());
 		System.out.println("PERFORMED: " + addSecondShape.getPresentationName());
 		System.out.println("edits nb=" + addSecondShape.getEdits().size());
-		assertEquals(355, addSecondShape.getEdits().size());
+		assertEquals(99, addSecondShape.getEdits().size());
 
 		addConnector = factory.getUndoManager().startRecording("Add connector");
 		Connector connector1 = factory.makeNewConnector(shape1, shape2, diagram);
@@ -116,7 +116,7 @@ public class TestUndoRedoWithDrawing extends TestCase {
 		assertFalse(factory.getUndoManager().isBeeingRecording());
 		System.out.println("PERFORMED: " + addConnector.getPresentationName());
 		System.out.println("edits nb=" + addConnector.getEdits().size());
-		assertEquals(27, addConnector.getEdits().size());
+		assertEquals(19, addConnector.getEdits().size());
 
 		root = diagramDrawing.getRoot();
 		assertEquals(3, root.getChildNodes().size());

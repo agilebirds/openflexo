@@ -224,8 +224,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	}
 
-	public static GRParameter<Double> X = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, X_KEY, Double.class);
-	public static GRParameter<Double> Y = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, Y_KEY, Double.class);
+	public static GRParameter<Double> X = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, X_KEY, Double.TYPE);
+	public static GRParameter<Double> Y = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, Y_KEY, Double.TYPE);
 	public static GRParameter<BackgroundStyle> BACKGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, BACKGROUND_KEY,
 			BackgroundStyle.class);
 	public static GRParameter<ForegroundStyle> FOREGROUND = GRParameter.getGRParameter(ShapeGraphicalRepresentation.class, FOREGROUND_KEY,

@@ -60,8 +60,10 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 	@Override
 	public boolean delete() {
-		if (super.delete()) {
+		if (!isDeleted()) {
 			stopDrawableObserving();
+			super.delete();
+			finalizeDeletion();
 			return true;
 		}
 		return false;

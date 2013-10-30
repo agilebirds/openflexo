@@ -117,6 +117,9 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 				returned = null;
 			}
 		}
+		if (parameter.getType().isPrimitive() && returned == null) {
+			return parameter.getDefaultValue();
+		}
 		return returned;
 	}
 
@@ -136,10 +139,10 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		T oldValue = getPropertyValue(parameter);
 		// System.out.println("Sets from " + oldValue + " to " + value);
 		if (requireChange(oldValue, value)) {
-			CompoundEdit setValueEdit = startRecordEdit("Set " + parameter.getName() + " to " + value);
 			if (getSelection().size() == 0) {
 				defaultValue.setObjectForKey(value, parameter.getName());
 			} else {
+				CompoundEdit setValueEdit = startRecordEdit("Set " + parameter.getName() + " to " + value);
 				for (DrawingTreeNode<?, ?> n : getSelection()) {
 					S style = getStyle(n);
 					// System.out.println("For " + n + " use " + style + " and sets value of " + parameter.getName() + " with " + value);
@@ -147,22 +150,23 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 						style.setObjectForKey(value, parameter.getName());
 					}
 				}
+				stopRecordEdit(setValueEdit);
 			}
 			storedPropertyValues.put(parameter, value);
 			pcSupport.firePropertyChange(parameter.getName(), oldValue, value);
-			stopRecordEdit(setValueEdit);
 		}
 	}
 
 	protected CompoundEdit startRecordEdit(String editName) {
-		if (getController().getFactory().getUndoManager() != null) {
+		if (getController().getFactory().getUndoManager() != null && !getController().getFactory().getUndoManager().isUndoInProgress()
+				&& !getController().getFactory().getUndoManager().isRedoInProgress()) {
 			return getController().getFactory().getUndoManager().startRecording(editName);
 		}
 		return null;
 	}
 
 	protected void stopRecordEdit(CompoundEdit edit) {
-		if (getController().getFactory().getUndoManager() != null) {
+		if (edit != null && getController().getFactory().getUndoManager() != null) {
 			getController().getFactory().getUndoManager().stopRecording(edit);
 		}
 	}
@@ -263,8 +267,10 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	protected void fireChangedProperties() {
 
-		for (GRParameter<?> p : GRParameter.getGRParameters(getInspectedStyleClass())) {
-			fireChangedProperty(p);
+		if (getInspectedStyleClass() != null) {
+			for (GRParameter<?> p : GRParameter.getGRParameters(getInspectedStyleClass())) {
+				fireChangedProperty(p);
+			}
 		}
 	}
 

@@ -49,6 +49,7 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
@@ -134,6 +135,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		alterings = new ArrayList<ConstraintDependency>();
 
 		// controlAreas = new ArrayList<ControlArea<?>>();
+
 	}
 
 	@Override
@@ -274,10 +276,22 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			}
 			graphicalRepresentation = null;
 
+			notifyObservers(new NodeDeleted(this));
+
 			isDeleted = true;
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Internally called at the very end of deletion procedure
+	 */
+	protected void finalizeDeletion() {
+		if (pcSupport.hasListeners(null)) {
+			logger.warning("WARNING: finalizeDeletion called for " + this + " while object still being observed");
+		}
+		pcSupport = null;
 	}
 
 	@Override
@@ -427,22 +441,35 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		temporaryIgnoredObservables.remove(observable);
 	}
 
+	private boolean isObservingDrawable = false;
+
 	protected void startDrawableObserving() {
+		if (isObservingDrawable) {
+			logger.warning("START drawable observing called for an already observed drawable");
+			Thread.dumpStack();
+			return;
+		}
 		// Now start to observe drawable for drawing structural modifications
 		if (drawable instanceof Observable) {
 			((Observable) drawable).addObserver(this);
 		} else if (drawable instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) drawable).getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
+		isObservingDrawable = true;
 	}
 
 	protected void stopDrawableObserving() {
+		if (!isObservingDrawable) {
+			logger.warning("STOP drawable observing called for an non-observed drawable");
+			return;
+		}
 		// Now start to observe drawable for drawing structural modifications
 		if (drawable instanceof Observable) {
 			((Observable) drawable).deleteObserver(this);
 		} else if (drawable instanceof HasPropertyChangeSupport) {
 			((HasPropertyChangeSupport) drawable).getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
+		isObservingDrawable = false;
 	}
 
 	@Override
@@ -791,6 +818,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		if (isDeleted()) {
 			return false;
 		}
+		if (getGraphicalRepresentation() == null) {
+			return false;
+		}
 		return getGraphicalRepresentation().getIsVisible() && getParentNode() != null && getParentNode().shouldBeDisplayed();
 	}
 
@@ -945,7 +975,14 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	 */
 	@Override
 	public <T> T getPropertyValue(GRParameter<T> parameter) {
+		T returned = _getPropertyValue(parameter);
+		if (parameter.getType().isPrimitive() && returned == null) {
+			returned = parameter.getDefaultValue();
+		}
+		return returned;
+	}
 
+	protected <T> T _getPropertyValue(GRParameter<T> parameter) {
 		if (hasDynamicPropertyValue(parameter)) {
 			try {
 				return getDynamicPropertyValue(parameter);

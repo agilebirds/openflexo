@@ -220,6 +220,12 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O drawable, GRBinding<O, GR> grBinding) {
+		if (drawable == null) {
+			return null;
+		}
+		if (grBinding == null) {
+			return null;
+		}
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(grBinding);
 		return (DrawingTreeNode<O, GR>) hash.get(drawable);
 	}
@@ -547,12 +553,12 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	}
 
 	private <O> boolean deleteNode(DrawingTreeNode<?, ?> node) {
-		ContainerNode<?, ?> parentNode = node.getParentNode();
-		node.delete();
-		if (parentNode != null) {
+		// ContainerNode<?, ?> parentNode = node.getParentNode();
+		return node.delete();
+		/*if (parentNode != null) {
 			parentNode.notifyNodeRemoved(node);
-		}
-		return true;
+		}*/
+		// return true;
 	}
 
 	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode, ContainerNode<?, ?> parentNode) {
@@ -582,7 +588,8 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		parentNode.addChild(returned);
 
 		// Now start to observe drawable for drawing structural modifications
-		returned.startDrawableObserving();
+		// NOTE: No need now, done in ShapeNodeImpl
+		// returned.startDrawableObserving();
 
 		// if (isUpdatingObjectHierarchy) {
 		notifyNodeAdded(returned, parentNode);
@@ -608,7 +615,8 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		returned.setEndNode((ShapeNodeImpl<?>) toNode);
 
 		// Now start to observe drawable for drawing structural modifications
-		returned.startDrawableObserving();
+		// NOTE: No need now, done in ConnectorNodeImpl
+		// returned.startDrawableObserving();
 
 		parentNode.addChild(returned);
 		// if (isUpdatingObjectHierarchy) {
