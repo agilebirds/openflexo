@@ -73,7 +73,7 @@ public class IEPalettePanel extends PalettePanel implements FlexoObserver {
 			add(new IEDSWidgetView((IEController) getPalette().getController(), dsWidget, w.canDeleteWidget()));
 			addToPaletteElements(dsWidget);
 		}
-		validate();
+		revalidate();
 		repaint();
 	}
 

@@ -116,7 +116,10 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 		try {
 			component.initializeSerialization();
 			String content = object.getXMLRepresentation();
-			content = content.substring(40);
+			int endOfPrologIndex = content.indexOf("?>");
+			if (endOfPrologIndex > -1) {
+				content = content.substring(endOfPrologIndex + 2).trim();
+			}
 			content = content.replaceAll("flexoID=\"[0-9]*\"\\s*", "");
 			content = content.replaceAll("userID=\"[^\"]*\"\\s*", "");
 			Properties p = new Properties();

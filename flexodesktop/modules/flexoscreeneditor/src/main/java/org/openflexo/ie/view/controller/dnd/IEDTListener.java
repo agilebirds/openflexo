@@ -83,7 +83,7 @@ public class IEDTListener implements DropTargetListener {
 
 	private static final Logger logger = Logger.getLogger(IEDTListener.class.getPackage().getName());
 
-	public static boolean isValidDropTargetContainer(IEWidget container, IEWidget widget) {
+	public static boolean isValidDropTargetContainer(IEWidget container, IEWidget widget, boolean isTopComponent) {
 		if (widget == null) {
 			return false;
 		}
@@ -92,7 +92,7 @@ public class IEDTListener implements DropTargetListener {
 				|| widget instanceof IESequenceTD || widget instanceof IESequenceButton) {
 			return false;
 		}
-		boolean ok = isValidTargetClassForDropTargetContainer(container, widget.getClass(), widget.isTopComponent());
+		boolean ok = isValidTargetClassForDropTargetContainer(container, widget.getClass(), isTopComponent);
 		if (ok) {
 			ok = !widget.isParentOf(container);
 		}
@@ -339,7 +339,7 @@ public class IEDTListener implements DropTargetListener {
 
 				} else if (!/*isValidTargetClassForDropTargetContainer(
 							_dropContainer, droppedWidget.getTargetClassModel())*/isValidDropTargetContainer(
-						_dropContainer.getContainerModel(), newWidget)) {
+						_dropContainer.getContainerModel(), newWidget, droppedWidget.isTopComponent())) {
 					e.rejectDrop();
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Invalid target class:" + droppedWidget.getTargetClassModel() + " for container:"
@@ -397,7 +397,7 @@ public class IEDTListener implements DropTargetListener {
 				 * instanceof IETableWidget) { IEController.isDropSuccessFull =
 				 * false; e.rejectDrop(); return; }
 				 */
-				if (!isValidDropTargetContainer(_dropContainer.getContainerModel(), movedWidget)) {
+				if (!isValidDropTargetContainer(_dropContainer.getContainerModel(), movedWidget, movedWidget.isTopComponent())) {
 					// e.dropComplete(false);
 					e.rejectDrop();
 

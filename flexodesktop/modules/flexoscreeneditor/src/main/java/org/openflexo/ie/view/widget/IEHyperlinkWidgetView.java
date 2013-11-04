@@ -249,7 +249,7 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 		};
 		_jLabelTextField.setFont(_jLabel.getFont());
 		_jLabelTextField.setForeground(_jLabel.getForeground());
-		_jLabelTextField.setBackground(_jLabel.getBackground());
+		_jLabelTextField.setOpaque(false);
 		if (getModel().isCustomButton()) {
 			_jLabelTextField.setBorder(BorderFactory.createMatteBorder(0, 15, 1, 15, _jLabel.getBackground()));
 		} else {

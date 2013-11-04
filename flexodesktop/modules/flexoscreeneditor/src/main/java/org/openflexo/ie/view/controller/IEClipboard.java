@@ -78,10 +78,12 @@ public class IEClipboard extends FlexoClipboard {
 				logger.fine("Target is valid");
 			}
 			IEContainer targetContainer = (IEContainer) container;
-			if (!IEDTListener.isValidDropTargetContainer(targetContainer.getContainerModel(), _clipboardData)) {
+			if (!IEDTListener.isValidDropTargetContainer(targetContainer.getContainerModel(), _clipboardData,
+					_clipboardData.isTopComponent())) {
 				JComponent subTarget = (JComponent) container.getComponentAt(location);
 				if (subTarget instanceof IEContainer
-						&& IEDTListener.isValidDropTargetContainer(((IEContainer) subTarget).getContainerModel(), _clipboardData)) {
+						&& IEDTListener.isValidDropTargetContainer(((IEContainer) subTarget).getContainerModel(), _clipboardData,
+								_clipboardData.isTopComponent())) {
 					targetContainer = (IEContainer) subTarget;
 				} else {
 					return;

@@ -39,9 +39,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
@@ -58,7 +63,6 @@ import org.openflexo.foundation.ie.widget.ContentSizeChanged;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.ie.util.TriggerRepaintDocumentListener;
 import org.openflexo.ie.view.DropZoneTopComponent;
 import org.openflexo.ie.view.IEContainer;
 import org.openflexo.ie.view.IEWOComponentView;
@@ -323,13 +327,54 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 			logger.fine("Edit ie bloc label");
 		}
 		labelEditing = true;
-		_jLabelTextField = new JTextField(getTitle());
+		String title = getTitle();
+		if (title != null) {
+			title = title.toUpperCase();
+		}
+		_jLabelTextField = new JTextField(title);
 		_jLabelTextField.setFont(BLOC_TITLE_FONT);
 		_jLabelTextField.setBorder(BorderFactory.createEmptyBorder());
-		// _jLabelTextField.setForeground(getFlexoNode().getTextColor());
-		_jLabelTextField.setBounds(topTitleLabel().getBounds());
-		_jLabelTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		_jLabelTextField.getDocument().addDocumentListener(new TriggerRepaintDocumentListener(this));
+		_jLabelTextField.setOpaque(false);
+		_jLabelTextField.setForeground(getTextColor());
+		_jLabelTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				update();
+			}
+
+			private void update() {
+				((JComponent) _jLabelTextField.getParent()).revalidate();
+				_jLabelTextField.getParent().repaint();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				update();
+			}
+		});
+		((PlainDocument) _jLabelTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+				if (string != null) {
+					string = string.toUpperCase();
+				}
+				super.insertString(fb, offset, string, attr);
+			}
+
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				if (text != null) {
+					text = text.toUpperCase();
+				}
+				super.replace(fb, offset, length, text, attrs);
+			}
+		});
 		_topTitle.removeLabel(topTitleLabel());
 		_topTitle.addTextField(_jLabelTextField);
 		_jLabelTextField.addActionListener(new ActionListener() {
@@ -387,7 +432,6 @@ public class IEBlocWidgetView extends IEWidgetView<IEBlocWidget> implements Doub
 		public void updateColor() {
 			_label.setForeground(getTextColor());
 			setBackground(getMainColor());
-			repaint();
 		}
 
 		public void initButtonPane() {

@@ -46,7 +46,8 @@ public class IETreeDropTarget extends TreeDropTarget {
 		FlexoModelObject targetObject = target.getObject();
 		FlexoModelObject sourceObject = source.getObject();
 		if (targetObject instanceof IEWidget && sourceObject instanceof IEWidget) {
-			return IEDTListener.isValidDropTargetContainer((IEWidget) targetObject, (IEWidget) sourceObject);
+			return IEDTListener.isValidDropTargetContainer((IEWidget) targetObject, (IEWidget) sourceObject,
+					((IEWidget) sourceObject).isTopComponent());
 		}
 		return false;
 	}

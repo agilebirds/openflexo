@@ -154,8 +154,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		}
 		labelEditing = true;
 		_jLabelTextField = new JTextField(getLabelModel().getValue());
-		_jLabelTextField.setSelectionStart(0);
-		_jLabelTextField.setSelectionEnd(getLabelModel().getValue().length());
+		_jLabelTextField.setOpaque(false);
 		_jLabelTextField.setFont(_jLabel.getFont());
 		_jLabelTextField.setBorder(BorderFactory.createEmptyBorder());
 		_jLabelTextField.setBounds(_jLabel.getBounds());
