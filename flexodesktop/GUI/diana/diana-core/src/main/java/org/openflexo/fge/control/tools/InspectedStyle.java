@@ -65,6 +65,8 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	private boolean isDeleted = false;
 
+	private boolean shouldBeUpdated = true;
+
 	protected InspectedStyle(DianaInteractiveViewer<?, ?, ?> controller, S defaultValue) {
 		this.controller = controller;
 		this.defaultValue = defaultValue;
@@ -108,12 +110,22 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	protected <T> T _getPropertyValue(GRParameter<T> parameter) {
 		T returned;
 		if (getSelection().size() == 0) {
-			returned = (T) defaultValue.objectForKey(parameter.getName());
+			if (defaultValue != null) {
+				returned = (T) defaultValue.objectForKey(parameter.getName());
+			} else {
+				returned = null;
+			}
 		} else {
 			S style = getStyle(getSelection().get(0));
 			if (style != null) {
 				returned = (T) style.objectForKey(parameter.getName());
 			} else {
+				if (style != null) {
+					System.out.println("OK, j'ai bien un " + style.getClass().getSimpleName() + " mais c'est dur de lui appliquer "
+							+ parameter);
+					System.out.println("parameter.getDeclaringClass()=" + parameter.getDeclaringClass());
+					System.out.println("style.getClass()=" + style.getClass());
+				}
 				returned = null;
 			}
 		}
@@ -235,6 +247,15 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	public void fireSelectionUpdated() {
 
+		update();
+	}
+
+	/**
+	 * Called to update inspected style<br>
+	 * 
+	 */
+	public void update() {
+
 		// We first unregister all existing observing scheme
 		for (S s : inspectedStyles) {
 			if (s instanceof HasPropertyChangeSupport) {
@@ -303,8 +324,18 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// System.out.println("****************** PropertyChange with " + evt);
-		fireChangedProperties();
+		// System.out.println("****************** PropertyChange with " + evt + " property=" + evt.getPropertyName());
+		if (shouldBeUpdated) {
+			fireChangedProperties();
+		}
+	}
+
+	public boolean shouldBeUpdated() {
+		return shouldBeUpdated;
+	}
+
+	public void setShouldBeUpdated(boolean shouldBeUpdated) {
+		this.shouldBeUpdated = shouldBeUpdated;
 	}
 
 	public PropertyChangeSupport getPropertyChangeSupport() {
@@ -312,7 +343,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	}
 
 	public void destroy() {
-		logger.warning("Destroy() not implemented yet");
+		logger.warning("destroy() not implemented yet");
 	}
 
 	public boolean delete() {

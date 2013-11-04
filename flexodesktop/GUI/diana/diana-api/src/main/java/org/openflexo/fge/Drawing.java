@@ -60,6 +60,7 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.factory.KeyValueCoding;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
@@ -119,7 +120,7 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	 *            Type of GraphicalRepresentation represented by this node
 	 */
 	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, PropertyChangeListener,
-			Observer, HasPropertyChangeSupport {
+			Observer, HasPropertyChangeSupport, KeyValueCoding {
 
 		public static GRParameter<Boolean> IS_FOCUSED = GRParameter.getGRParameter(DrawingTreeNode.class, DrawingTreeNode.IS_FOCUSED_KEY,
 				Boolean.class);

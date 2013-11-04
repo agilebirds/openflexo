@@ -30,6 +30,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.control.tools.ConnectorSpecificationFactory;
 import org.openflexo.fge.control.tools.DianaInspectors;
+import org.openflexo.fge.control.tools.InspectedLocationSizeProperties;
 import org.openflexo.fge.control.tools.ShapeSpecificationFactory;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors.JInspector;
@@ -56,6 +57,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	private JInspector<ShadowStyle> shadowInspector;
 	private JInspector<ShapeSpecificationFactory> shapeInspector;
 	private JInspector<ConnectorSpecificationFactory> connectorInspector;
+	private JInspector<InspectedLocationSizeProperties> locationSizeInspector;
 
 	private JFrame frame;
 
@@ -84,6 +86,9 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 		if (connectorInspector != null) {
 			connectorInspector.setData(getInspectedConnectorSpecification().getStyleFactory(), true);
 		}
+		if (locationSizeInspector != null) {
+			locationSizeInspector.setData(getInspectedLocationSizeProperties(), true);
+		}
 	}
 
 	public static FileResource FOREGROUND_STYLE_FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
@@ -92,6 +97,7 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 	public static FileResource BACKGROUND_STYLE_FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
 	public static FileResource SHAPE_SPECIFICATION_PANEL_FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
 	public static FileResource CONNECTOR_SPECIFICATION_PANEL_FIB_FILE = new FileResource("Fib/ConnectorSelectorPanel.fib");
+	public static FileResource LOCATION_SIZE_FIB_FILE = new FileResource("Fib/LocationSizePanel.fib");
 
 	public JInspector<ForegroundStyle> getForegroundStyleInspector() {
 		if (foregroundStyleInspector == null) {
@@ -125,6 +131,15 @@ public class JDianaInspectors extends DianaInspectors<JInspector<?>, SwingViewFa
 					getInspectedShadowStyle(), frame, "Shadow");
 		}
 		return shadowInspector;
+	}
+
+	@Override
+	public JInspector<InspectedLocationSizeProperties> getLocationSizeInspector() {
+		if (locationSizeInspector == null) {
+			locationSizeInspector = new JInspector<InspectedLocationSizeProperties>(FIBLibrary.instance().retrieveFIBComponent(
+					LOCATION_SIZE_FIB_FILE), getInspectedLocationSizeProperties(), frame, "Location/Size");
+		}
+		return locationSizeInspector;
 	}
 
 	public JInspector<ShapeSpecificationFactory> getShapeInspector() {

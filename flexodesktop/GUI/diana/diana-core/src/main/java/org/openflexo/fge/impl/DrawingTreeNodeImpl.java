@@ -52,6 +52,8 @@ import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.xmlcode.KeyValueCoder;
+import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
  * This is the base implementation of a node in the drawing tree. (see DrawingTreeNode<O,GR)<br>
@@ -493,6 +495,8 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+
+		// System.out.println("!!!!!!!Received PropertyChangeEvent " + evt);
 
 		if (isDeleted()) {
 			logger.warning("Received PropertyChangeEvent " + evt + " for DELETED node !!!!");
@@ -1144,6 +1148,23 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public void setTextStyle(TextStyle style) {
 		setPropertyValue(GraphicalRepresentation.TEXT_STYLE, style);
+	}
+
+	@Override
+	public Object objectForKey(String key) {
+		return KeyValueDecoder.objectForKey(this, key);
+	}
+
+	@Override
+	public void setObjectForKey(Object value, String key) {
+		KeyValueCoder.setObjectForKey(this, value, key);
+	}
+
+	// Retrieving type
+
+	@Override
+	public Class getTypeForKey(String key) {
+		return KeyValueDecoder.getTypeForKey(this, key);
 	}
 
 }

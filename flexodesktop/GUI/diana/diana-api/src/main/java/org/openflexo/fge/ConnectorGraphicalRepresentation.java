@@ -122,6 +122,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public void setEndObject(ShapeGraphicalRepresentation anEndObject);*/
 
 	@Getter(value = CONNECTOR_SPECIFICATION_KEY)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
 	@XMLElement
 	public ConnectorSpecification getConnectorSpecification();
 

@@ -176,6 +176,7 @@ public class DiagramEditorApplication {
 		inspectors.getBackgroundStyleInspector().setLocation(1000, 500);
 		inspectors.getShapeInspector().setLocation(1000, 600);
 		inspectors.getConnectorInspector().setLocation(1000, 700);
+		inspectors.getLocationSizeInspector().setLocation(1000, 50);
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(toolSelector.getComponent());
@@ -374,6 +375,8 @@ public class DiagramEditorApplication {
 				inspectors.getConnectorInspector());
 		WindowMenuItem shadowInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "shadow_inspector"),
 				inspectors.getShadowStyleInspector());
+		WindowMenuItem locationSizeInspectorItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION,
+				"location_size_inspector"), inspectors.getLocationSizeInspector());
 
 		WindowMenuItem paletteItem = new WindowMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "palette"), paletteDialog);
 
@@ -383,6 +386,7 @@ public class DiagramEditorApplication {
 		viewMenu.add(shapeInspectorItem);
 		viewMenu.add(connectorInspectorItem);
 		viewMenu.add(shadowInspectorItem);
+		viewMenu.add(locationSizeInspectorItem);
 		viewMenu.addSeparator();
 		viewMenu.add(paletteItem);
 
@@ -727,10 +731,12 @@ public class DiagramEditorApplication {
 
 		@Override
 		public void windowDeactivated(WindowEvent e) {
+			setState(window.isVisible());
 		}
 
 		@Override
 		public void windowClosing(WindowEvent e) {
+			setState(window.isVisible());
 		}
 
 		@Override
@@ -740,6 +746,7 @@ public class DiagramEditorApplication {
 
 		@Override
 		public void windowActivated(WindowEvent e) {
+			setState(window.isVisible());
 		}
 
 	}

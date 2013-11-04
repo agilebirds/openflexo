@@ -27,8 +27,11 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.model.undo.CompoundEdit;
 
 public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
+
+	private CompoundEdit adjustEdit = null;
 
 	public ConnectorAdjustingControlPoint(ConnectorNode<?> node, FGEPoint pt) {
 		super(node, pt);
@@ -51,6 +54,11 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 
 	@Override
 	public void startDragging(DianaEditor<?> controller, FGEPoint startPoint) {
+
+		if (getNode().getFactory().getUndoManager() != null) {
+			adjustEdit = getNode().getFactory().getUndoManager().startRecording("Adjust connector");
+		}
+
 		super.startDragging(controller, startPoint);
 		if (controller instanceof AbstractDianaEditor && ((AbstractDianaEditor<?, ?, ?>) controller).getDelegate() != null) {
 			((AbstractDianaEditor<?, ?, ?>) controller).getDelegate().objectStartMoving(getNode());
@@ -68,6 +76,9 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 		super.stopDragging(controller, focused);
 		if (controller instanceof AbstractDianaEditor && ((AbstractDianaEditor<?, ?, ?>) controller).getDelegate() != null) {
 			((AbstractDianaEditor<?, ?, ?>) controller).getDelegate().objectStopMoving(getNode());
+		}
+		if (getNode().getFactory().getUndoManager() != null) {
+			getNode().getFactory().getUndoManager().stopRecording(adjustEdit);
 		}
 	}
 }

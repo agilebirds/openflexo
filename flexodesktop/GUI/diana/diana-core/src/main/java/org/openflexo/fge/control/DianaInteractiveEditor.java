@@ -40,6 +40,7 @@ import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
 import org.openflexo.fge.control.tools.InspectedConnectorSpecification;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
+import org.openflexo.fge.control.tools.InspectedLocationSizeProperties;
 import org.openflexo.fge.control.tools.InspectedShadowStyle;
 import org.openflexo.fge.control.tools.InspectedShapeSpecification;
 import org.openflexo.fge.control.tools.InspectedTextStyle;
@@ -79,6 +80,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private InspectedShadowStyle inspectedShadowStyle;
 	private InspectedShapeSpecification inspectedShapeSpecification;
 	private InspectedConnectorSpecification inspectedConnectorSpecification;
+	private InspectedLocationSizeProperties inspectedLocationSizeProperties;
 
 	/**
 	 * The clipboard beeing managed by this editor
@@ -105,6 +107,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedShadowStyle = new InspectedShadowStyle(this);
 		inspectedShapeSpecification = new InspectedShapeSpecification(this);
 		inspectedConnectorSpecification = new InspectedConnectorSpecification(this);
+		inspectedLocationSizeProperties = new InspectedLocationSizeProperties(this);
 		setCurrentTool(EditorTool.SelectionTool);
 	}
 
@@ -129,6 +132,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedBackgroundStyle.fireSelectionUpdated();
 		inspectedShapeSpecification.fireSelectionUpdated();
 		inspectedConnectorSpecification.fireSelectionUpdated();
+		inspectedLocationSizeProperties.fireSelectionUpdated();
 	}
 
 	public DrawShapeToolController<?, ?> getDrawShapeToolController() {
@@ -188,6 +192,10 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	public InspectedConnectorSpecification getInspectedConnectorSpecification() {
 		return inspectedConnectorSpecification;
+	}
+
+	public InspectedLocationSizeProperties getInspectedLocationSizeProperties() {
+		return inspectedLocationSizeProperties;
 	}
 
 	public DrawShapeAction getDrawShapeAction() {

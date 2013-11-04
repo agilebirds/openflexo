@@ -83,16 +83,22 @@ public class GRParameter<T> {
 		return returned;
 	}
 
+	private static Map<Class<?>, Collection<GRParameter<?>>> cache = new HashMap<Class<?>, Collection<GRParameter<?>>>();
+
 	public static Collection<GRParameter<?>> getGRParameters(Class<?> declaringClass) {
-		Map<String, GRParameter<?>> cacheForClass = cachedParameters.get(declaringClass);
-		if (cacheForClass == null) {
-			cacheForClass = retrieveParameters(declaringClass);
-			cachedParameters.put(declaringClass, cacheForClass);
-		}
-		Collection<GRParameter<?>> returned = new ArrayList<GRParameter<?>>();
-		returned.addAll(cacheForClass.values());
-		if (declaringClass.getSuperclass() != null) {
-			returned.addAll(getGRParameters(declaringClass.getSuperclass()));
+		Collection<GRParameter<?>> returned = cache.get(declaringClass);
+		if (returned == null) {
+			Map<String, GRParameter<?>> cacheForClass = cachedParameters.get(declaringClass);
+			if (cacheForClass == null) {
+				cacheForClass = retrieveParameters(declaringClass);
+				cachedParameters.put(declaringClass, cacheForClass);
+			}
+			returned = new ArrayList<GRParameter<?>>();
+			returned.addAll(cacheForClass.values());
+			if (declaringClass.getSuperclass() != null) {
+				returned.addAll(getGRParameters(declaringClass.getSuperclass()));
+			}
+			cache.put(declaringClass, returned);
 		}
 		return returned;
 	}

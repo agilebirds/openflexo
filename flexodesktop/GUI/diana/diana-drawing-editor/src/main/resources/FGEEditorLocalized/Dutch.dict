@@ -19,6 +19,7 @@ foreground_inspector=foreground_inspector
 help=Help
 inspect=Inspect
 localized_editor=Localization Editor
+location_size_inspector=location_size_inspector
 logs=Logs
 new_drawing=New drawing...
 ok=OK

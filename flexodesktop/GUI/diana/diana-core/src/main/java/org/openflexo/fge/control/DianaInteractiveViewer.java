@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
@@ -76,6 +77,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	private List<DrawingTreeNode<?, ?>> selectedObjects;
 	private List<ShapeNode<?>> selectedShapes;
 	private List<ConnectorNode<?>> selectedConnectors;
+	private List<ContainerNode<?, ?>> selectedContainers;
 
 	private FGEView<?, ?> currentlyEditedLabelView;
 	private ControlArea<?> focusedControlArea;
@@ -230,6 +232,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			notifyObservers(new ObjectAddedToSelection(aNode));
 			selectedShapes = null;
 			selectedConnectors = null;
+			selectedContainers = null;
 		}
 		/*if (getInspectors() != null) {
 			getInspectors().update();
@@ -250,6 +253,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			notifyObservers(new ObjectRemovedFromSelection(aNode));
 			selectedShapes = null;
 			selectedConnectors = null;
+			selectedContainers = null;
 		}
 		/*if (getInspectors() != null) {
 			getInspectors().update();
@@ -281,6 +285,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		notifyObservers(new SelectionCleared());
 		selectedShapes = null;
 		selectedConnectors = null;
+		selectedContainers = null;
 
 		/*if (getInspectors() != null) {
 			getInspectors().update();
@@ -340,6 +345,18 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			}
 		}
 		return selectedConnectors;
+	}
+
+	public List<ContainerNode<?, ?>> getSelectedContainers() {
+		if (selectedContainers == null) {
+			selectedContainers = new ArrayList<ContainerNode<?, ?>>();
+			for (DrawingTreeNode<?, ?> node : selectedObjects) {
+				if (node instanceof ContainerNode) {
+					selectedContainers.add((ContainerNode<?, ?>) node);
+				}
+			}
+		}
+		return selectedContainers;
 	}
 
 	public List<DrawingTreeNode<?, ?>> getFocusedObjects() {
