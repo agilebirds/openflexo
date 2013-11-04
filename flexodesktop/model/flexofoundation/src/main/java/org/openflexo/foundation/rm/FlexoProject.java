@@ -677,7 +677,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		File oldProjectDirectory = getProjectDirectory();
 		boolean directoriesAreDifferent = true;
 
-		if (newProjectDirectory == null) {
+		if (newProjectDirectory == null || newProjectDirectory.isFile()) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Invoked 'Save As' with a null new project directory");
 			}
@@ -715,8 +715,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		try {
 			if (directoriesAreDifferent) {
 				try {
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Copying all files to new location");
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Copying all files to new location");
 					}
 					if (progress != null) {
 						progress.setSecondaryProgress(FlexoLocalization.localizedForKey("copying_files_to_new_location"));
@@ -726,8 +726,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 					} else {
 						FileUtils.copyContentDirToDir(getProjectDirectory(), newProjectDirectory);
 					}
-					if (logger.isLoggable(Level.FINE)) {
-						logger.fine("Copy terminated succesfully");
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Copy terminated succesfully");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
