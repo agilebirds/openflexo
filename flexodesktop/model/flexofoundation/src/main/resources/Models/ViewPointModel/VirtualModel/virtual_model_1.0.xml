@@ -245,9 +245,6 @@
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
 	</entity>
 	
-	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole" xmlTag="ExcelWorkbookPatternRole">
-	</entity>
-	
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole" xmlTag="ExcelSheetPatternRole">
 	</entity>
 	
@@ -574,11 +571,7 @@
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="cellStyle" xmlTag="cellStyle" attribute="YES" />
 	</entity>
-	
-	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook"
-		xmlTag="AddExcelWorkbook">
-	</entity>
-	
+
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet"
 		xmlTag="AddExcelSheet">
 		<property name="sheetName" xmlTag="sheetName" attribute="YES" />

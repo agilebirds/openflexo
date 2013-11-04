@@ -48,11 +48,9 @@ import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
-import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
@@ -66,14 +64,12 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
-@DeclarePatternRole(FML = "ExcelWorkbook", patternRoleClass = ExcelWorkbookPatternRole.class), // Workbook
-		@DeclarePatternRole(FML = "ExcelSheet", patternRoleClass = ExcelSheetPatternRole.class), // Sheet
+@DeclarePatternRole(FML = "ExcelSheet", patternRoleClass = ExcelSheetPatternRole.class), // Sheet
 		@DeclarePatternRole(FML = "ExcelColumn", patternRoleClass = ExcelColumnPatternRole.class), // Sheet
 		@DeclarePatternRole(FML = "ExcelRow", patternRoleClass = ExcelRowPatternRole.class), // Row
 		@DeclarePatternRole(FML = "ExcelCell", patternRoleClass = ExcelCellPatternRole.class) // Cell
 })
 @DeclareEditionActions({ // All edition actions available through this model slot
-@DeclareEditionAction(FML = "AddExcelWorkbook", editionActionClass = AddExcelWorkbook.class), // Add workbook
 		@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
 		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
 		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class), // Add sheet
@@ -118,9 +114,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelSheetPatternRole(null);
-		} else if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelWorkbookPatternRole(null);
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		}  else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelCellPatternRole(null);
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelRowPatternRole(null);
@@ -131,9 +125,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "workbook";
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "cell";
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "row";
@@ -155,8 +147,6 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelSheet(null);
-		} else if (AddExcelWorkbook.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelWorkbook(null);
 		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelCell(null);
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
@@ -177,10 +167,9 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectExcelSheet.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelSheet(null);
-		} 
-		if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
+		} else if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelCell(null);
-		}if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
+		} else if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelRow(null);
 		}else {
 			return null;
