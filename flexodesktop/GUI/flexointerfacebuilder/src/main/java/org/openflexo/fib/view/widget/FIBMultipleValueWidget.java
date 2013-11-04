@@ -145,8 +145,12 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		private boolean requireChange = true;
 
 		private boolean requireChange() {
-			// Always return true first time
 			if (requireChange) {
+				if (getWidget().getList() != null && !getWidget().getList().isSet() && getWidget().getArray() != null
+						&& !getWidget().getArray().isSet()) {
+					requireChange = false;
+				}
+				// Always return true first time
 				return true;
 			}
 			requireChange = false;
@@ -190,6 +194,11 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			}
 
 			else if (StringUtils.isNotEmpty(getWidget().getStaticList())) {
+				return false;
+			}
+
+			if (getWidget().getList() != null && !getWidget().getList().isSet() && getWidget().getArray() != null
+					&& !getWidget().getArray().isSet()) {
 				return false;
 			}
 
