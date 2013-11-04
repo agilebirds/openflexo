@@ -71,7 +71,7 @@ public abstract class DMPerspective extends FlexoPerspective {
 		private DMEntity representedEntity = null;
 
 		protected PropertiesBrowser(DMController controller) {
-			super(controller, false);
+			super(controller);
 		}
 
 		protected DMEntity getRepresentedEntity() {
@@ -80,6 +80,7 @@ public abstract class DMPerspective extends FlexoPerspective {
 
 		protected void setRepresentedEntity(DMEntity representedEntity) {
 			this.representedEntity = representedEntity;
+			setRootObject(representedEntity);
 		}
 
 		@Override

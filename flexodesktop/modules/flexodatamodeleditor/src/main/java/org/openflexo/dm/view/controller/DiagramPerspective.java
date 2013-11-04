@@ -59,7 +59,7 @@ public class DiagramPerspective extends DMPerspective {
 	public DiagramPerspective(DMController controller) {
 		super("er_diagram_perspective", controller);
 		this.controller = controller;
-		browser = new DMBrowser(controller, true);
+		browser = new DMBrowser(controller);
 		browser.setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
 		browser.setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
 		browser.setDMViewMode(DMViewMode.Diagrams);
@@ -84,7 +84,6 @@ public class DiagramPerspective extends DMPerspective {
 	public void focusOnDiagram(ERDiagram diagram) {
 		diagramBrowser.deleteBrowserListener(browserView);
 		diagramBrowser.setRepresentedDiagram(diagram);
-		diagramBrowser.update();
 		diagramBrowser.addBrowserListener(browserView);
 	}
 
@@ -149,7 +148,7 @@ public class DiagramPerspective extends DMPerspective {
 		private ERDiagram representedDiagram = null;
 
 		protected DiagramBrowser(DMController controller) {
-			super(controller, true);
+			super(controller);
 		}
 
 		protected ERDiagram getRepresentedDiagram() {
@@ -158,11 +157,7 @@ public class DiagramPerspective extends DMPerspective {
 
 		protected void setRepresentedDiagram(ERDiagram representedDiagram) {
 			this.representedDiagram = representedDiagram;
-		}
-
-		@Override
-		public FlexoModelObject getDefaultRootObject() {
-			return representedDiagram;
+			setRootObject(representedDiagram);
 		}
 
 	}
@@ -189,6 +184,11 @@ public class DiagramPerspective extends DMPerspective {
 	@Override
 	public void setProject(FlexoProject project) {
 		super.setProject(project);
+		if (project != null) {
+			browser.setRootObject(project.getDataModel());
+		} else {
+			browser.setRootObject(null);
+		}
 		if (project != null) {
 			if (project.getDataModel().getJDKRepository().hasDiagrams()) {
 				browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);

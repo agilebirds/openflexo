@@ -62,7 +62,6 @@ class HierarchyPerspective extends DMPerspective {
 				if (event.getAddedObject() instanceof DMEntity) {
 					propertiesBrowser.deleteBrowserListener(this);
 					propertiesBrowser.setRepresentedEntity((DMEntity) event.getAddedObject());
-					propertiesBrowser.update();
 					propertiesBrowser.addBrowserListener(this);
 				}
 				super.objectAddedToSelection(event);
