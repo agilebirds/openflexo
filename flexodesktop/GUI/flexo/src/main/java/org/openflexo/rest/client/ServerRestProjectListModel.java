@@ -100,7 +100,7 @@ public class ServerRestProjectListModel extends AbstractServerRestClientModel im
 				Project project = iterator.next();
 				progress.increment(FlexoLocalization.localizedForKey("fetching_last_version_for") + " " + project.getName());
 				List<ProjectVersion> versions = client.projectsProjectIDVersions(jerseyClient, uri, project.getProjectId()).getAsXml(0, 1,
-						"creationDate desc", new GenericType<List<ProjectVersion>>() {
+						"versionID desc", new GenericType<List<ProjectVersion>>() {
 						});
 				if (versions.size() == 0) {
 					iterator.remove();
