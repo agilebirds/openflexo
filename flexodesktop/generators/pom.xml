@@ -14,7 +14,7 @@
 		<module>flexocodegenerator</module>
 		<module>flexodocgenerator</module>
 		<module>flexogenerator</module>
-		<module>flexosourcegenerator</module>
+		<!-- <module>flexosourcegenerator</module> -->
 	</modules>
 </project>
 
