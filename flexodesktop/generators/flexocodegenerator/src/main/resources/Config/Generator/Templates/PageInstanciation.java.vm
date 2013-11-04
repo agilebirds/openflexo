@@ -472,6 +472,7 @@
 						#if($generator.isPrototype()) 
     						#if(${workflowPathList.size()} > 1)
 								#set($prefix = "");
+								#set($condition = "")
 								#if(!${button1.getWOComponent().equals(${ci.getComponentDefinition().getWOComponent()})})
 									#set($prefix = "${button1.getWOComponent().getName()}.")
 								#end
@@ -483,7 +484,7 @@
                         				#if(!$nextop)
                         					#set($nextop = ${ci.getOperationNode()})
     									#end
-    									#if($foreach.index)#set($condition = "$condition && ")#end
+    									#if($foreach.index > 0)#set($condition = "$condition && ")#end
     									#set($condition = "$condition !hiddenFieldValue.equals(${prefix}#upNameForWidget($button1)+#componentInstance($nextop.getComponentInstance()))")
     								#end
     							#end
@@ -491,7 +492,7 @@
 									#if ($button1.isInRepetition())
             							#set($listProcess = ${button1.getHTMLListDescriptor().getRepetitionOperator().getInferredListProcess()})
             							#if($listProcess)
-                    						Integer itemId = new Integer(hiddenFieldValue.substring(#upNameForWidget($button1)).length()));
+                    						Integer itemId = Integer.valueOf(hiddenFieldValue.substring(#upNameForWidget($button1).length()));
             								getBusinessDataStorage().setCurrentProcessBusinessData(WorkflowProcess.${listProcess.getProcessDictionaryKey()}, itemId);
             							#end
             						#end
