@@ -70,6 +70,7 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
 
@@ -386,16 +387,29 @@ public class ProjectLoader implements HasPropertyChangeSupport, FlexoObserver {
 		List<FlexoVersion> availableVersions = new ArrayList<FlexoVersion>(FlexoXMLMappings.getReleaseVersions());
 		Collections.sort(availableVersions, Collections.reverseOrder(FlexoVersion.comparator));
 
-		final DirectoryParameter targetPrjDirectory = new DirectoryParameter("targetPrjDirectory", "new_project_file", project
-				.getProjectDirectory().getParentFile()) {
-			@Override
-			public void setValue(File value) {
-				if (!value.getName().endsWith(".prj")) {
-					value = new File(value.getParentFile(), value.getName() + ".prj");
+		final FileParameter targetPrjDirectory;
+		if (ToolBox.isMacOSLaf()) {
+			targetPrjDirectory = new FileParameter("targetPrjDirectory", "new_project_file", project.getProjectDirectory().getParentFile()) {
+				@Override
+				public void setValue(File value) {
+					if (!value.getName().endsWith(".prj")) {
+						value = new File(value.getParentFile(), value.getName() + ".prj");
+					}
+					super.setValue(value);
 				}
-				super.setValue(value);
-			}
-		};
+			};
+		} else {
+			targetPrjDirectory = new DirectoryParameter("targetPrjDirectory", "new_project_file", project.getProjectDirectory()
+					.getParentFile()) {
+				@Override
+				public void setValue(File value) {
+					if (!value.getName().endsWith(".prj")) {
+						value = new File(value.getParentFile(), value.getName() + ".prj");
+					}
+					super.setValue(value);
+				}
+			};
+		}
 		targetPrjDirectory.setDepends("targetPrjDirectory");
 		targetPrjDirectory.addParameter(FileEditWidget.TITLE, "select_a_prj_directory");
 		targetPrjDirectory.addParameter(FileEditWidget.FILTER, "*.prj");
@@ -425,7 +439,6 @@ public class ProjectLoader implements HasPropertyChangeSupport, FlexoObserver {
 					}
 				}, targetPrjDirectory, versionParam);
 
-		System.setProperty("apple.awt.fileDialogForDirectories", "false");
 		if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 			File projectDirectory = targetPrjDirectory.getValue();
 			if (projectDirectory == null) {

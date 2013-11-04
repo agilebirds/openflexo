@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
-public class DirectoryParameter extends ParameterDefinition<File> {
+public class DirectoryParameter extends FileParameter {
 
 	public DirectoryParameter(String name, String label, File defaultValue) {
 		super(name, label, defaultValue);
