@@ -45,7 +45,7 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 	 */
 	public DiagramRootPane(Diagram diagram) {
 		super(diagram);
-		setGraphicalRepresentation(getFactory().makeDrawingGraphicalRepresentation(null));
+		setGraphicalRepresentation(getFactory().makeDrawingGraphicalRepresentation());
 		logger.info("%%%%%%%%%%%%%%%%%%%%%%% On cree un DiagramRootPane");
 	}
 

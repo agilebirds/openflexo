@@ -74,9 +74,8 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(
-				getClass().getSimpleName() + " conformTo ConnectorSpecification from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
-				context);
+		out.append(getClass().getSimpleName() + " conformTo ConnectorSpecification from " + getModelSlot().getName() + " {"
+				+ StringUtils.LINE_SEPARATOR, context);
 		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
 		out.append("}", context);
 		if (getAssignation().isSet()) {
@@ -236,7 +235,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ConnectorGraphicalRepresentation<DiagramConnector> newGR = diagram.getFactory().makeConnectorGraphicalRepresentation(null, null);
+		ConnectorGraphicalRepresentation newGR = diagram.getFactory().makeConnectorGraphicalRepresentation();
 		newGR.setsWith(grToUse);
 		newConnector.setGraphicalRepresentation(newGR);
 

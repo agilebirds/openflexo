@@ -61,7 +61,7 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	private ExampleDiagramFactory factory;
 
 	public static ExampleDiagram newExampleDiagram(DiagramSpecification diagramSpecification, String exampleDiagramName,
-			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
+			DrawingGraphicalRepresentation graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
 		ExampleDiagramResource edRes = ExampleDiagramResourceImpl.makeExampleDiagramResource(diagramSpecification.getResource(),
 				exampleDiagramName, viewPointLibrary);
 		ExampleDiagram exampleDiagram = new ExampleDiagram(null);

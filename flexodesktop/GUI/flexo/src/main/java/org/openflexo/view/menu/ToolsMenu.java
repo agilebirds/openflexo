@@ -34,6 +34,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.FlexoMainLocalizer;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.components.ProgressWindow;
@@ -41,7 +42,6 @@ import org.openflexo.components.validation.ConsistencyCheckDialog;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;

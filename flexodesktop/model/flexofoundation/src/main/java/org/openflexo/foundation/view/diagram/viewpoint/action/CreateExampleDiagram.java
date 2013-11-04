@@ -71,7 +71,7 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, Diag
 
 	public String newShemaName;
 	public String description;
-	public DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation;
+	public DrawingGraphicalRepresentation graphicalRepresentation;
 
 	private ExampleDiagram _newShema;
 

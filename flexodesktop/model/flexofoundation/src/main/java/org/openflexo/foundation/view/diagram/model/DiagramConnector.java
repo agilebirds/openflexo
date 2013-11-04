@@ -80,11 +80,11 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	/**
 	 * Refresh graphical representation
 	 */
-	@Override
+	/*@Override
 	public void refreshGraphicalRepresentation() {
 		super.refreshGraphicalRepresentation();
 		getGraphicalRepresentation().notifyConnectorChanged();
-	}
+	}*/
 
 	@Override
 	public boolean delete() {

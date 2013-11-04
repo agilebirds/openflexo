@@ -5,6 +5,6 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 public interface GRShapeTemplate extends GRTemplate {
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation();
 
 }

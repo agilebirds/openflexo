@@ -48,9 +48,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.FlexoMainLocalizer;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.validation.ValidationModel;

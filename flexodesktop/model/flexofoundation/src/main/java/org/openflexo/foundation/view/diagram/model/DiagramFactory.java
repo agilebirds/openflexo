@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
-import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 /**
@@ -29,7 +29,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
  * @author sylvain
  * 
  */
-public class DiagramFactory extends FGEModelFactory {
+public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public DiagramFactory() throws ModelDefinitionException {
 		super(DiagramRootPane.class, DiagramShape.class, DiagramConnector.class);

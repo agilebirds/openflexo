@@ -177,7 +177,8 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 					// Declare shape as new shape only if it is the primary representation role of the EP
 
 					_primaryShape = newShape;
-					gr.setLocation(dropLocation);
+					gr.setX(dropLocation.getX());
+					gr.setY(dropLocation.getY());
 
 					// Temporary comment this portion of code if child shapes are declared inside this shape
 					if (!action.getPatternRole().containsShapes()
@@ -207,7 +208,8 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 						}
 						if (requireNewBorder) {
 							gr.setBorder(newBorder);
-							gr.setLocation(new FGEPoint(gr.getX() + deltaX, gr.getY() + deltaY));
+							gr.setX(gr.getX() + deltaX);
+							gr.setY(gr.getY() + deltaY);
 							if (gr.getIsFloatingLabel()) {
 								gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
 								gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
@@ -218,18 +220,18 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 					Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
 					if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
 						ShapeGraphicalRepresentation primaryGR = (ShapeGraphicalRepresentation) graphicalRepresentation;
-						gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY()
-								- primaryGR.getY()));
+						gr.setX(dropLocation.x + gr.getX() - primaryGR.getX());
+						gr.setY(dropLocation.y + gr.getY() - primaryGR.getY());
 					}
 				}
-				gr.updateConstraints();
+				// gr.updateConstraints();
 			} else {
 				logger.warning("Inconsistant data: shape has not been created");
 			}
 
-			if (action.getExtendParentBoundsToHostThisShape()) {
+			/*if (action.getExtendParentBoundsToHostThisShape()) {
 				((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).extendParentBoundsToHostThisShape();
-			}
+			}*/
 
 		}
 		return assignedObject;

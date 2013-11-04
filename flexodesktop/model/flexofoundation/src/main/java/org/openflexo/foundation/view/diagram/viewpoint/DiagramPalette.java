@@ -93,6 +93,8 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 		return diagramPalette;
 	}
 
+	private DiagramPaletteFactory factory;
+
 	// Used during deserialization, do not use it
 	public DiagramPalette(DiagramPaletteBuilder builder) {
 		super(builder);
@@ -101,7 +103,12 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 			builder.diagramPalette = this;
 			diagramSpecification = builder.diagramSpecification;
 			resource = builder.resource;
+			factory = builder.getFactory();
 		}
+	}
+
+	public DiagramPaletteFactory getFactory() {
+		return factory;
 	}
 
 	@Override

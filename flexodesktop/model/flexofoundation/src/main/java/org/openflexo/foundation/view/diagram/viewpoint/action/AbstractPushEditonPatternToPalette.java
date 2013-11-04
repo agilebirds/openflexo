@@ -29,12 +29,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -45,6 +40,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -89,14 +85,15 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 
 		if (getFocusedObject() != null && palette != null) {
 
+			DiagramPaletteFactory factory = palette.getFactory();
+
 			if (takeScreenshotForTopLevelElement) {
 				File screenshotFile = saveScreenshot();
-				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentation();
-				gr.setShapeType(ShapeType.RECTANGLE);
-				gr.setForeground(ForegroundStyle.makeNone());
-				gr.setBackground(new BackgroundImageBackgroundStyle(screenshotFile));
-				gr.setShadowStyle(ShadowStyle.makeNone());
-				gr.setTextStyle(TextStyle.makeDefault());
+				ShapeGraphicalRepresentation gr = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
+				gr.setForeground(factory.makeNoneForegroundStyle());
+				gr.setBackground(factory.makeImageBackground(screenshotFile));
+				gr.setShadowStyle(factory.makeNoneShadowStyle());
+				gr.setTextStyle(factory.makeDefaultTextStyle());
 				gr.setText("");
 				gr.setWidth(imageWidth);
 				gr.setHeight(imageHeight);
@@ -106,10 +103,10 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 			} else {
 				GraphicalRepresentation gr = getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
-					graphicalRepresentation = new ShapeGraphicalRepresentation();
+					graphicalRepresentation = factory.makeShapeGraphicalRepresentation();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				} else if (gr instanceof ConnectorGraphicalRepresentation) {
-					graphicalRepresentation = new ConnectorGraphicalRepresentation();
+					graphicalRepresentation = factory.makeConnectorGraphicalRepresentation();
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				}
 			}
@@ -133,12 +130,12 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 				((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
 				((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
 			}
-			
+
 			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
 			_newPaletteElement.setEditionPattern(editionPattern);
 			_newPaletteElement.setDropScheme(dropScheme);
 			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
-			
+
 		} else {
 			logger.warning("Focused role is null !");
 		}

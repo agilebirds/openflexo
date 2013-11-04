@@ -56,7 +56,6 @@ import org.openflexo.fib.InstallDefaultPackagedResourceCenterDirectory;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;

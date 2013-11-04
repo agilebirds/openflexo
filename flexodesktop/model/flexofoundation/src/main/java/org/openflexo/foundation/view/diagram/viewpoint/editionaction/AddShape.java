@@ -73,8 +73,8 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo ShapeSpecification from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
-				context);
+		out.append(getClass().getSimpleName() + " conformTo ShapeSpecification from " + getModelSlot().getName() + " {"
+				+ StringUtils.LINE_SEPARATOR, context);
 		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
 		out.append("}", context);
 		if (getAssignation().isSet()) {
@@ -166,7 +166,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ShapeGraphicalRepresentation<DiagramShape> newGR = diagram.getFactory().makeShapeGraphicalRepresentation(null, null);
+		ShapeGraphicalRepresentation newGR = diagram.getFactory().makeShapeGraphicalRepresentation();
 		newGR.setsWith(grToUse);
 		newShape.setGraphicalRepresentation(newGR);
 

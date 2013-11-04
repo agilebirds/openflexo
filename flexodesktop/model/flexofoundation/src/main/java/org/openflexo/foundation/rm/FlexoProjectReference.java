@@ -12,12 +12,13 @@ import org.openflexo.model.annotations.ReturnedValue;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.factory.AccessibleProxyObject;
+import org.openflexo.model.factory.DeletableProxyObject;
 
 @ModelEntity
 @XMLElement
 @ImplementationClass(FlexoProjectReferenceImpl.class)
 @Modify(forward = FlexoProjectReference.PROJECT_DATA)
-public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileResource<FlexoProject> {
+public interface FlexoProjectReference extends AccessibleProxyObject, DeletableProxyObject, FlexoFileResource<FlexoProject> {
 
 	public static final String PROJECT_DATA = "projectData";
 	public static final String REFERRING_PROJECT = "referringProject";

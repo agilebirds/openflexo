@@ -5,6 +5,6 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 public interface GRConnectorTemplate extends GRTemplate {
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation();
 
 }

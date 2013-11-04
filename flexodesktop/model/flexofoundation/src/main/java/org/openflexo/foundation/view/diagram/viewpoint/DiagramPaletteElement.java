@@ -64,6 +64,10 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
 
+	public DiagramPaletteFactory getFactory() {
+		return _palette.getFactory();
+	}
+
 	@Override
 	public String getURI() {
 		return getVirtualModel().getURI() + "." + getName();

@@ -164,8 +164,9 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 						.setExampleLabel(((ConnectorGraphicalRepresentation) getFocusedObject().getGraphicalRepresentation()).getText());
 				// }
 				// We clone here the GR (fixed unfocusable GR bug)
-				newConnectorPatternRole.setGraphicalRepresentation(((ConnectorGraphicalRepresentation<?>) getFocusedObject()
-						.getGraphicalRepresentation()).clone());
+				newConnectorPatternRole
+						.setGraphicalRepresentation((ConnectorGraphicalRepresentation) ((ConnectorGraphicalRepresentation) getFocusedObject()
+								.getGraphicalRepresentation()).clone());
 				newEditionPattern.addToPatternRoles(newConnectorPatternRole);
 				newEditionPattern.setPrimaryRepresentationRole(newConnectorPatternRole);
 

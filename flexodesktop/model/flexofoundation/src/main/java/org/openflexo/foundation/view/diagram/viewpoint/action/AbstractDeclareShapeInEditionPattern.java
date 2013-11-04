@@ -372,11 +372,11 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 							newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
 									.getGraphicalRepresentation()).getText());
 							// We clone here the GR (fixed unfocusable GR bug)
-							newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
-									.getGraphicalRepresentation()).clone());
+							newShapePatternRole
+									.setGraphicalRepresentation((ShapeGraphicalRepresentation) ((ShapeGraphicalRepresentation) entry.graphicalObject
+											.getGraphicalRepresentation()).clone());
 							// Forces GR to be displayed in view
-							((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
-									.setAllowToLeaveBounds(false);
+							((ShapeGraphicalRepresentation) newShapePatternRole.getGraphicalRepresentation()).setAllowToLeaveBounds(false);
 							newEditionPattern.addToPatternRoles(newShapePatternRole);
 							if (entry.getParentEntry() != null) {
 								newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles.get(entry

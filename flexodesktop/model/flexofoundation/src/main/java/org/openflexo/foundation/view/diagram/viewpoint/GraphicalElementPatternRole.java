@@ -271,7 +271,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 	}
 
 	public static GraphicalFeature<String, GraphicalRepresentation> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation>(
-			"label", GraphicalRepresentation.Parameters.text, String.class) {
+			"label", GraphicalRepresentation.TEXT) {
 		@Override
 		public String retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
 			return gr.getText();
@@ -284,7 +284,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 	};
 
 	public static GraphicalFeature<Boolean, GraphicalRepresentation> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation>(
-			"visible", GraphicalRepresentation.Parameters.isVisible, Boolean.class) {
+			"visible", GraphicalRepresentation.IS_VISIBLE) {
 		@Override
 		public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
 			return gr.getIsVisible();
@@ -296,19 +296,19 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 		}
 	};
 
-	public static GraphicalFeature<Double, GraphicalRepresentation<?>> TRANSPARENCY_FEATURE = new GraphicalFeature<Double, GraphicalRepresentation<?>>(
-			"transparency", GraphicalRepresentation.Parameters.transparency, Double.class) {
+	public static GraphicalFeature<Double, GraphicalRepresentation> TRANSPARENCY_FEATURE = new GraphicalFeature<Double, GraphicalRepresentation>(
+			"transparency", GraphicalRepresentation.TRANSPARENCY) {
 		@Override
-		public Double retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+		public Double retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
 			return gr.getTransparency();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, Double value) {
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Double value) {
 			gr.setTransparency(value);
 		}
 	};
-	
+
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE, TRANSPARENCY_FEATURE };
 
 	@Override

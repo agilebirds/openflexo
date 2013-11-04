@@ -17,25 +17,23 @@ public abstract class GraphicalFeature<T, GR extends GraphicalRepresentation> {
 	private static final Logger logger = Logger.getLogger(GraphicalFeature.class.getPackage().getName());
 
 	private String name;
-	private Class<T> type;
-	private GRParameter parameter;
+	private GRParameter<T> parameter;
 
-	public GraphicalFeature(String name, GRParameter parameter, Class<T> type) {
+	public GraphicalFeature(String name, GRParameter<T> parameter) {
 		this.name = name;
 		this.parameter = parameter;
-		this.type = type;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public GRParameter getParameter() {
+	public GRParameter<T> getParameter() {
 		return parameter;
 	}
 
 	public Class<T> getType() {
-		return type;
+		return parameter.getType();
 	}
 
 	public abstract void applyToGraphicalRepresentation(GR gr, T value);

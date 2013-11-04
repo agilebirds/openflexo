@@ -40,9 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>diana-api</artifactId>
-			<!-- <scope>test</scope> -->
-			<!-- We don't want graphical engine core to be imported in foundation, only api -->
+			<artifactId>diana-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cayenne</groupId>

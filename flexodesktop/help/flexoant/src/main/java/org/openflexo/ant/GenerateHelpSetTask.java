@@ -26,12 +26,12 @@ import java.util.logging.Logger;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.openflexo.FlexoMainLocalizer;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.UserType;

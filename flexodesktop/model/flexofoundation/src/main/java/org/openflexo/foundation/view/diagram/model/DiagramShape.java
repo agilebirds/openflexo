@@ -84,13 +84,13 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> i
 	/**
 	 * Refresh graphical representation
 	 */
-	@Override
+	/*@Override
 	public void refreshGraphicalRepresentation() {
 		super.refreshGraphicalRepresentation();
 		getGraphicalRepresentation().updateConstraints();
 		getGraphicalRepresentation().notifyShapeNeedsToBeRedrawn();
 		getGraphicalRepresentation().notifyObjectHasMoved();
-	}
+	}*/
 
 	@Override
 	public boolean delete() {
