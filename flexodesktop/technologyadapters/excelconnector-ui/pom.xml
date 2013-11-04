@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>excelconnector</artifactId>
-		</dependency>
+			</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexo</artifactId>

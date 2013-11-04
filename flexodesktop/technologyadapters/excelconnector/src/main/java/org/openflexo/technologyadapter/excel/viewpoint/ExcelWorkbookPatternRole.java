@@ -21,13 +21,10 @@ package org.openflexo.technologyadapter.excel.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {

@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
 /**
@@ -449,7 +450,7 @@ public class ExcelCell extends ExcelObject {
 	 * @return
 	 */
 	public String getCellIdentifier() {
-		return "" + Character.toChars(getColumnIndex() + 65)[0] + (getRowIndex() + 1);
+		return CellReference.convertNumToColString(getColumnIndex());
 	}
 
 	/**
@@ -507,17 +508,16 @@ public class ExcelCell extends ExcelObject {
 		return false;
 	}
 
-	public CellStyle getCellStyle() {
+	public HSSFCellStyle getCellStyle() {
 		if (getCell() != null) {
-			return getCell().getCellStyle();
+			return (HSSFCellStyle) getCell().getCellStyle();
 		}
 		return null;
 	}
 	
 	public void setCellStyle(CellStyleFeature cellStyle, Object value) {
 		if (getCell() != null && cellStyle!=null) {
-			CellStyle style = getCellStyle();
-			style.setLocked(false);
+			HSSFCellStyle style = (HSSFCellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
 			switch (cellStyle) {
 			case Alignment:
 				break;
@@ -527,19 +527,16 @@ public class ExcelCell extends ExcelObject {
 					style.setFillForegroundColor(Short.parseShort((String)value));
 				}
 				if(value instanceof Long){
-					
 					style.setFillForegroundColor(((Long)value).shortValue());
 				}
 				else{
 					break;
 				}
 			case Background:
-				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-				/*if(value instanceof String){
-					style.setFillBackgroundColor(Short.parseShort((String)value));
-				}*/
 				if(value instanceof Long){
+					style.setFillForegroundColor(((Long)value).shortValue());
 					style.setFillBackgroundColor(((Long)value).shortValue());
+					style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 				}
 				else{
 					break;
@@ -547,7 +544,7 @@ public class ExcelCell extends ExcelObject {
 			default:
 				break;
 			}
-			//getCell().setCellStyle(style);
+			getCell().setCellStyle(style);
 		}
 		return;
 	}
