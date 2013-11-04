@@ -96,6 +96,12 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 
 	}
 
+	@Override
+	public void delete() {
+		getDrawable().deleteObserver(this);
+		super.delete();
+	}
+
 	private void updateStyles() {
 		/*foreground = ForegroundStyle.makeStyle(getEntity().getColor());
 		foreground.setLineWidth(2);
