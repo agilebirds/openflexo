@@ -121,8 +121,6 @@ public class FileEditWidget extends DenaliWidget {
 				.localizedForKey(title));
 		chooser.setFileFilterAsString(filter);
 		chooser.setDialogType(mode);
-
-		System.setProperty("apple.awt.fileDialogForDirectories", "false");
 	}
 
 	public void addActionListenerToChooseButton() {
