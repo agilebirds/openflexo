@@ -81,10 +81,9 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		getConnector().getBasicallyAdjustableControlPoint().setPoint(newRelativePoint);
 		getConnector().updateWithNewPolylin(newPolylin);*/
 
-		getConnectorSpecification().setCrossedControlPoint(newRelativePoint);
+		getConnector().setCrossedControlPoint(newRelativePoint);
 
-		// getConnector().updateLayout();
-
+		getConnector().updateLayout();
 		// getConnector()._updateAsBasicallyAdjustable();
 
 		getConnector()._connectorChanged(true);

@@ -534,6 +534,11 @@ public class LineConnector extends ConnectorImpl<LineConnectorSpecification> {
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
 
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
+
 		if (evt.getSource() == getConnectorSpecification()) {
 			if (evt.getPropertyName().equals(LineConnectorSpecification.LINE_CONNECTOR_TYPE.getName())) {
 				refreshConnector(true);

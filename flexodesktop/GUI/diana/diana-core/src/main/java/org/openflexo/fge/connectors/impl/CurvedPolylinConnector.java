@@ -144,6 +144,11 @@ public class CurvedPolylinConnector extends ConnectorImpl<CurvedPolylinConnector
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
 
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
+
 		if (evt.getSource() == getConnectorSpecification()) {
 		}
 

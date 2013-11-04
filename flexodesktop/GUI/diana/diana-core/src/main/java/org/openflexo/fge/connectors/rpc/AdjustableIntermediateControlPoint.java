@@ -60,6 +60,9 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 	@Override
 	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 			FGEPoint initialPoint, MouseEvent event) {
+
+		System.out.println("AdjustableIntermediateControlPoint dragged to " + newRelativePoint);
+
 		if (getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
 			getConnectorSpecification().setCrossedControlPoint(newRelativePoint);
 			getConnector()._connectorChanged(true);

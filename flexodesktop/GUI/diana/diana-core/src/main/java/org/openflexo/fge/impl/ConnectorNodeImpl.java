@@ -80,7 +80,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	@Override
 	public Connector<?> getConnector() {
 		if (connector == null && getConnectorSpecification() != null) {
-			System.out.println("################# MAKE NEW CONNECTOR with " + getConnectorSpecification());
+			logger.info("Make new connector with " + getConnectorSpecification());
 			connector = getConnectorSpecification().makeConnector(this);
 			getConnectorSpecification().getPropertyChangeSupport().addPropertyChangeListener(connector);
 		}
@@ -401,15 +401,13 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	private void fireConnectorSpecificationChanged() {
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!! Changing ConnectorSpecification");
+		logger.info("fireConnectorSpecificationChanged()");
 		if (connector != null && getConnectorSpecification() != null) {
-			System.out.println("Hop, le connecteur se fait deleter pour le ConnectorNodeImpl " + hashCode());
 			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(connector);
 			connector.delete();
 			connector = null;
 		}
 		refreshConnector(true);
-		System.out.println("Nouveau connecteur: " + getConnector());
 	}
 
 	@Override

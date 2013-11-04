@@ -140,7 +140,7 @@ public abstract class ConnectorGraphicalRepresentationImpl extends GraphicalRepr
 
 	@Override
 	public void setConnectorSpecification(ConnectorSpecification aConnector) {
-		System.out.println("Hop, setConnectorSpecification with " + aConnector);
+		logger.info("setConnectorSpecification with " + aConnector);
 		if (connector != aConnector) {
 			if (connector != null) {
 				connector.getPropertyChangeSupport().removePropertyChangeListener(this);

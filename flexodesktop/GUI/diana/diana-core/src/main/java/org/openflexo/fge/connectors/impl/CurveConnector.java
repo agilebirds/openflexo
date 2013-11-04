@@ -100,8 +100,6 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
 	@Override
 	public List<ControlPoint> getControlAreas() {
-		// TODO: perfs issue : do not update all the time !!!
-		updateControlPoints();
 		return controlPoints;
 	}
 
@@ -482,9 +480,17 @@ public class CurveConnector extends ConnectorImpl<CurveConnectorSpecification> {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+
 		super.propertyChange(evt);
 
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
+
 		if (evt.getSource() == getConnectorSpecification()) {
+			// TODO: perfs issue : do not update all the time !!!
+			updateControlPoints();
 		}
 
 		// if (notification instanceof FGENotification && observable == getConnectorSpecification()) {

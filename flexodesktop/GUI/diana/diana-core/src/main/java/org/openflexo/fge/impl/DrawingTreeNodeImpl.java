@@ -515,11 +515,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 				// This is a tricky area
 				// We share GR, which means that we don't use GR to store values, but we store them in propertyValues hashtable
 				GRParameter<?> parameter = GRParameter.getGRParameter(evt.getSource().getClass(), evt.getPropertyName());
-				// System.out.println("!!!!!!!!! Merde, faut que je mette a jour la valeur du parametre " + evt.getPropertyName()
+				// System.out.println("Value needs to be updated for parameter " + evt.getPropertyName()
 				// + " parameter=" + parameter);
 				if (parameter != null && propertyValues.get(parameter) != evt.getNewValue()) {
 					propertyValues.put(parameter, evt.getNewValue());
-					System.out.println("Value for " + parameter.getName() + " changed for " + evt.getNewValue());
+					// System.out.println("Value for " + parameter.getName() + " changed for " + evt.getNewValue());
 				}
 			}
 

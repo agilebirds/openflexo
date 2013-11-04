@@ -77,9 +77,9 @@ public class GRParameter<T> {
 		if (returned == null && declaringClass.getSuperclass() != null) {
 			return getGRParameter(declaringClass.getSuperclass(), name);
 		}
-		if (returned == null) {
+		/*if (returned == null) {
 			logger.warning("Not found GRParameter " + name + " for " + declaringClass);
-		}
+		}*/
 		return returned;
 	}
 

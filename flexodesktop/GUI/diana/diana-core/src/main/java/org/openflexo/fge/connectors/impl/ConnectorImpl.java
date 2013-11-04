@@ -60,6 +60,8 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	private FGEPoint endShapeLocation;
 	private FGERectangle knownConnectorUsedBounds;
 
+	private CS connectorSpecification;
+
 	/**
 	 * Store temporary properties that may not be serialized
 	 */
@@ -68,13 +70,12 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	public ConnectorImpl(ConnectorNode<?> connectorNode) {
 		super();
 		this.connectorNode = connectorNode;
+		connectorSpecification = (CS) connectorNode.getConnectorSpecification();
 		propertyValues = new HashMap<GRParameter, Object>();
 
 	}
 
 	public void delete() {
-
-		System.out.println("Le connecteur se fait deleter");
 
 		if (getConnectorSpecification() != null) {
 			getConnectorSpecification().getPropertyChangeSupport().removePropertyChangeListener(this);
@@ -99,10 +100,11 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 	@Override
 	@SuppressWarnings("unchecked")
 	public CS getConnectorSpecification() {
-		if (connectorNode != null) {
+		/*if (connectorNode != null) {
 			return (CS) connectorNode.getConnectorSpecification();
 		}
-		return null;
+		return null;*/
+		return connectorSpecification;
 	}
 
 	@Override
@@ -354,7 +356,16 @@ public abstract class ConnectorImpl<CS extends ConnectorSpecification> implement
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
+
+		if (isDeleted()) {
+			logger.warning("Received PropertyChangeEvent=" + evt + " for a deleted connector !!!");
+			return;
+		}
+
+		if (temporaryIgnoredObservables.contains(evt.getSource())) {
+			// System.out.println("IGORE NOTIFICATION " + notification);
+			return;
+		}
 	}
 
 /**
