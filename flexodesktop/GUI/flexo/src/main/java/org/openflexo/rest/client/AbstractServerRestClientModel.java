@@ -90,10 +90,21 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public class UpdateUserOperation implements ServerRestClientOperation {
+
+		private String userName;
+
+		public UpdateUserOperation() {
+		}
+
+		public UpdateUserOperation(String userName) {
+			super();
+			this.userName = userName;
+		}
+
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			try {
-				User user = client.users().id(client.getUserName()).getAsUserXml();
+				User user = client.users().id(userName = client.getUserName()).getAsUserXml();
 				if (user != null && user.getClientAccount() != null) {
 					progress.increment(FlexoLocalization.localizedForKey("retrieving_account_info"));
 					setAccount(client.accounts().idSummary(user.getClientAccount()).getAsAccountXml());
@@ -104,6 +115,10 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 					setStatus(FlexoLocalization.localizedForKey("could_not_identify_user"));
 				}
 			}
+		}
+
+		public String getUserName() {
+			return userName;
 		}
 
 		@Override
@@ -268,14 +283,14 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 		pcSupport.firePropertyChange(DELETED, false, true);
 	}
 
-	public boolean handleWSException(final Exception e) throws InterruptedException {
+	public boolean handleWSException(final ServerRestClientOperation operation, final Exception e) throws InterruptedException {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			final Holder<Boolean> returned = new Holder<Boolean>();
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					@Override
 					public void run() {
-						returned.value = _handleWSException(e);
+						returned.value = _handleWSException(operation, e);
 					}
 				});
 			} catch (InvocationTargetException e1) {
@@ -284,10 +299,10 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 			}
 			return returned.value != null && returned.value;
 		}
-		return _handleWSException(e);
+		return _handleWSException(operation, e);
 	}
 
-	private boolean _handleWSException(Throwable e) {
+	private boolean _handleWSException(ServerRestClientOperation operation, Throwable e) {
 		if (e instanceof RuntimeException && e.getCause() != null) {
 			e = e.getCause();
 		}
@@ -325,7 +340,7 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 				}
 				return confirm;
 			case 401:
-				boolean confirm2 = FlexoController.confirm(FlexoLocalization.localizedForKey("authentication_failed") + entity + "\n"
+				boolean confirm2 = FlexoController.confirm(FlexoLocalization.localizedForKey("authentication_failed") + " " + entity + "\n"
 						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 				if (!confirm2) {
 					goOffline();
@@ -339,6 +354,11 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 				}
 				return confirm3;
 			case 404:
+				if (operation instanceof UpdateUserOperation) {
+					FlexoController.notify(FlexoLocalization.localizedForKey("not_found") + ": "
+							+ ((UpdateUserOperation) operation).getUserName());
+					return true;
+				}
 				FlexoController.notify(FlexoLocalization.localizedForKey("not_found") + entity);
 				return false;
 			default:
@@ -552,19 +572,19 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 						done = true;
 					} catch (WebApplicationException e) {
 						e.printStackTrace();
-						if (!handleWSException(e)) {
+						if (!handleWSException(operation, e)) {
 							return;
 						}
 						firstAttempt = false;
 					} catch (IOException e) {
 						e.printStackTrace();
-						if (!handleWSException(e)) {
+						if (!handleWSException(operation, e)) {
 							return;
 						}
 						firstAttempt = false;
 					} catch (RuntimeException e) {
 						e.printStackTrace();
-						if (!handleWSException(e)) {
+						if (!handleWSException(operation, e)) {
 							return;
 						}
 						firstAttempt = false;
