@@ -26,6 +26,7 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
@@ -74,8 +75,8 @@ public class TestCityMappingView extends FlexoTestCase {
 		// First define an editor factory: here instantiate the default flexo editor
 		FlexoEditorFactory editorFactory = new FlexoEditorFactory() {
 			@Override
-			public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-				return new DefaultFlexoEditor(project);
+			public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+				return new DefaultFlexoEditor(project, serviceManager);
 			}
 		};
 

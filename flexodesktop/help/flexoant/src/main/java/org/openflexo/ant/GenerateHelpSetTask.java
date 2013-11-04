@@ -65,7 +65,7 @@ public class GenerateHelpSetTask extends Task {
 		FlexoLocalization.initWith(new FlexoMainLocalizer());
 		System.out.println(baseName + ": This class has been loaded by " + getClass().getClassLoader());
 		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(DocResourceManager.instance().getDocResourceCenter(), null,
-				new DefaultFlexoEditor(null));
+				new DefaultFlexoEditor(null, null));
 		action.setNote("none");
 		action.setBaseName(baseName);
 		System.out.println("Helpset directory is " + action.getHelpsetDirectory().getAbsolutePath());

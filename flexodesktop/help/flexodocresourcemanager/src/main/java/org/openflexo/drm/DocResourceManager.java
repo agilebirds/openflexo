@@ -567,7 +567,7 @@ public class DocResourceManager {
 
 	public FlexoEditor getEditor() {
 		if (_editor == null) {
-			_editor = new DefaultFlexoEditor(null);
+			_editor = new DefaultFlexoEditor(null, null);
 		}
 		return _editor;
 	}

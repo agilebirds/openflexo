@@ -1,6 +1,6 @@
 package org.openflexo.technologyadapter.emf.gui.fib;
 
-import org.openflexo.fib.FIBTestCase;
+import org.openflexo.fib.utils.FIBTestCase;
 
 public class TestEMFInspectors extends FIBTestCase {
 

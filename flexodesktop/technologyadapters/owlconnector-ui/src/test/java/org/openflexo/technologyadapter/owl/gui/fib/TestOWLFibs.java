@@ -1,6 +1,6 @@
 package org.openflexo.technologyadapter.owl.gui.fib;
 
-import org.openflexo.fib.FIBTestCase;
+import org.openflexo.fib.utils.FIBTestCase;
 import org.openflexo.technologyadapter.owl.controller.OWLFIBLibrary;
 
 public class TestOWLFibs extends FIBTestCase {

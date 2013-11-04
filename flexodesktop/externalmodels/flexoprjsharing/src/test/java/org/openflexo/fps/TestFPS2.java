@@ -66,7 +66,7 @@ public class TestFPS2 extends FPSTestCase {
 		CVSConsole.logger.setLevel(Level.FINE);
 	}
 
-	private static FlexoEditor EDITOR = new DefaultFlexoEditor(null);
+	private static FlexoEditor EDITOR = new DefaultFlexoEditor(null, null);
 
 	/**
 	 * Creates a new project in a temp directory
