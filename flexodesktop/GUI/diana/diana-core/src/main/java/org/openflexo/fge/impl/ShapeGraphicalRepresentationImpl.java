@@ -282,6 +282,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		}
 		if (evt.getSource() instanceof ShapeSpecification) {
 			forward(evt);
+			// ici c'est pas normal, ca devrait suffir
 			// notifyAttributeChange(SHAPE);
 		}
 	}
@@ -1757,6 +1758,7 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 
 	@Override
 	public void setShapeSpecification(ShapeSpecification aShape) {
+		logger.info("================ setShapeSpecification() " + aShape);
 		if (shape != aShape) {
 			if (shape != null) {
 				shape.getPropertyChangeSupport().removePropertyChangeListener(this);
@@ -1796,15 +1798,11 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 		}
 	}
 
-	@Override
 	public void notifyShapeChanged() {
-		setChanged();
 		notifyObservers(new ShapeChanged());
 	}
 
-	@Override
 	public void notifyShapeNeedsToBeRedrawn() {
-		setChanged();
 		notifyObservers(new ShapeNeedsToBeRedrawn());
 	}
 

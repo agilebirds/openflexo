@@ -221,11 +221,9 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public ShapeImpl<?> makeShape(ShapeNode<?> node) {
-			// ShapeImpl returned = new ShapeImpl(node);
-			// getPropertyChangeSupport().addPropertyChangeListener(returned);
-			// return returned;
-			System.out.println("Tiens, qui appelle ca ????");
-			return null;
+			ShapeImpl returned = new ShapeImpl(node);
+			getPropertyChangeSupport().addPropertyChangeListener(returned);
+			return returned;
 		}
 
 	}

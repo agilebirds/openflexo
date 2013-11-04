@@ -63,6 +63,8 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 
 	private List<ControlPoint> controlPoints;
 
+	private SS shapeSpecification;
+
 	// *******************************************************************************
 	// * Constructor *
 	// *******************************************************************************
@@ -73,6 +75,7 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 	public ShapeImpl(ShapeNode<?> shapeNode) {
 		super();
 		this.shapeNode = shapeNode;
+		shapeSpecification = (SS) shapeNode.getShapeSpecification();
 		controlPoints = new ArrayList<ControlPoint>();
 	}
 
@@ -86,12 +89,12 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public SS getShapeSpecification() {
-		if (shapeNode != null && shapeNode.getGraphicalRepresentation() != null) {
+		/*if (shapeNode != null && shapeNode.getGraphicalRepresentation() != null) {
 			return (SS) shapeNode.getGraphicalRepresentation().getShapeSpecification();
 		}
-		return null;
+		return null;*/
+		return shapeSpecification;
 	}
 
 	/**
@@ -430,6 +433,7 @@ public class ShapeImpl<SS extends ShapeSpecification> implements PropertyChangeL
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getShapeSpecification()) {
+			// System.out.println("Received " + evt + " in ShapeImpl propertyName=" + evt.getPropertyName());
 			// Those notifications are forwarded by the shape specification
 			updateShape();
 		}

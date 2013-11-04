@@ -369,19 +369,16 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	 * Undoes appropriate edit
 	 */
 	public void undo() {
-		System.out.println("UNDO called !!!");
+		logger.info("UNDO called");
 		getFactory().getUndoManager().debug();
 		if (getFactory().getUndoManager().canUndo()) {
-			System.out.println("Effectivement, je peux faire un undo de: "
-					+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+			logger.info("Undoing: " + getFactory().getUndoManager().editToBeUndone().getPresentationName());
 			getFactory().getUndoManager().undo();
 		} else {
 			if (getFactory().getUndoManager().canUndoIfStoppingCurrentEdition()) {
 				getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
-				System.out.println("Bon, j'arrete de force");
 				if (getFactory().getUndoManager().canUndo()) {
-					System.out.println("Effectivement, je peux faire un undo de: "
-							+ getFactory().getUndoManager().editToBeUndone().getPresentationName());
+					logger.info("Undoing: " + getFactory().getUndoManager().editToBeUndone().getPresentationName());
 					getFactory().getUndoManager().undo();
 				}
 			} else {
@@ -403,10 +400,9 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	 * Redoes appropriate edit
 	 */
 	public void redo() {
-		System.out.println("REDO called !!!");
+		logger.info("REDO called");
 		if (getFactory().getUndoManager().canRedo()) {
-			System.out.println("Effectivement, je peux faire un redo de: "
-					+ getFactory().getUndoManager().editToBeRedone().getPresentationName());
+			logger.info("Redoing: " + getFactory().getUndoManager().editToBeRedone().getPresentationName());
 			getFactory().getUndoManager().redo();
 		}
 	}
