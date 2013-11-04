@@ -89,7 +89,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			} catch (SaveResourceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}catch (InvalidExcelFormatException e) {
+			}catch (InvalidPowerpointFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -135,7 +135,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 	 * @throws FlexoException
 	 */
 	@Override
-	public PowerpointSlideshow loadResourceData(IProgress progress) throws InvalidExcelFormatException {
+	public PowerpointSlideshow loadResourceData(IProgress progress) throws InvalidPowerpointFormatException {
 
 		PowerpointSlideshow resourceData = null;
 		SlideShow ssOpenned = null;
@@ -168,7 +168,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			e.printStackTrace();
 		} catch (OfficeXmlFileException e) {
 			// TODO: load an XSSFWorkbook
-			throw new InvalidExcelFormatException(this, e);
+			throw new InvalidPowerpointFormatException(this, e);
 		} 
 		return resourceData;
 	}
