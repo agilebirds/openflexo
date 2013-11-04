@@ -122,6 +122,28 @@
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
+        <dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>powerpointconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>powerpointconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+ 			<groupId>org.openflexo</groupId>
+ 			<artifactId>powerpointconnector-ui</artifactId>
+ 			<scope>runtime</scope>
+ 		</dependency>
+ 		<dependency>
+ 			<groupId>org.openflexo</groupId>
+ 			<artifactId>powerpointconnector-ui</artifactId>
+ 			<classifier>resources</classifier>
+ 			 <type>zip</type>
+ 		</dependency>
         <!-- MDT-UML not yet functional --> 
   		<!--  <dependency>
 			<groupId>org.openflexo</groupId>
@@ -168,5 +190,5 @@
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency> -->
-      </dependencies>
+    </dependencies>
 </project>

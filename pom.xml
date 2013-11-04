@@ -849,6 +849,32 @@
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
+			
+			<!--  Powerpoint -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
 
 			<!--  MDTUML -->
 
@@ -1139,10 +1165,10 @@
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>3.5-FINAL</version>
-			</dependency>
+			<groupId>org.apache.poi</groupId>
+			  <artifactId>poi-scratchpad</artifactId>
+			  <version>3.10-beta1</version>
+		</dependency>
 			<dependency>
 				<groupId>com.jcraft</groupId>
 				<artifactId>jsch</artifactId>
