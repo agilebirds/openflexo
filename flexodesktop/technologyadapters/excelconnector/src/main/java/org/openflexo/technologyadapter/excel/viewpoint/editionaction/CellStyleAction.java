@@ -25,6 +25,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -35,6 +36,8 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelCell.CellAlignmentStyleFeature;
+import org.openflexo.technologyadapter.excel.model.ExcelCell.CellBorderStyleFeature;
 import org.openflexo.technologyadapter.excel.model.ExcelCell.CellStyleFeature;
 
 @FIBPanel("Fib/CellStyleActionPanel.fib")
@@ -47,6 +50,10 @@ public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCel
 	}
 	
 	private CellStyleFeature cellStyle = null;
+	
+	private CellBorderStyleFeature cellBorderStyle = null;
+	
+	private CellAlignmentStyleFeature cellAlignmentStyle = null;
 	
 	private DataBinding<Object> value;
 	
@@ -114,6 +121,9 @@ public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCel
 		return null;
 	}
 	
+	//			MAIN CELL STYLES
+	
+	
 	public java.lang.reflect.Type getGraphicalFeatureType() {
 		if (getCellStyle() != null) {
 			return getCellStyle().getClass();
@@ -136,6 +146,19 @@ public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCel
 
 	public void setCellStyle(CellStyleFeature cellStyle) {
 		this.cellStyle = cellStyle;
+		if(cellStyle.equals(CellStyleFeature.BorderBottom)||
+				cellStyle.equals(CellStyleFeature.BorderTop) ||
+				cellStyle.equals(CellStyleFeature.BorderLeft)||
+				cellStyle.equals(CellStyleFeature.BorderRight)){
+			isBorderStyle = true;
+		}else{
+			isBorderStyle = false;
+		}
+		if(cellStyle.equals(CellStyleFeature.Alignment)){
+			isAlignmentStyle = true;
+		}else{
+			isAlignmentStyle = false;
+		}
 	}
 
 	private List<CellStyleFeature> availableCellStyles = null;
@@ -163,13 +186,122 @@ public class CellStyleAction extends EditionAction<BasicExcelModelSlot, ExcelCel
 		_cellStyleName = cellStyleName;
 	}
 	
+	// 			SPECIAL BORDER STYLES
+
+	private boolean isBorderStyle = false;
+	
+	public boolean isBorderStyle() {
+		return isBorderStyle;
+	}
+	
+	public CellBorderStyleFeature getCellBorderStyle() {
+		if (cellBorderStyle == null) {
+			if (_cellBorderStyleName != null) {
+				for (CellBorderStyleFeature cellBorderStyle : getAvailableCellBorderStyles()) {
+					if (cellBorderStyle.name().equals(_cellBorderStyleName)) {
+						return cellBorderStyle;
+					}
+				}
+			}
+		}
+		return cellBorderStyle;
+	}
+
+	public void setCellBorderStyle(CellBorderStyleFeature cellBorderStyle) {
+		this.cellBorderStyle = cellBorderStyle;
+	}
+	
+	private List<CellBorderStyleFeature> availableCellBorderStyles = null;
+	
+	public List<CellBorderStyleFeature> getAvailableCellBorderStyles() {
+		if (availableCellBorderStyles == null) {
+			availableCellBorderStyles = new Vector<CellBorderStyleFeature>();
+			for (CellBorderStyleFeature cellBorderStyle : ExcelCell.CellBorderStyleFeature.values()) {
+				availableCellBorderStyles.add(cellBorderStyle);
+			}
+		}
+		return availableCellBorderStyles;
+	}
+
+	private String _cellBorderStyleName = null;
+
+	public String _getCellBorderStyleName() {
+		if (getCellBorderStyle() == null) {
+			return _cellBorderStyleName;
+		}
+		return getCellBorderStyle().name();
+	}
+
+	public void _setCellBorderStyleName(String cellBorderStyleName) {
+		_cellBorderStyleName = cellBorderStyleName;
+	}	
+	
+	//		SPECIAL ALIGNMENT STYLES
+
+	private boolean isAlignmentStyle = false;
+	
+	public boolean isAlignmentStyle() {
+		return isAlignmentStyle;
+	}
+	
+	public CellAlignmentStyleFeature getCellAlignmentStyle() {
+		if (cellAlignmentStyle == null) {
+			if (_cellAlignmentStyleName != null) {
+				for (CellAlignmentStyleFeature cellAlignmentStyle : getAvailableCellAlignmentStyles()) {
+					if (cellAlignmentStyle.name().equals(_cellAlignmentStyleName)) {
+						return cellAlignmentStyle;
+					}
+				}
+			}
+		}
+		return cellAlignmentStyle;
+	}
+	
+	public void setCellAlignmentStyle(CellAlignmentStyleFeature cellAlignmentStyle) {
+		this.cellAlignmentStyle = cellAlignmentStyle;
+	}
+	
+	private List<CellAlignmentStyleFeature> availableCellAlignmentStyles = null;
+	
+	public List<CellAlignmentStyleFeature> getAvailableCellAlignmentStyles() {
+		if (availableCellAlignmentStyles == null) {
+			availableCellAlignmentStyles = new Vector<CellAlignmentStyleFeature>();
+			for (CellAlignmentStyleFeature cellAlignmentStyle : ExcelCell.CellAlignmentStyleFeature.values()) {
+				availableCellAlignmentStyles.add(cellAlignmentStyle);
+			}
+		}
+		return availableCellAlignmentStyles;
+	}
+	
+	private String _cellAlignmentStyleName = null;
+	
+	public String _getCellAlignmentStyleName() {
+		if (getCellAlignmentStyle() == null) {
+			return _cellAlignmentStyleName;
+		}
+		return getCellAlignmentStyle().name();
+	}
+	
+	public void _setCellAlignmentStyleName(String cellAlignmentStyleName) {
+		_cellAlignmentStyleName = cellAlignmentStyleName;
+	}	
+	
+	//		ACTION
+	
 	@Override
 	public ExcelCell performAction(EditionSchemeAction action) {
 		logger.info("Perform graphical action " + action);
 		ExcelCell excelCell = getSubject(action);
 		Object value = null;
 		try {
-			value = getValue().getBindingValue(action);
+			if(isAlignmentStyle){
+				value = getCellAlignmentStyle();
+			}else if(isBorderStyle){
+				value = getCellBorderStyle();
+			}
+			else{
+				value = getValue().getBindingValue(action);
+			}
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
