@@ -20,7 +20,6 @@
 package org.openflexo.dm.view.erdiagram;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -104,6 +103,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 				return false;
 			}
 		});
+		setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
 
 	}
 
@@ -122,9 +122,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 
 	@Override
 	public double getRelativeTextX() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double absoluteCenterX = labelSize.width / 2;
-		return absoluteCenterX / getWidth();
+		return 0;
 	}
 
 	@Override
