@@ -218,7 +218,7 @@ public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JSha
 		// getShape().updateShape();
 
 		shapeGR.setShapeSpecification(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE));
-		shapeGR.notifyShapeChanged();
+		// shapeGR.notifyShapeChanged();
 
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());

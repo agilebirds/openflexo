@@ -558,9 +558,9 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	public void setBackgroundType(BackgroundStyleType backgroundType);
 
-	public void notifyShapeChanged();
+	// public void notifyShapeChanged();
 
-	public void notifyShapeNeedsToBeRedrawn();
+	// public void notifyShapeNeedsToBeRedrawn();
 
 	/*public void notifyObjectMoved();
 

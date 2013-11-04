@@ -122,7 +122,6 @@ public abstract class RegularPolygonImpl extends PolygonImpl implements RegularP
 
 	@Override
 	public void setStartAngle(int anAngle) {
-		System.out.println("setStartAngle with " + anAngle);
 		FGEAttributeNotification notification = requireChange(START_ANGLE, anAngle);
 		if (notification != null) {
 			startAngle = anAngle;
