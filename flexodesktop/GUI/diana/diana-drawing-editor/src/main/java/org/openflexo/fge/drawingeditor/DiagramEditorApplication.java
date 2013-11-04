@@ -63,6 +63,7 @@ import org.openflexo.fge.drawingeditor.model.Diagram;
 import org.openflexo.fge.drawingeditor.model.DiagramFactory;
 import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors;
+import org.openflexo.fge.swing.control.tools.JDianaLayoutWidget;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
@@ -120,6 +121,7 @@ public class DiagramEditorApplication {
 
 	private JDianaToolSelector toolSelector;
 	private JDianaScaleSelector scaleSelector;
+	private JDianaLayoutWidget layoutWidget;
 	private JDianaStyles stylesWidget;
 	private JDianaPalette commonPalette;
 	private DiagramEditorPalette commonPaletteModel;
@@ -149,7 +151,7 @@ public class DiagramEditorApplication {
 		}
 
 		frame = new JFrame();
-		frame.setPreferredSize(new Dimension(1000, 800));
+		frame.setPreferredSize(new Dimension(1100, 800));
 		fileChooser = new FlexoFileChooser(frame);
 		fileChooser.setFileFilterAsString("*.drw");
 		fileChooser.setCurrentDirectory(new FileResource("DrawingExamples"));
@@ -165,6 +167,7 @@ public class DiagramEditorApplication {
 		toolSelector = toolFactory.makeDianaToolSelector(null);
 		stylesWidget = toolFactory.makeDianaStyles();
 		scaleSelector = toolFactory.makeDianaScaleSelector(null);
+		layoutWidget = toolFactory.makeDianaLayoutWidget();
 		inspectors = toolFactory.makeDianaInspectors();
 
 		inspectors.getForegroundStyleInspector().setLocation(1000, 100);
@@ -177,6 +180,7 @@ public class DiagramEditorApplication {
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(toolSelector.getComponent());
 		topPanel.add(stylesWidget.getComponent());
+		topPanel.add(layoutWidget.getComponent());
 		topPanel.add(scaleSelector.getComponent());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -517,6 +521,7 @@ public class DiagramEditorApplication {
 		toolSelector.attachToEditor(diagramEditor.getController());
 		stylesWidget.attachToEditor(diagramEditor.getController());
 		scaleSelector.attachToEditor(diagramEditor.getController());
+		layoutWidget.attachToEditor(diagramEditor.getController());
 		commonPaletteModel.setEditor(diagramEditor.getController());
 		commonPalette.attachToEditor(diagramEditor.getController());
 		inspectors.attachToEditor(diagramEditor.getController());

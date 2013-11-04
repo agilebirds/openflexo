@@ -12,6 +12,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.model.undo.CompoundEdit;
 
 /**
  * Represent a widget allowing to edit a layout, associated with a {@link DianaInteractiveViewer}
@@ -43,7 +44,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX, gr.getY())));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align left");
 	}
 
 	public void alignCenter() {
@@ -57,7 +58,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX - gr.getWidth() / 2, gr.getY())));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align center");
 	}
 
 	public void alignRight() {
@@ -72,7 +73,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX - gr.getWidth(), gr.getY())));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align right");
 	}
 
 	public void alignTop() {
@@ -87,7 +88,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY)));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align top");
 	}
 
 	public void alignMiddle() {
@@ -101,7 +102,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY - gr.getHeight() / 2)));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align middle");
 	}
 
 	public void alignBottom() {
@@ -116,7 +117,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		for (ShapeNode<?> gr : getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY - gr.getHeight())));
 		}
-		performTransitions(tts);
+		performTransitions(tts, "Align bottom");
 	}
 
 	public class TranslationTransition {
@@ -142,12 +143,14 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		private int steps;
 		private List<TranslationTransition> transitions;
 		private Timer timer;
+		private CompoundEdit edit;
 
-		public Animation(List<TranslationTransition> transitions, int steps) {
+		public Animation(List<TranslationTransition> transitions, int steps, CompoundEdit edit) {
 			super();
 			this.currentStep = 0;
 			this.steps = steps;
 			this.transitions = transitions;
+			this.edit = edit;
 		}
 
 		public void performAnimation() {
@@ -161,6 +164,7 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 					currentStep++;
 					if (currentStep > steps) {
 						timer.stop();
+						stopRecordEdit(edit);
 					}
 				}
 			});
@@ -168,8 +172,9 @@ public abstract class DianaLayoutWidget<C, F extends DianaViewFactory<F, ? super
 		}
 	}
 
-	public void performTransitions(final List<TranslationTransition> transitions) {
-		new Animation(transitions, 10).performAnimation();
+	public void performTransitions(final List<TranslationTransition> transitions, String editName) {
+		CompoundEdit edit = startRecordEdit(editName);
+		new Animation(transitions, 10, edit).performAnimation();
 	}
 
 	@Override

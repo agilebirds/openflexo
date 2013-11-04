@@ -29,6 +29,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.view.DianaViewFactory;
+import org.openflexo.model.undo.CompoundEdit;
 
 public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> implements DianaTool<C, F>, PropertyChangeListener {
 
@@ -87,4 +88,19 @@ public abstract class DianaToolImpl<C, F extends DianaViewFactory<F, ?>> impleme
 		}
 		return null;
 	}
+
+	protected CompoundEdit startRecordEdit(String editName) {
+		if (getEditor().getFactory().getUndoManager() != null && !getEditor().getFactory().getUndoManager().isUndoInProgress()
+				&& !getEditor().getFactory().getUndoManager().isRedoInProgress()) {
+			return getEditor().getFactory().getUndoManager().startRecording(editName);
+		}
+		return null;
+	}
+
+	protected void stopRecordEdit(CompoundEdit edit) {
+		if (edit != null && getEditor().getFactory().getUndoManager() != null) {
+			getEditor().getFactory().getUndoManager().stopRecording(edit);
+		}
+	}
+
 }

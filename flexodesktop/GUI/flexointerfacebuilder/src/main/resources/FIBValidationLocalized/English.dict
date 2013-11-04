@@ -25,6 +25,7 @@
 'format'_binding_is_not_valid='format' binding is not valid
 'format'_binding_is_not_valid_description='format' binding is not valid description
 'icon'_binding_is_not_valid='icon' binding is not valid
+'icon'_binding_is_not_valid\ 'object.icon'='icon'_binding_is_not_valid 'object.icon'
 'icon'_binding_is_not_valid_description='icon' binding is not valid description
 'is_available'_binding_is_not_valid='is_available'_binding_is_not_valid
 'is_available'_binding_is_not_valid_description='is_available'_binding_is_not_valid_description

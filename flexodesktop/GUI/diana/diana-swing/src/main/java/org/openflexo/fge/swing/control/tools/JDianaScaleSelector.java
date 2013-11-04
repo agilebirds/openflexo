@@ -26,7 +26,7 @@ public class JDianaScaleSelector extends DianaScaleSelector<JToolBar, SwingViewF
 
 	private static final int MAX_ZOOM_VALUE = 300;
 	protected JTextField scaleTF;
-	protected JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 500, 100);
+	protected JSlider slider;
 
 	protected ChangeListener sliderChangeListener;
 	protected ActionListener actionListener;
