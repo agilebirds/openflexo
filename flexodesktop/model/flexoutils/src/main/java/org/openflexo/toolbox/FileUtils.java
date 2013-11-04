@@ -47,6 +47,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.openflexo.logging.FlexoLogger;
 
@@ -260,11 +261,7 @@ public class FileUtils {
 		createNewFile(newFile);
 		FileOutputStream os = new FileOutputStream(newFile);
 		try {
-			while (is.available() > 0) {
-				byte[] byteArray = new byte[is.available()];
-				is.read(byteArray);
-				os.write(byteArray);
-			}
+			IOUtils.copy(is, os);
 			os.flush();
 		} finally {
 			os.close();
