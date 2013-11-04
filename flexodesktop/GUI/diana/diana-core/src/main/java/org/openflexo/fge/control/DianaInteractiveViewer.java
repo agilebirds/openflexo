@@ -90,6 +90,8 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	 */
 	private List<DrawingTreeNodeIdentifier<?>> storedSelection;
 
+	private boolean isRestoringSelection = false;
+
 	public DianaInteractiveViewer(Drawing<M> aDrawing, FGEModelFactory factory, F dianaFactory, DianaToolFactory<C> toolFactory) {
 		this(aDrawing, factory, dianaFactory, toolFactory, true, false, true, true, true);
 	}
@@ -215,7 +217,9 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 	}
 
 	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
-		stopEditionOfEditedLabelIfAny();
+		if (!isRestoringSelection) {
+			stopEditionOfEditedLabelIfAny();
+		}
 		if (aNode == null) {
 			logger.warning("Cannot add null object");
 			return;
@@ -531,6 +535,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			return;
 		}
 		try {
+			isRestoringSelection = true;
 			for (DrawingTreeNodeIdentifier<?> identifier : storedSelection) {
 				DrawingTreeNode<?, ?> node = getDrawing().getDrawingTreeNode(identifier);
 				if (node != null) {
@@ -539,6 +544,7 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			}
 		} finally {
 			storedSelection = null;
+			isRestoringSelection = false;
 		}
 	}
 

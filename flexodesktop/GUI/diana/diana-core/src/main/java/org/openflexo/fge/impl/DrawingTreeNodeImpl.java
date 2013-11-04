@@ -1116,6 +1116,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	 */
 	@Override
 	public void setText(String text) {
+		System.out.println("set text with " + text);
 		setPropertyValue(GraphicalRepresentation.TEXT, text);
 	}
 
