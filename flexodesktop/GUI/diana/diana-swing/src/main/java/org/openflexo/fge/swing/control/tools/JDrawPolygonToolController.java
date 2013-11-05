@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.swing.control;
+package org.openflexo.fge.swing.control.tools;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -30,18 +30,18 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
+import org.openflexo.fge.control.tools.DrawPolygonToolController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.fge.swing.view.JDrawingView;
 
-public class JDrawClosedCurveToolController extends DrawClosedCurveToolController<MouseEvent> {
+public class JDrawPolygonToolController extends DrawPolygonToolController<MouseEvent> {
 
-	private static final Logger logger = Logger.getLogger(JDrawClosedCurveToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JDrawPolygonToolController.class.getPackage().getName());
 
 	private boolean isBuildingPoints;
 
-	public JDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+	public JDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
@@ -65,6 +65,9 @@ public class JDrawClosedCurveToolController extends DrawClosedCurveToolControlle
 	public FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		return new FGEPoint(pt.getX(), pt.getY());
+
+		// return getCurrentEditedShape().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(),
+		// getController().getScale());
 	}
 
 	@Override

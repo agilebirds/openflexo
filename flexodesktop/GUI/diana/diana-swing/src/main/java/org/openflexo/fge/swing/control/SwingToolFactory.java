@@ -38,6 +38,8 @@ import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
+import org.openflexo.fge.swing.control.tools.JDrawClosedCurveToolController;
+import org.openflexo.fge.swing.control.tools.JDrawPolygonToolController;
 
 /**
  * Represent the view factory for Swing technology

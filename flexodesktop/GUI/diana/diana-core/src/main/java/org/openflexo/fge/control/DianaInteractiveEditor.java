@@ -109,7 +109,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	}
 
 	public enum DrawCustomShapeToolOption implements EditorToolOption {
-		DrawPolygon, DrawClosedCurve, DrawComplexShape
+		DrawPolygon, DrawClosedCurve, DrawOpenedCurve, DrawComplexShape
 	}
 
 	public enum DrawConnectorToolOption implements EditorToolOption {

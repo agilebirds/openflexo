@@ -1,7 +1,6 @@
 package org.openflexo.fge.control.tools;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -324,7 +323,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 	protected class InspectedPolygon<SS extends Polygon> extends AbstractInspectedShapeSpecification<SS> implements Polygon {
 
-		private List<FGEPoint> points;
+		// private List<FGEPoint> points;
 
 		protected InspectedPolygon(DianaInteractiveViewer<?, ?, ?> controller, SS defaultValue) {
 			super(controller, defaultValue);
@@ -342,34 +341,38 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public List<FGEPoint> getPoints() {
-			return points;
+			return getPropertyValue(ClosedCurve.POINTS);
 		}
 
 		@Override
 		public void setPoints(List<FGEPoint> points) {
-			if (points != null) {
+			// Not applicable in this context (ambigous semantics, preferably disabled)
+			/*if (points != null) {
 				this.points = new ArrayList<FGEPoint>(points);
 			} else {
 				this.points = null;
 			}
-			notifyChange(POINTS);
+			notifyChange(POINTS);*/
+			setPropertyValue(ClosedCurve.POINTS, points);
 		}
 
 		@Override
 		public void addToPoints(FGEPoint aPoint) {
-			points.add(aPoint);
-			notifyChange(POINTS);
+			// Not applicable in this context (ambigous semantics, preferably disabled)
+			// points.add(aPoint);
+			// notifyChange(POINTS);
 		}
 
 		@Override
 		public void removeFromPoints(FGEPoint aPoint) {
-			points.remove(aPoint);
-			notifyChange(POINTS);
+			// Not applicable in this context (ambigous semantics, preferably disabled)
+			// points.remove(aPoint);
+			// notifyChange(POINTS);
 		}
 
 		@Override
 		public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
-			return new FGEPolygon(Filling.FILLED, points);
+			return new FGEPolygon(Filling.FILLED, getPoints());
 		}
 
 		@Override
@@ -386,7 +389,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 	protected class InspectedClosedCurve<SS extends ClosedCurve> extends AbstractInspectedShapeSpecification<SS> implements ClosedCurve {
 
-		private List<FGEPoint> points;
+		// private List<FGEPoint> points;
 
 		protected InspectedClosedCurve(DianaInteractiveViewer<?, ?, ?> controller, SS defaultValue) {
 			super(controller, defaultValue);
@@ -409,6 +412,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public void setPoints(List<FGEPoint> points) {
+			// Not applicable in this context (ambigous semantics, preferably disabled)
 			/*if (points != null) {
 				this.points = new ArrayList<FGEPoint>(points);
 			} else {
@@ -420,12 +424,14 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public void addToPoints(FGEPoint aPoint) {
+			// Not applicable in this context (ambigous semantics, preferably disabled)
 			// points.add(aPoint);
 			// notifyChange(POINTS);
 		}
 
 		@Override
 		public void removeFromPoints(FGEPoint aPoint) {
+			// Not applicable in this context (ambigous semantics, preferably disabled)
 			// points.remove(aPoint);
 			// notifyChange(POINTS);
 		}

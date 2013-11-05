@@ -66,9 +66,18 @@ public class FGEIconLibrary {
 
 	public static final ImageIconResource CURSOR_MOVE_ICON = new ImageIconResource("Icons/CursorMove.gif");
 
-	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/RectPolylinConnector.gif");
-	public static final ImageIconResource CURVE_CONNECTOR_ICON = new ImageIconResource("Icons/CurveConnector.gif");
-	public static final ImageIconResource LINE_CONNECTOR_ICON = new ImageIconResource("Icons/LineConnector.gif");
+	public static final ImageIconResource RECTANGLE_ICON = new ImageIconResource("Icons/Tools/Rectangle.png");
+	public static final ImageIconResource OVAL_ICON = new ImageIconResource("Icons/Tools/Oval.png");
+
+	public static final ImageIconResource CUSTOM_POLYGON_ICON = new ImageIconResource("Icons/Tools/CustomPolygon.png");
+	public static final ImageIconResource CLOSE_CURVE_ICON = new ImageIconResource("Icons/Tools/ClosedCurve.png");
+	public static final ImageIconResource OPENED_CURVE_ICON = new ImageIconResource("Icons/Tools/OpenedCurve.png");
+	public static final ImageIconResource COMPLEX_SHAPE_ICON = new ImageIconResource("Icons/Tools/ComplexShape.png");
+
+	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/Tools/RectPolylin.png");
+	public static final ImageIconResource CURVE_CONNECTOR_ICON = new ImageIconResource("Icons/Tools/Curve.png");
+	public static final ImageIconResource LINE_CONNECTOR_ICON = new ImageIconResource("Icons/Tools/Line.png");
+	public static final ImageIconResource CURVED_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/Tools/CurvedPolylin.png");
 
 	public static final ImageIconResource PIN_ICON = new ImageIconResource("Icons/Pin.gif");
 

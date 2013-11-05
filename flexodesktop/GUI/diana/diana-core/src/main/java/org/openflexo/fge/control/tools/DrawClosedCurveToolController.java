@@ -153,6 +153,9 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 		returned.setForeground(getController().getInspectedForegroundStyle().cloneStyle());
 		returned.setTextStyle(getController().getInspectedTextStyle().cloneStyle());
 		returned.setAllowToLeaveBounds(false);
+		returned.setIsFloatingLabel(false);
+		returned.setRelativeTextX(0.5);
+		returned.setRelativeTextY(0.5);
 
 		FGERectangle boundingBox = getClosedCurve().getBoundingBox();
 		returned.setWidth(boundingBox.getWidth());

@@ -111,7 +111,7 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 					if (e.getPoint().x > getWidth() - 8 && e.getPoint().y > getHeight() - 8 && representedTool.getOptions() != null) {
 						JPopupMenu contextualMenu = new JPopupMenu();
 						for (final EditorToolOption option : representedTool.getOptions()) {
-							JMenuItem menuItem = new JMenuItem(option.name(), getSelectedIconFor(option));
+							JMenuItem menuItem = new JMenuItem(option.name(), getMenuItemIconFor(option));
 							menuItem.addActionListener(new ActionListener() {
 								@Override
 								public void actionPerformed(ActionEvent e) {
@@ -313,6 +313,50 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 			default:
 				logger.warning("Unexpected option: " + option);
 				return FGEIconLibrary.DRAW_LINE_TOOL_SELECTED_ICON;
+			}
+		}
+		logger.warning("Unexpected option: " + option);
+		return null;
+	}
+
+	public Icon getMenuItemIconFor(EditorToolOption option) {
+		if (option instanceof DrawShapeToolOption) {
+			switch ((DrawShapeToolOption) option) {
+			case DrawRectangle:
+				return FGEIconLibrary.RECTANGLE_ICON;
+			case DrawOval:
+				return FGEIconLibrary.OVAL_ICON;
+			default:
+				logger.warning("Unexpected option: " + option);
+				return null;
+			}
+		} else if (option instanceof DrawCustomShapeToolOption) {
+			switch ((DrawCustomShapeToolOption) option) {
+			case DrawPolygon:
+				return FGEIconLibrary.CUSTOM_POLYGON_ICON;
+			case DrawClosedCurve:
+				return FGEIconLibrary.CLOSE_CURVE_ICON;
+			case DrawOpenedCurve:
+				return FGEIconLibrary.OPENED_CURVE_ICON;
+			case DrawComplexShape:
+				return FGEIconLibrary.COMPLEX_SHAPE_ICON;
+			default:
+				logger.warning("Unexpected option: " + option);
+				return null;
+			}
+		} else if (option instanceof DrawConnectorToolOption) {
+			switch ((DrawConnectorToolOption) option) {
+			case DrawLine:
+				return FGEIconLibrary.LINE_CONNECTOR_ICON;
+			case DrawCurve:
+				return FGEIconLibrary.CURVE_CONNECTOR_ICON;
+			case DrawRectPolylin:
+				return FGEIconLibrary.RECT_POLYLIN_CONNECTOR_ICON;
+			case DrawCurvedPolylin:
+				return FGEIconLibrary.CURVED_POLYLIN_CONNECTOR_ICON;
+			default:
+				logger.warning("Unexpected option: " + option);
+				return null;
 			}
 		}
 		logger.warning("Unexpected option: " + option);
