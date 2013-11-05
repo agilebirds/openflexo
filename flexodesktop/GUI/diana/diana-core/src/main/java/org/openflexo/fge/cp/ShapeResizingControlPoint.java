@@ -67,93 +67,101 @@ public class ShapeResizingControlPoint extends ControlPoint {
 			cardinalDirection = aCardinalDirection;
 		}
 
-		if (cardinalDirection == CardinalDirection.NORTH) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.EAST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.WEST, ShapeSpecification.EAST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.SOUTH) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.WEST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.SOUTH_WEST, CardinalQuadrant.NORTH_EAST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH_WEST, ShapeSpecification.NORTH_EAST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.WEST, ShapeSpecification.EAST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.SOUTH_EAST, CardinalQuadrant.NORTH_WEST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH_EAST, ShapeSpecification.NORTH_WEST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.NORTH_EAST, CardinalQuadrant.SOUTH_WEST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH_EAST, ShapeSpecification.SOUTH_WEST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-			}
-		} else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
-			if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
-					|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
-				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.NORTH_WEST, CardinalQuadrant.SOUTH_EAST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH_WEST, ShapeSpecification.SOUTH_EAST));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
-			} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
-				setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
-			} else {
-				setDraggingAuthorizedArea(new FGEEmptyArea());
-				logger.warning("Created SOUTH_EAST ShapeResizingControlPoint with EMPTY dragging authorized area");
-			}
-		} else {
+		if (getNode() == null || getNode().getGraphicalRepresentation() == null) {
 			setDraggingAuthorizedArea(new FGEEmptyArea());
+		} else {
+			if (cardinalDirection == CardinalDirection.NORTH) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.EAST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.WEST, ShapeSpecification.EAST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.SOUTH) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.WEST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.NORTH_EAST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.SOUTH_WEST,
+							CardinalQuadrant.NORTH_EAST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH_WEST, ShapeSpecification.NORTH_EAST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.WEST, ShapeSpecification.EAST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.NORTH_WEST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.SOUTH_EAST,
+							CardinalQuadrant.NORTH_WEST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH_EAST, ShapeSpecification.NORTH_WEST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.SOUTH, ShapeSpecification.NORTH));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.SOUTH_WEST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.NORTH_EAST,
+							CardinalQuadrant.SOUTH_WEST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH_EAST, ShapeSpecification.SOUTH_WEST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+				}
+			} else if (cardinalDirection == CardinalDirection.SOUTH_EAST) {
+				if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.FREELY_RESIZABLE
+						|| getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.STEP_CONSTRAINED) {
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(ShapeSpecification.NORTH_WEST,
+							CardinalQuadrant.SOUTH_EAST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH_WEST, ShapeSpecification.SOUTH_EAST));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.WIDTH_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.NORTH, ShapeSpecification.SOUTH));
+				} else if (getNode().getGraphicalRepresentation().getDimensionConstraints() == DimensionConstraints.HEIGHT_FIXED) {
+					setDraggingAuthorizedArea(new FGEHalfLine(ShapeSpecification.EAST, ShapeSpecification.WEST));
+				} else {
+					setDraggingAuthorizedArea(new FGEEmptyArea());
+					logger.warning("Created SOUTH_EAST ShapeResizingControlPoint with EMPTY dragging authorized area");
+				}
+			} else {
+				setDraggingAuthorizedArea(new FGEEmptyArea());
+			}
 		}
 	}
 

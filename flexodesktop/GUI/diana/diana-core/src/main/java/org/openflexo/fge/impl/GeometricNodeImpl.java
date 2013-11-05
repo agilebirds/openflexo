@@ -196,6 +196,9 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			g.setDefaultForeground(style);
 		}
 
+		// System.out.println("Attempt to paint " + getGraphicalRepresentation().getGeometricObject() + " with " + g + " dtn=" +
+		// g.getNode());
+
 		paintGeometricObject(g);
 
 		if (getIsSelected() || getIsFocused()) {
@@ -502,6 +505,9 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 				@Override
 				public void update(FGEPolygon geometricObject) {
+					if (geometricObject == null) {
+						return;
+					}
 					setPoint(geometricObject.getPointAt(index));
 				}
 			});

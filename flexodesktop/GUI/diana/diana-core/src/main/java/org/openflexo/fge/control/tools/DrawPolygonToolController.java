@@ -35,12 +35,15 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.model.undo.CompoundEdit;
 
 public abstract class DrawPolygonToolController<ME> extends DrawShapeToolController<FGEPolygon, ME> {
 
 	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
 
 	private boolean isBuildingPoints;
+
+	private CompoundEdit drawPolygonEdit;
 
 	public DrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super(controller, control);
@@ -114,6 +117,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 
 	@Override
 	protected void startMouseEdition(ME e) {
+		drawPolygonEdit = startRecordEdit("Draw polygon");
 		super.startMouseEdition(e);
 		isBuildingPoints = true;
 	}
@@ -124,6 +128,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 		getShape().setIsFilled(true);
 		isBuildingPoints = false;
 		makeNewShape();
+		stopRecordEdit(drawPolygonEdit);
 	}
 
 	@Override
@@ -167,4 +172,5 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 		returned.setShapeSpecification(getController().getFactory().makePolygon(normalizedPolygon));
 		return returned;
 	}
+
 }

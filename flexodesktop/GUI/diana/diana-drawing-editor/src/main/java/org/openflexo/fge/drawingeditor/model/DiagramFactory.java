@@ -65,6 +65,10 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		return returned;
 	}
 
+	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, Diagram diagram) {
+		return makeNewShape(aGR, aGR.getLocation(), diagram);
+	}
+
 	public DrawingGraphicalRepresentation makeNewDrawingGR() {
 		return makeDrawingGraphicalRepresentation(true);
 	}

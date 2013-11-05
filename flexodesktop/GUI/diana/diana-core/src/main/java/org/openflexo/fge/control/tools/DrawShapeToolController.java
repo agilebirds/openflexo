@@ -30,8 +30,10 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.GeometricNode;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding.GeometricGRBinding;
+import org.openflexo.fge.GRProvider.GeometricGRProvider;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveEditor;
@@ -45,6 +47,7 @@ import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.GeometricNodeImpl;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.model.undo.CompoundEdit;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> implements PropertyChangeListener, HasPropertyChangeSupport {
@@ -58,6 +61,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 
 	private S shape;
 	private GeometricNode<S> currentEditedShapeGeometricNode;
+	private GeometricGraphicalRepresentation geomGR;
 
 	private boolean editionHasBeenStarted = false;
 
@@ -74,7 +78,6 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 		this.control = control;
 		editionHasBeenStarted = false;
 
-		graphics = makeGraphics(controller.getFactory().makeForegroundStyle(Color.GREEN));
 	}
 
 	public abstract FGEGeometricGraphics makeGraphics(ForegroundStyle foregroundStyle);
@@ -98,11 +101,19 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 	protected void startMouseEdition(ME e) {
 		editionHasBeenStarted = true;
 		parentNode = getFocusedObject(e);
+
+		System.out.println("ParentNode=" + getFocusedObject(e));
+
 		shape = makeDefaultShape(e);
 		Class<S> shapeClass = (Class<S>) TypeUtils.getTypeArgument(getClass(), DrawShapeToolController.class, 0);
+		geomGR = controller.getFactory().makeGeometricGraphicalRepresentation(shape);
 		GeometricGRBinding<S> editedGeometricObjectBinding = getController().getDrawing().bindGeometric(shapeClass,
-				"editedGeometricObject", null);
-		GeometricGraphicalRepresentation geomGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape);
+				"editedGeometricObject", new GeometricGRProvider<S>() {
+					@Override
+					public GeometricGraphicalRepresentation provideGR(S drawable, FGEModelFactory factory) {
+						return geomGR;
+					}
+				});
 		currentEditedShapeGeometricNode = new GeometricNodeImpl<S>((DrawingImpl<?>) getController().getDrawing(), shape,
 				editedGeometricObjectBinding, (ContainerNodeImpl<?, ?>) getController().getDrawing().getRoot());
 		currentEditedShapeGeometricNode.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
@@ -113,6 +124,9 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 				}
 			}
 		});
+
+		graphics = makeGraphics(controller.getFactory().makeForegroundStyle(Color.GREEN));
+
 		// TODO Check this / fge_under_pamela
 		/*currentEditedShapeGeometricNode = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
 			@Override
@@ -231,6 +245,20 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 	@Override
 	public String getDeletedProperty() {
 		return null;
+	}
+
+	protected CompoundEdit startRecordEdit(String editName) {
+		if (controller.getFactory().getUndoManager() != null && !controller.getFactory().getUndoManager().isUndoInProgress()
+				&& !controller.getFactory().getUndoManager().isRedoInProgress()) {
+			return controller.getFactory().getUndoManager().startRecording(editName);
+		}
+		return null;
+	}
+
+	protected void stopRecordEdit(CompoundEdit edit) {
+		if (edit != null && controller.getFactory().getUndoManager() != null) {
+			controller.getFactory().getUndoManager().stopRecording(edit);
+		}
 	}
 
 }

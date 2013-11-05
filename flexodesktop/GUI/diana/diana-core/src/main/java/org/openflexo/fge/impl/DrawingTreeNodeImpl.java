@@ -553,6 +553,10 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	public void notifyObservers(FGENotification notification) {
+		if (isDeleted()) {
+			logger.warning("notifyObservers() called by a deleted DrawingTreeNode");
+			return;
+		}
 		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 

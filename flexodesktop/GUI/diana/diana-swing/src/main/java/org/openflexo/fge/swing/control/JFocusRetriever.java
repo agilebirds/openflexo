@@ -240,14 +240,22 @@ public class JFocusRetriever {
 
 	public DrawingTreeNode<?, ?> getFocusedObject(MouseEvent event) {
 		if (getController() instanceof DianaInteractiveEditor) {
-			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			DianaInteractiveEditor<?, ?, ?> editor = (DianaInteractiveEditor<?, ?, ?>) getController();
+			switch (editor.getCurrentTool()) {
 			case SelectionTool:
 				return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 			case DrawShapeTool:
-				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController() != null) {
-					return ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getCurrentEditedShape();
-				} else {
-					return null;
+				if (editor.getDrawShapeToolController() != null) {
+					if (editor.getDrawShapeToolController().editionHasBeenStarted()
+							&& editor.getDrawShapeToolController().getCurrentEditedShape() != null) {
+						return editor.getDrawShapeToolController().getCurrentEditedShape();
+					} else {
+						DrawingTreeNode<?, ?> returned = getFocusedObject(drawingView.getDrawing().getRoot(), event);
+						if (returned == null) {
+							returned = drawingView.getDrawing().getRoot();
+						}
+						return returned;
+					}
 				}
 			default:
 				return null;

@@ -64,6 +64,8 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation, ContainerNode<?, ?> parentNode) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " and parent: " + parentNode);
+				Shape newShape = getFactory().makeNewShape(graphicalRepresentation, getDrawing().getModel());
+				getDrawing().getModel().addToShapes(newShape);
 				/*Shape newShape = getDrawing().getModel().getFactory()
 						.makeNewShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
 				if (parentGraphicalRepresentation != null && parentGraphicalRepresentation.getDrawable() instanceof DiagramElement) {

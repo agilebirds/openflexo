@@ -64,8 +64,10 @@ public class JDrawPolygonToolController extends DrawPolygonToolController<MouseE
 
 	public FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
-		return getCurrentEditedShape().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(),
-				getController().getScale());
+		return new FGEPoint(pt.getX(), pt.getY());
+
+		// return getCurrentEditedShape().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(),
+		// getController().getScale());
 	}
 
 	@Override
