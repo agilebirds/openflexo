@@ -12,7 +12,7 @@ public class TestGenerateHelpSet {
 	@Test
 	public void testHelpSetGeneration() {
 		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(DocResourceManager.instance().getDocResourceCenter(), null,
-				new DefaultFlexoEditor(null));
+				new DefaultFlexoEditor(null, null));
 		action.setNote("none");
 		action.setBaseName("flexoenterprise");
 		UserType userType = UserType.DEVELOPER;
