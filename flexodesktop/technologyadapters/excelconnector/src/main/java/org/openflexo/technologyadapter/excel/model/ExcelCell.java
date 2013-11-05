@@ -49,6 +49,10 @@ public class ExcelCell extends ExcelObject {
 		VERTICAL_BOTTOM, VERTICAL_CENTER, VERTICAL_JUSTIFY, VERTICAL_TOP
 	}
 	
+	public enum CellFontStyleFeature {
+		ANSI_CHARSET, BOLDWEIGHT_BOLD, BOLDWEIGHT_NORMAL, COLOR_NORMAL, COLOR_RED, DEFAULT_CHARSET, SS_NONE, SS_SUB, SS_SUPER, SYMBOL_CHARSET, U_DOUBLE, U_DOUBLE_ACCOUNTING, U_NONE, U_SINGLE, U_SINGLE_ACCOUNTING
+	}
+	
 	public Cell getCell() {
 		return cell;
 	}
@@ -600,6 +604,14 @@ public class ExcelCell extends ExcelObject {
 			return CellStyle.ALIGN_LEFT;
 		}else if(alignmentStyle.name().equals("ALIGN_RIGHT")){
 			return CellStyle.ALIGN_RIGHT;
+		}else if(alignmentStyle.name().equals("VERTICAL_BOTTOM")){
+			return CellStyle.VERTICAL_BOTTOM;
+		}else if(alignmentStyle.name().equals("VERTICAL_JUSTIFY")){
+			return CellStyle.VERTICAL_JUSTIFY;
+		}else if(alignmentStyle.name().equals("VERTICAL_CENTER")){
+			return CellStyle.VERTICAL_CENTER;
+		}else if(alignmentStyle.name().equals("VERTICAL_TOP")){
+			return CellStyle.VERTICAL_TOP;
 		}
 		return null;
 	}
