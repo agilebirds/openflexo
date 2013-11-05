@@ -34,9 +34,10 @@ import javax.swing.JPanel;
 
 import org.openflexo.components.widget.binding.BindingSelector;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.FlexoTestCase.FlexoTestEditor;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingDefinition;
@@ -71,8 +72,8 @@ public class TestBindingExpressionSelector {
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new DefaultFlexoEditor(project);
+		public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+			return new FlexoTestEditor(project, serviceManager);
 		}
 	};
 

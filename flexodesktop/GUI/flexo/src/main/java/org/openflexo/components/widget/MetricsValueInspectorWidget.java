@@ -83,6 +83,11 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 	}
 
 	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
 	public Class getDefaultType() {
 		return MetricsValue.class;
 	}

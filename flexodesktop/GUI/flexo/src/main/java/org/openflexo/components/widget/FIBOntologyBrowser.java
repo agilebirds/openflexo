@@ -103,6 +103,11 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		setEditedObject(this);
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+	}
+
 	public IFlexoOntology getOntology() {
 		return ontology;
 	}

@@ -19,20 +19,33 @@
  */
 package org.openflexo.rm.view;
 
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.ConnectorGRProvider;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
+import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.impl.DrawingImpl;
+import org.openflexo.fge.shapes.Rectangle;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -46,9 +59,12 @@ public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements
 
 	private static final Logger logger = Logger.getLogger(RMViewerRepresentation.class.getPackage().getName());
 
-	private DrawingGraphicalRepresentation<FlexoProject> graphicalRepresentation;
+	private DrawingGraphicalRepresentation drawingGraphicalRepresentation;
+	private ShapeGraphicalRepresentation resourceGraphicalRepresentation;
+	private ConnectorGraphicalRepresentation resourceDependancyGraphicalRepresentation;
+	private ConnectorGraphicalRepresentation resourceSynchronizationGraphicalRepresentation;
 
-	public RMViewerRepresentation(FlexoProject project) {
+	/*public RMViewerRepresentation(FlexoProject project) {
 		super(project);
 		graphicalRepresentation = new DrawingGraphicalRepresentation<FlexoProject>(this);
 
@@ -57,6 +73,97 @@ public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements
 		updateGraphicalObjectsHierarchy();
 
 		performAutomaticLayout();
+	}*/
+
+	public RMViewerRepresentation(FlexoProject project, FGEModelFactory factory) {
+		super(project, factory, PersistenceMode.SharedGraphicalRepresentations);
+	}
+
+	@Override
+	public void init() {
+
+		drawingGraphicalRepresentation = getFactory().makeDrawingGraphicalRepresentation();
+
+		resourceGraphicalRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.RECTANGLE);
+		resourceGraphicalRepresentation.setWidth(40);
+		resourceGraphicalRepresentation.setHeight(60);
+		resourceGraphicalRepresentation.setIsFloatingLabel(false);
+		((Rectangle) resourceGraphicalRepresentation.getShapeSpecification()).setIsRounded(true);
+		resourceGraphicalRepresentation.setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
+		resourceGraphicalRepresentation.setAdjustMinimalWidthToLabelWidth(true);
+		resourceGraphicalRepresentation.setMinimalWidth(150);
+
+		resourceDependancyGraphicalRepresentation = getFactory().makeConnectorGraphicalRepresentation();
+		resourceDependancyGraphicalRepresentation.setForeground(getFactory().makeForegroundStyle(Color.DARK_GRAY, 1.6f));
+		resourceDependancyGraphicalRepresentation.getConnectorSpecification().setEndSymbol(EndSymbolType.PLAIN_ARROW);
+		resourceDependancyGraphicalRepresentation.setTextStyle(getFactory()
+				.makeTextStyle(Color.GRAY, new Font("SansSerif", Font.ITALIC, 8)));
+
+		resourceSynchronizationGraphicalRepresentation = getFactory().makeConnectorGraphicalRepresentation();
+		resourceSynchronizationGraphicalRepresentation = getFactory().makeConnectorGraphicalRepresentation();
+		resourceSynchronizationGraphicalRepresentation.setForeground(getFactory().makeForegroundStyle(Color.RED, 1.6f));
+		resourceSynchronizationGraphicalRepresentation.getConnectorSpecification().setStartSymbol(StartSymbolType.PLAIN_ARROW);
+		resourceSynchronizationGraphicalRepresentation.getConnectorSpecification().setEndSymbol(EndSymbolType.PLAIN_ARROW);
+		resourceSynchronizationGraphicalRepresentation.setTextStyle(getFactory().makeTextStyle(Color.GRAY,
+				new Font("SansSerif", Font.ITALIC, 8)));
+
+		final DrawingGRBinding<FlexoProject> drawingBinding = bindDrawing(FlexoProject.class, "project",
+				new DrawingGRProvider<FlexoProject>() {
+					@Override
+					public DrawingGraphicalRepresentation provideGR(FlexoProject drawable, FGEModelFactory factory) {
+						return drawingGraphicalRepresentation;
+					}
+				});
+		final ShapeGRBinding<FlexoResource> resourceBinding = bindShape(FlexoResource.class, "resource",
+				new ShapeGRProvider<FlexoResource>() {
+					@Override
+					public ShapeGraphicalRepresentation provideGR(FlexoResource drawable, FGEModelFactory factory) {
+						return resourceGraphicalRepresentation;
+					}
+				});
+		final ConnectorGRBinding<ResourceDependancy> dependancyBinding = bindConnector(ResourceDependancy.class, "resource_dependancy",
+				resourceBinding, resourceBinding, new ConnectorGRProvider<ResourceDependancy>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(ResourceDependancy drawable, FGEModelFactory factory) {
+						return resourceDependancyGraphicalRepresentation;
+					}
+				});
+		final ConnectorGRBinding<ResourceSynchronization> synchroBinding = bindConnector(ResourceSynchronization.class,
+				"resource_synchronization", resourceBinding, resourceBinding, new ConnectorGRProvider<ResourceSynchronization>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(ResourceSynchronization drawable, FGEModelFactory factory) {
+						return resourceSynchronizationGraphicalRepresentation;
+					}
+				});
+
+		drawingBinding.addToWalkers(new GRStructureWalker<FlexoProject>() {
+
+			@Override
+			public void walk(FlexoProject project) {
+				for (FlexoResource<? extends FlexoResourceData> res : project) {
+					drawShape(resourceBinding, res, project);
+				}
+
+				for (FlexoResource<? extends FlexoResourceData> r1 : project) {
+					for (FlexoResource<FlexoResourceData> r2 : r1.getDependentResources()) {
+						if (r2.isRegistered()) {
+							drawConnector(dependancyBinding, resourceDependancyBetween(r1, r2), r1, r2, project);
+						} else {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("Found dependant resource not in project: " + r2 + " for resource " + r1);
+							}
+						}
+					}
+					for (FlexoResource<FlexoResourceData> r2 : r1.getSynchronizedResources()) {
+						drawConnector(synchroBinding, resourceSynchronizationBetween(r1, r2), r1, r2, project);
+					}
+				}
+
+			}
+		});
+
+		resourceBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
+
 	}
 
 	@Override
@@ -65,54 +172,8 @@ public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements
 		super.delete();
 	}
 
-	@Override
-	protected void buildGraphicalObjectsHierarchy() {
-		for (FlexoResource<? extends FlexoResourceData> res : getProject()) {
-			addDrawable(res, getProject());
-		}
-
-		for (FlexoResource<? extends FlexoResourceData> r1 : getProject()) {
-			for (FlexoResource<FlexoResourceData> r2 : r1.getDependentResources()) {
-				if (r2.isRegistered()) {
-					addDrawable(resourceDependancyBetween(r1, r2), getProject());
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Found dependant resource not in project: " + r2 + " for resource " + r1);
-					}
-				}
-			}
-			for (FlexoResource<FlexoResourceData> r2 : r1.getSynchronizedResources()) {
-				addDrawable(resourceSynchronizationBetween(r1, r2), getProject());
-			}
-		}
-
-	}
-
 	public FlexoProject getProject() {
 		return getModel();
-	}
-
-	@Override
-	public DrawingGraphicalRepresentation<FlexoProject> getDrawingGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
-		return (GraphicalRepresentation) buildGraphicalRepresentation(aDrawable);
-	}
-
-	private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable) {
-		if (aDrawable instanceof FlexoResource) {
-			return new ResourceGR((FlexoResource) aDrawable, this);
-		} else if (aDrawable instanceof ResourceDependancy) {
-			return new ResourceDependancyGR((ResourceDependancy) aDrawable, this);
-		} else if (aDrawable instanceof ResourceSynchronization) {
-			return new ResourceSynchronizationGR((ResourceSynchronization) aDrawable, this);
-		}
-		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
-		return null;
 	}
 
 	@Override
@@ -211,35 +272,6 @@ public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements
 		public FlexoResource getR2() {
 			return r2;
 		}
-	}
-
-	public void performAutomaticLayout() {
-		double width = getDrawingGraphicalRepresentation().getWidth();
-		double height = getDrawingGraphicalRepresentation().getHeight();
-		int maxOrder = -1;
-		Map<Integer, List<FlexoResource<? extends FlexoResourceData>>> resources = new HashMap<Integer, List<FlexoResource<? extends FlexoResourceData>>>();
-		for (FlexoResource<? extends FlexoResourceData> res : getProject()) {
-			System.out.println("resource: " + res + " order " + res.getResourceOrder());
-			if (res.getResourceOrder() > maxOrder) {
-				maxOrder = res.getResourceOrder();
-			}
-			List<FlexoResource<? extends FlexoResourceData>> thisOrderResources = resources.get(res.getResourceOrder());
-			if (thisOrderResources == null) {
-				thisOrderResources = new ArrayList<FlexoResource<? extends FlexoResourceData>>();
-				resources.put(res.getResourceOrder(), thisOrderResources);
-			}
-			thisOrderResources.add(res);
-		}
-
-		for (int i : resources.keySet()) {
-			int j = 0;
-			for (FlexoResource<? extends FlexoResourceData> r : resources.get(i)) {
-				ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) getGraphicalRepresentation(r);
-				gr.setLocation(new FGEPoint(i * width / maxOrder, j * height / resources.get(i).size()));
-				j++;
-			}
-		}
-
 	}
 
 }

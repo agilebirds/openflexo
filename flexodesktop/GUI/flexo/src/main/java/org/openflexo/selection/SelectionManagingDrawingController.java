@@ -25,17 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.control.DrawingController;
-import org.openflexo.fge.control.MouseClickControl;
-import org.openflexo.fge.control.actions.CustomClickControlAction;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.control.MouseControlContext;
+import org.openflexo.fge.control.actions.MouseClickControlActionImpl;
+import org.openflexo.fge.control.actions.MouseClickControlImpl;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.swing.JDianaInteractiveEditor;
+import org.openflexo.fge.swing.control.SwingToolFactory;
+import org.openflexo.fge.swing.view.JFGEView;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -45,15 +45,15 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @param <D>
  */
-public class SelectionManagingDrawingController<D extends Drawing<? extends FlexoObject>> extends DrawingController<D> implements
-		SelectionListener {
+public class SelectionManagingDrawingController<M extends FlexoObject> extends JDianaInteractiveEditor<M> implements SelectionListener {
 
 	private static final Logger logger = Logger.getLogger(SelectionManagingDrawingController.class.getPackage().getName());
 
 	private SelectionManager _selectionManager;
 
-	public SelectionManagingDrawingController(D drawing, SelectionManager selectionManager) {
-		super(drawing);
+	public SelectionManagingDrawingController(Drawing<M> drawing, SelectionManager selectionManager, FGEModelFactory factory,
+			SwingToolFactory toolFactory) {
+		super(drawing, factory, toolFactory);
 		_selectionManager = selectionManager;
 		if (_selectionManager != null) {
 			selectionManager.addToSelectionListeners(this);
@@ -84,7 +84,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends DrawingTreeNode<?, ?>> someSelectedObjects) {
 		if (_selectionManager != null) {
 			_selectionManager.resetSelection();
 		}
@@ -92,7 +92,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void addToSelectedObjects(GraphicalRepresentation anObject) {
+	public void addToSelectedObjects(DrawingTreeNode<?, ?> anObject) {
 		// logger.info("_selectionManager="+_selectionManager);
 		// logger.info("anObject.getDrawable()="+anObject.getDrawable());
 		if (_selectionManager != null) {
@@ -112,7 +112,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void removeFromSelectedObjects(GraphicalRepresentation anObject) {
+	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> anObject) {
 		if (_selectionManager != null) {
 			for (FlexoObject o : new ArrayList<FlexoObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
@@ -128,11 +128,11 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 	}
 
-	@Override
+	/*@Override
 	public void clearSelection() {
 		super.clearSelection();
 		notifyObservers(new EmptySelection());
-	}
+	}*/
 
 	@Override
 	public void selectDrawing() {
@@ -142,22 +142,26 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 	}
 
-	public static class ShowContextualMenuControl extends MouseClickControl {
+	public static class ShowContextualMenuControl extends MouseClickControlImpl<SelectionManagingDrawingController<?>> {
 
-		public ShowContextualMenuControl() {
-			this(false);
+		public ShowContextualMenuControl(FGEModelFactory factory) {
+			this(factory, false);
 		}
 
-		public ShowContextualMenuControl(boolean controlDown) {
-			super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
+		public ShowContextualMenuControl(FGEModelFactory factory, boolean controlDown) {
+			super("Show contextual menu", MouseButton.RIGHT, 1, new MouseClickControlActionImpl<SelectionManagingDrawingController<?>>() {
+
 				@Override
-				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-						java.awt.event.MouseEvent event) {
-					FGEView view = controller.getDrawingView().viewForNode(graphicalRepresentation);
-					Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-					controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
-					controller.setLastSelectedGR(graphicalRepresentation);
-					if (!(graphicalRepresentation.getDrawable() instanceof FlexoObject)) {
+				public boolean handleClick(DrawingTreeNode<?, ?> node, SelectionManagingDrawingController<?> controller,
+						MouseControlContext context) {
+					JFGEView<?, ?> view = controller.getDrawingView().viewForNode(node);
+
+					Point newPoint = getPointInView(node, controller, context);
+					controller.setLastSelectedNode(node);
+					controller.setLastClickedPoint(
+							node.convertLocalViewCoordinatesToRemoteNormalizedPoint(newPoint, node, controller.getScale()), node);
+
+					if (!(node.getDrawable() instanceof FlexoObject)) {
 						return false;
 					}
 					if (!(controller instanceof SelectionManagingDrawingController)) {
@@ -165,7 +169,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 								+ " does not implement SelectionManagingDrawingController");
 						return false;
 					}
-					FlexoObject o = (FlexoObject) graphicalRepresentation.getDrawable();
+					FlexoObject o = (FlexoObject) node.getDrawable();
 					SelectionManager selectionManager = ((SelectionManagingDrawingController) controller).getSelectionManager();
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						if (!selectionManager.selectionContains(o)) {
@@ -176,7 +180,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 							}
 						}
 					} else {
-						boolean isControlDown = event.isControlDown();
+						boolean isControlDown = context.isControlDown();
 						if (isControlDown) {
 							if (!selectionManager.selectionContains(o)) {
 								selectionManager.addToSelected(o);
@@ -190,7 +194,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 					selectionManager.getContextualMenuManager().showPopupMenuForObject(o, (Component) view, newPoint);
 					return true;
 				}
-			}, false, controlDown, false, false);
+			}, false, controlDown, false, false, factory);
 		}
 
 	}
@@ -208,20 +212,20 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	private boolean mayRepresent(FlexoObject o) {
-		return getDrawing().getGraphicalRepresentation(o) != null;
+		return getDrawing().getDrawingTreeNode(o) != null;
 	}
 
 	@Override
 	public void fireObjectDeselected(FlexoObject object) {
 		if (mayRepresent(object)) {
-			super.removeFromSelectedObjects(getDrawing().getGraphicalRepresentation(object));
+			super.removeFromSelectedObjects(getDrawing().getDrawingTreeNode(object));
 		}
 	}
 
 	@Override
 	public void fireObjectSelected(FlexoObject object) {
 		if (mayRepresent(object)) {
-			super.addToSelectedObjects(getDrawing().getGraphicalRepresentation(object));
+			super.addToSelectedObjects(getDrawing().getDrawingTreeNode(object));
 		}
 	}
 
@@ -231,21 +235,15 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setLastClickedPoint(FGEPoint lastClickedPoint) {
-		super.setLastClickedPoint(lastClickedPoint);
+	public void setLastClickedPoint(FGEPoint lastClickedPoint, DrawingTreeNode<?, ?> node) {
+		super.setLastClickedPoint(lastClickedPoint, node);
 		if (_selectionManager instanceof MouseSelectionManager) {
 			((MouseSelectionManager) _selectionManager).setLastClickedPoint(new Point((int) lastClickedPoint.getX(), (int) lastClickedPoint
 					.getY()));
-		}
-	}
-
-	@Override
-	public void setLastSelectedGR(GraphicalRepresentation lastSelectedGR) {
-		super.setLastSelectedGR(lastSelectedGR);
-		if (_selectionManager instanceof MouseSelectionManager) {
-			if (lastSelectedGR.getDrawable() instanceof FlexoObject) {
-				((MouseSelectionManager) _selectionManager).setLastSelectedObject((FlexoObject) lastSelectedGR.getDrawable());
+			if (node.getDrawable() instanceof FlexoObject) {
+				((MouseSelectionManager) _selectionManager).setLastSelectedObject((FlexoObject) node.getDrawable());
 			}
 		}
 	}
+
 }

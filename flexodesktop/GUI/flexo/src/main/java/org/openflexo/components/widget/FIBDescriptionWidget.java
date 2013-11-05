@@ -48,6 +48,11 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject>
 	}
 
 	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
 	public Class<FlexoObject> getRepresentedType() {
 		return FlexoObject.class;
 	}

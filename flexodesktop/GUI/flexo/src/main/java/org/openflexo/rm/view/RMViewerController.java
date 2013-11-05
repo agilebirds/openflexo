@@ -21,28 +21,38 @@ package org.openflexo.rm.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.fge.control.DrawingController;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEModelFactoryImpl;
+import org.openflexo.fge.swing.JDianaInteractiveViewer;
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public class RMViewerController extends DrawingController<RMViewerRepresentation> {
+public class RMViewerController extends JDianaInteractiveViewer<FlexoProject> {
 
-	public RMViewerController(FlexoProject project) {
-		super(new RMViewerRepresentation(project));
+	private static final Logger logger = Logger.getLogger(RMViewerController.class.getPackage().getName());
+
+	/**
+	 * This is the FGE model factory used in the context of RM_VIEWER
+	 */
+	public static FGEModelFactory RM_VIEWER_FACTORY = null;
+
+	static {
+		try {
+			RM_VIEWER_FACTORY = new FGEModelFactoryImpl();
+		} catch (ModelDefinitionException e) {
+			logger.severe(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
-	@Override
-	public void delete() {
-		super.delete();
-		getDrawing().delete();
+	public RMViewerController(FlexoProject project) {
+		super(new RMViewerRepresentation(project, RM_VIEWER_FACTORY), RM_VIEWER_FACTORY, SwingToolFactory.DEFAULT);
 	}
 
 	private JPanel mainView;
@@ -50,25 +60,7 @@ public class RMViewerController extends DrawingController<RMViewerRepresentation
 	public JPanel getMainView() {
 		if (mainView == null) {
 			JPanel topPanel = new JPanel(new BorderLayout());
-			topPanel.add(getScalePanel(), BorderLayout.WEST);
-			JPanel controlPanel = new JPanel(new FlowLayout());
-			JButton randomLayoutButton = new JButton(FlexoLocalization.localizedForKey("random_layout"));
-			randomLayoutButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					getDrawingGraphicalRepresentation().performRandomLayout();
-				}
-			});
-			controlPanel.add(randomLayoutButton);
-			JButton autoLayoutButton = new JButton(FlexoLocalization.localizedForKey("auto_layout"));
-			autoLayoutButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					getDrawingGraphicalRepresentation().performAutoLayout();
-				}
-			});
-			controlPanel.add(autoLayoutButton);
-			topPanel.add(controlPanel, BorderLayout.EAST);
+			topPanel.add(getToolFactory().makeDianaScaleSelector(this).getComponent(), BorderLayout.WEST);
 			mainView = new JPanel(new BorderLayout());
 			mainView.add(topPanel, BorderLayout.NORTH);
 			mainView.add(new JScrollPane(getDrawingView()), BorderLayout.CENTER);

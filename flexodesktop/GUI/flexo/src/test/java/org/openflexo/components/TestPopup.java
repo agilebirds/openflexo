@@ -35,9 +35,9 @@ import javax.swing.JTextArea;
 
 import org.openflexo.components.widget.DMEntitySelector;
 import org.openflexo.components.widget.DMTypeSelector;
-import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoTestCase.FlexoTestEditor;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -49,8 +49,8 @@ public class TestPopup {
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
+		public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+			return new FlexoTestEditor(project, serviceManager);
 		}
 	};
 

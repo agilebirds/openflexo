@@ -41,15 +41,15 @@ public interface DianaToolFactory<C> {
 
 	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
-	public DianaToolSelector<?, ?> makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor);
+	public DianaToolSelector<? extends C, ?> makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor);
 
-	public DianaScaleSelector<?, ?> makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor);
+	public DianaScaleSelector<? extends C, ?> makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor);
 
-	public DianaStyles<?, ?> makeDianaStyles();
+	public DianaStyles<? extends C, ?> makeDianaStyles();
 
 	public DianaInspectors<?, ?> makeDianaInspectors();
 
-	public DianaLayoutWidget<?, ?> makeDianaLayoutWidget();
+	public DianaLayoutWidget<? extends C, ?> makeDianaLayoutWidget();
 
-	public DianaPalette<?, ?> makeDianaPalette(DrawingPalette palette);
+	public DianaPalette<? extends C, ?> makeDianaPalette(DrawingPalette palette);
 }
