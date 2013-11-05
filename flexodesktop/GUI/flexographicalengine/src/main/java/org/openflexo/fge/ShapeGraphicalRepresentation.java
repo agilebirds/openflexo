@@ -2562,21 +2562,21 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		case CENTER:
 			point.x -= d.width / 2;
 			break;
-		case LEFT:
-			break;
 		case RIGHT:
+			break;
+		case LEFT:
 			point.x -= d.width;
 			break;
 
 		}
 		switch (getVerticalTextAlignment()) {
-		case BOTTOM:
+		case TOP:
 			point.y -= d.height;
 			break;
 		case MIDDLE:
 			point.y -= d.height / 2;
 			break;
-		case TOP:
+		case BOTTOM:
 			break;
 
 		}
