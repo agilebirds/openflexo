@@ -28,6 +28,7 @@ import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaToolFactory;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.actions.DrawShapeAction;
+import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
 import org.openflexo.fge.swing.JDianaInteractiveEditor;
 import org.openflexo.fge.swing.SwingViewFactory;
@@ -54,11 +55,6 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 		this.frame = frame;
 	}
 
-	@Override
-	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
-		return new JDrawPolygonToolController(controller, control);
-	}
-
 	public JDianaToolSelector makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor) {
 		return new JDianaToolSelector((JDianaInteractiveEditor<?>) editor);
 	}
@@ -83,4 +79,16 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 	public JDianaPalette makeDianaPalette(DrawingPalette palette) {
 		return new JDianaPalette(palette);
 	}
+
+	@Override
+	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+		return new JDrawPolygonToolController(controller, control);
+	}
+
+	@Override
+	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
+			DrawShapeAction control) {
+		return new JDrawClosedCurveToolController(controller, control);
+	}
+
 }

@@ -102,11 +102,14 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 
 		if (getController() instanceof DianaInteractiveEditor) {
 			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
-			case DrawShapeTool:
+			case DrawCustomShapeTool:
 				performSelectionTool = false;
 				if (editable) {
 					getDrawShapeToolController().mouseClicked(e);
 				}
+				break;
+			case DrawShapeTool:
+				performSelectionTool = false;
 				break;
 			case DrawConnectorTool:
 				performSelectionTool = false;
@@ -578,7 +581,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		}
 
 		if ((getController() instanceof DianaInteractiveEditor)
-				&& (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawShapeTool)) {
+				&& (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawCustomShapeTool)) {
 			DianaInteractiveEditor<?, ?, ?> controller = (DianaInteractiveEditor<?, ?, ?>) getController();
 			((DrawShapeToolController<?, MouseEvent>) controller.getDrawShapeToolController()).mouseMoved(e);
 		}

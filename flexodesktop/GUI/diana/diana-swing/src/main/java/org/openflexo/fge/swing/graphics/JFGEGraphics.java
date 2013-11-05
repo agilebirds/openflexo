@@ -537,7 +537,9 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 
 	@Override
 	public void fillGeneralShape(FGEGeneralShape shape) {
-		GeneralPath p = shape.getGeneralPath();
+		AffineTransform at = getNode().convertNormalizedPointToViewCoordinatesAT(getScale());
+		FGEGeneralShape transformedShape = shape.transform(at);
+		GeneralPath p = transformedShape.getGeneralPath();
 		if (getCurrentBackground() instanceof BackgroundImageBackgroundStyle) {
 			fillInShapeWithImage(p);
 		} else {

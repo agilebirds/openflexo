@@ -209,9 +209,8 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 				}*/
 				break;
 			case DrawShapeTool:
-				// if (drawShapeAction != null) {
-				drawShapeToolController = getToolFactory().makeDrawPolygonToolController(this, drawShapeAction);
-				// }
+				break;
+			case DrawCustomShapeTool:
 				break;
 			case DrawConnectorTool:
 				break;
@@ -245,8 +244,28 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		if (this.drawCustomShapeToolOption != drawCustomShapeToolOption) {
 			DrawCustomShapeToolOption oldToolOption = this.drawCustomShapeToolOption;
 			this.drawCustomShapeToolOption = drawCustomShapeToolOption;
+			if (drawShapeToolController != null) {
+				drawShapeToolController.delete();
+			}
+			prepareDrawShapeToolController();
 			notifyObservers(new ToolOptionChanged(oldToolOption, drawCustomShapeToolOption));
 		}
+	}
+
+	private void prepareDrawShapeToolController() {
+		if (drawShapeAction != null) {
+			switch (getDrawCustomShapeToolOption()) {
+			case DrawPolygon:
+				drawShapeToolController = getToolFactory().makeDrawPolygonToolController(this, drawShapeAction);
+				break;
+			case DrawClosedCurve:
+				drawShapeToolController = getToolFactory().makeDrawClosedCurveToolController(this, drawShapeAction);
+				break;
+			default:
+				logger.warning("Not implemented: " + getDrawCustomShapeToolOption());
+			}
+		}
+
 	}
 
 	public DrawConnectorToolOption getDrawConnectorToolOption() {
@@ -295,6 +314,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	public void setDrawShapeAction(DrawShapeAction drawShapeAction) {
 		this.drawShapeAction = drawShapeAction;
+		prepareDrawShapeToolController();
 	}
 
 	public void activatePalette(DianaPalette<?, ?> aPalette) {

@@ -28,24 +28,24 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEComplexCurve;
+import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.model.undo.CompoundEdit;
 
-public abstract class DrawPolygonToolController<ME> extends DrawShapeToolController<FGEPolygon, ME> {
+public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolController<FGEComplexCurve, ME> {
 
-	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DrawClosedCurveToolController.class.getPackage().getName());
 
 	private boolean isBuildingPoints;
 
-	private CompoundEdit drawPolygonEdit;
+	private CompoundEdit drawCurveEdit;
 
-	public DrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+	public DrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
@@ -62,12 +62,12 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 	}
 
 	@Override
-	public FGEPolygon makeDefaultShape(ME e) {
+	public FGEComplexCurve makeDefaultShape(ME e) {
 		FGEPoint newPoint = getPoint(e);
-		return new FGEPolygon(Filling.FILLED, newPoint, new FGEPoint(newPoint));
+		return new FGEComplexCurve(Closure.CLOSED_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 
-	public FGEPolygon getPolygon() {
+	public FGEComplexCurve getClosedCurve() {
 		return getShape();
 	}
 
@@ -117,7 +117,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 
 	@Override
 	protected void startMouseEdition(ME e) {
-		drawPolygonEdit = startRecordEdit("Draw polygon");
+		drawCurveEdit = startRecordEdit("Draw closed curve");
 		super.startMouseEdition(e);
 		isBuildingPoints = true;
 	}
@@ -128,7 +128,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 		isBuildingPoints = false;
 		makeNewShape();
 		super.stopMouseEdition();
-		stopRecordEdit(drawPolygonEdit);
+		stopRecordEdit(drawCurveEdit);
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 
 	@Override
 	public ShapeGraphicalRepresentation buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON);
+		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CLOSED_CURVE);
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getInspectedBackgroundStyle().cloneStyle());
@@ -154,13 +154,13 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 		returned.setTextStyle(getController().getInspectedTextStyle().cloneStyle());
 		returned.setAllowToLeaveBounds(false);
 
-		FGERectangle boundingBox = getPolygon().getBoundingBox();
+		FGERectangle boundingBox = getClosedCurve().getBoundingBox();
 		returned.setWidth(boundingBox.getWidth());
 		returned.setHeight(boundingBox.getHeight());
 		AffineTransform translateAT = AffineTransform.getTranslateInstance(-boundingBox.getX(), -boundingBox.getY());
 
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
-		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
+		FGEComplexCurve normalizedCurve = getClosedCurve().transform(translateAT).transform(scaleAT);
 		if (parentNode instanceof ShapeGraphicalRepresentation) {
 			FGEPoint pt = FGEUtils.convertNormalizedPoint(parentNode, new FGEPoint(0, 0), getController().getDrawing().getRoot());
 			returned.setX(boundingBox.getX() - pt.x);
@@ -169,7 +169,8 @@ public abstract class DrawPolygonToolController<ME> extends DrawShapeToolControl
 			returned.setX(boundingBox.getX() - FGEConstants.DEFAULT_BORDER_SIZE);
 			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
 		}
-		returned.setShapeSpecification(getController().getFactory().makePolygon(normalizedPolygon));
+
+		returned.setShapeSpecification(getController().getFactory().makeClosedCurve(normalizedCurve));
 		return returned;
 	}
 

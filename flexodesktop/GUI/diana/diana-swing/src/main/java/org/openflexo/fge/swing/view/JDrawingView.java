@@ -581,7 +581,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			 */
 
 			if (getController() instanceof DianaInteractiveEditor) {
-				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawShapeTool) {
+				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawCustomShapeTool) {
 					// logger.info("Painting current edited shape");
 					paintCurrentEditedShape(graphics);
 				}

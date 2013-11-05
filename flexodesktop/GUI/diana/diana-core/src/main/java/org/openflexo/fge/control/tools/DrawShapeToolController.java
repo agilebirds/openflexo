@@ -99,10 +99,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 	}
 
 	protected void startMouseEdition(ME e) {
-		editionHasBeenStarted = true;
 		parentNode = getFocusedObject(e);
-
-		System.out.println("ParentNode=" + getFocusedObject(e));
+		editionHasBeenStarted = true;
 
 		shape = makeDefaultShape(e);
 		Class<S> shapeClass = (Class<S>) TypeUtils.getTypeArgument(getClass(), DrawShapeToolController.class, 0);
@@ -144,6 +142,11 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 
 	protected void stopMouseEdition() {
 		editionHasBeenStarted = false;
+		// geomGR.delete();
+		// geomGR = null;
+		// currentEditedShapeGeometricNode.delete();
+		// currentEditedShapeGeometricNode = null;
+
 	}
 
 	public boolean editionHasBeenStarted() {
@@ -233,6 +236,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 			ShapeGraphicalRepresentation newShapeGraphicalRepresentation = buildShapeGraphicalRepresentation();
 			control.performedDrawNewShape(newShapeGraphicalRepresentation, (ContainerNode<?, ?>) parentNode);
 		} else {
+			System.out.println("control=" + control);
+			System.out.println("parentNode=" + parentNode);
 			logger.warning("No DrawShapeAction defined !");
 		}
 	}
@@ -259,6 +264,11 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>, ME> impleme
 		if (edit != null && controller.getFactory().getUndoManager() != null) {
 			controller.getFactory().getUndoManager().stopRecording(edit);
 		}
+	}
+
+	public void delete() {
+		// TODO
+		logger.warning("Please implement deletion for DrawShapeToolController");
 	}
 
 }

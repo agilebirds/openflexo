@@ -115,6 +115,7 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 							menuItem.addActionListener(new ActionListener() {
 								@Override
 								public void actionPerformed(ActionEvent e) {
+									selectTool(representedTool);
 									setOption(option);
 								}
 
@@ -133,15 +134,6 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 
 			update();
 
-			/*addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (isSelected()) {
-						selectTool(tool);
-					}
-				}
-			});*/
 		}
 
 		public void update() {

@@ -32,11 +32,13 @@ import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.MouseDragControlAction;
 import org.openflexo.fge.control.PredefinedMouseClickControlActionType;
 import org.openflexo.fge.control.PredefinedMouseDragControlActionType;
+import org.openflexo.fge.geom.FGEComplexCurve;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
+import org.openflexo.fge.shapes.ClosedCurve;
 import org.openflexo.fge.shapes.Losange;
 import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
@@ -862,6 +864,8 @@ public abstract class FGEModelFactory extends ModelFactory {
 			returned = newInstance(RegularPolygon.class);
 		} else if (type == ShapeType.CUSTOM_POLYGON) {
 			returned = newInstance(Polygon.class);
+		} else if (type == ShapeType.CLOSED_CURVE) {
+			returned = newInstance(ClosedCurve.class);
 		} else if (type == ShapeType.OVAL) {
 			returned = newInstance(Oval.class);
 		} else if (type == ShapeType.CIRCLE) {
@@ -909,6 +913,36 @@ public abstract class FGEModelFactory extends ModelFactory {
 			polygon.addToPoints(pt);
 		}
 		return polygon;
+	}
+
+	/**
+	 * Make a new ClosedCurve with supplied curve
+	 * 
+	 * @param aCurve
+	 * 
+	 * @return a newly created ClosedCurve
+	 */
+	public ClosedCurve makeClosedCurve(FGEComplexCurve aCurve) {
+		ClosedCurve curve = newInstance(ClosedCurve.class);
+		for (FGEPoint pt : aCurve.getPoints()) {
+			curve.addToPoints(pt);
+		}
+		return curve;
+	}
+
+	/**
+	 * Make a new ClosedCurve with supplied points
+	 * 
+	 * @param points
+	 * 
+	 * @return a newly created ClosedCurve
+	 */
+	public ClosedCurve makeClosedCurve(FGEPoint... points) {
+		ClosedCurve curve = newInstance(ClosedCurve.class);
+		for (FGEPoint pt : points) {
+			curve.addToPoints(pt);
+		}
+		return curve;
 	}
 
 	/**

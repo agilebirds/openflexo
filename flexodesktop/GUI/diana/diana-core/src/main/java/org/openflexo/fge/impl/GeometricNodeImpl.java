@@ -681,10 +681,10 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 		return returned;
 	}
 
-	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape shape) {
+	protected List<ControlPoint> buildControlPointsForGeneralShape(FGEGeneralShape<?> shape) {
 		Vector<ControlPoint> returned = new Vector<ControlPoint>();
 
-		returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this, "p0", shape.getPathElements().firstElement().getP1()) {
+		returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape<?>>(this, "p0", shape.getPathElements().firstElement().getP1()) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
@@ -693,7 +693,8 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			@Override
 			public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 					FGEPoint initialPoint, MouseEvent event) {
-				FGEPoint p = ((FGEGeneralShape) getGraphicalRepresentation().getGeometricObject()).getPathElements().firstElement().getP1();
+				FGEPoint p = ((FGEGeneralShape<?>) getGraphicalRepresentation().getGeometricObject()).getPathElements().firstElement()
+						.getP1();
 				p.x = newAbsolutePoint.x;
 				p.y = newAbsolutePoint.y;
 				setPoint(newAbsolutePoint);
@@ -702,14 +703,14 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 			}
 
 			@Override
-			public void update(FGEGeneralShape geometricObject) {
+			public void update(FGEGeneralShape<?> geometricObject) {
 				setPoint(geometricObject.getPathElements().firstElement().getP1());
 			}
 		});
 		for (int i = 0; i < shape.getPathElements().size(); i++) {
 			final int index = i;
 			GeneralShapePathElement<?> element = shape.getPathElements().get(i);
-			returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape>(this, "p" + i, element.getP2()) {
+			returned.add(new GeometryAdjustingControlPoint<FGEGeneralShape<?>>(this, "p" + i, element.getP2()) {
 				@Override
 				public FGEArea getDraggingAuthorizedArea() {
 					return new FGEPlane();
@@ -718,17 +719,18 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 				@Override
 				public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration,
 						FGEPoint newAbsolutePoint, FGEPoint initialPoint, MouseEvent event) {
-					FGEPoint p = ((FGEGeneralShape) getGraphicalRepresentation().getGeometricObject()).getPathElements().get(index).getP2();
+					FGEPoint p = ((FGEGeneralShape<?>) getGraphicalRepresentation().getGeometricObject()).getPathElements().get(index)
+							.getP2();
 					p.x = newAbsolutePoint.x;
 					p.y = newAbsolutePoint.y;
-					((FGEGeneralShape) getGraphicalRepresentation().getGeometricObject()).refresh();
+					((FGEGeneralShape<?>) getGraphicalRepresentation().getGeometricObject()).refresh();
 					setPoint(newAbsolutePoint);
 					notifyGeometryChanged();
 					return true;
 				}
 
 				@Override
-				public void update(FGEGeneralShape geometricObject) {
+				public void update(FGEGeneralShape<?> geometricObject) {
 					setPoint(geometricObject.getPathElements().get(index).getP2());
 				}
 			});

@@ -19,13 +19,16 @@
  */
 package org.openflexo.fge.geom;
 
+import java.awt.geom.AffineTransform;
 import java.awt.geom.QuadCurve2D;
 import java.util.List;
 import java.util.Vector;
 
-public class FGEComplexCurve extends FGEGeneralShape {
+public class FGEComplexCurve extends FGEGeneralShape<FGEComplexCurve> {
 
 	private Vector<FGEPoint> _points;
+
+	private FGERectangle bounds;
 
 	public FGEComplexCurve(Closure closure) {
 		super(closure);
@@ -52,6 +55,21 @@ public class FGEComplexCurve extends FGEGeneralShape {
 		updateCurve();
 	}
 
+	public void clearPoints() {
+		_points.clear();
+	}
+
+	public Vector<FGEPoint> getPoints() {
+		return _points;
+	}
+
+	public void setPoints(Vector<FGEPoint> points) {
+		_points.clear();
+		for (FGEPoint p : points) {
+			addToPoints(p);
+		}
+	}
+
 	private void _addToPoints(FGEPoint p) {
 		_points.add(p);
 	}
@@ -59,38 +77,101 @@ public class FGEComplexCurve extends FGEGeneralShape {
 	public void addToPoints(FGEPoint p) {
 		_points.add(p);
 		updateCurve();
+		// reCalculateBounds();
+	}
+
+	public int getPointsNb() {
+		return _points.size();
+	}
+
+	public FGEPoint getPointAt(int index) {
+		return _points.elementAt(index);
 	}
 
 	private void updateCurve() {
-		for (int i = 0; i < _points.size(); i++) {
-			FGEPoint current = _points.get(i);
-			if (i == 0) {
-				beginAtPoint(current);
-			} else if (i == 1) {
-				// First segment: quadratic curve
-				FGEQuadCurve curve = FGEQuadCurve.makeCurveFromPoints(_points.get(0), _points.get(1), _points.get(2));
-				QuadCurve2D left = new QuadCurve2D.Double();
-				QuadCurve2D right = new QuadCurve2D.Double();
-				curve.subdivide(left, right);
-				addQuadCurve(left.getCtrlPt(), left.getP2());
-			} else if (i == _points.size() - 1) {
-				// Last segment: quadratic curve
-				FGEQuadCurve curve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 2), _points.get(i - 1), _points.get(i));
-				QuadCurve2D left = new QuadCurve2D.Double();
-				QuadCurve2D right = new QuadCurve2D.Double();
-				curve.subdivide(left, right);
-				addQuadCurve(right.getCtrlPt(), right.getP2());
-			} else {
-				// Cubic segment
-				FGEQuadCurve leftCurve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 2), _points.get(i - 1), _points.get(i));
-				FGEQuadCurve rightCurve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 1), _points.get(i), _points.get(i + 1));
-				/*FGECubicCurve curve = new FGECubicCurve(
-						_points.get(i-1),
-						rightCurve.getPP1(),
-						leftCurve.getPP2(),
-						_points.get(i));*/
-				addCubicCurve(leftCurve.getPP2(), rightCurve.getPP1(), _points.get(i));
+		if (_points.size() == 2) {
+			beginAtPoint(_points.get(0));
+			addSegment(_points.get(1));
+
+		} else if (_points.size() > 2) {
+			for (int i = 0; i < _points.size(); i++) {
+				FGEPoint current = _points.get(i);
+				if (i == 0) {
+					beginAtPoint(current);
+				} else if (i == 1) {
+					// First segment: quadratic curve
+					FGEQuadCurve curve = FGEQuadCurve.makeCurveFromPoints(_points.get(0), _points.get(1), _points.get(2));
+					QuadCurve2D left = new QuadCurve2D.Double();
+					QuadCurve2D right = new QuadCurve2D.Double();
+					curve.subdivide(left, right);
+					addQuadCurve(left.getCtrlPt(), left.getP2());
+				} else if (i == _points.size() - 1) {
+					// Last segment: quadratic curve
+					FGEQuadCurve curve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 2), _points.get(i - 1), _points.get(i));
+					QuadCurve2D left = new QuadCurve2D.Double();
+					QuadCurve2D right = new QuadCurve2D.Double();
+					curve.subdivide(left, right);
+					addQuadCurve(right.getCtrlPt(), right.getP2());
+				} else {
+					// Cubic segment
+					FGEQuadCurve leftCurve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 2), _points.get(i - 1), _points.get(i));
+					FGEQuadCurve rightCurve = FGEQuadCurve.makeCurveFromPoints(_points.get(i - 1), _points.get(i), _points.get(i + 1));
+					/*FGECubicCurve curve = new FGECubicCurve(
+							_points.get(i-1),
+							rightCurve.getPP1(),
+							leftCurve.getPP2(),
+							_points.get(i));*/
+					addCubicCurve(leftCurve.getPP2(), rightCurve.getPP1(), _points.get(i));
+				}
 			}
 		}
 	}
+
+	public void geometryChanged() {
+		updateCurve();
+		// reCalculateBounds();
+	}
+
+	/*private void reCalculateBounds() {
+		double boundsMinX = Double.POSITIVE_INFINITY;
+		double boundsMinY = Double.POSITIVE_INFINITY;
+		double boundsMaxX = Double.NEGATIVE_INFINITY;
+		double boundsMaxY = Double.NEGATIVE_INFINITY;
+
+		for (int i = 0; i < getPointsNb(); i++) {
+			FGEPoint p = getPointAt(i);
+			double x = p.getX();
+			boundsMinX = Math.min(boundsMinX, x);
+			boundsMaxX = Math.max(boundsMaxX, x);
+			double y = p.getY();
+			boundsMinY = Math.min(boundsMinY, y);
+			boundsMaxY = Math.max(boundsMaxY, y);
+		}
+		bounds = new FGERectangle(boundsMinX, boundsMinY, boundsMaxX - boundsMinX, boundsMaxY - boundsMinY, getIsFilled() ? Filling.FILLED
+				: Filling.NOT_FILLED);
+	}*/
+
+	/*@Override
+	public FGERectangle getBoundingBox() {
+		if (bounds == null) {
+			reCalculateBounds();
+		}
+		return bounds;
+	}*/
+
+	/*@Override
+	public FGEPoint getCenter() {
+		return getBoundingBox().getCenter();
+	}*/
+
+	@Override
+	public FGEComplexCurve transform(AffineTransform t) {
+		Vector<FGEPoint> points = new Vector<FGEPoint>();
+		for (FGEPoint p : _points) {
+			points.add(p.transform(t));
+		}
+		FGEComplexCurve returned = new FGEComplexCurve(getClosure(), points);
+		return returned;
+	}
+
 }

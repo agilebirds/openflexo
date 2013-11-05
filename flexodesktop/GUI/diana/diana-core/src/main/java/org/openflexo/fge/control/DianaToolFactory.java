@@ -27,6 +27,7 @@ import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DianaScaleSelector;
 import org.openflexo.fge.control.tools.DianaStyles;
 import org.openflexo.fge.control.tools.DianaToolSelector;
+import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
 
 /**
@@ -39,8 +40,6 @@ import org.openflexo.fge.control.tools.DrawPolygonToolController;
  */
 public interface DianaToolFactory<C> {
 
-	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
-
 	public DianaToolSelector<? extends C, ?> makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor);
 
 	public DianaScaleSelector<? extends C, ?> makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor);
@@ -52,4 +51,10 @@ public interface DianaToolFactory<C> {
 	public DianaLayoutWidget<? extends C, ?> makeDianaLayoutWidget();
 
 	public DianaPalette<? extends C, ?> makeDianaPalette(DrawingPalette palette);
+
+	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
+
+	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
+			DrawShapeAction control);
+
 }

@@ -37,7 +37,7 @@ import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.AbstractFGEGraphics;
 
-public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGEShape<FGEGeneralShape> {
+public class FGEGeneralShape<O extends FGEGeneralShape<O>> implements FGEGeometricObject<O>, FGEShape<O> {
 
 	private static final Logger logger = Logger.getLogger(FGEGeneralShape.class.getPackage().getName());
 
@@ -267,19 +267,19 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	@Override
 	public FGEArea exclusiveOr(FGEArea area) {
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public FGEArea getAnchorAreaFrom(org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection direction) {
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public FGEPoint getNearestPoint(FGEPoint aPoint) {
 		// TODO Auto-generated method stub
-		return null;
+		return aPoint;
 	}
 
 	@Override
@@ -299,9 +299,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	}
 
 	@Override
-	public FGEArea transform(AffineTransform t) {
-		// TODO Auto-generated method stub
-		return null;
+	public FGEGeneralShape transform(AffineTransform t) {
+		// TODO
+		return this;
 	}
 
 	@Override
@@ -339,14 +339,13 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 
 	@Override
 	public FGEPoint getCenter() {
-		// TODO Auto-generated method stub
-		return null;
+		return getBoundingBox().getCenter();
 	}
 
 	@Override
 	public FGEPoint nearestOutlinePoint(FGEPoint aPoint) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO
+		return aPoint;
 	}
 
 	/**
@@ -430,9 +429,9 @@ public class FGEGeneralShape implements FGEGeometricObject<FGEGeneralShape>, FGE
 	 * @since 1.2
 	 */
 	@Override
-	public FGEGeneralShape clone() {
+	public FGEGeneralShape<O> clone() {
 		try {
-			return (FGEGeneralShape) super.clone();
+			return (FGEGeneralShape<O>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// this shouldn't happen, since we are Cloneable
 			throw new InternalError();

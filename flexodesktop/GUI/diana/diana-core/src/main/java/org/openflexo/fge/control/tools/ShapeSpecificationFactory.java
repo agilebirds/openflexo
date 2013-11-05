@@ -11,7 +11,9 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEArc.ArcType;
+import org.openflexo.fge.geom.FGEComplexCurve;
 import org.openflexo.fge.geom.FGEEllips;
+import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
@@ -21,6 +23,7 @@ import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
+import org.openflexo.fge.shapes.ClosedCurve;
 import org.openflexo.fge.shapes.Losange;
 import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
@@ -57,6 +60,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 	private InspectedCircle circle;
 	private InspectedArc arc;
 	private InspectedStar star;
+	private InspectedClosedCurve closedCurve;
 
 	private PropertyChangeSupport pcSupport;
 	private FGEModelFactory fgeFactory;
@@ -78,6 +82,8 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 		circle = new InspectedCircle(controller, (Circle) controller.getFactory().makeShape(ShapeType.CIRCLE));
 		arc = new InspectedArc(controller, (Arc) controller.getFactory().makeShape(ShapeType.ARC));
 		star = new InspectedStar(controller, (Star) controller.getFactory().makeShape(ShapeType.STAR));
+		closedCurve = new InspectedClosedCurve<ClosedCurve>(controller, (ClosedCurve) controller.getFactory().makeShape(
+				ShapeType.CLOSED_CURVE));
 	}
 
 	public FGEModelFactory getFGEFactory() {
@@ -130,6 +136,8 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 			return arc;
 		case STAR:
 			return star;
+		case CLOSED_CURVE:
+			return closedCurve;
 		}
 		logger.warning("Unexpected " + shapeType);
 		return null;
@@ -368,6 +376,69 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 		public SS getStyle(DrawingTreeNode<?, ?> node) {
 			if (node instanceof ShapeNode) {
 				if (((ShapeNode<?>) node).getShapeSpecification() instanceof Polygon) {
+					return (SS) ((ShapeNode<?>) node).getShapeSpecification();
+				}
+			}
+			return null;
+		}
+
+	}
+
+	protected class InspectedClosedCurve<SS extends ClosedCurve> extends AbstractInspectedShapeSpecification<SS> implements ClosedCurve {
+
+		private List<FGEPoint> points;
+
+		protected InspectedClosedCurve(DianaInteractiveViewer<?, ?, ?> controller, SS defaultValue) {
+			super(controller, defaultValue);
+		}
+
+		@Override
+		public boolean areDimensionConstrained() {
+			return false;
+		}
+
+		@Override
+		public ShapeType getShapeType() {
+			return ShapeType.CLOSED_CURVE;
+		}
+
+		@Override
+		public List<FGEPoint> getPoints() {
+			return getPropertyValue(ClosedCurve.POINTS);
+		}
+
+		@Override
+		public void setPoints(List<FGEPoint> points) {
+			/*if (points != null) {
+				this.points = new ArrayList<FGEPoint>(points);
+			} else {
+				this.points = null;
+			}
+			notifyChange(POINTS);*/
+			setPropertyValue(ClosedCurve.POINTS, points);
+		}
+
+		@Override
+		public void addToPoints(FGEPoint aPoint) {
+			// points.add(aPoint);
+			// notifyChange(POINTS);
+		}
+
+		@Override
+		public void removeFromPoints(FGEPoint aPoint) {
+			// points.remove(aPoint);
+			// notifyChange(POINTS);
+		}
+
+		@Override
+		public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
+			return new FGEComplexCurve(Closure.CLOSED_FILLED, getPoints());
+		}
+
+		@Override
+		public SS getStyle(DrawingTreeNode<?, ?> node) {
+			if (node instanceof ShapeNode) {
+				if (((ShapeNode<?>) node).getShapeSpecification() instanceof ClosedCurve) {
 					return (SS) ((ShapeNode<?>) node).getShapeSpecification();
 				}
 			}
