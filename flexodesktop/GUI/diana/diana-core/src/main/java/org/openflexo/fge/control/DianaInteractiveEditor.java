@@ -20,6 +20,8 @@
 
 package org.openflexo.fge.control;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +37,7 @@ import org.openflexo.fge.control.exceptions.CutException;
 import org.openflexo.fge.control.exceptions.PasteException;
 import org.openflexo.fge.control.notifications.SelectionCopied;
 import org.openflexo.fge.control.notifications.ToolChanged;
+import org.openflexo.fge.control.notifications.ToolOptionChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawShapeToolController;
 import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
@@ -63,13 +66,62 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	private static final Logger logger = Logger.getLogger(DianaInteractiveEditor.class.getPackage().getName());
 
-	public enum EditorTool {
-		SelectionTool, DrawShapeTool, DrawConnectorTool, DrawTextTool
+	public static enum EditorTool {
+		SelectionTool {
+			@Override
+			public Collection<EditorToolOption> getOptions() {
+				return null;
+			}
+		},
+		DrawShapeTool {
+			@Override
+			public Collection<DrawShapeToolOption> getOptions() {
+				return Arrays.asList(DrawShapeToolOption.values());
+			}
+		},
+		DrawCustomShapeTool {
+			@Override
+			public Collection<DrawCustomShapeToolOption> getOptions() {
+				return Arrays.asList(DrawCustomShapeToolOption.values());
+			}
+		},
+		DrawConnectorTool {
+			@Override
+			public Collection<DrawConnectorToolOption> getOptions() {
+				return Arrays.asList(DrawConnectorToolOption.values());
+			}
+		},
+		DrawTextTool {
+			@Override
+			public Collection<EditorToolOption> getOptions() {
+				return null;
+			}
+		};
+		public abstract Collection<? extends EditorToolOption> getOptions();
+	}
+
+	public static interface EditorToolOption {
+		public String name();
+	}
+
+	public enum DrawShapeToolOption implements EditorToolOption {
+		DrawRectangle, DrawOval
+	}
+
+	public enum DrawCustomShapeToolOption implements EditorToolOption {
+		DrawPolygon, DrawClosedCurve, DrawComplexShape
+	}
+
+	public enum DrawConnectorToolOption implements EditorToolOption {
+		DrawLine, DrawCurve, DrawRectPolylin, DrawCurvedPolylin
 	}
 
 	public static final int PASTE_DELTA = 10;
 
 	private EditorTool currentTool;
+	private DrawShapeToolOption drawShapeToolOption;
+	private DrawCustomShapeToolOption drawCustomShapeToolOption;
+	private DrawConnectorToolOption drawConnectorToolOption;
 
 	private DrawShapeToolController<?, ?> drawShapeToolController;
 	private DrawShapeAction drawShapeAction;
@@ -109,6 +161,9 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedConnectorSpecification = new InspectedConnectorSpecification(this);
 		inspectedLocationSizeProperties = new InspectedLocationSizeProperties(this);
 		setCurrentTool(EditorTool.SelectionTool);
+		setDrawShapeToolOption(DrawShapeToolOption.DrawRectangle);
+		setDrawCustomShapeToolOption(DrawCustomShapeToolOption.DrawPolygon);
+		setDrawConnectorToolOption(DrawConnectorToolOption.DrawLine);
 	}
 
 	public void delete() {
@@ -167,6 +222,42 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 			}
 			currentTool = aTool;
 			notifyObservers(new ToolChanged(oldTool, currentTool));
+		}
+	}
+
+	public DrawShapeToolOption getDrawShapeToolOption() {
+		return drawShapeToolOption;
+	}
+
+	public void setDrawShapeToolOption(DrawShapeToolOption drawShapeToolOption) {
+		if (this.drawShapeToolOption != drawShapeToolOption) {
+			DrawShapeToolOption oldToolOption = this.drawShapeToolOption;
+			this.drawShapeToolOption = drawShapeToolOption;
+			notifyObservers(new ToolOptionChanged(oldToolOption, drawShapeToolOption));
+		}
+	}
+
+	public DrawCustomShapeToolOption getDrawCustomShapeToolOption() {
+		return drawCustomShapeToolOption;
+	}
+
+	public void setDrawCustomShapeToolOption(DrawCustomShapeToolOption drawCustomShapeToolOption) {
+		if (this.drawCustomShapeToolOption != drawCustomShapeToolOption) {
+			DrawCustomShapeToolOption oldToolOption = this.drawCustomShapeToolOption;
+			this.drawCustomShapeToolOption = drawCustomShapeToolOption;
+			notifyObservers(new ToolOptionChanged(oldToolOption, drawCustomShapeToolOption));
+		}
+	}
+
+	public DrawConnectorToolOption getDrawConnectorToolOption() {
+		return drawConnectorToolOption;
+	}
+
+	public void setDrawConnectorToolOption(DrawConnectorToolOption drawConnectorToolOption) {
+		if (this.drawConnectorToolOption != drawConnectorToolOption) {
+			DrawConnectorToolOption oldToolOption = this.drawConnectorToolOption;
+			this.drawConnectorToolOption = drawConnectorToolOption;
+			notifyObservers(new ToolOptionChanged(oldToolOption, drawConnectorToolOption));
 		}
 	}
 

@@ -29,6 +29,7 @@ import org.openflexo.fge.control.DianaToolFactory;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
+import org.openflexo.fge.swing.JDianaInteractiveEditor;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors;
 import org.openflexo.fge.swing.control.tools.JDianaLayoutWidget;
@@ -59,7 +60,7 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 	}
 
 	public JDianaToolSelector makeDianaToolSelector(AbstractDianaEditor<?, ?, ?> editor) {
-		return new JDianaToolSelector((AbstractDianaEditor<?, SwingViewFactory, ?>) editor);
+		return new JDianaToolSelector((JDianaInteractiveEditor<?>) editor);
 	}
 
 	public JDianaScaleSelector makeDianaScaleSelector(AbstractDianaEditor<?, ?, ?> editor) {

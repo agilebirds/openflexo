@@ -36,11 +36,31 @@ public class FGEIconLibrary {
 
 	public static final ImageIconResource SELECTION_TOOL_ICON = new ImageIconResource("Icons/Tools/SelectionTool.png");
 	public static final ImageIconResource SELECTION_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/SelectionTool-selected.png");
-	public static final ImageIconResource DRAW_SHAPE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawShapeTool.png");
-	public static final ImageIconResource DRAW_SHAPE_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawShapeTool-selected.png");
-	public static final ImageIconResource DRAW_CONNECTOR_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawConnectorTool.png");
-	public static final ImageIconResource DRAW_CONNECTOR_TOOL_SELECTED_ICON = new ImageIconResource(
-			"Icons/Tools/DrawConnectorTool-selected.png");
+
+	public static final ImageIconResource DRAW_RECTANGLE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawRectangleTool.png");
+	public static final ImageIconResource DRAW_RECTANGLE_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawRectangleTool-selected.png");
+	public static final ImageIconResource DRAW_OVAL_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawOvalTool.png");
+	public static final ImageIconResource DRAW_OVAL_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawOvalTool-selected.png");
+
+	public static final ImageIconResource DRAW_CUSTOM_POLYGON_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawCustomPolygonTool.png");
+	public static final ImageIconResource DRAW_CUSTOM_POLYGON_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawCustomPolygonTool-selected.png");
+	public static final ImageIconResource DRAW_CLOSED_CURVE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawClosedCurveTool.png");
+	public static final ImageIconResource DRAW_CLOSED_CURVE_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawClosedCurveTool-selected.png");
+
+	public static final ImageIconResource DRAW_LINE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawLineTool.png");
+	public static final ImageIconResource DRAW_LINE_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawLineTool-selected.png");
+	public static final ImageIconResource DRAW_CURVE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawCurveTool.png");
+	public static final ImageIconResource DRAW_CURVE_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawCurveTool-selected.png");
+	public static final ImageIconResource DRAW_RECT_POLYLIN_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawRectPolylinTool.png");
+	public static final ImageIconResource DRAW_RECT_POLYLIN_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawRectPolylinTool-selected.png");
+	public static final ImageIconResource DRAW_CURVED_POLYLIN_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawCurvedPolylinTool.png");
+	public static final ImageIconResource DRAW_CURVED_POLYLIN_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawCurvedPolylinTool-selected.png");
+
 	public static final ImageIconResource DRAW_TEXT_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawTextTool.png");
 	public static final ImageIconResource DRAW_TEXT_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawTextTool-selected.png");
 

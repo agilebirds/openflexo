@@ -6,6 +6,7 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.notifications.ToolChanged;
+import org.openflexo.fge.control.notifications.ToolOptionChanged;
 import org.openflexo.fge.view.DianaViewFactory;
 
 /**
@@ -57,8 +58,12 @@ public abstract class DianaToolSelector<C, F extends DianaViewFactory<F, ? super
 		if (evt.getPropertyName().equals(ToolChanged.EVENT_NAME)) {
 			handleToolChanged();
 		}
+		if (evt.getPropertyName().equals(ToolOptionChanged.EVENT_NAME)) {
+			handleToolOptionChanged();
+		}
 	}
 
 	public abstract void handleToolChanged();
 
+	public abstract void handleToolOptionChanged();
 }
