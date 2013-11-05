@@ -30,8 +30,6 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 
 	public ExcelWorkbook(ExcelTechnologyAdapter adapter) {
 		super(adapter);
-		
-		this.workbook = workbook;
 		excelSheets = new ArrayList<ExcelSheet>();
 	}
 	

@@ -167,7 +167,6 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		ExcelWorkbookResource wbResource = null;
 
 		// TODO: try to look-up already found file
-
 		wbResource = ExcelWorkbookResourceImpl.retrieveExcelWorkbookResource(workbookFile, getTechnologyContextManager());
 
 		return wbResource;

@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -494,15 +493,15 @@ public class ExcelCell extends ExcelObject {
 		return false;
 	}
 
-	public void setCellStyle(HSSFCellStyle style) {
+	public void setCellStyle(CellStyle style) {
 		if (getCell() != null) {
 			getCell().setCellStyle(style);
 		}
 	}
 	
-	public HSSFCellStyle getCellStyle() {
+	public CellStyle getCellStyle() {
 		if (getCell() != null) {
-			return (HSSFCellStyle) getCell().getCellStyle();
+			return (CellStyle) getCell().getCellStyle();
 		}
 		return null;
 	}
@@ -511,9 +510,9 @@ public class ExcelCell extends ExcelObject {
 		if (getCell() != null && cellStyle!=null) {
 			
 			// First get the old style
-			HSSFCellStyle oldStyle = getCellStyle();
+			CellStyle oldStyle = getCellStyle();
 			// Then create a new style
-			HSSFCellStyle newStyle = (HSSFCellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
+			CellStyle newStyle = (CellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
 			// Apply the old parameters to the new style
 			newStyle.cloneStyleFrom(oldStyle);
 			// Then apply the new parameter to the new style
@@ -550,7 +549,7 @@ public class ExcelCell extends ExcelObject {
 				if(value instanceof Long){
 					newStyle.setFillForegroundColor(((Long)value).shortValue());
 					newStyle.setFillBackgroundColor(((Long)value).shortValue());
-					newStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+					newStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 				}
 				else{
 					break;

@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -57,6 +58,8 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	private static final Logger logger = Logger.getLogger(ExcelWorkbookResourceImpl.class.getPackage().getName());
 
 	private boolean isLoaded = false;
+	
+	private boolean isXSSFFormat =false;
 	
 	/**
 	 * Creates a new {@link ExcelModelResource} asserting this is an explicit creation: no file is present on file system<br>
@@ -139,13 +142,17 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	public ExcelWorkbook loadResourceData(IProgress progress) throws InvalidExcelFormatException {
 
 		ExcelWorkbook resourceData = null;
-		HSSFWorkbook wbOpenned = null;
+		Workbook wbOpenned = null;
 		
 		try {
 			if (!getFile().exists()){
 				//Creates a new file
 				getFile().createNewFile();
-				wbOpenned = new HSSFWorkbook();
+				if(getFile().getName().endsWith(".xls")){
+					wbOpenned = new HSSFWorkbook();
+				}else{
+					wbOpenned = new XSSFWorkbook();
+				}
 				// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 				BasicExcelModelConverter converter = new BasicExcelModelConverter();
 				resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
@@ -158,7 +165,11 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			}
 			else{
 				FileInputStream fis = new FileInputStream(getFile());
-				wbOpenned = new HSSFWorkbook(fis);
+				if(getFile().getName().endsWith(".xls")){
+					wbOpenned = new HSSFWorkbook(fis);
+				}else{
+					wbOpenned = new XSSFWorkbook(fis);
+				}
 				// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 				BasicExcelModelConverter converter = new BasicExcelModelConverter();
 				resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
