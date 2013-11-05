@@ -89,8 +89,8 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 
 	@Override
 	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
-			DrawShapeAction control) {
-		return new JDrawClosedCurveToolController(controller, control);
+			DrawShapeAction control, boolean isClosedCurve) {
+		return new JDrawClosedCurveToolController(controller, control, isClosedCurve);
 	}
 
 }

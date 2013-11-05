@@ -39,11 +39,11 @@ import org.openflexo.model.annotations.ModelEntity;
 @ModelEntity(isAbstract = true)
 @Imports({ @Import(Arc.class), @Import(Circle.class), @Import(Losange.class), @Import(Oval.class), @Import(Polygon.class),
 		@Import(Rectangle.class), @Import(RectangularOctogon.class), @Import(RegularPolygon.class), @Import(Square.class),
-		@Import(Star.class), @Import(Triangle.class), @Import(ClosedCurve.class) })
+		@Import(Star.class), @Import(Triangle.class), @Import(ComplexCurve.class) })
 public interface ShapeSpecification extends FGEObject {
 
 	public static enum ShapeType {
-		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON, CLOSED_CURVE
+		RECTANGLE, SQUARE, RECTANGULAROCTOGON, POLYGON, TRIANGLE, LOSANGE, OVAL, CIRCLE, STAR, ARC, CUSTOM_POLYGON, COMPLEX_CURVE
 	}
 
 	public static final FGEPoint CENTER = new FGEPoint(0.5, 0.5);

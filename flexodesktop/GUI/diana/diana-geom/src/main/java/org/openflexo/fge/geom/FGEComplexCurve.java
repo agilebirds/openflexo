@@ -23,8 +23,18 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.QuadCurve2D;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
+/**
+ * Represents a complex curve, with at least 2 points<br>
+ * This complex curve is defined by a list of points linked with bezier curves, depending on defined closure.<br>
+ * 
+ * @author sylvain
+ * 
+ */
 public class FGEComplexCurve extends FGEGeneralShape<FGEComplexCurve> {
+
+	private static final Logger logger = Logger.getLogger(FGEComplexCurve.class.getPackage().getName());
 
 	private Vector<FGEPoint> _points;
 
@@ -94,6 +104,18 @@ public class FGEComplexCurve extends FGEGeneralShape<FGEComplexCurve> {
 			addSegment(_points.get(1));
 
 		} else if (_points.size() > 2) {
+			if (getClosure() == Closure.OPEN_FILLED || getClosure() == Closure.OPEN_NOT_FILLED) {
+				updateAsOpenedCurve();
+			} else if (getClosure() == Closure.CLOSED_FILLED || getClosure() == Closure.CLOSED_NOT_FILLED) {
+				updateAsClosedCurve();
+			} else {
+				logger.warning("unexpected closure:" + getClosure());
+			}
+		}
+	}
+
+	private void updateAsOpenedCurve() {
+		if (_points.size() > 2) {
 			for (int i = 0; i < _points.size(); i++) {
 				FGEPoint current = _points.get(i);
 				if (i == 0) {
@@ -124,6 +146,42 @@ public class FGEComplexCurve extends FGEGeneralShape<FGEComplexCurve> {
 					addCubicCurve(leftCurve.getPP2(), rightCurve.getPP1(), _points.get(i));
 				}
 			}
+		}
+	}
+
+	private void updateAsClosedCurve() {
+		if (_points.size() > 2) {
+			for (int i = 0; i < _points.size() + 1; i++) {
+				// FGEPoint current = _points.get(i);
+				if (i == 0) {
+					beginAtPoint(_points.get(0));
+				}
+
+				// Cubic segment
+				FGEQuadCurve leftCurve = FGEQuadCurve.makeCurveFromPoints(getPointAtIndex(i - 2), getPointAtIndex(i - 1),
+						getPointAtIndex(i));
+				FGEQuadCurve rightCurve = FGEQuadCurve.makeCurveFromPoints(getPointAtIndex(i - 1), getPointAtIndex(i),
+						getPointAtIndex(i + 1));
+				/*FGECubicCurve curve = new FGECubicCurve(
+						_points.get(i-1),
+						rightCurve.getPP1(),
+						leftCurve.getPP2(),
+						_points.get(i));*/
+				if (i > 0) {
+					addCubicCurve(leftCurve.getPP2(), rightCurve.getPP1(), getPointAtIndex(i));
+				}
+			}
+		}
+	}
+
+	// Implements circular index
+	private FGEPoint getPointAtIndex(int i) {
+		if (i < 0) {
+			return getPointAt(i + _points.size());
+		} else if (i >= _points.size()) {
+			return getPointAt(i - _points.size());
+		} else {
+			return _points.get(i);
 		}
 	}
 

@@ -55,6 +55,6 @@ public interface DianaToolFactory<C> {
 	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
 	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
-			DrawShapeAction control);
+			DrawShapeAction control, boolean isClosedCurve);
 
 }

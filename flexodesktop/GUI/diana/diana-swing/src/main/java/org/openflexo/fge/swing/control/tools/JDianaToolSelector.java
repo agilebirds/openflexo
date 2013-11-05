@@ -100,6 +100,7 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 	@SuppressWarnings("serial")
 	public class ToolButton extends JToggleButton {
 		private EditorTool representedTool;
+		private JPopupMenu contextualMenu;
 
 		public ToolButton(EditorTool aRepresentedTool, final EditorToolOption toolOption) {
 			super();
@@ -109,20 +110,12 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getPoint().x > getWidth() - 8 && e.getPoint().y > getHeight() - 8 && representedTool.getOptions() != null) {
-						JPopupMenu contextualMenu = new JPopupMenu();
-						for (final EditorToolOption option : representedTool.getOptions()) {
-							JMenuItem menuItem = new JMenuItem(option.name(), getMenuItemIconFor(option));
-							menuItem.addActionListener(new ActionListener() {
-								@Override
-								public void actionPerformed(ActionEvent e) {
-									selectTool(representedTool);
-									setOption(option);
-								}
-
-							});
-							contextualMenu.add(menuItem);
+						if (getContextualMenu().isVisible()) {
+							System.out.println("Try to hide popup menu");
+							getContextualMenu().setVisible(false);
+						} else {
+							getContextualMenu().show((Component) e.getSource(), e.getPoint().x, e.getPoint().y);
 						}
-						contextualMenu.show((Component) e.getSource(), e.getPoint().x, e.getPoint().y);
 					}
 					if (isSelected()) {
 						selectTool(representedTool);
@@ -134,6 +127,25 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 
 			update();
 
+		}
+
+		public JPopupMenu getContextualMenu() {
+			if (contextualMenu == null) {
+				contextualMenu = new JPopupMenu();
+				for (final EditorToolOption option : representedTool.getOptions()) {
+					JMenuItem menuItem = new JMenuItem(option.name(), getMenuItemIconFor(option));
+					menuItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							selectTool(representedTool);
+							setOption(option);
+						}
+
+					});
+					contextualMenu.add(menuItem);
+				}
+			}
+			return contextualMenu;
 		}
 
 		public void update() {
@@ -252,6 +264,8 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 				return FGEIconLibrary.DRAW_CUSTOM_POLYGON_TOOL_ICON;
 			case DrawClosedCurve:
 				return FGEIconLibrary.DRAW_CLOSED_CURVE_TOOL_ICON;
+			case DrawOpenedCurve:
+				return FGEIconLibrary.DRAW_OPENED_CURVE_TOOL_ICON;
 			case DrawComplexShape:
 				return FGEIconLibrary.DRAW_CLOSED_CURVE_TOOL_ICON;
 			default:
@@ -294,6 +308,8 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 				return FGEIconLibrary.DRAW_CUSTOM_POLYGON_TOOL_SELECTED_ICON;
 			case DrawClosedCurve:
 				return FGEIconLibrary.DRAW_CLOSED_CURVE_TOOL_SELECTED_ICON;
+			case DrawOpenedCurve:
+				return FGEIconLibrary.DRAW_OPENED_CURVE_TOOL_SELECTED_ICON;
 			case DrawComplexShape:
 				return FGEIconLibrary.DRAW_CLOSED_CURVE_TOOL_SELECTED_ICON;
 			default:

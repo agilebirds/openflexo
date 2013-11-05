@@ -259,7 +259,10 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 				drawShapeToolController = getToolFactory().makeDrawPolygonToolController(this, drawShapeAction);
 				break;
 			case DrawClosedCurve:
-				drawShapeToolController = getToolFactory().makeDrawClosedCurveToolController(this, drawShapeAction);
+				drawShapeToolController = getToolFactory().makeDrawClosedCurveToolController(this, drawShapeAction, true);
+				break;
+			case DrawOpenedCurve:
+				drawShapeToolController = getToolFactory().makeDrawClosedCurveToolController(this, drawShapeAction, false);
 				break;
 			default:
 				logger.warning("Not implemented: " + getDrawCustomShapeToolOption());

@@ -23,6 +23,7 @@ package org.openflexo.fge.shapes;
 import java.util.List;
 
 import org.openflexo.fge.GRParameter;
+import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
@@ -34,25 +35,30 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
- * Represents a closed curve, with more than 3 points
+ * Represents a complex curve, with at least 2 points<br>
+ * This complex curve is defined by a list of points linked with bezier curves, depending on defined closure.<br>
  * 
  * Note that this implementation is powered by PAMELA framework.
  * 
  * @author sylvain
  */
 @ModelEntity
-@XMLElement(xmlTag = "CustomClosedCurve")
-public interface ClosedCurve extends ShapeSpecification {
+@XMLElement(xmlTag = "ComplexCurve")
+public interface ComplexCurve extends ShapeSpecification {
 
 	// Property keys
 
 	@PropertyIdentifier(type = FGEPoint.class, cardinality = Cardinality.LIST)
 	public static final String POINTS_KEY = "points";
+	@PropertyIdentifier(type = Closure.class)
+	public static final String CLOSURE_KEY = "closure";
 
-	public static GRParameter<List> POINTS = GRParameter.getGRParameter(ClosedCurve.class, POINTS_KEY, List.class);
+	public static GRParameter<List> POINTS = GRParameter.getGRParameter(ComplexCurve.class, POINTS_KEY, List.class);
+	public static GRParameter<Closure> CLOSURE = GRParameter.getGRParameter(ComplexCurve.class, CLOSURE_KEY, Closure.class);
 
 	/*public static enum PolygonParameters implements GRParameter {
 		points;
@@ -76,5 +82,12 @@ public interface ClosedCurve extends ShapeSpecification {
 
 	@Remover(POINTS_KEY)
 	public void removeFromPoints(FGEPoint aPoint);
+
+	@Getter(value = CLOSURE_KEY, defaultValue = "CLOSED_FILLED")
+	@XMLAttribute
+	public Closure getClosure();
+
+	@Setter(value = CLOSURE_KEY)
+	public void setClosure(Closure aClosure);
 
 }

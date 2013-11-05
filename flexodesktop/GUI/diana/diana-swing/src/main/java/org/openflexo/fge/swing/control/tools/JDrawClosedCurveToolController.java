@@ -41,8 +41,8 @@ public class JDrawClosedCurveToolController extends DrawClosedCurveToolControlle
 
 	private boolean isBuildingPoints;
 
-	public JDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
-		super(controller, control);
+	public JDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
+		super(controller, control, isClosedCurve);
 	}
 
 	/**

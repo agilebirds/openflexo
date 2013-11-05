@@ -22,7 +22,7 @@ import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.ClosedCurve;
+import org.openflexo.fge.shapes.ComplexCurve;
 import org.openflexo.fge.shapes.Losange;
 import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
@@ -59,7 +59,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 	private InspectedCircle circle;
 	private InspectedArc arc;
 	private InspectedStar star;
-	private InspectedClosedCurve closedCurve;
+	private InspectedComplexCurve complexCurve;
 
 	private PropertyChangeSupport pcSupport;
 	private FGEModelFactory fgeFactory;
@@ -81,8 +81,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 		circle = new InspectedCircle(controller, (Circle) controller.getFactory().makeShape(ShapeType.CIRCLE));
 		arc = new InspectedArc(controller, (Arc) controller.getFactory().makeShape(ShapeType.ARC));
 		star = new InspectedStar(controller, (Star) controller.getFactory().makeShape(ShapeType.STAR));
-		closedCurve = new InspectedClosedCurve<ClosedCurve>(controller, (ClosedCurve) controller.getFactory().makeShape(
-				ShapeType.CLOSED_CURVE));
+		complexCurve = new InspectedComplexCurve(controller, (ComplexCurve) controller.getFactory().makeShape(ShapeType.COMPLEX_CURVE));
 	}
 
 	public FGEModelFactory getFGEFactory() {
@@ -135,8 +134,8 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 			return arc;
 		case STAR:
 			return star;
-		case CLOSED_CURVE:
-			return closedCurve;
+		case COMPLEX_CURVE:
+			return complexCurve;
 		}
 		logger.warning("Unexpected " + shapeType);
 		return null;
@@ -341,7 +340,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public List<FGEPoint> getPoints() {
-			return getPropertyValue(ClosedCurve.POINTS);
+			return getPropertyValue(ComplexCurve.POINTS);
 		}
 
 		@Override
@@ -353,7 +352,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 				this.points = null;
 			}
 			notifyChange(POINTS);*/
-			setPropertyValue(ClosedCurve.POINTS, points);
+			setPropertyValue(ComplexCurve.POINTS, points);
 		}
 
 		@Override
@@ -387,11 +386,11 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 	}
 
-	protected class InspectedClosedCurve<SS extends ClosedCurve> extends AbstractInspectedShapeSpecification<SS> implements ClosedCurve {
+	protected class InspectedComplexCurve extends AbstractInspectedShapeSpecification<ComplexCurve> implements ComplexCurve {
 
 		// private List<FGEPoint> points;
 
-		protected InspectedClosedCurve(DianaInteractiveViewer<?, ?, ?> controller, SS defaultValue) {
+		protected InspectedComplexCurve(DianaInteractiveViewer<?, ?, ?> controller, ComplexCurve defaultValue) {
 			super(controller, defaultValue);
 		}
 
@@ -402,12 +401,12 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 
 		@Override
 		public ShapeType getShapeType() {
-			return ShapeType.CLOSED_CURVE;
+			return ShapeType.COMPLEX_CURVE;
 		}
 
 		@Override
 		public List<FGEPoint> getPoints() {
-			return getPropertyValue(ClosedCurve.POINTS);
+			return getPropertyValue(ComplexCurve.POINTS);
 		}
 
 		@Override
@@ -419,7 +418,7 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 				this.points = null;
 			}
 			notifyChange(POINTS);*/
-			setPropertyValue(ClosedCurve.POINTS, points);
+			setPropertyValue(ComplexCurve.POINTS, points);
 		}
 
 		@Override
@@ -437,15 +436,25 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 		}
 
 		@Override
-		public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
-			return new FGEComplexCurve(Closure.CLOSED_FILLED, getPoints());
+		public Closure getClosure() {
+			return getPropertyValue(ComplexCurve.CLOSURE);
 		}
 
 		@Override
-		public SS getStyle(DrawingTreeNode<?, ?> node) {
+		public void setClosure(Closure aClosure) {
+			setPropertyValue(ComplexCurve.CLOSURE, aClosure);
+		}
+
+		@Override
+		public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
+			return new FGEComplexCurve(getClosure(), getPoints());
+		}
+
+		@Override
+		public ComplexCurve getStyle(DrawingTreeNode<?, ?> node) {
 			if (node instanceof ShapeNode) {
-				if (((ShapeNode<?>) node).getShapeSpecification() instanceof ClosedCurve) {
-					return (SS) ((ShapeNode<?>) node).getShapeSpecification();
+				if (((ShapeNode<?>) node).getShapeSpecification() instanceof ComplexCurve) {
+					return (ComplexCurve) ((ShapeNode<?>) node).getShapeSpecification();
 				}
 			}
 			return null;

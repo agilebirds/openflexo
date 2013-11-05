@@ -38,7 +38,7 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.ClosedCurve;
+import org.openflexo.fge.shapes.ComplexCurve;
 import org.openflexo.fge.shapes.Losange;
 import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
@@ -864,8 +864,8 @@ public abstract class FGEModelFactory extends ModelFactory {
 			returned = newInstance(RegularPolygon.class);
 		} else if (type == ShapeType.CUSTOM_POLYGON) {
 			returned = newInstance(Polygon.class);
-		} else if (type == ShapeType.CLOSED_CURVE) {
-			returned = newInstance(ClosedCurve.class);
+		} else if (type == ShapeType.COMPLEX_CURVE) {
+			returned = newInstance(ComplexCurve.class);
 		} else if (type == ShapeType.OVAL) {
 			returned = newInstance(Oval.class);
 		} else if (type == ShapeType.CIRCLE) {
@@ -916,29 +916,30 @@ public abstract class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Make a new ClosedCurve with supplied curve
+	 * Make a new ComplexCurve with supplied curve
 	 * 
 	 * @param aCurve
 	 * 
-	 * @return a newly created ClosedCurve
+	 * @return a newly created ComplexCurve
 	 */
-	public ClosedCurve makeClosedCurve(FGEComplexCurve aCurve) {
-		ClosedCurve curve = newInstance(ClosedCurve.class);
+	public ComplexCurve makeComplexCurve(FGEComplexCurve aCurve) {
+		ComplexCurve curve = newInstance(ComplexCurve.class);
 		for (FGEPoint pt : aCurve.getPoints()) {
 			curve.addToPoints(pt);
 		}
+		curve.setClosure(aCurve.getClosure());
 		return curve;
 	}
 
 	/**
-	 * Make a new ClosedCurve with supplied points
+	 * Make a new ComplexCurve with supplied points
 	 * 
 	 * @param points
 	 * 
-	 * @return a newly created ClosedCurve
+	 * @return a newly created ComplexCurve
 	 */
-	public ClosedCurve makeClosedCurve(FGEPoint... points) {
-		ClosedCurve curve = newInstance(ClosedCurve.class);
+	public ComplexCurve makeComplexCurve(FGEPoint... points) {
+		ComplexCurve curve = newInstance(ComplexCurve.class);
 		for (FGEPoint pt : points) {
 			curve.addToPoints(pt);
 		}

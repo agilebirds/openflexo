@@ -49,6 +49,9 @@ public class FGEIconLibrary {
 	public static final ImageIconResource DRAW_CLOSED_CURVE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawClosedCurveTool.png");
 	public static final ImageIconResource DRAW_CLOSED_CURVE_TOOL_SELECTED_ICON = new ImageIconResource(
 			"Icons/Tools/DrawClosedCurveTool-selected.png");
+	public static final ImageIconResource DRAW_OPENED_CURVE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawOpenedCurveTool.png");
+	public static final ImageIconResource DRAW_OPENED_CURVE_TOOL_SELECTED_ICON = new ImageIconResource(
+			"Icons/Tools/DrawOpenedCurveTool-selected.png");
 
 	public static final ImageIconResource DRAW_LINE_TOOL_ICON = new ImageIconResource("Icons/Tools/DrawLineTool.png");
 	public static final ImageIconResource DRAW_LINE_TOOL_SELECTED_ICON = new ImageIconResource("Icons/Tools/DrawLineTool-selected.png");

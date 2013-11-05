@@ -26,11 +26,13 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEComplexCurve;
 import org.openflexo.fge.geom.FGEGeneralShape.Closure;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.ClosedCurve;
+import org.openflexo.fge.notifications.FGEAttributeNotification;
+import org.openflexo.fge.shapes.ComplexCurve;
 
-public abstract class ClosedCurveImpl extends ShapeSpecificationImpl implements ClosedCurve {
+public abstract class ComplexCurveImpl extends ShapeSpecificationImpl implements ComplexCurve {
 
 	private List<FGEPoint> points;
+	private Closure closure = Closure.CLOSED_FILLED;
 
 	// *******************************************************************************
 	// * Constructor *
@@ -39,19 +41,19 @@ public abstract class ClosedCurveImpl extends ShapeSpecificationImpl implements 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
 	 */
-	public ClosedCurveImpl() {
+	public ComplexCurveImpl() {
 		super();
 		this.points = new ArrayList<FGEPoint>();
 	}
 
-	public ClosedCurveImpl(List<FGEPoint> points) {
+	public ComplexCurveImpl(List<FGEPoint> points) {
 		this();
 		for (FGEPoint pt : points) {
 			this.points.add(pt);
 		}
 	}
 
-	public ClosedCurveImpl(FGEComplexCurve curve) {
+	public ComplexCurveImpl(FGEComplexCurve curve) {
 		this();
 		for (FGEPoint pt : curve.getPoints()) {
 			points.add(pt);
@@ -87,12 +89,26 @@ public abstract class ClosedCurveImpl extends ShapeSpecificationImpl implements 
 
 	@Override
 	public ShapeType getShapeType() {
-		return ShapeType.CLOSED_CURVE;
+		return ShapeType.COMPLEX_CURVE;
+	}
+
+	@Override
+	public Closure getClosure() {
+		return closure;
+	}
+
+	@Override
+	public void setClosure(Closure aClosure) {
+		FGEAttributeNotification notification = requireChange(CLOSURE, aClosure);
+		if (notification != null) {
+			closure = aClosure;
+			hasChanged(notification);
+		}
 	}
 
 	@Override
 	public FGEComplexCurve makeFGEShape(ShapeNode<?> node) {
-		return new FGEComplexCurve(Closure.CLOSED_FILLED, points);
+		return new FGEComplexCurve(getClosure(), points);
 	}
 
 }

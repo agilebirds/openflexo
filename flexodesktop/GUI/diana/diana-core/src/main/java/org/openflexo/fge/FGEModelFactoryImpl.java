@@ -50,7 +50,7 @@ import org.openflexo.fge.impl.TextStyleImpl;
 import org.openflexo.fge.impl.TextureBackgroundStyleImpl;
 import org.openflexo.fge.shapes.Arc;
 import org.openflexo.fge.shapes.Circle;
-import org.openflexo.fge.shapes.ClosedCurve;
+import org.openflexo.fge.shapes.ComplexCurve;
 import org.openflexo.fge.shapes.Losange;
 import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
@@ -63,7 +63,7 @@ import org.openflexo.fge.shapes.Star;
 import org.openflexo.fge.shapes.Triangle;
 import org.openflexo.fge.shapes.impl.ArcImpl;
 import org.openflexo.fge.shapes.impl.CircleImpl;
-import org.openflexo.fge.shapes.impl.ClosedCurveImpl;
+import org.openflexo.fge.shapes.impl.ComplexCurveImpl;
 import org.openflexo.fge.shapes.impl.LosangeImpl;
 import org.openflexo.fge.shapes.impl.OvalImpl;
 import org.openflexo.fge.shapes.impl.PolygonImpl;
@@ -140,7 +140,7 @@ public class FGEModelFactoryImpl extends FGEModelFactory {
 		setImplementingClassForInterface(SquareImpl.class, Square.class);
 		setImplementingClassForInterface(StarImpl.class, Star.class);
 		setImplementingClassForInterface(TriangleImpl.class, Triangle.class);
-		setImplementingClassForInterface(ClosedCurveImpl.class, ClosedCurve.class);
+		setImplementingClassForInterface(ComplexCurveImpl.class, ComplexCurve.class);
 
 		setImplementingClassForInterface(ConnectorSpecificationImpl.class, ConnectorSpecification.class);
 		setImplementingClassForInterface(LineConnectorSpecificationImpl.class, LineConnectorSpecification.class);

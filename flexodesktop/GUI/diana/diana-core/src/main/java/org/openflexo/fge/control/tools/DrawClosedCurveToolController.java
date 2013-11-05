@@ -45,8 +45,11 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 
 	private CompoundEdit drawCurveEdit;
 
-	public DrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+	private boolean isClosedCurve;
+
+	public DrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
 		super(controller, control);
+		this.isClosedCurve = isClosedCurve;
 	}
 
 	/**
@@ -64,10 +67,10 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 	@Override
 	public FGEComplexCurve makeDefaultShape(ME e) {
 		FGEPoint newPoint = getPoint(e);
-		return new FGEComplexCurve(Closure.CLOSED_FILLED, newPoint, new FGEPoint(newPoint));
+		return new FGEComplexCurve(isClosedCurve ? Closure.CLOSED_FILLED : Closure.OPEN_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 
-	public FGEComplexCurve getClosedCurve() {
+	public FGEComplexCurve getComplexCurve() {
 		return getShape();
 	}
 
@@ -146,7 +149,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 
 	@Override
 	public ShapeGraphicalRepresentation buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CLOSED_CURVE);
+		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.COMPLEX_CURVE);
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getInspectedBackgroundStyle().cloneStyle());
@@ -157,13 +160,13 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 		returned.setRelativeTextX(0.5);
 		returned.setRelativeTextY(0.5);
 
-		FGERectangle boundingBox = getClosedCurve().getBoundingBox();
+		FGERectangle boundingBox = getComplexCurve().getBoundingBox();
 		returned.setWidth(boundingBox.getWidth());
 		returned.setHeight(boundingBox.getHeight());
 		AffineTransform translateAT = AffineTransform.getTranslateInstance(-boundingBox.getX(), -boundingBox.getY());
 
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
-		FGEComplexCurve normalizedCurve = getClosedCurve().transform(translateAT).transform(scaleAT);
+		FGEComplexCurve normalizedCurve = getComplexCurve().transform(translateAT).transform(scaleAT);
 		if (parentNode instanceof ShapeGraphicalRepresentation) {
 			FGEPoint pt = FGEUtils.convertNormalizedPoint(parentNode, new FGEPoint(0, 0), getController().getDrawing().getRoot());
 			returned.setX(boundingBox.getX() - pt.x);
@@ -173,7 +176,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolCon
 			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
 		}
 
-		returned.setShapeSpecification(getController().getFactory().makeClosedCurve(normalizedCurve));
+		returned.setShapeSpecification(getController().getFactory().makeComplexCurve(normalizedCurve));
 		return returned;
 	}
 

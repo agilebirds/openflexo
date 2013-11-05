@@ -129,7 +129,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 				returned = null;
 			}
 		}
-		if (parameter.getType().isPrimitive() && returned == null) {
+		if (parameter.getType() != null && parameter.getType().isPrimitive() && returned == null) {
 			return parameter.getDefaultValue();
 		}
 		return returned;

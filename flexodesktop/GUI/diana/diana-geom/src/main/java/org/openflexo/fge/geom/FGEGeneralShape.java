@@ -151,6 +151,7 @@ public class FGEGeneralShape<O extends FGEGeneralShape<O>> implements FGEGeometr
 			throw new IllegalArgumentException("No current point defined");
 		}
 		pathElements.add(new FGECubicCurve(currentPoint, cp1, cp2, p));
+		currentPoint = p;
 		updateGeneralPath();
 	}
 

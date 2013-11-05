@@ -55,7 +55,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
-			if (st != ShapeType.CUSTOM_POLYGON && st != ShapeType.CLOSED_CURVE) {
+			if (st != ShapeType.CUSTOM_POLYGON && st != ShapeType.COMPLEX_CURVE) {
 				addElement(makePaletteElement(st, px, py));
 				px = px + 1;
 				if (px == 3) {
