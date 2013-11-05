@@ -494,6 +494,12 @@ public class ExcelCell extends ExcelObject {
 		return false;
 	}
 
+	public void setCellStyle(HSSFCellStyle style) {
+		if (getCell() != null) {
+			getCell().setCellStyle(style);
+		}
+	}
+	
 	public HSSFCellStyle getCellStyle() {
 		if (getCell() != null) {
 			return (HSSFCellStyle) getCell().getCellStyle();
@@ -503,47 +509,48 @@ public class ExcelCell extends ExcelObject {
 	
 	public void setCellStyle(CellStyleFeature cellStyle, Object value) {
 		if (getCell() != null && cellStyle!=null) {
-			HSSFCellStyle style=null;
-			if(getCellStyle()!=null){
-				style = getCellStyle();
-			}
-			else{
-				style = (HSSFCellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
-			}
+			
+			// First get the old style
+			HSSFCellStyle oldStyle = getCellStyle();
+			// Then create a new style
+			HSSFCellStyle newStyle = (HSSFCellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
+			// Apply the old parameters to the new style
+			newStyle.cloneStyleFrom(oldStyle);
+			// Then apply the new parameter to the new style
 			switch (cellStyle) {
 			case Alignment:
-				style.setAlignment(getPOIAlignmentStyle((CellAlignmentStyleFeature)value));
+				newStyle.setAlignment(getPOIAlignmentStyle((CellAlignmentStyleFeature)value));
 				break;
 			case Font:
-				style.setFont((Font)value);
+				newStyle.setFont((Font)value);
 				break;
 			case BorderBottom:
-				style.setBorderBottom(getPOIBorderStyle((CellBorderStyleFeature)value));
+				newStyle.setBorderBottom(getPOIBorderStyle((CellBorderStyleFeature)value));
 				break;
 			case BorderLeft:
-				style.setBorderLeft(getPOIBorderStyle((CellBorderStyleFeature)value));
+				newStyle.setBorderLeft(getPOIBorderStyle((CellBorderStyleFeature)value));
 				break;
 			case BorderRight:
-				style.setBorderRight(getPOIBorderStyle((CellBorderStyleFeature)value));
+				newStyle.setBorderRight(getPOIBorderStyle((CellBorderStyleFeature)value));
 				break;
 			case BorderTop:
-				style.setBorderTop(getPOIBorderStyle((CellBorderStyleFeature)value));
+				newStyle.setBorderTop(getPOIBorderStyle((CellBorderStyleFeature)value));
 				break;
 			case Foreground:
 				if(value instanceof String){
-					style.setFillForegroundColor(Short.parseShort((String)value));
+					newStyle.setFillForegroundColor(Short.parseShort((String)value));
 				}
 				if(value instanceof Long){
-					style.setFillForegroundColor(((Long)value).shortValue());
+					newStyle.setFillForegroundColor(((Long)value).shortValue());
 				}
 				else{
 					break;
 				}
 			case Background:
 				if(value instanceof Long){
-					style.setFillForegroundColor(((Long)value).shortValue());
-					style.setFillBackgroundColor(((Long)value).shortValue());
-					style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+					newStyle.setFillForegroundColor(((Long)value).shortValue());
+					newStyle.setFillBackgroundColor(((Long)value).shortValue());
+					newStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 				}
 				else{
 					break;
@@ -551,7 +558,8 @@ public class ExcelCell extends ExcelObject {
 			default:
 				break;
 			}
-			getCell().setCellStyle(style);
+			// Set the style of this cell to the new style
+			getCell().setCellStyle(newStyle);
 		}
 		return;
 	}
