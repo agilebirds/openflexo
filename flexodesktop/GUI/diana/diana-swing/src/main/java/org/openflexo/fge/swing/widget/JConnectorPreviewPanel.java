@@ -22,7 +22,7 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.ConnectorSpecification;
@@ -109,10 +109,10 @@ public class JConnectorPreviewPanel extends JPanel implements ConnectorPreviewPa
 							}
 						});
 
-				previewPanelBinding.addToWalkers(new GRStructureWalker<JConnectorPreviewPanel>() {
+				previewPanelBinding.addToWalkers(new GRStructureVisitor<JConnectorPreviewPanel>() {
 
 					@Override
-					public void walk(JConnectorPreviewPanel previewPanel) {
+					public void visit(JConnectorPreviewPanel previewPanel) {
 						drawShape(startShapeBinding, previewPanel, previewPanelBinding, previewPanel);
 						drawShape(endShapeBinding, previewPanel, previewPanelBinding, previewPanel);
 						drawConnector(connectorBinding, previewPanel, startShapeBinding, previewPanel, endShapeBinding, previewPanel,

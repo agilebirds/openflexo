@@ -38,7 +38,7 @@ import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.GeometricGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
@@ -499,10 +499,10 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 				deletedNodes.addAll(((ContainerNode<?, ?>) dtn).getChildNodes());
 			}
 
-			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
-				walker.startWalking(dtn);
-				walker.walk(dtn.getDrawable());
-				walker.stopWalking();
+			for (GRStructureVisitor<O> walker : grBinding.getWalkers()) {
+				walker.startVisiting(dtn);
+				walker.visit(dtn.getDrawable());
+				walker.stopVisiting();
 				createdNodes.addAll(walker.getCreatedNodes());
 				deletedNodes.addAll(walker.getDeletedNodes());
 				updatedNodes.addAll(walker.getUpdatedNodes());

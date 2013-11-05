@@ -54,19 +54,19 @@ public class GraphDrawing1 extends DrawingImpl<Graph> {
 					}
 				});
 
-		graphBinding.addToWalkers(new GRStructureWalker<Graph>() {
+		graphBinding.addToWalkers(new GRStructureVisitor<Graph>() {
 
 			@Override
-			public void walk(Graph graph) {
+			public void visit(Graph graph) {
 				for (GraphNode node : graph.getNodes()) {
 					drawShape(nodeBinding, node);
 				}
 			}
 		});
 
-		nodeBinding.addToWalkers(new GRStructureWalker<GraphNode>() {
+		nodeBinding.addToWalkers(new GRStructureVisitor<GraphNode>() {
 			@Override
-			public void walk(GraphNode node) {
+			public void visit(GraphNode node) {
 				System.out.println("Walking for edges ");
 				for (Edge edge : node.getInputEdges()) {
 					drawConnector(edgeBinding, edge, edge.getStartNode(), edge.getEndNode(), node.getGraph());

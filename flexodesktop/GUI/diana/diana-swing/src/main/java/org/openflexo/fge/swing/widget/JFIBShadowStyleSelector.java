@@ -38,7 +38,7 @@ import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.impl.DrawingImpl;
@@ -287,10 +287,10 @@ public class JFIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements
 								}
 							});
 
-					previewPanelBinding.addToWalkers(new GRStructureWalker<ShadowStylePreviewPanel>() {
+					previewPanelBinding.addToWalkers(new GRStructureVisitor<ShadowStylePreviewPanel>() {
 
 						@Override
-						public void walk(ShadowStylePreviewPanel previewPanel) {
+						public void visit(ShadowStylePreviewPanel previewPanel) {
 							drawShape(shapeBinding, previewPanel, previewPanel);
 						}
 					});

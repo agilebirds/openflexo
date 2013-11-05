@@ -36,16 +36,16 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 
 /**
  * Represents a dynamic structure allowing to explore represented graph of objects<br>
- * A {@link GRStructureWalker} is attached to a {@link GRBinding}, and allows to explore from a {@link DrawingTreeNode} defined as a
+ * A {@link GRStructureVisitor} is attached to a {@link GRBinding}, and allows to explore from a {@link DrawingTreeNode} defined as a
  * starting point
  * 
  * @author sylvain
  * 
  * @param <R>
  */
-public abstract class GRStructureWalker<R> {
+public abstract class GRStructureVisitor<R> {
 
-	static final Logger logger = Logger.getLogger(GRStructureWalker.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(GRStructureVisitor.class.getPackage().getName());
 
 	private DrawingTreeNode<R, ?> node;
 	private Drawing<?> drawing;
@@ -60,7 +60,7 @@ public abstract class GRStructureWalker<R> {
 	 * 
 	 * @param drawable
 	 */
-	public abstract void walk(R drawable);
+	public abstract void visit(R drawable);
 
 	/**
 	 * Internal method called when starting exploring from supplied {@link DrawingTreeNode}
@@ -68,7 +68,7 @@ public abstract class GRStructureWalker<R> {
 	 * @param node
 	 *            : the node from which starts the exploration
 	 */
-	public void startWalking(DrawingTreeNode<R, ?> node) {
+	public void startVisiting(DrawingTreeNode<R, ?> node) {
 		this.node = node;
 		drawing = node.getDrawing();
 		createdNodes = new ArrayList<Drawing.DrawingTreeNode<?, ?>>();
@@ -80,7 +80,7 @@ public abstract class GRStructureWalker<R> {
 	/**
 	 * Internal method called when stopping exploring form supplied {@link DrawingTreeNode}
 	 */
-	public void stopWalking() {
+	public void stopVisiting() {
 	}
 
 	/**

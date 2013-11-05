@@ -40,7 +40,7 @@ import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.tools.BackgroundStyleFactory;
 import org.openflexo.fge.impl.DrawingImpl;
@@ -334,10 +334,10 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 								}
 							});
 
-					previewPanelBinding.addToWalkers(new GRStructureWalker<BackgroundStylePreviewPanel>() {
+					previewPanelBinding.addToWalkers(new GRStructureVisitor<BackgroundStylePreviewPanel>() {
 
 						@Override
-						public void walk(BackgroundStylePreviewPanel previewPanel) {
+						public void visit(BackgroundStylePreviewPanel previewPanel) {
 							drawShape(shapeBinding, previewPanel, previewPanel);
 						}
 					});

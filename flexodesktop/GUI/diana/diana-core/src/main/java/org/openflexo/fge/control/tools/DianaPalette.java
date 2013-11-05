@@ -35,7 +35,7 @@ import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
@@ -170,10 +170,10 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 						}
 					});
 
-			paletteBinding.addToWalkers(new GRStructureWalker<DrawingPalette>() {
+			paletteBinding.addToWalkers(new GRStructureVisitor<DrawingPalette>() {
 
 				@Override
-				public void walk(DrawingPalette palette) {
+				public void visit(DrawingPalette palette) {
 					for (PaletteElement element : palette.getElements()) {
 						drawShape(paletteElementBinding, element, palette);
 					}

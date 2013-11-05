@@ -37,7 +37,7 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
@@ -136,10 +136,10 @@ public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements
 					}
 				});
 
-		drawingBinding.addToWalkers(new GRStructureWalker<FlexoProject>() {
+		drawingBinding.addToWalkers(new GRStructureVisitor<FlexoProject>() {
 
 			@Override
-			public void walk(FlexoProject project) {
+			public void visit(FlexoProject project) {
 				for (FlexoResource<? extends FlexoResourceData> res : project) {
 					drawShape(resourceBinding, res, project);
 				}

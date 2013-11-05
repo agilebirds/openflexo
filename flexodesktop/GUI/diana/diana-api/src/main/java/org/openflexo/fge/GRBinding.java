@@ -44,7 +44,7 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> implement
 
 	private String name;
 	private GRProvider<O, GR> grProvider;
-	private List<GRStructureWalker<O>> walkers;
+	private List<GRStructureVisitor<O>> walkers;
 
 	private Map<GRParameter, DataBinding<?>> dynamicPropertyValues;
 	protected BindingModel bindingModel;
@@ -52,17 +52,17 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> implement
 	protected GRBinding(String name, Class<?> drawableClass, GRProvider<O, GR> grProvider) {
 		this.name = name;
 		this.grProvider = grProvider;
-		walkers = new ArrayList<GRStructureWalker<O>>();
+		walkers = new ArrayList<GRStructureVisitor<O>>();
 		dynamicPropertyValues = new Hashtable<GRParameter, DataBinding<?>>();
 		bindingModel = new BindingModel();
 		bindingModel.addToBindingVariables(new BindingVariable("drawable", drawableClass));
 	}
 
-	public List<GRStructureWalker<O>> getWalkers() {
+	public List<GRStructureVisitor<O>> getWalkers() {
 		return walkers;
 	}
 
-	public void addToWalkers(GRStructureWalker<O> walker) {
+	public void addToWalkers(GRStructureVisitor<O> walker) {
 		walkers.add(walker);
 	}
 

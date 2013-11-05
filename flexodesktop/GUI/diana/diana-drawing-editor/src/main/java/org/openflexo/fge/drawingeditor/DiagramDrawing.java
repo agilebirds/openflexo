@@ -10,7 +10,7 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.ConnectorGRProvider;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
-import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.model.Connector;
@@ -71,10 +71,10 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 				});
 
 		// visitor plutot ?
-		drawingBinding.addToWalkers(new GRStructureWalker<Diagram>() {
+		drawingBinding.addToWalkers(new GRStructureVisitor<Diagram>() {
 
 			@Override
-			public void walk(Diagram myDrawing) {
+			public void visit(Diagram myDrawing) {
 				for (Shape shape : myDrawing.getShapes()) {
 					drawShape(shapeBinding, shape, myDrawing);
 					// drawShape(shape).as(shapeBinding).in(myDrawing);
@@ -82,27 +82,27 @@ public class DiagramDrawing extends DrawingImpl<Diagram> {
 			}
 		});
 
-		drawingBinding.addToWalkers(new GRStructureWalker<Diagram>() {
+		drawingBinding.addToWalkers(new GRStructureVisitor<Diagram>() {
 			@Override
-			public void walk(Diagram myDrawing) {
+			public void visit(Diagram myDrawing) {
 				for (Connector connector : myDrawing.getConnectors()) {
 					drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape());
 				}
 			}
 		});
 
-		shapeBinding.addToWalkers(new GRStructureWalker<Shape>() {
+		shapeBinding.addToWalkers(new GRStructureVisitor<Shape>() {
 			@Override
-			public void walk(Shape myShape) {
+			public void visit(Shape myShape) {
 				for (Shape shape : myShape.getShapes()) {
 					drawShape(shapeBinding, shape, shapeBinding, myShape);
 					// drawShape(shape).as(shapeBinding).in(myShape).as(shapeBinding);
 				}
 			}
 		});
-		shapeBinding.addToWalkers(new GRStructureWalker<Shape>() {
+		shapeBinding.addToWalkers(new GRStructureVisitor<Shape>() {
 			@Override
-			public void walk(Shape myShape) {
+			public void visit(Shape myShape) {
 				for (Connector connector : myShape.getConnectors()) {
 					drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape());
 				}
