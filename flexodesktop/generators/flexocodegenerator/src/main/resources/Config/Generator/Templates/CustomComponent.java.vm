@@ -138,6 +138,14 @@ import be.denali.dbbusinesslogic.WDLBLComponent;
         return (Application)WOApplication.application();
     }
     
+    public Session getSession() {
+        return (Session)super.session();
+    }
+    
+    public Application getApplication() {
+        return (Application)WOApplication.application();
+    }
+    
     public String currentUserLogin(){
         if(context().hasSession() && session().currentUser()!=null)
             return session().currentUser().login();
