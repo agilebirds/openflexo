@@ -1058,4 +1058,9 @@ public class DMTranstyper extends DMObject implements Typed, Bindable, SourceCod
 		return true;
 	}
 
+	@Override
+	public boolean getIsReadOnly() {
+		return false;
+	}
+
 }

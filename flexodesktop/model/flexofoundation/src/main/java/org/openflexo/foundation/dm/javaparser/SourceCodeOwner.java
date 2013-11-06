@@ -47,4 +47,6 @@ public interface SourceCodeOwner {
 
 	public void resetSourceCode() throws ParserNotInstalledException, DuplicateMethodSignatureException;
 
+	public boolean getIsReadOnly();
+
 }

@@ -97,7 +97,7 @@ public class ResetSourceCode extends FlexoAction<ResetSourceCode, DMObject, DMOb
 			return;
 		}
 		visited.add(object);
-		if (object instanceof SourceCodeOwner && !codeOwner.contains(object)) {
+		if (object instanceof SourceCodeOwner && !codeOwner.contains(object) && !((SourceCodeOwner) object).getIsReadOnly()) {
 			codeOwner.add((SourceCodeOwner) object);
 		}
 		Vector<DMObject> embedded = object.getAllEmbeddedDMObjects();
