@@ -26,36 +26,21 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.action.ExportDiagramToImageAction;
-import org.openflexo.components.widget.CommonFIB;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGELayeredView;
-import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
-import org.openflexo.foundation.view.action.DiagramShapePushToPalette;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.VEIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.swing.FlexoFileChooser;
-import org.openflexo.swing.ImagePreview;
-import org.openflexo.toolbox.FileUtils;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.ve.diagram.DiagramGR;
 import org.openflexo.ve.diagram.DiagramModuleView;
-import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 
 public class ExportDiagramToImageInitializer extends ActionInitializer<ExportDiagramToImageAction, DiagramElement<?>, DiagramElement<?>> {
 
@@ -83,9 +68,9 @@ public class ExportDiagramToImageInitializer extends ActionInitializer<ExportDia
 				
 				if (getController().getCurrentModuleView() instanceof DiagramModuleView)
 				{
+					DiagramController c = ((DiagramModuleView) getController().getCurrentModuleView()).getController();
 					if(action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) 
 					{
-						DiagramController c = ((DiagramModuleView) getController().getCurrentModuleView()).getController();
 						ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) action.getFocusedObject().getGraphicalRepresentation();
 						ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
 						shapeView.captureScreenshot();
@@ -97,7 +82,6 @@ public class ExportDiagramToImageInitializer extends ActionInitializer<ExportDia
 								(int) gr.getHeight() + (ss.getDrawShadow() ? ss.getShadowBlur() : 0) + 1));
 					}
 					else if(action.getFocusedObject().getGraphicalRepresentation() instanceof DiagramGR){
-						DiagramController c = ((DiagramModuleView) getController().getCurrentModuleView()).getController();
 						DiagramGR gr = (DiagramGR)action.getFocusedObject().getGraphicalRepresentation();
 						FGELayeredView view = (FGELayeredView)c.getDrawingView().viewForObject(gr);
 						view.captureScreenshot();
