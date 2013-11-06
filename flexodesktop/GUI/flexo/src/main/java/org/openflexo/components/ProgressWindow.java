@@ -141,7 +141,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	};
 
-	public synchronized static ProgressWindow makeProgressWindow(final String title, final int steps) {
+	public static ProgressWindow makeProgressWindow(final String title, final int steps) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -302,7 +302,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void showProgressWindow(final String title, final int steps) {
+	public static void showProgressWindow(final String title, final int steps) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -319,7 +319,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void hideProgressWindow() {
+	public static void hideProgressWindow() {
 		if (_instance != null) {
 			_instance.hideWindow();
 		}
@@ -448,7 +448,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		paintImmediately();
 	}
 
-	public synchronized static void setProgressInstance(final String stepName) {
+	public static void setProgressInstance(final String stepName) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -466,7 +466,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void resetSecondaryProgressInstance(final int steps) {
+	public static void resetSecondaryProgressInstance(final int steps) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -481,7 +481,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public synchronized static void setSecondaryProgressInstance(final String stepName) {
+	public static void setSecondaryProgressInstance(final String stepName) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
