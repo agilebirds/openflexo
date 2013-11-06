@@ -37,7 +37,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.model.undo.CompoundEdit;
 
-public abstract class DrawClosedCurveToolController<ME> extends DrawShapeToolController<FGEComplexCurve, ME> {
+public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeToolController<FGEComplexCurve, ME> {
 
 	private static final Logger logger = Logger.getLogger(DrawClosedCurveToolController.class.getPackage().getName());
 

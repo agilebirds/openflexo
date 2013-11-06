@@ -37,7 +37,7 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.model.undo.CompoundEdit;
 
-public abstract class DrawPolygonToolController<ME> extends DrawShapeToolController<FGEPolygon, ME> {
+public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolController<FGEPolygon, ME> {
 
 	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
 

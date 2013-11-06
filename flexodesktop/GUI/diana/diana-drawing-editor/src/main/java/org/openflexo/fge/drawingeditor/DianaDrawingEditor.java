@@ -28,9 +28,12 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.exceptions.CopyException;
 import org.openflexo.fge.control.exceptions.CutException;
@@ -60,21 +63,29 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory, SwingToolFactory toolFactory) {
 		super(aDrawing, factory, toolFactory);
 
-		setDrawShapeAction(new DrawShapeAction() {
+		DrawShapeAction drawShapeAction = new DrawShapeAction() {
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation, ContainerNode<?, ?> parentNode) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " and parent: " + parentNode);
 				Shape newShape = getFactory().makeNewShape(graphicalRepresentation, getDrawing().getModel());
 				getDrawing().getModel().addToShapes(newShape);
-				/*Shape newShape = getDrawing().getModel().getFactory()
-						.makeNewShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
-				if (parentGraphicalRepresentation != null && parentGraphicalRepresentation.getDrawable() instanceof DiagramElement) {
-					addNewShape(newShape, (DiagramElement) parentGraphicalRepresentation.getDrawable());
-				} else {
-					addNewShape(newShape, (Diagram) getDrawingGraphicalRepresentation().getDrawable());
-				}*/
 			}
-		});
+		};
+
+		DrawConnectorAction drawConnectorAction = new DrawConnectorAction() {
+
+			@Override
+			public void performedDrawNewConnector(ConnectorGraphicalRepresentation graphicalRepresentation, ShapeNode<?> startNode,
+					ShapeNode<?> endNode) {
+				System.out.println("OK, perform draw new connector with " + graphicalRepresentation + " start: " + startNode + " end: "
+						+ endNode);
+			}
+		};
+
+		setDrawCustomShapeAction(drawShapeAction);
+		setDrawShapeAction(drawShapeAction);
+		setDrawConnectorAction(drawConnectorAction);
+
 		contextualMenu = new JPopupMenu();
 		for (final ShapeType st : ShapeType.values()) {
 			JMenuItem menuItem = new JMenuItem("Add " + st.name());

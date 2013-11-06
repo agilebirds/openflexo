@@ -42,7 +42,8 @@ import org.openflexo.fge.control.DianaInteractiveViewer;
 import org.openflexo.fge.control.MouseClickControl;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.MouseDragControl;
-import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.DrawConnectorToolController;
+import org.openflexo.fge.control.tools.DrawCustomShapeToolController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.control.JFocusRetriever;
@@ -75,8 +76,15 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	}
 
 	@SuppressWarnings("unchecked")
-	public DrawShapeToolController<?, MouseEvent> getDrawShapeToolController() {
-		return (DrawShapeToolController<?, MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController();
+	public DrawCustomShapeToolController<?, MouseEvent> getDrawCustomShapeToolController() {
+		return (DrawCustomShapeToolController<?, MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController())
+				.getDrawCustomShapeToolController();
+	}
+
+	@SuppressWarnings("unchecked")
+	public DrawConnectorToolController<MouseEvent> getDrawConnectorToolController() {
+		return (DrawConnectorToolController<MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController())
+				.getDrawConnectorToolController();
 	}
 
 	@Override
@@ -105,13 +113,16 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			case DrawCustomShapeTool:
 				performSelectionTool = false;
 				if (editable) {
-					getDrawShapeToolController().mouseClicked(e);
+					getDrawCustomShapeToolController().mouseClicked(e);
 				}
 				break;
 			case DrawShapeTool:
 				performSelectionTool = false;
 				break;
 			case DrawConnectorTool:
+				if (editable) {
+					getDrawConnectorToolController().mouseClicked(e);
+				}
 				performSelectionTool = false;
 				break;
 			case DrawTextTool:
@@ -583,7 +594,7 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if ((getController() instanceof DianaInteractiveEditor)
 				&& (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawCustomShapeTool)) {
 			DianaInteractiveEditor<?, ?, ?> controller = (DianaInteractiveEditor<?, ?, ?>) getController();
-			((DrawShapeToolController<?, MouseEvent>) controller.getDrawShapeToolController()).mouseMoved(e);
+			((DrawCustomShapeToolController<?, MouseEvent>) controller.getDrawCustomShapeToolController()).mouseMoved(e);
 		}
 
 	}

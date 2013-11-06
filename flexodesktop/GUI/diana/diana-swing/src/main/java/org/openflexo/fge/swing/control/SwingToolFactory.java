@@ -27,9 +27,8 @@ import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.DianaToolFactory;
 import org.openflexo.fge.control.DrawingPalette;
+import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
-import org.openflexo.fge.control.tools.DrawPolygonToolController;
 import org.openflexo.fge.swing.JDianaInteractiveEditor;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.tools.JDianaInspectors;
@@ -39,6 +38,7 @@ import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
 import org.openflexo.fge.swing.control.tools.JDrawClosedCurveToolController;
+import org.openflexo.fge.swing.control.tools.JDrawConnectorToolController;
 import org.openflexo.fge.swing.control.tools.JDrawPolygonToolController;
 
 /**
@@ -83,14 +83,19 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 	}
 
 	@Override
-	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+	public JDrawPolygonToolController makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		return new JDrawPolygonToolController(controller, control);
 	}
 
 	@Override
-	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
+	public JDrawClosedCurveToolController makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawShapeAction control, boolean isClosedCurve) {
 		return new JDrawClosedCurveToolController(controller, control, isClosedCurve);
 	}
 
+	@Override
+	public JDrawConnectorToolController makeDrawConnectorToolController(DianaInteractiveEditor<?, ?, ?> controller,
+			DrawConnectorAction control) {
+		return new JDrawConnectorToolController(controller, control);
+	}
 }

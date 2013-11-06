@@ -21,11 +21,12 @@ package org.openflexo.fge.control.actions;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ContainerNode;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 
-public abstract class DrawShapeAction extends ToolAction {
-	static final Logger logger = Logger.getLogger(DrawShapeAction.class.getPackage().getName());
+public abstract class DrawConnectorAction extends ToolAction {
+	static final Logger logger = Logger.getLogger(DrawConnectorAction.class.getPackage().getName());
 
-	public abstract void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation, ContainerNode<?, ?> parentNode);
+	public abstract void performedDrawNewConnector(ConnectorGraphicalRepresentation graphicalRepresentation, ShapeNode<?> startNode,
+			ShapeNode<?> endNode);
 }

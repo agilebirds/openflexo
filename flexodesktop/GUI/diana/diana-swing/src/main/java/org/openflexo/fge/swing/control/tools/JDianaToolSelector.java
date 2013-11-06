@@ -109,7 +109,8 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 			addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (e.getPoint().x > getWidth() - 8 && e.getPoint().y > getHeight() - 8 && representedTool.getOptions() != null) {
+					if (e.getPoint().x > getWidth() - 8 && e.getPoint().y > getHeight() - 8 && representedTool.getOptions() != null
+							&& isEnabled()) {
 						if (getContextualMenu().isVisible()) {
 							System.out.println("Try to hide popup menu");
 							getContextualMenu().setVisible(false);
@@ -159,6 +160,30 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 				setPressedIcon(getSelectedIconFor(representedTool));
 				setSelectedIcon(getSelectedIconFor(representedTool));
 			}
+			if (getEditor() == null) {
+				setEnabled(false);
+			} else {
+				switch (representedTool) {
+				case SelectionTool:
+					setEnabled(true);
+					break;
+				case DrawShapeTool:
+					setEnabled(getEditor().getDrawShapeAction() != null);
+					break;
+				case DrawCustomShapeTool:
+					setEnabled(getEditor().getDrawCustomShapeAction() != null);
+					break;
+				case DrawConnectorTool:
+					setEnabled(getEditor().getDrawConnectorAction() != null);
+					break;
+				case DrawTextTool:
+					setEnabled(true);
+					break;
+				default:
+					setEnabled(false);
+				}
+			}
+
 		}
 
 		@Override

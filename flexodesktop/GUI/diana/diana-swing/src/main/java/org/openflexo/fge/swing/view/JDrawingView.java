@@ -742,20 +742,20 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			return;
 		}
 
-		if (!((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().editionHasBeenStarted()) {
+		if (!((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().editionHasBeenStarted()) {
 			return;
 		}
 
-		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getGraphics())
+		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().getGraphics())
 				.createGraphics(graphics.getGraphics(), controller);
-		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().paintCurrentEditedShape();
-		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getGraphics())
+		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().paintCurrentEditedShape();
+		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().getGraphics())
 				.releaseGraphics();
 
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
 
-		for (ControlArea<?> ca : ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController().getControlAreas()) {
+		for (ControlArea<?> ca : ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().getControlAreas()) {
 			paintControlArea(ca, graphics);
 		}
 

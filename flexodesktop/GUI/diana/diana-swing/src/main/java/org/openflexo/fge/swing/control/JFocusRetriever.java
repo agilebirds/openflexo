@@ -245,10 +245,10 @@ public class JFocusRetriever {
 			case SelectionTool:
 				return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 			case DrawCustomShapeTool:
-				if (editor.getDrawShapeToolController() != null) {
-					if (editor.getDrawShapeToolController().editionHasBeenStarted()
-							&& editor.getDrawShapeToolController().getCurrentEditedShape() != null) {
-						return editor.getDrawShapeToolController().getCurrentEditedShape();
+				if (editor.getDrawCustomShapeToolController() != null) {
+					if (editor.getDrawCustomShapeToolController().editionHasBeenStarted()
+							&& editor.getDrawCustomShapeToolController().getCurrentEditedShape() != null) {
+						return editor.getDrawCustomShapeToolController().getCurrentEditedShape();
 					} else {
 						DrawingTreeNode<?, ?> returned = getFocusedObject(drawingView.getDrawing().getRoot(), event);
 						if (returned == null) {

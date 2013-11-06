@@ -20,6 +20,7 @@
 
 package org.openflexo.fge.control;
 
+import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.tools.DianaInspectors;
 import org.openflexo.fge.control.tools.DianaLayoutWidget;
@@ -28,6 +29,7 @@ import org.openflexo.fge.control.tools.DianaScaleSelector;
 import org.openflexo.fge.control.tools.DianaStyles;
 import org.openflexo.fge.control.tools.DianaToolSelector;
 import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
+import org.openflexo.fge.control.tools.DrawConnectorToolController;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
 
 /**
@@ -56,5 +58,8 @@ public interface DianaToolFactory<C> {
 
 	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawShapeAction control, boolean isClosedCurve);
+
+	public DrawConnectorToolController<?> makeDrawConnectorToolController(DianaInteractiveEditor<?, ?, ?> controller,
+			DrawConnectorAction control);
 
 }
