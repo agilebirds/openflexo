@@ -511,7 +511,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		return getController().getToolTipText();
 	}
 
-	private BufferedImage screenshot;
+/*	private BufferedImage screenshot;
 
 	public BufferedImage getScreenshot() {
 		if (screenshot == null) {
@@ -540,9 +540,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
 																								// context
 			lbl.print(graphics); // painting the graphics to label
-			/*if (this.getGraphicalRepresentation().getBackground() instanceof BackgroundImage) {
-				graphics.drawImage(((BackgroundImage)this.getGraphicalRepresentation().getBackground()).getImage(),0,0,null);
-			}*/
+
 			if (getLabelView() != null) {
 				Rectangle r = getLabelView().getBounds();
 				getLabelView().print(graphics.create(r.x - bounds.x, r.y - bounds.y, r.width, r.height));
@@ -554,6 +552,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		} finally {
 			getController().enablePaintingCache();
 		}
-	}
+	}*/
 
 }

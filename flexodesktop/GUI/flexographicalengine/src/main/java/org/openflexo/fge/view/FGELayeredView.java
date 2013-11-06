@@ -19,11 +19,20 @@
  */
 package org.openflexo.fge.view;
 
+import java.awt.AlphaComposite;
 import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
@@ -129,6 +138,51 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		remove((Component) view);
 		if (getDrawingView() != null) {
 			getDrawingView().getContents().remove(view.getGraphicalRepresentation());
+		}
+	}
+	
+	private BufferedImage screenshot;
+
+	public BufferedImage getScreenshot() {
+		if (screenshot == null) {
+			captureScreenshot();
+		}
+		return screenshot;
+	}
+
+	public void captureScreenshot() {
+		JComponent lbl = this;
+		getController().disablePaintingCache();
+		try {
+			Rectangle bounds = new Rectangle(getBounds());
+			if (getLabelView() != null) {
+				bounds = bounds.union(getLabelView().getBounds());
+			}
+			GraphicsConfiguration gc = getGraphicsConfiguration();
+			if (gc == null) {
+				gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+			}
+			screenshot = gc.createCompatibleImage(bounds.width, bounds.height, Transparency.TRANSLUCENT);// buffered image
+			// reference passing
+			// the label's ht
+			// and width
+			Graphics2D graphics = screenshot.createGraphics();// creating the graphics for buffered image
+			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
+																								// context
+			lbl.print(graphics); // painting the graphics to label
+			/*if (this.getGraphicalRepresentation().getBackground() instanceof BackgroundImage) {
+				graphics.drawImage(((BackgroundImage)this.getGraphicalRepresentation().getBackground()).getImage(),0,0,null);
+			}*/
+			if (getLabelView() != null) {
+				Rectangle r = getLabelView().getBounds();
+				getLabelView().print(graphics.create(r.x - bounds.x, r.y - bounds.y, r.width, r.height));
+			}
+			graphics.dispose();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Captured image on " + this);
+			}
+		} finally {
+			getController().enablePaintingCache();
 		}
 	}
 
