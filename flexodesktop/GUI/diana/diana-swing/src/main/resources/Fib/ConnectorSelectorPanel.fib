@@ -2,6 +2,7 @@
 <Panel layout="gridbag" borderBottom="5" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.control.tools.ConnectorSpecificationFactory" controllerClassName="org.openflexo.fge.swing.widget.JFIBShapeSelector$ShapeDetailsPanel$CustomFIBController" font="SansSerif,0,11" opaque="false" width="420" height="430" name="ConnectorPanel">
   <Custom componentClassName="org.openflexo.fge.swing.widget.JConnectorPreviewPanel" localize="true" manageDynamicModel="true" name="PreviewPanel" index="0" data="data.connectorSpecification" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)">
     <Dependancy componentName="ConnectorType" />
+    <Dependancy componentName="EndSymbol" />
   </Custom>
   <Panel layout="twocols" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=0.0;weightY=0.0)" opaque="false" name="ShapeTypePanel">
     <Label label="connector_type" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="ConnectorTypeLabel" localize="true" />
