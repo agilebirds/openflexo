@@ -590,10 +590,15 @@ public class ExcelSheetView extends JPanel {
 			if (poiFont instanceof HSSFFont)
 			{
 			   HSSFColor color = ((HSSFFont) poiFont).getHSSFColor((HSSFWorkbook) sheet.getWorkbook().getWorkbook());
-			   short[] rgb = color.getTriplet();
-			   red = rgb[0];
-			   green = rgb[1];
-			   blue = rgb[2];
+			   if(color==null){
+				   return new Color(0,0,0);
+			   }
+			   else{
+				   short[] rgb = color.getTriplet();
+				   red = rgb[0];
+				   green = rgb[1];
+				   blue = rgb[2];
+			   }  
 			}
 			else if (poiFont instanceof XSSFFont)
 			{
