@@ -40,6 +40,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sylvain
  * 
  * @param <ME>
+ *            technology-specific controlling events type
  */
 public abstract class ToolController<ME> implements PropertyChangeListener, HasPropertyChangeSupport {
 
@@ -105,26 +106,86 @@ public abstract class ToolController<ME> implements PropertyChangeListener, HasP
 		logger.info("propertyChange in DrawCustomShapeToolController with " + evt);
 	}
 
+	/**
+	 * Return point where event occurs, relative to DrawingView
+	 */
 	public abstract FGEPoint getPoint(ME e);
 
-	public void mouseClicked(ME e) {
+	/**
+	 * Process mouse cliked event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseClicked(ME e) {
 		// System.out.println("mouseClicked() on " + getPoint(e));
+		return false;
 	}
 
-	public void mousePressed(ME e) {
+	/**
+	 * Process mouse pressed event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mousePressed(ME e) {
 		// System.out.println("mousePressed() on " + getPoint(e));
+		return false;
 	}
 
-	public void mouseReleased(ME e) {
+	/**
+	 * Process mouse released event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseReleased(ME e) {
 		// System.out.println("mouseReleased() on " + getPoint(e));
+		return false;
 	}
 
-	public void mouseDragged(ME e) {
+	/**
+	 * Process mouse dragged event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseDragged(ME e) {
 		// System.out.println("mouseDragged() on " + getPoint(e));
+		return false;
 	}
 
-	public void mouseMoved(ME e) {
+	/**
+	 * Process mouse moved event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseMoved(ME e) {
 		// System.out.println("mouseMoved() on " + getPoint(e));
+		return false;
+	}
+
+	/**
+	 * Process mouse entered event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseEntered(ME e) {
+		// System.out.println("mouseEntered() on " + getPoint(e));
+		return false;
+	}
+
+	/**
+	 * Process mouse exited event for current controller
+	 * 
+	 * @param e
+	 * @return true if the event has been consumed (means that the event processing should stop)
+	 */
+	public boolean mouseExited(ME e) {
+		// System.out.println("mouseEntered() on " + getPoint(e));
+		return false;
 	}
 
 	public abstract DrawingTreeNode<?, ?> getFocusedObject(ME e);

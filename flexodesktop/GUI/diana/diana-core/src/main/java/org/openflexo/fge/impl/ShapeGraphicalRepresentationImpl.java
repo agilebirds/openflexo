@@ -1679,11 +1679,11 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	public void setShadowStyle(ShadowStyle aShadowStyle) {
 		FGEAttributeNotification notification = requireChange(SHADOW_STYLE, aShadowStyle);
 		if (notification != null) {
-			if (shadowStyle != null) {
+			if (shadowStyle != null && shadowStyle.getPropertyChangeSupport() != null) {
 				shadowStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			this.shadowStyle = aShadowStyle;
-			if (aShadowStyle != null) {
+			if (aShadowStyle != null && aShadowStyle.getPropertyChangeSupport() != null) {
 				aShadowStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);
@@ -1760,10 +1760,10 @@ public abstract class ShapeGraphicalRepresentationImpl extends ContainerGraphica
 	public void setShapeSpecification(ShapeSpecification aShape) {
 		logger.info("================ setShapeSpecification() " + aShape);
 		if (shape != aShape) {
-			if (shape != null) {
+			if (shape != null && shape.getPropertyChangeSupport() != null) {
 				shape.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
-			if (aShape != null) {
+			if (aShape != null && aShape.getPropertyChangeSupport() != null) {
 				aShape.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			FGEAttributeNotification notification = requireChange(SHAPE, aShape);

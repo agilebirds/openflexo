@@ -51,6 +51,8 @@ public interface Connector<CS extends ConnectorSpecification> extends PropertyCh
 
 	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
+	public abstract void drawConnector(FGEConnectorGraphics g);
+
 	/**
 	 * Retrieve all control area used to manage this connector
 	 * 

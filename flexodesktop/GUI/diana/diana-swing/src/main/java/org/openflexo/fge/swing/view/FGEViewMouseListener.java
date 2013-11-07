@@ -44,6 +44,8 @@ import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.MouseDragControl;
 import org.openflexo.fge.control.tools.DrawConnectorToolController;
 import org.openflexo.fge.control.tools.DrawCustomShapeToolController;
+import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.DrawTextToolController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.control.JFocusRetriever;
@@ -76,6 +78,11 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	}
 
 	@SuppressWarnings("unchecked")
+	public DrawShapeToolController<MouseEvent> getDrawShapeToolController() {
+		return (DrawShapeToolController<MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawShapeToolController();
+	}
+
+	@SuppressWarnings("unchecked")
 	public DrawCustomShapeToolController<?, MouseEvent> getDrawCustomShapeToolController() {
 		return (DrawCustomShapeToolController<?, MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController())
 				.getDrawCustomShapeToolController();
@@ -85,6 +92,11 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 	public DrawConnectorToolController<MouseEvent> getDrawConnectorToolController() {
 		return (DrawConnectorToolController<MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController())
 				.getDrawConnectorToolController();
+	}
+
+	@SuppressWarnings("unchecked")
+	public DrawTextToolController<MouseEvent> getDrawTextToolController() {
+		return (DrawTextToolController<MouseEvent>) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawTextToolController();
 	}
 
 	@Override
@@ -112,20 +124,26 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
 			case DrawCustomShapeTool:
 				performSelectionTool = false;
-				if (editable) {
+				if (editable && getDrawCustomShapeToolController() != null) {
 					getDrawCustomShapeToolController().mouseClicked(e);
 				}
 				break;
 			case DrawShapeTool:
+				if (editable && getDrawShapeToolController() != null) {
+					getDrawShapeToolController().mouseClicked(e);
+				}
 				performSelectionTool = false;
 				break;
 			case DrawConnectorTool:
-				if (editable) {
+				if (editable && getDrawConnectorToolController() != null) {
 					getDrawConnectorToolController().mouseClicked(e);
 				}
 				performSelectionTool = false;
 				break;
 			case DrawTextTool:
+				if (editable && getDrawTextToolController() != null) {
+					getDrawTextToolController().mouseClicked(e);
+				}
 				performSelectionTool = false;
 				break;
 			case SelectionTool:
@@ -221,6 +239,38 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			return;
 		}
 
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mouseEntered(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mouseEntered(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mouseEntered(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mouseEntered(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
+
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
 		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
 		// not make sense for another one. If we want to emulate those event, it should be done
@@ -237,6 +287,38 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
+
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mouseExited(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mouseExited(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mouseExited(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mouseExited(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
 
 		// SGU: I dont think that JTextComponent react to these event, but in case of, uncomment this
 		// GPO: Actually this is not the case because a mouse enter/exited event in one component does
@@ -358,6 +440,39 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
+
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mousePressed(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mousePressed(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mousePressed(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mousePressed(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
+
 		boolean editable = getController().getDrawing().isEditable();
 		DrawingTreeNode<?, ?> focusedObject = getFocusRetriever() != null ? getFocusRetriever().getFocusedObject(e) : null;
 
@@ -449,6 +564,38 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			return;
 		}
 
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mouseReleased(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mouseReleased(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mouseReleased(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mouseReleased(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
+
 		if ((getController() instanceof DianaInteractiveViewer) && ((DianaInteractiveViewer<?, ?, ?>) getController()).hasEditedLabel()) {
 			DrawingTreeNode<?, ?> focusedObject = getFocusRetriever() != null ? getFocusRetriever().getFocusedObject(e) : null;
 			if (handleEventForEditedLabel(e, focusedObject)) {
@@ -502,7 +649,40 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 			return;
 		}
 
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mouseDragged(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mouseDragged(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mouseDragged(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mouseDragged(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
+
 		boolean editable = getController().getDrawing().isEditable();
+
 		if (editable && getFocusRetriever() != null) {
 			if ((getController() instanceof DianaInteractiveViewer) && ((DianaInteractiveViewer<?, ?, ?>) getController()).hasEditedLabel()) {
 				DrawingTreeNode<?, ?> focused = getFocusRetriever().getFocusedObject(e);
@@ -560,6 +740,38 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		if (view.isDeleted()) {
 			return;
 		}
+
+		// If a specific tool is active, delegate event to him, and return is the event was consumed by delegate tool controller
+		if (getController() instanceof DianaInteractiveEditor) {
+			switch (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool()) {
+			case DrawCustomShapeTool:
+				if (getDrawCustomShapeToolController() != null && getDrawCustomShapeToolController().mouseMoved(e)) {
+					return;
+				}
+				break;
+			case DrawShapeTool:
+				if (getDrawShapeToolController() != null && getDrawShapeToolController().mouseMoved(e)) {
+					return;
+				}
+				break;
+			case DrawConnectorTool:
+				if (getDrawConnectorToolController() != null && getDrawConnectorToolController().mouseMoved(e)) {
+					return;
+				}
+				break;
+			case DrawTextTool:
+				if (getDrawTextToolController() != null && getDrawTextToolController().mouseMoved(e)) {
+					return;
+				}
+				break;
+			case SelectionTool:
+				// We continue
+				break;
+			}
+		}
+
+		// We arrive here if the event was not consumed by a specific tool
+		// In this case, we apply drawing-specific controls
 
 		if ((getController() instanceof DianaInteractiveViewer) && ((DianaInteractiveViewer<?, ?, ?>) getController()).hasEditedLabel()) {
 			DrawingTreeNode<?, ?> focused = getFocusRetriever().getFocusedObject(e);

@@ -45,10 +45,17 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	private Connector<?> connector;
 
-	protected ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
+	public ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		startDrawableObserving();
+	}
+
+	public ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
+			ContainerNodeImpl<?, ?> parentNode, ShapeNodeImpl<?> startNode, ShapeNodeImpl<?> endNode) {
+		this(drawingImpl, drawable, grBinding, parentNode);
+		setStartNode(startNode);
+		setEndNode(endNode);
 	}
 
 	@Override
@@ -498,6 +505,12 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	public void paint(FGEConnectorGraphics g) {
+
+		if (isDeleted()) {
+			logger.warning("paint connector called for a deleted ConnectorNode");
+			Thread.dumpStack();
+			return;
+		}
 
 		if (getStartNode() == null || getStartNode().isDeleted()) {
 			logger.warning("Could not paint connector: start object is null or deleted");

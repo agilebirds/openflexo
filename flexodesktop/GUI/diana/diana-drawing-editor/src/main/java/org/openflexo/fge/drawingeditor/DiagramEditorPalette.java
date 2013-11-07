@@ -30,6 +30,7 @@ import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.fge.drawingeditor.model.DiagramElement;
@@ -234,6 +235,7 @@ public class DiagramEditorPalette extends DrawingPalette {
 
 				getEditor().getFactory().getUndoManager().stopRecording(edit);
 
+				getEditor().setCurrentTool(EditorTool.SelectionTool);
 				getEditor().setSelectedObject(getEditor().getDrawing().getDrawingTreeNode(newShape));
 
 				return true;

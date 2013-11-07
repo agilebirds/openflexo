@@ -45,7 +45,6 @@ import org.openflexo.fge.NoneBackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.TextureBackgroundStyle.TextureType;
-import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEGeneralShape;
 import org.openflexo.fge.geom.FGEPoint;
@@ -94,9 +93,8 @@ public abstract class JFGEGraphics extends FGEGraphicsImpl {
 	 * @param controller
 	 */
 
-	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?, ?, ?> controller) {
+	public void createGraphics(Graphics2D graphics2D/*, AbstractDianaEditor<?, ?, ?> controller*/) {
 		g2d = (Graphics2D) graphics2D.create();
-		_controller = controller;
 	}
 
 	public void releaseGraphics() {

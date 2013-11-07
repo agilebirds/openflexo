@@ -34,6 +34,17 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		return returned;
 	}
 
+	public Connector makeNewConnector(ConnectorGraphicalRepresentation aGR, Shape from, Shape to, Diagram diagram) {
+		Connector returned = newInstance(Connector.class);
+		returned.setName("Connector" + connectorIndex);
+		connectorIndex++;
+		returned.setDiagram(diagram);
+		returned.setGraphicalRepresentation(makeNewConnectorGR(aGR));
+		returned.setStartShape(from);
+		returned.setEndShape(to);
+		return returned;
+	}
+
 	public Connector makeNewConnector(Shape from, Shape to, Diagram diagram) {
 		Connector returned = newInstance(Connector.class);
 		returned.setName("Connector" + connectorIndex);
@@ -100,10 +111,15 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class);
 		returned.setFactory(this);
 		returned.setConnectorType(aConnectorType);
-		// returned.setStartObject(aStartObject);
-		// returned.setEndObject(anEndObject);
 		applyDefaultProperties(returned);
 		applyBasicControls(returned);
+		return returned;
+	}
+
+	public ConnectorGraphicalRepresentation makeNewConnectorGR(ConnectorGraphicalRepresentation aGR) {
+		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class);
+		returned.setFactory(this);
+		returned.setsWith(aGR);
 		return returned;
 	}
 

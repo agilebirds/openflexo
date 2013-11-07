@@ -55,8 +55,6 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEGraphicsImpl.class.getPackage().getName());
 
-	// TODO: do we need this ?
-	protected AbstractDianaEditor<?, ?, ?> _controller;
 	private DrawingTreeNode<?, ?> dtn;
 	private FGEView<?, ?> view;
 
@@ -100,7 +98,7 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 	}
 
 	public AbstractDianaEditor<?, ?, ?> getController() {
-		return _controller;
+		return view.getController();
 	}
 
 	public double getScale() {
@@ -109,7 +107,6 @@ public abstract class FGEGraphicsImpl implements FGEGraphics {
 
 	public void delete() {
 		dtn = null;
-		_controller = null;
 	}
 
 	public ForegroundStyle getDefaultForeground() {

@@ -759,11 +759,11 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	public void setTextStyle(TextStyle aTextStyle) {
 		FGEAttributeNotification notification = requireChange(TEXT_STYLE, aTextStyle, false);
 		if (notification != null) {
-			if (textStyle != null) {
+			if (textStyle != null && textStyle.getPropertyChangeSupport() != null) {
 				textStyle.getPropertyChangeSupport().removePropertyChangeListener(this);
 			}
 			this.textStyle = aTextStyle;
-			if (aTextStyle != null) {
+			if (aTextStyle != null && aTextStyle.getPropertyChangeSupport() != null) {
 				aTextStyle.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			hasChanged(notification);

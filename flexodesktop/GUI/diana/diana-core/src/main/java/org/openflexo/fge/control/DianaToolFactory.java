@@ -28,9 +28,11 @@ import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DianaScaleSelector;
 import org.openflexo.fge.control.tools.DianaStyles;
 import org.openflexo.fge.control.tools.DianaToolSelector;
-import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
+import org.openflexo.fge.control.tools.DrawComplexCurveToolController;
 import org.openflexo.fge.control.tools.DrawConnectorToolController;
 import org.openflexo.fge.control.tools.DrawPolygonToolController;
+import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.DrawTextToolController;
 
 /**
  * Represent the tool factory for a given technology (eg. Swing)
@@ -56,10 +58,14 @@ public interface DianaToolFactory<C> {
 
 	public DrawPolygonToolController<?> makeDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
-	public DrawClosedCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
+	public DrawComplexCurveToolController<?> makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawShapeAction control, boolean isClosedCurve);
+
+	public DrawShapeToolController<?> makeDrawShapeToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
 	public DrawConnectorToolController<?> makeDrawConnectorToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawConnectorAction control);
+
+	public DrawTextToolController<?> makeDrawTextToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control);
 
 }

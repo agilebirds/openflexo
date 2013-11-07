@@ -547,6 +547,9 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 	 * @return
 	 */
 	public Vector<SimplifiedCardinalDirection> getPrimitiveAllowedStartOrientations() {
+		if (getRectPolylinConstraints() == null) {
+			return SimplifiedCardinalDirection.allDirections();
+		}
 		switch (getRectPolylinConstraints()) {
 		case NONE:
 			return SimplifiedCardinalDirection.allDirections();
@@ -2121,7 +2124,7 @@ public class RectPolylinConnector extends ConnectorImpl<RectPolylinConnectorSpec
 			return;
 		}
 
-		logger.info("propertyChanged() with " + evt + " adjustability=" + getAdjustability());
+		// logger.info("propertyChanged() with " + evt + " adjustability=" + getAdjustability());
 
 		if (evt.getSource() == getConnectorSpecification()) {
 

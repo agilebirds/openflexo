@@ -32,6 +32,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.actions.DrawShapeAction;
@@ -79,6 +80,11 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 					ShapeNode<?> endNode) {
 				System.out.println("OK, perform draw new connector with " + graphicalRepresentation + " start: " + startNode + " end: "
 						+ endNode);
+				Connector newConnector = getFactory().makeNewConnector(graphicalRepresentation, (Shape) startNode.getDrawable(),
+						(Shape) endNode.getDrawable(), getDrawing().getModel());
+				DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(startNode, endNode);
+				((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
+
 			}
 		};
 

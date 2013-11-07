@@ -244,8 +244,16 @@ public class JFocusRetriever {
 			switch (editor.getCurrentTool()) {
 			case SelectionTool:
 				return getFocusedObject(drawingView.getDrawing().getRoot(), event);
+			case DrawShapeTool:
 			case DrawCustomShapeTool:
-				if (editor.getDrawCustomShapeToolController() != null) {
+			case DrawConnectorTool:
+			case DrawTextTool:
+				DrawingTreeNode<?, ?> returned = getFocusedObject(drawingView.getDrawing().getRoot(), event);
+				if (returned == null) {
+					returned = drawingView.getDrawing().getRoot();
+				}
+				return returned;
+				/*if (editor.getDrawCustomShapeToolController() != null) {
 					if (editor.getDrawCustomShapeToolController().editionHasBeenStarted()
 							&& editor.getDrawCustomShapeToolController().getCurrentEditedShape() != null) {
 						return editor.getDrawCustomShapeToolController().getCurrentEditedShape();
@@ -256,7 +264,7 @@ public class JFocusRetriever {
 						}
 						return returned;
 					}
-				}
+				}*/
 			default:
 				return getFocusedObject(drawingView.getDrawing().getRoot(), event);
 			}

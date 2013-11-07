@@ -24,6 +24,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
@@ -32,14 +33,20 @@ import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.tools.DrawConnectorToolController;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.graphics.JFGEConnectorGraphics;
+import org.openflexo.fge.swing.view.JConnectorView;
 import org.openflexo.fge.swing.view.JDrawingView;
 
+/**
+ * Swing implementation for the controller of the DrawConnector tool<br>
+ * As swing component, this controller is driven by {@link MouseEvent}
+ * 
+ * @author sylvain
+ */
 public class JDrawConnectorToolController extends DrawConnectorToolController<MouseEvent> {
 
 	private static final Logger logger = Logger.getLogger(JDrawConnectorToolController.class.getPackage().getName());
-
-	private boolean isBuildingPoints;
 
 	public JDrawConnectorToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawConnectorAction control) {
 		super(controller, control);
@@ -58,20 +65,41 @@ public class JDrawConnectorToolController extends DrawConnectorToolController<Mo
 		return getDrawingView().getFocusRetriever().getFocusedObject(e);
 	}
 
+	/**
+	 * Return point where event occurs, relative to DrawingView
+	 */
 	public FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		return new FGEPoint(pt.getX(), pt.getY());
 	}
 
 	@Override
+	public DianaInteractiveEditor<?, SwingViewFactory, JComponent> getController() {
+		return (DianaInteractiveEditor<?, SwingViewFactory, JComponent>) super.getController();
+	}
+
+	private JConnectorView<DrawConnectorToolController> view;
+
+	@Override
 	public JFGEConnectorGraphics makeGraphics(ForegroundStyle foregroundStyle) {
-		JFGEConnectorGraphics returned = new JFGEConnectorGraphics(null, null);
+		view = SwingViewFactory.INSTANCE.makeConnectorView(connectorNode, getController());
+		JFGEConnectorGraphics returned = new JFGEConnectorGraphics(connectorNode, view);
 		returned.setDefaultForeground(foregroundStyle);
 		return returned;
+	}
+
+	protected void stopMouseEdition() {
+		view.delete();
+		super.stopMouseEdition();
 	}
 
 	@Override
 	public JFGEConnectorGraphics getGraphics() {
 		return (JFGEConnectorGraphics) super.getGraphics();
+	}
+
+	@Override
+	public void paintConnector() {
+		getDrawingView().getPaintManager().repaint(getDrawingView());
 	}
 }

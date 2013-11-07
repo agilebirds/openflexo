@@ -129,8 +129,6 @@ public class ConnectorSpecificationFactory implements StyleFactory<ConnectorSpec
 
 	public void setStyleType(ConnectorType connectorType) {
 
-		System.out.println("ConnectorSpecFactory, setStyleType with " + connectorType);
-
 		ConnectorType oldConnectorType = getStyleType();
 
 		if (oldConnectorType == connectorType) {

@@ -36,6 +36,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.DianaInteractiveEditor;
@@ -80,6 +82,7 @@ import org.openflexo.fge.swing.SwingEditorDelegate;
 import org.openflexo.fge.swing.SwingViewFactory;
 import org.openflexo.fge.swing.control.JFocusRetriever;
 import org.openflexo.fge.swing.control.tools.JDianaPalette;
+import org.openflexo.fge.swing.control.tools.JDrawConnectorToolController;
 import org.openflexo.fge.swing.graphics.DrawUtils;
 import org.openflexo.fge.swing.graphics.JFGEConnectorGraphics;
 import org.openflexo.fge.swing.graphics.JFGEDrawingGraphics;
@@ -413,7 +416,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
-		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+		graphics.createGraphics(g2/*, controller*/);
 		getDrawing().getRoot().paint(graphics);
 		graphics.releaseGraphics();
 	}
@@ -469,7 +472,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 						FGEPaintManager.paintPrimitiveLogger.fine("JDrawingView: continuous painting, paint " + node
 								+ " temporaryObjectsOnly=" + temporaryObjectsOnly);
 					}
-					childGraphics.createGraphics(g2d, controller);
+					childGraphics.createGraphics(g2d/*, controller*/);
 					if (node instanceof ShapeNode) {
 						((ShapeNode<?>) node).paint((JFGEShapeGraphics) childGraphics);
 					} else if (node instanceof ConnectorNode) {
@@ -554,7 +557,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			DrawUtils.turnOnAntiAlising(g2);
 			DrawUtils.setRenderQuality(g2);
 			DrawUtils.setColorRenderQuality(g2);
-			graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+			graphics.createGraphics(g2/*, controller*/);
 
 			if (getController() instanceof DianaInteractiveViewer) {
 				// Don't paint those things in case of buffering
@@ -584,6 +587,9 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 				if (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawCustomShapeTool) {
 					// logger.info("Painting current edited shape");
 					paintCurrentEditedShape(graphics);
+				} else if (((DianaInteractiveEditor<?, ?, ?>) getController()).getCurrentTool() == EditorTool.DrawConnectorTool) {
+					// logger.info("Painting current edited shape");
+					paintCurrentDrawnConnector(graphics);
 				}
 			}
 
@@ -632,7 +638,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 			for (GeometricNode<?> gn : geomList) {
 				// TODO: use the same graphics, just change DrawingTreeNode
 				JFGEGeometricGraphics geometricGraphics = new JFGEGeometricGraphics(gn, this);
-				geometricGraphics.createGraphics(g2, controller);
+				geometricGraphics.createGraphics(g2/*, controller*/);
 				gn.paint(geometricGraphics);
 				geometricGraphics.releaseGraphics();
 				geometricGraphics.delete();
@@ -747,7 +753,7 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		}
 
 		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().getGraphics())
-				.createGraphics(graphics.getGraphics(), controller);
+				.createGraphics(graphics.getGraphics()/*, controller*/);
 		((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().paintCurrentEditedShape();
 		((JFGEGeometricGraphics) ((DianaInteractiveEditor<?, ?, ?>) getController()).getDrawCustomShapeToolController().getGraphics())
 				.releaseGraphics();
@@ -760,6 +766,54 @@ public class JDrawingView<M> extends JDianaLayeredView<M> implements Autoscroll,
 		}
 
 		graphics.releaseClonedGraphics(oldGraphics);
+	}
+
+	private void paintCurrentDrawnConnector(JFGEDrawingGraphics graphics) {
+
+		if (!(getController() instanceof DianaInteractiveEditor)) {
+			return;
+		}
+
+		JDrawConnectorToolController connectorController = (JDrawConnectorToolController) ((DianaInteractiveEditor<?, ?, ?>) getController())
+				.getDrawConnectorToolController();
+
+		if (!connectorController.editionHasBeenStarted()) {
+			return;
+		}
+
+		if (connectorController.getConnectorNode() == null) {
+			return;
+		}
+
+		// OK, now we paint the connector beeing drawn
+		// Following code is not quite easy to understand, i try to document it well
+
+		// We first "save" oldGraphics
+		Graphics2D oldGraphics = graphics.cloneGraphics();
+
+		// Then we obtain current Graphics2D (valid for Drawing, not for the connector node!)
+		Graphics2D connectorGraphics2D = graphics.getGraphics();
+
+		// We obtain the right AffineTransform (the Graphics2D is valid for Drawing, not for the connector node!)
+		AffineTransform at = FGEUtils.convertCoordinatesAT(connectorController.getConnectorNode(), getDrawing().getRoot(), getScale());
+
+		// We apply this transform
+		connectorGraphics2D.transform(at);
+
+		// We give the Graphics2D to the connector graphics
+		connectorController.getGraphics().createGraphics(connectorGraphics2D);
+
+		// The connector is drawn
+		// connectorController.getConnectorNode().getConnector().drawConnector(connectorController.getGraphics());
+
+		connectorController.getConnectorNode().paint(connectorController.getGraphics());
+
+		// Graphics has been released
+		connectorController.getGraphics().releaseGraphics();
+
+		// We finally restore the original graphics for the drawing
+		graphics.releaseClonedGraphics(oldGraphics);
+
 	}
 
 	private void paintFocused(DrawingTreeNode<?, ?> focused, JFGEDrawingGraphics graphics) {

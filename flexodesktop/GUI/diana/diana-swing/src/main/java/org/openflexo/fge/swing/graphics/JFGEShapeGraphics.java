@@ -32,7 +32,6 @@ import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.swing.view.JShapeView;
 
@@ -61,9 +60,9 @@ public class JFGEShapeGraphics extends JFGEGraphics implements FGEShapeGraphics 
 	 * @param graphics2D
 	 * @param controller
 	 */
-	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?, ?, ?> controller) {
-		super.createGraphics(graphics2D, controller);
-		shapeDecorationGraphics.createGraphics(graphics2D, controller);
+	public void createGraphics(Graphics2D graphics2D) {
+		super.createGraphics(graphics2D);
+		shapeDecorationGraphics.createGraphics(graphics2D);
 	}
 
 	public void releaseGraphics() {

@@ -136,7 +136,12 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(StyleFactory.STYLE_CLASS_CHANGED)) {
-				applyNewStyleTypeToSelection((ST) evt.getNewValue());
+				if (getSelection().size() == 0) {
+					// In this case style type should be applied as default value, which should be recomputed
+					setDefaultValue(cloneStyle());
+				} else {
+					applyNewStyleTypeToSelection((ST) evt.getNewValue());
+				}
 			}
 
 			System.out.println("Tiens, on me previent que " + evt + " pour " + evt.getPropertyName());

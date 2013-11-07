@@ -326,7 +326,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
-		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+		graphics.createGraphics(g2/*, controller*/);
 		shapeNode.paint(graphics);
 		graphics.releaseGraphics();
 		super.paint(g);

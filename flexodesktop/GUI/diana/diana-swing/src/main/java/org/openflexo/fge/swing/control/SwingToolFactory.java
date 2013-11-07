@@ -37,9 +37,11 @@ import org.openflexo.fge.swing.control.tools.JDianaPalette;
 import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
-import org.openflexo.fge.swing.control.tools.JDrawClosedCurveToolController;
+import org.openflexo.fge.swing.control.tools.JDrawComplexCurveToolController;
 import org.openflexo.fge.swing.control.tools.JDrawConnectorToolController;
 import org.openflexo.fge.swing.control.tools.JDrawPolygonToolController;
+import org.openflexo.fge.swing.control.tools.JDrawShapeToolController;
+import org.openflexo.fge.swing.control.tools.JDrawTextToolController;
 
 /**
  * Represent the view factory for Swing technology
@@ -88,14 +90,24 @@ public class SwingToolFactory implements DianaToolFactory<JComponent> {
 	}
 
 	@Override
-	public JDrawClosedCurveToolController makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
+	public JDrawComplexCurveToolController makeDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawShapeAction control, boolean isClosedCurve) {
-		return new JDrawClosedCurveToolController(controller, control, isClosedCurve);
+		return new JDrawComplexCurveToolController(controller, control, isClosedCurve);
+	}
+
+	@Override
+	public JDrawShapeToolController makeDrawShapeToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+		return new JDrawShapeToolController(controller, control);
 	}
 
 	@Override
 	public JDrawConnectorToolController makeDrawConnectorToolController(DianaInteractiveEditor<?, ?, ?> controller,
 			DrawConnectorAction control) {
 		return new JDrawConnectorToolController(controller, control);
+	}
+
+	@Override
+	public JDrawTextToolController makeDrawTextToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+		return new JDrawTextToolController(controller, control);
 	}
 }

@@ -47,6 +47,14 @@ import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
+/**
+ * Abstract implementation for the controller of a DrawCustomShape tool
+ * 
+ * @author sylvain
+ * 
+ * @param <ME>
+ *            technology-specific controlling events type
+ */
 public abstract class DrawCustomShapeToolController<S extends FGEShape<S>, ME> extends ToolController<ME> implements
 		PropertyChangeListener, HasPropertyChangeSupport {
 

@@ -37,6 +37,14 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.model.undo.CompoundEdit;
 
+/**
+ * Abstract implementation for the controller of the Complex Curve drawing tool
+ * 
+ * @author sylvain
+ * 
+ * @param <ME>
+ *            technology-specific controlling events type
+ */
 public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolController<FGEPolygon, ME> {
 
 	private static final Logger logger = Logger.getLogger(DrawPolygonToolController.class.getPackage().getName());
@@ -84,7 +92,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolC
 	}
 
 	@Override
-	public void mouseClicked(ME e) {
+	public boolean mouseClicked(ME e) {
 		super.mouseClicked(e);
 		logger.fine("Handle mouseClicked()");
 		// System.out.println("Mouse clicked");
@@ -111,6 +119,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolC
 				getController().setCurrentTool(EditorTool.SelectionTool);
 			}
 		}
+		return true;
 	}
 
 	protected abstract boolean isFinalizationEvent(ME e);
@@ -132,7 +141,7 @@ public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolC
 	}
 
 	@Override
-	public void mouseMoved(ME e) {
+	public boolean mouseMoved(ME e) {
 		super.mouseMoved(e);
 		// System.out.println("ShapeSpecification=" + getShape());
 		if (isBuildingPoints && getShape().getPointsNb() > 0) {
@@ -141,7 +150,9 @@ public abstract class DrawPolygonToolController<ME> extends DrawCustomShapeToolC
 			getShape().getPoints().lastElement().setX(newPoint.x);
 			getShape().getPoints().lastElement().setY(newPoint.y);
 			geometryChanged();
+			return true;
 		}
+		return false;
 	}
 
 	@Override

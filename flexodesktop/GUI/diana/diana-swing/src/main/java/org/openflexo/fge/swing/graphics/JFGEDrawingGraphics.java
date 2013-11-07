@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
@@ -57,9 +56,9 @@ public class JFGEDrawingGraphics extends JFGEGraphics implements FGEDrawingGraph
 	 * @param graphics2D
 	 * @param controller
 	 */
-	public void createGraphics(Graphics2D graphics2D, AbstractDianaEditor<?, ?, ?> controller) {
-		super.createGraphics(graphics2D, controller);
-		drawingDecorationGraphics.createGraphics(graphics2D, controller);
+	public void createGraphics(Graphics2D graphics2D) {
+		super.createGraphics(graphics2D);
+		drawingDecorationGraphics.createGraphics(graphics2D);
 	}
 
 	public void releaseGraphics() {

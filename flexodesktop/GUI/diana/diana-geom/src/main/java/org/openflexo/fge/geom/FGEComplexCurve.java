@@ -51,10 +51,12 @@ public class FGEComplexCurve extends FGEGeneralShape<FGEComplexCurve> {
 
 	public FGEComplexCurve(Closure closure, List<FGEPoint> points) {
 		this(closure);
-		for (FGEPoint p : points) {
-			_addToPoints(p);
+		if (points != null) {
+			for (FGEPoint p : points) {
+				_addToPoints(p);
+			}
+			updateCurve();
 		}
-		updateCurve();
 	}
 
 	public FGEComplexCurve(Closure closure, FGEPoint... points) {

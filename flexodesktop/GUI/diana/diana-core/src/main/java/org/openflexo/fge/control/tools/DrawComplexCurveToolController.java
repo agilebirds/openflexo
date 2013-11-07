@@ -37,9 +37,17 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.model.undo.CompoundEdit;
 
-public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeToolController<FGEComplexCurve, ME> {
+/**
+ * Abstract implementation for the controller of the Complex Curve drawing tool
+ * 
+ * @author sylvain
+ * 
+ * @param <ME>
+ *            technology-specific controlling events type
+ */
+public abstract class DrawComplexCurveToolController<ME> extends DrawCustomShapeToolController<FGEComplexCurve, ME> {
 
-	private static final Logger logger = Logger.getLogger(DrawClosedCurveToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DrawComplexCurveToolController.class.getPackage().getName());
 
 	private boolean isBuildingPoints;
 
@@ -47,7 +55,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeT
 
 	private boolean isClosedCurve;
 
-	public DrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
+	public DrawComplexCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
 		super(controller, control);
 		this.isClosedCurve = isClosedCurve;
 	}
@@ -87,7 +95,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeT
 	}
 
 	@Override
-	public void mouseClicked(ME e) {
+	public boolean mouseClicked(ME e) {
 		super.mouseClicked(e);
 		logger.fine("Handle mouseClicked()");
 		// System.out.println("Mouse clicked");
@@ -114,6 +122,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeT
 				getController().setCurrentTool(EditorTool.SelectionTool);
 			}
 		}
+		return true;
 	}
 
 	protected abstract boolean isFinalizationEvent(ME e);
@@ -135,7 +144,7 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeT
 	}
 
 	@Override
-	public void mouseMoved(ME e) {
+	public boolean mouseMoved(ME e) {
 		super.mouseMoved(e);
 		// System.out.println("ShapeSpecification=" + getShape());
 		if (isBuildingPoints && getShape().getPointsNb() > 0) {
@@ -144,7 +153,9 @@ public abstract class DrawClosedCurveToolController<ME> extends DrawCustomShapeT
 			getShape().getPoints().lastElement().setX(newPoint.x);
 			getShape().getPoints().lastElement().setY(newPoint.y);
 			geometryChanged();
+			return true;
 		}
+		return false;
 	}
 
 	@Override

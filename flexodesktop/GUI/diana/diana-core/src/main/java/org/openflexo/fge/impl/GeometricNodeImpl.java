@@ -704,7 +704,9 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 			@Override
 			public void update(FGEGeneralShape<?> geometricObject) {
-				setPoint(geometricObject.getPathElements().firstElement().getP1());
+				if (geometricObject != null && geometricObject.getPathElements() != null && geometricObject.getPathElements().size() > 0) {
+					setPoint(geometricObject.getPathElements().firstElement().getP1());
+				}
 			}
 		});
 		for (int i = 0; i < shape.getPathElements().size(); i++) {
@@ -731,7 +733,10 @@ public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphi
 
 				@Override
 				public void update(FGEGeneralShape<?> geometricObject) {
-					setPoint(geometricObject.getPathElements().get(index).getP2());
+					if (geometricObject != null && geometricObject.getPathElements() != null
+							&& geometricObject.getPathElements().size() > 0) {
+						setPoint(geometricObject.getPathElements().get(index).getP2());
+					}
 				}
 			});
 

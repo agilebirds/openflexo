@@ -270,7 +270,7 @@ public class JConnectorView<O> extends JPanel implements ConnectorView<O, JPanel
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
-		graphics.createGraphics(g2, (AbstractDianaEditor<?, ?, ?>) controller);
+		graphics.createGraphics(g2/*, controller*/);
 
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {

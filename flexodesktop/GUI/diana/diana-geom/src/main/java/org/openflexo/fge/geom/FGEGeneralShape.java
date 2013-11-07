@@ -229,7 +229,7 @@ public class FGEGeneralShape<O extends FGEGeneralShape<O>> implements FGEGeometr
 				_generalPath.curveTo((float) cp1.x, (float) cp1.y, (float) cp2.x, (float) cp2.y, (float) current.x, (float) current.y);
 			}
 		}
-		if (closure == Closure.CLOSED_FILLED || closure == Closure.CLOSED_NOT_FILLED) {
+		if (pathElements.size() > 0 && (closure == Closure.CLOSED_FILLED || closure == Closure.CLOSED_NOT_FILLED)) {
 			_generalPath.closePath();
 		}
 		_generalPath.setWindingRule(Path2D.WIND_NON_ZERO);

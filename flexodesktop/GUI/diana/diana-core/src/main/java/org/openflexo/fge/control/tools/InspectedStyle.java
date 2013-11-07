@@ -226,6 +226,15 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	}
 
 	/**
+	 * Sets value identified as default values (values that are used when selection is empty)
+	 * 
+	 * @param defaultValue
+	 */
+	public void setDefaultValue(S defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	/**
 	 * Generate new style using supplied factory and inspected property values
 	 * 
 	 * @param factory

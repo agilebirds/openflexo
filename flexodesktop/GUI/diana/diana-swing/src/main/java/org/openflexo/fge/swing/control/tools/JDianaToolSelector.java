@@ -177,7 +177,7 @@ public class JDianaToolSelector extends DianaToolSelector<JPanel, SwingViewFacto
 					setEnabled(getEditor().getDrawConnectorAction() != null);
 					break;
 				case DrawTextTool:
-					setEnabled(true);
+					setEnabled(getEditor().getDrawTextAction() != null);
 					break;
 				default:
 					setEnabled(false);

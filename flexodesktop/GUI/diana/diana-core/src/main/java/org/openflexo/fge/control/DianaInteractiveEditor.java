@@ -31,6 +31,7 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.control.actions.DrawConnectorAction;
 import org.openflexo.fge.control.actions.DrawShapeAction;
 import org.openflexo.fge.control.exceptions.CopyException;
@@ -42,6 +43,8 @@ import org.openflexo.fge.control.notifications.ToolOptionChanged;
 import org.openflexo.fge.control.tools.DianaPalette;
 import org.openflexo.fge.control.tools.DrawConnectorToolController;
 import org.openflexo.fge.control.tools.DrawCustomShapeToolController;
+import org.openflexo.fge.control.tools.DrawShapeToolController;
+import org.openflexo.fge.control.tools.DrawTextToolController;
 import org.openflexo.fge.control.tools.InspectedBackgroundStyle;
 import org.openflexo.fge.control.tools.InspectedConnectorSpecification;
 import org.openflexo.fge.control.tools.InspectedForegroundStyle;
@@ -115,7 +118,21 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	}
 
 	public enum DrawConnectorToolOption implements EditorToolOption {
-		DrawLine, DrawCurve, DrawRectPolylin, DrawCurvedPolylin
+		DrawLine, DrawCurve, DrawRectPolylin, DrawCurvedPolylin;
+		public ConnectorType getConnectorType() {
+			switch (this) {
+			case DrawLine:
+				return ConnectorType.LINE;
+			case DrawCurve:
+				return ConnectorType.CURVE;
+			case DrawRectPolylin:
+				return ConnectorType.RECT_POLYLIN;
+			case DrawCurvedPolylin:
+				return ConnectorType.CURVED_POLYLIN;
+			default:
+				return null;
+			}
+		}
 	}
 
 	public static final int PASTE_DELTA = 10;
@@ -125,12 +142,15 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	private DrawCustomShapeToolOption drawCustomShapeToolOption;
 	private DrawConnectorToolOption drawConnectorToolOption;
 
+	private DrawShapeToolController<?> drawShapeToolController;
 	private DrawCustomShapeToolController<?, ?> drawCustomShapeToolController;
 	private DrawConnectorToolController<?> drawConnectorToolController;
+	private DrawTextToolController<?> drawTextToolController;
 
 	private DrawShapeAction drawShapeAction;
 	private DrawShapeAction drawCustomShapeAction;
 	private DrawConnectorAction drawConnectorAction;
+	private DrawShapeAction drawTextAction;
 
 	private InspectedForegroundStyle inspectedForegroundStyle;
 	private InspectedBackgroundStyle inspectedBackgroundStyle;
@@ -196,12 +216,32 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		inspectedLocationSizeProperties.fireSelectionUpdated();
 	}
 
+	public DrawShapeToolController<?> getDrawShapeToolController() {
+		if (drawShapeToolController == null) {
+			prepareDrawShapeToolController();
+		}
+		return drawShapeToolController;
+	}
+
 	public DrawCustomShapeToolController<?, ?> getDrawCustomShapeToolController() {
+		if (drawCustomShapeToolController == null) {
+			prepareDrawCustomShapeToolController();
+		}
 		return drawCustomShapeToolController;
 	}
 
 	public DrawConnectorToolController<?> getDrawConnectorToolController() {
+		if (drawConnectorToolController == null) {
+			prepareDrawConnectorToolController();
+		}
 		return drawConnectorToolController;
+	}
+
+	public DrawTextToolController<?> getDrawTextToolController() {
+		if (drawTextToolController == null) {
+			prepareDrawTextToolController();
+		}
+		return drawTextToolController;
 	}
 
 	public EditorTool getCurrentTool() {
@@ -283,7 +323,12 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	}
 
 	private void prepareDrawShapeToolController() {
+		if (drawShapeToolController != null) {
+			drawShapeToolController.delete();
+		}
 		if (drawShapeAction != null) {
+			System.out.println("Preparing the prepareDrawShapeToolController");
+			drawShapeToolController = getToolFactory().makeDrawShapeToolController(this, drawShapeAction);
 			switch (getDrawShapeToolOption()) {
 			default:
 				logger.warning("Not implemented: " + getDrawShapeToolOption());
@@ -307,6 +352,17 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 
 	}
 
+	private void prepareDrawTextToolController() {
+		if (drawTextToolController != null) {
+			drawTextToolController.delete();
+		}
+		if (drawTextAction != null) {
+			System.out.println("Preparing the prepareDrawTextToolController");
+			drawTextToolController = getToolFactory().makeDrawTextToolController(this, drawTextAction);
+		}
+
+	}
+
 	public DrawConnectorToolOption getDrawConnectorToolOption() {
 		return drawConnectorToolOption;
 	}
@@ -315,6 +371,7 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 		if (this.drawConnectorToolOption != drawConnectorToolOption) {
 			DrawConnectorToolOption oldToolOption = this.drawConnectorToolOption;
 			this.drawConnectorToolOption = drawConnectorToolOption;
+			getInspectedConnectorSpecification().getStyleFactory().setStyleType(drawConnectorToolOption.getConnectorType());
 			prepareDrawConnectorToolController();
 			notifyObservers(new ToolOptionChanged(oldToolOption, drawConnectorToolOption));
 		}
@@ -373,6 +430,15 @@ public abstract class DianaInteractiveEditor<M, F extends DianaViewFactory<F, C>
 	public void setDrawConnectorAction(DrawConnectorAction drawConnectorAction) {
 		this.drawConnectorAction = drawConnectorAction;
 		prepareDrawConnectorToolController();
+	}
+
+	public DrawShapeAction getDrawTextAction() {
+		return drawTextAction;
+	}
+
+	public void setDrawTextAction(DrawShapeAction drawTextAction) {
+		this.drawTextAction = drawTextAction;
+		prepareDrawTextToolController();
 	}
 
 	public void activatePalette(DianaPalette<?, ?> aPalette) {

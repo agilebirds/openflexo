@@ -30,18 +30,22 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.control.tools.DrawClosedCurveToolController;
+import org.openflexo.fge.control.tools.DrawComplexCurveToolController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.fge.swing.view.JDrawingView;
 
-public class JDrawClosedCurveToolController extends DrawClosedCurveToolController<MouseEvent> {
+/**
+ * Swing implementation for the controller of the Complex Curve drawing tool<br>
+ * As swing component, this controller is driven by {@link MouseEvent}
+ * 
+ * @author sylvain
+ */
+public class JDrawComplexCurveToolController extends DrawComplexCurveToolController<MouseEvent> {
 
-	private static final Logger logger = Logger.getLogger(JDrawClosedCurveToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JDrawComplexCurveToolController.class.getPackage().getName());
 
-	private boolean isBuildingPoints;
-
-	public JDrawClosedCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
+	public JDrawComplexCurveToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control, boolean isClosedCurve) {
 		super(controller, control, isClosedCurve);
 	}
 
@@ -62,6 +66,9 @@ public class JDrawClosedCurveToolController extends DrawClosedCurveToolControlle
 		return getDrawingView().getFocusRetriever().getFocusedObject(e);
 	}
 
+	/**
+	 * Return point where event occurs, relative to DrawingView
+	 */
 	public FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		return new FGEPoint(pt.getX(), pt.getY());

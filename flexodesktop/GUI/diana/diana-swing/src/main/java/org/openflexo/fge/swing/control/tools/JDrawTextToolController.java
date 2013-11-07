@@ -27,27 +27,23 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor;
 import org.openflexo.fge.control.actions.DrawShapeAction;
-import org.openflexo.fge.control.tools.DrawPolygonToolController;
+import org.openflexo.fge.control.tools.DrawTextToolController;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.swing.graphics.JFGEGeometricGraphics;
 import org.openflexo.fge.swing.view.JDrawingView;
 
 /**
- * Swing implementation for the controller of the Polygon drawing tool<br>
+ * Swing implementation for the controller of the DrawText tool<br>
  * As swing component, this controller is driven by {@link MouseEvent}
  * 
  * @author sylvain
  */
-public class JDrawPolygonToolController extends DrawPolygonToolController<MouseEvent> {
+public class JDrawTextToolController extends DrawTextToolController<MouseEvent> {
 
-	private static final Logger logger = Logger.getLogger(JDrawPolygonToolController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(JDrawTextToolController.class.getPackage().getName());
 
-	private boolean isBuildingPoints;
-
-	public JDrawPolygonToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
+	public JDrawTextToolController(DianaInteractiveEditor<?, ?, ?> controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
@@ -60,10 +56,6 @@ public class JDrawPolygonToolController extends DrawPolygonToolController<MouseE
 		return (JDrawingView<?>) super.getDrawingView();
 	}
 
-	public boolean isFinalizationEvent(MouseEvent e) {
-		return e.getClickCount() == 2 || e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3;
-	}
-
 	public DrawingTreeNode<?, ?> getFocusedObject(MouseEvent e) {
 		return getDrawingView().getFocusRetriever().getFocusedObject(e);
 	}
@@ -74,20 +66,5 @@ public class JDrawPolygonToolController extends DrawPolygonToolController<MouseE
 	public FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getDrawingView());
 		return new FGEPoint(pt.getX(), pt.getY());
-
-		// return getCurrentEditedShape().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(),
-		// getController().getScale());
-	}
-
-	@Override
-	public JFGEGeometricGraphics makeGraphics(ForegroundStyle foregroundStyle) {
-		JFGEGeometricGraphics returned = new JFGEGeometricGraphics(getCurrentEditedShape(), getDrawingView());
-		returned.setDefaultForeground(foregroundStyle);
-		return returned;
-	}
-
-	@Override
-	public JFGEGeometricGraphics getGraphics() {
-		return (JFGEGeometricGraphics) super.getGraphics();
 	}
 }
