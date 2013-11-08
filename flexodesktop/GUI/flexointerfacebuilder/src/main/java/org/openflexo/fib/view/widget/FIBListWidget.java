@@ -24,7 +24,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -58,7 +57,6 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		}
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
 		_list.addFocusListener(this);
-		_list.setBorder(BorderFactory.createEtchedBorder());
 
 		// _list.setMinimumSize(new Dimension(60,60));
 		// _list.setPreferredSize(new Dimension(60,60));

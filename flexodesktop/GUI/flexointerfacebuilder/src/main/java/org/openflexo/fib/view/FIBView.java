@@ -36,6 +36,7 @@ import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizationListener;
@@ -175,7 +176,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 						getComponent().getHorizontalScrollbarPolicy().getPolicy());
 				scrolledComponent.setOpaque(false);
 				scrolledComponent.getViewport().setOpaque(false);
-				scrolledComponent.setBorder(BorderFactory.createEmptyBorder());
+				if (getComponent() instanceof FIBContainer) {
+					scrolledComponent.setBorder(BorderFactory.createEmptyBorder());
+				}
 			}
 			return scrolledComponent;
 		} else {
@@ -389,11 +392,19 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateBackgroundColor() {
-		getJComponent().setBackground(getComponent().getBackgroundColor());
+		if (getComponent().getBackgroundColor() != null) {
+			getJComponent().setBackground(getComponent().getBackgroundColor());
+		} else {
+			getJComponent().updateUI();
+		}
 	}
 
 	protected void updateForegroundColor() {
-		getJComponent().setForeground(getComponent().getForegroundColor());
+		if (getComponent().getForegroundColor() != null) {
+			getJComponent().setForeground(getComponent().getForegroundColor());
+		} else {
+			getJComponent().updateUI();
+		}
 	}
 
 	public static boolean equals(Object o1, Object o2) {

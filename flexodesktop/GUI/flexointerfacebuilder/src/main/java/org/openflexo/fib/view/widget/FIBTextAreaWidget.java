@@ -239,7 +239,7 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 						.getHorizontalScrollbarPolicy().getPolicy());
 				scrollPane.setOpaque(false);
 				scrollPane.getViewport().setOpaque(false);
-				scrollPane.setBorder(BorderFactory.createEmptyBorder());
+				// scrollPane.setBorder(BorderFactory.createEmptyBorder());
 			}
 			panel.add(scrollPane);
 			return panel;
