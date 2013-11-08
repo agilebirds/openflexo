@@ -9,7 +9,7 @@
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.wkf.Role" label="role.name" icon="controller.getIconForRole(role)" imageIconFile="../Resources/WKF/SmallRole.gif" isEditable="false" filtered="false" defaultVisible="true" name="role" />
   </Browser>
-  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)" useScrollBar="false" opaque="false">
+  <Panel layout="buttons" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)" useScrollBar="false" opaque="false">
     <Button action="controller.apply()" buttonType="Trigger" label="apply" constraints="flow(index=0)" useScrollBar="false" localize="true" enable="(data.selectedObject != null)" />
     <Button action="controller.cancel()" buttonType="Trigger" label="cancel" constraints="flow(index=1)" useScrollBar="false" localize="true" />
     <Button action="controller.reset()" buttonType="Trigger" label="reset" constraints="flow(index=2)" useScrollBar="false" localize="true" />

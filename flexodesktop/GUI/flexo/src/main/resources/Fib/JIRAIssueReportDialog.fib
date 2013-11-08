@@ -23,11 +23,9 @@
     <CheckBox selected="false" index="17" data="data.isSendProject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="sendCurrentProject" localize="true" />
     <Label label="Attach file" index="18" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
     <File mode="OpenMode" isDirectory="false" index="19" data="data.attachFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="attachFile" localize="true" />
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="20" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false">
-      <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="20" constraints="flow(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false">
+    <Panel layout="buttons" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="20" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false">
         <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Send" localize="true" enable="((((data.issue.issuetype != null) &amp; (data.issue.summary != null)) &amp; (data.issue.description != null)) &amp; ((!(data.issue.summary.trim.isEmpty)) &amp; (!(data.issue.description.trim.isEmpty))))" index="0" constraints="grid(index=0;x=0;y=0)" name="Send" />
         <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" localize="true" index="0" constraints="grid(index=1;x=1;y=0)" />
-      </Panel>
     </Panel>
   </Panel>
   <LocalizedDictionary />
