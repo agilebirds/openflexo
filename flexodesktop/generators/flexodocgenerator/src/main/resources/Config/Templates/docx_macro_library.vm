@@ -222,7 +222,11 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
                                     w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
                             </w:rPr>
-                            <w:t>#escape(${button.getLabel()})</w:t>
+                            #set($_label = ${button.getLabel()})
+                            #if(!$_label)
+                                #set($_label = ${button.getCalculatedLabel()})
+                            #end
+                            <w:t>#escape($_label)</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
@@ -489,7 +493,7 @@
             </w:tr>
             
 #foreach($field in $fieldList)
-    #if(!$button.getDontGenerate())
+    #if(!$field.getDontGenerate())
             <w:tr w:rsidR="00C6320A">
                 <w:trPr>
                     <w:cnfStyle w:val="000000100000" />
@@ -515,7 +519,11 @@
                                     w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi" />
                                 <w:color w:val="auto" />
                             </w:rPr>
-                            <w:t>#escape(${field.getLabel()})</w:t>
+                            #set($_label = ${field.getLabel()})
+                            #if(!$_label)
+                                #set($_label = ${field.getCalculatedLabel()})
+                            #end
+                            <w:t>#escape($_label)</w:t>
                         </w:r>
                     </w:p>
                 </w:tc>
