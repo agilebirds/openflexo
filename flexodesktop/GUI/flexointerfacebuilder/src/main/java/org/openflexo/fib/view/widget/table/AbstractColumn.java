@@ -39,6 +39,8 @@ import org.openflexo.fib.model.FIBTableColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
+import com.google.common.primitives.Primitives;
+
 public abstract class AbstractColumn<T> implements BindingEvaluationContext, Observer {
 
 	private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
@@ -156,7 +158,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	public final Class<T> getValueClass() {
-		return TypeUtils.getBaseClass(getColumnModel().getDataClass());
+		return Primitives.wrap(TypeUtils.getBaseClass(getColumnModel().getDataClass()));
 	}
 
 	public synchronized T getValueFor(final Object object) {
