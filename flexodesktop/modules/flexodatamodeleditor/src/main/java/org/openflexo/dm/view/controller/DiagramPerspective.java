@@ -63,28 +63,13 @@ public class DiagramPerspective extends DMPerspective {
 		browser.setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
 		browser.setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
 		browser.setDMViewMode(DMViewMode.Diagrams);
-		browserView = new DMBrowserView(browser, controller) {
-			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
-				super.treeDoubleClick(object);
-				if (object instanceof ERDiagram) {
-					focusOnDiagram((ERDiagram) object);
-				}
-			}
-
-		};
+		browserView = new DMBrowserView(browser, controller);
 		diagramBrowser = new DiagramBrowser(controller);
 		diagramBrowserView = new DMBrowserView(diagramBrowser, controller);
 		setTopLeftView(browserView);
 		setBottomLeftView(diagramBrowserView);
 		infoLabel = new JLabel("ALT-drag to define inheritance, CTRL-drag to define properties");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
-	}
-
-	public void focusOnDiagram(ERDiagram diagram) {
-		diagramBrowser.deleteBrowserListener(browserView);
-		diagramBrowser.setRepresentedDiagram(diagram);
-		diagramBrowser.addBrowserListener(browserView);
 	}
 
 	/**
@@ -167,7 +152,7 @@ public class DiagramPerspective extends DMPerspective {
 		super.notifyModuleViewDisplayed(moduleView);
 		if (moduleView instanceof DiagramView) {
 			DiagramView diagram = (DiagramView) moduleView;
-			browser.setRootObject(diagram.getRepresentedObject());
+			diagramBrowser.setRootObject(diagram.getRepresentedObject());
 		}
 	}
 

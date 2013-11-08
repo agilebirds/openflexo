@@ -81,7 +81,6 @@ public class DiagramView extends DrawingView<ERDiagramRepresentation> implements
 
 	@Override
 	public void willShow() {
-		getPerspective().focusOnDiagram(getRepresentedObject());
 	}
 
 	/*private DrawRoleSpecializationAction _drawRoleSpecializationAction;
