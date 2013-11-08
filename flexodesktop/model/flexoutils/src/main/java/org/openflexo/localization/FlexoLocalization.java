@@ -458,22 +458,27 @@ public class FlexoLocalization {
 	}
 
 	private static String valueForKeyAndObject(String key, Object object) {
-
-		try {
-			// Object objectForKey = BindingEvaluator.evaluateBinding(key, object);
-			Object objectForKey = KeyValueDecoder.valueForKey(object, key);
-			if (objectForKey != null) {
-				return objectForKey.toString();
-			} else {
+		if (key == null) {
+			return key;
+		}
+		String[] keys = key.split("\\.");
+		for (String k : keys) {
+			try {
+				object = KeyValueDecoder.objectForKey(object, k);
+			} catch (InvalidObjectSpecificationException e) {
+				logger.warning(e.getMessage());
+				return key;
+			}
+			if (object == null) {
 				return "";
 			}
-		} catch (InvalidObjectSpecificationException e) {
-			logger.warning(e.getMessage());
-			return key;
-			/*
-			 * }catch (InvalidKeyValuePropertyException e) { logger.warning(e.getMessage()); return key;
-			 */
 		}
+		if (object != null) {
+			return object.toString();
+		} else {
+			return "";
+		}
+
 	}
 
 	public static void clearStoredLocalizedForComponents() {
