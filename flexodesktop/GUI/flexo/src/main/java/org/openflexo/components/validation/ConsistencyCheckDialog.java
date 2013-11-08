@@ -20,8 +20,6 @@
 package org.openflexo.components.validation;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -79,13 +77,8 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		}
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-
-		setSize(600, 500);
-		// setFocusableWindowState(false);
-		validate();
 		pack();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
+		centerDialog();
 	}
 
 	public void setController(FlexoController controller) {
