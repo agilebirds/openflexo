@@ -267,7 +267,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 		// We first unregister all existing observing scheme
 		for (S s : inspectedStyles) {
-			if (s instanceof HasPropertyChangeSupport) {
+			if (s instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) s).getPropertyChangeSupport() != null) {
 				((HasPropertyChangeSupport) s).getPropertyChangeSupport().removePropertyChangeListener(this);
 			}/* else if (s instanceof Observable) {
 				((Observable) s).deleteObserver(this);
@@ -538,6 +538,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		return false;
 	}
 
+	@Override
 	public Object clone() {
 		// Not relevant
 		return this;
