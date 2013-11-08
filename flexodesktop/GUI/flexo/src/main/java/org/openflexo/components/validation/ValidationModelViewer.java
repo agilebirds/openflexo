@@ -22,7 +22,6 @@ package org.openflexo.components.validation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -58,6 +57,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
+import org.openflexo.swing.ButtonLayout;
 
 /**
  * Defines the panel allowing to show and edit a ValidationModel
@@ -240,7 +240,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 		JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane, rulePanel);
 
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
+		controlPanel.setLayout(new ButtonLayout());
 
 		closeButton = new JButton();
 		closeButton.setText(FlexoLocalization.localizedForKey("close", closeButton));

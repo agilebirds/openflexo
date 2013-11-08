@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -74,6 +73,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.ButtonLayout;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -254,7 +254,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, bottomPanel);
 		splitPane.setDividerLocation(0.8);
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
+		controlPanel.setLayout(new ButtonLayout());
 		disableRuleButton = new JButton();
 		disableRuleButton.setText(FlexoLocalization.localizedForKey("disableRule", disableRuleButton));
 		fixButton = new JButton();
