@@ -24,15 +24,30 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.dm.ComponentRepository;
 import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.DMPackage;
+import org.openflexo.foundation.dm.DMProperty;
+import org.openflexo.foundation.dm.DMRepository;
+import org.openflexo.foundation.dm.DMRepositoryFolder;
 import org.openflexo.foundation.dm.DMTranstyper;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMType.KindOfType;
 import org.openflexo.foundation.dm.ERDiagram;
+import org.openflexo.foundation.dm.ExternalRepository;
+import org.openflexo.foundation.dm.JDKRepository;
+import org.openflexo.foundation.dm.ProcessBusinessDataRepository;
+import org.openflexo.foundation.dm.ProcessInstanceRepository;
+import org.openflexo.foundation.dm.WORepository;
+import org.openflexo.foundation.dm.eo.DMEOAttribute;
+import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOJoin;
+import org.openflexo.foundation.dm.eo.DMEORelationship;
+import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -114,7 +129,11 @@ public class DMEIconLibrary extends IconLibrary {
 		} else if (object instanceof DMEntity) {
 			DMEntity entity = (DMEntity) object;
 			if (entity.getIsNormalClass()) {
-				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
+				if (entity instanceof DMEOEntity) {
+					return DMEIconLibrary.EOENTITY_ICON;
+				} else {
+					return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
+				}
 			} else if (entity.getIsInterface()) {
 				return DMEIconLibrary.DM_ENTITY_INTERFACE_ICON;
 			} else if (entity.getIsEnumeration()) {
@@ -127,6 +146,38 @@ public class DMEIconLibrary extends IconLibrary {
 			return DMEIconLibrary.DM_TRANSTYPER_ICON;
 		} else if (object instanceof DMTranstyperEntry) {
 			return DMEIconLibrary.DM_TRANSTYPER_ENTRY_ICON;
+		} else if (object instanceof DMRepositoryFolder) {
+			return DMEIconLibrary.DM_REPOSITORY_FOLDER_ICON;
+		} else if (object instanceof DMRepository) {
+			if (object instanceof DMEORepository) {
+				return DMEIconLibrary.DM_EOREPOSITORY_ICON;
+			} else if (object instanceof JDKRepository) {
+				return DMEIconLibrary.JDK_REPOSITORY_ICON;
+			} else if (object instanceof WORepository) {
+				return DMEIconLibrary.WO_REPOSITORY_ICON;
+			} else if (object instanceof ComponentRepository) {
+				return DMEIconLibrary.COMPONENT_REPOSITORY_ICON;
+			} else if (object instanceof ProcessInstanceRepository) {
+				return DMEIconLibrary.PROCESS_INSTANCE_REPOSITORY_ICON;
+			} else if (object instanceof ProcessBusinessDataRepository) {
+				return DMEIconLibrary.PROCESS_BUSINESS_DATA_REPOSITORY_ICON;
+			} else if (object instanceof ExternalRepository) {
+				return DMEIconLibrary.DM_JAR_REPOSITORY_ICON;
+			} else {
+				return DMEIconLibrary.DM_REPOSITORY_ICON;
+			}
+		} else if (object instanceof DMPackage) {
+			return DMEIconLibrary.DM_PACKAGE_ICON;
+		} else if (object instanceof DMProperty) {
+			if (object instanceof DMEOAttribute) {
+				return DMEIconLibrary.DM_EOATTRIBUTE_ICON;
+			} else if (object instanceof DMEORelationship) {
+				return DMEIconLibrary.DM_EORELATIONSHIP_ICON;
+			} else {
+				return DMEIconLibrary.DM_PROPERTY_ICON;
+			}
+		} else if (object instanceof DMMethod) {
+			return DMEIconLibrary.DM_METHOD_ICON;
 		}
 		return null;
 	}
