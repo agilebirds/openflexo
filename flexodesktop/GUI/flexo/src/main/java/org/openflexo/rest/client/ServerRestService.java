@@ -228,6 +228,9 @@ public class ServerRestService implements HasPropertyChangeSupport {
 				}
 			}
 			String uuid = history.getJobResult();
+			if (uuid == null) {
+				return true; // No result, nothing we can do about it
+			}
 			ClientResponse response = client.files(createClient, client.getBASE_URI()).getAsOctetStream(uuid, ClientResponse.class);
 			if (response.getStatus() >= 400) {
 				String message = "";

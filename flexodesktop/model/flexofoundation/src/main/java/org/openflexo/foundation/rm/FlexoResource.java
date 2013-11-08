@@ -775,6 +775,9 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 	}
 
 	public void setLastSynchronizedWithResource(FlexoResource aResource, Date aDate) {
+		if (aResource == null) {
+			return;
+		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setLastSynchronizedWithResource " + aResource + " with " + aDate);
 		}

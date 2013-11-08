@@ -789,6 +789,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 				FlexoResource<? extends FlexoResourceData> tempBSResource = entry.getResource();
 				FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
 						.getResourceIdentifier());
+				if (originResource == null) {
+					return;
+				}
 				FlexoResource<? extends FlexoResourceData> bsResource = currentProject.resourceForKey(tempBSResource
 						.getResourceIdentifier());
 				if (bsResource != null) {
@@ -800,7 +803,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 				ExternalResource tempBSExternalResource = entry.getExternalResource();
 				FlexoResource<? extends FlexoResourceData> originResource = currentProject.resourceForKey(tempOriginResource
 						.getResourceIdentifier());
-
+				if (originResource == null) {
+					continue;
+				}
 				LastSynchronizedWithResourceEntry newEntry = new LastSynchronizedWithResourceEntry(originResource, new ExternalResource(
 						currentProject, tempBSExternalResource.getProjectURI(), tempBSExternalResource.getResourceIdentifier()),
 						entry.getDate());
