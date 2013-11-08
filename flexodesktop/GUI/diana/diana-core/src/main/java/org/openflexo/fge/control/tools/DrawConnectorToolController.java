@@ -72,6 +72,7 @@ public abstract class DrawConnectorToolController<ME> extends ToolController<ME>
 
 	public abstract FGEConnectorGraphics makeGraphics(ForegroundStyle foregroundStyle);
 
+	@Override
 	public FGEConnectorGraphics getGraphics() {
 		return graphics;
 	}
@@ -84,6 +85,7 @@ public abstract class DrawConnectorToolController<ME> extends ToolController<ME>
 	private ShapeNode<DrawConnectorToolController> cursorNode;
 	protected ConnectorNode<DrawConnectorToolController> connectorNode;
 
+	@Override
 	protected void startMouseEdition(ME e) {
 		drawConnectorEdit = startRecordEdit("Draw connector");
 		super.startMouseEdition(e);
@@ -126,6 +128,7 @@ public abstract class DrawConnectorToolController<ME> extends ToolController<ME>
 
 	}
 
+	@Override
 	protected void stopMouseEdition() {
 		System.out.println(">>>>> Hop, stop mouse edition");
 
@@ -157,6 +160,7 @@ public abstract class DrawConnectorToolController<ME> extends ToolController<ME>
 		}
 	}
 
+	@Override
 	public void delete() {
 		logger.warning("Please implement deletion for DrawConnectorToolController");
 		super.delete();
@@ -183,14 +187,14 @@ public abstract class DrawConnectorToolController<ME> extends ToolController<ME>
 		// System.out.println("mouseDragged() on " + getPoint(e));
 		if (drawEdge && startNode != null) {
 			FGEPoint p = getPoint(e);
-			cursorGR.setX(p.x);
-			cursorGR.setY(p.y);
+			cursorGR.setX(p.x / getController().getScale());
+			cursorGR.setY(p.y / getController().getScale());
 
 			// currentDraggingLocationInDrawingView.x = (int) p.x;
 			// currentDraggingLocationInDrawingView.y = (int) p.y;
 
 			DrawingTreeNode<?, ?> focused = getFocusedObject(e);
-			if ((focused instanceof ShapeNode) && focused != startNode && !startNode.getAncestors().contains(focused)) {
+			if (focused instanceof ShapeNode && focused != startNode && !startNode.getAncestors().contains(focused)) {
 				endNode = (ShapeNode<?>) focused;
 				endNode.setIsFocused(true);
 				((ConnectorNodeImpl<?>) connectorNode).setEndNode((ShapeNodeImpl<?>) endNode);
