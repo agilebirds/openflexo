@@ -38,6 +38,7 @@
 		<module>diana-swing</module>
 		<module>diana-drawing-editor</module>
 		<module>diana-geomedit</module>
+		<module>diana-ppt-editor</module>
     </modules>
 	<dependencyManagement>
 		<dependencies>
