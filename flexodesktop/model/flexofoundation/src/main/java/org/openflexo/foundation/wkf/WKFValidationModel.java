@@ -71,11 +71,11 @@ public class WKFValidationModel extends ValidationModel {
 		super(project, targetType);
 
 		registerRule(new FlexoWorkflow.WorkflowMustHaveARootProcess());
-		registerRule(new FlexoWorkflow.BusinessDataClassMustHaveAStatusColumn());
-		registerRule(new FlexoWorkflow.BusinessDataMustNotBeReadOnly());
+		// registerRule(new FlexoWorkflow.BusinessDataClassMustHaveAStatusColumn());
 
 		registerRule(new WKFObject.WKFObjectMustReferToAProcess());
 
+		registerRule(new FlexoProcess.BusinessDataMustNotBeReadOnly());
 		registerRule(new FlexoProcess.FlexoProcessMustHaveADefaultStatus());
 		registerRule(new FlexoProcess.NonRootProcessShouldBeUsed());
 		registerRule(new FlexoProcess.ProcessHierarchyIsConsistent());

@@ -1249,36 +1249,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		}
 	}
 
-	public static class BusinessDataMustNotBeReadOnly extends ValidationRule<BusinessDataMustNotBeReadOnly, FlexoWorkflow> {
-		public BusinessDataMustNotBeReadOnly() {
-			super(FlexoWorkflow.class, "business_data_class_must_not_be_read_only");
-		}
-
-		@Override
-		public ValidationIssue<BusinessDataMustNotBeReadOnly, FlexoWorkflow> applyValidation(FlexoWorkflow workflow) {
-			for (FlexoProcess p : workflow.getAllLocalFlexoProcesses()) {
-				if (p.getBusinessDataType() == null) {
-					continue;
-				}
-				if (p.getBusinessDataType().getIsReadOnly()) {
-					return new ValidationError<BusinessDataMustNotBeReadOnly, FlexoWorkflow>(this, workflow,
-							"business_data_must_not_be_readonly");
-				}
-			}
-			return null;
-		}
-
-		/**
-		 * Overrides isValidForTarget
-		 * 
-		 * @see org.openflexo.foundation.validation.ValidationRule#isValidForTarget(TargetType)
-		 */
-		@Override
-		public boolean isValidForTarget(TargetType targetType) {
-			return true;
-		}
-	}
-
 	/**
 	 * Overrides getClassNameKey
 	 * 
