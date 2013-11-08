@@ -4595,6 +4595,7 @@ set_($object.name)_role_to_($role.name)=Positionner le r\u00F4le pour l'activite
 set_($object.name)_sub_process_to_($subProcess.name)=Posiionner le sous-processus pour l'activit\u00E9 "($object.name)" \u00E0 "($subProcess.name)"
 set_binding_($bindingName)_to_($bindingValue.stringRepresentation)=Positionner le binding '($bindingName)' \u00E0 la valeur '($bindingValue.stringRepresentation)'
 set_binding_value_to_($bindingValue.stringRepresentation)=Positionner la valeur du binding \u00E0 ($bindingValue.stringRepresentation)
+set_business_data_to_auto_generated_type=Utiliser le type g\u00E9n\u00E9r\u00E9 automatiquement pour la business data
 set_custom_name=Entrer manuellement le nouveau nom de la propri\u00E9t\u00E9
 set_default_status_for_process_($object.process.name)_to_($status.name)=Mettre le statut par d\u00E9faut du processus "($object.process.name)" \u00E0 ($status.name)
 set_default_status_to_($status.name)=Assigner le statut ($status.name) comme statut par d\u00E9faut

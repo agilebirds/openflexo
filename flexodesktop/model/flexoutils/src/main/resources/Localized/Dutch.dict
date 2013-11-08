@@ -4595,6 +4595,7 @@ set_($object.name)_role_to_($role.name)=Bepaal een rol voor de activiteit "($obj
 set_($object.name)_sub_process_to_($subProcess.name)=Bepaal een sub-proces voor de activiteit "($object.name)" aan "($subProcess.name)"
 set_binding_($bindingName)_to_($bindingValue.stringRepresentation)=Link de binding '($bindingName)' aan de waarde '($bindingValue.stringRepresentation)'
 set_binding_value_to_($bindingValue.stringRepresentation)=Zet de binding toe aan de waarde ($bindingValue.stringRepresentation)
+set_business_data_to_auto_generated_type=Set business data to auto-generated type
 set_custom_name=Voer handmatig een nieuwe eigenschap naam in
 set_default_status_for_process_($object.process.name)_to_($status.name)=Bepaal een standaard status voor het proces ($object.process.name) aan ($status.name)
 set_default_status_to_($status.name)=Kies ($status.name) als standaard status

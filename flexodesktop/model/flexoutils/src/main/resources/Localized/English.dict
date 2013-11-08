@@ -4597,6 +4597,7 @@ set_($object.name)_role_to_($role.name)=Set role for activity "($object.name)" t
 set_($object.name)_sub_process_to_($subProcess.name)=Set sub-process for activity "($object.name)" to "($subProcess.name)"
 set_binding_($bindingName)_to_($bindingValue.stringRepresentation)=Set binding '($bindingName)' to '($bindingValue.stringRepresentation)'
 set_binding_value_to_($bindingValue.stringRepresentation)=Set binding value to ($bindingValue.stringRepresentation)
+set_business_data_to_auto_generated_type=Set business data to auto-generated type
 set_custom_name=Enter manually new property name
 set_default_status_for_process_($object.process.name)_to_($status.name)=Set default status for process ($object.process.name) to ($status.name)
 set_default_status_to_($status.name)=Set ($status.name) as default status
