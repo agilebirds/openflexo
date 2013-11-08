@@ -6,7 +6,7 @@
 	<groupId>org.openflexo</groupId>
 	<artifactId>openflexo</artifactId>
 	<packaging>pom</packaging>
-    <version>1.6-SNAPSHOT</version>
+        <version>1.6.1-SNAPSHOT</version>
 	<name>OpenFlexo</name>
 	<organization>
 		<name>${organization.name}</name>
@@ -911,6 +911,32 @@
 				<type>zip</type>
 			</dependency>
 
+			<!--  Powerpoint -->
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>powerpointconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+
 			<!--  MDTUML -->
 
 			<!-- packaging -->
@@ -1201,8 +1227,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>3.5-FINAL</version>
+			  <artifactId>poi-scratchpad</artifactId>
+			  <version>3.10-beta1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.jcraft</groupId>
@@ -1222,12 +1248,12 @@
 			<dependency>
 				<groupId>org.apache.xmlbeans</groupId>
 				<artifactId>xmlbeans-xmlpublic</artifactId>
-				<version>2.2.0</version>
+				<version>2.3.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.xmlbeans</groupId>
 				<artifactId>xmlbeans-xpath</artifactId>
-				<version>2.2.0</version>
+				<version>2.3.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jdt</groupId>
@@ -1323,6 +1349,31 @@
 				<groupId>org.eclipse.emf</groupId>
 				<artifactId>ecore-xmi</artifactId>
 				<version>2.7.0.v20120127</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+		    	<groupId>org.apache.poi</groupId>
+		    	<artifactId>poi-ooxml</artifactId>
+		    	<version>3.8-beta4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>3.10-beta2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.xbean</groupId>
+				<artifactId>xmlbean</artifactId>
+				<version>2.3.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

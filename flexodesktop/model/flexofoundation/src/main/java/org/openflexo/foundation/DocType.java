@@ -38,7 +38,7 @@ import org.openflexo.xmlcode.StringRepresentable;
 public class DocType extends TargetType implements ChoiceList, StringRepresentable {
 
 	public static enum DefaultDocType {
-		Business, Technical, UserManual, Objectives;
+		Business, Technical, UserManual, Objectives, FreeProperties;
 
 		public static boolean isDefaultDocType(String docType, boolean ignoreCase) {
 			for (DefaultDocType defaultDocType : values()) {

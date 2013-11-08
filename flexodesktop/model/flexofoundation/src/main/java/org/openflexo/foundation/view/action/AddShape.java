@@ -96,7 +96,7 @@ public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramEl
 		}
 
 		try {
-			_newShape.setName(getNewShapeName());
+			_newShape.setName("");
 		} catch (InvalidNameException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

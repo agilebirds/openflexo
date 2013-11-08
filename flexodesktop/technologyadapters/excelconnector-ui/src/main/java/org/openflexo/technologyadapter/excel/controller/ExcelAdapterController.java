@@ -4,7 +4,10 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
+import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.gui.ExcelIconLibrary;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
@@ -15,7 +18,10 @@ import org.openflexo.technologyadapter.excel.view.ExcelWorkbookView;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
-import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
@@ -64,9 +70,6 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
-		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForTechnologyObject(ExcelWorkbook.class);
-		}
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForTechnologyObject(ExcelSheet.class);
 		}
@@ -77,6 +80,26 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 			return getIconForTechnologyObject(ExcelRow.class);
 		}
 		return null;
+	}
+	
+	/**
+	 * Return icon representing supplied edition action
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
+		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(ExcelSheet.class), IconLibrary.DUPLICATE);
+		}else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(ExcelCell.class), IconLibrary.DUPLICATE);
+		}else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(getIconForTechnologyObject(ExcelRow.class), IconLibrary.DUPLICATE);
+		}else if (CellStyleAction.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(ExcelIconLibrary.EXCEL_GRAPHICAL_ACTION_ICON, IconLibrary.DUPLICATE);
+		}
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

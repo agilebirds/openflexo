@@ -85,6 +85,7 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 			if (resource != null) {
 				try {
 					resourceData = resource.getResourceData(null);
+					this.resource=resource;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

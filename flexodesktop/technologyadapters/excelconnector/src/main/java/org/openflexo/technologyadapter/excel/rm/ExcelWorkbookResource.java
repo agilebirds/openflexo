@@ -25,11 +25,13 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(ExcelWorkbookResourceImpl.class)
+@XMLElement
 public interface ExcelWorkbookResource extends FlexoFileResource<ExcelWorkbook>, TechnologyAdapterResource<ExcelWorkbook> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";

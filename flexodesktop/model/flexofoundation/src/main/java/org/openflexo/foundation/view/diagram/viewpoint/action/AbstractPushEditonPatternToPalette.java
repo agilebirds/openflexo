@@ -21,6 +21,7 @@ package org.openflexo.foundation.view.diagram.viewpoint.action;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -63,7 +64,7 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 	private EditionPattern editionPattern;
 	public DropScheme dropScheme;
 	private String newElementName;
-	public boolean takeScreenshotForTopLevelElement = false;
+	public boolean takeScreenshotForTopLevelElement = true;
 	public boolean overrideDefaultGraphicalRepresentations = false;
 
 	private ScreenshotImage screenshot;
@@ -99,18 +100,46 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 				gr.setHeight(imageHeight);
 				gr.setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 				gr.setIsFloatingLabel(false);
+				gr.setX(xLocation);
+				gr.setY(yLocation);
 				graphicalRepresentation = gr;
 			} else {
 				GraphicalRepresentation gr = getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
 					graphicalRepresentation = factory.makeShapeGraphicalRepresentation();
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
+					((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
+					((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
 				} else if (gr instanceof ConnectorGraphicalRepresentation) {
 					graphicalRepresentation = factory.makeConnectorGraphicalRepresentation();
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				}
 			}
 
+			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
+			_newPaletteElement.setEditionPattern(editionPattern);
+			_newPaletteElement.setDropScheme(dropScheme);
+			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
+		
+			
+			/*for (DrawingObjectEntry entry : drawingObjectEntries) {
+				if(!entry.isMainEntry()){
+					if (entry.graphicalObject.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+						ShapeGraphicalRepresentation subGr = new ShapeGraphicalRepresentation();
+						ShapeGraphicalRepresentation test = ((ShapeGraphicalRepresentation)graphicalRepresentation);
+						((ShapeGraphicalRepresentation) subGr).setsWith((ShapeGraphicalRepresentation)entry.graphicalObject.getGraphicalRepresentation());
+						List grs = test.getOrderedContainedGraphicalRepresentations();
+						if(grs!=null){
+							grs.add(subGr);
+						}
+						else{
+							grs=new ArrayList();
+						}
+						
+					}
+				}
+			}*/
+			
 			if (overrideDefaultGraphicalRepresentations) {
 				for (DrawingObjectEntry entry : drawingObjectEntries) {
 					if (entry.getSelectThis()) {
@@ -125,16 +154,6 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 					}
 				}
 			}
-
-			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation) graphicalRepresentation).setX(xLocation);
-				((ShapeGraphicalRepresentation) graphicalRepresentation).setY(yLocation);
-			}
-
-			_newPaletteElement = palette.addPaletteElement(newElementName, graphicalRepresentation);
-			_newPaletteElement.setEditionPattern(editionPattern);
-			_newPaletteElement.setDropScheme(dropScheme);
-			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
 
 		} else {
 			logger.warning("Focused role is null !");

@@ -60,6 +60,9 @@ public class ExcelActorReference<T extends ExcelObject> extends ActorReference<T
 	public T retrieveObject() {
 		if (object == null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
+			if(msInstance.getResource()==null){
+				msInstance.getResourceData();
+			}
 			if (msInstance.getResource() != null) {
 				/** Model Slot is responsible for URI mapping */
 				object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);

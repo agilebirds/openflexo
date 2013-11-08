@@ -640,6 +640,21 @@ public abstract class FlexoObject extends FlexoObservable {
 		setChanged();
 		notifyObservers(new DataModification("businessDescription", null, businessDescription));
 	}
+	
+	
+	// PRI REQUIREMENT
+	/**
+	 * @param freePropertiesDescription
+	 */
+	public void setFreePropertiesDescription(String freePropertiesDescription) {
+		if (freePropertiesDescription != null) {
+			setSpecificDescriptionsForKey(freePropertiesDescription, DocType.DefaultDocType.FreeProperties.name());
+		} else {
+			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.FreeProperties.name());
+		}
+		setChanged();
+		notifyObservers(new DataModification("freePropertiesDescription", null, freePropertiesDescription));
+	}
 
 	/**
 	 * @param technicalDescription

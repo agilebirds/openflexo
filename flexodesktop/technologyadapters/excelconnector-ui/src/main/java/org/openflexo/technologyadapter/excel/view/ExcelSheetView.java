@@ -50,12 +50,18 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openflexo.swing.msct.CellSpan;
 import org.openflexo.swing.msct.MultiSpanCellTable;
 import org.openflexo.swing.msct.MultiSpanCellTableModel;
@@ -485,21 +491,37 @@ public class ExcelSheetView extends JPanel {
 			@Override
 			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 				Color oldColor = g.getColor();
-
+				CellStyle cellStyle = cell.getCell().getCellStyle();
 				if (hasTopBorder()) {
-					g.setColor(getColor(cell.getCell().getCellStyle().getTopBorderColor()));
+					if(cellStyle instanceof HSSFCellStyle){
+						g.setColor(getColor(((HSSFCellStyle)cellStyle).getTopBorderColor()));
+					}else if(cellStyle instanceof XSSFCellStyle){
+						g.setColor(getColor(((XSSFCellStyle)cellStyle).getTopBorderXSSFColor()));
+					}
 					g.drawLine(x, y, width - 1, y);
 				}
 				if (hasLeftBorder()) {
-					g.setColor(getColor(cell.getCell().getCellStyle().getLeftBorderColor()));
+					if(cellStyle instanceof HSSFCellStyle){
+						g.setColor(getColor(((HSSFCellStyle)cellStyle).getLeftBorderColor()));
+					}else if(cellStyle instanceof XSSFCellStyle){
+						g.setColor(getColor(((XSSFCellStyle)cellStyle).getLeftBorderXSSFColor()));
+					}
 					g.drawLine(x, y, x, height - 1);
 				}
 				if (hasBottomBorder()) {
-					g.setColor(getColor(cell.getCell().getCellStyle().getBottomBorderColor()));
+					if(cellStyle instanceof HSSFCellStyle){
+						g.setColor(getColor(((HSSFCellStyle)cellStyle).getBottomBorderColor()));
+					}else if(cellStyle instanceof XSSFCellStyle){
+						g.setColor(getColor(((XSSFCellStyle)cellStyle).getBottomBorderXSSFColor()));
+					}
 					g.drawLine(x, height - 1, width - 1, height - 1);
 				}
 				if (hasRightBorder()) {
-					g.setColor(getColor(cell.getCell().getCellStyle().getRightBorderColor()));
+					if(cellStyle instanceof HSSFCellStyle){
+						g.setColor(getColor(((HSSFCellStyle)cellStyle).getRightBorderColor()));
+					}else if(cellStyle instanceof XSSFCellStyle){
+						g.setColor(getColor(((XSSFCellStyle)cellStyle).getRightBorderXSSFColor()));
+					}
 					g.drawLine(width - 1, y, width - 1, height - 1);
 				}
 
@@ -558,14 +580,49 @@ public class ExcelSheetView extends JPanel {
 
 		protected Color getForegroundColor(CellStyle cellStyle) {
 			org.apache.poi.ss.usermodel.Font poiFont = sheet.getWorkbook().getWorkbook().getFontAt(cellStyle.getFontIndex());
-			return getColor(poiFont.getColor());
+			return getFontColor(poiFont);
 		}
 
+		protected Color getFontColor(org.apache.poi.ss.usermodel.Font poiFont){
+			int red = 0;
+			int green = 0;
+			int blue = 0;
+			if (poiFont instanceof HSSFFont)
+			{
+			   HSSFColor color = ((HSSFFont) poiFont).getHSSFColor((HSSFWorkbook) sheet.getWorkbook().getWorkbook());
+			   if(color==null){
+				   return new Color(0,0,0);
+			   }
+			   else{
+				   short[] rgb = color.getTriplet();
+				   red = rgb[0];
+				   green = rgb[1];
+				   blue = rgb[2];
+			   }  
+			}
+			else if (poiFont instanceof XSSFFont)
+			{
+			   XSSFColor color = ((XSSFFont) poiFont).getXSSFColor();
+			   byte[] rgb = color.getRgb();
+			   red = (rgb[0] < 0) ? (rgb[0] + 256) : rgb[0];
+			   green = (rgb[1] < 0) ? (rgb[1] + 256) : rgb[1];
+			   blue = (rgb[2] < 0) ? (rgb[2] + 256) : rgb[2];
+			}
+			return new Color(red, green, blue);	
+		}
+		
 		protected Color getBackgroundColor(CellStyle cellStyle) {
-			Color returned = getColor(cellStyle.getFillForegroundColor());
-			// Hack: don't know why
-			if (cellStyle.getFillBackgroundColor() == 64) {
-				return null;
+			// Two ways of handle colors
+			Color returned = null;
+			if(cellStyle instanceof HSSFCellStyle){
+				returned = getColor(((HSSFCellStyle)cellStyle).getFillForegroundColor());
+				// Hack: don't know why
+				if (cellStyle.getFillBackgroundColor() == 64) {
+					return null;
+				}
+			}
+			if(cellStyle instanceof XSSFCellStyle){
+				returned = getColor(((XSSFCellStyle)cellStyle).getFillForegroundXSSFColor());
 			}
 			return returned;
 		}
@@ -580,7 +637,22 @@ public class ExcelSheetView extends JPanel {
 			short red = rgb[0];
 			short green = rgb[1];
 			short blue = rgb[2];
-			return new Color(red, green, blue);
+			return new Color(red, green, blue);	
+		}
+		
+		private Color getColor(org.apache.poi.ss.usermodel.Color colorIdx) {
+			XSSFColor color = (XSSFColor)colorIdx;
+			if(color==null){
+				return null;
+			}
+			byte[] rgb = color.getRgb();
+			if(rgb==null){
+				return new Color(0, 0, 0);	
+			}
+			int red = (rgb[0] < 0) ? (rgb[0] + 256) : rgb[0];
+			int green = (rgb[1] < 0) ? (rgb[1] + 256) : rgb[1];
+			int blue = (rgb[2] < 0) ? (rgb[2] + 256) : rgb[2];
+			return new Color(red, green, blue);	
 		}
 	}
 

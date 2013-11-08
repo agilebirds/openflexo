@@ -200,7 +200,6 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 		} finally {
 			ProgressWindow.hideProgressWindow();
 		}
-		ProgressWindow.hideProgressWindow();
 
 		System.out.println("Je notifie que le project vient d'etre charge");
 		getServiceManager().notify(this, new ProjectLoaded(editor.getProject()));

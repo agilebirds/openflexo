@@ -180,7 +180,7 @@ public class MySchemaTypeSystemCompiler {
 			}
 
 			// deal with imports and includes
-			StscImporter.SchemaToProcess[] schemasAndChameleons = StscImporter.resolveImportsAndIncludes(startWith);
+			StscImporter.SchemaToProcess[] schemasAndChameleons = StscImporter.resolveImportsAndIncludes(startWith,false);
 
 			// call the translator so that it may also perform magic
 			StscTranslator.addAllDefinitions(schemasAndChameleons);

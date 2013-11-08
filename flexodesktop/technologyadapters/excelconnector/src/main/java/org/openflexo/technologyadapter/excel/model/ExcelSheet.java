@@ -1,9 +1,7 @@
 package org.openflexo.technologyadapter.excel.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,9 +14,6 @@ import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
  * 
  */
 public class ExcelSheet extends ExcelObject {
-
-	private Map<ExcelProperty, ExcelPropertyValue> values = new HashMap<ExcelProperty, ExcelPropertyValue>();
-
 	private Sheet sheet;
 	private ExcelWorkbook workbook;
 	private List<ExcelRow> excelRows;
@@ -35,7 +30,6 @@ public class ExcelSheet extends ExcelObject {
 		this.workbook = workbook;
 		excelRows = new ArrayList<ExcelRow>();
 		evaluator = workbook.getWorkbook().getCreationHelper().createFormulaEvaluator();
-		addToPropertyValue(new ExcelProperty("Name", adapter), sheet.getSheetName());
 	}
 
 	public FormulaEvaluator getEvaluator() {
@@ -97,29 +91,11 @@ public class ExcelSheet extends ExcelObject {
 		}
 		return getRowAt(row).getCellAt(column);
 	}
-
+	
 	@Override
-	public List<? extends ExcelPropertyValue> getPropertyValues() {
-		ArrayList<ExcelPropertyValue> returned = new ArrayList<ExcelPropertyValue>();
-		returned.addAll(values.values());
-		return returned;
-	}
-
-	@Override
-	public ExcelPropertyValue getPropertyValue(ExcelProperty property) {
-		return values.get(property);
-	}
-
-	@Override
-	public ExcelPropertyValue addToPropertyValue(ExcelProperty property, Object newValue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExcelPropertyValue removeFromPropertyValue(ExcelProperty property, Object valueToRemove) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getUri() {
+		String uri = getWorkbook().getUri()+"Sheet="+getName();
+		return uri;
 	}
 
 }

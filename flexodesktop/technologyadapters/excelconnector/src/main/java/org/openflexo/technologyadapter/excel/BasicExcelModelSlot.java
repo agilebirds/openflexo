@@ -43,16 +43,18 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
-import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell;
 
 /**
  * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
@@ -62,20 +64,22 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
-@DeclarePatternRole(FML = "ExcelWorkbook", patternRoleClass = ExcelWorkbookPatternRole.class), // Workbook
-		@DeclarePatternRole(FML = "ExcelSheet", patternRoleClass = ExcelSheetPatternRole.class), // Sheet
+@DeclarePatternRole(FML = "ExcelSheet", patternRoleClass = ExcelSheetPatternRole.class), // Sheet
 		@DeclarePatternRole(FML = "ExcelColumn", patternRoleClass = ExcelColumnPatternRole.class), // Sheet
 		@DeclarePatternRole(FML = "ExcelRow", patternRoleClass = ExcelRowPatternRole.class), // Row
 		@DeclarePatternRole(FML = "ExcelCell", patternRoleClass = ExcelCellPatternRole.class) // Cell
 })
 @DeclareEditionActions({ // All edition actions available through this model slot
-@DeclareEditionAction(FML = "AddExcelWorkbook", editionActionClass = AddExcelWorkbook.class), // Add workbook
 		@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
 		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
-		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class) // Add sheet
+		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class), // Add sheet
+		@DeclareEditionAction(FML = "CellStyleAction", editionActionClass = CellStyleAction.class) // Cell Style
 })
 @DeclareFetchRequests({ // All requests available through this model slot
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class) })
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), //Select Excel Sheet
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelRow.class),  //Select Excel Row
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class)  //Select Excel Cell
+})
 public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
@@ -90,6 +94,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	public BasicExcelModelSlot(VirtualModelBuilder builder) {
 		super(builder);
+		uriProcessor = new BasicExcelModelSlotURIProcessor();
 	}
 
 	@Override
@@ -109,9 +114,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelSheetPatternRole(null);
-		} else if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelWorkbookPatternRole(null);
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		}  else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelCellPatternRole(null);
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelRowPatternRole(null);
@@ -122,9 +125,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "workbook";
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "cell";
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "row";
@@ -146,13 +147,13 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelSheet(null);
-		} else if (AddExcelWorkbook.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelWorkbook(null);
 		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelCell(null);
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelRow(null);
-		} else {
+		} else if (CellStyleAction.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new CellStyleAction(null);
+		}else {
 			return null;
 		}
 	}
@@ -166,7 +167,11 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectExcelSheet.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelSheet(null);
-		} else {
+		} else if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectExcelCell(null);
+		} else if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectExcelRow(null);
+		}else {
 			return null;
 		}
 	}
@@ -197,9 +202,14 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	}
 
 	@Override
-	public TechnologyAdapterResource<ExcelWorkbook> createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExcelTechnologyAdapter getTechnologyAdapter() {
+		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
+	}
+	
+	
+	@Override
+	public ExcelWorkbookResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
+		return getTechnologyAdapter().createNewWorkbook(view.getProject(),filename, modelUri);
 	}
 
 	@Override

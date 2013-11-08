@@ -36,7 +36,8 @@ public class ExcelIconLibrary {
 
 	public static final ImageIconResource EXCEL_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/ExcelBig.png");
 	public static final ImageIconResource EXCEL_TECHNOLOGY_ICON = new ImageIconResource("Icons/ExcelSmall.png");
-
+	public static final ImageIconResource EXCEL_GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/GraphicalActionIcon.png");
+	
 	public static ImageIcon iconForObject(Class<? extends TechnologyObject> objectClass) {
 		if (ExcelWorkbook.class.isAssignableFrom(objectClass)) {
 			return EXCEL_TECHNOLOGY_ICON;
@@ -46,7 +47,7 @@ public class ExcelIconLibrary {
 			return EXCEL_TECHNOLOGY_ICON;
 		} else if (ExcelRow.class.isAssignableFrom(objectClass)) {
 			return EXCEL_TECHNOLOGY_ICON;
-		}
+		} 
 		logger.warning("No icon for " + objectClass);
 		return null;
 	}

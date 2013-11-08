@@ -89,19 +89,19 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 		} else {
 			newRepository = TOCRepository.createTOCRepositoryForDocType(getData(), getDocType());
 		}
+		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0) {
+			setRepositoryName(newRepository.getTitle());
+		}
+
 		if (getDocType() != null) {
 			newRepository.setDocType(getDocType());
 		}
-		String attempt = newRepository.getTitle();
+		String attempt = getRepositoryName();
 		int i = 1;
-		boolean updateTitle = false;
 		while (getData().getRepositoryWithTitle(attempt) != null) {
-			updateTitle = true;
-			attempt = newRepository.getTitle() + "-" + i++;
+			attempt = getRepositoryName() + "-" + i++;
 		}
-		if (updateTitle) {
-			newRepository.setTitle(attempt);
-		}
+		newRepository.setTitle(attempt);
 		if (docType == null) {
 			String docTypeName = newRepository.getDocTypeAsString();
 			DocType docType = getProject().getDocTypeNamed(docTypeName);

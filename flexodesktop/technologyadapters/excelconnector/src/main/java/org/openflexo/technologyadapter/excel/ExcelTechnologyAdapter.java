@@ -28,6 +28,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
 import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
@@ -166,7 +167,6 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		ExcelWorkbookResource wbResource = null;
 
 		// TODO: try to look-up already found file
-
 		wbResource = ExcelWorkbookResourceImpl.retrieveExcelWorkbookResource(workbookFile, getTechnologyContextManager());
 
 		return wbResource;
@@ -217,6 +217,29 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		ExcelWorkbookRepository returned = new ExcelWorkbookRepository(this, resourceCenter);
 		resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
 		return returned;
+	}
+	
+	
+	/**
+	 * Create empty model.
+	 * 
+	 * @param modelFile
+	 * @param modelUri
+	 * @param metaModelResource
+	 * @param technologyContextManager
+	 * @return
+	 */
+	public ExcelWorkbookResource createNewWorkbook(FlexoProject project, String excelFilename, String modelUri) {
+
+		File excelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), excelFilename);
+
+		modelUri = excelFile.toURI().toString();
+
+		ExcelWorkbookResource workbookResource = ExcelWorkbookResourceImpl.makeExcelWorkbookResource(modelUri, excelFile, getTechnologyContextManager());
+
+		getTechnologyContextManager().registerResource(workbookResource);
+
+		return workbookResource;
 	}
 
 }

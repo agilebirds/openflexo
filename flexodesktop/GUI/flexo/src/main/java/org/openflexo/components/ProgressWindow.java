@@ -142,7 +142,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	};
 
-	public static ProgressWindow makeProgressWindow(String title, int steps) {
+	public synchronized static ProgressWindow makeProgressWindow(String title, int steps) {
 		if (_instance != null) {
 			logger.warning("Invoke creation of new progress window while an other one is displayed. Using old one.");
 		} else {
@@ -263,13 +263,16 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 			}
 		}
 		super.setVisible(b);
+		if (b) {
+			_instance = this;
+		}
 	}
 
 	public static void showProgressWindow(String title, int steps) {
 		showProgressWindow(getActiveModuleFrame(), title, steps);
 	}
 
-	public static void showProgressWindow(Frame owner, String title, int steps) {
+	public synchronized static void showProgressWindow(Frame owner, String title, int steps) {
 		if (_instance != null) {
 			logger.warning("Try to open another ProgressWindow !!!!");
 		} else {
@@ -277,7 +280,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public static void hideProgressWindow() {
+	public synchronized static void hideProgressWindow() {
 		if (_instance != null) {
 			_instance.hideWindow();
 			_instance = null;
@@ -394,7 +397,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		paintImmediately();
 	}
 
-	public static void setProgressInstance(String stepName) {
+	public synchronized static void setProgressInstance(String stepName) {
 		if (instance() != null) {
 			if (!instance().isVisible()) {
 				instance().setVisible(true);
@@ -403,13 +406,13 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		}
 	}
 
-	public static void resetSecondaryProgressInstance(int steps) {
+	public synchronized static void resetSecondaryProgressInstance(int steps) {
 		if (instance() != null) {
 			instance().resetSecondaryProgress(steps);
 		}
 	}
 
-	public static void setSecondaryProgressInstance(String stepName) {
+	public synchronized static void setSecondaryProgressInstance(String stepName) {
 		if (instance() != null) {
 			instance().setSecondaryProgress(stepName);
 		}

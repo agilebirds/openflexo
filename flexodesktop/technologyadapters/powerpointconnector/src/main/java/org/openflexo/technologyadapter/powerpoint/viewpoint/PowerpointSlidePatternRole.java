@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.excel.viewpoint;
+package org.openflexo.technologyadapter.powerpoint.viewpoint;
 
 import java.lang.reflect.Type;
 
@@ -25,23 +25,23 @@ import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlide;
 
-public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
+public class PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
 
-	public ExcelWorkbookPatternRole(VirtualModelBuilder builder) {
+	public PowerpointSlidePatternRole(VirtualModelBuilder builder) {
 		super(builder);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Type getType() {
-		return ExcelWorkbook.class;
+		return PowerpointSlide.class;
 	}
 
 	@Override
 	public String getPreciseType() {
-		return ExcelWorkbook.class.getName();
+		return PowerpointSlide.class.getSimpleName();
 	}
 
 	@Override
@@ -63,9 +63,9 @@ public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
 	}
 
 	@Override
-	public ActorReference<ExcelWorkbook> makeActorReference(ExcelWorkbook object, EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
+	public ActorReference<PowerpointSlide> makeActorReference(PowerpointSlide object, EditionPatternInstance epi) {
+		return new PowerpointActorReference(object, this, epi);
 	}
+	
 
 }

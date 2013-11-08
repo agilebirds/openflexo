@@ -1,16 +1,17 @@
 package org.openflexo.technologyadapter.excel.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
 /**
@@ -23,8 +24,6 @@ public class ExcelCell extends ExcelObject {
 
 	static final Logger logger = Logger.getLogger(ExcelCell.class.getPackage().getName());
 
-	private Map<ExcelProperty, ExcelPropertyValue> values = new HashMap<ExcelProperty, ExcelPropertyValue>();
-
 	private Cell cell;
 	private ExcelRow excelRow;
 
@@ -33,7 +32,26 @@ public class ExcelCell extends ExcelObject {
 	public enum CellType {
 		Blank, Numeric, String, NumericFormula, StringFormula, Boolean, Error, Empty, Unknown
 	}
+	
+	public enum CellStyleFeature {
+		Foreground, Background, Pattern, Alignment, Font, BorderBottom, BorderTop, BorderLeft, BorderRight
+	}
+	
+	public enum CellBorderStyleFeature {
+		BORDER_DASH_DOT, BORDER_DASH_DOT_DOT, BORDER_DASHED, BORDER_DOTTED, BORDER_DOUBLE, 
+		BORDER_HAIR, BORDER_MEDIUM, BORDER_MEDIUM_DASH_DOT, BORDER_MEDIUM_DASH_DOT_DOT, BORDER_MEDIUM_DASHED,
+		BORDER_NONE, BORDER_SLANTED_DASH_DOT, BORDER_THICK, BORDER_THIN
+	}
 
+	public enum CellAlignmentStyleFeature {
+		ALIGN_CENTER, ALIGN_CENTER_SELECTION, ALIGN_FILL, ALIGN_GENERAL, ALIGN_JUSTIFY, ALIGN_LEFT, ALIGN_RIGHT,
+		VERTICAL_BOTTOM, VERTICAL_CENTER, VERTICAL_JUSTIFY, VERTICAL_TOP
+	}
+	
+	public enum CellFontStyleFeature {
+		ANSI_CHARSET, BOLDWEIGHT_BOLD, BOLDWEIGHT_NORMAL, COLOR_NORMAL, COLOR_RED, DEFAULT_CHARSET, SS_NONE, SS_SUB, SS_SUPER, SYMBOL_CHARSET, U_DOUBLE, U_DOUBLE_ACCOUNTING, U_NONE, U_SINGLE, U_SINGLE_ACCOUNTING
+	}
+	
 	public Cell getCell() {
 		return cell;
 	}
@@ -72,30 +90,6 @@ public class ExcelCell extends ExcelObject {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return "ROW:" + cell.getRowIndex() + "/" + "COL:" + cell.getColumnIndex();
-	}
-
-	@Override
-	public List<? extends ExcelPropertyValue> getPropertyValues() {
-		ArrayList<ExcelPropertyValue> returned = new ArrayList<ExcelPropertyValue>();
-		returned.addAll(values.values());
-		return returned;
-	}
-
-	@Override
-	public ExcelPropertyValue getPropertyValue(ExcelProperty property) {
-		return values.get(property);
-	}
-
-	@Override
-	public ExcelPropertyValue addToPropertyValue(ExcelProperty property, Object newValue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExcelPropertyValue removeFromPropertyValue(ExcelProperty property, Object valueToRemove) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void merge(CellRangeAddress cellRange) {
@@ -378,6 +372,10 @@ public class ExcelCell extends ExcelObject {
 		getExcelSheet().getEvaluator().clearAllCachedResultValues();
 	}
 
+	private CellValue evaluateFormula(){
+		return getExcelSheet().getEvaluator().evaluate(cell);
+	}
+	
 	protected void createCellWhenNonExistant() {
 		if (cell == null) {
 			getExcelRow().createRowWhenNonExistant();
@@ -391,6 +389,7 @@ public class ExcelCell extends ExcelObject {
 
 		if (value.startsWith("=")) {
 			setCellFormula(value);
+			setCellValue(evaluateFormula().formatAsString());
 			return;
 		}
 		if (value.equalsIgnoreCase("true")) {
@@ -412,36 +411,6 @@ public class ExcelCell extends ExcelObject {
 			getExcelSheet().getEvaluator().clearAllCachedResultValues();
 			return;
 		}
-		/*
-				switch (getCellType()) {
-				case Blank:
-					cell.setCellValue(value);
-					getExcelSheet().getEvaluator().clearAllCachedResultValues();
-					break;
-				case Boolean:
-					cell.setCellValue(Boolean.parseBoolean(value));
-					getExcelSheet().getEvaluator().clearAllCachedResultValues();
-					break;
-				case Numeric:
-					cell.setCellValue(Double.parseDouble(value));
-					getExcelSheet().getEvaluator().clearAllCachedResultValues();
-					break;
-				case NumericFormula:
-					setCellFormula(value);
-					break;
-				case String:
-					cell.setCellValue(value);
-					getExcelSheet().getEvaluator().clearAllCachedResultValues();
-					break;
-				case StringFormula:
-					setCellFormula(value);
-					break;
-				case Empty:
-					// TODO: create cell
-					return;
-				default:
-					;
-				}*/
 	}
 
 	/**
@@ -466,7 +435,7 @@ public class ExcelCell extends ExcelObject {
 	 * @return
 	 */
 	public String getCellIdentifier() {
-		return "" + Character.toChars(getColumnIndex() + 65)[0] + (getRowIndex() + 1);
+		return CellReference.convertNumToColString(getColumnIndex());
 	}
 
 	/**
@@ -524,11 +493,139 @@ public class ExcelCell extends ExcelObject {
 		return false;
 	}
 
+	public void setCellStyle(CellStyle style) {
+		if (getCell() != null) {
+			getCell().setCellStyle(style);
+		}
+	}
+	
 	public CellStyle getCellStyle() {
 		if (getCell() != null) {
-			return getCell().getCellStyle();
+			return (CellStyle) getCell().getCellStyle();
 		}
 		return null;
+	}
+	
+	public void setCellStyle(CellStyleFeature cellStyle, Object value) {
+		if (getCell() != null && cellStyle!=null) {
+			
+			// First get the old style
+			CellStyle oldStyle = getCellStyle();
+			// Then create a new style
+			CellStyle newStyle = (CellStyle) getExcelSheet().getWorkbook().getWorkbook().createCellStyle();
+			// Apply the old parameters to the new style
+			newStyle.cloneStyleFrom(oldStyle);
+			// Then apply the new parameter to the new style
+			switch (cellStyle) {
+			case Alignment:
+				newStyle.setAlignment(getPOIAlignmentStyle((CellAlignmentStyleFeature)value));
+				break;
+			case Font:
+				newStyle.setFont((Font)value);
+				break;
+			case BorderBottom:
+				newStyle.setBorderBottom(getPOIBorderStyle((CellBorderStyleFeature)value));
+				break;
+			case BorderLeft:
+				newStyle.setBorderLeft(getPOIBorderStyle((CellBorderStyleFeature)value));
+				break;
+			case BorderRight:
+				newStyle.setBorderRight(getPOIBorderStyle((CellBorderStyleFeature)value));
+				break;
+			case BorderTop:
+				newStyle.setBorderTop(getPOIBorderStyle((CellBorderStyleFeature)value));
+				break;
+			case Foreground:
+				if(value instanceof String){
+					newStyle.setFillForegroundColor(Short.parseShort((String)value));
+				}
+				if(value instanceof Long){
+					newStyle.setFillForegroundColor(((Long)value).shortValue());
+				}
+				else{
+					break;
+				}
+			case Background:
+				if(value instanceof Long){
+					newStyle.setFillForegroundColor(((Long)value).shortValue());
+					newStyle.setFillBackgroundColor(((Long)value).shortValue());
+					newStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+				}
+				else{
+					break;
+				}
+			default:
+				break;
+			}
+			// Set the style of this cell to the new style
+			getCell().setCellStyle(newStyle);
+		}
+		return;
+	}
+	
+	private Short getPOIBorderStyle(CellBorderStyleFeature borderStyle){
+		if(borderStyle.name().equals("BORDER_DASH_DOT")){
+			return CellStyle.BORDER_DASH_DOT;
+		}else if(borderStyle.name().equals("BORDER_DASH_DOT_DOT")){
+			return CellStyle.BORDER_DASH_DOT_DOT;
+		}else if(borderStyle.name().equals("BORDER_DASHED")){
+			return CellStyle.BORDER_DASHED;
+		}else if(borderStyle.name().equals("BORDER_DOTTED")){
+			return CellStyle.BORDER_DOTTED;
+		}else if(borderStyle.name().equals("BORDER_DOUBLE")){
+			return CellStyle.BORDER_DOUBLE;
+		}else if(borderStyle.name().equals("BORDER_HAIR")){
+			return CellStyle.BORDER_HAIR;
+		}else if(borderStyle.name().equals("BORDER_MEDIUM")){
+			return CellStyle.BORDER_MEDIUM;
+		}else if(borderStyle.name().equals("BORDER_MEDIUM_DASH_DOT")){
+			return CellStyle.BORDER_MEDIUM_DASH_DOT;
+		}else if(borderStyle.name().equals("BORDER_MEDIUM_DASH_DOT_DOT")){
+			return CellStyle.BORDER_MEDIUM_DASH_DOT_DOT;
+		}else if(borderStyle.name().equals("BORDER_MEDIUM_DASHED")){
+			return CellStyle.BORDER_MEDIUM_DASHED;
+		}else if(borderStyle.name().equals("BORDER_NONE")){
+			return CellStyle.BORDER_NONE;
+		}else if(borderStyle.name().equals("BORDER_SLANTED_DASH_DOT")){
+			return CellStyle.BORDER_SLANTED_DASH_DOT;
+		}else if(borderStyle.name().equals("BORDER_THICK")){
+			return CellStyle.BORDER_THICK;
+		}else if(borderStyle.name().equals("BORDER_THIN")){
+			return CellStyle.BORDER_THIN;
+		}
+		return null;
+	}
+	
+	private Short getPOIAlignmentStyle(CellAlignmentStyleFeature alignmentStyle){
+		if(alignmentStyle.name().equals("ALIGN_CENTER")){
+			return CellStyle.ALIGN_CENTER;
+		}else if(alignmentStyle.name().equals("ALIGN_CENTER_SELECTION")){
+			return CellStyle.ALIGN_CENTER_SELECTION;
+		}else if(alignmentStyle.name().equals("ALIGN_FILL")){
+			return CellStyle.ALIGN_FILL;
+		}else if(alignmentStyle.name().equals("ALIGN_GENERAL")){
+			return CellStyle.ALIGN_GENERAL;
+		}else if(alignmentStyle.name().equals("ALIGN_JUSTIFY")){
+			return CellStyle.ALIGN_JUSTIFY;
+		}else if(alignmentStyle.name().equals("ALIGN_LEFT")){
+			return CellStyle.ALIGN_LEFT;
+		}else if(alignmentStyle.name().equals("ALIGN_RIGHT")){
+			return CellStyle.ALIGN_RIGHT;
+		}else if(alignmentStyle.name().equals("VERTICAL_BOTTOM")){
+			return CellStyle.VERTICAL_BOTTOM;
+		}else if(alignmentStyle.name().equals("VERTICAL_JUSTIFY")){
+			return CellStyle.VERTICAL_JUSTIFY;
+		}else if(alignmentStyle.name().equals("VERTICAL_CENTER")){
+			return CellStyle.VERTICAL_CENTER;
+		}else if(alignmentStyle.name().equals("VERTICAL_TOP")){
+			return CellStyle.VERTICAL_TOP;
+		}
+		return null;
+	}
+	
+	@Override
+	public String getUri() {
+		return getExcelRow().getUri()+getName();
 	}
 
 }

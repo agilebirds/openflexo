@@ -23,10 +23,13 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.InvalidNameException;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -66,6 +69,7 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 	private DiagramShape _toShape;
 	private String annotation;
 	private DiagramConnector _newConnector;
+	private String newConnectorName;
 
 	private boolean automaticallyCreateConnector = false;
 
@@ -90,6 +94,17 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 			_newConnector = new DiagramConnector(getFromShape().getDiagram(), getFromShape(), getToShape());
 			_newConnector.setDescription(annotation);
 			parent.addToChilds(_newConnector);
+			if(getNewConnectorName()!=null){
+				try {
+					_newConnector.setName(getNewConnectorName());
+				} catch (InvalidNameException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateResourceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Focused role is null !");
@@ -134,6 +149,14 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 
 	public void setAnnotation(String annotation) {
 		this.annotation = annotation;
+	}
+
+	public String getNewConnectorName() {
+		return newConnectorName;
+	}
+
+	public void setNewConnectorName(String newConnectorName) {
+		this.newConnectorName = newConnectorName;
 	}
 
 }

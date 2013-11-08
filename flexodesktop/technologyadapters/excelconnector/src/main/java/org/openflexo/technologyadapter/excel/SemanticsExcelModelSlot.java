@@ -47,12 +47,10 @@ import org.openflexo.technologyadapter.excel.viewpoint.BusinessConceptTypePatter
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
-import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddBusinessConceptInstance;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
 
 /**
  * Implementation of the ModelSlot class for the Excel technology adapter<br>
@@ -97,8 +95,6 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelSheetPatternRole(null);
-		} else if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelWorkbookPatternRole(null);
 		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelCellPatternRole(null);
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -110,9 +106,7 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "workbook";
-		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "cell";
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "row";
@@ -134,9 +128,7 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelSheet(null);
-		} else if (AddExcelWorkbook.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelWorkbook(null);
-		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
+		}  else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelCell(null);
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelRow(null);

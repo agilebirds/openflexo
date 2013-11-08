@@ -4,7 +4,7 @@
   <parent>
   	<groupId>org.openflexo</groupId>
   	<artifactId>technologyadapters</artifactId>
-  	<version>1.6-SNAPSHOT</version>
+  	<version>1.6.1-SNAPSHOT</version>
   </parent>
   <name>Excel technology connector</name>
   <build>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>excelconnector</artifactId>
-		</dependency>
+			</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexo</artifactId>

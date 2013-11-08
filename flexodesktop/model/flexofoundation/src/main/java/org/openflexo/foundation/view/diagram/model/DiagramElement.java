@@ -130,12 +130,14 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 
 	@Override
 	public void setName(String name) throws DuplicateResourceException, InvalidNameException {
-		if (requireChange(name, name)) {
+		if (requireChange(this.name, name)) {
 			String oldName = name;
 			this.name = name;
+			graphicalRepresentation.setText(name);
 			setChanged();
 			notifyObservers(new NameChanged(oldName, name));
 		}
+		
 	}
 
 	public Vector<DiagramElement<?>> getChilds() {

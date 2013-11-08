@@ -59,7 +59,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
+		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
 			if (graphicalRepresentation instanceof DiagramShapeGR) {
 				drawEdge = true;
@@ -71,7 +71,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, final DrawingController controller,
+		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				List<LinkScheme> availableConnectors = new ArrayList<LinkScheme>();
@@ -214,10 +214,10 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
+		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (gr instanceof DiagramShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
 					toShape = (DiagramShapeGR) gr;
 				} else {
@@ -231,14 +231,14 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController controller) {
+		public void paint(Graphics g, DrawingController<?> controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-						fromShape.getShapeSpecification().getShapeSpecification().getCenter(), fromShape, controller.getScale());
+						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());
 				Point to = currentDraggingLocationInDrawingView;
 				if (toShape != null) {
 					to = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
-							toShape.getShapeSpecification().getShapeSpecification().getCenter(), toShape, controller.getScale());
+							toShape.getShape().getShape().getCenter(), toShape, controller.getScale());
 					g.setColor(Color.BLUE);
 				} else {
 					g.setColor(Color.RED);

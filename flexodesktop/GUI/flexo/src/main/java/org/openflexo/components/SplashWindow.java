@@ -74,7 +74,7 @@ public class SplashWindow extends JDialog {
 		getContentPane().add(versionLabel);
 		versionLabel.setBounds(260, 215, 280, 15);
 
-		JLabel urlLabel = new JLabel("<html><u>www.openflexo.com</u></html>", SwingConstants.RIGHT);
+		JLabel urlLabel = new JLabel("<html><u>www.openflexo.org</u></html>", SwingConstants.RIGHT);
 		urlLabel.addMouseListener(new MouseAdapter() {
 
 			/**
@@ -112,7 +112,7 @@ public class SplashWindow extends JDialog {
 		getContentPane().add(urlLabel);
 		urlLabel.setBounds(290, 263, 280, 12);
 
-		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2013, all rights reserved", SwingConstants.RIGHT);
+		JLabel copyrightLabel = new JLabel("(c) Copyright Openflexo, 2013, all rights reserved", SwingConstants.RIGHT);
 		copyrightLabel.setForeground(Color.DARK_GRAY);
 		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
 		getContentPane().add(copyrightLabel);
