@@ -175,7 +175,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, PropertyCh
 	public static GRParameter<Double> ABSOLUTE_TEXT_Y = GRParameter.getGRParameter(GraphicalRepresentation.class, ABSOLUTE_TEXT_Y_KEY,
 			Double.class);
 	public static GRParameter<Boolean> IS_MULTILINE_ALLOWED = GRParameter.getGRParameter(GraphicalRepresentation.class,
-			IS_MULTILINE_ALLOWED_KEY, Boolean.class);
+			IS_MULTILINE_ALLOWED_KEY, Boolean.TYPE);
 	public static GRParameter<Boolean> LINE_WRAP = GRParameter.getGRParameter(GraphicalRepresentation.class, LINE_WRAP_KEY, Boolean.class);
 	public static GRParameter<Boolean> CONTINUOUS_TEXT_EDITING = GRParameter.getGRParameter(GraphicalRepresentation.class,
 			CONTINUOUS_TEXT_EDITING_KEY, Boolean.class);

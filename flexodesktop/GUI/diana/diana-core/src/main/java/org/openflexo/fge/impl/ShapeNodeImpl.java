@@ -328,6 +328,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			} else if (evt.getPropertyName() == GraphicalRepresentation.HORIZONTAL_TEXT_ALIGNEMENT.getName()
 					|| evt.getPropertyName() == GraphicalRepresentation.VERTICAL_TEXT_ALIGNEMENT.getName()) {
 				checkAndUpdateDimensionIfRequired();
+			} else if (evt.getPropertyName() == GraphicalRepresentation.ABSOLUTE_TEXT_X.getName()
+					|| evt.getPropertyName() == GraphicalRepresentation.ABSOLUTE_TEXT_Y.getName()) {
+				checkAndUpdateDimensionIfRequired();
 			} else if (evt.getPropertyName() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINTS.getName()
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.LOCATION_CONSTRAINED_AREA.getName()
 					|| evt.getPropertyName() == ShapeGraphicalRepresentation.DIMENSION_CONSTRAINT_STEP.getName()
