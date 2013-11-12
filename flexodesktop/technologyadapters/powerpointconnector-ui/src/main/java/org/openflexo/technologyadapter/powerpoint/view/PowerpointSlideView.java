@@ -136,7 +136,13 @@ public class PowerpointSlideView extends JPanel {
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
-			slide.getSlide().draw((Graphics2D)g);
+			try{
+				slide.getSlide().draw((Graphics2D)g);
+			}
+			catch(ArrayIndexOutOfBoundsException e){
+				
+			}
+
 		}
 	}
 
