@@ -52,19 +52,18 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 			@Override
 			public void documentWasEdited() {
 				super.documentWasEdited();
-				updateModelFromWidget();
+				//updateModelFromWidget();
 			}
 		};
-		
 		_editor.getHtmlTextPane().addKeyListener(new KeyListener(){
 			@Override
 			public void keyTyped(KeyEvent e) {
-				updateModelFromWidget();
+				//updateModelFromWidget();
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				updateModelFromWidget();
+				//updateModelFromWidget();
 			}
 
 			@Override
