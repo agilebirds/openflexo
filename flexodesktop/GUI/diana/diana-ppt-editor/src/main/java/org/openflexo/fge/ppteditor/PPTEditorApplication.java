@@ -138,7 +138,7 @@ public class PPTEditorApplication {
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(1100, 800));
 		fileChooser = new FlexoFileChooser(frame);
-		fileChooser.setFileFilterAsString("*.ppt");
+		fileChooser.setFileFilterAsString("*.ppt,*.pptx");
 		fileChooser.setCurrentDirectory(new FileResource("ppt"));
 
 		toolFactory = new SwingToolFactory(frame);

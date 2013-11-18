@@ -16,6 +16,7 @@ import org.apache.poi.hslf.model.TextBox;
 import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.model.TextShape;
 import org.apache.poi.hslf.usermodel.RichTextRun;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGECoreUtils;
 import org.openflexo.fge.FGEModelFactory;
@@ -25,6 +26,7 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRProvider.DrawingGRProvider;
 import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureVisitor;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.fge.GraphicalRepresentation.VerticalTextAlignment;
@@ -55,12 +57,19 @@ public class SlideDrawing extends DrawingImpl<Slide> {
 				return drawingGR;
 			}
 		});
+
+		// slideBinding.setDynamicPropertyValue(DrawingGraphicalRepresentation.WIDTH, new DataBinding<Double>(
+		// "drawable.slideShow.pageSize.width"), true);
+		// slideBinding.setDynamicPropertyValue(DrawingGraphicalRepresentation.HEIGHT, new DataBinding<Double>(
+		// "drawable.slideShow.pageSize.height"), true);
+
 		final ShapeGRBinding<AutoShape> autoShapeBinding = bindShape(AutoShape.class, "autoShape", new ShapeGRProvider<AutoShape>() {
 			@Override
 			public ShapeGraphicalRepresentation provideGR(AutoShape drawable, FGEModelFactory factory) {
 				return makeAutoShapeGraphicalRepresentation(drawable);
 			}
 		});
+		autoShapeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.text"), true);
 
 		final ShapeGRBinding<TextBox> textBoxBinding = bindShape(TextBox.class, "textBox", new ShapeGRProvider<TextBox>() {
 			@Override
@@ -68,6 +77,7 @@ public class SlideDrawing extends DrawingImpl<Slide> {
 				return makeTextBoxGraphicalRepresentation(drawable);
 			}
 		});
+		textBoxBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.text"), true);
 
 		final ShapeGRBinding<Picture> pictureBinding = bindShape(Picture.class, "picture", new ShapeGRProvider<Picture>() {
 			@Override
@@ -86,8 +96,9 @@ public class SlideDrawing extends DrawingImpl<Slide> {
 				if (slide.getFollowMasterObjects()) {
 					Shape[] sh = master.getShapes();
 					for (int i = sh.length - 1; i >= 0; i--) {
-						if (MasterSheet.isPlaceholder(sh[i]))
+						if (MasterSheet.isPlaceholder(sh[i])) {
 							continue;
+						}
 						Shape shape = sh[i];
 						if (shape instanceof Picture) {
 							drawShape(pictureBinding, (Picture) shape, slide);
@@ -169,8 +180,6 @@ public class SlideDrawing extends DrawingImpl<Slide> {
 				returned.setTextStyle(textStyle);
 			}
 		}
-
-		returned.setText(textShape.getText());
 
 		returned.setIsFloatingLabel(false);
 		returned.setIsMultilineAllowed(true);
