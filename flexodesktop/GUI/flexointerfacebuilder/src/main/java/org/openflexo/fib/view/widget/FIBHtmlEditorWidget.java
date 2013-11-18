@@ -20,6 +20,8 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +55,23 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 				updateModelFromWidget();
 			}
 		};
+		
+		_editor.getHtmlTextPane().addKeyListener(new KeyListener(){
+			@Override
+			public void keyTyped(KeyEvent e) {
+				updateModelFromWidget();
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				updateModelFromWidget();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateModelFromWidget();
+			}
+		});
 		/* _editor.getDocument().addDocumentListener(new DocumentListener() {
 		     public void changedUpdate(DocumentEvent e)
 		     {
@@ -99,6 +118,7 @@ public class FIBHtmlEditorWidget extends FIBWidgetView<FIBHtmlEditor, MetaphaseE
 		// _editor.selectAll();
 	}
 
+	
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), _editor.getDocument())) {
