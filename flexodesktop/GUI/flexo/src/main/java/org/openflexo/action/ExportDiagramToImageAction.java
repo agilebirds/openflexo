@@ -22,7 +22,6 @@ package org.openflexo.action;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -30,9 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
@@ -89,7 +86,9 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 	
 	private File dest;
 	
-	public boolean saveAsJpeg() {
+	private ImageType imageType;
+	
+	public boolean saveAsImage() {
 		dest = null;
 		JFileChooser chooser = new JFileChooser(){
 			@Override
@@ -118,19 +117,26 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 		};
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_image", chooser));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
-		    chooser.setFileFilter(filter);
+		
+		for(ImageType type : ImageType.values()){
+			FileNameExtensionFilter filter = new FileNameExtensionFilter(type.name(), type.getExtension());
+			 chooser.addChoosableFileFilter(filter);
+		}
+		
+		   
 		int returnVal = chooser.showSaveDialog(null);
 		if (returnVal == JFileChooser.CANCEL_OPTION) {
 			return false;
 		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			if (!chooser.getSelectedFile().getName().toLowerCase().endsWith(".png")) {
-				dest = new File(chooser.getSelectedFile().getAbsolutePath() + ".png");
+			for(ImageType type : ImageType.values()){
+				if (!chooser.getSelectedFile().getName().toLowerCase().endsWith("."+type.getExtension())) {
+					dest = new File(chooser.getSelectedFile().getAbsolutePath() + "."+type.getExtension());
+					imageType = type;
+				}
 			}
-			else{
+			if(imageType==null){
 				dest = chooser.getSelectedFile();
-			//	dest = new File(chooser.getSelectedFile().getAbsolutePath());
 			}	
 		} 
 		if (dest == null) {
@@ -156,7 +162,7 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 	public File saveScreenshot() {
 		logger.info("Saving " + dest);
 		try {
-			ImageUtils.saveImageToFile(getScreenshot().image, dest, ImageType.PNG);
+			ImageUtils.saveImageToFile(getScreenshot().image, dest, imageType);
 			return dest;
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -27,17 +27,24 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.openflexo.toolbox.FileUtils;
+import org.w3c.dom.DOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.w3c.dom.Document;
 
 public class ImageUtils {
 
 	public enum ImageType {
-		JPG, PNG, GIF;
+		JPG, PNG, GIF, SVG;
 
 		public String getExtension() {
 			return name().toLowerCase();
@@ -59,7 +66,18 @@ public class ImageUtils {
 		if (!dest.exists()) {
 			FileUtils.createNewFile(dest);
 		}
-		ImageIO.write(image, type.getExtension(), dest);
+		if(type==ImageType.SVG){
+		    DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+		    String svgNS = "http://www.w3.org/2000/svg";
+		    Document document = domImpl.createDocument(svgNS, "svg", null);
+		    SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+		    svgGenerator.drawRenderedImage(image, null);
+		    svgGenerator.stream(new FileWriter(dest));
+		}
+		else{
+			ImageIO.write(image, type.getExtension(), dest);
+		}
+		
 	}
 
 	public static BufferedImage loadImageFromFile(File source) {

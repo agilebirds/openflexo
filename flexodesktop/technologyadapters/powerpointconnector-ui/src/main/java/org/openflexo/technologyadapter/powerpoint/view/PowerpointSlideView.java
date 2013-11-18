@@ -140,7 +140,7 @@ public class PowerpointSlideView extends JPanel {
 				slide.getSlide().draw((Graphics2D)g);
 			}
 			catch(ArrayIndexOutOfBoundsException e){
-				
+				logger.warning("This slide might contains unparsable comments");
 			}
 
 		}

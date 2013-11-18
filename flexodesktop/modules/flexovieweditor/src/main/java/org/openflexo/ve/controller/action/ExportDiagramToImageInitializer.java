@@ -91,7 +91,7 @@ public class ExportDiagramToImageInitializer extends ActionInitializer<ExportDia
 								(int) gr.getHeight()));
 						
 					}
-					return action.saveAsJpeg();
+					return action.saveAsImage();
 				}
 					
 				return false;
