@@ -90,6 +90,10 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> implement
 		return dynamicPropertyValues.get(parameter) != null;
 	}
 
+	public Map<GRParameter, DataBinding<?>> getDynamicPropertyValues() {
+		return dynamicPropertyValues;
+	}
+
 	@Override
 	public BindingFactory getBindingFactory() {
 		return BINDING_FACTORY;

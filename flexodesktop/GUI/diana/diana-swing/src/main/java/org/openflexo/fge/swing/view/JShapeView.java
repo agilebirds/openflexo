@@ -254,6 +254,7 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 
 	private void updateLabelView() {
 		if (!shapeNode.hasText() && labelView != null) {
+			getParentView().remove(getLabelView());
 			labelView.delete();
 			labelView = null;
 		} else if (shapeNode.hasText() && labelView == null) {
@@ -420,7 +421,10 @@ public class JShapeView<O> extends JDianaLayeredView<O> implements ShapeView<O, 
 			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_FOCUSED.getName())) {
 				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT.getName())) {
-				updateLabelView();
+				System.out.println("Updating label view");
+				// updateLabelView();
+				getPaintManager().invalidate(shapeNode);
+				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(DrawingTreeNode.IS_SELECTED.getName())) {
 				if (getParent() != null) {
 					getParent().moveToFront(this);

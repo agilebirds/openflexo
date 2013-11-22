@@ -355,6 +355,7 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 			// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
 			// properly use appropriate bindings
 					|| evt.getPropertyName().equals(ShapeNeedsToBeRedrawn.EVENT_NAME)) {
+				System.out.println("En tant que LabelView, on me dit de me mettre a jour");
 				updateText();
 				getPaintManager().repaint(this);
 			} else if (evt.getPropertyName().equals(GraphicalRepresentation.TEXT_STYLE.getName())) {
@@ -687,6 +688,14 @@ public class JLabelView<O> extends JScrollPane implements JFGEView<O, JPanel>, L
 		@Override
 		public void insertUpdate(DocumentEvent event) {
 			if (!isEditing) {
+				return;
+			}
+			if (node == null) {
+				logger.warning("Unexpected null node");
+				return;
+			}
+			if (node.getGraphicalRepresentation() == null) {
+				logger.warning("Unexpected null node graphical representation");
 				return;
 			}
 			if (node.getGraphicalRepresentation().getIsMultilineAllowed()) {

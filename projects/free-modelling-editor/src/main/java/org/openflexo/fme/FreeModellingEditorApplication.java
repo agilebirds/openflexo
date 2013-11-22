@@ -807,7 +807,7 @@ public class FreeModellingEditorApplication {
 
 		@Override
 		public void windowDeactivated(WindowEvent e) {
-			setState(false);
+			// setState(false);
 		}
 
 		@Override
@@ -822,7 +822,7 @@ public class FreeModellingEditorApplication {
 
 		@Override
 		public void windowActivated(WindowEvent e) {
-			setState(true);
+			// setState(true);
 		}
 
 	}

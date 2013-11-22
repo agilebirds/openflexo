@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
@@ -22,7 +23,7 @@ public class DependingObjects {
 	private static final Logger logger = FlexoLogger.getLogger(DependingObjects.class.getName());
 
 	public static interface HasDependencyBinding extends Observer, PropertyChangeListener {
-		public List<DataBinding<?>> getDependencyBindings();
+		public Collection<DataBinding<?>> getDependencyBindings();
 
 		public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object);
 	}

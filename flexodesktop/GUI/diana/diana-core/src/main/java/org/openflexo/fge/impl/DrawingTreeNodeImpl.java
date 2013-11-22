@@ -8,6 +8,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -21,6 +22,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DependingObjects;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -137,6 +140,42 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		alterings = new ArrayList<ConstraintDependency>();
 
 		// controlAreas = new ArrayList<ControlArea<?>>();
+
+		bindingValueObserver = new BindingValueObserver();
+	}
+
+	private BindingValueObserver bindingValueObserver;
+
+	public class BindingValueObserver implements HasDependencyBinding {
+
+		private DependingObjects dependingObjects;
+
+		public BindingValueObserver() {
+			dependingObjects = new DependingObjects(this);
+			dependingObjects.refreshObserving(DrawingTreeNodeImpl.this);
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			System.out.println("Hehe, je me prends l'update");
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			System.out.println("Hehe, je me prends le propertyChange with " + evt);
+			notifyAttributeChanged(GraphicalRepresentation.TEXT, null, getText());
+			System.out.println("Le text vaut maintenant: " + getText());
+		}
+
+		@Override
+		public Collection<DataBinding<?>> getDependencyBindings() {
+			return getGRBinding().getDynamicPropertyValues().values();
+		}
+
+		@Override
+		public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+			return null;
+		}
 
 	}
 
