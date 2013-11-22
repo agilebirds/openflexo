@@ -20,8 +20,6 @@
 package org.openflexo.fme.model;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.model.annotations.Adder;
@@ -37,23 +35,19 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.factory.AccessibleProxyObject;
-import org.openflexo.model.factory.CloneableProxyObject;
-import org.openflexo.model.factory.DeletableProxyObject;
-import org.openflexo.xmlcode.XMLSerializable;
 
 @ModelEntity
 @ImplementationClass(DiagramElementImpl.class)
-public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends XMLSerializable, Cloneable,
-		Observer, AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
+public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends FMEModelObject {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
-	public static final String DIAGRAM = "diagram";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
 	public static final String NAME = "name";
+	public static final String CONTAINER = "container";
+	public static final String PROPERTY_VALUES = "propertyValues";
 
-	@Getter(value = SHAPES, cardinality = Cardinality.LIST)
+	@Getter(value = SHAPES, cardinality = Cardinality.LIST, inverse = CONTAINER)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
@@ -69,7 +63,7 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Remover(SHAPES)
 	public void removeFromShapes(Shape aShape);
 
-	@Getter(value = CONNECTORS, cardinality = Cardinality.LIST)
+	@Getter(value = CONNECTORS, cardinality = Cardinality.LIST, inverse = CONTAINER)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
@@ -92,11 +86,29 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Setter(value = NAME)
 	public void setName(String aName);
 
-	@Getter(value = DIAGRAM)
-	public Diagram getDiagram();
+	@Getter(value = PROPERTY_VALUES, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	public List<PropertyValue> getPropertyValues();
 
-	@Setter(value = DIAGRAM)
-	public void setDiagram(Diagram diagram);
+	@Setter(PROPERTY_VALUES)
+	public void setPropertyValues(List<PropertyValue> somePropertyValues);
+
+	@Adder(PROPERTY_VALUES)
+	@PastingPoint
+	public void addToPropertyValues(PropertyValue aPropertyValue);
+
+	@Remover(PROPERTY_VALUES)
+	public void removeFromPropertyValues(PropertyValue aPropertyValue);
+
+	@Getter(value = CONTAINER)
+	public DiagramElement<?, ?> getContainer();
+
+	@Setter(value = CONTAINER)
+	public void setContainer(DiagramElement<?, ?> aContainer);
+
+	public Diagram getDiagram();
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@CloningStrategy(StrategyType.CLONE)
@@ -106,15 +118,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Setter(value = GRAPHICAL_REPRESENTATION)
 	public void setGraphicalRepresentation(G graphicalRepresentation);
-
-	// public void initializeDeserialization();
-
-	// public void finalizeDeserialization();
-
-	public DiagramElement<M, G> clone();
-
-	@Override
-	public void update(Observable o, Object arg);
 
 	public void setChanged();
 

@@ -19,23 +19,15 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.factory.AccessibleProxyObject;
+import org.openflexo.model.factory.CloneableProxyObject;
+import org.openflexo.model.factory.DeletableProxyObject;
 
 @ModelEntity
-@XMLElement(xmlTag = "Diagram")
-public interface Diagram extends DiagramElement<Diagram, DrawingGraphicalRepresentation> {
+public interface FMEModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
 
-	public static final String DATA_MODEL = "dataModel";
+	public void setChanged();
 
-	@Getter(value = DATA_MODEL)
-	@XMLElement
-	public DataModel getDataModel();
-
-	@Setter(value = DATA_MODEL)
-	public void setDataModel(DataModel aDataModel);
-
+	public boolean hasChanged();
 }

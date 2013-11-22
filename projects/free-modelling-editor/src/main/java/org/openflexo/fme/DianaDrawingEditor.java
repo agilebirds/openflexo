@@ -23,14 +23,18 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -40,9 +44,7 @@ import org.openflexo.fge.control.exceptions.CopyException;
 import org.openflexo.fge.control.exceptions.CutException;
 import org.openflexo.fge.control.exceptions.PasteException;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.swing.JDianaInteractiveEditor;
-import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fme.model.Connector;
 import org.openflexo.fme.model.Diagram;
@@ -56,13 +58,12 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 
 	private JPopupMenu contextualMenu;
 
-	// private DrawingTreeNode<?, ?> contextualMenuInvoker;
-	// private Point contextualMenuClickedPoint;
+	private DiagramEditor diagramEditor;
 
-	// private Shape copiedShape;
+	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory, DiagramEditor aDiagramEditor) {
+		super(aDrawing, factory, aDiagramEditor.getApplication().getToolFactory());
 
-	public DianaDrawingEditor(final DiagramDrawing aDrawing, DiagramFactory factory, SwingToolFactory toolFactory) {
-		super(aDrawing, factory, toolFactory);
+		this.diagramEditor = aDiagramEditor;
 
 		DrawShapeAction drawShapeAction = new DrawShapeAction() {
 			@Override
@@ -93,19 +94,51 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		setDrawConnectorAction(drawConnectorAction);
 
 		contextualMenu = new JPopupMenu();
-		for (final ShapeType st : ShapeType.values()) {
-			JMenuItem menuItem = new JMenuItem("Add " + st.name());
-			menuItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Shape newShape = getFactory().makeNewShape(st, new FGEPoint(getLastClickedPoint()), getDrawing().getModel());
-					getDrawing().getModel().addToShapes(newShape);
+
+		JMenuItem newConceptItem = new JMenuItem("New concept");
+		newConceptItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getSelectedObjects().size() == 1 && getSelectedObjects().get(0).getDrawable() instanceof DiagramElement) {
+					diagramEditor.createNewConceptAndNewInstance((DiagramElement<?, ?>) getSelectedObjects().get(0).getDrawable());
 				}
-			});
-			contextualMenu.add(menuItem);
-		}
+			}
+		});
+		contextualMenu.add(newConceptItem);
+
+		JMenuItem newInstanceOfExistingConceptItem = new JMenuItem("New instance of existing concept");
+		newInstanceOfExistingConceptItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (getSelectedObjects().size() == 1 && getSelectedObjects().get(0).getDrawable() instanceof DiagramElement) {
+					diagramEditor.createNewInstance((DiagramElement<?, ?>) getSelectedObjects().get(0).getDrawable());
+				}
+			}
+		});
+		contextualMenu.add(newInstanceOfExistingConceptItem);
+
+		JMenuItem deleteItem = new JMenuItem("Delete");
+		deleteItem.setIcon(FMEIconLibrary.DELETE_ICON);
+		deleteItem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<DiagramElement<?, ?>> objectsToDelete = new ArrayList<DiagramElement<?, ?>>();
+				for (DrawingTreeNode<?, ?> n : getSelectedObjects(ShapeNode.class, ConnectorNode.class)) {
+					Object drawable = n.getDrawable();
+					if (drawable instanceof DiagramElement) {
+						objectsToDelete.add((DiagramElement<?, ?>) drawable);
+					}
+				}
+				diagramEditor.delete(objectsToDelete);
+
+			}
+		});
+		contextualMenu.add(deleteItem);
+
 		contextualMenu.addSeparator();
 		JMenuItem copyItem = new JMenuItem("Copy");
+		copyItem.setIcon(FMEIconLibrary.COPY_ICON);
 		copyItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,6 +151,7 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		});
 		contextualMenu.add(copyItem);
 		JMenuItem pasteItem = new JMenuItem("Paste");
+		pasteItem.setIcon(FMEIconLibrary.PASTE_ICON);
 		pasteItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -130,6 +164,7 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		});
 		contextualMenu.add(pasteItem);
 		JMenuItem cutItem = new JMenuItem("Cut");
+		cutItem.setIcon(FMEIconLibrary.CUT_ICON);
 		cutItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -142,25 +177,6 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		});
 		contextualMenu.add(cutItem);
 
-		contextualMenu.addSeparator();
-
-		JMenuItem undoItem = new JMenuItem("Undo");
-		undoItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				undo();
-			}
-		});
-		contextualMenu.add(undoItem);
-		JMenuItem redoItem = new JMenuItem("Redo");
-		redoItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				redo();
-			}
-		});
-		contextualMenu.add(redoItem);
-		// initPalette();
 	}
 
 	@Override
@@ -173,48 +189,9 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		return (DiagramFactory) super.getFactory();
 	}
 
-	/*private void initPalette() {
-		paletteModel = new CommonPalette(this);
-		palette = (JDianaPalette) getToolFactory().makeDianaPalette(paletteModel);
-		palette.setEditor(this);
-		activatePalette(palette);
-	}*/
-
-	// private CommonPalette paletteModel;
-	// private JDianaPalette palette;
-
-	/*public CommonPalette getPaletteModel() {
-		return paletteModel;
-	}*/
-
-	@Deprecated
-	public void addNewShape(Shape aShape, DiagramElement father) {
-		father.addToShapes(aShape);
-		// aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
-		// getDrawing().addDrawable(aShape,
-		// contextualMenuInvoker.getDrawable());
-	}
-
-	@Deprecated
-	public void addNewConnector(Connector aConnector, DiagramElement father) {
-		// ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
-		// ShapeGraphicalRepresentation endObject = aConnector.getEndObject();
-		// GraphicalRepresentation fatherGR = FGEUtils.getFirstCommonAncestor(startObject, endObject);
-		// ((DiagramElement) fatherGR.getDrawable()).addToChilds(aConnector);
-		// getDrawing().addDrawable(aConnector, fatherGR.getDrawable());
-		father.addToConnectors(aConnector);
-	}
-
 	public void showContextualMenu(DrawingTreeNode<?, ?> dtn, FGEView view, Point p) {
-		// contextualMenuInvoker = dtn;
-		// contextualMenuClickedPoint = p;
 		contextualMenu.show((Component) view, p.x, p.y);
 	}
-
-	/*@Override
-	public JDrawingView<DiagramDrawing> makeDrawingView() {
-		return new DiagramEditorView(drawing, this);
-	}*/
 
 	@Override
 	public DiagramEditorView makeDrawingView() {
@@ -251,4 +228,19 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		}
 	}
 
+	@Override
+	protected void fireSelectionUpdated() {
+		super.fireSelectionUpdated();
+		if (getSelectedObjects().size() == 0) {
+			diagramEditor.getApplication().getInspector().switchToEmptyContent();
+		} else if (getSelectedObjects().size() == 1) {
+			if (getSelectedObjects().get(0) instanceof RootNode) {
+				diagramEditor.getApplication().getInspector().switchToEmptyContent();
+			} else {
+				diagramEditor.getApplication().getInspector().inspectObject(getSelectedObjects().get(0).getDrawable());
+			}
+		} else {
+			diagramEditor.getApplication().getInspector().switchToMultipleContent();
+		}
+	}
 }

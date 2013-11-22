@@ -24,13 +24,11 @@ import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(ShapeImpl.class)
 @XMLElement(xmlTag = "Shape")
 public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentation> {
 

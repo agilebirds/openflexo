@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,25 +18,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fme.model;
+package org.openflexo.fme;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLElement;
+import javax.swing.ImageIcon;
 
-@ModelEntity
-@XMLElement(xmlTag = "Diagram")
-public interface Diagram extends DiagramElement<Diagram, DrawingGraphicalRepresentation> {
+import org.openflexo.toolbox.ImageIconResource;
 
-	public static final String DATA_MODEL = "dataModel";
+public class FMEIconLibrary {
 
-	@Getter(value = DATA_MODEL)
-	@XMLElement
-	public DataModel getDataModel();
+	public static final ImageIcon COPY_ICON = new ImageIconResource("Icons/Copy.png");
+	public static final ImageIcon PASTE_ICON = new ImageIconResource("Icons/Paste.png");
+	public static final ImageIcon CUT_ICON = new ImageIconResource("Icons/Cut.png");
+	public static final ImageIcon DELETE_ICON = new ImageIconResource("Icons/Delete.png");
 
-	@Setter(value = DATA_MODEL)
-	public void setDataModel(DataModel aDataModel);
+	public static final ImageIcon CONCEPT_ICON = new ImageIconResource("Icons/EClass.gif");
+	public static final ImageIcon INSTANCE_ICON = new ImageIconResource("Icons/EObject.gif");
 
 }

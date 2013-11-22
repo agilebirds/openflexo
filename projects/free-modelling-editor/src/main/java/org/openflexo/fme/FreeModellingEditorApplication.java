@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -115,8 +116,6 @@ public class FreeModellingEditorApplication {
 	private FlexoFileChooser fileChooser;
 	private SwingToolFactory toolFactory;
 
-	// private FIBInspectorController inspector;
-
 	private DiagramFactory factory;
 
 	private Vector<DiagramEditor> diagramEditors = new Vector<DiagramEditor>();
@@ -133,6 +132,10 @@ public class FreeModellingEditorApplication {
 	private JDianaPalette commonPalette;
 	private CommonPalette commonPaletteModel;
 	private JDianaInspectors inspectors;
+
+	private FIBInspectorController inspector;
+	private ConceptBrowser conceptBrowser;
+	private RepresentedConceptBrowser representedConceptBrowser;
 
 	protected PropertyChangeListenerRegistrationManager manager;
 
@@ -165,7 +168,7 @@ public class FreeModellingEditorApplication {
 
 		toolFactory = new SwingToolFactory(frame);
 
-		// inspector = new FIBInspectorController(frame);
+		inspector = new FIBInspectorController(this);
 
 		mainPanel = new JPanel(new BorderLayout());
 
@@ -206,6 +209,9 @@ public class FreeModellingEditorApplication {
 		paletteDialog.setVisible(true);
 		paletteDialog.setFocusableWindowState(false);*/
 
+		conceptBrowser = new ConceptBrowser(null);
+		representedConceptBrowser = new RepresentedConceptBrowser(null);
+
 		Split all = new Split();
 
 		Split leftColumn = new Split();
@@ -213,6 +219,8 @@ public class FreeModellingEditorApplication {
 		leftColumn.setRowLayout(false);
 		Leaf leftTop = new Leaf("left.top");
 		Leaf leftBottom = new Leaf("left.bottom");
+		leftTop.setWeight(1.0);
+		leftBottom.setWeight(1.0);
 		leftColumn.setChildren(leftTop, new Divider(), leftBottom);
 
 		Split rightColumn = new Split();
@@ -221,8 +229,8 @@ public class FreeModellingEditorApplication {
 		Leaf rightTop = new Leaf("right.top");
 		Leaf rightMiddle = new Leaf("right.middle");
 		Leaf rightBottom = new Leaf("right.bottom");
-		rightTop.setWeight(1.0);
-		rightMiddle.setWeight(1.0);
+		rightTop.setWeight(0.0);
+		rightMiddle.setWeight(0.0);
 		rightBottom.setWeight(1.0);
 		rightColumn.setChildren(rightTop, new Divider(), rightMiddle, new Divider(), rightBottom);
 
@@ -237,12 +245,14 @@ public class FreeModellingEditorApplication {
 		layout.setFloatingDividers(true);
 
 		splitPanel = new JXMultiSplitPane(layout);
-		splitPanel.add(new JButton("left.top"), "left.top");
-		splitPanel.add(new JButton("left.bottom"), "left.bottom");
+		splitPanel.add(representedConceptBrowser, "left.top");
+		splitPanel.add(conceptBrowser, "left.bottom");
 		splitPanel.add(new JButton("right.top"), "right.top");
 		splitPanel.add(commonPalette.getComponent(), "right.middle");
-		splitPanel.add(new JButton("right.bottom"), "right.bottom");
+		splitPanel.add(inspector.getRootPane(), "right.bottom");
 		splitPanel.add(mainPanel, "middle");
+
+		splitPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
 		manager = new PropertyChangeListenerRegistrationManager();
 
@@ -276,7 +286,7 @@ public class FreeModellingEditorApplication {
 					}
 				});
 
-		JMenuItem saveAsItem = makeJMenuItem("save_drawing", SAVE_AS_ICON, null, new AbstractAction() {
+		JMenuItem saveAsItem = makeJMenuItem("save_drawing_as", SAVE_AS_ICON, null, new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveDrawingAs();
@@ -471,6 +481,10 @@ public class FreeModellingEditorApplication {
 
 	}
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	private class MyDrawingViewScrollPane extends JScrollPane {
 		private DiagramEditorView drawingView;
 
@@ -549,6 +563,7 @@ public class FreeModellingEditorApplication {
 	}
 
 	public void switchToDiagramEditor(DiagramEditor diagramEditor) {
+		currentDiagramEditor = diagramEditor;
 		tabbedPane.setSelectedIndex(diagramEditors.indexOf(diagramEditor));
 	}
 
@@ -583,6 +598,11 @@ public class FreeModellingEditorApplication {
 		topPanel.add(currentDiagramEditor.getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);*/
+
+		inspector.setDiagramEditor(diagramEditor);
+		inspector.switchToEmptyContent();
+		conceptBrowser.setDataObject(diagramEditor.getDiagram().getDataModel());
+		representedConceptBrowser.setDataObject(diagramEditor.getDiagram().getDataModel());
 
 		copyItem.synchronizeWith(diagramEditor.getController());
 		cutItem.synchronizeWith(diagramEditor.getController());
@@ -684,6 +704,14 @@ public class FreeModellingEditorApplication {
 		} else {
 			return false;
 		}
+	}
+
+	public FIBInspectorController getInspector() {
+		return inspector;
+	}
+
+	public DiagramEditor getCurrentDiagramEditor() {
+		return currentDiagramEditor;
 	}
 
 	private JMenuItem makeJMenuItem(String actionName, Icon icon, KeyStroke accelerator, AbstractAction action) {

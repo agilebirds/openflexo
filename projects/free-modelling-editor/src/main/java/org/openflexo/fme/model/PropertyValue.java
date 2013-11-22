@@ -19,38 +19,31 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.model.annotations.CloningStrategy;
-import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@XMLElement(xmlTag = "Connector")
-public interface Connector extends DiagramElement<Connector, ConnectorGraphicalRepresentation> {
+@XMLElement(xmlTag = "PropertyValue")
+public interface PropertyValue extends FMEModelObject {
 
-	public static final String START_SHAPE = "startShape";
-	public static final String END_SHAPE = "endShape";
+	public static final String KEY = "key";
+	public static final String VALUE = "value";
 
-	@Getter(START_SHAPE)
-	@XMLElement(context = "Start")
-	@Embedded
-	@CloningStrategy(StrategyType.CLONE)
-	public Shape getStartShape();
+	@Getter(value = KEY)
+	@XMLAttribute
+	public String getKey();
 
-	@Setter(START_SHAPE)
-	public void setStartShape(Shape startShape);
+	@Setter(value = KEY)
+	public void setKey(String aName);
 
-	@Getter(END_SHAPE)
-	@XMLElement(context = "End")
-	@Embedded
-	@CloningStrategy(StrategyType.CLONE)
-	public abstract Shape getEndShape();
+	@Getter(value = VALUE)
+	@XMLAttribute
+	public String getValue();
 
-	@Setter(END_SHAPE)
-	public abstract void setEndShape(Shape endShape);
+	@Setter(value = VALUE)
+	public void setValue(String aName);
 
 }

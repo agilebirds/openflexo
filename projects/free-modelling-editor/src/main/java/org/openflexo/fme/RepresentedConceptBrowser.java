@@ -17,25 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fme.model;
+package org.openflexo.fme;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLElement;
+import java.io.File;
+import java.util.logging.Logger;
 
-@ModelEntity
-@XMLElement(xmlTag = "Diagram")
-public interface Diagram extends DiagramElement<Diagram, DrawingGraphicalRepresentation> {
+import org.openflexo.fme.model.DataModel;
+import org.openflexo.toolbox.FileResource;
 
-	public static final String DATA_MODEL = "dataModel";
+public class RepresentedConceptBrowser extends AbstractFIBPanel {
+	static final Logger logger = Logger.getLogger(RepresentedConceptBrowser.class.getPackage().getName());
 
-	@Getter(value = DATA_MODEL)
-	@XMLElement
-	public DataModel getDataModel();
+	private static final File REPRESENTED_CONCEPT_BROWSER_FIB = new FileResource("Fib/RepresentedConceptBrowser.fib");
 
-	@Setter(value = DATA_MODEL)
-	public void setDataModel(DataModel aDataModel);
-
+	public RepresentedConceptBrowser(DataModel dataModel) {
+		super(dataModel, REPRESENTED_CONCEPT_BROWSER_FIB, false);
+	}
 }

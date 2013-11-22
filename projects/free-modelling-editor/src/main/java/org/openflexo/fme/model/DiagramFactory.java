@@ -27,6 +27,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 	public Diagram makeNewDiagram() {
 		CompoundEdit edit = getUndoManager().startRecording("Create empty diagram");
 		Diagram returned = newInstance(Diagram.class);
+		returned.setDataModel(newInstance(DataModel.class));
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
 		// returned.getEditedDrawing().init();
@@ -38,7 +39,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		Connector returned = newInstance(Connector.class);
 		returned.setName("Connector" + connectorIndex);
 		connectorIndex++;
-		returned.setDiagram(diagram);
+		// returned.setDiagram(diagram);
 		returned.setGraphicalRepresentation(makeNewConnectorGR(aGR));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
@@ -49,7 +50,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		Connector returned = newInstance(Connector.class);
 		returned.setName("Connector" + connectorIndex);
 		connectorIndex++;
-		returned.setDiagram(diagram);
+		// returned.setDiagram(diagram);
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
@@ -65,7 +66,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public Shape makeNewShape(ShapeGraphicalRepresentation aGR, FGEPoint p, Diagram diagram) {
 		Shape returned = newInstance(Shape.class);
-		returned.setDiagram(diagram);
+		// returned.setDiagram(diagram);
 		returned.setName("Shape" + shapeIndex);
 		System.out.println("New name: " + returned.getName());
 		shapeIndex++;

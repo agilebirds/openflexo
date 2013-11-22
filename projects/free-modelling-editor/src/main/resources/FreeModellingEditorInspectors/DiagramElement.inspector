@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fme.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fme.model.DiagramElement" controllerClassName="org.openflexo.fme.FMEFIBController" name="Inspector">
+  <LocalizedDictionary>
+    <Localized key="weightY" lang="English">Weight Y</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="DiagramElement" />
+</Panel>

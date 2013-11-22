@@ -19,38 +19,41 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.model.annotations.CloningStrategy;
-import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import java.util.List;
+
+import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PastingPoint;
+import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@XMLElement(xmlTag = "Connector")
-public interface Connector extends DiagramElement<Connector, ConnectorGraphicalRepresentation> {
+@XMLElement(xmlTag = "DataModel")
+public interface DataModel extends FMEModelObject {
 
-	public static final String START_SHAPE = "startShape";
-	public static final String END_SHAPE = "endShape";
+	public static final String CONCEPTS = "concepts";
 
-	@Getter(START_SHAPE)
-	@XMLElement(context = "Start")
+	@Getter(value = CONCEPTS, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
 	@Embedded
-	@CloningStrategy(StrategyType.CLONE)
-	public Shape getStartShape();
+	public List<Concept> getConcepts();
 
-	@Setter(START_SHAPE)
-	public void setStartShape(Shape startShape);
+	@Setter(CONCEPTS)
+	public void setConcepts(List<Concept> someConcepts);
 
-	@Getter(END_SHAPE)
-	@XMLElement(context = "End")
-	@Embedded
-	@CloningStrategy(StrategyType.CLONE)
-	public abstract Shape getEndShape();
+	@Adder(CONCEPTS)
+	@PastingPoint
+	public void addToConcepts(Concept aConcept);
 
-	@Setter(END_SHAPE)
-	public abstract void setEndShape(Shape endShape);
+	@Remover(CONCEPTS)
+	public void removeFromConcepts(Concept aConcept);
+
+	@Finder(attribute = Concept.NAME, collection = CONCEPTS)
+	public Concept getConceptNamed(String conceptName);
 
 }

@@ -17,29 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fme.model;
+package org.openflexo.fme;
 
+import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.logging.FlexoLogger;
+import org.openflexo.fme.model.DataModel;
+import org.openflexo.toolbox.FileResource;
 
-public abstract class DiagramImpl extends DiagramElementImpl<Diagram, DrawingGraphicalRepresentation> implements Diagram {
+public class ConceptBrowser extends AbstractFIBPanel {
+	static final Logger logger = Logger.getLogger(ConceptBrowser.class.getPackage().getName());
 
-	private static final Logger logger = FlexoLogger.getLogger(DiagramImpl.class.getPackage().getName());
+	private static final File CONCEPT_BROWSER_FIB = new FileResource("Fib/ConceptBrowser.fib");
 
-	// Used by PAMELA, do not use it
-	public DiagramImpl() {
-		super(null);
+	public ConceptBrowser(DataModel dataModel) {
+		super(dataModel, CONCEPT_BROWSER_FIB, false);
 	}
-
-	// Called for LOAD
-	/*public DiagramImpl(DrawingBuilder builder) {
-		this();
-		if (builder != null) {
-			builder.drawing = this;
-		}
-		// initializeDeserialization();
-	}*/
-
 }

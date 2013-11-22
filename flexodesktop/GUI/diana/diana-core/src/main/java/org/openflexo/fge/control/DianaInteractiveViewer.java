@@ -555,11 +555,14 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 			isRestoringSelection = true;
 			for (DrawingTreeNodeIdentifier<?> identifier : storedSelection) {
 				DrawingTreeNode<?, ?> node = getDrawing().getDrawingTreeNode(identifier);
-				if (node != null) {
+				if (node != null && !node.isDeleted()) {
 					addToSelectedObjects(node);
 				}
 			}
 		} finally {
+			if (storedSelection != null) {
+				storedSelection.clear();
+			}
 			storedSelection = null;
 			isRestoringSelection = false;
 		}

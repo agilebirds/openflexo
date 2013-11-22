@@ -931,7 +931,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	}
 
 	private void firePropertyChange(String propertyIdentifier, Object oldValue, Object value) {
-		if (getObject() instanceof HasPropertyChangeSupport) {
+		if (getObject() instanceof HasPropertyChangeSupport && !deleting) {
 			((HasPropertyChangeSupport) getObject()).getPropertyChangeSupport().firePropertyChange(propertyIdentifier, oldValue, value);
 		}
 	}

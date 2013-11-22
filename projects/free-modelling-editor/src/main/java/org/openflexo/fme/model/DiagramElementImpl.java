@@ -19,169 +19,27 @@
  */
 package org.openflexo.fme.model;
 
-import java.util.Observable;
-
 import org.openflexo.fge.GraphicalRepresentation;
 
 public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> implements DiagramElement<M, G> {
 
-	private Diagram diagram;
-
-	// private List<Shape> shapes;
-	// private List<Connector> connectors;
-
-	// @Inject
-	// private G graphicalRepresentation;
-
-	public DiagramElementImpl(Diagram diagram) {
-		// shapes = new ArrayList<Shape>();
-		// connectors = new ArrayList<Connector>();
-		this.diagram = diagram;
-	}
-
-	// This method has no functional effect, it is just to test super calls over internal PAMELA management
-	@Override
-	public void addToShapes(Shape aShape) {
-		performSuperAdder(SHAPES, aShape);
-	}
-
-	// This method has no functional effect, it is just to test super calls over internal PAMELA management
-	@Override
-	public void removeFromShapes(Shape aShape) {
-		performSuperRemover(SHAPES, aShape);
-	}
-
-	/*@Override
-	public List<Shape> getShapes() {
-		return shapes;
+	public DiagramElementImpl() {
 	}
 
 	@Override
-	public void setShapes(List<Shape> someShapes) {
-		if (someShapes != null) {
-			shapes.addAll(someShapes);
-		} else {
-			shapes.clear();
-		}
+	public void setName(String aName) {
+		System.out.println("Set new name: " + aName);
+		performSuperSetter(NAME, aName);
 	}
-
-	@Override
-	public void addToShapes(Shape aShape) {
-		shapes.add(aShape);
-		setChanged();
-		notifyObservers();
-		getPropertyChangeSupport().firePropertyChange(SHAPES, null, shapes);
-	}
-
-	@Override
-	public void removeFromShapes(Shape aShape) {
-		System.out.println("!!!!!!!!!!!!!!!!!! Remove Shape " + aShape);
-		shapes.remove(aShape);
-		setChanged();
-		notifyObservers();
-		getPropertyChangeSupport().firePropertyChange(SHAPES, null, shapes);
-	}
-	*/
-
-	/*@Override
-	public List<Connector> getConnectors() {
-		return connectors;
-	}
-
-	@Override
-	public void setConnectors(List<Connector> someConnectors) {
-		if (someConnectors != null) {
-			connectors.addAll(someConnectors);
-		} else {
-			connectors.clear();
-		}
-	}
-
-	@Override
-	public void addToConnectors(Connector aConnector) {
-		connectors.add(aConnector);
-		setChanged();
-		notifyObservers();
-		getPropertyChangeSupport().firePropertyChange(CONNECTORS, null, shapes);
-	}
-
-	@Override
-	public void removeFromConnectors(Connector aConnector) {
-		connectors.remove(aConnector);
-		setChanged();
-		notifyObservers();
-		getPropertyChangeSupport().firePropertyChange(CONNECTORS, null, shapes);
-	}*/
 
 	@Override
 	public Diagram getDiagram() {
-		return diagram;
-	}
-
-	@Override
-	public void setDiagram(Diagram drawing) {
-		diagram = drawing;
-	}
-
-	/*@Override
-	public final G getGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
-
-	@Override
-	public void setGraphicalRepresentation(G graphicalRepresentation) {
-		this.graphicalRepresentation = graphicalRepresentation;
-		// graphicalRepresentation.setDrawable((M) this);
-		// graphicalRepresentation.addObserver(this);
-	}*/
-
-	/*private boolean isDeserializing = false;
-
-	@Override
-	public void initializeDeserialization() {
-		isDeserializing = true;
-	}
-
-	@Override
-	public void finalizeDeserialization() {
-		isDeserializing = false;
-	}
-
-	@Override
-	public boolean isDeserializing() {
-		return isDeserializing;
-	}*/
-
-	@Override
-	public DiagramElement<M, G> clone() {
-		return (DiagramElement<M, G>) cloneObject();
-
-		/*try {
-			return (DiagramElementImpl<M, G>) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			// cannot happen since we are clonable
-			return null;
-		}*/
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		if (o == getGraphicalRepresentation()) {
-			if (getDiagram() != null) {
-				getDiagram().setChanged();
-			}
+		if (this instanceof Diagram) {
+			return (Diagram) this;
 		}
-	}
-
-	/*@Override
-	public void setChanged() {
-		super.setChanged();
-	}*/
-
-	@Override
-	public String getName() {
-		// System.out.println("On me demande mon nom, je retourne " + performSuperGetter(NAME));
-		return (String) performSuperGetter(NAME);
+		if (getContainer() != null) {
+			return getContainer().getDiagram();
+		}
+		return null;
 	}
 }

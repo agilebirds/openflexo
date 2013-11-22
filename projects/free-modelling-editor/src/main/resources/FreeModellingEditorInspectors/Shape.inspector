@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fme.FIBInspector" layout="twocols" darkLevel="0" dataClassName="org.openflexo.fme.model.Shape" controllerClassName="org.openflexo.fme.FMEFIBController" name="Inspector">
+  <Label label="name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+  <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
+  <Table iteratorClassName="org.openflexo.fme.model.PropertyValue" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" data="data.propertyValues" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+    <TextFieldColumn data="iterator.key" title="key" columnWidth="40" resizable="true" displayTitle="true" />
+    <TextFieldColumn data="iterator.value" title="value" columnWidth="60" resizable="true" displayTitle="true" />
+    <AddAction method="controller.createPropertyValue(data)" name="add_action" />
+  </Table>
+  <LocalizedDictionary>
+    <Localized key="weightY" lang="English">Weight Y</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Shape" />
+</Panel>

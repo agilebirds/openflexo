@@ -24,16 +24,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fme.dialog.CreateConceptAndInstanceDialog;
+import org.openflexo.fme.dialog.CreateConceptDialog;
+import org.openflexo.fme.dialog.CreateInstanceDialog;
+import org.openflexo.fme.model.Concept;
 import org.openflexo.fme.model.Diagram;
+import org.openflexo.fme.model.DiagramElement;
 import org.openflexo.fme.model.DiagramFactory;
+import org.openflexo.fme.model.Instance;
+import org.openflexo.fme.model.PropertyValue;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.undo.CompoundEdit;
+import org.openflexo.toolbox.FileResource;
 
 public class DiagramEditor {
 
@@ -46,6 +57,10 @@ public class DiagramEditor {
 	private File file = null;
 	private DiagramFactory factory;
 	private FreeModellingEditorApplication application;
+
+	private static final File NEW_CONCEPT_NEW_INSTANCE_DIALOG = new FileResource("Fib/Dialog/NewConceptNewInstanceDialog.fib");
+	private static final File NEW_CONCEPT_DIALOG = new FileResource("Fib/Dialog/NewConceptDialog.fib");
+	private static final File NEW_INSTANCE_DIALOG = new FileResource("Fib/Dialog/NewInstanceDialog.fib");
 
 	public static DiagramEditor newDiagramEditor(DiagramFactory factory, FreeModellingEditorApplication application) {
 
@@ -112,7 +127,7 @@ public class DiagramEditor {
 	public DianaDrawingEditor getController() {
 		if (controller == null) {
 			CompoundEdit edit = factory.getUndoManager().startRecording("Initialize diagram");
-			controller = new DianaDrawingEditor(getDrawing(), factory, application.getToolFactory());
+			controller = new DianaDrawingEditor(getDrawing(), factory, this);
 			factory.getUndoManager().stopRecording(edit);
 		}
 		return controller;
@@ -175,9 +190,83 @@ public class DiagramEditor {
 		this.index = index;
 	}
 
+	public FreeModellingEditorApplication getApplication() {
+		return application;
+	}
+
 	@Override
 	public String toString() {
 		return "DiagramEditor:" + getTitle();
+	}
+
+	public DiagramFactory getFactory() {
+		return getApplication().getFactory();
+	}
+
+	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
+		PropertyValue returned = getFactory().newInstance(PropertyValue.class);
+		returned.setKey("property");
+		element.addToPropertyValues(returned);
+		return returned;
+	}
+
+	public Concept createNewConcept() {
+		CreateConceptDialog dialogData = new CreateConceptDialog(getDiagram().getDataModel());
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_CONCEPT_DIALOG, dialogData, application.getFrame(), true,
+				application.LOCALIZATION);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			Concept returned = getFactory().newInstance(Concept.class);
+			returned.setName(dialogData.getConceptName());
+			System.out.println("Created " + returned);
+			getDiagram().getDataModel().addToConcepts(returned);
+			return returned;
+		}
+		return null;
+	}
+
+	public Instance createNewConceptAndNewInstance(DiagramElement<?, ?> diagramElement) {
+		CreateConceptAndInstanceDialog dialogData = new CreateConceptAndInstanceDialog(getDiagram().getDataModel(),
+				diagramElement.getName());
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_CONCEPT_NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
+				application.LOCALIZATION);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			Concept concept = getFactory().newInstance(Concept.class);
+			concept.setName(dialogData.getConceptName());
+			System.out.println("Created " + concept);
+			getDiagram().getDataModel().addToConcepts(concept);
+			Instance returned = getFactory().newInstance(Instance.class);
+			returned.setName(dialogData.getInstanceName());
+			returned.setConcept(concept);
+			System.out.println("Created " + returned);
+			concept.addToInstances(returned);
+			diagramElement.setName(dialogData.getInstanceName());
+			return returned;
+		}
+		return null;
+	}
+
+	public Instance createNewInstance(DiagramElement<?, ?> diagramElement) {
+		CreateInstanceDialog dialogData = new CreateInstanceDialog(getDiagram().getDataModel(), diagramElement.getName());
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
+				application.LOCALIZATION);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			Instance returned = getFactory().newInstance(Instance.class);
+			returned.setName(dialogData.getInstanceName());
+			returned.setConcept(dialogData.getConcept());
+			System.out.println("Created " + returned);
+			dialogData.getConcept().addToInstances(returned);
+			diagramElement.setName(dialogData.getInstanceName());
+			return returned;
+		}
+		return null;
+	}
+
+	public void delete(List<DiagramElement<?, ?>> objectsToDelete) {
+		System.out.println("Deleting objects: " + objectsToDelete);
+		Object[] context = objectsToDelete.toArray(new Object[objectsToDelete.size()]);
+		for (DiagramElement<?, ?> o : objectsToDelete) {
+			o.delete(context);
+		}
 	}
 
 }

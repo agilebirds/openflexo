@@ -277,6 +277,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 				Constructor<? extends FIBController> c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
 				System.out.println("Constructor=" + c);
 				returned = c.newInstance(fibComponent);
+				System.out.println("returned=" + returned);
 			} catch (SecurityException e) {
 				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (NoSuchMethodException e) {
