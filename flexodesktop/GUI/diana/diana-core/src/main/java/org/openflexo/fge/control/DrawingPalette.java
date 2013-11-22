@@ -46,6 +46,8 @@ public class DrawingPalette {
 	private final int height;
 	private final String title;
 
+	private boolean drawWorkingArea = false;
+
 	/**
 	 * This factory is the one used to build palettes, NOT THE ONE which is used in the related drawing editor
 	 */
@@ -110,6 +112,14 @@ public class DrawingPalette {
 
 	public void removeElement(PaletteElement element) {
 		elements.remove(element);
+	}
+
+	public boolean getDrawWorkingArea() {
+		return drawWorkingArea;
+	}
+
+	public void setDrawWorkingArea(boolean drawWorkingArea) {
+		this.drawWorkingArea = drawWorkingArea;
 	}
 
 }

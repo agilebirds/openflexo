@@ -146,7 +146,7 @@ public class ResourceLocator {
 						directoriesSearchOrder.add(preferredResourcePath);
 					}
 					File workingDirectory = new File(System.getProperty("user.dir"));
-					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
+					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "openflexo");
 					if (flexoDesktopDirectory != null) {
 						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
 						File technologyadaptersintegrationDirectory = new File(flexoDesktopDirectory.getParentFile(),
@@ -179,7 +179,8 @@ public class ResourceLocator {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
 				if (f.getName().startsWith("flexo") || f.getName().contains("connector")
-						|| f.getName().equals("technologyadaptersintegration") || f.getName().startsWith("diana")) {
+						|| f.getName().equals("technologyadaptersintegration") || f.getName().startsWith("diana")
+						|| f.getName().equals("projects") || f.getName().equals("free-modelling-editor")) {
 					addProjectResourceDirs(files, f);
 				}
 				if (f.isDirectory()) {
@@ -194,7 +195,7 @@ public class ResourceLocator {
 		File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
 		File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
 		// File file4 = new File(f.getAbsolutePath());
-		if (logger.isLoggable(Level.FINE)) {
+		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Adding directory " + file1.getAbsolutePath());
 		}
 		if (logger.isLoggable(Level.FINE)) {

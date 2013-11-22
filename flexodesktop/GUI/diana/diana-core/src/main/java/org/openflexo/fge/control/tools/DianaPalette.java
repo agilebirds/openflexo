@@ -148,7 +148,7 @@ public abstract class DianaPalette<C, F extends DianaViewFactory<F, ? super C>> 
 			gr.setWidth(palette.getWidth());
 			gr.setHeight(palette.getHeight());
 			gr.setBackgroundColor(Color.WHITE);
-			gr.setDrawWorkingArea(true);
+			gr.setDrawWorkingArea(palette.getDrawWorkingArea());
 			setEditable(true);
 		}
 
