@@ -362,7 +362,7 @@ public class AbstractServerRestClientModel implements HasPropertyChangeSupport {
 				FlexoController.notify(FlexoLocalization.localizedForKey("not_found") + entity);
 				return false;
 			default:
-				if (entity != null) {
+				if (entity != null && !StringUtils.isEmpty(entity.toString())) {
 					FlexoController.notify(entity.toString());
 				} else {
 					FlexoController.notify(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server"));
