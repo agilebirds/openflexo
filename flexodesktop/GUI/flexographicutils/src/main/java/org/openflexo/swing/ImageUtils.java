@@ -29,8 +29,6 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
