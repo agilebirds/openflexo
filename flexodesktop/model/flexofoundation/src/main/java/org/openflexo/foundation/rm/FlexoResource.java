@@ -904,8 +904,8 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 							+ getResource().getSerializationIdentifier();
 				}
 			} else if (getExternalResource() != null) {
-				return originResource.getSerializationIdentifier() + "_" + getResource().getProject().getProjectURI() + "_"
-						+ getResource().getSerializationIdentifier();
+				return originResource.getSerializationIdentifier() + "_" + getExternalResource().getProjectURI() + "_"
+						+ getExternalResource().getResourceIdentifier();
 			} else {
 				return null;
 			}
