@@ -51,7 +51,7 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static final String BROWSERFONT_KEY = "browser_font";
 
-	public static final String BUG_REPORT_URL_KEY = "bug_report_url";
+	public static final String BUG_REPORT_URL_KEY = "bug_report_url_2";
 	public static final String BUG_REPORT_USER = "bug_report_user";
 	public static final String BUG_REPORT_PASWORD = "bug_report_password";
 
@@ -173,7 +173,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	public static String getBugReportUrl() {
 		String answer = getPreferences().getProperty(BUG_REPORT_URL_KEY);
 		if (answer == null) {
-			setBugReportUrl(answer = "https://bugs.openflexo.com");
+			setBugReportUrl(answer = "https://bugs.openflexo.org");
 		}
 		return answer;
 	}
