@@ -8,7 +8,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -20,10 +19,9 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingValueChangeListener;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DependingObjects;
-import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -37,6 +35,7 @@ import org.openflexo.fge.Drawing.PersistenceMode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.GRBinding.DynamicPropertyValue;
 import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
@@ -146,37 +145,37 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	private BindingValueObserver bindingValueObserver;
 
-	public class BindingValueObserver implements HasDependencyBinding {
+	/**
+	 * Utility class used to observe all dynamic property values, relatively to their value at run-time
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class BindingValueObserver {
 
-		private DependingObjects dependingObjects;
+		private Map<DynamicPropertyValue<?>, BindingValueChangeListener<?>> listeners;
 
 		public BindingValueObserver() {
-			dependingObjects = new DependingObjects(this);
-			dependingObjects.refreshObserving(DrawingTreeNodeImpl.this);
+			listeners = new HashMap<GRBinding.DynamicPropertyValue<?>, BindingValueChangeListener<?>>();
+			for (final DynamicPropertyValue dpv : getGRBinding().getDynamicPropertyValues()) {
+				BindingValueChangeListener listener = new BindingValueChangeListener(dpv.dataBinding, DrawingTreeNodeImpl.this) {
+					@Override
+					public void bindingValueChanged(Object source, Object newValue) {
+						System.out.println(" YYYYYYYEEEEEEEEESSSSSSSSS");
+						notifyAttributeChanged(dpv.parameter, null, newValue);
+					}
+				};
+			}
 		}
 
-		@Override
-		public void update(Observable o, Object arg) {
-			System.out.println("Hehe, je me prends l'update");
+		public void delete() {
+			for (BindingValueChangeListener<?> l : listeners.values()) {
+				l.stopObserving();
+				l.delete();
+			}
+			listeners.clear();
+			listeners = null;
 		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			System.out.println("Hehe, je me prends le propertyChange with " + evt);
-			notifyAttributeChanged(GraphicalRepresentation.TEXT, null, getText());
-			System.out.println("Le text vaut maintenant: " + getText());
-		}
-
-		@Override
-		public Collection<DataBinding<?>> getDependencyBindings() {
-			return getGRBinding().getDynamicPropertyValues().values();
-		}
-
-		@Override
-		public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
-			return null;
-		}
-
 	}
 
 	@Override
@@ -302,6 +301,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			if (parentNode instanceof ContainerNode && ((ContainerNode<?, ?>) parentNode).getChildNodes().contains(this)) {
 				parentNode.removeChild(this);
 			}
+
+			bindingValueObserver.delete();
+			bindingValueObserver = null;
 
 			Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
 
@@ -988,7 +990,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	protected <T> T getDynamicPropertyValue(GRParameter<T> parameter) throws InvocationTargetException {
 		if (hasDynamicPropertyValue(parameter)) {
 			try {
-				return getGRBinding().getDynamicPropertyValue(parameter).getBindingValue(this);
+				return getGRBinding().getDynamicPropertyValue(parameter).dataBinding.getBindingValue(this);
 			} catch (TypeMismatchException e) {
 				throw new InvocationTargetException(e);
 			} catch (NullReferenceException e) {
@@ -1009,7 +1011,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	protected <T> void setDynamicPropertyValue(GRParameter<T> parameter, T value) throws InvocationTargetException {
 		if (hasDynamicSettablePropertyValue(parameter)) {
 			try {
-				getGRBinding().getDynamicPropertyValue(parameter).setBindingValue(value, this);
+				getGRBinding().getDynamicPropertyValue(parameter).dataBinding.setBindingValue(value, this);
 				return;
 			} catch (TypeMismatchException e) {
 				throw new InvocationTargetException(e);

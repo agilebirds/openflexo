@@ -21,6 +21,7 @@
 package org.openflexo.fge;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +47,29 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> implement
 	private GRProvider<O, GR> grProvider;
 	private List<GRStructureVisitor<O>> walkers;
 
-	private Map<GRParameter, DataBinding<?>> dynamicPropertyValues;
+	private Map<GRParameter, DynamicPropertyValue<?>> dynamicPropertyValues;
 	protected BindingModel bindingModel;
+
+	public static class DynamicPropertyValue<T> {
+		public GRParameter<T> parameter;
+		public DataBinding<T> dataBinding;
+
+		public DynamicPropertyValue(GRParameter<T> parameter, DataBinding<T> dataBinding) {
+			super();
+			this.parameter = parameter;
+			this.dataBinding = dataBinding;
+		}
+
+		public boolean isSettable() {
+			return dataBinding.isSettable();
+		}
+	}
 
 	protected GRBinding(String name, Class<?> drawableClass, GRProvider<O, GR> grProvider) {
 		this.name = name;
 		this.grProvider = grProvider;
 		walkers = new ArrayList<GRStructureVisitor<O>>();
-		dynamicPropertyValues = new Hashtable<GRParameter, DataBinding<?>>();
+		dynamicPropertyValues = new Hashtable<GRParameter, DynamicPropertyValue<?>>();
 		bindingModel = new BindingModel();
 		bindingModel.addToBindingVariables(new BindingVariable("drawable", drawableClass));
 	}
@@ -70,28 +86,30 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> implement
 		return grProvider;
 	}
 
-	public <T> DataBinding<T> getDynamicPropertyValue(GRParameter<T> parameter) {
-		return (DataBinding<T>) dynamicPropertyValues.get(parameter);
+	public <T> DynamicPropertyValue<T> getDynamicPropertyValue(GRParameter<T> parameter) {
+		return (DynamicPropertyValue<T>) dynamicPropertyValues.get(parameter);
 	}
 
-	public <T> void setDynamicPropertyValue(GRParameter<T> parameter, DataBinding<T> bindingValue) {
-		setDynamicPropertyValue(parameter, bindingValue, false);
+	public <T> DynamicPropertyValue<T> setDynamicPropertyValue(GRParameter<T> parameter, DataBinding<T> bindingValue) {
+		return setDynamicPropertyValue(parameter, bindingValue, false);
 	}
 
-	public <T> void setDynamicPropertyValue(GRParameter<T> parameter, DataBinding<T> bindingValue, boolean settable) {
+	public <T> DynamicPropertyValue<T> setDynamicPropertyValue(GRParameter<T> parameter, DataBinding<T> bindingValue, boolean settable) {
 		bindingValue.setOwner(this);
 		bindingValue.setBindingName(parameter.getName());
 		bindingValue.setDeclaredType(parameter.getType());
 		bindingValue.setBindingDefinitionType(settable ? BindingDefinitionType.GET_SET : BindingDefinitionType.GET);
-		dynamicPropertyValues.put(parameter, bindingValue);
+		DynamicPropertyValue<T> returned = new DynamicPropertyValue<T>(parameter, bindingValue);
+		dynamicPropertyValues.put(parameter, returned);
+		return returned;
 	}
 
 	public boolean hasDynamicPropertyValue(GRParameter<?> parameter) {
 		return dynamicPropertyValues.get(parameter) != null;
 	}
 
-	public Map<GRParameter, DataBinding<?>> getDynamicPropertyValues() {
-		return dynamicPropertyValues;
+	public Collection<DynamicPropertyValue<?>> getDynamicPropertyValues() {
+		return dynamicPropertyValues.values();
 	}
 
 	@Override
