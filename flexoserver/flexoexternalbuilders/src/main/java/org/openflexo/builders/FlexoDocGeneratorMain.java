@@ -116,7 +116,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 						+ " " + OUTPUT_FILE_ARGUMENT_PREFIX + " " + DOC_TYPE_ARGUMENT_PREFIX + " " + TEMPLATES_ARGUMENT_PREFIX + " " + "\n"
 						+ (args.length > 0 ? sb.toString() : "No arguments !!!"));
 			}
-			if (outputPath == null) {
+			if (outputPath == null && !noPostBuild) {
 				throw new MissingArgumentException(OUTPUT_FILE_ARGUMENT_PREFIX);
 			}
 		}
