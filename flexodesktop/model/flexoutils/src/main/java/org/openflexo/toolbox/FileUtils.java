@@ -971,6 +971,8 @@ public class FileUtils {
 				if (c instanceof HttpURLConnection) {
 					HttpURLConnection connection = (HttpURLConnection) c;
 					connection.setIfModifiedSince(lastModified);
+					connection.setConnectTimeout(30000);
+					connection.setReadTimeout(30000);
 					connection.connect();
 					if (connection.getResponseCode() == 200) {
 						fileContent = FileUtils.fileContents(connection.getInputStream(), "UTF-8");
