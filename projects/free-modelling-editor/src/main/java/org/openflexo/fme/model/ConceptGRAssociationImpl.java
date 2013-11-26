@@ -19,28 +19,16 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.XMLElement;
-
 /**
- * A shape element in a diagram
+ * Default implementation of {@link ConceptGRAssociation}
  * 
  * @author sylvain
- * 
  */
-@ModelEntity
-@XMLElement(xmlTag = "Shape")
-public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentation> {
+public abstract class ConceptGRAssociationImpl implements ConceptGRAssociation {
 
-	/*@Getter(value = GRAPHICAL_REPRESENTATION)
-	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
-	@XMLElement
 	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation();
+	public String toString() {
+		return "Association" + Integer.toHexString(hashCode());
+	}
 
-	@Setter(value = GRAPHICAL_REPRESENTATION)
-	@Override
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation);*/
 }

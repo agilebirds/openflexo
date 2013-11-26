@@ -323,6 +323,29 @@ public abstract class DianaInteractiveViewer<M, F extends DianaViewFactory<F, C>
 		return returned;
 	}
 
+	/**
+	 * Return list of selected drawable of either of supplied types
+	 * 
+	 * @param types
+	 * @return
+	 */
+	public <T> List<T> getSelectedDrawables(Class<? extends T>... types) {
+		List<T> returned = new ArrayList<T>();
+		for (DrawingTreeNode<?, ?> node : selectedObjects) {
+			boolean takeIt = false;
+			for (Class<? extends T> t : types) {
+				if (t.isAssignableFrom(node.getDrawable().getClass())) {
+					takeIt = true;
+					break;
+				}
+			}
+			if (takeIt) {
+				returned.add((T) node.getDrawable());
+			}
+		}
+		return returned;
+	}
+
 	public List<ShapeNode<?>> getSelectedShapes() {
 		if (selectedShapes == null) {
 			selectedShapes = new ArrayList<ShapeNode<?>>();

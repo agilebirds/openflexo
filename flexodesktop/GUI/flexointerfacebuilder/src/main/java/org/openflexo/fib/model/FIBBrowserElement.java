@@ -211,10 +211,10 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	public void setVisible(DataBinding visible) {
-		if (enabled != null) {
-			enabled.setOwner(iterator);
-			enabled.setDeclaredType(Boolean.class);
-			enabled.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+		if (visible != null) {
+			visible.setOwner(iterator);
+			visible.setDeclaredType(Boolean.class);
+			visible.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 		}
 		this.visible = visible;
 	}

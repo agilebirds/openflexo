@@ -271,19 +271,24 @@ public abstract class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Creates and return a new ShapeGraphicalRepresentation, given a Drawable and a Drawing instance, initialized with default values and
-	 * given a shape type
-	 * 
-	 * @param aDrawing
-	 *            the drawing where the shape is defined
-	 * @param aDrawable
-	 *            object supposed to be represented by returned graphical representation
+	 * Creates and return a new ShapeGraphicalRepresentation, initialized with default values and given a shape type
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
 	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeType shapeType) {
 		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation();
 		returned.setShapeType(shapeType);
+		return returned;
+	}
+
+	/**
+	 * Creates and return a new ShapeGraphicalRepresentation, given a ShapeSpecification
+	 * 
+	 * @return a newly created ShapeGraphicalRepresentation
+	 */
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeSpecification shapeSpecification) {
+		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation();
+		returned.setShapeSpecification(shapeSpecification);
 		return returned;
 	}
 

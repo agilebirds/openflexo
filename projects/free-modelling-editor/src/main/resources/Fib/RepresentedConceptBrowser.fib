@@ -2,11 +2,11 @@
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.fme.model.DataModel" controllerClassName="org.openflexo.fme.FMEFIBController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
     <Label label="represented_concepts" align="center" constraints="border(location=north)" localize="true" />
-    <Browser root="data" iteratorClassName="org.openflexo.fme.model.FMEModelObject" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="false" showRootsHandle="true" localize="true" manageDynamicModel="true" constraints="border(location=center)" width="100" height="100">
+    <Browser root="data" iteratorClassName="org.openflexo.fme.model.FMEModelObject" visibleRowCount="3" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="false" showRootsHandle="true" localize="true" manageDynamicModel="true" constraints="border(location=center)" width="100" height="100">
       <BrowserElement dataClassName="org.openflexo.fme.model.DataModel" label="&quot;DataModel&quot;" isEditable="false" filtered="false" defaultVisible="true" name="dataModel">
         <Children data="dataModel.concepts" name="concepts" />
       </BrowserElement>
-      <BrowserElement dataClassName="org.openflexo.fme.model.Concept" label="concept.name" icon="controller.getIcon(concept)" isEditable="false" filtered="false" defaultVisible="true" name="concept">
+      <BrowserElement dataClassName="org.openflexo.fme.model.Concept" label="concept.name" icon="controller.getIcon(concept)" enabled="concept.isUsed" visible="concept.isUsed" isEditable="false" filtered="false" defaultVisible="true" name="concept">
         <Children data="concept.instances" name="instances" />
       </BrowserElement>
       <BrowserElement dataClassName="org.openflexo.fme.model.Instance" label="instance.name" icon="controller.getIcon(instance)" isEditable="false" filtered="false" defaultVisible="true" name="instance" />

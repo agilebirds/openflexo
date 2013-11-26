@@ -28,12 +28,13 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.shapes.Rectangle;
+import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fme.model.DiagramElement;
 import org.openflexo.fme.model.Shape;
@@ -49,37 +50,53 @@ public class CommonPalette extends DrawingPalette {
 	public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 7);
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
-	private DianaDrawingEditor editor;
+	private DiagramEditor editor;
 
 	public CommonPalette() {
 		super(200, 200, "default");
+
+		ShapeSpecification[] ssp = new ShapeSpecification[11];
+
+		ssp[0] = FACTORY.makeShape(ShapeType.RECTANGLE);
+		ssp[1] = FACTORY.makeShape(ShapeType.RECTANGLE);
+		((Rectangle) ssp[1]).setIsRounded(true);
+		((Rectangle) ssp[1]).setArcSize(20);
+		ssp[2] = FACTORY.makeShape(ShapeType.SQUARE);
+		ssp[3] = FACTORY.makeShape(ShapeType.RECTANGULAROCTOGON);
+		ssp[4] = FACTORY.makeShape(ShapeType.OVAL);
+		ssp[5] = FACTORY.makeShape(ShapeType.CIRCLE);
+		ssp[6] = FACTORY.makeShape(ShapeType.LOSANGE);
+		ssp[7] = FACTORY.makeShape(ShapeType.POLYGON);
+		ssp[8] = FACTORY.makeShape(ShapeType.TRIANGLE);
+		ssp[9] = FACTORY.makeShape(ShapeType.STAR);
+		ssp[10] = FACTORY.makeShape(ShapeType.ARC);
+
 		int px = 0;
 		int py = 0;
-		for (ShapeType st : ShapeType.values()) {
-			if (st != ShapeType.CUSTOM_POLYGON && st != ShapeType.COMPLEX_CURVE && st != ShapeType.ARC) {
-				addElement(makePaletteElement(st, px, py));
-				px = px + 1;
-				if (px == 3) {
-					px = 0;
-					py++;
-				}
+		for (ShapeSpecification sspi : ssp) {
+			addElement(makePaletteElement(sspi, px, py));
+			px = px + 1;
+			if (px == 3) {
+				px = 0;
+				py++;
 			}
 		}
 
 	}
 
-	public DianaDrawingEditor getEditor() {
+	public DiagramEditor getEditor() {
 		return editor;
 	}
 
-	public void setEditor(DianaDrawingEditor editor) {
+	public void setEditor(DiagramEditor editor) {
 		this.editor = editor;
 	}
 
-	private PaletteElement makePaletteElement(ShapeType st, int px, int py) {
-		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(st);
+	private PaletteElement makePaletteElement(ShapeSpecification shapeSpecification, int px, int py) {
+		final ShapeGraphicalRepresentation gr = FACTORY.makeShapeGraphicalRepresentation(shapeSpecification);
 		FACTORY.applyDefaultProperties(gr);
-		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+		// if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
+		if (shapeSpecification.getShapeType() == ShapeType.SQUARE || shapeSpecification.getShapeType() == ShapeType.CIRCLE) {
 			gr.setX(px * GRID_WIDTH + 15);
 			gr.setY(py * GRID_HEIGHT + 10);
 			gr.setWidth(30);
@@ -126,29 +143,34 @@ public class CommonPalette extends DrawingPalette {
 
 				CompoundEdit edit = getEditor().getFactory().getUndoManager().startRecording("Dragging new Element");
 
-				Shape newShape = getEditor().getFactory().makeNewShape(getGraphicalRepresentation(), dropLocation, container.getDiagram());
-
-				ShapeGraphicalRepresentation shapeGR = newShape.getGraphicalRepresentation();
-
+				ShapeGraphicalRepresentation shapeGR = getEditor().getFactory().makeNewShapeGR(getGraphicalRepresentation());
+				if (shapeGR.getShapeSpecification().getShapeType() == ShapeType.SQUARE
+						|| shapeGR.getShapeSpecification().getShapeType() == ShapeType.CIRCLE) {
+					shapeGR.setWidth(40);
+					shapeGR.setHeight(40);
+				} else {
+					shapeGR.setWidth(50);
+					shapeGR.setHeight(40);
+				}
 				if (applyCurrentForeground) {
-					shapeGR.setForeground(getEditor().getInspectedForegroundStyle().cloneStyle());
+					shapeGR.setForeground(getEditor().getController().getInspectedForegroundStyle().cloneStyle());
 				}
 				if (applyCurrentBackground) {
-					shapeGR.setBackground(getEditor().getInspectedBackgroundStyle().cloneStyle());
+					shapeGR.setBackground(getEditor().getController().getInspectedBackgroundStyle().cloneStyle());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle((TextStyle) getEditor().getInspectedTextStyle().cloneStyle());
+					shapeGR.setTextStyle((TextStyle) getEditor().getController().getInspectedTextStyle().cloneStyle());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle((ShadowStyle) getEditor().getInspectedShadowStyle().cloneStyle());
+					shapeGR.setShadowStyle((ShadowStyle) getEditor().getController().getInspectedShadowStyle().cloneStyle());
 				}
 
-				container.addToShapes(newShape);
+				Shape newShape = getEditor().createNewShape(container, shapeGR, dropLocation);
 
 				getEditor().getFactory().getUndoManager().stopRecording(edit);
 
-				getEditor().setCurrentTool(EditorTool.SelectionTool);
-				getEditor().setSelectedObject(getEditor().getDrawing().getDrawingTreeNode(newShape));
+				getEditor().getController().setCurrentTool(EditorTool.SelectionTool);
+				getEditor().getController().setSelectedObject(getEditor().getDrawing().getDrawingTreeNode(newShape));
 
 				return true;
 			}

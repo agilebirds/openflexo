@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fme.FIBInspector" layout="twocols" darkLevel="0" dataClassName="org.openflexo.fme.model.Connector" controllerClassName="org.openflexo.fme.FMEFIBController" name="Inspector">
+  <LocalizedDictionary>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Connector" />
+</Panel>

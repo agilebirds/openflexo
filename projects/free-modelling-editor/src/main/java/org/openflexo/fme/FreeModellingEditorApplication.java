@@ -40,7 +40,6 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -131,6 +130,8 @@ public class FreeModellingEditorApplication {
 	private JDianaStyles stylesWidget;
 	private JDianaPalette commonPalette;
 	private CommonPalette commonPaletteModel;
+	private JDianaPalette dynamicPalette;
+	private DynamicPalette dynamicPaletteModel;
 	private JDianaInspectors inspectors;
 
 	private FIBInspectorController inspector;
@@ -202,6 +203,9 @@ public class FreeModellingEditorApplication {
 		commonPaletteModel = new CommonPalette();
 		commonPalette = toolFactory.makeDianaPalette(commonPaletteModel);
 
+		dynamicPaletteModel = new DynamicPalette();
+		dynamicPalette = toolFactory.makeDianaPalette(dynamicPaletteModel);
+
 		/*paletteDialog = new JDialog(frame, "Palette", false);
 		paletteDialog.getContentPane().add(commonPalette.getComponent());
 		paletteDialog.setLocation(1010, 0);
@@ -244,10 +248,15 @@ public class FreeModellingEditorApplication {
 		layout.setLayoutByWeight(false);
 		layout.setFloatingDividers(true);
 
+		dynamicPalette.getComponent().setBorder(
+				BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0), dynamicPalette.getComponent().getBorder()));
+		inspector.getRootPane().setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+		conceptBrowser.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+
 		splitPanel = new JXMultiSplitPane(layout);
 		splitPanel.add(representedConceptBrowser, "left.top");
 		splitPanel.add(conceptBrowser, "left.bottom");
-		splitPanel.add(new JButton("right.top"), "right.top");
+		splitPanel.add(dynamicPalette.getComponent(), "right.top");
 		splitPanel.add(commonPalette.getComponent(), "right.middle");
 		splitPanel.add(inspector.getRootPane(), "right.bottom");
 		splitPanel.add(mainPanel, "middle");
@@ -584,13 +593,19 @@ public class FreeModellingEditorApplication {
 			// mainPanel.remove(currentDiagramEditor.getController().getScalePanel());
 			currentDiagramEditor.getController().deleteObserver(inspector);
 		}*/
+
+		conceptBrowser.setDiagramEditor(diagramEditor);
+		representedConceptBrowser.setDiagramEditor(diagramEditor);
+
 		currentDiagramEditor = diagramEditor;
 		toolSelector.attachToEditor(diagramEditor.getController());
 		stylesWidget.attachToEditor(diagramEditor.getController());
 		scaleSelector.attachToEditor(diagramEditor.getController());
 		layoutWidget.attachToEditor(diagramEditor.getController());
-		commonPaletteModel.setEditor(diagramEditor.getController());
+		commonPaletteModel.setEditor(diagramEditor);
 		commonPalette.attachToEditor(diagramEditor.getController());
+		dynamicPaletteModel.setEditor(diagramEditor);
+		dynamicPalette.attachToEditor(diagramEditor.getController());
 		inspectors.attachToEditor(diagramEditor.getController());
 
 		/*JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -712,6 +727,18 @@ public class FreeModellingEditorApplication {
 
 	public DiagramEditor getCurrentDiagramEditor() {
 		return currentDiagramEditor;
+	}
+
+	public DynamicPalette getDynamicPaletteModel() {
+		return dynamicPaletteModel;
+	}
+
+	public ConceptBrowser getConceptBrowser() {
+		return conceptBrowser;
+	}
+
+	public RepresentedConceptBrowser getRepresentedConceptBrowser() {
+		return representedConceptBrowser;
 	}
 
 	private JMenuItem makeJMenuItem(String actionName, Icon icon, KeyStroke accelerator, AbstractAction action) {

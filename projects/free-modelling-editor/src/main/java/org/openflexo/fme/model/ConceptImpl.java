@@ -19,28 +19,25 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.XMLElement;
-
 /**
- * A shape element in a diagram
+ * Default implementation for concept
  * 
  * @author sylvain
  * 
  */
-@ModelEntity
-@XMLElement(xmlTag = "Shape")
-public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentation> {
+public abstract class ConceptImpl implements Concept {
 
-	/*@Getter(value = GRAPHICAL_REPRESENTATION)
-	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
-	@XMLElement
-	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation();
-
-	@Setter(value = GRAPHICAL_REPRESENTATION)
-	@Override
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation);*/
+	public boolean isUsed() {
+		if (getName().equals(NONE_CONCEPT)) {
+			return true;
+		}
+		if (getDataModel() != null && getDataModel().getDiagram() != null) {
+			for (ConceptGRAssociation association : getDataModel().getDiagram().getAssociations()) {
+				if (association.getConcept() == this) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

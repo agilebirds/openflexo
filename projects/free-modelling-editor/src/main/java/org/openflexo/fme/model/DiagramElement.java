@@ -19,6 +19,7 @@
  */
 package org.openflexo.fme.model;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.openflexo.fge.GraphicalRepresentation;
@@ -33,19 +34,29 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
+/**
+ * Abstraction of any graphical element at logic level, involved in a {@link Diagram}
+ * 
+ * @author sylvain
+ * 
+ * @param <M>
+ * @param <G>
+ */
 @ModelEntity
 @ImplementationClass(DiagramElementImpl.class)
-public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends FMEModelObject {
+public interface DiagramElement<M extends DiagramElement<M, G>, G extends GraphicalRepresentation> extends FMEModelObject,
+		PropertyChangeListener {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
-	public static final String NAME = "name";
+	// public static final String NAME = "name";
+	public static final String ASSOCIATION = "association";
 	public static final String CONTAINER = "container";
 	public static final String PROPERTY_VALUES = "propertyValues";
+	public static final String INSTANCE = "instance";
 
 	@Getter(value = SHAPES, cardinality = Cardinality.LIST, inverse = CONTAINER)
 	@XMLElement(primary = true)
@@ -79,12 +90,12 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Remover(CONNECTORS)
 	public void removeFromConnectors(Connector aConnector);
 
-	@Getter(value = NAME)
+	/*@Getter(value = NAME)
 	@XMLAttribute
 	public String getName();
 
 	@Setter(value = NAME)
-	public void setName(String aName);
+	public void setName(String aName);*/
 
 	@Getter(value = PROPERTY_VALUES, cardinality = Cardinality.LIST)
 	@XMLElement(primary = true)
@@ -118,6 +129,24 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Setter(value = GRAPHICAL_REPRESENTATION)
 	public void setGraphicalRepresentation(G graphicalRepresentation);
+
+	@Getter(value = ASSOCIATION)
+	@XMLElement
+	public ConceptGRAssociation getAssociation();
+
+	@Setter(value = ASSOCIATION)
+	public void setAssociation(ConceptGRAssociation anAssociation);
+
+	@Getter(value = INSTANCE)
+	@XMLElement
+	public Instance getInstance();
+
+	@Setter(INSTANCE)
+	public void setInstance(Instance instance);
+
+	public List<DiagramElement<?, ?>> getElementsWithAssociation(ConceptGRAssociation association);
+
+	public List<DiagramElement<?, ?>> getElementsRepresentingInstance(Instance instance);
 
 	public void setChanged();
 

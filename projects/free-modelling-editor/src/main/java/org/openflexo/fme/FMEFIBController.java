@@ -65,6 +65,10 @@ public class FMEFIBController extends FIBController {
 		this.diagramEditor = diagramEditor;
 	}
 
+	public void createConcept() {
+		getDiagramEditor().createNewConcept();
+	}
+
 	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
 		return getDiagramEditor().createPropertyValue(element);
 	}

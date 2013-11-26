@@ -24,6 +24,12 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.CloneableProxyObject;
 import org.openflexo.model.factory.DeletableProxyObject;
 
+/**
+ * Root class for all concepts involved in FreeModellingEditor demonstrator
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
 public interface FMEModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
 

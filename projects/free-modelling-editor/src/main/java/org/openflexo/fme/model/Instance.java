@@ -25,6 +25,12 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
+/**
+ * Represents an instance of a concept in emerging data model
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
 @XMLElement(xmlTag = "Instance")
 public interface Instance extends FMEModelObject {

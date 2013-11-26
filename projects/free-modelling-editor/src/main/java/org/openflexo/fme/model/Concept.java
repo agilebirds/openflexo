@@ -28,6 +28,7 @@ import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
@@ -35,11 +36,21 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
+/**
+ * Represents a concept in emerging data model
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
+@ImplementationClass(ConceptImpl.class)
 @XMLElement(xmlTag = "Concept")
 public interface Concept extends FMEModelObject {
 
+	public static final String NONE_CONCEPT = "None";
+
 	public static final String NAME = "name";
+	public static final String DATA_MODEL = "dataModel";
 	public static final String INSTANCES = "instances";
 
 	@Getter(value = NAME)
@@ -48,6 +59,13 @@ public interface Concept extends FMEModelObject {
 
 	@Setter(value = NAME)
 	public void setName(String aName);
+
+	@Getter(value = DATA_MODEL, inverse = DataModel.CONCEPTS)
+	@XMLElement
+	public DataModel getDataModel();
+
+	@Setter(value = DATA_MODEL)
+	public void setDataModel(DataModel aDataModel);
 
 	@Getter(value = INSTANCES, cardinality = Cardinality.LIST, inverse = Instance.CONCEPT)
 	@XMLElement(primary = true)
@@ -68,4 +86,5 @@ public interface Concept extends FMEModelObject {
 	@Finder(attribute = Instance.NAME, collection = INSTANCES)
 	public Instance getInstanceNamed(String instanceName);
 
+	public boolean isUsed();
 }

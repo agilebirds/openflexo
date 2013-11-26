@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.control;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * A {@link DrawingPalette} is the abstraction of a palette associated to a drawing<br>
@@ -36,7 +38,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
  * @author sylvain
  * 
  */
-public class DrawingPalette {
+public class DrawingPalette implements HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
 
@@ -47,6 +49,8 @@ public class DrawingPalette {
 	private final String title;
 
 	private boolean drawWorkingArea = false;
+
+	private PropertyChangeSupport pcSupport;
 
 	/**
 	 * This factory is the one used to build palettes, NOT THE ONE which is used in the related drawing editor
@@ -67,6 +71,7 @@ public class DrawingPalette {
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}
+		pcSupport = new PropertyChangeSupport(this);
 		this.width = width;
 		this.height = height;
 		this.title = title;
@@ -74,6 +79,16 @@ public class DrawingPalette {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
 		}
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
 	}
 
 	public void delete() {
@@ -108,10 +123,12 @@ public class DrawingPalette {
 		element.getGraphicalRepresentation().setIsReadOnly(true);
 		element.getGraphicalRepresentation().setLocationConstraints(LocationConstraints.UNMOVABLE);
 		// element.getGraphicalRepresentation().addToMouseDragControls(mouseDragControl)
+		pcSupport.firePropertyChange("elements", null, element);
 	}
 
 	public void removeElement(PaletteElement element) {
 		elements.remove(element);
+		pcSupport.firePropertyChange("elements", element, null);
 	}
 
 	public boolean getDrawWorkingArea() {

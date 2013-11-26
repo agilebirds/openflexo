@@ -54,7 +54,7 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 	private Object dataObject;
 
 	private FIBView<?, ?> fibView;
-	private FIBController fibController;
+	private FMEFIBController fibController;
 	private FIBComponent fibComponent;
 
 	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
@@ -104,8 +104,8 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 	 * @param controller
 	 * @return the newly created FlexoFIBController
 	 */
-	protected FIBController createFibController(FIBComponent fibComponent) {
-		return FIBController.instanciateController(fibComponent, FlexoLocalization.getMainLocalizer());
+	protected FMEFIBController createFibController(FIBComponent fibComponent) {
+		return (FMEFIBController) FIBController.instanciateController(fibComponent, FlexoLocalization.getMainLocalizer());
 		/*if (returned instanceof FlexoFIBController) {
 			((FlexoFIBController) returned).setFlexoController(controller);
 			return (FlexoFIBController) returned;
@@ -153,7 +153,7 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 		return fibView;
 	}
 
-	public FIBController getFIBController() {
+	public FMEFIBController getFIBController() {
 		return fibController;
 	}
 
@@ -190,6 +190,16 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 	 * check or redefine component
 	 */
 	protected void initializeFIBComponent() {
+	}
+
+	public void setDiagramEditor(DiagramEditor diagramEditor) {
+		if (fibController.getDiagramEditor() != null) {
+			fibController.removeSelectionListener(fibController.getDiagramEditor());
+		}
+		fibController.setDiagramEditor(diagramEditor);
+		if (diagramEditor != null) {
+			fibController.addSelectionListener(diagramEditor);
+		}
 	}
 
 }

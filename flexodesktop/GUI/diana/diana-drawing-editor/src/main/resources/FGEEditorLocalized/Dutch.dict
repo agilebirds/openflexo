@@ -24,6 +24,7 @@ location_size_inspector=location_size_inspector
 logs=Logs
 new_drawing=New drawing...
 new_slideshow=new_slideshow
+no_type=Geen type
 ok=OK
 open_drawing=Open drawing...
 open_slideshow=open_slideshow

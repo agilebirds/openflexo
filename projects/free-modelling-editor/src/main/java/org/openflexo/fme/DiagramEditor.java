@@ -24,21 +24,31 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.fme.dialog.CreateConceptAndInstanceDialog;
 import org.openflexo.fme.dialog.CreateConceptDialog;
 import org.openflexo.fme.dialog.CreateInstanceDialog;
 import org.openflexo.fme.model.Concept;
+import org.openflexo.fme.model.ConceptGRAssociation;
 import org.openflexo.fme.model.Diagram;
 import org.openflexo.fme.model.DiagramElement;
 import org.openflexo.fme.model.DiagramFactory;
 import org.openflexo.fme.model.Instance;
 import org.openflexo.fme.model.PropertyValue;
+import org.openflexo.fme.model.Shape;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
@@ -46,7 +56,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.undo.CompoundEdit;
 import org.openflexo.toolbox.FileResource;
 
-public class DiagramEditor {
+public class DiagramEditor implements FIBSelectionListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(DiagramEditor.class.getPackage().getName());
 
@@ -203,11 +213,130 @@ public class DiagramEditor {
 		return getApplication().getFactory();
 	}
 
-	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
-		PropertyValue returned = getFactory().newInstance(PropertyValue.class);
-		returned.setKey("property");
-		element.addToPropertyValues(returned);
-		return returned;
+	public Shape createNewShape(DiagramElement container, ShapeGraphicalRepresentation graphicalRepresentation, FGEPoint dropLocation) {
+
+		CompoundEdit edit = null;
+
+		if (!getFactory().getUndoManager().isBeeingRecording()) {
+			edit = getFactory().getUndoManager().startRecording("Dragging new Element");
+		}
+
+		Shape newShape = getFactory().makeNewShape(graphicalRepresentation, dropLocation, container.getDiagram());
+
+		// Lets see about ConceptGRAssociation
+
+		ConceptGRAssociation association = retrieveAssociation(newShape.getGraphicalRepresentation());
+		if (association == null) {
+
+			// No other association with same GR found
+
+			association = getFactory().newInstance(ConceptGRAssociation.class);
+
+			ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation().cloneObject();
+
+			association.setGraphicalRepresentation(shapeGR);
+			association.setConcept(getDiagram().getDataModel().getConceptNamed(Concept.NONE_CONCEPT));
+
+			getDiagram().addToAssociations(association);
+			// getApplication().getDynamicPaletteModel().addAssociation(association);
+			getApplication().getDynamicPaletteModel().update();
+		}
+
+		else {
+
+			// An association with same GR has been found, use it
+
+		}
+
+		String baseName = "concept";
+		String instanceName = baseName;
+		int i = 1;
+		while (association.getConcept().getInstanceNamed(instanceName) != null) {
+			instanceName = baseName + i;
+			i++;
+		}
+
+		Instance instance = getFactory().newInstance(Instance.class);
+		instance.setName(instanceName);
+		instance.setConcept(association.getConcept());
+		newShape.setInstance(instance);
+
+		newShape.setAssociation(association);
+		container.addToShapes(newShape);
+
+		if (edit != null) {
+			getFactory().getUndoManager().stopRecording(edit);
+		}
+
+		return newShape;
+	}
+
+	public Shape createNewShape(DiagramElement container, ConceptGRAssociation association, FGEPoint dropLocation) {
+
+		CompoundEdit edit = null;
+
+		if (!getFactory().getUndoManager().isBeeingRecording()) {
+			edit = getFactory().getUndoManager().startRecording("Dragging new Element");
+		}
+
+		Shape newShape = getFactory().makeNewShape((ShapeGraphicalRepresentation) association.getGraphicalRepresentation(), dropLocation,
+				container.getDiagram());
+
+		newShape.setAssociation(association);
+
+		String instanceName = association.getConcept().getName().substring(0, 1).toLowerCase()
+				+ association.getConcept().getName().substring(1);
+		String baseName = instanceName;
+		int i = 1;
+		while (association.getConcept().getInstanceNamed(instanceName) != null) {
+			instanceName = baseName + i;
+			i++;
+		}
+
+		Instance returned = getFactory().newInstance(Instance.class);
+		returned.setName(instanceName);
+		returned.setConcept(association.getConcept());
+		newShape.setInstance(returned);
+
+		container.addToShapes(newShape);
+
+		if (edit != null) {
+			getFactory().getUndoManager().stopRecording(edit);
+		}
+
+		return newShape;
+	}
+
+	/**
+	 * Look-up in existing associations an association where gr exactely maps same ShapeSpecification, ForegroundStyle, BackgroundStyle and
+	 * TextStyle
+	 * 
+	 * @param gr
+	 * @return
+	 */
+	protected ConceptGRAssociation retrieveAssociation(GraphicalRepresentation gr) {
+		for (ConceptGRAssociation a : getDiagram().getAssociations()) {
+			if (gr instanceof ShapeGraphicalRepresentation && a.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation searchedGR = (ShapeGraphicalRepresentation) gr;
+				ShapeGraphicalRepresentation iteratedGR = (ShapeGraphicalRepresentation) a.getGraphicalRepresentation();
+				if ((searchedGR.getShapeSpecification().equalsObject(iteratedGR.getShapeSpecification()))
+						&& (searchedGR.getBackground().equalsObject(iteratedGR.getBackground()))
+						&& (searchedGR.getForeground().equalsObject(iteratedGR.getForeground()))
+						&& (searchedGR.getTextStyle().equalsObject(iteratedGR.getTextStyle()))) {
+					return a;
+				}
+			} else if (gr instanceof ConnectorGraphicalRepresentation
+					&& a.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
+				ConnectorGraphicalRepresentation searchedGR = (ConnectorGraphicalRepresentation) gr;
+				ConnectorGraphicalRepresentation iteratedGR = (ConnectorGraphicalRepresentation) a.getGraphicalRepresentation();
+				if ((searchedGR.getConnectorSpecification().equalsObject(iteratedGR.getConnectorSpecification()))
+						&& (searchedGR.getForeground().equalsObject(iteratedGR.getForeground()))
+						&& (searchedGR.getTextStyle().equalsObject(iteratedGR.getTextStyle()))) {
+					return a;
+				}
+			}
+		}
+		return null;
 	}
 
 	public Concept createNewConcept() {
@@ -225,8 +354,8 @@ public class DiagramEditor {
 	}
 
 	public Instance createNewConceptAndNewInstance(DiagramElement<?, ?> diagramElement) {
-		CreateConceptAndInstanceDialog dialogData = new CreateConceptAndInstanceDialog(getDiagram().getDataModel(),
-				diagramElement.getName());
+		CreateConceptAndInstanceDialog dialogData = new CreateConceptAndInstanceDialog(getDiagram().getDataModel(), diagramElement
+				.getInstance().getName());
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_CONCEPT_NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
@@ -234,31 +363,44 @@ public class DiagramEditor {
 			concept.setName(dialogData.getConceptName());
 			System.out.println("Created " + concept);
 			getDiagram().getDataModel().addToConcepts(concept);
+			diagramElement.getAssociation().setConcept(concept);
+			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
+			diagramElement.getInstance().delete();
 			Instance returned = getFactory().newInstance(Instance.class);
 			returned.setName(dialogData.getInstanceName());
 			returned.setConcept(concept);
 			System.out.println("Created " + returned);
 			concept.addToInstances(returned);
-			diagramElement.setName(dialogData.getInstanceName());
+			diagramElement.setInstance(returned);
 			return returned;
 		}
 		return null;
 	}
 
 	public Instance createNewInstance(DiagramElement<?, ?> diagramElement) {
-		CreateInstanceDialog dialogData = new CreateInstanceDialog(getDiagram().getDataModel(), diagramElement.getName());
+		CreateInstanceDialog dialogData = new CreateInstanceDialog(getDiagram().getDataModel(), diagramElement.getInstance().getName());
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
+			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
+			diagramElement.getInstance().delete();
 			Instance returned = getFactory().newInstance(Instance.class);
 			returned.setName(dialogData.getInstanceName());
 			returned.setConcept(dialogData.getConcept());
+			diagramElement.getAssociation().setConcept(dialogData.getConcept());
 			System.out.println("Created " + returned);
 			dialogData.getConcept().addToInstances(returned);
-			diagramElement.setName(dialogData.getInstanceName());
+			diagramElement.setInstance(returned);
 			return returned;
 		}
 		return null;
+	}
+
+	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
+		PropertyValue returned = getFactory().newInstance(PropertyValue.class);
+		returned.setKey("property");
+		element.addToPropertyValues(returned);
+		return returned;
 	}
 
 	public void delete(List<DiagramElement<?, ?>> objectsToDelete) {
@@ -269,4 +411,67 @@ public class DiagramEditor {
 		}
 	}
 
+	private boolean isSelectingObjectOnDiagram = false;
+
+	@Override
+	public synchronized void selectionChanged(Vector<Object> selection) {
+		List<DiagramElement<?, ?>> reflectingSelection = new ArrayList<DiagramElement<?, ?>>();
+
+		for (Shape s : getDiagram().getShapes()) {
+			s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
+			s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+		}
+
+		if (selection.size() > 0) {
+			for (Object o : selection) {
+				Concept concept = null;
+				if (o instanceof Concept) {
+					concept = (Concept) o;
+				} else if (o instanceof Instance) {
+					concept = ((Instance) o).getConcept();
+				}
+				for (Shape s : getDiagram().getShapes()) {
+					if (s.getAssociation().getConcept() != concept) {
+						s.getGraphicalRepresentation().getForeground().setUseTransparency(true);
+						s.getGraphicalRepresentation().getForeground().setTransparencyLevel(0.1f);
+						s.getGraphicalRepresentation().getBackground().setUseTransparency(true);
+						s.getGraphicalRepresentation().getBackground().setTransparencyLevel(0.1f);
+					}
+				}
+			}
+		}
+
+		for (Object o : selection) {
+			if (o instanceof Instance) {
+				reflectingSelection.addAll(getDiagram().getElementsRepresentingInstance((Instance) o));
+			}
+		}
+
+		List<DrawingTreeNode<?, ?>> dtnSelection = new ArrayList<DrawingTreeNode<?, ?>>();
+		for (DiagramElement<?, ?> e : reflectingSelection) {
+			DrawingTreeNode<?, ?> dtn = getDrawing().getDrawingTreeNode(e);
+			if (dtn != null) {
+				dtnSelection.add(dtn);
+			}
+		}
+		isSelectingObjectOnDiagram = true;
+		getController().setSelectedObjects(dtnSelection);
+		isSelectingObjectOnDiagram = false;
+	}
+
+	public synchronized void fireDrawingSelectionChanged(List<DiagramElement> diagramElements) {
+		if (isSelectingObjectOnDiagram) {
+			return;
+		}
+
+		for (Shape s : getDiagram().getShapes()) {
+			s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
+			s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+		}
+
+		application.getRepresentedConceptBrowser().getFIBController().selectionCleared();
+		for (DiagramElement e : diagramElements) {
+			application.getRepresentedConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance());
+		}
+	}
 }

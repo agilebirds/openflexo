@@ -25,6 +25,12 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
+/**
+ * Represents a property value, as s String value associated with a String key
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
 @XMLElement(xmlTag = "PropertyValue")
 public interface PropertyValue extends FMEModelObject {

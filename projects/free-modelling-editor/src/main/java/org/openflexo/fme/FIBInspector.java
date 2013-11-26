@@ -19,6 +19,7 @@
  */
 package org.openflexo.fme;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -37,11 +38,17 @@ public class FIBInspector extends FIBPanel {
 		if (getDataType() == null) {
 			return;
 		}
-		if (getDataType() instanceof Class) {
-			FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
-			if (superInspector != null) {
-				superInspector.appendSuperInspectors(controller);
-				appendSuperInspector(superInspector);
+		Class dataClass = TypeUtils.getBaseClass(getDataType());
+		FIBInspector superInspector = controller.inspectorForClass(dataClass.getSuperclass());
+		if (superInspector != null) {
+			superInspector.appendSuperInspectors(controller);
+			appendSuperInspector(superInspector);
+		}
+		for (Class<?> superInterface : dataClass.getInterfaces()) {
+			FIBInspector superInterfaceInspector = controller.inspectorForClass(superInterface);
+			if (superInterfaceInspector != null) {
+				superInterfaceInspector.appendSuperInspectors(controller);
+				appendSuperInspector(superInterfaceInspector);
 			}
 		}
 	}

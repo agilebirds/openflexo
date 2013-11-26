@@ -32,13 +32,26 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
+/**
+ * Emerging {@link DataModel}: container of concepts and instances of these concepts
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity
 @XMLElement(xmlTag = "DataModel")
 public interface DataModel extends FMEModelObject {
 
+	public static final String DIAGRAM = "diagram";
 	public static final String CONCEPTS = "concepts";
 
-	@Getter(value = CONCEPTS, cardinality = Cardinality.LIST)
+	@Getter(value = DIAGRAM, inverse = Diagram.DATA_MODEL)
+	public Diagram getDiagram();
+
+	@Setter(value = DIAGRAM)
+	public void setDiagram(Diagram aDiagram);
+
+	@Getter(value = CONCEPTS, cardinality = Cardinality.LIST, inverse = Concept.DATA_MODEL)
 	@XMLElement(primary = true)
 	@Embedded
 	public List<Concept> getConcepts();

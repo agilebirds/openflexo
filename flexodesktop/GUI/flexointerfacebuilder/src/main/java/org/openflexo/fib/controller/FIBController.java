@@ -273,11 +273,11 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		FIBController returned = null;
 		if (fibComponent.getControllerClass() != null) {
 			try {
-				System.out.println("Class=" + fibComponent.getControllerClass());
+				// System.out.println("Class=" + fibComponent.getControllerClass());
 				Constructor<? extends FIBController> c = fibComponent.getControllerClass().getConstructor(FIBComponent.class);
-				System.out.println("Constructor=" + c);
+				// System.out.println("Constructor=" + c);
 				returned = c.newInstance(fibComponent);
-				System.out.println("returned=" + returned);
+				// System.out.println("returned=" + returned);
 			} catch (SecurityException e) {
 				logger.warning("SecurityException: Could not instanciate " + fibComponent.getControllerClass());
 			} catch (NoSuchMethodException e) {
@@ -660,7 +660,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 					lastFocusedSelectable = newFocusedWidget.getSelectableComponent();
 					if (lastFocusedSelectable.synchronizedWithSelection()) {
 						selectionLeader = newFocusedWidget.getSelectableComponent();
-						logger.info("Selection LEADER is now " + selectionLeader);
+						// logger.info("Selection LEADER is now " + selectionLeader);
 						fireSelectionChanged((FIBSelectable) newFocusedWidget);
 					}
 				}

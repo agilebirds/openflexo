@@ -208,21 +208,21 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		if (getClipboard().isSingleObject()) {
 			if (getClipboard().getSingleContents() instanceof Shape) {
 				Shape shapeBeingPasted = (Shape) getClipboard().getSingleContents();
-				shapeBeingPasted.setName(shapeBeingPasted.getName() + "-new");
+				shapeBeingPasted.getInstance().setName(shapeBeingPasted.getInstance().getName() + "-new");
 				shapeBeingPasted.getGraphicalRepresentation().setX(proposedPastingLocation.x);
 				shapeBeingPasted.getGraphicalRepresentation().setY(proposedPastingLocation.y);
 			} else if (getClipboard().getSingleContents() instanceof Connector) {
 				Connector connectorBeingPasted = (Connector) getClipboard().getSingleContents();
-				connectorBeingPasted.setName(connectorBeingPasted.getName() + "-new");
+				connectorBeingPasted.getInstance().setName(connectorBeingPasted.getInstance().getName() + "-new");
 			}
 		} else {
 			for (Object o : getClipboard().getMultipleContents()) {
 				if (o instanceof Shape) {
 					((Shape) o).getGraphicalRepresentation().setX(((Shape) o).getGraphicalRepresentation().getX() + PASTE_DELTA);
 					((Shape) o).getGraphicalRepresentation().setY(((Shape) o).getGraphicalRepresentation().getY() + PASTE_DELTA);
-					((Shape) o).setName(((Shape) o).getName() + "-new");
+					((Shape) o).getInstance().setName(((Shape) o).getInstance().getName() + "-new");
 				} else if (o instanceof Connector) {
-					((Connector) o).setName(((Connector) o).getName() + "-new");
+					((Connector) o).getInstance().setName(((Connector) o).getInstance().getName() + "-new");
 				}
 			}
 		}
@@ -242,5 +242,6 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		} else {
 			diagramEditor.getApplication().getInspector().switchToMultipleContent();
 		}
+		diagramEditor.fireDrawingSelectionChanged(getSelectedDrawables(DiagramElement.class));
 	}
 }

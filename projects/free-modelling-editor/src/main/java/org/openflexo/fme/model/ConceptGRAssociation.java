@@ -19,44 +19,46 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
- * A connector element in a diagram
+ * Represents the association between a graphical representation and a concept in emerging DataModel.<br>
+ * Note that we are here a meta-level: we type here a DiagramElement
  * 
  * @author sylvain
  * 
  */
 @ModelEntity
-@XMLElement(xmlTag = "Connector")
-public interface Connector extends DiagramElement<Connector, ConnectorGraphicalRepresentation> {
+@XMLElement(xmlTag = "ConceptGRAssociation")
+@ImplementationClass(ConceptGRAssociationImpl.class)
+public interface ConceptGRAssociation extends FMEModelObject {
 
-	public static final String START_SHAPE = "startShape";
-	public static final String END_SHAPE = "endShape";
+	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
+	public static final String CONCEPT = "concept";
 
-	@Getter(START_SHAPE)
-	@XMLElement(context = "Start")
-	@Embedded
+	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@CloningStrategy(StrategyType.CLONE)
-	public Shape getStartShape();
-
-	@Setter(START_SHAPE)
-	public void setStartShape(Shape startShape);
-
-	@Getter(END_SHAPE)
-	@XMLElement(context = "End")
 	@Embedded
-	@CloningStrategy(StrategyType.CLONE)
-	public abstract Shape getEndShape();
+	@XMLElement
+	public GraphicalRepresentation getGraphicalRepresentation();
 
-	@Setter(END_SHAPE)
-	public abstract void setEndShape(Shape endShape);
+	@Setter(value = GRAPHICAL_REPRESENTATION)
+	public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation);
 
+	@Getter(value = CONCEPT)
+	@XMLElement
+	public Concept getConcept();
+
+	@Setter(CONCEPT)
+	public void setConcept(Concept concept);
+
+	public String getName();
 }

@@ -302,7 +302,8 @@ public abstract class FGEObjectImpl implements FGEObject {
 	}
 
 	public void forward(PropertyChangeEvent evt) {
-		getPropertyChangeSupport().firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		getPropertyChangeSupport().firePropertyChange(
+				new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue()));
 	}
 
 	@Deprecated
