@@ -445,7 +445,7 @@
             if(isIE6())
                 areaOffset = 4;
             
-            #if(${node.getLevel()} == "ACTIVITY" && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()}))
+            #if(${node.getLevel()} == "ACTIVITY" && ${generator.isInstance($node,"org.openflexo.foundation.wkf.node.AbstractActivityNode")} && (${node.getOperationPetriGraph()} || ${node.getExecutionPetriGraph()}))
                 
                 #if(${node.getOperationPetriGraph()})
                     #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
@@ -546,14 +546,14 @@
 			#set($index=${node.getIndex()})
 		#end
         FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()} || ${node.getLevel()} != "PROCESS") false #else true #end);
-        #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
+        #if(${node.getLevel()} == "ACTIVITY" && ${generator.isInstance($node,"org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getOperationPetriGraph()})
             #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
                 #generateNodesCreation($subNode ${node.getURI()})
 			#end
 			#foreach($subNode in ${node.getOperationPetriGraph().getArtefacts()})
                 #generateNodesCreation($subNode ${node.getURI()})
             #end
-        #elseif(${node.getLevel()} == "ACTIVITY" && ${node.getExecutionPetriGraph()})
+        #elseif(${node.getLevel()} == "ACTIVITY" && ${generator.isInstance($node,"org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getExecutionPetriGraph()})
             #foreach($subNode in ${node.getExecutionPetriGraph().getNodes()})
                 #generateNodesCreation($subNode ${node.getURI()})
             #end
