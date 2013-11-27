@@ -61,4 +61,18 @@ public interface ConceptGRAssociation extends FMEModelObject {
 	public void setConcept(Concept concept);
 
 	public String getName();
+
+	/*@DelegateImplementation
+	public static abstract class APartialImplementation extends DelegatedImplementation implements ConceptGRAssociation {
+		public String getName() {
+			return toString();
+		}
+		@Override
+		public String toString() {
+			return "Association" + Integer.toHexString(hashCode());
+		}
+	}*/
+
+	// public @interface Getter2 {}
+
 }
