@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Drawing id="1">
-  <MyDrawingGraphicalRepresentation id="2" identifier="root" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
+<Diagram id="1">
+  <DrawingGraphicalRepresentation id="2" identifier="root" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255">
     <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
-  </MyDrawingGraphicalRepresentation>
-</Drawing>
+  </DrawingGraphicalRepresentation>
+</Diagram>
 

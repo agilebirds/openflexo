@@ -126,7 +126,7 @@ class XMLDeserializer {
 
 		I returned;
 		String text = node.getText();
-		if (text != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
+		if (text != null && getStringEncoder() != null && getStringEncoder().isConvertable(modelEntity.getImplementedInterface())) {
 			// GPO: I am not sure this is still useful.
 			try {
 				returned = getStringEncoder().fromString(modelEntity.getImplementedInterface(), text);

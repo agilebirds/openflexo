@@ -444,7 +444,7 @@ public class DiagramEditorApplication {
 		return injector;
 	}*/
 
-	private void addDiagramEditor(DiagramEditor diagramEditor) {
+	public void addDiagramEditor(DiagramEditor diagramEditor) {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.addChangeListener(new ChangeListener() {
@@ -561,6 +561,10 @@ public class DiagramEditorApplication {
 
 		frame.setVisible(true);
 
+	}
+
+	public JPanel getMainPanel() {
+		return mainPanel;
 	}
 
 	public void quit() {
