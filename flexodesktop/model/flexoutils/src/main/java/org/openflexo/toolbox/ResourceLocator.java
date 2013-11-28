@@ -180,7 +180,7 @@ public class ResourceLocator {
 			for (File f : dir.listFiles()) {
 				if (f.getName().startsWith("flexo") || f.getName().contains("connector")
 						|| f.getName().equals("technologyadaptersintegration") || f.getName().startsWith("diana")
-						|| f.getName().equals("projects") || f.getName().equals("free-modelling-editor")) {
+						|| f.getName().startsWith("fib") || f.getName().equals("projects") || f.getName().equals("free-modelling-editor")) {
 					addProjectResourceDirs(files, f);
 				}
 				if (f.isDirectory()) {

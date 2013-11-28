@@ -53,7 +53,7 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 
 	private Object dataObject;
 
-	private FIBView<?, ?> fibView;
+	private FIBView<?, ?, ?> fibView;
 	private FMEFIBController fibController;
 	private FIBComponent fibComponent;
 
@@ -149,7 +149,7 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 		return fibComponent;
 	}
 
-	public FIBView<?, ?> getFIBView() {
+	public FIBView<?, ?, ?> getFIBView() {
 		return fibView;
 	}
 
@@ -157,7 +157,7 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 		return fibController;
 	}
 
-	public FIBView<?, ?> getFIBView(String componentName) {
+	public FIBView<?, ?, ?> getFIBView(String componentName) {
 		return fibController.viewForComponent(componentName);
 	}
 

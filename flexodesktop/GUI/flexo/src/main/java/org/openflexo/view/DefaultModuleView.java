@@ -12,11 +12,11 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 public class DefaultModuleView<O extends FlexoModelObject> extends JPanel implements ModuleView<O> {
 
 	private final O representedObject;
-	private final FIBView<?, ?> component;
+	private final FIBView<?, ?, ?> component;
 	private final FlexoPerspective perspective;
 	private final FlexoController controller;
 
-	public DefaultModuleView(FlexoController controller, O representedObject, FIBView<?, ?> component, FlexoPerspective perspective) {
+	public DefaultModuleView(FlexoController controller, O representedObject, FIBView<?, ?, ?> component, FlexoPerspective perspective) {
 		super(new BorderLayout());
 		this.controller = controller;
 		this.representedObject = representedObject;

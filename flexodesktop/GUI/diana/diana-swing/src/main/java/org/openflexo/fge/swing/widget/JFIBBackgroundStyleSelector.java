@@ -161,7 +161,7 @@ public class JFIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> im
 
 	public class BackgroundStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView<?, ?> fibView;
+		private FIBView<?, ?, ?> fibView;
 		private CustomFIBController controller;
 
 		// private BackgroundStyleFactory bsFactory;

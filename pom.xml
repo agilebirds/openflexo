@@ -31,6 +31,7 @@
 		<swingx.version>1.6.3</swingx.version>
 		<javahelp.version>2.0.05</javahelp.version>
 		<diana.version>1.0-SNAPSHOT</diana.version>
+		<fib.version>1.0-SNAPSHOT</fib.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
@@ -288,19 +289,43 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
-				<version>${project.version}</version>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
-				<version>${project.version}</version>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
 				<classifier>tests</classifier>
+			</dependency>		
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-core</artifactId>
+				<version>${fib.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
-				<version>${project.version}</version>
+				<artifactId>fib-swing</artifactId>
+				<version>${fib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing</artifactId>
+				<version>${fib.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>

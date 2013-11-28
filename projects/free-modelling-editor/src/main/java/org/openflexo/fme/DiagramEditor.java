@@ -26,7 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
@@ -414,7 +413,7 @@ public class DiagramEditor implements FIBSelectionListener {
 	private boolean isSelectingObjectOnDiagram = false;
 
 	@Override
-	public synchronized void selectionChanged(Vector<Object> selection) {
+	public synchronized void selectionChanged(List<Object> selection) {
 		List<DiagramElement<?, ?>> reflectingSelection = new ArrayList<DiagramElement<?, ?>>();
 
 		for (Shape s : getDiagram().getShapes()) {

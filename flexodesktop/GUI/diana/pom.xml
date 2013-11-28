@@ -52,10 +52,20 @@
 			   <artifactId>flexopamela</artifactId>
 			   <version>1.6.1-SNAPSHOT</version>
 		    </dependency>
+		    <dependency>
+			   <groupId>org.openflexo</groupId>
+			   <artifactId>flexoutils</artifactId>
+			   <version>1.6.1-SNAPSHOT</version>
+		    </dependency>
+		    <dependency>
+			   <groupId>org.openflexo</groupId>
+			   <artifactId>flexographicsutils</artifactId>
+			   <version>1.6.1-SNAPSHOT</version>
+		    </dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
-			    <version>1.6.1-SNAPSHOT</version>
+				<artifactId>fib-core</artifactId>
+			    <version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>

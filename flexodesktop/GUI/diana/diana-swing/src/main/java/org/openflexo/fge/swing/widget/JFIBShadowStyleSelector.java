@@ -139,7 +139,7 @@ public class JFIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements
 
 	public class ShadowStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView<?, ?> fibView;
+		private FIBView<?, ?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ShadowStyleDetailsPanel(ShadowStyle shadowStyle) {

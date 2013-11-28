@@ -126,7 +126,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 
 	public class ShapeDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView<?, ?> fibView;
+		private FIBView<?, ?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ShapeDetailsPanel(ShapeSpecification backgroundStyle) {
@@ -184,7 +184,7 @@ public class JFIBShapeSelector extends CustomPopup<ShapeSpecification> implement
 				getFrontComponent().setShape(getFactory().getShapeSpecification());
 				// getFrontComponent().update();
 
-				FIBView<?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
+				FIBView<?, ?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
 					JComponent customComponent = ((FIBCustomWidget<?, ?>) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {

@@ -32,7 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
 		</dependency>
 		<!--  <dependency>
 			<groupId>org.openflexo</groupId>

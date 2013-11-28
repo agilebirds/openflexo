@@ -141,7 +141,7 @@ public class JFIBTextStyleSelector extends CustomPopup<TextStyle> implements FIB
 
 	public class TextStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView<?, ?> fibView;
+		private FIBView<?, ?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected TextStyleDetailsPanel(TextStyle textStyle) {

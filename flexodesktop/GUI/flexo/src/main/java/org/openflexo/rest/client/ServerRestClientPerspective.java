@@ -47,7 +47,7 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 			} else if (component.getControllerClass() != null) {
 				logger.warning("Controller for component " + component + " is not an instanceof FlexoFIBController");
 			}
-			FIBView<?, ?> view = fibController.buildView(component);
+			FIBView<?, ?, ?> view = fibController.buildView(component);
 			fibController.setDataObject(model);
 			return new DefaultModuleView<FlexoProject>(controller, (FlexoProject) object, view, this);
 		} else {

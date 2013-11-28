@@ -36,9 +36,7 @@ import javax.swing.SwingConstants;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.editor.notifications.FIBEditorNotification;
-import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
@@ -46,6 +44,9 @@ import org.openflexo.toolbox.FileResource;
 public class FIBInspectorController implements Observer/*, ChangeListener*/{
 
 	static final Logger logger = Logger.getLogger(FIBInspectorController.class.getPackage().getName());
+
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FMEEditorLocalized"),
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
 
 	// private JDialog inspectorDialog;
 	private JPanel EMPTY_CONTENT;
@@ -87,7 +88,7 @@ public class FIBInspectorController implements Observer/*, ChangeListener*/{
 
 		for (FIBInspector inspector : inspectors.values()) {
 
-			FIBView inspectorView = FIBController.makeView(inspector, FIBAbstractEditor.LOCALIZATION);
+			FIBView inspectorView = FIBController.makeView(inspector, LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			logger.info("Initialized inspector for " + inspector.getDataClass());
@@ -222,14 +223,14 @@ public class FIBInspectorController implements Observer/*, ChangeListener*/{
 
 	@Override
 	public void update(Observable o, Object notification) {
-		if (notification instanceof FIBEditorNotification) {
+		/*if (notification instanceof FIBEditorNotification) {
 			if (notification instanceof SelectedObjectChange) {
 				SelectedObjectChange selectionChange = (SelectedObjectChange) notification;
 				if (selectionChange.newValue() != null) {
 					inspectObject(selectionChange.newValue());
 				}
 			}
-		}
+		}*/
 	}
 
 	public JPanel getRootPane() {

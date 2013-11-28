@@ -59,7 +59,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private final JPanel EMPTY_CONTENT;
 	private final JPanel MULTIPLE_SELECTION_CONTENT;
 
-	private final Map<FIBInspector, FIBView<?, ?>> inspectorViews;
+	private final Map<FIBInspector, FIBView<?, ?, ?>> inspectorViews;
 
 	private final ModuleInspectorController inspectorController;
 
@@ -75,7 +75,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		inspectorController.addObserver(this);
 
-		inspectorViews = new Hashtable<FIBInspector, FIBView<?, ?>>();
+		inspectorViews = new Hashtable<FIBInspector, FIBView<?, ?, ?>>();
 
 		resetViews();
 
@@ -91,7 +91,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 	private void resetViews() {
 
 		if (inspectorViews != null) {
-			for (FIBView<?, ?> v : inspectorViews.values()) {
+			for (FIBView<?, ?, ?> v : inspectorViews.values()) {
 				FlexoLocalization.removeFromLocalizationListeners(v);
 			}
 			inspectorViews.clear();
@@ -99,7 +99,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		/*for (Class<?> c : inspectorController.getInspectors().keySet()) {
 			FIBInspector inspector = inspectorController.getInspectors().get(c);
-			FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+			FIBView<?, ?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
 			inspectorViews.put(inspector, inspectorView);
 			if (logger.isLoggable(Level.FINE)) {
@@ -109,9 +109,9 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	}
 
-	private FIBView<?, ?> buildViewFor(FIBInspector inspector) {
+	private FIBView<?, ?, ?> buildViewFor(FIBInspector inspector) {
 
-		FIBView<?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
+		FIBView<?, ?, ?> inspectorView = FIBController.makeView(inspector, FlexoLocalization.getMainLocalizer());
 		FIBController controller = inspectorView.getController();
 		if (controller instanceof FlexoFIBController) {
 			((FlexoFIBController) controller).setFlexoController(inspectorController.getFlexoController());
@@ -126,7 +126,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	public void delete() {
 		inspectorController.deleteObserver(this);
-		for (FIBView<?, ?> v : inspectorViews.values()) {
+		for (FIBView<?, ?, ?> v : inspectorViews.values()) {
 			v.getController().delete();
 			FlexoLocalization.removeFromLocalizationListeners(v);
 		}
@@ -137,7 +137,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		tabPanelView = null;
 	}
 
-	private FIBView<?, ?> currentInspectorView = null;
+	private FIBView<?, ?, ?> currentInspectorView = null;
 
 	/**
 	 * Returns boolean indicating if inspection change
@@ -174,7 +174,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	/*private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
-			FIBView<?, ?> view = viewForInspector(inspector);
+			FIBView<?, ?, ?> view = viewForInspector(inspector);
 			FIBController controller = view.getController();
 			FIBTabPanelView tabPanelView = (FIBTabPanelView) controller.viewForComponent(inspector.getTabPanel());
 			tabPanelView.updateLayout();
@@ -209,7 +209,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 		currentlyDisplayedInspector = newInspector;
 
-		FIBView<?, ?> view = viewForInspector(newInspector);
+		FIBView<?, ?, ?> view = viewForInspector(newInspector);
 		FIBInspectorController controller = (FIBInspectorController) view.getController();
 		controller.setFlexoController(inspectorController.getFlexoController());
 
@@ -250,8 +250,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		currentInspectorView.getController().setDataObject(inspectedObject);
 	}
 
-	private FIBView<?, ?> viewForInspector(FIBInspector inspector) {
-		FIBView<?, ?> returned = inspectorViews.get(inspector);
+	private FIBView<?, ?, ?> viewForInspector(FIBInspector inspector) {
+		FIBView<?, ?, ?> returned = inspectorViews.get(inspector);
 		if (returned == null) {
 			returned = buildViewFor(inspector);
 		}

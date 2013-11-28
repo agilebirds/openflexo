@@ -21,6 +21,7 @@ package org.openflexo.view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -151,7 +152,7 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 	}
 
 	@Override
-	public void selectionChanged(Vector<Object> selection) {
+	public void selectionChanged(List<Object> selection) {
 		if (selection == null) {
 			return;
 		}

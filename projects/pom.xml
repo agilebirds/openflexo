@@ -48,8 +48,39 @@
 		    </dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexointerfacebuilder</artifactId>
-			    <version>1.6.1-SNAPSHOT</version>
+				<artifactId>fib-core</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-core</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+			    <version>1.0-SNAPSHOT</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>

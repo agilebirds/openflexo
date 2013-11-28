@@ -151,7 +151,7 @@ public class JFIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> im
 
 	public class ForegroundStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView<?, ?> fibView;
+		private FIBView<?, ?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ForegroundStyleDetailsPanel(ForegroundStyle fs) {

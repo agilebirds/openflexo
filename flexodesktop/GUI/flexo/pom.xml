@@ -84,11 +84,31 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing</artifactId>
+			<classifier>resources</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>fib-swing-editor</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
 		</dependency>
@@ -161,7 +181,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexointerfacebuilder</artifactId>
+			<artifactId>fib-core</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
