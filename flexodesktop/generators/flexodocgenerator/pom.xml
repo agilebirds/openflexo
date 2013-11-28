@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>generators</artifactId>
-        <version>1.6.1-SNAPSHOT</version>
+        <version>1.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexodocgenerator</artifactId>
 	<name>Generators :: FlexoDocGenerator</name>

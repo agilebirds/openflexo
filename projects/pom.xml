@@ -7,7 +7,7 @@
 		<artifactId>flexodesktop</artifactId>
         <version>1.6-SNAPSHOT</version>
 	</parent>-->
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.7-SNAPSHOT</version>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>projects</artifactId>
 	<name>Openflexo Projects</name>
@@ -44,7 +44,7 @@
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
 			   <artifactId>flexopamela</artifactId>
-			   <version>1.6.1-SNAPSHOT</version>
+			   <version>1.7-SNAPSHOT</version>
 		    </dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
