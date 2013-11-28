@@ -5,6 +5,7 @@ DATE=[Datum]
 DURATION=[DUUR]
 ENUM=ENUM
 LITERAL=[LITERAL]
+NullReferenceException_on_operator_($0)=NullReferenceException_on_operator_($0)
 STRING=[TEKST]
 background=Achtergrond
 background_inspector=background_inspector

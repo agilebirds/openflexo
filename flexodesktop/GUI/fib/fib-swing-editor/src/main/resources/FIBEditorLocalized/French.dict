@@ -66,6 +66,7 @@ Link=Lien
 Message=Message
 Multiple=Multiple
 Multiple\nParallel=Multiple\nParallel
+NullReferenceException_on_operator_($0)=NullReferenceException_on_operator_($0)
 OR=OU
 Parameters=Param\u00E8tres
 Preferences=Pr\u00E9f\u00E9rences

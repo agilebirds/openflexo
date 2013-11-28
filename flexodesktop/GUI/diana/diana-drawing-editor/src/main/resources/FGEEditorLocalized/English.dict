@@ -6,6 +6,7 @@ DATE=[DATE]
 DURATION=[DURATION]
 ENUM=ENUM
 LITERAL=[LITERAL]
+NullReferenceException_on_operator_($0)=NullReferenceException_on_operator_($0)
 STRING=[STRING]
 addition=addition
 background=Background
