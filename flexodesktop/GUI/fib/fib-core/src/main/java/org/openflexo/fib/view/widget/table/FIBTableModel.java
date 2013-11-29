@@ -29,7 +29,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,14 +57,14 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBTableModel extends AbstractTableModel {
+public class FIBTableModel<T> extends AbstractTableModel {
 
 	private static final Logger logger = Logger.getLogger(FIBTableModel.class.getPackage().getName());
 
-	private List<Object> _values;
-	private Vector<AbstractColumn> _columns;
+	private List<T> _values;
+	private List<AbstractColumn<T, ?>> _columns;
 	private FIBTable _fibTable;
-	private FIBTableWidget _widget;
+	private FIBTableWidget<T> _widget;
 
 	private final Hashtable<Object, RowObjectModificationTracker> _rowObjectModificationTrackers;
 
@@ -79,7 +78,7 @@ public class FIBTableModel extends AbstractTableModel {
 		_fibTable = fibTable;
 		_widget = widget;
 		_values = null;
-		_columns = new Vector<AbstractColumn>();
+		_columns = new ArrayList<AbstractColumn<T, ?>>();
 		for (FIBTableColumn column : fibTable.getColumns()) {
 			addToColumns(buildTableColumn(column, controller));
 		}
@@ -94,7 +93,7 @@ public class FIBTableModel extends AbstractTableModel {
 
 	public void delete() {
 		if (_values != null) {
-			for (Object o : _values) {
+			for (T o : _values) {
 				// logger.info("REMOVE "+o);
 				if (o instanceof HasPropertyChangeSupport) {
 					PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
@@ -128,29 +127,29 @@ public class FIBTableModel extends AbstractTableModel {
 		return _widget;
 	}
 
-	public List<Object> getValues() {
+	public List<T> getValues() {
 		return _values;
 	}
 
-	public void setValues(Collection<?> values) {
+	public void setValues(Collection<T> values) {
 		// logger.info("setValues with "+values);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValues() with " + values);
 		}
-		Collection<?> newValues = values;
+		Collection<T> newValues = values;
 		if (values == null) {
 			newValues = Collections.emptyList();
 		}
 
-		List<Object> oldValues = _values;
-		_values = new ArrayList<Object>();
-		List<Object> removedValues = new ArrayList<Object>();
-		List<Object> addedValues = new ArrayList<Object>();
+		List<T> oldValues = _values;
+		_values = new ArrayList<T>();
+		List<T> removedValues = new ArrayList<T>();
+		List<T> addedValues = new ArrayList<T>();
 		if (oldValues != null) {
 			removedValues.addAll(oldValues);
 		}
 
-		for (Object v : newValues) {
+		for (T v : newValues) {
 			if (oldValues != null && oldValues.contains(v)) {
 				removedValues.remove(v);
 			} else {
@@ -159,7 +158,7 @@ public class FIBTableModel extends AbstractTableModel {
 			_values.add(v);
 		}
 
-		for (Object o : addedValues) {
+		for (T o : addedValues) {
 			logger.fine("ADD " + o);
 			if (o instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
@@ -171,7 +170,7 @@ public class FIBTableModel extends AbstractTableModel {
 			}
 		}
 
-		for (Object o : removedValues) {
+		for (T o : removedValues) {
 			logger.fine("REMOVE " + o);
 			if (o instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o).getPropertyChangeSupport();
@@ -194,7 +193,7 @@ public class FIBTableModel extends AbstractTableModel {
 		_rowObjectModificationTrackers.remove(o);
 	}
 
-	private RowObjectModificationTracker getTracker(Object o) {
+	private RowObjectModificationTracker getTracker(T o) {
 		RowObjectModificationTracker returned = _rowObjectModificationTrackers.get(o);
 		if (returned == null) {
 			returned = new RowObjectModificationTracker(o);
@@ -204,9 +203,9 @@ public class FIBTableModel extends AbstractTableModel {
 	}
 
 	protected class RowObjectModificationTracker implements Observer, PropertyChangeListener {
-		private final Object rowObject;
+		private final T rowObject;
 
-		public RowObjectModificationTracker(Object rowObject) {
+		public RowObjectModificationTracker(T rowObject) {
 			this.rowObject = rowObject;
 		}
 
@@ -238,27 +237,27 @@ public class FIBTableModel extends AbstractTableModel {
 	 * @see EventListenerList
 	 * @see javax.swing.JTable#tableChanged(TableModelEvent)
 	 */
-	public void fireModelObjectHasChanged(List<Object> oldValues, List<Object> newValues) {
+	public void fireModelObjectHasChanged(List<T> oldValues, List<T> newValues) {
 		// logger.info("fireModelObjectHasChanged in " + getTable().getName() + " from " + oldValues + " to " + newValues);
 		fireTableChanged(new ModelObjectHasChanged(this, oldValues, newValues));
 	}
 
 	public class ModelObjectHasChanged extends TableModelEvent {
-		private final List<Object> _oldValues;
+		private final List<T> _oldValues;
 
-		private final List<Object> _newValues;
+		private final List<T> _newValues;
 
-		public ModelObjectHasChanged(TableModel source, List<Object> oldValues, List<Object> newValues) {
+		public ModelObjectHasChanged(TableModel source, List<T> oldValues, List<T> newValues) {
 			super(source);
 			_oldValues = oldValues;
 			_newValues = newValues;
 		}
 
-		public List<Object> getNewValues() {
+		public List<T> getNewValues() {
 			return _newValues;
 		}
 
-		public List<Object> getOldValues() {
+		public List<T> getOldValues() {
 			return _oldValues;
 		}
 	}
@@ -271,14 +270,14 @@ public class FIBTableModel extends AbstractTableModel {
 		return 0;
 	}
 
-	public Object elementAt(int row) {
+	public T elementAt(int row) {
 		if (getValues() != null && row >= 0 && row < getValues().size()) {
 			return getValues().get(row);
 		}
 		return null;
 	}
 
-	public int indexOf(Object object) {
+	public int indexOf(T object) {
 		for (int i = 0; i < getRowCount(); i++) {
 			if (elementAt(i) == object) {
 				return i;
@@ -287,18 +286,18 @@ public class FIBTableModel extends AbstractTableModel {
 		return -1;
 	}
 
-	public void addToColumns(AbstractColumn aColumn) {
+	public void addToColumns(AbstractColumn<T, ?> aColumn) {
 		_columns.add(aColumn);
 		aColumn.setTableModel(this);
 	}
 
-	public void removeFromColumns(AbstractColumn aColumn) {
+	public void removeFromColumns(AbstractColumn<T, ?> aColumn) {
 		_columns.remove(aColumn);
 		aColumn.setTableModel(null);
 	}
 
-	public AbstractColumn columnAt(int index) {
-		AbstractColumn returned = _columns.elementAt(index);
+	public AbstractColumn<T, ?> columnAt(int index) {
+		AbstractColumn<T, ?> returned = _columns.get(index);
 		return returned;
 	}
 
@@ -309,7 +308,7 @@ public class FIBTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getLocalizedTitle();
 		}
@@ -317,7 +316,7 @@ public class FIBTableModel extends AbstractTableModel {
 	}
 
 	public int getDefaultColumnSize(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getDefaultWidth();
 		}
@@ -325,7 +324,7 @@ public class FIBTableModel extends AbstractTableModel {
 	}
 
 	public boolean getColumnResizable(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getResizable();
 		}
@@ -334,7 +333,7 @@ public class FIBTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getValueClass();
 		}
@@ -343,9 +342,9 @@ public class FIBTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
-			Object object = elementAt(row);
+			T object = elementAt(row);
 			return column.isCellEditableFor(object);
 		}
 		return false;
@@ -353,9 +352,9 @@ public class FIBTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null) {
-			Object object = elementAt(row);
+			T object = elementAt(row);
 			return column.getValueFor(object, _widget.getBindingEvaluationContext());
 		}
 		return null;
@@ -364,15 +363,15 @@ public class FIBTableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<T, ?> column = columnAt(col);
 		if (column != null && column instanceof EditableColumn) {
-			Object object = elementAt(row);
-			((EditableColumn) column).setValueFor(object, value, _widget.getBindingEvaluationContext());
+			T object = elementAt(row);
+			((EditableColumn<T, Object>) column).setValueFor(object, value, _widget.getBindingEvaluationContext());
 			fireCellUpdated(object, row, col);
 		}
 	}
 
-	public void fireCellUpdated(Object editedObject, int row, int column) {
+	public void fireCellUpdated(T editedObject, int row, int column) {
 		// fireTableChanged(new TableModelEvent(this, row, row, column));
 		int newRow = indexOf(editedObject);
 		if (logger.isLoggable(Level.FINE)) {
@@ -475,27 +474,27 @@ public class FIBTableModel extends AbstractTableModel {
 	 * @deprecated model should not have access to its view nor its controller
 	 */
 	@Deprecated
-	protected FIBTableWidget getTableWidget() {
+	protected FIBTableWidget<T> getTableWidget() {
 		return _widget;
 	}
 
-	private AbstractColumn buildTableColumn(FIBTableColumn column, FIBController controller) {
+	private AbstractColumn<T, ?> buildTableColumn(FIBTableColumn column, FIBController controller) {
 		if (column instanceof FIBLabelColumn) {
-			return new LabelColumn((FIBLabelColumn) column, this, controller);
+			return new LabelColumn<T>((FIBLabelColumn) column, this, controller);
 		} else if (column instanceof FIBTextFieldColumn) {
-			return new TextFieldColumn((FIBTextFieldColumn) column, this, controller);
+			return new TextFieldColumn<T>((FIBTextFieldColumn) column, this, controller);
 		} else if (column instanceof FIBCheckBoxColumn) {
-			return new CheckBoxColumn((FIBCheckBoxColumn) column, this, controller);
+			return new CheckBoxColumn<T>((FIBCheckBoxColumn) column, this, controller);
 		} else if (column instanceof FIBDropDownColumn) {
-			return new DropDownColumn((FIBDropDownColumn) column, this, controller);
+			return new DropDownColumn<T, Object>((FIBDropDownColumn) column, this, controller);
 		} else if (column instanceof FIBIconColumn) {
-			return new IconColumn((FIBIconColumn) column, this, controller);
+			return new IconColumn<T>((FIBIconColumn) column, this, controller);
 		} else if (column instanceof FIBNumberColumn) {
-			return new NumberColumn((FIBNumberColumn) column, this, controller);
+			return new NumberColumn<T>((FIBNumberColumn) column, this, controller);
 		} else if (column instanceof FIBCustomColumn) {
-			return new CustomColumn((FIBCustomColumn) column, this, controller);
+			return new CustomColumn<T, Object>((FIBCustomColumn) column, this, controller);
 		} else if (column instanceof FIBButtonColumn) {
-			return new ButtonColumn((FIBButtonColumn) column, this, controller);
+			return new ButtonColumn<T, Object>((FIBButtonColumn) column, this, controller);
 		}
 		return null;
 

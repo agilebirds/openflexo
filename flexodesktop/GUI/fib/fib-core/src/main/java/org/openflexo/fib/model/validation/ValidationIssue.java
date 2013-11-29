@@ -19,8 +19,8 @@
  */
 package org.openflexo.fib.model.validation;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -36,7 +36,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends FIBModelObject> implements Observer {
+public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends FIBModelObject> implements PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationIssue.class.getPackage().getName());
@@ -68,7 +68,7 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 		if (!isLocalized) {
 			_localizedMessage = aMessage;
 		}
-		_object.addObserver(this);
+		_object.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 	}
 
@@ -123,12 +123,12 @@ public abstract class ValidationIssue<R extends ValidationRule<R, C>, C extends 
 	}
 
 	@Override
-	public void update(Observable observable, Object dataModification) {
+	public void propertyChange(PropertyChangeEvent evt) {
 		// System.out.println("Received " + dataModification);
 	}
 
 	public void delete() {
-		_object.deleteObserver(this);
+		_object.getPropertyChangeSupport().removePropertyChangeListener(this);
 		_validationReport.removeFromValidationIssues(this);
 	}
 

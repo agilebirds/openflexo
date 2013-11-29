@@ -20,8 +20,11 @@
 package org.openflexo.fib.view.widget.table;
 
 import java.awt.Component;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -39,19 +42,20 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDownColumn;
 
-public class DropDownColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T> {
+public class DropDownColumn<T, V> extends AbstractColumn<T, V> implements EditableColumn<T, V> {
 	static final Logger logger = Logger.getLogger(DropDownColumn.class.getPackage().getName());
 
 	private DropDownCellRenderer _cellRenderer;
 
 	private DropDownCellEditor _cellEditor;
 
-	public DropDownColumn(FIBDropDownColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public DropDownColumn(FIBDropDownColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 		_cellRenderer = new DropDownCellRenderer();
 		_cellEditor = new DropDownCellEditor(new JComboBox());
@@ -63,8 +67,33 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 	}
 
 	@Override
-	public Class getValueClass() {
-		return Object.class;
+	public Class<V> getValueClass() {
+
+		if (getColumnModel().getData() != null && getColumnModel().getData().isValid()) {
+			Type analyzedType = getColumnModel().getData().getAnalyzedType();
+			return (Class<V>) TypeUtils.getRawType(analyzedType);
+		}
+
+		if (getColumnModel().staticList != null) {
+			return (Class<V>) String.class;
+		}
+
+		else if (getColumnModel().getList() != null && getColumnModel().getList().isValid()) {
+			Type analyzedType = getColumnModel().getList().getAnalyzedType();
+			if (analyzedType instanceof ParameterizedType) {
+				return (Class<V>) TypeUtils.getRawType(((ParameterizedType) analyzedType).getActualTypeArguments()[0]);
+			}
+		}
+
+		else if (getColumnModel().getArray() != null && getColumnModel().getArray().isValid()) {
+			Type analyzedType = getColumnModel().getArray().getAnalyzedType();
+			if (analyzedType instanceof GenericArrayType) {
+				return (Class<V>) TypeUtils.getRawType(((GenericArrayType) analyzedType).getGenericComponentType());
+			}
+		}
+
+		logger.warning("Could not determine value class");
+		return (Class<V>) Object.class;
 	}
 
 	/**
@@ -87,7 +116,7 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		return true;
 	}
 
-	protected class DropDownCellRenderer extends FIBTableCellRenderer<T> {
+	protected class DropDownCellRenderer extends FIBTableCellRenderer<T, V> {
 		public DropDownCellRenderer() {
 			super(DropDownColumn.this);
 		}
@@ -107,7 +136,7 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		return getStringRepresentation(value);
 	}
 
-	protected List getAvailableValues(Object object) {
+	protected List<V> getAvailableValues(T object) {
 
 		if (getColumnModel().staticList != null) {
 			Vector<String> list = new Vector<String>();
@@ -115,15 +144,15 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			while (st.hasMoreTokens()) {
 				list.add(st.nextToken());
 			}
-			return list;
+			return (List<V>) list;
 		}
 
 		else if (getColumnModel().getList() != null && getColumnModel().getList().isSet()) {
 
 			iteratorObject = object;
-			Object accessedList = null;
+			List<V> accessedList = null;
 			try {
-				accessedList = getColumnModel().getList().getBindingValue(this);
+				accessedList = (List<V>) getColumnModel().getList().getBindingValue(this);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -133,16 +162,16 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			}
 
 			if (accessedList instanceof List) {
-				return (List) accessedList;
+				return (List<V>) accessedList;
 			}
 		}
 
 		else if (getColumnModel().getArray() != null && getColumnModel().getArray().isSet()) {
 
 			iteratorObject = object;
-			Object accessedArray = null;
+			V[] accessedArray = null;
 			try {
-				accessedArray = getColumnModel().getArray().getBindingValue(this);
+				accessedArray = (V[]) getColumnModel().getArray().getBindingValue(this);
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {
@@ -151,8 +180,8 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 				e1.printStackTrace();
 			}
 			try {
-				Object[] array = (Object[]) accessedArray;
-				Vector<Object> list = new Vector<Object>();
+				V[] array = accessedArray;
+				List<V> list = new ArrayList<V>();
 				for (int i = 0; i < array.length; i++) {
 					list.add(array[i]);
 				}
@@ -164,9 +193,9 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 
 		else if (getColumnModel().getData() != null && getColumnModel().getData().isValid()) {
 			Type type = getColumnModel().getData().getAnalyzedType();
-			if (type instanceof Class && ((Class) type).isEnum()) {
-				Object[] array = ((Class) type).getEnumConstants();
-				Vector<Object> list = new Vector<Object>();
+			if (type instanceof Class && ((Class<V>) type).isEnum()) {
+				V[] array = ((Class<V>) type).getEnumConstants();
+				List<V> list = new ArrayList<V>();
 				for (int i = 0; i < array.length; i++) {
 					list.add(array[i]);
 				}
@@ -187,6 +216,7 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		return _cellEditor;
 	}
 
+	@SuppressWarnings("serial")
 	protected class DropDownCellEditor extends DefaultCellEditor {
 		private Hashtable<Integer, DropDownComboBoxModel> _comboBoxModels;
 
@@ -230,12 +260,12 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 
 		protected class DropDownComboBoxModel extends DefaultComboBoxModel {
 
-			protected DropDownComboBoxModel(Object element) {
+			protected DropDownComboBoxModel(T element) {
 				super();
-				List v = getAvailableValues(element);
+				List<V> v = getAvailableValues(element);
 				if (v != null) {
-					for (Iterator it = v.iterator(); it.hasNext();) {
-						Object next = it.next();
+					for (Iterator<V> it = v.iterator(); it.hasNext();) {
+						V next = it.next();
 						addElement(next);
 					}
 				}

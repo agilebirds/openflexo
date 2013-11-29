@@ -1205,17 +1205,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 						+ p.getMasterComponent() + " message: " + e.getMessage());
 			}*/
 		}
-		// componentDependancies = null;
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBDependancy>(Parameters.explicitDependancies, p));
+		getPropertyChangeSupport().firePropertyChange(Parameters.explicitDependancies.name(), null, explicitDependancies);
 	}
 
 	public void removeFromExplicitDependancies(FIBDependancy p) {
 		p.setOwner(null);
 		explicitDependancies.remove(p);
-		// componentDependancies = null;
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBDependancy>(Parameters.explicitDependancies, p));
+		getPropertyChangeSupport().firePropertyChange(Parameters.explicitDependancies.name(), null, explicitDependancies);
 	}
 
 	public FIBDependancy createNewExplicitDependancy() {

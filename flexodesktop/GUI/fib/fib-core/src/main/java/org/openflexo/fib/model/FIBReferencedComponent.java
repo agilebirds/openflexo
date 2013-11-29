@@ -41,7 +41,7 @@ public class FIBReferencedComponent extends FIBWidget {
 	}
 
 	// TODO: Should be moved to FIBReferencedComponent widget
-	//private FIBComponent referencedComponent;
+	// private FIBComponent referencedComponent;
 	private Vector<FIBReferenceAssignment> assignments;
 
 	public FIBReferencedComponent() {
@@ -100,7 +100,7 @@ public class FIBReferencedComponent extends FIBWidget {
 
 			this.dynamicComponentFile = dynamicComponentFile;
 
-		//	referencedComponent = null;
+			// referencedComponent = null;
 			notify(notification);
 		}
 
@@ -141,15 +141,13 @@ public class FIBReferencedComponent extends FIBWidget {
 		}
 		a.setReferencedComponent(this);
 		assignments.add(a);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBReferenceAssignment>(Parameters.assignments, a));
+		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
 	}
 
 	public void removeFromAssignments(FIBReferenceAssignment a) {
 		a.setReferencedComponent(null);
 		assignments.remove(a);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBReferenceAssignment>(Parameters.assignments, a));
+		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
 	}
 
 	@Override

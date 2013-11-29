@@ -28,9 +28,9 @@ import org.openflexo.fib.model.FIBTableColumn;
  * @author sguerin
  * 
  */
-public abstract class StringColumn extends AbstractColumn<String> {
+public abstract class StringColumn<T> extends AbstractColumn<T, String> {
 
-	public StringColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public StringColumn(FIBTableColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 	}
 

@@ -23,7 +23,6 @@ import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,13 +40,13 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBList;
 
-public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> implements FIBSelectable {
+public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, T> implements FIBSelectable<T> {
 
 	static final Logger logger = Logger.getLogger(FIBListWidget.class.getPackage().getName());
 
 	public static final String SELECTION = "selection";
 
-	private List<Object> selection;
+	private List<T> selection;
 	protected JList _list;
 
 	public FIBListWidget(FIBList model, FIBController controller) {
@@ -73,24 +72,23 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> 
 		_list.revalidate();
 		_list.repaint();
 
-		updateListModelWhenRequired();
+		// updateListModelWhenRequired();
 		updateFont();
 	}
 
-	public List<Object> getSelection() {
+	public List<T> getSelection() {
 		return selection;
 	}
 
-	public void setSelection(List<Object> selection) {
-		List<Object> oldSelection = this.selection;
+	public void setSelection(List<T> selection) {
+		List<T> oldSelection = this.selection;
 		this.selection = selection;
 		getPropertyChangeSupport().firePropertyChange(SELECTION, oldSelection, selection);
 	}
 
-
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		updateListModelWhenRequired();
+		// updateListModelWhenRequired();
 		if (getWidget().getData() != null && notEquals(getValue(), _list.getSelectedValue())) {
 
 			if (logger.isLoggable(Level.FINE)) {
@@ -124,40 +122,49 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> 
 		return false;
 	}
 
-	@Override
 	public FIBListModel getListModel() {
-		return (FIBListModel) super.getListModel();
+		return (FIBListModel) super.getMultipleValueModel();
 	}
 
-	protected synchronized void updateList() {
-		if (listModel == null) {
+	@Override
+	protected FIBListModel createMultipleValueModel() {
+		return new FIBListModel();
+	}
+
+	@Override
+	protected void proceedToListModelUpdate() {
+		proceedToListModelUpdate(getListModel());
+	}
+
+	/*protected synchronized void updateList() {
+		if (multipleValueModel == null) {
 			updateListModelWhenRequired();
 		} else {
-			_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
-			listModel = new FIBListModel();
-			setListModel((FIBListModel) listModel);
+			_list.getSelectionModel().removeListSelectionListener((FIBListModel) multipleValueModel);
+			multipleValueModel = new FIBListModel();
+			setListModel((FIBListModel) multipleValueModel);
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	protected FIBListModel updateListModelWhenRequired() {
-		if (listModel == null) {
-			listModel = new FIBListModel();
-			setListModel((FIBListModel) listModel);
+		if (multipleValueModel == null) {
+			multipleValueModel = new FIBListModel();
+			setListModel((FIBListModel) multipleValueModel);
 		} else {
 			FIBListModel newListModel = new FIBListModel();
-			if (!newListModel.equals(listModel) || didLastKnownValuesChange()) {
-				_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
-				listModel = newListModel;
-				setListModel((FIBListModel) listModel);
+			if (!newListModel.equals(multipleValueModel) || didLastKnownValuesChange()) {
+				_list.getSelectionModel().removeListSelectionListener((FIBListModel) multipleValueModel);
+				multipleValueModel = newListModel;
+				setListModel((FIBListModel) multipleValueModel);
 			}
 		}
-		return (FIBListModel) listModel;
-	}
+		return (FIBListModel) multipleValueModel;
+	}*/
 
 	private FIBListModel oldListModel = null;
 
-	private void setListModel(FIBListModel aListModel) {
+	private void proceedToListModelUpdate(FIBListModel aListModel) {
 		// logger.info("************* Updating GUI with " + aListModel);
 		widgetUpdating = true;
 		if (oldListModel != null) {
@@ -219,21 +226,21 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> 
 		}*/
 	}
 
-	protected class FIBListModel extends FIBMultipleValueModel implements ListSelectionListener {
-		private Object selectedObject;
-		private Vector<Object> selection;
+	protected class FIBListModel extends FIBMultipleValueModel<T> implements ListSelectionListener {
+		private T selectedObject;
+		private List<T> selection;
 
 		public FIBListModel() {
 			super();
 			selectedObject = null;
-			selection = new Vector<Object>();
+			selection = new ArrayList<T>();
 		}
 
-		public Object getSelectedObject() {
+		public T getSelectedObject() {
 			return selectedObject;
 		}
 
-		public Vector<Object> getSelection() {
+		public List<T> getSelection() {
 			return selection;
 		}
 
@@ -267,8 +274,8 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> 
 
 			selectedObject = getElementAt(leadIndex);
 
-			Vector<Object> oldSelection = selection;
-			List<Object> newSelection = new ArrayList<Object>();
+			List<T> oldSelection = selection;
+			List<T> newSelection = new ArrayList<T>();
 			for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
 				if (getListSelectionModel().isSelectedIndex(i)) {
 					newSelection.add(getElementAt(i));
@@ -401,7 +408,7 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T> 
 	}
 
 	@Override
-	public Object getSelectedObject() {
+	public T getSelectedObject() {
 		return getListModel().getSelectedObject();
 	}
 

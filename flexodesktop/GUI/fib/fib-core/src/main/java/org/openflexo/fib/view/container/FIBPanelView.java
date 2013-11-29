@@ -218,7 +218,8 @@ public class FIBPanelView<C extends FIBPanel, T> extends FIBContainerView<C, JPa
 
 		_setPanelLayoutParameters();
 		buildSubComponents();
-		updateDataObject(getDataObject());
+		// updateDataObject(getDataObject());
+		update();
 	}
 
 	@Override

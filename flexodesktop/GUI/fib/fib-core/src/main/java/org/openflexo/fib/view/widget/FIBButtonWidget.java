@@ -22,7 +22,6 @@ package org.openflexo.fib.view.widget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +33,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButton;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBWidgetView;
 
 public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
@@ -99,7 +97,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 				e.printStackTrace();
 			}
 		}
-		updateDependancies(new Vector<FIBComponent>());
+		updateComponentsExplicitelyDeclaredAsDependant();
 		updateWidgetFromModel();
 	}
 

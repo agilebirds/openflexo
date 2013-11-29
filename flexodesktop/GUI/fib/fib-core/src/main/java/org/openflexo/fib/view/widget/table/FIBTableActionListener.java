@@ -21,9 +21,9 @@ package org.openflexo.fib.view.widget.table;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -32,7 +32,6 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
@@ -45,39 +44,37 @@ import org.openflexo.fib.view.widget.FIBTableWidget;
  * @author sguerin
  * 
  */
-public class FIBTableActionListener implements ActionListener, BindingEvaluationContext, Observer {
+public class FIBTableActionListener<T> implements ActionListener, BindingEvaluationContext, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(FIBTableActionListener.class.getPackage().getName());
 
 	private FIBTableAction tableAction;
-
 	private Object model;
+	private FIBTableWidget<T> tableWidget;
+	protected T selectedObject;
 
-	private FIBTableWidget tableWidget;
-
-	public FIBTableActionListener(FIBTableAction tableAction, FIBTableWidget tableWidget) {
+	public FIBTableActionListener(FIBTableAction tableAction, FIBTableWidget<T> tableWidget) {
 		super();
 		this.tableWidget = tableWidget;
 		this.tableAction = tableAction;
 		selectedObject = null;
-		tableAction.addObserver(this);
+		tableAction.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	public void delete() {
 		// NPE Protection
 		if (tableAction != null) {
-			tableAction.deleteObserver(this);
-			}
+			tableAction.getPropertyChangeSupport().removePropertyChangeListener(this);
+		}
 		this.tableAction = null;
 		this.tableWidget = null;
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (arg instanceof FIBAttributeNotification && o == tableAction) {
-			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
-			if (dataModification.getAttribute() == FIBTableAction.Parameters.method
-					|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == tableAction) {
+			if ((evt.getPropertyName().equals(FIBTableAction.Parameters.method.name()))
+					|| (evt.getPropertyName().equals(FIBTableAction.Parameters.isAvailable.name()))) {
 				tableWidget.updateTable();
 			}
 		}
@@ -103,7 +100,7 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 		return isCustomAction() && ((FIBCustomAction) tableAction).isStatic;
 	}
 
-	public boolean isActive(Object selectedObject) {
+	public boolean isActive(T selectedObject) {
 		if (isRemoveAction() && selectedObject == null) {
 			return false;
 		}
@@ -129,7 +126,7 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 		return true;
 	}
 
-	protected void performAction(Object selectedObject) {
+	protected void performAction(T selectedObject) {
 		if (tableAction.getMethod() != null && tableAction.getMethod().isValid()) {
 			logger.info("Perform action " + tableAction.getName() + " method " + tableAction.getMethod());
 			// logger.info("controller="+getController()+" of "+getController().getClass().getSimpleName());
@@ -161,11 +158,11 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 		performAction(getSelectedObject());
 	}
 
-	public Object getSelectedObject() {
+	public T getSelectedObject() {
 		return selectedObject;
 	}
 
-	public void setSelectedObject(Object selectedObject) {
+	public void setSelectedObject(T selectedObject) {
 		this.selectedObject = selectedObject;
 	}
 
@@ -176,8 +173,6 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 	public void setModel(Object model) {
 		this.model = model;
 	}
-
-	protected Object selectedObject;
 
 	@Override
 	public Object getValue(BindingVariable variable) {

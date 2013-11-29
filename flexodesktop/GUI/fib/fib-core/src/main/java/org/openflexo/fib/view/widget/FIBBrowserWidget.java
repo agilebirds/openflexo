@@ -49,6 +49,8 @@ import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.openflexo.antar.binding.BindingValueChangeListener;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -86,6 +88,8 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	private T selectedObject;
 	private List<T> selection;
 
+	private BindingValueChangeListener<T> selectedBindingValueChangeListener;
+
 	public FIBBrowserWidget(FIBBrowser fibBrowser, FIBController controller) {
 		super(fibBrowser, controller);
 		_fibBrowser = fibBrowser;
@@ -95,6 +99,26 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		selection = new ArrayList<T>();
 		_footer = new FIBBrowserWidgetFooter(this);
 		buildBrowser();
+		listenSelectedValueChange();
+	}
+
+	private void listenSelectedValueChange() {
+		if (selectedBindingValueChangeListener != null) {
+			selectedBindingValueChangeListener.stopObserving();
+			selectedBindingValueChangeListener.delete();
+		}
+		if (getComponent().getSelected() != null && getComponent().getSelected().isValid()) {
+			selectedBindingValueChangeListener = new BindingValueChangeListener<T>((DataBinding<T>) getComponent().getSelected(),
+					getBindingEvaluationContext()) {
+
+				@Override
+				public void bindingValueChanged(Object source, T newValue) {
+					System.out.println(" bindingValueChanged() detected for selected=" + getComponent().getEnable() + " with newValue="
+							+ newValue + " source=" + source);
+					setSelectedObject(newValue);
+				}
+			};
+		}
 	}
 
 	@Override
@@ -303,7 +327,8 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 
 		buildBrowser();
 
-		updateDataObject(getDataObject());
+		update();
+		// updateDataObject(getDataObject());
 	}
 
 	private void deleteBrowser() {
@@ -491,6 +516,34 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	}
 
 	@Override
+	public boolean update() {
+		super.update();
+		updateSelected();
+		// TODO: this should be not necessary
+		getBrowserModel().fireTreeRestructured();
+		return true;
+	}
+
+	private final void updateSelected() {
+
+		try {
+			if (getComponent().getSelected().isValid()
+					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
+				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+				if (notEquals(newSelectedObject, getSelectedObject())) {
+					setSelectedObject(newSelectedObject);
+				}
+			}
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*@Override
 	public void updateDataObject(final Object dataObject) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -506,7 +559,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		}
 		super.updateDataObject(dataObject);
 		getBrowserModel().fireTreeRestructured();
-	}
+	}*/
 
 	@Override
 	public T getSelectedObject() {

@@ -17,34 +17,34 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.editor.test;
+package org.openflexo.fib.sampleData;
 
 import java.io.File;
 import java.util.Vector;
 
-import javax.swing.Icon;
-
-import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.toolbox.FileResource;
 
-public class Family {
+public class Family extends SampleData {
 
-	public Person father;
-	public Person mother;
+	private Person father;
+	private Person mother;
 
-	public Person biggestChild;
-	public Person biggestParent;
+	private Person biggestChild;
+	private Person biggestParent;
 
-	public Person[] parents;
+	private Person[] parents;
 
 	private Vector<Person> children;
-	public Vector<Person> jackies;
+	private Vector<Person> jackies;
 
 	public enum Gender {
 		Male, Female
 	}
 
 	public Family() {
+
+		super();
+
 		father = new Person("Robert", "Smith", 39, Gender.Male);
 		mother = new Person("Mary", "Smith", 37, Gender.Female);
 		parents = new Person[2];
@@ -76,14 +76,12 @@ public class Family {
 	}
 
 	public Person createChild() {
-		System.out.println("OK, je cree un nouvel enfant !!!");
 		Person newChild = new Person("John Jr", "Smith", 0, Gender.Male);
 		children.add(newChild);
 		return newChild;
 	}
 
 	public Person deleteChild(Person childToDelete) {
-		System.out.println("OK, je supprime cet enfant: " + childToDelete);
 		children.remove(childToDelete);
 		return childToDelete;
 	}
@@ -97,36 +95,64 @@ public class Family {
 		if (person == null) {
 			return null;
 		}
-		if (person.gender == Gender.Male) {
+		if (person.getGender() == Gender.Male) {
 			return new FileResource("src/dev/resources/TestFIB/TestMalePerson.fib");
-		} else if (person.gender == Gender.Female) {
+		} else if (person.getGender() == Gender.Female) {
 			return new FileResource("src/dev/resources/TestFIB/TestFemalePerson.fib");
 		}
 		return null;
 	}
 
-	public static class Person {
-		public Person(String firstName, String lastName, int age, Gender gender) {
-			super();
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.age = age;
-			this.gender = gender;
-		}
+	public Person getFather() {
+		return father;
+	}
 
-		public String firstName;
-		public String lastName;
-		public int age;
-		public Gender gender;
+	public void setFather(Person father) {
+		this.father = father;
+	}
 
-		@Override
-		public String toString() {
-			return firstName + " " + lastName + " aged " + age + " (" + gender + ")";
-		}
+	public Person getMother() {
+		return mother;
+	}
 
-		public Icon getIcon() {
-			return UtilsIconLibrary.OK_ICON;
-		}
+	public void setMother(Person mother) {
+		this.mother = mother;
+	}
+
+	public Person getBiggestChild() {
+		return biggestChild;
+	}
+
+	public void setBiggestChild(Person biggestChild) {
+		this.biggestChild = biggestChild;
+	}
+
+	public Person getBiggestParent() {
+		return biggestParent;
+	}
+
+	public void setBiggestParent(Person biggestParent) {
+		this.biggestParent = biggestParent;
+	}
+
+	public Person[] getParents() {
+		return parents;
+	}
+
+	public void setParents(Person[] parents) {
+		this.parents = parents;
+	}
+
+	public Vector<Person> getJackies() {
+		return jackies;
+	}
+
+	public void setJackies(Vector<Person> jackies) {
+		this.jackies = jackies;
+	}
+
+	public void setChildren(Vector<Person> children) {
+		this.children = children;
 	}
 
 }

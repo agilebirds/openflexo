@@ -466,15 +466,13 @@ public class FIBBrowserElement extends FIBModelObject {
 		logger.fine("Add to actions " + anAction);
 		anAction.setBrowserElement(this);
 		actions.add(anAction);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserAction>(Parameters.actions, anAction));
+		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
 	}
 
 	public void removeFromActions(FIBBrowserAction anAction) {
 		anAction.setBrowserElement(null);
 		actions.remove(anAction);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBBrowserAction>(Parameters.actions, anAction));
+		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
 	}
 
 	public FIBAddAction createAddAction() {
@@ -515,15 +513,13 @@ public class FIBBrowserElement extends FIBModelObject {
 	public void addToChildren(FIBBrowserElementChildren aChildren) {
 		aChildren.setBrowserElement(this);
 		children.add(aChildren);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElementChildren>(Parameters.children, aChildren));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public void removeFromChildren(FIBBrowserElementChildren aChildren) {
 		aChildren.setBrowserElement(null);
 		children.remove(aChildren);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBBrowserElementChildren>(Parameters.children, aChildren));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public FIBBrowserElementChildren createChildren() {
@@ -546,8 +542,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 		children.remove(e);
 		children.insertElementAt(e, 0);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElementChildren>(Parameters.children, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public void moveUp(FIBBrowserElementChildren e) {
@@ -557,8 +552,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		int index = children.indexOf(e);
 		children.remove(e);
 		children.insertElementAt(e, index - 1);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElementChildren>(Parameters.children, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public void moveDown(FIBBrowserElementChildren e) {
@@ -568,8 +562,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		int index = children.indexOf(e);
 		children.remove(e);
 		children.insertElementAt(e, index + 1);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElementChildren>(Parameters.children, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public void moveToBottom(FIBBrowserElementChildren e) {
@@ -578,8 +571,7 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 		children.remove(e);
 		children.add(e);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElementChildren>(Parameters.children, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.children.name(), null, children);
 	}
 
 	public static class FIBBrowserElementChildren extends FIBModelObject {

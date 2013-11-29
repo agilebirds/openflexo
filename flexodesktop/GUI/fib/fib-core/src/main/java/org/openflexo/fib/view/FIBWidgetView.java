@@ -29,14 +29,10 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,6 +67,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	private static final Logger logger = Logger.getLogger(FIBWidgetView.class.getPackage().getName());
 
+	public static final String ENABLED = "enabled";
+
 	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 	public static final Font DEFAULT_MEDIUM_FONT = new Font("SansSerif", Font.PLAIN, 10);
 
@@ -85,7 +83,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	private DynamicValueBindingContext valueBindingContext;
 	private final DynamicEventListener eventListener;
 
-	private Map<DataBinding<?>, BindingValueChangeListener<?>> listeners;
+	// private Map<DataBinding<?>, BindingValueChangeListener<?>> listeners;
+
+	private BindingValueChangeListener<Boolean> enableBindingValueChangeListener;
 
 	// private DependingObjects dependingObjects;
 
@@ -94,7 +94,25 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		formatter = new DynamicFormatter();
 		valueBindingContext = new DynamicValueBindingContext();
 		eventListener = new DynamicEventListener();
-		addBindingValueChangeListeners();
+		// addBindingValueChangeListeners();
+		listenEnableValueChange();
+	}
+
+	private void listenEnableValueChange() {
+		if (enableBindingValueChangeListener != null) {
+			enableBindingValueChangeListener.stopObserving();
+			enableBindingValueChangeListener.delete();
+		}
+		if (getComponent().getEnable() != null && getComponent().getEnable().isValid()) {
+			enableBindingValueChangeListener = new BindingValueChangeListener<Boolean>(getComponent().getEnable(),
+					getBindingEvaluationContext()) {
+				@Override
+				public void bindingValueChanged(Object source, Boolean newValue) {
+					System.out.println(" bindingValueChanged() detected for enable=" + getComponent().getEnable() + " with newValue="
+							+ newValue + " source=" + source);
+				}
+			};
+		}
 	}
 
 	public void updateBindingValueChangeListeners() {
@@ -105,7 +123,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		addBindingValueChangeListeners();*/
 	}
 
-	private void addBindingValueChangeListeners() {
+	/*private void addBindingValueChangeListeners() {
 		if (listeners != null) {
 			deleteBindingValueChangeListener();
 		}
@@ -120,16 +138,16 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				}
 			};
 		}
-	}
+	}*/
 
-	private void deleteBindingValueChangeListener() {
+	/*private void deleteBindingValueChangeListener() {
 		for (BindingValueChangeListener<?> l : listeners.values()) {
 			l.stopObserving();
 			l.delete();
 		}
 		listeners.clear();
 		listeners = null;
-	}
+	}*/
 
 	@Override
 	public synchronized void delete() {
@@ -139,6 +157,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	public M getWidget() {
 		return getComponent();
+	}
+
+	protected void updateData() {
+		super.updateData();
+		if (!widgetUpdating && !isDeleted() && getDynamicJComponent() != null) {
+			updateWidgetFromModel();
+		}
 	}
 
 	/**
@@ -343,7 +368,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		}
 
-		updateDependancies(new Vector<FIBComponent>());
+		updateComponentsExplicitelyDeclaredAsDependant();
 		/*
 		 * Iterator<FIBComponent> it = getWidget().getMayAltersIterator(); while(it.hasNext()) { FIBComponent c = it.next();
 		 * logger.info("Modified "+aValue+" now update "+c); getController().viewForComponent(c).update(); }
@@ -363,12 +388,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	}
 
+	@Deprecated
 	protected void updateDependingObjects() {
 
-		updateBindingValueChangeListeners();
+		// updateBindingValueChangeListeners();
 	}
 
-	public <T> void bindingValueHasChanged(DataBinding<T> dataBinding, T newValue) {
+	/*public <T> void bindingValueHasChanged(DataBinding<T> dataBinding, T newValue) {
 		// System.out.println("Widget "+getWidget()+" : receive notification "+o);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -381,12 +407,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		} else {
 			update(new ArrayList<FIBComponent>());
 		}
-	}
+	}*/
 
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println("Widget " + getWidget() + " : receive notification " + o);
-		if (!SwingUtilities.isEventDispatchThread()) {
+		/*if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
@@ -396,13 +422,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			});
 		} else {
 			update(new ArrayList<FIBComponent>());
-		}
+		}*/
 	}
 
 	@Override
 	public final void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("Widget " + getWidget() + " : propertyChange " + evt);
-		if (!SwingUtilities.isEventDispatchThread()) {
+		/*if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
@@ -412,7 +438,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			});
 		} else {
 			update(new ArrayList<FIBComponent>());
-		}
+		}*/
 	}
 
 	@Override
@@ -433,6 +459,30 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	/**
 	 * This method is called to update view representing a FIBComponent.<br>
+	 * 
+	 * @return a flag indicating if component has been updated
+	 */
+	@Override
+	public boolean update() {
+		super.update();
+		updateEnability();
+		if (isComponentVisible()) {
+			updateDynamicTooltip();
+			updateDependingObjects();
+			if (updateWidgetFromModel()) {
+				updateComponentsExplicitelyDeclaredAsDependant();
+			}
+		} /* else if (checkValidDataPath()) {
+			// Even if the component is not visible, its visibility may depend
+			// it self from some depending component (which in that situation,
+			// are very important to know, aren'they ?)
+			updateDependingObjects();
+			}*/
+		return true;
+	}
+
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
 	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
 	 * nothing and return.
 	 * 
@@ -440,7 +490,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	 *            all the components that have been previously updated during current update loop
 	 * @return a flag indicating if component has been updated
 	 */
-	@Override
+	/*@Override
 	public boolean update(List<FIBComponent> callers) {
 		try {
 			if (!super.update(callers)) {
@@ -456,7 +506,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				updateDynamicTooltip();
 				updateDependingObjects();
 				if (updateWidgetFromModel()) {
-					updateDependancies(callers);
+					updateComponentsExplicitel(callers);
 				}
 			} else if (checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
@@ -470,9 +520,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 
-	protected void updateDependancies(List<FIBComponent> callers) {
+	protected void updateComponentsExplicitelyDeclaredAsDependant() {
 		if (getController() == null) {
 			return;
 		}
@@ -483,7 +533,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			// logger.info("###### Component " + getWidget() + ", has been updated, now update " + c);
 			FIBView<?, ?, ?> v = getController().viewForComponent(c);
 			if (v != null) {
-				v.update(callers);
+				v.update();
 			} else {
 				logger.warning("Cannot find FIBView for component " + c);
 			}
@@ -491,22 +541,22 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		// logger.info("END updateDependancies() for " + getWidget());
 	}
 
-	@Override
-	public void updateDataObject(final Object aDataObject) {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					updateDataObject(aDataObject);
-				}
-			});
-			return;
+	// @Override
+	// public void updateDataObject(final Object aDataObject) {
+	/*if (!SwingUtilities.isEventDispatchThread()) {
+		if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
 		}
-		update(new ArrayList<FIBComponent>());
-	}
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateDataObject(aDataObject);
+			}
+		});
+		return;
+	}*/
+	// update(new ArrayList<FIBComponent>());
+	// }
 
 	@Override
 	public void updateLanguage() {
@@ -703,6 +753,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		return enabled;
 	}
 
+	public void setEnabled(boolean enabled) {
+		if (this.enabled != enabled) {
+			this.enabled = enabled;
+			getPropertyChangeSupport().firePropertyChange(VISIBLE, !enabled, enabled);
+		}
+	}
+
 	public final void updateEnability() {
 		if (isComponentEnabled()) {
 			if (!enabled) {
@@ -710,7 +767,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				logger.fine("Component becomes enabled");
 				// System.out.println("Component  becomes enabled "+getJComponent());
 				enableComponent(getJComponent());
-				enabled = true;
+				setEnabled(true);
 			}
 		} else {
 			if (enabled) {
@@ -718,7 +775,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				logger.fine("Component becomes disabled");
 				// System.out.println("Component  becomes disabled "+getJComponent());
 				disableComponent(getJComponent());
-				enabled = false;
+				setEnabled(false);
 			}
 		}
 	}

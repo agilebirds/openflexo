@@ -17,26 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.view.widget.table;
+package org.openflexo.fib.sampleData;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBLabelColumn;
+import java.beans.PropertyChangeSupport;
 
-/**
- * Please comment this class
- * 
- * @author sguerin
- * 
- */
-public class LabelColumn<T> extends StringColumn<T> {
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-	public LabelColumn(FIBLabelColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
-		super(columnModel, tableModel, controller);
+public class SampleData implements HasPropertyChangeSupport {
+
+	private PropertyChangeSupport pcSupport;
+
+	public SampleData() {
+
+		pcSupport = new PropertyChangeSupport(this);
+
 	}
 
 	@Override
-	public String toString() {
-		return "LabelColumn " + "@" + Integer.toHexString(hashCode());
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
 	}
 
+	@Override
+	public String getDeletedProperty() {
+		return null;
+	}
 }

@@ -11,7 +11,7 @@ import org.openflexo.fib.model.validation.ValidationError;
 import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.toolbox.FileResource;
 
-public class FIBTestCase extends TestCase {
+public abstract class FIBTestCase extends TestCase {
 
 	static final Logger logger = Logger.getLogger(FIBTestCase.class.getPackage().getName());
 
@@ -20,15 +20,19 @@ public class FIBTestCase extends TestCase {
 	}
 
 	public void validateFIB(File fibFile) {
-		FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
-		if (component == null) {
-			fail("Component not found: " + fibFile.getAbsolutePath());
+		try {
+			FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+			if (component == null) {
+				fail("Component not found: " + fibFile.getAbsolutePath());
+			}
+			ValidationReport validationReport = component.validate();
+			for (ValidationError error : validationReport.getErrors()) {
+				logger.severe("FIBComponent validation error: Object: " + error.getObject() + " message: " + error.getMessage());
+			}
+			assertEquals(0, validationReport.getErrorNb());
+		} finally {
+			FIBLibrary.instance().removeFIBComponentFromCache(fibFile);
 		}
-		ValidationReport validationReport = component.validate();
-		for (ValidationError error : validationReport.getErrors()) {
-			logger.severe("FIBComponent validation error: Object: " + error.getObject() + " message: " + error.getMessage());
-		}
-		assertEquals(0, validationReport.getErrorNb());
 	}
 
 	public static String generateFIBTestCaseClass(File directory, String relativePath) {

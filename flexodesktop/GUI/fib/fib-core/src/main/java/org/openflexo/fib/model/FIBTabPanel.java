@@ -49,9 +49,8 @@ public class FIBTabPanel extends FIBContainer {
 
 	public void setRestrictPreferredSizeToSelectedComponent(boolean restrictPreferredSizeToSelectedComponent) {
 		this.restrictPreferredSizeToSelectedComponent = restrictPreferredSizeToSelectedComponent;
-		setChanged();
-		notifyChange("restrictPreferredSizeToSelectedComponent", !restrictPreferredSizeToSelectedComponent,
-				restrictPreferredSizeToSelectedComponent);
+		getPropertyChangeSupport().firePropertyChange("restrictPreferredSizeToSelectedComponent",
+				!restrictPreferredSizeToSelectedComponent, restrictPreferredSizeToSelectedComponent);
 	}
 
 }

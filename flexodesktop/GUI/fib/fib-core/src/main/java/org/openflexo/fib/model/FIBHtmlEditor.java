@@ -78,7 +78,14 @@ public class FIBHtmlEditor extends FIBWidget {
 			MetaphaseEditorPanel.ABOUT_PANEL_KEY, MetaphaseEditorPanel.ABOUT_BUTTON_KEY };
 
 	public static enum Parameters implements FIBModelAttribute {
-		optionsInLine1, optionsInLine2, optionsInLine3, firstLevelOptionsInLine1, firstLevelOptionsInLine2, firstLevelOptionsInLine3, availableOptions, visibleAndUnusedOptions
+		optionsInLine1,
+		optionsInLine2,
+		optionsInLine3,
+		firstLevelOptionsInLine1,
+		firstLevelOptionsInLine2,
+		firstLevelOptionsInLine3,
+		availableOptions,
+		visibleAndUnusedOptions
 	}
 
 	private Vector<FIBHtmlEditorOption> availableOptions;
@@ -298,8 +305,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setFIBHtmlEditor(this);
 		optionsInLine1.add(anOption);
 		anOption.setIndexNoEditorNotification(optionsInLine1.indexOf(anOption));
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine1, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine1.name(), null, optionsInLine1);
 		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
 		}
@@ -311,8 +317,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine1.add(anOption);
 			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine1.indexOf(anOption));
-			setChanged();
-			notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine1, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine1.name(), null, firstLevelOptionsInLine1);
 		}
 	}
 
@@ -326,8 +331,7 @@ public class FIBHtmlEditor extends FIBWidget {
 
 	public void removeFromOptionsInLine1(FIBHtmlEditorOption anOption) {
 		optionsInLine1.remove(anOption);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine1, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine1.name(), null, optionsInLine1);
 		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
 		}
@@ -338,8 +342,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine1.remove(anOption);
-			setChanged();
-			notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine1, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine1.name(), null, firstLevelOptionsInLine1);
 		}
 	}
 
@@ -369,8 +372,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setFIBHtmlEditor(this);
 		optionsInLine2.add(anOption);
 		anOption.setIndexNoEditorNotification(optionsInLine2.indexOf(anOption));
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine2, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine2.name(), null, optionsInLine2);
 		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
 		}
@@ -382,8 +384,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine2.add(anOption);
 			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine2.indexOf(anOption));
-			setChanged();
-			notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine2, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine2.name(), null, firstLevelOptionsInLine2);
 		}
 	}
 
@@ -397,8 +398,7 @@ public class FIBHtmlEditor extends FIBWidget {
 
 	public void removeFromOptionsInLine2(FIBHtmlEditorOption anOption) {
 		optionsInLine2.remove(anOption);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine2, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine2.name(), null, optionsInLine2);
 		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
 		}
@@ -409,8 +409,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine2.remove(anOption);
-			setChanged();
-			notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine2, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine2.name(), null, firstLevelOptionsInLine2);
 		}
 	}
 
@@ -440,8 +439,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		anOption.setFIBHtmlEditor(this);
 		optionsInLine3.add(anOption);
 		anOption.setIndexNoEditorNotification(optionsInLine3.indexOf(anOption));
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine3, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine3.name(), null, optionsInLine3);
 		if (visibleAndUnusedOptions.contains(anOption)) {
 			removeFromVisibleAndUnusedOptions(anOption);
 		}
@@ -453,8 +451,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine3.add(anOption);
 			anOption.setIndexNoEditorNotification(firstLevelOptionsInLine3.indexOf(anOption));
-			setChanged();
-			notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine3, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine3.name(), null, firstLevelOptionsInLine3);
 		}
 	}
 
@@ -468,8 +465,7 @@ public class FIBHtmlEditor extends FIBWidget {
 
 	public void removeFromOptionsInLine3(FIBHtmlEditorOption anOption) {
 		optionsInLine3.remove(anOption);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.optionsInLine3, anOption));
+		getPropertyChangeSupport().firePropertyChange(Parameters.optionsInLine3.name(), null, optionsInLine3);
 		if (!visibleAndUnusedOptions.contains(anOption)) {
 			addToVisibleAndUnusedOptions(anOption);
 		}
@@ -480,8 +476,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		}
 		if (anOption.getLevel() == 0) {
 			firstLevelOptionsInLine3.remove(anOption);
-			setChanged();
-			notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.firstLevelOptionsInLine3, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.firstLevelOptionsInLine3.name(), null, firstLevelOptionsInLine3);
 		}
 	}
 
@@ -505,8 +500,7 @@ public class FIBHtmlEditor extends FIBWidget {
 		if (anOption.getLevel() == 0) {
 			// logger.info(">> addToVisibleAndUnusedOptions "+anOption);
 			visibleAndUnusedOptions.add(anOption);
-			setChanged();
-			notifyObservers(new FIBAddingNotification<FIBHtmlEditorOption>(Parameters.visibleAndUnusedOptions, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.visibleAndUnusedOptions.name(), null, visibleAndUnusedOptions);
 		}
 	}
 
@@ -514,14 +508,13 @@ public class FIBHtmlEditor extends FIBWidget {
 		if (anOption.getLevel() == 0) {
 			// logger.info(">> removeFromVisibleAndUnusedOptions "+anOption);
 			visibleAndUnusedOptions.remove(anOption);
-			setChanged();
-			notifyObservers(new FIBRemovingNotification<FIBHtmlEditorOption>(Parameters.visibleAndUnusedOptions, anOption));
+			getPropertyChangeSupport().firePropertyChange(Parameters.visibleAndUnusedOptions.name(), null, visibleAndUnusedOptions);
 		}
 	}
 
 	public void indexChanged() {
-		setChanged();
-		notifyObservers();
+		// setChanged();
+		// notifyObservers();
 	}
 
 }

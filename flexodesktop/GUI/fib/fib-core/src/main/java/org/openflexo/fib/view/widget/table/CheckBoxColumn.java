@@ -21,8 +21,6 @@ package org.openflexo.fib.view.widget.table;
 
 import java.util.logging.Logger;
 
-import javax.swing.DefaultCellEditor;
-
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
 
@@ -32,12 +30,13 @@ import org.openflexo.fib.model.FIBCheckBoxColumn;
  * @author sguerin
  * 
  */
-public class CheckBoxColumn extends AbstractColumn<Boolean> implements EditableColumn<Boolean> {
+public class CheckBoxColumn<T> extends AbstractColumn<T, Boolean> implements EditableColumn<T, Boolean> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CheckBoxColumn.class.getPackage().getName());
 
-	private DefaultCellEditor editor;
+	// private DefaultCellEditor editor;
 
-	public CheckBoxColumn(FIBCheckBoxColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public CheckBoxColumn(FIBCheckBoxColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 	}
 

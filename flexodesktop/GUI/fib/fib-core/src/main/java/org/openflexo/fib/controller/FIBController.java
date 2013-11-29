@@ -28,6 +28,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -114,6 +116,7 @@ import org.openflexo.fib.view.widget.FIBTextFieldWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 
@@ -123,7 +126,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sylvain
  * 
  */
-public class FIBController extends Observable implements BindingEvaluationContext, Observer {
+public class FIBController extends Observable implements BindingEvaluationContext, Observer, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(FIBController.class.getPackage().getName());
 
@@ -182,7 +185,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	}
 
 	public FIBView<FIBComponent, ?, ?> buildView() {
-		return buildView(rootComponent);
+		FIBView<FIBComponent, ?, ?> returned = buildView(rootComponent);
+		returned.update();
+		return returned;
 	}
 
 	public FIBViewFactory getViewFactory() {
@@ -258,12 +263,18 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void setDataObject(Object anObject, boolean forceUpdate) {
 		if (forceUpdate || anObject != dataObject) {
-			if (dataObject instanceof Observable) {
+			if (dataObject instanceof HasPropertyChangeSupport) {
+				((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
+			} else if (dataObject instanceof Observable) {
 				((Observable) dataObject).deleteObserver(this);
 			}
 			dataObject = anObject;
-			getRootView().updateDataObject(anObject);
-			if (dataObject instanceof Observable) {
+			if (getRootView() != null) {
+				getRootView().update();
+			}
+			if (dataObject instanceof HasPropertyChangeSupport) {
+				((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().addPropertyChangeListener(this);
+			} else if (dataObject instanceof Observable) {
 				((Observable) dataObject).addObserver(this);
 			}
 		}
@@ -466,7 +477,13 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	@Override
 	public void update(Observable o, Object arg) {
 		// System.out.println("Received "+arg);
-		getRootView().updateDataObject(dataObject);
+		// getRootView().updateDataObject(dataObject);
+		// getRootView().update();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// getRootView().update();
 	}
 
 	public void show() {

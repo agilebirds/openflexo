@@ -56,25 +56,25 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public class CustomColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T>, ApplyCancelListener {
+public class CustomColumn<T, V> extends AbstractColumn<T, V> implements EditableColumn<T, V>, ApplyCancelListener {
 	private static final Logger logger = Logger.getLogger(CustomColumn.class.getPackage().getName());
 
 	private FIBCustomColumn _customColumn;
 
-	private FIBCustomComponent<T, ?> _viewCustomWidget;
+	private FIBCustomComponent<V, ?> _viewCustomWidget;
 
-	private FIBCustomComponent<T, ?> _editCustomWidget;
+	private FIBCustomComponent<V, ?> _editCustomWidget;
 
 	private boolean useCustomViewForCellRendering;
 	private boolean disableTerminateEditOnFocusLost;
 
-	public CustomColumn(FIBCustomColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public CustomColumn(FIBCustomColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 		_customColumn = columnModel;
-		_viewCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
-				(Class<T>) TypeUtils.getBaseClass(columnModel.getDataClass()));
-		_editCustomWidget = makeCustomComponent((Class<FIBCustomComponent<T, ?>>) columnModel.getComponentClass(),
-				(Class<T>) TypeUtils.getBaseClass(columnModel.getDataClass()));
+		_viewCustomWidget = makeCustomComponent((Class<FIBCustomComponent<V, ?>>) columnModel.getComponentClass(),
+				(Class<V>) TypeUtils.getBaseClass(columnModel.getDataClass()));
+		_editCustomWidget = makeCustomComponent((Class<FIBCustomComponent<V, ?>>) columnModel.getComponentClass(),
+				(Class<V>) TypeUtils.getBaseClass(columnModel.getDataClass()));
 		if (_editCustomWidget != null) {
 			_editCustomWidget.addApplyCancelListener(this);
 		}
@@ -89,7 +89,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		return (FIBCustomColumn) super.getColumnModel();
 	}
 
-	private FIBCustomComponent<T, ?> makeCustomComponent(Class<FIBCustomComponent<T, ?>> customComponentClass, Class<T> dataClass) {
+	private FIBCustomComponent<V, ?> makeCustomComponent(Class<FIBCustomComponent<V, ?>> customComponentClass, Class<V> dataClass) {
 		if (dataClass == null) {
 			return null;
 		}
@@ -99,11 +99,11 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		Class[] types = new Class[1];
 		types[0] = dataClass;
 		try {
-			Constructor<FIBCustomComponent<T, ?>> constructor = null;
+			Constructor<FIBCustomComponent<V, ?>> constructor = null;
 			for (Constructor<?> c : customComponentClass.getConstructors()) {
 				if (c.getGenericParameterTypes().length == 1) {
 					if (TypeUtils.isTypeAssignableFrom(c.getGenericParameterTypes()[0], dataClass)) {
-						constructor = (Constructor<FIBCustomComponent<T, ?>>) c;
+						constructor = (Constructor<FIBCustomComponent<V, ?>>) c;
 						break;
 					}
 				}
@@ -130,8 +130,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	}
 
 	@Override
-	public Class<T> getValueClass() {
-		return (Class<T>) TypeUtils.getBaseClass(getColumnModel().getDataClass());
+	public Class<V> getValueClass() {
+		return (Class<V>) TypeUtils.getBaseClass(getColumnModel().getDataClass());
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	private CustomCellRenderer _customCellRenderer;
 
-	protected class CustomCellRenderer extends FIBTableCellRenderer<T> {
+	protected class CustomCellRenderer extends FIBTableCellRenderer<T, V> {
 
 		public CustomCellRenderer() {
 			super(CustomColumn.this);
@@ -168,7 +168,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c;
 			if (isSelected && hasFocus || useCustomViewForCellRendering) {
-				FIBCustomComponent<T, ?> customWidgetView = getViewCustomWidget(elementAt(row));
+				FIBCustomComponent<V, ?> customWidgetView = getViewCustomWidget(elementAt(row));
 				if (customWidgetView != null) {
 					c = customWidgetView.getJComponent();
 				} else {
@@ -231,9 +231,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		// return _viewCustomWidget.getColorForObject(value);
 	}
 
-	protected FIBCustomComponent<T, ?> getViewCustomWidget(Object rowObject) {
+	protected FIBCustomComponent<V, ?> getViewCustomWidget(T rowObject) {
 		if (_viewCustomWidget != null) {
-			T value = getValueFor(rowObject, getBindingEvaluationContext());
+			V value = getValueFor(rowObject, getBindingEvaluationContext());
 			_viewCustomWidget.setEditedObject(value);
 			_viewCustomWidget.setRevertValue(value);
 			logger.fine("Return _viewCustomWidget for model rowObject=" + rowObject + " value=" + value);
@@ -241,9 +241,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		return _viewCustomWidget;
 	}
 
-	protected FIBCustomComponent<T, ?> getEditCustomWidget(Object rowObject) {
+	protected FIBCustomComponent<V, ?> getEditCustomWidget(T rowObject) {
 		if (_editCustomWidget != null) {
-			T value = getValueFor(rowObject, getBindingEvaluationContext());
+			V value = getValueFor(rowObject, getBindingEvaluationContext());
 			_editCustomWidget.setEditedObject(value);
 			_editCustomWidget.setRevertValue(value);
 			logger.fine("Return _editCustomWidget for model rowObject=" + rowObject + " value=" + value);
@@ -268,7 +268,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	private CustomCellEditor _customCellEditor;
 
 	protected class CustomCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-		FIBCustomComponent<T, ?> _customWidget;
+		FIBCustomComponent<V, ?> _customWidget;
 
 		public CustomCellEditor() {
 			_customWidget = getEditCustomWidget(null);
@@ -293,7 +293,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 		// Implement the one CellEditor method that AbstractCellEditor doesn't.
 		@Override
-		public Object getCellEditorValue() {
+		public V getCellEditorValue() {
 			if (_customWidget == null) {
 				return null;
 			}
@@ -330,9 +330,9 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		}
 	}
 
-	protected Object _editedRowObject;
+	protected T _editedRowObject;
 
-	protected void setEditedRowObject(Object anObject) {
+	protected void setEditedRowObject(T anObject) {
 		// logger.info("setEditedRowObject with " + anObject);
 		_editedRowObject = anObject;
 

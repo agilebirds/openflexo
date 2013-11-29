@@ -287,8 +287,7 @@ public abstract class FIBMultipleValues extends FIBWidget {
 
 			}
 		} else if (binding == getFormat()) {
-			setChanged();
-			notifyChange(FIBWidget.Parameters.format);
+			notifyChange(FIBWidget.Parameters.format.name(), null, getFormat());
 		}
 	}
 

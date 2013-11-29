@@ -52,7 +52,7 @@ public class FIBCustom extends FIBWidget {
 
 	public static final String COMPONENT_NAME = "component";
 
-	public static interface FIBCustomComponent<T, C extends JComponent> {
+	public static interface FIBCustomComponent<V, C extends JComponent> {
 		@Documented
 		@Retention(RetentionPolicy.RUNTIME)
 		public @interface CustomComponentParameter {
@@ -70,19 +70,19 @@ public class FIBCustom extends FIBWidget {
 
 		public C getJComponent();
 
-		public T getEditedObject();
+		public V getEditedObject();
 
-		public void setEditedObject(T object);
+		public void setEditedObject(V object);
 
-		public T getRevertValue();
+		public V getRevertValue();
 
-		public void setRevertValue(T object);
+		public void setRevertValue(V object);
 
 		public void addApplyCancelListener(ApplyCancelListener l);
 
 		public void removeApplyCancelListener(ApplyCancelListener l);
 
-		public Class<T> getRepresentedType();
+		public Class<V> getRepresentedType();
 
 		public void init(FIBCustom component, FIBController controller);
 
@@ -179,15 +179,13 @@ public class FIBCustom extends FIBWidget {
 		}
 		a.setCustom(this);
 		assignments.add(a);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBCustomAssignment>(Parameters.assignments, a));
+		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
 	}
 
 	public void removeFromAssignments(FIBCustomAssignment a) {
 		a.setCustom(null);
 		assignments.remove(a);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBCustomAssignment>(Parameters.assignments, a));
+		getPropertyChangeSupport().firePropertyChange(Parameters.assignments.name(), null, assignments);
 	}
 
 	private BindingModel customComponentBindingModel;

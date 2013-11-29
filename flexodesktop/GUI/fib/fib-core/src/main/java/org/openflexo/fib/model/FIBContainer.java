@@ -123,8 +123,7 @@ public abstract class FIBContainer extends FIBComponent {
 				updateBindingModel();
 			}
 		}
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBComponent>(Parameters.subComponents, aComponent));
+		getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
 	}
 
 	private void updateComponentIndexForInsertionIndex(FIBComponent component, int insertionIndex) {
@@ -182,8 +181,7 @@ public abstract class FIBContainer extends FIBComponent {
 
 	public void removeFromSubComponents(FIBComponent aComponent) {
 		removeFromSubComponentsNoNotification(aComponent);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBComponent>(Parameters.subComponents, aComponent));
+		getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
 	}
 
 	public void removeFromSubComponentsNoNotification(FIBComponent aComponent) {
@@ -192,8 +190,7 @@ public abstract class FIBContainer extends FIBComponent {
 	}
 
 	public void notifyComponentMoved(FIBComponent aComponent) {
-		setChanged();
-		notifyObservers(new FIBAttributeNotification<FIBComponent>(Parameters.subComponents, aComponent));
+		getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
 	}
 
 	@Override
@@ -464,13 +461,11 @@ public abstract class FIBContainer extends FIBComponent {
 		FIBAttributeNotification<ComponentConstraints> notification = new FIBAttributeNotification<ComponentConstraints>(
 				FIBComponent.Parameters.constraints, component.getConstraints(), component.getConstraints());
 		component.notify(notification);
-		setChanged();
-		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
+		getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
 	}
 
 	private void notifySubcomponentsIndexChanged() {
-		setChanged();
-		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
+		getPropertyChangeSupport().firePropertyChange(Parameters.subComponents.name(), null, subComponents);
 	}
 
 	@Override

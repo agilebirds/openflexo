@@ -21,9 +21,9 @@ package org.openflexo.fib.view.widget.table;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,13 +36,22 @@ import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBTableColumn;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
-public abstract class AbstractColumn<T> implements BindingEvaluationContext, Observer {
+/**
+ * Represents a column in a table
+ * 
+ * @author sylvain
+ * 
+ * @param <T>
+ *            type of row object beeing handled by this column
+ * @param <V>
+ *            type of value beeing managed by column's cells
+ */
+public abstract class AbstractColumn<T, V> implements BindingEvaluationContext, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(AbstractColumn.class.getPackage().getName());
 
@@ -56,15 +65,15 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	private String tooltipKey;
 
-	private FIBTableCellRenderer<T> _defaultTableCellRenderer;
+	private FIBTableCellRenderer<T, V> _defaultTableCellRenderer;
 
 	private FIBController controller;
 
-	private FIBTableModel tableModel;
+	private FIBTableModel<T> tableModel;
 
 	private DynamicFormatter formatter;
 
-	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public AbstractColumn(FIBTableColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super();
 		this.controller = controller;
 		this.tableModel = tableModel;
@@ -75,11 +84,12 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		isResizable = columnModel.getResizable();
 		displayTitle = columnModel.getDisplayTitle();
 
-		columnModel.addObserver(this);
+		columnModel.getPropertyChangeSupport().addPropertyChangeListener(this);
+
 	}
 
 	public void delete() {
-		columnModel.deleteObserver(this);
+		columnModel.getPropertyChangeSupport().removePropertyChangeListener(this);
 
 		this.controller = null;
 		this.columnModel = null;
@@ -87,20 +97,20 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (arg instanceof FIBAttributeNotification && o == columnModel) {
-			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
-			if (dataModification.getAttribute() == FIBTableColumn.Parameters.columnWidth
-					|| dataModification.getAttribute() == FIBTableColumn.Parameters.data
-					|| dataModification.getAttribute() == FIBTableColumn.Parameters.displayTitle
-					|| dataModification.getAttribute() == FIBTableColumn.Parameters.font
-					|| dataModification.getAttribute() == FIBTableColumn.Parameters.resizable
-					|| dataModification.getAttribute() == FIBTableColumn.Parameters.title) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == columnModel) {
+			if ((evt.getPropertyName().equals(FIBTableColumn.Parameters.columnWidth.name()))
+					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.data.name()))
+					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.displayTitle.name()))
+					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.font.name()))
+					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.resizable.name()))
+					|| (evt.getPropertyName().equals(FIBTableColumn.Parameters.title.name()))) {
 				if (controller.viewForComponent((FIBComponent) columnModel.getTable()) != null) {
 					((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getTable())).updateTable();
 				}
 			}
 		}
+
 	}
 
 	public FIBController getController() {
@@ -117,15 +127,15 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 	}
 
-	public FIBTableModel getTableModel() {
+	public FIBTableModel<T> getTableModel() {
 		return tableModel;
 	}
 
-	protected void setTableModel(FIBTableModel model) {
+	protected void setTableModel(FIBTableModel<T> model) {
 		tableModel = model;
 	}
 
-	public Object elementAt(int row) {
+	public T elementAt(int row) {
 		return tableModel.elementAt(row);
 	}
 
@@ -156,13 +166,14 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		defaultWidth = width;
 	}
 
-	public boolean isCellEditableFor(Object object) {
+	public boolean isCellEditableFor(T object) {
 		return false;
 	}
 
-	public abstract Class<T> getValueClass();
+	public abstract Class<V> getValueClass();
 
-	public synchronized T getValueFor(final Object object, BindingEvaluationContext evaluationContext) {
+	@SuppressWarnings("unchecked")
+	public synchronized V getValueFor(final T object, BindingEvaluationContext evaluationContext) {
 		iteratorObject = object;
 		bindingEvaluationContext = evaluationContext;
 		/*
@@ -174,7 +185,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		 * +columnModel.getData().getBindingValue(this));
 		 */
 		try {
-			return (T) columnModel.getData().getBindingValue(this);
+			return (V) columnModel.getData().getBindingValue(this);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 			return null;
@@ -188,7 +199,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 	}
 
-	public synchronized void setValueFor(final Object object, T value, BindingEvaluationContext evaluationContext) {
+	public synchronized void setValueFor(final T object, V value, BindingEvaluationContext evaluationContext) {
 		iteratorObject = object;
 		bindingEvaluationContext = evaluationContext;
 		try {
@@ -205,7 +216,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 	}
 
-	protected Object iteratorObject;
+	protected T iteratorObject;
 
 	@Override
 	public Object getValue(BindingVariable variable) {
@@ -248,7 +259,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 	 */
 	protected TableCellRenderer getDefaultTableCellRenderer() {
 		if (_defaultTableCellRenderer == null) {
-			_defaultTableCellRenderer = new FIBTableCellRenderer<T>(this);
+			_defaultTableCellRenderer = new FIBTableCellRenderer<T, V>(this);
 		}
 		return _defaultTableCellRenderer;
 	}
@@ -262,7 +273,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return false;
 	}
 
-	public String getTooltip(Object object) {
+	public String getTooltip(T object) {
 		if (columnModel.getTooltip().isSet() && columnModel.getTooltip().isValid()) {
 			iteratorObject = object;
 			try {
@@ -278,7 +289,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return null;
 	}
 
-	public Color getSpecificColor(Object object) {
+	public Color getSpecificColor(T object) {
 		if (columnModel.getColor().isSet() && columnModel.getColor().isValid()) {
 			iteratorObject = object;
 			try {
@@ -294,7 +305,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return null;
 	}
 
-	public Color getSpecificBgColor(Object object) {
+	public Color getSpecificBgColor(T object) {
 		if (columnModel.getBgColor().isSet() && columnModel.getBgColor().isValid()) {
 			iteratorObject = object;
 			try {
@@ -323,7 +334,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return getTableModel().getPropertyListColumnWithTitle(title);
 	}
 
-	public void notifyValueChangedFor(Object object, T value, BindingEvaluationContext evaluationContext) {
+	public void notifyValueChangedFor(T object, V value, BindingEvaluationContext evaluationContext) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyValueChangedFor " + object);
 		}

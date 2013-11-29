@@ -35,9 +35,9 @@ import org.openflexo.fib.model.FIBIconColumn;
  * @author sguerin
  * 
  */
-public class IconColumn extends AbstractColumn<Icon> implements EditableColumn<Icon> {
+public class IconColumn<T> extends AbstractColumn<T, Icon> implements EditableColumn<T, Icon> {
 
-	public IconColumn(FIBIconColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public IconColumn(FIBIconColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 	}
 
@@ -81,7 +81,8 @@ public class IconColumn extends AbstractColumn<Icon> implements EditableColumn<I
 
 	private IconCellRenderer _iconTableCellRenderer;
 
-	class IconCellRenderer extends FIBTableCellRenderer {
+	@SuppressWarnings("serial")
+	protected class IconCellRenderer extends FIBTableCellRenderer<T, Icon> {
 
 		public IconCellRenderer() {
 			super(IconColumn.this);

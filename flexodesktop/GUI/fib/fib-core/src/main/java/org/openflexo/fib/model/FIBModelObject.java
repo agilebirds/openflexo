@@ -19,13 +19,13 @@
  */
 package org.openflexo.fib.model;
 
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,13 +44,16 @@ import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.KeyValueDecoder;
 import org.openflexo.xmlcode.XMLSerializable;
 
-public abstract class FIBModelObject extends Observable implements Bindable, XMLSerializable {
+public abstract class FIBModelObject implements Bindable, XMLSerializable, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(FIBModelObject.class.getPackage().getName());
+
+	public static final String DELETED_PROPERTY = "Deleted";
 
 	// Instanciate a new localizer in directory src/dev/resources/FIBLocalizer
 	// Little hack to be removed: linked to parent localizer (which is Openflexo main localizer)
@@ -69,14 +72,28 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	private String description;
 	private boolean isDeleted = false;
 
-	private Vector<FIBParameter> parameters = new Vector<FIBParameter>();
+	private List<FIBParameter> parameters = new Vector<FIBParameter>();
+
+	private PropertyChangeSupport pcSupport;
 
 	public FIBModelObject() {
 		super();
+		pcSupport = new PropertyChangeSupport(this);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED_PROPERTY;
 	}
 
 	public void delete() {
 		isDeleted = true;
+		getPropertyChangeSupport().firePropertyChange(DELETED_PROPERTY, this, null);
 	}
 
 	public boolean isDeleted() {
@@ -116,12 +133,12 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return null;
 	}
 
-	public Vector<FIBParameter> getParameters() {
+	public List<FIBParameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Vector<FIBParameter> parameters) {
-		FIBAttributeNotification<Vector<FIBParameter>> notification = requireChange(Parameters.parameters, parameters);
+	public void setParameters(List<FIBParameter> parameters) {
+		FIBAttributeNotification<List<FIBParameter>> notification = requireChange(Parameters.parameters, parameters);
 		if (notification != null) {
 			this.parameters = parameters;
 			hasChanged(notification);
@@ -130,14 +147,12 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	public void addToParameters(FIBParameter p) {
 		parameters.add(p);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBParameter>(Parameters.parameters, p));
+		getPropertyChangeSupport().firePropertyChange(Parameters.parameters.name(), null, parameters);
 	}
 
 	public void removeFromParameters(FIBParameter p) {
 		parameters.remove(p);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBParameter>(Parameters.parameters, p));
+		getPropertyChangeSupport().firePropertyChange(Parameters.parameters.name(), null, parameters);
 	}
 
 	public FIBParameter createNewParameter() {
@@ -207,18 +222,16 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
 		}
-		setChanged();
-		notifyObservers(new FIBAttributeNotification<T>(parameterKey, oldValue, newValue));
+		getPropertyChangeSupport().firePropertyChange(parameterKey.name(), oldValue, newValue);
 	}
 
+	@Deprecated
 	protected void notifyChange(FIBModelAttribute parameterKey) {
-		setChanged();
-		notifyObservers(new FIBAttributeNotification(parameterKey, null, null));
+		getPropertyChangeSupport().firePropertyChange(parameterKey.name(), null, this);
 	}
 
 	protected <T extends Object> void notifyChange(String parameterName, T oldValue, T newValue) {
-		setChanged();
-		notifyObservers(new FIBModelNotification<T>(parameterName, oldValue, newValue));
+		getPropertyChangeSupport().firePropertyChange(parameterName, oldValue, newValue);
 	}
 
 	protected <T extends Object> FIBAttributeNotification<T> requireChange(FIBModelAttribute parameterKey, T value) {
@@ -247,8 +260,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 			logger.fine("Change attribute " + notification.getAttributeName() + " for object " + this + " was: " + notification.oldValue()
 					+ " is now: " + notification.newValue());
 		}
-		setChanged();
-		notifyObservers(notification);
+		getPropertyChangeSupport().firePropertyChange(notification.getAttributeName(), notification.oldValue(), notification.newValue());
 	}
 
 	/**

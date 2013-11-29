@@ -24,7 +24,6 @@ import java.awt.Font;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -33,6 +32,8 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingValueChangeListener;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -50,7 +51,6 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 	public static final String DATA = "data";
 	public static final String VISIBLE = "visible";
-	public static final String ENABLED = "enabled";
 
 	public static final String DELETED_PROPERTY = "Deleted";
 
@@ -75,6 +75,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 	private PropertyChangeSupport pcSupport;
 
+	private BindingValueChangeListener<T> dataBindingValueChangeListener;
+	private BindingValueChangeListener<Boolean> visibleBindingValueChangeListener;
+
 	public FIBView(M model, FIBController controller) {
 		super();
 		this.controller = controller;
@@ -86,6 +89,46 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 		controller.registerView(this);
 
+		updateData();
+
+		listenDataValueChange();
+		listenVisibleValueChange();
+
+	}
+
+	private void listenDataValueChange() {
+		if (dataBindingValueChangeListener != null) {
+			dataBindingValueChangeListener.stopObserving();
+			dataBindingValueChangeListener.delete();
+		}
+		if (getComponent().getData() != null && getComponent().getData().isValid()) {
+			dataBindingValueChangeListener = new BindingValueChangeListener<T>((DataBinding<T>) getComponent().getData(),
+					getBindingEvaluationContext()) {
+				@Override
+				public void bindingValueChanged(Object source, T newValue) {
+					System.out.println(" bindingValueChanged() detected for data=" + getComponent().getData() + " with newValue="
+							+ newValue + " source=" + source);
+					updateData();
+				}
+			};
+		}
+	}
+
+	private void listenVisibleValueChange() {
+		if (visibleBindingValueChangeListener != null) {
+			visibleBindingValueChangeListener.stopObserving();
+			visibleBindingValueChangeListener.delete();
+		}
+		if (getComponent().getVisible() != null && getComponent().getVisible().isValid()) {
+			visibleBindingValueChangeListener = new BindingValueChangeListener<Boolean>(getComponent().getVisible(),
+					getBindingEvaluationContext()) {
+				@Override
+				public void bindingValueChanged(Object source, Boolean newValue) {
+					System.out.println(" bindingValueChanged() detected for visible=" + getComponent().getVisible() + " with newValue="
+							+ newValue + " source=" + source);
+				}
+			};
+		}
 	}
 
 	@Override
@@ -129,7 +172,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 	public void setData(T data) {
 		T oldData = this.data;
 		if (oldData != data) {
+
 			this.data = data;
+
 			getPropertyChangeSupport().firePropertyChange(DATA, oldData, data);
 		}
 	}
@@ -215,7 +260,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 		return component;
 	}
 
-	public abstract void updateDataObject(Object anObject);
+	// public abstract void updateDataObject(Object anObject);
 
 	public abstract void updateLanguage();
 
@@ -256,6 +301,18 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 	/**
 	 * This method is called to update view representing a FIBComponent.<br>
+	 * 
+	 * @return a flag indicating if component has been updated
+	 */
+	public boolean update() {
+
+		updateData();
+		updateVisibility();
+		return true;
+	}
+
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
 	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
 	 * nothing and return.
 	 * 
@@ -263,13 +320,13 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 	 *            all the components that have been previously updated during current update loop
 	 * @return a flag indicating if component has been updated
 	 */
-	public boolean update(List<FIBComponent> callers) {
+	/*public boolean update(List<FIBComponent> callers) {
 		if (callers.contains(getComponent())) {
 			return false;
 		}
 		updateVisibility();
 		return true;
-	}
+	}*/
 
 	protected abstract boolean checkValidDataPath();
 
@@ -325,6 +382,12 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 	public final boolean hasValue() {
 		return component.getData() != null && component.getData().isSet();
+	}
+
+	public abstract T getValue();
+
+	protected void updateData() {
+		setData(getValue());
 	}
 
 	protected void updateVisibility() {

@@ -38,11 +38,11 @@ import org.openflexo.fib.model.FIBTextFieldColumn;
  * @author sguerin
  * 
  */
-public class TextFieldColumn extends StringColumn implements EditableColumn<String> {
+public class TextFieldColumn<T> extends StringColumn<T> implements EditableColumn<T, String> {
 
 	private DefaultCellEditor editor;
 
-	public TextFieldColumn(FIBTextFieldColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public TextFieldColumn(FIBTextFieldColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 	}
 
@@ -66,6 +66,7 @@ public class TextFieldColumn extends StringColumn implements EditableColumn<Stri
 		return true;
 	}
 
+	@SuppressWarnings("serial")
 	@Override
 	public TableCellEditor getCellEditor() {
 		if (editor == null) {

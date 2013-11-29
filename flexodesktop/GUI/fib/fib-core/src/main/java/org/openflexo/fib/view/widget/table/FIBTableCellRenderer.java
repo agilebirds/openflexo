@@ -15,13 +15,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 
-class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
+@SuppressWarnings("serial")
+public class FIBTableCellRenderer<T, V> extends DefaultTableCellRenderer {
 
-	private final AbstractColumn<T> column;
+	private final AbstractColumn<T, V> column;
 	private Color disabledColor;
 	private Color disabledBackgroundColor;
 
-	public FIBTableCellRenderer(AbstractColumn<T> aColumn) {
+	public FIBTableCellRenderer(AbstractColumn<T, V> aColumn) {
 		super();
 		column = aColumn;
 		setFont(column.getColumnModel().retrieveValidFont());
@@ -34,11 +35,11 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 		disabledBackgroundColor = UIManager.getDefaults().getColor("TextArea.disabledBackground");
 	}
 
-	public FIBTableModel getTableModel() {
+	public FIBTableModel<T> getTableModel() {
 		return column.getTableModel();
 	}
 
-	public FIBTableWidget getTableWidget() {
+	public FIBTableWidget<T> getTableWidget() {
 		return column.getTableModel().getTableWidget();
 	}
 

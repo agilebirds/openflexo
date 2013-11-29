@@ -39,11 +39,11 @@ import org.openflexo.fib.model.FIBNumberColumn;
  * @author sguerin
  * 
  */
-public class NumberColumn extends AbstractColumn<Number> implements EditableColumn<Number> {
+public class NumberColumn<T> extends AbstractColumn<T, Number> implements EditableColumn<T, Number> {
 
 	private DefaultCellEditor editor;
 
-	public NumberColumn(FIBNumberColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	public NumberColumn(FIBNumberColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 	}
 

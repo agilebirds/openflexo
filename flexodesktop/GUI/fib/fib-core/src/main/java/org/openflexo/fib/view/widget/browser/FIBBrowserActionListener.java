@@ -21,9 +21,9 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -34,14 +34,12 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowserAction;
 import org.openflexo.fib.model.FIBBrowserAction.ActionType;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
-import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 
-public class FIBBrowserActionListener implements ActionListener, BindingEvaluationContext, Observer {
+public class FIBBrowserActionListener<T> implements ActionListener, BindingEvaluationContext, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserActionListener.class.getPackage().getName());
 
@@ -49,28 +47,29 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 
 	private Object model;
 
-	private final FIBBrowserWidget widget;
+	private final FIBBrowserWidget<T> widget;
 
-	public FIBBrowserActionListener(FIBBrowserWidget widget, FIBBrowserAction browserAction) {
+	public FIBBrowserActionListener(FIBBrowserWidget<T> widget, FIBBrowserAction browserAction) {
 		super();
 		this.widget = widget;
 		this.browserAction = browserAction;
 		selectedObject = null;
-		browserAction.addObserver(this);
+
+		browserAction.getPropertyChangeSupport().addPropertyChangeListener(this);
+
 	}
 
 	public void delete() {
-		browserAction.deleteObserver(this);
+		browserAction.getPropertyChangeSupport().removePropertyChangeListener(this);
 		this.browserAction = null;
 		selectedObject = null;
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (arg instanceof FIBAttributeNotification && o == browserAction) {
-			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
-			if (dataModification.getAttribute() == FIBTableAction.Parameters.method
-					|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == browserAction) {
+			if ((evt.getPropertyName().equals(FIBBrowserAction.Parameters.method.name()))
+					|| (evt.getPropertyName().equals(FIBBrowserAction.Parameters.isAvailable.name()))) {
 				widget.updateBrowser();
 			}
 		}

@@ -26,17 +26,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
+import org.openflexo.antar.binding.BindingValueArrayChangeListener;
+import org.openflexo.antar.binding.BindingValueListChangeListener;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -47,7 +47,20 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
-public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C extends JComponent, T> extends FIBWidgetView<W, C, T> {
+/**
+ * 
+ * @author sylvain
+ * 
+ * @param <W>
+ *            type of FIBComponent used as model (here a subclass of FIBMultipleValues)
+ * @param <C>
+ *            type of rendering component
+ * @param <T>
+ *            type of data being managed by this widget
+ * @param <I>
+ *            type of iterable beeing managed by this widget
+ */
+public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C extends JComponent, T, I> extends FIBWidgetView<W, C, T> {
 
 	static final Logger logger = Logger.getLogger(FIBMultipleValueWidget.class.getPackage().getName());
 
@@ -57,13 +70,59 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	private T selected;
 	private int selectedIndex;
 
+	private FIBMultipleValueCellRenderer listCellRenderer;
+	protected FIBMultipleValueModel<I> multipleValueModel;
+
+	private BindingValueListChangeListener<Object, List<Object>> listBindingValueChangeListener;
+	private BindingValueArrayChangeListener<Object> arrayBindingValueChangeListener;
+
 	public FIBMultipleValueWidget(W model, FIBController controller) {
 		super(model, controller);
+		listenListValueChange();
+		listenArrayValueChange();
+		proceedToListModelUpdate();
 	}
 
-	protected class FIBMultipleValueModel implements ListModel {
-		private List list = null;
-		private Object[] array = null;
+	private void listenListValueChange() {
+		if (listBindingValueChangeListener != null) {
+			listBindingValueChangeListener.stopObserving();
+			listBindingValueChangeListener.delete();
+		}
+		if (getComponent().getList() != null && getComponent().getList().isValid()) {
+			listBindingValueChangeListener = new BindingValueListChangeListener<Object, List<Object>>(
+					(DataBinding<List<Object>>) ((DataBinding) getComponent().getList()), getBindingEvaluationContext()) {
+
+				@Override
+				public void bindingValueChanged(Object source, List<Object> newValue) {
+					System.out.println(" bindingValueChanged() detected for list=" + getComponent().getEnable() + " with newValue="
+							+ newValue + " source=" + source);
+					proceedToListModelUpdate();
+				}
+			};
+		}
+	}
+
+	private void listenArrayValueChange() {
+		if (arrayBindingValueChangeListener != null) {
+			arrayBindingValueChangeListener.stopObserving();
+			arrayBindingValueChangeListener.delete();
+		}
+		if (getComponent().getArray() != null && getComponent().getArray().isValid()) {
+			arrayBindingValueChangeListener = new BindingValueArrayChangeListener<Object>(getComponent().getArray(),
+					getBindingEvaluationContext()) {
+				@Override
+				public void bindingValueChanged(Object source, Object[] newValue) {
+					System.out.println(" bindingValueChanged() detected for array=" + getComponent().getArray() + " with newValue="
+							+ newValue + " source=" + source);
+					proceedToListModelUpdate();
+				}
+			};
+		}
+	}
+
+	protected class FIBMultipleValueModel<T> implements ListModel {
+		private List<T> list = null;
+		private T[] array = null;
 
 		protected FIBMultipleValueModel() {
 			super();
@@ -105,7 +164,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}
 				// System.out.println("accessedArray="+accessedArray);
 				try {
-					array = (Object[]) accessedArray;
+					array = (T[]) accessedArray;
 				} catch (ClassCastException e) {
 					logger.warning("ClassCastException " + e.getMessage());
 				}
@@ -127,19 +186,19 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}*/
 				Type type = getWidget().getData().getAnalyzedType();
 				if (type instanceof Class && ((Class) type).isEnum()) {
-					array = ((Class) type).getEnumConstants();
+					array = (T[]) ((Class) type).getEnumConstants();
 				}
 			}
 
 			if (list == null && array == null && getWidget().getIteratorClass() != null && getWidget().getIteratorClass().isEnum()) {
-				array = getWidget().getIteratorClass().getEnumConstants();
+				array = (T[]) getWidget().getIteratorClass().getEnumConstants();
 			}
 
 			if (list == null && array == null && StringUtils.isNotEmpty(getWidget().getStaticList())) {
-				list = new Vector();
+				list = new ArrayList<T>();
 				StringTokenizer st = new StringTokenizer(getWidget().getStaticList(), ",");
 				while (st.hasMoreTokens()) {
-					list.add(st.nextToken());
+					list.add((T) st.nextToken());
 				}
 			}
 
@@ -222,7 +281,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 
 		@Override
-		public Object getElementAt(int index) {
+		public T getElementAt(int index) {
 			if (list != null && index >= 0 && index < list.size()) {
 				return list.get(index);
 			}
@@ -296,7 +355,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	protected boolean listModelRequireChange() {
-		return getListModel().requireChange();
+		return getMultipleValueModel().requireChange();
 	}
 
 	protected class FIBMultipleValueCellRenderer extends DefaultListCellRenderer {
@@ -357,9 +416,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 	}
 
-	private FIBMultipleValueCellRenderer listCellRenderer;
-	protected FIBMultipleValueModel listModel;
-
 	public FIBMultipleValueCellRenderer getListCellRenderer() {
 		if (listCellRenderer == null) {
 			listCellRenderer = new FIBMultipleValueCellRenderer();
@@ -367,53 +423,57 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		return listCellRenderer;
 	}
 
-	public FIBMultipleValueModel getListModel() {
-		if (listModel == null) {
-			updateListModelWhenRequired();
+	public FIBMultipleValueModel<I> getMultipleValueModel() {
+		if (multipleValueModel == null) {
+			multipleValueModel = createMultipleValueModel();
 		}
-		return listModel;
+		return multipleValueModel;
 	}
 
-	protected FIBMultipleValueModel updateListModelWhenRequired() {
-		if (listModel == null) {
-			listModel = new FIBMultipleValueModel();
+	protected abstract FIBMultipleValueModel<I> createMultipleValueModel();
+
+	protected abstract void proceedToListModelUpdate();
+
+	/*protected FIBMultipleValueModel updateListModelWhenRequired() {
+		if (multipleValueModel == null) {
+			multipleValueModel = new FIBMultipleValueModel();
 		} else {
 			FIBMultipleValueModel aNewListModel = new FIBMultipleValueModel();
-			if (!aNewListModel.equals(listModel) || didLastKnownValuesChange()) {
-				listModel = aNewListModel;
+			if (!aNewListModel.equals(multipleValueModel) || didLastKnownValuesChange()) {
+				multipleValueModel = aNewListModel;
 			}
 		}
-		return listModel;
-	}
+		return multipleValueModel;
+	}*/
 
-	protected FIBMultipleValueModel updateListModel() {
-		listModel = null;
+	/*protected FIBMultipleValueModel updateListModel() {
+		multipleValueModel = null;
 		updateListModelWhenRequired();
-		return listModel;
-	}
+		return multipleValueModel;
+	}*/
 
-	private ArrayList<Object> lastKnownValues = null;
+	// private ArrayList<Object> lastKnownValues = null;
 
 	/**
 	 * Return a flag indicating if last known values declared as ListModel have changed since the last time this method was called.
 	 * 
 	 * @return
 	 */
-	protected boolean didLastKnownValuesChange() {
+	/*protected boolean didLastKnownValuesChange() {
 		boolean returned;
-		if (listModel != null) {
-			returned = !listModel.equalsToList(lastKnownValues);
-			lastKnownValues = listModel.toArrayList();
+		if (multipleValueModel != null) {
+			returned = !multipleValueModel.equalsToList(lastKnownValues);
+			lastKnownValues = multipleValueModel.toArrayList();
 		} else {
 			returned = lastKnownValues != null;
 			lastKnownValues = null;
 		}
 		return returned;
-	}
+	}*/
 
 	/*protected final FIBListModel rebuildListModel()
 	{
-		return listModel = buildListModel();
+		return multipleValueModel = buildListModel();
 	}
 	
 	protected final FIBListModel buildListModel()
@@ -421,7 +481,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		return new FIBListModel();
 	}*/
 
-	@Override
+	/*@Override
 	public final void updateDataObject(final Object dataObject) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -437,13 +497,20 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 		updateListModelWhenRequired();
 		super.updateDataObject(dataObject);
+	}*/
+
+	@Override
+	public boolean update() {
+		super.update();
+		proceedToListModelUpdate();
+		return true;
 	}
 
 	@Override
 	public void updateLanguage() {
 		super.updateLanguage();
 		if (getComponent().getLocalize()) {
-			FIBMultipleValueModel mvModel = getListModel();
+			FIBMultipleValueModel mvModel = getMultipleValueModel();
 			for (int i = 0; i < mvModel.getSize(); i++) {
 				String s = getStringRepresentation(mvModel.getElementAt(i));
 				getLocalized(s);

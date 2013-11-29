@@ -22,13 +22,10 @@ package org.openflexo.fib.view;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -131,36 +128,28 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	@Override
-	public void updateDataObject(final Object dataObject) {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
-			}
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					updateDataObject(dataObject);
-				}
-			});
-			return;
+	public boolean update() {
+		super.update();
+		for (FIBView v : new ArrayList<FIBView>(subViews.values())) {
+			v.update();
 		}
+		return true;
+	}
+
+	/*@Override
+	public void updateDataObject(final Object dataObject) {
 		update(new Vector<FIBComponent>());
 		if (isComponentVisible()) {
 			for (FIBView v : new ArrayList<FIBView>(subViews.values())) {
 				v.updateDataObject(dataObject);
 			}
-			/*if (getDynamicModel() != null && getComponent().getData().isSet()) {
-				logger.fine("Container: " + getComponent() + " value data for " + getDynamicModel() + " is " + getValue());
-				getDynamicModel().setData(getValue());
-				notifyDynamicModelChanged();
-			}*/
 		}
 		updateDataDynamicValue();
-	}
+	}*/
 
-	private void updateDataDynamicValue() {
+	/*private void updateDataDynamicValue() {
 		setData(getValue());
-	}
+	}*/
 
 	/*private void updateDataDynamicValue() {
 		if (getDynamicModel() != null && getComponent().getData().isSet() && getComponent().getData().isValid()) {
@@ -206,13 +195,13 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	 *            all the components that have been previously updated during current update loop
 	 * @return a flag indicating if component has been updated
 	 */
-	@Override
+	/*@Override
 	public boolean update(List<FIBComponent> callers) {
 		boolean returned = super.update(callers);
 		updateDataDynamicValue();
 
 		return returned;
-	}
+	}*/
 
 	protected void registerViewForComponent(FIBView view, FIBComponent component) {
 		subViews.put(component, view);

@@ -22,6 +22,7 @@ package org.openflexo.fib.editor.test;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.fib.sampleData.Family;
 import org.openflexo.toolbox.FileResource;
 
 public class TestDynamicReuse extends FIBAbstractEditor {

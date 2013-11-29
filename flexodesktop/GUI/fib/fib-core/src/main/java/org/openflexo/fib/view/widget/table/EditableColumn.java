@@ -22,14 +22,18 @@ package org.openflexo.fib.view.widget.table;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 
 /**
- * Please comment this class
+ * Represents an editable column in a table
  * 
- * @author sguerin
+ * @author sylvain
  * 
+ * @param <T>
+ *            type of row object beeing handled by this column
+ * @param <V>
+ *            type of value beeing managed by column's cells
  */
-public interface EditableColumn<T> {
+public interface EditableColumn<T, V> {
 
-	public boolean isCellEditableFor(Object object);
+	public boolean isCellEditableFor(T object);
 
-	public void setValueFor(Object object, T value, BindingEvaluationContext evaluationContext);
+	public void setValueFor(T object, V value, BindingEvaluationContext evaluationContext);
 }

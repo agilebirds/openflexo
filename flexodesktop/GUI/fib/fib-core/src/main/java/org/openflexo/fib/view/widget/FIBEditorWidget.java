@@ -31,7 +31,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -172,6 +171,12 @@ public class FIBEditorWidget extends FIBWidgetView<FIBEditor, JEditTextArea, Str
 	}
 
 	@Override
+	public boolean update() {
+		super.update();
+		return true;
+	}
+
+	/*@Override
 	public void updateDataObject(final Object dataObject) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -187,7 +192,7 @@ public class FIBEditorWidget extends FIBWidgetView<FIBEditor, JEditTextArea, Str
 		}
 		super.updateDataObject(dataObject);
 		textArea.setEditable(!isReadOnly());
-	}
+	}*/
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {

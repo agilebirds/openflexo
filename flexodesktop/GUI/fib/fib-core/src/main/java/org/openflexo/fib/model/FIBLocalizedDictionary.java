@@ -263,8 +263,7 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 	public void refresh() {
 		logger.fine("Refresh called on FIBLocalizedDictionary " + Integer.toHexString(hashCode()));
 		dynamicEntries = null;
-		setChanged();
-		notifyObservers();
+		getPropertyChangeSupport().firePropertyChange("entries", null, getEntries());
 	}
 
 	public DynamicEntry addEntry() {

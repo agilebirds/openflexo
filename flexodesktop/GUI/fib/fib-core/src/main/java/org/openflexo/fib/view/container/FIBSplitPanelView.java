@@ -150,7 +150,9 @@ public class FIBSplitPanelView<T> extends FIBContainerView<FIBSplitPanel, JXMult
 		getJComponent().removeAll();
 
 		buildSubComponents();
-		updateDataObject(getDataObject());
+		// updateDataObject(getDataObject());
+
+		update();
 
 		getJComponent().revalidate();
 		getJComponent().repaint();

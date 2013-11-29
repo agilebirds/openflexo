@@ -39,7 +39,7 @@ import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
-public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JComboBox, T> {
+public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JComboBox, T, T> {
 
 	static final Logger logger = Logger.getLogger(FIBDropDownWidget.class.getPackage().getName());
 
@@ -90,7 +90,7 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 			parentTemp.remove(jComboBox);
 			parentTemp.remove(resetButton);
 		}
-		listModel = null;
+		multipleValueModel = null;
 		jComboBox = new JComboBox(getListModel());
 		/*if (getDataObject() == null) {
 			Vector<Object> defaultValue = new Vector<Object>();
@@ -98,7 +98,7 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 			_jComboBox = new JComboBox(defaultValue);
 		} else {
 			// TODO: Verify that there is no reason for this comboBoxModel to be cached.
-			listModel=null;
+			multipleValueModel=null;
 			_jComboBox = new JComboBox(getListModel());
 		}*/
 		jComboBox.setFont(getFont());
@@ -175,27 +175,36 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 		return false;
 	}
 
-	@Override
 	public MyComboBoxModel getListModel() {
-		return (MyComboBoxModel) super.getListModel();
+		return (MyComboBoxModel) getMultipleValueModel();
 	}
 
-	@Override
+	protected MyComboBoxModel createMultipleValueModel() {
+		return new MyComboBoxModel(getValue());
+	}
+
+	protected void proceedToListModelUpdate() {
+		if (jComboBox != null) {
+			jComboBox.setModel(getListModel());
+		}
+	}
+
+	/*@Override
 	protected MyComboBoxModel updateListModelWhenRequired() {
-		if (listModel == null) {
-			listModel = new MyComboBoxModel(getValue());
+		if (multipleValueModel == null) {
+			multipleValueModel = new MyComboBoxModel(getValue());
 			if (jComboBox != null) {
-				jComboBox.setModel((MyComboBoxModel) listModel);
+				jComboBox.setModel((MyComboBoxModel) multipleValueModel);
 			}
 		} else {
 			MyComboBoxModel aNewMyComboBoxModel = new MyComboBoxModel(getValue());
-			if (!aNewMyComboBoxModel.equals(listModel)) {
-				listModel = aNewMyComboBoxModel;
-				jComboBox.setModel((MyComboBoxModel) listModel);
+			if (!aNewMyComboBoxModel.equals(multipleValueModel)) {
+				multipleValueModel = aNewMyComboBoxModel;
+				jComboBox.setModel((MyComboBoxModel) multipleValueModel);
 			}
 		}
-		return (MyComboBoxModel) listModel;
-	}
+		return (MyComboBoxModel) multipleValueModel;
+	}*/
 
 	protected class MyComboBoxModel extends FIBMultipleValueModel implements ComboBoxModel {
 		protected Object selectedItem = null;

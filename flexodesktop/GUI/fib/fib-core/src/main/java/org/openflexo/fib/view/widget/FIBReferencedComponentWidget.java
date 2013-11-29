@@ -21,13 +21,10 @@ package org.openflexo.fib.view.widget;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
@@ -124,6 +121,13 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	}
 
 	@Override
+	public boolean update() {
+		super.update();
+		updateDynamicallyReferencedComponentWhenRequired();
+		return true;
+	}
+
+	/*@Override
 	public final void updateDataObject(final Object dataObject) {
 		if (!SwingUtilities.isEventDispatchThread()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -140,7 +144,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		// super.updateDataObject(dataObject);
 		updateDynamicallyReferencedComponentWhenRequired();
 		super.updateDataObject(dataObject);
-	}
+	}*/
 
 	/**
 	 * Called whenever the referenced component may have changed
@@ -245,7 +249,8 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 			// logger.info("getData()=" + getWidget().getData());
 			// logger.info("valid=" + getWidget().getData().isValid());
 			((FIBView) referencedComponentView).setData(getValue());
-			referencedComponentView.updateDataObject(getValue());
+			// referencedComponentView.updateDataObject(getValue());
+			referencedComponentView.update();
 		}
 		return true;
 
@@ -280,9 +285,9 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public void updateComponent() {
 		referencedComponentView = null;
 		logger.info("Updating component not implemented yet");
-		getParentView().update(new ArrayList<FIBComponent>());
+		getParentView().update();
 		((FIBContainerView) getParentView()).updateLayout();
-		getParentView().updateDataObject(getValue());
+		getParentView().update();
 	}
 
 	public BindingEvaluationContext getEmbeddedBindingEvaluationContext() {

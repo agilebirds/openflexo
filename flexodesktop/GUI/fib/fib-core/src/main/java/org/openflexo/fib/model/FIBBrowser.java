@@ -270,16 +270,14 @@ public class FIBBrowser extends FIBWidget {
 		anElement.setBrowser(this);
 		elements.add(anElement);
 		updateElementsForClasses();
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElement>(Parameters.elements, anElement));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public void removeFromElements(FIBBrowserElement anElement) {
 		anElement.setBrowser(null);
 		elements.remove(anElement);
 		updateElementsForClasses();
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBBrowserElement>(Parameters.elements, anElement));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public FIBBrowserElement createElement() {
@@ -302,8 +300,7 @@ public class FIBBrowser extends FIBWidget {
 		}
 		elements.remove(e);
 		elements.insertElementAt(e, 0);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElement>(Parameters.elements, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public void moveUp(FIBBrowserElement e) {
@@ -313,8 +310,7 @@ public class FIBBrowser extends FIBWidget {
 		int index = elements.indexOf(e);
 		elements.remove(e);
 		elements.insertElementAt(e, index - 1);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElement>(Parameters.elements, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public void moveDown(FIBBrowserElement e) {
@@ -324,8 +320,7 @@ public class FIBBrowser extends FIBWidget {
 		int index = elements.indexOf(e);
 		elements.remove(e);
 		elements.insertElementAt(e, index + 1);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElement>(Parameters.elements, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public void moveToBottom(FIBBrowserElement e) {
@@ -334,8 +329,7 @@ public class FIBBrowser extends FIBWidget {
 		}
 		elements.remove(e);
 		elements.add(e);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBBrowserElement>(Parameters.elements, e));
+		getPropertyChangeSupport().firePropertyChange(Parameters.elements.name(), null, elements);
 	}
 
 	public SelectionMode getSelectionMode() {

@@ -155,15 +155,13 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	public void addToColumns(FIBTableColumn aColumn) {
 		aColumn.setTable(this);
 		columns.add(aColumn);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, aColumn));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public void removeFromColumns(FIBTableColumn aColumn) {
 		aColumn.setTable(null);
 		columns.remove(aColumn);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBTableColumn>(Parameters.columns, aColumn));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public List<FIBTableAction> getActions() {
@@ -178,15 +176,13 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		logger.fine("Add to actions " + anAction);
 		anAction.setTable(this);
 		actions.add(anAction);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableAction>(Parameters.actions, anAction));
+		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
 	}
 
 	public void removeFromActions(FIBTableAction anAction) {
 		anAction.setTable(null);
 		actions.remove(anAction);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBTableAction>(Parameters.actions, anAction));
+		getPropertyChangeSupport().firePropertyChange(Parameters.actions.name(), null, actions);
 	}
 
 	@Override
@@ -547,8 +543,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		}
 		columns.remove(c);
 		columns.add(0, c);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public void moveUp(FIBTableColumn c) {
@@ -558,8 +553,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		int index = columns.indexOf(c);
 		columns.remove(c);
 		columns.add(index - 1, c);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public void moveDown(FIBTableColumn c) {
@@ -569,8 +563,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		int index = columns.indexOf(c);
 		columns.remove(c);
 		columns.add(index + 1, c);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public void moveToBottom(FIBTableColumn c) {
@@ -579,8 +572,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		}
 		columns.remove(c);
 		columns.add(c);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, c));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public SelectionMode getSelectionMode() {

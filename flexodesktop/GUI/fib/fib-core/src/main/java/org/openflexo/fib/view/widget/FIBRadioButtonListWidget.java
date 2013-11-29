@@ -32,7 +32,7 @@ import javax.swing.JRadioButton;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBRadioButtonList;
 
-public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, Object> {
+public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadioButtonList, JPanel, T, T> {
 
 	static final Logger logger = Logger.getLogger(FIBRadioButtonListWidget.class.getPackage().getName());
 
@@ -42,29 +42,39 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	private ButtonGroup buttonGroup;
 
-	private Object selectedValue;
+	private T selectedValue;
 
 	public FIBRadioButtonListWidget(FIBRadioButtonList model, FIBController controller) {
 		super(model, controller);
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns(), model.getHGap(), model.getVGap()));
 		panel.setOpaque(false);
-		rebuildRadioButtons();
-		if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+		// rebuildRadioButtons();
+		if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
 			radioButtonArray[0].setSelected(true);
-			setSelected(getListModel().getElementAt(0));
+			setSelected(getMultipleValueModel().getElementAt(0));
 		}
 	}
 
-	protected void rebuildRadioButtons() {
+	@Override
+	protected FIBMultipleValueModel<T> createMultipleValueModel() {
+		return new FIBMultipleValueModel<T>();
+	}
+
+	@Override
+	protected void proceedToListModelUpdate() {
+		rebuildRadioButtons();
+	}
+
+	private void rebuildRadioButtons() {
 		panel.removeAll();
 		((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
 		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
 		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
 		buttonGroup = new ButtonGroup();
-		radioButtonArray = new JRadioButton[getListModel().getSize()];
-		for (int i = 0; i < getListModel().getSize(); i++) {
-			Object object = getListModel().getElementAt(i);
+		radioButtonArray = new JRadioButton[getMultipleValueModel().getSize()];
+		for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
+			T object = getMultipleValueModel().getElementAt(i);
 			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
 			rb.setOpaque(false);
 			rb.addActionListener(new RadioButtonListener(rb, object, i));
@@ -81,8 +91,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		Object value = getValue();
-		if (notEquals(value, selectedValue) || listModelRequireChange() || listModel == null) {
+		T value = getValue();
+		if (notEquals(value, selectedValue) || listModelRequireChange() || multipleValueModel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
@@ -94,11 +104,11 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			rebuildRadioButtons();
 
 			if (selectedValue == null) {
-				if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+				if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
 					radioButtonArray[0].doClick();
 				}
-				setSelected(getListModel().getElementAt(0));
-				selectedValue = getListModel().getElementAt(0);
+				setSelected(getMultipleValueModel().getElementAt(0));
+				selectedValue = getMultipleValueModel().getElementAt(0);
 				setValue(selectedValue);
 			}
 
@@ -110,11 +120,11 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 	private class RadioButtonListener implements ActionListener {
 
-		private final Object value;
+		private final T value;
 		private final JRadioButton button;
 		private final int index;
 
-		public RadioButtonListener(JRadioButton button, Object value, int index) {
+		public RadioButtonListener(JRadioButton button, T value, int index) {
 			this.button = button;
 			this.value = value;
 			this.index = index;

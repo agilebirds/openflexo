@@ -31,7 +31,7 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 	private DataBinding<T> dataBinding;
 	private BindingEvaluationContext context;
 	private List<TargetObject> dependingObjects;
-	private T lastNotifiedValue;
+	protected T lastNotifiedValue;
 
 	public BindingValueChangeListener(DataBinding<T> dataBinding, BindingEvaluationContext context) {
 		super();
@@ -187,17 +187,18 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 
 	@Override
 	public void update(Observable o, Object arg) {
-		processChange(o);
+		fireChange(o);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		processChange(evt.getSource());
+		fireChange(evt.getSource());
 	}
 
-	private void processChange(Object source) {
+	protected void fireChange(Object source) {
 		T newValue = evaluateValue();
 		if (newValue != lastNotifiedValue) {
+			lastNotifiedValue = newValue;
 			bindingValueChanged(source, newValue);
 		}
 	}

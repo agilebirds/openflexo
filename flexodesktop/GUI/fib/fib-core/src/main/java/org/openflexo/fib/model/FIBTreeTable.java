@@ -38,15 +38,13 @@ public class FIBTreeTable extends FIBBrowser implements FIBTableComponent {
 	public void addToColumns(FIBTableColumn aColumn) {
 		aColumn.setTable(this);
 		columns.add(aColumn);
-		setChanged();
-		notifyObservers(new FIBAddingNotification<FIBTableColumn>(Parameters.columns, aColumn));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	public void removeFromColumns(FIBTableColumn aColumn) {
 		aColumn.setTable(null);
 		columns.remove(aColumn);
-		setChanged();
-		notifyObservers(new FIBRemovingNotification<FIBTableColumn>(Parameters.columns, aColumn));
+		getPropertyChangeSupport().firePropertyChange(Parameters.columns.name(), null, columns);
 	}
 
 	@Override

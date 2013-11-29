@@ -20,12 +20,12 @@
 package org.openflexo.fib.view.widget.browser;
 
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -37,7 +37,6 @@ import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
@@ -48,46 +47,7 @@ import org.openflexo.toolbox.ToolBox;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-public class FIBBrowserElementType implements BindingEvaluationContext, Observer {
-
-	private final class CastFunction implements Function<Object, Object>, BindingEvaluationContext {
-		private final FIBBrowserElementChildren children;
-
-		private Object child;
-
-		private CastFunction(FIBBrowserElementChildren children) {
-			this.children = children;
-		}
-
-		@Override
-		public synchronized Object apply(Object arg0) {
-			child = arg0;
-			try {
-				Object result = null;
-				try {
-					result = children.getCast().getBindingValue(this);
-				} catch (TypeMismatchException e) {
-					e.printStackTrace();
-				} catch (NullReferenceException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				return result;
-			} finally {
-				child = null;
-			}
-		}
-
-		@Override
-		public Object getValue(BindingVariable variable) {
-			if (variable.getVariableName().equals("child")) {
-				return child;
-			} else {
-				return FIBBrowserElementType.this.getValue(variable);
-			}
-		}
-	}
+public class FIBBrowserElementType implements BindingEvaluationContext, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(FIBBrowserElementType.class.getPackage().getName());
 
@@ -103,12 +63,12 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 		this.fibBrowserModel = browserModel;
 		this.browserElementDefinition = browserElementDefinition;
 
-		browserElementDefinition.addObserver(this);
+		browserElementDefinition.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	public void delete() {
 		if (browserElementDefinition != null) {
-			browserElementDefinition.deleteObserver(this);
+			browserElementDefinition.getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 
 		this.controller = null;
@@ -120,9 +80,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (arg instanceof FIBAttributeNotification && o == browserElementDefinition) {
-			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == browserElementDefinition) {
 			((FIBBrowserWidget) controller.viewForComponent(browserElementDefinition.getBrowser())).updateBrowser();
 		}
 	}
@@ -503,6 +462,45 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			this.isFiltered = isFiltered;
 			// Later, try to implement a way to rebuild tree with same expanded nodes
 			fibBrowserModel.fireTreeRestructured();
+		}
+	}
+
+	private final class CastFunction implements Function<Object, Object>, BindingEvaluationContext {
+		private final FIBBrowserElementChildren children;
+
+		private Object child;
+
+		private CastFunction(FIBBrowserElementChildren children) {
+			this.children = children;
+		}
+
+		@Override
+		public synchronized Object apply(Object arg0) {
+			child = arg0;
+			try {
+				Object result = null;
+				try {
+					result = children.getCast().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				return result;
+			} finally {
+				child = null;
+			}
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("child")) {
+				return child;
+			} else {
+				return FIBBrowserElementType.this.getValue(variable);
+			}
 		}
 	}
 

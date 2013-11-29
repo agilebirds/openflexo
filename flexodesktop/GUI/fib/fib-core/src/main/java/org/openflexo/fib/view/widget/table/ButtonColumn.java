@@ -41,12 +41,14 @@ import org.openflexo.fib.model.FIBButtonColumn;
  * @author sguerin
  * 
  */
-public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements EditableColumn<T> {
+public class ButtonColumn<T, V> extends AbstractColumn<T, V> implements EditableColumn<T, V> {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ButtonColumn.class.getPackage().getName());
 
 	private org.openflexo.swing.ButtonColumn buttonTableColumn;
 
-	public ButtonColumn(FIBButtonColumn columnModel, FIBTableModel tableModel, FIBController controller) {
+	@SuppressWarnings("serial")
+	public ButtonColumn(FIBButtonColumn columnModel, FIBTableModel<T> tableModel, FIBController controller) {
 		super(columnModel, tableModel, controller);
 		buttonTableColumn = new org.openflexo.swing.ButtonColumn(new AbstractAction() {
 
@@ -97,9 +99,10 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 		return (FIBButtonColumn) super.getColumnModel();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<T> getValueClass() {
-		return (Class<T>) TypeUtils.getBaseClass(getColumnModel().getDataClass());
+	public Class<V> getValueClass() {
+		return (Class<V>) TypeUtils.getBaseClass(getColumnModel().getDataClass());
 	}
 
 	@Override

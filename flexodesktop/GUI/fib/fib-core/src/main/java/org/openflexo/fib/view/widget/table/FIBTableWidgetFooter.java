@@ -43,13 +43,14 @@ import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
-public class FIBTableWidgetFooter extends JPanel {
+@SuppressWarnings("serial")
+public class FIBTableWidgetFooter<T> extends JPanel {
 
 	protected static final Logger logger = Logger.getLogger(FIBTableWidgetFooter.class.getPackage().getName());
 
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 200;
 
-	protected FIBTableWidget _widget;
+	protected FIBTableWidget<T> _widget;
 	protected FIBTable _fibTable;
 
 	protected JButton plusButton;
@@ -65,7 +66,7 @@ public class FIBTableWidgetFooter extends JPanel {
 	 */
 	// private Hashtable<JButton,FIBTableActionListener> _controls;
 
-	public FIBTableWidgetFooter(FIBTableWidget widget) {
+	public FIBTableWidgetFooter(FIBTableWidget<T> widget) {
 		super();
 		_widget = widget;
 
@@ -195,7 +196,7 @@ public class FIBTableWidgetFooter extends JPanel {
 		} else {
 			boolean isActive = false;
 			for (FIBTableAction action : _addActions.keySet()) {
-				FIBTableActionListener actionListener = _addActions.get(action);
+				FIBTableActionListener<T> actionListener = _addActions.get(action);
 				if (actionListener.isActive(_widget.getSelectedObject())) {
 					isActive = true;
 				}
@@ -205,7 +206,7 @@ public class FIBTableWidgetFooter extends JPanel {
 
 		boolean isMinusActive = false;
 		for (FIBTableAction action : _removeActions.keySet()) {
-			FIBTableActionListener actionListener = _removeActions.get(action);
+			FIBTableActionListener<T> actionListener = _removeActions.get(action);
 			if (actionListener.isActive(_widget.getSelectedObject())) {
 				isMinusActive = true;
 			}
@@ -237,7 +238,7 @@ public class FIBTableWidgetFooter extends JPanel {
 
 	void plusPressed() {
 		for (FIBTableAction action : _addActions.keySet()) {
-			FIBTableActionListener actionListener = _addActions.get(action);
+			FIBTableActionListener<T> actionListener = _addActions.get(action);
 			if (actionListener.isActive(_widget.getSelectedObject())) {
 				actionListener.performAction(_widget.getSelectedObject());
 			}
@@ -246,7 +247,7 @@ public class FIBTableWidgetFooter extends JPanel {
 
 	void minusPressed() {
 		for (FIBTableAction action : _removeActions.keySet()) {
-			FIBTableActionListener actionListener = _removeActions.get(action);
+			FIBTableActionListener<T> actionListener = _removeActions.get(action);
 			if (actionListener.isActive(_widget.getSelectedObject())) {
 				// actionListener.performAction(_tableModel.getSelectedObject(), _tableModel.getSelectedObjects());
 				actionListener.performAction(_widget.getSelectedObject());
@@ -278,7 +279,7 @@ public class FIBTableWidgetFooter extends JPanel {
 			}
 
 			for (FIBTableAction action : _addActions.keySet()) {
-				FIBTableActionListener actionListener = _addActions.get(action);
+				FIBTableActionListener<T> actionListener = _addActions.get(action);
 				actionListener.setSelectedObject(_widget.getSelectedObject());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
@@ -297,7 +298,7 @@ public class FIBTableWidgetFooter extends JPanel {
 			minusActionMenu = new JPopupMenu();
 
 			for (FIBTableAction action : _removeActions.keySet()) {
-				FIBTableActionListener actionListener = _removeActions.get(action);
+				FIBTableActionListener<T> actionListener = _removeActions.get(action);
 				actionListener.setSelectedObject(_widget.getSelectedObject());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
@@ -319,7 +320,7 @@ public class FIBTableWidgetFooter extends JPanel {
 			}
 
 			for (FIBTableAction action : _otherActions.keySet()) {
-				FIBTableActionListener actionListener = _otherActions.get(action);
+				FIBTableActionListener<T> actionListener = _otherActions.get(action);
 				actionListener.setSelectedObject(_widget.getSelectedObject());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
@@ -333,17 +334,17 @@ public class FIBTableWidgetFooter extends JPanel {
 		return optionsActionMenu;
 	}
 
-	private Hashtable<FIBTableAction, FIBTableActionListener> _addActions;
-	private Hashtable<FIBTableAction, FIBTableActionListener> _removeActions;
-	private Hashtable<FIBTableAction, FIBTableActionListener> _otherActions;
+	private Hashtable<FIBTableAction, FIBTableActionListener<T>> _addActions;
+	private Hashtable<FIBTableAction, FIBTableActionListener<T>> _removeActions;
+	private Hashtable<FIBTableAction, FIBTableActionListener<T>> _otherActions;
 
-	private void initializeActions(FIBTableWidget tableWidget) {
-		_addActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
-		_removeActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
-		_otherActions = new Hashtable<FIBTableAction, FIBTableActionListener>();
+	private void initializeActions(FIBTableWidget<T> tableWidget) {
+		_addActions = new Hashtable<FIBTableAction, FIBTableActionListener<T>>();
+		_removeActions = new Hashtable<FIBTableAction, FIBTableActionListener<T>>();
+		_otherActions = new Hashtable<FIBTableAction, FIBTableActionListener<T>>();
 
 		for (FIBTableAction plAction : tableWidget.getComponent().getActions()) {
-			FIBTableActionListener plActionListener = new FIBTableActionListener(plAction, tableWidget);
+			FIBTableActionListener<T> plActionListener = new FIBTableActionListener<T>(plAction, tableWidget);
 			if (plActionListener.isAddAction()) {
 				_addActions.put(plAction, plActionListener);
 			} else if (plActionListener.isRemoveAction()) {
@@ -369,22 +370,22 @@ public class FIBTableWidgetFooter extends JPanel {
 		_fibTable = null;
 	}
 
-	public Enumeration<FIBTableActionListener> getAddActionListeners() {
+	public Enumeration<FIBTableActionListener<T>> getAddActionListeners() {
 		return _addActions.elements();
 	}
 
 	public void setModel(Object model) {
 		// logger.info("Set model with "+model);
 		for (FIBTableAction action : _addActions.keySet()) {
-			FIBTableActionListener actionListener = _addActions.get(action);
+			FIBTableActionListener<T> actionListener = _addActions.get(action);
 			actionListener.setModel(model);
 		}
 		for (FIBTableAction action : _removeActions.keySet()) {
-			FIBTableActionListener actionListener = _removeActions.get(action);
+			FIBTableActionListener<T> actionListener = _removeActions.get(action);
 			actionListener.setModel(model);
 		}
 		for (FIBTableAction action : _otherActions.keySet()) {
-			FIBTableActionListener actionListener = _otherActions.get(action);
+			FIBTableActionListener<T> actionListener = _otherActions.get(action);
 			actionListener.setModel(model);
 		}
 		handleSelectionChanged();
