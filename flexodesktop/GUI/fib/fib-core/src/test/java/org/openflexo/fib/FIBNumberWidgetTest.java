@@ -19,10 +19,11 @@ import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.sampleData.Numbers;
+import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Test the structural and behavioural features of FIBTextArea widget
+ * Test the structural and behavioural features of FIBNumber widget
  * 
  * @author sylvain
  * 
@@ -259,6 +260,117 @@ public class FIBNumberWidgetTest {
 		assertEquals(Double.valueOf(6), controller.viewForComponent(doublePWidget).getData());
 		assertEquals(Double.valueOf(12), controller.viewForComponent(doubleOWidget).getData());
 		assertEquals(Double.valueOf(18), controller.viewForComponent(doubleSWidget).getData());
+
+	}
+
+	/**
+	 * Update the model, and check that widgets have well reacted
+	 */
+	@Test
+	public void test3ModifyValueInModel() {
+		numbers.setByteP((byte) 101);
+		numbers.setByteO(Byte.valueOf((byte) 107));
+		assertEquals((byte) 101, controller.viewForComponent(bytePWidget).getData());
+		assertEquals((byte) 107, controller.viewForComponent(byteOWidget).getData());
+		assertEquals((byte) 208, controller.viewForComponent(byteSWidget).getData());
+
+		numbers.setShortP((short) 102);
+		numbers.setShortO(Short.valueOf((short) 108));
+		assertEquals((short) 102, controller.viewForComponent(shortPWidget).getData());
+		assertEquals((short) 108, controller.viewForComponent(shortOWidget).getData());
+		assertEquals((short) 210, controller.viewForComponent(shortSWidget).getData());
+
+		numbers.setIntP((int) 103);
+		numbers.setIntO(Integer.valueOf(109));
+		assertEquals((int) 103, controller.viewForComponent(integerPWidget).getData());
+		assertEquals((int) 109, controller.viewForComponent(integerOWidget).getData());
+		assertEquals((int) 212, controller.viewForComponent(integerSWidget).getData());
+
+		numbers.setLongP((long) 104);
+		numbers.setLongO(Long.valueOf(110));
+		assertEquals((long) 104, controller.viewForComponent(longPWidget).getData());
+		assertEquals((long) 110, controller.viewForComponent(longOWidget).getData());
+		assertEquals((long) 214, controller.viewForComponent(longSWidget).getData());
+
+		numbers.setFloatP((float) 105);
+		numbers.setFloatO(Float.valueOf(111));
+		assertEquals((float) 105, controller.viewForComponent(floatPWidget).getData());
+		assertEquals((float) 111, controller.viewForComponent(floatOWidget).getData());
+		assertEquals((float) 216, controller.viewForComponent(floatSWidget).getData());
+
+		numbers.setDoubleP((double) 106);
+		numbers.setDoubleO(Double.valueOf(112));
+		assertEquals((double) 106, controller.viewForComponent(doublePWidget).getData());
+		assertEquals((double) 112, controller.viewForComponent(doubleOWidget).getData());
+		assertEquals((double) 218, controller.viewForComponent(doubleSWidget).getData());
+
+	}
+
+	/**
+	 * Update the widget, and check that model has well reacted
+	 */
+	@Test
+	public void test4ModifyValueInWidget() {
+
+		FIBNumberWidget<Byte> bytePWidgetView = (FIBNumberWidget<Byte>) controller.viewForComponent(bytePWidget);
+		bytePWidgetView.getDynamicJComponent().setValue((byte) 201);
+		assertEquals((byte) 201, numbers.getByteP());
+
+		FIBNumberWidget<Byte> byteOWidgetView = (FIBNumberWidget<Byte>) controller.viewForComponent(byteOWidget);
+		byteOWidgetView.getDynamicJComponent().setValue((byte) 207);
+		assertEquals(Byte.valueOf((byte) 207), numbers.getByteO());
+
+		assertEquals((byte) 408, controller.viewForComponent(byteSWidget).getData());
+
+		FIBNumberWidget<Short> shortPWidgetView = (FIBNumberWidget<Short>) controller.viewForComponent(shortPWidget);
+		shortPWidgetView.getDynamicJComponent().setValue((short) 202);
+		assertEquals((short) 202, numbers.getShortP());
+
+		FIBNumberWidget<Short> shortOWidgetView = (FIBNumberWidget<Short>) controller.viewForComponent(shortOWidget);
+		shortOWidgetView.getDynamicJComponent().setValue((short) 208);
+		assertEquals(Short.valueOf((short) 208), numbers.getShortO());
+
+		assertEquals((short) 410, controller.viewForComponent(shortSWidget).getData());
+
+		FIBNumberWidget<Integer> integerPWidgetView = (FIBNumberWidget<Integer>) controller.viewForComponent(integerPWidget);
+		integerPWidgetView.getDynamicJComponent().setValue((int) 203);
+		assertEquals((int) 203, numbers.getIntP());
+
+		FIBNumberWidget<Integer> integerOWidgetView = (FIBNumberWidget<Integer>) controller.viewForComponent(integerOWidget);
+		integerOWidgetView.getDynamicJComponent().setValue((int) 209);
+		assertEquals(Integer.valueOf((int) 209), numbers.getIntO());
+
+		assertEquals((int) 412, controller.viewForComponent(integerSWidget).getData());
+
+		FIBNumberWidget<Long> longPWidgetView = (FIBNumberWidget<Long>) controller.viewForComponent(longPWidget);
+		longPWidgetView.getDynamicJComponent().setValue((long) 204);
+		assertEquals((long) 204, numbers.getLongP());
+
+		FIBNumberWidget<Long> longOWidgetView = (FIBNumberWidget<Long>) controller.viewForComponent(longOWidget);
+		longOWidgetView.getDynamicJComponent().setValue((long) 210);
+		assertEquals(Long.valueOf((long) 210), numbers.getLongO());
+
+		assertEquals((long) 414, controller.viewForComponent(longSWidget).getData());
+
+		FIBNumberWidget<Float> floatPWidgetView = (FIBNumberWidget<Float>) controller.viewForComponent(floatPWidget);
+		floatPWidgetView.getDynamicJComponent().setValue((float) 205);
+		assertEquals(205, numbers.getFloatP(), 0.000001);
+
+		FIBNumberWidget<Float> floatOWidgetView = (FIBNumberWidget<Float>) controller.viewForComponent(floatOWidget);
+		floatOWidgetView.getDynamicJComponent().setValue((float) 211);
+		assertEquals(Float.valueOf(211), numbers.getFloatO(), 0.000001);
+
+		assertEquals((float) 416, controller.viewForComponent(floatSWidget).getData());
+
+		FIBNumberWidget<Double> doublePWidgetView = (FIBNumberWidget<Double>) controller.viewForComponent(doublePWidget);
+		doublePWidgetView.getDynamicJComponent().setValue((double) 205);
+		assertEquals(205, numbers.getDoubleP(), 0.000001);
+
+		FIBNumberWidget<Double> doubleOWidgetView = (FIBNumberWidget<Double>) controller.viewForComponent(doubleOWidget);
+		doubleOWidgetView.getDynamicJComponent().setValue((double) 211);
+		assertEquals(Double.valueOf(211), numbers.getDoubleO(), 0.000001);
+
+		assertEquals((double) 416, controller.viewForComponent(doubleSWidget).getData());
 
 	}
 
