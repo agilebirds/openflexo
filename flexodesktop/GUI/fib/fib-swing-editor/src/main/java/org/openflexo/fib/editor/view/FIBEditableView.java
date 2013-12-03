@@ -19,8 +19,7 @@
  */
 package org.openflexo.fib.editor.view;
 
-import java.util.List;
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -29,7 +28,7 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 
-public interface FIBEditableView<M extends FIBComponent, J extends JComponent> extends Observer {
+public interface FIBEditableView<M extends FIBComponent, J extends JComponent> extends PropertyChangeListener {
 
 	public abstract FIBEditorController getEditorController();
 
@@ -37,13 +36,13 @@ public interface FIBEditableView<M extends FIBComponent, J extends JComponent> e
 
 	public abstract M getComponent();
 
-	public abstract void updateDataObject(Object anObject);
+	// public abstract void updateDataObject(Object anObject);
 
 	public abstract JComponent getJComponent();
 
 	public abstract J getDynamicJComponent();
 
-	public boolean update(List<FIBComponent> callers);
+	// public boolean update(List<FIBComponent> callers);
 
 	public abstract boolean isComponentVisible();
 

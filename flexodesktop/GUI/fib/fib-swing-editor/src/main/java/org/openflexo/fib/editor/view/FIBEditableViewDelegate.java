@@ -39,7 +39,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,27 +51,26 @@ import org.openflexo.fib.editor.controller.ExistingElementDrag;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
-import org.openflexo.fib.model.FIBAddingNotification;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBFont;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
-import org.openflexo.fib.model.FIBRemovingNotification;
+import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
-import org.openflexo.fib.view.container.FIBTabPanelView;
+import org.openflexo.fib.view.container.FIBSplitPanelView;
 import org.openflexo.fib.view.container.FIBTabView;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBFontWidget;
+import org.openflexo.fib.view.widget.FIBMultipleValueWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.Focusable;
@@ -271,7 +269,7 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		getEditorController().setFocusedObject(null);
 	}
 
-	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 		// System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
 
 		if (view == null) {
@@ -280,96 +278,77 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		}
 
 		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
-			if (dataModification instanceof FIBAddingNotification) {
-				if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBComponent) {
-					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBContainerView) view).updateLayout();
-				}
-			} else if (dataModification instanceof FIBRemovingNotification) {
-				if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBComponent) {
-					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBContainerView) view).updateLayout();
-				}
-			} else if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBContainer.Parameters.subComponents) {
-					((FIBContainerView) view).updateLayout();
-				}
+			if (propertyName.equals(FIBContainer.Parameters.subComponents.name())) {
+				((FIBContainerView) view).updateLayout();
+			}
+		}
+
+		if (o instanceof FIBSplitPanel && view instanceof FIBSplitPanelView) {
+			if (propertyName.equals(FIBSplitPanel.Parameters.split.name())) {
+				((FIBSplitPanelView) view).updateLayout();
 			}
 		}
 
 		if (o instanceof FIBTab && view instanceof FIBTabView) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBTab.Parameters.title) {
-					if (view.getParentView() instanceof FIBTabPanelView) {
-						// Arghlll how do we update titles on this.
-					}
-
-				}
+			if (propertyName.equals(FIBTab.Parameters.title.name())) {
+				// Arghlll how do we update titles on this.
 			}
 		}
 
 		if (o instanceof FIBPanel && view instanceof FIBPanelView) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBPanel.Parameters.border || n.getAttribute() == FIBPanel.Parameters.borderColor
-						|| n.getAttribute() == FIBPanel.Parameters.borderTitle || n.getAttribute() == FIBPanel.Parameters.borderTop
-						|| n.getAttribute() == FIBPanel.Parameters.borderLeft || n.getAttribute() == FIBPanel.Parameters.borderRight
-						|| n.getAttribute() == FIBPanel.Parameters.borderBottom || n.getAttribute() == FIBPanel.Parameters.titleFont
-						|| n.getAttribute() == FIBPanel.Parameters.darkLevel) {
-					((FIBPanelView) view).updateBorder();
-				} else if (n.getAttribute() == FIBPanel.Parameters.layout || n.getAttribute() == FIBPanel.Parameters.flowAlignment
-						|| n.getAttribute() == FIBPanel.Parameters.boxLayoutAxis || n.getAttribute() == FIBPanel.Parameters.vGap
-						|| n.getAttribute() == FIBPanel.Parameters.hGap || n.getAttribute() == FIBPanel.Parameters.rows
-						|| n.getAttribute() == FIBPanel.Parameters.cols || n.getAttribute() == FIBPanel.Parameters.protectContent) {
-					((FIBPanelView) view).updateLayout();
-				}
+			if (propertyName.equals(FIBPanel.Parameters.border.name()) || propertyName.equals(FIBPanel.Parameters.borderColor.name())
+					|| propertyName.equals(FIBPanel.Parameters.borderTitle.name())
+					|| propertyName.equals(FIBPanel.Parameters.borderTop.name())
+					|| propertyName.equals(FIBPanel.Parameters.borderLeft.name())
+					|| propertyName.equals(FIBPanel.Parameters.borderRight.name())
+					|| propertyName.equals(FIBPanel.Parameters.borderBottom.name())
+					|| propertyName.equals(FIBPanel.Parameters.titleFont.name())
+					|| propertyName.equals(FIBPanel.Parameters.darkLevel.name())) {
+				((FIBPanelView) view).updateBorder();
+			} else if (propertyName.equals(FIBPanel.Parameters.layout.name())
+					|| propertyName.equals(FIBPanel.Parameters.flowAlignment.name())
+					|| propertyName.equals(FIBPanel.Parameters.boxLayoutAxis.name())
+					|| propertyName.equals(FIBPanel.Parameters.vGap.name()) || propertyName.equals(FIBPanel.Parameters.hGap.name())
+					|| propertyName.equals(FIBPanel.Parameters.rows.name()) || propertyName.equals(FIBPanel.Parameters.cols.name())
+					|| propertyName.equals(FIBPanel.Parameters.protectContent.name())) {
+				((FIBPanelView) view).updateLayout();
 			}
 		}
 
 		if (o instanceof FIBWidget) {
 			FIBWidgetView widgetView = (FIBWidgetView) view;
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBWidget.Parameters.manageDynamicModel) {
-					widgetView.getComponent().updateBindingModel();
-				} else if (n.getAttribute() == FIBWidget.Parameters.readOnly) {
-					widgetView.updateEnability();
-				}
+			if (propertyName.equals(FIBWidget.Parameters.manageDynamicModel.name())) {
+				widgetView.getComponent().updateBindingModel();
+			} else if (propertyName.equals(FIBWidget.Parameters.readOnly.name())) {
+				widgetView.updateEnability();
 			}
 		}
 
 		if (o instanceof FIBMultipleValues) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBMultipleValues.Parameters.staticList || n.getAttribute() == FIBMultipleValues.Parameters.list
-						|| n.getAttribute() == FIBMultipleValues.Parameters.array) {
-					view.updateDataObject(view.getDataObject());
-				}
+			if (propertyName.equals(FIBMultipleValues.Parameters.staticList.name())
+					|| propertyName.equals(FIBMultipleValues.Parameters.list.name())
+					|| propertyName.equals(FIBMultipleValues.Parameters.array.name())) {
+				// view.updateDataObject(view.getDataObject());
+				((FIBMultipleValueWidget) view).updateMultipleValues();
+
 			}
 		}
 
 		if (o instanceof FIBNumber) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBNumber.Parameters.allowsNull) {
-					((FIBNumberWidget<?>) view).updateCheckboxVisibility();
-				} else if (n.getAttribute() == FIBNumber.Parameters.columns) {
-					((FIBNumberWidget<?>) view).updateColumns();
-				}
+			if (propertyName.equals(FIBNumber.Parameters.allowsNull.name())) {
+				((FIBNumberWidget<?>) view).updateCheckboxVisibility();
+			} else if (propertyName.equals(FIBNumber.Parameters.columns.name())) {
+				((FIBNumberWidget<?>) view).updateColumns();
 			}
 		}
 
 		if (o instanceof FIBFont) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBFont.Parameters.allowsNull) {
+			if (propertyName.equals(FIBFont.Parameters.allowsNull.name())) {
 				((FIBFontWidget) view).updateCheckboxVisibility();
 			}
 		}
 		if (o instanceof FIBColor) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBColor.Parameters.allowsNull) {
+			if (propertyName.equals(FIBColor.Parameters.allowsNull.name())) {
 				((FIBColorWidget) view).updateCheckboxVisibility();
 			}
 		}
@@ -381,32 +360,32 @@ public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponen
 		 */
 
 		if (o instanceof FIBComponent) {
-			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-				if (n.getAttribute() == FIBComponent.Parameters.constraints || n.getAttribute() == FIBComponent.Parameters.width
-						|| n.getAttribute() == FIBComponent.Parameters.height || n.getAttribute() == FIBComponent.Parameters.minWidth
-						|| n.getAttribute() == FIBComponent.Parameters.minHeight || n.getAttribute() == FIBComponent.Parameters.maxWidth
-						|| n.getAttribute() == FIBComponent.Parameters.maxHeight
-						|| n.getAttribute() == FIBComponent.Parameters.useScrollBar
-						|| n.getAttribute() == FIBComponent.Parameters.horizontalScrollbarPolicy
-						|| n.getAttribute() == FIBComponent.Parameters.verticalScrollbarPolicy) {
-					FIBView parentView = view.getParentView();
-					FIBEditorController controller = getEditorController();
-					if (parentView instanceof FIBContainerView) {
-						((FIBContainerView) parentView).updateLayout();
-					}
-					controller.notifyFocusedAndSelectedObject();
-				} else if (n.getAttribute() == FIBComponent.Parameters.data) {
-					view.updateDataObject(view.getDataObject());
-				} else if (n.getAttribute() == FIBComponent.Parameters.font) {
-					((FIBView) view).updateFont();
-				} else if (n.getAttribute() == FIBComponent.Parameters.backgroundColor
-						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor
-						|| n.getAttribute() == FIBComponent.Parameters.opaque) {
-					((FIBView) view).updateGraphicalProperties();
-					((FIBView) view).getJComponent().revalidate();
-					((FIBView) view).getJComponent().repaint();
+			if (propertyName.equals(FIBComponent.Parameters.constraints.name())
+					|| propertyName.equals(FIBComponent.Parameters.width.name())
+					|| propertyName.equals(FIBComponent.Parameters.height.name())
+					|| propertyName.equals(FIBComponent.Parameters.minWidth.name())
+					|| propertyName.equals(FIBComponent.Parameters.minHeight.name())
+					|| propertyName.equals(FIBComponent.Parameters.maxWidth.name())
+					|| propertyName.equals(FIBComponent.Parameters.maxHeight.name())
+					|| propertyName.equals(FIBComponent.Parameters.useScrollBar.name())
+					|| propertyName.equals(FIBComponent.Parameters.horizontalScrollbarPolicy.name())
+					|| propertyName.equals(FIBComponent.Parameters.verticalScrollbarPolicy.name())) {
+				FIBView parentView = view.getParentView();
+				FIBEditorController controller = getEditorController();
+				if (parentView instanceof FIBContainerView) {
+					((FIBContainerView) parentView).updateLayout();
 				}
+				controller.notifyFocusedAndSelectedObject();
+			} else if (propertyName.equals(FIBComponent.Parameters.data.name())) {
+				((FIBView) view).updateData();
+			} else if (propertyName.equals(FIBComponent.Parameters.font.name())) {
+				((FIBView) view).updateFont();
+			} else if (propertyName.equals(FIBComponent.Parameters.backgroundColor.name())
+					|| propertyName.equals(FIBComponent.Parameters.foregroundColor.name())
+					|| propertyName.equals(FIBComponent.Parameters.opaque.name())) {
+				((FIBView) view).updateGraphicalProperties();
+				((FIBView) view).getJComponent().revalidate();
+				((FIBView) view).getJComponent().repaint();
 			}
 		}
 	}

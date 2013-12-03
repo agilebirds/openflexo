@@ -20,7 +20,7 @@
 package org.openflexo.fib.editor.view.container;
 
 import java.awt.BorderLayout;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -37,7 +37,7 @@ import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.BoxLayoutConstraints;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBLabel;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FlowLayoutConstraints;
@@ -69,12 +69,12 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 
 		delegate = new FIBEditableViewDelegate<FIBTab, JPanel>(this);
 
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		if (placeholders != null) {
 			placeholders.clear();
 		}
@@ -342,12 +342,8 @@ public class FIBEditableTabView<T> extends FIBTabView<FIBTab, T> implements FIBE
 	}
 
 	@Override
-	public void update(Observable o, Object dataModification) {
-		// System.out.println("alignmentX="+getJComponent().getAlignmentX());
-		// System.out.println("alignmentY="+getJComponent().getAlignmentY());
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+	public void propertyChange(PropertyChangeEvent evt) {
+		delegate.receivedModelNotifications((FIBModelObject) evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 	}
 
 }

@@ -21,7 +21,7 @@ package org.openflexo.fib.editor.view.container;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -33,10 +33,8 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAddingNotification;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel.Layout;
-import org.openflexo.fib.model.FIBRemovingNotification;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.view.container.FIBTabPanelView;
@@ -62,7 +60,7 @@ public class FIBEditableTabPanelView<T> extends FIBTabPanelView<T> implements FI
 		this.editorController = editorController;
 		delegate = new FIBEditableViewDelegate<FIBTabPanel, JTabbedPane>(this);
 		placeholders = new Vector<PlaceHolder>();
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class FIBEditableTabPanelView<T> extends FIBTabPanelView<T> implements FI
 		placeholders.clear();
 		placeholders = null;
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -113,22 +111,8 @@ public class FIBEditableTabPanelView<T> extends FIBTabPanelView<T> implements FI
 	}
 
 	@Override
-	public void update(Observable o, Object dataModification) {
-		// Tab added
-		if (dataModification instanceof FIBAddingNotification) {
-			if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBTab) {
-				updateLayout();
-			}
-		}
-		// Tab removed
-		else if (dataModification instanceof FIBRemovingNotification) {
-			if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBTab) {
-				updateLayout();
-			}
-		}
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+	public void propertyChange(PropertyChangeEvent evt) {
+		delegate.receivedModelNotifications((FIBModelObject) evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 	}
 
 }

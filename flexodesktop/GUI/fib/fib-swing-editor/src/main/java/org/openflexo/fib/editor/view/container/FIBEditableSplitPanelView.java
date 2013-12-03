@@ -19,7 +19,7 @@
  */
 package org.openflexo.fib.editor.view.container;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -28,11 +28,8 @@ import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate.FIBDropTarget;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAddingNotification;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.fib.model.FIBModelNotification;
-import org.openflexo.fib.model.FIBRemovingNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.SplitLayoutConstraints;
 import org.openflexo.fib.view.container.FIBSplitPanelView;
@@ -62,7 +59,7 @@ public class FIBEditableSplitPanelView<T> extends FIBSplitPanelView<T> implement
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBSplitPanel, JXMultiSplitPane>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
@@ -70,7 +67,7 @@ public class FIBEditableSplitPanelView<T> extends FIBSplitPanelView<T> implement
 		placeholders.clear();
 		placeholders = null;
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -154,31 +151,8 @@ public class FIBEditableSplitPanelView<T> extends FIBSplitPanelView<T> implement
 	}
 
 	@Override
-	public void update(Observable o, Object dataModification) {
-
-		// Tab added
-		if (dataModification instanceof FIBAddingNotification) {
-			if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBComponent) {
-				updateLayout();
-			}
-		}
-		// Tab removed
-		else if (dataModification instanceof FIBRemovingNotification) {
-			if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBComponent) {
-				updateLayout();
-			}
-		}
-
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBSplitPanel.Parameters.split) {
-				updateLayout();
-			}
-		}
-
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+	public void propertyChange(PropertyChangeEvent evt) {
+		delegate.receivedModelNotifications((FIBModelObject) evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 	}
 
 }
