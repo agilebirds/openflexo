@@ -28,11 +28,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
 import javax.swing.JList;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataListener;
 
 import org.openflexo.antar.binding.BindingValueArrayChangeListener;
 import org.openflexo.antar.binding.BindingValueListChangeListener;
@@ -80,6 +79,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		super(model, controller);
 		listenListValueChange();
 		listenArrayValueChange();
+		getMultipleValueModel().update();
 		proceedToListModelUpdate();
 	}
 
@@ -96,6 +96,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				public void bindingValueChanged(Object source, List<Object> newValue) {
 					System.out.println(" bindingValueChanged() detected for list=" + getComponent().getEnable() + " with newValue="
 							+ newValue + " source=" + source);
+					getMultipleValueModel().update();
 					proceedToListModelUpdate();
 				}
 			};
@@ -120,14 +121,20 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 	}
 
-	protected class FIBMultipleValueModel<T> implements ListModel {
+	public class FIBMultipleValueModel<T> extends AbstractListModel {
 		private List<T> list = null;
 		private T[] array = null;
 
 		protected FIBMultipleValueModel() {
 			super();
+			update();
+		}
 
-			logger.fine("Build FIBListModel");
+		private void update() {
+			logger.fine("update FIBMultipleValueModel");
+
+			list = null;
+			array = null;
 
 			if (getWidget().getList() != null && getWidget().getList().isValid() && getDataObject() != null) {
 
@@ -204,9 +211,11 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			// logger.info("Built list model: " + this);
 
+			fireContentsChanged(this, 0, getSize());
+
 		}
 
-		private boolean requireChange = true;
+		/*private boolean requireChange = true;
 
 		private boolean requireChange() {
 			if (requireChange) {
@@ -267,7 +276,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			}
 
 			return true;
-		}
+		}*/
 
 		@Override
 		public int getSize() {
@@ -291,16 +300,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			return null;
 		}
 
-		@Override
-		public void addListDataListener(ListDataListener l) {
-			// Interface
-		}
-
-		@Override
-		public void removeListDataListener(ListDataListener l) {
-			// Interface
-		}
-
 		public int indexOf(Object cur) {
 			for (int i = 0; i < getSize(); i++) {
 				if (getElementAt(i).equals(cur)) {
@@ -309,20 +308,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			}
 			return -1;
 		}
-
-		/*@Override
-		public FIBMultipleValueModel clone() {
-			FIBMultipleValueModel returned = new FIBMultipleValueModel();
-			if (list != null) {
-				returned.list = new ArrayList(list);
-			} else if (array != null) {
-				returned.array = new Object[array.length];
-				for (int i = 0; i < array.length; i++) {
-					returned.array[i] = array[i];
-				}
-			}
-			return returned;
-		}*/
 
 		@Override
 		public String toString() {
@@ -337,7 +322,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			return returned;
 		}
 
-		protected boolean equalsToList(List l) {
+		/*protected boolean equalsToList(List l) {
 			if (l == null) {
 				return getSize() == 0;
 			}
@@ -351,12 +336,12 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			} else {
 				return false;
 			}
-		}
+		}*/
 	}
 
-	protected boolean listModelRequireChange() {
+	/*protected boolean listModelRequireChange() {
 		return getMultipleValueModel().requireChange();
-	}
+	}*/
 
 	protected class FIBMultipleValueCellRenderer extends DefaultListCellRenderer {
 		private Dimension nullDimesion;

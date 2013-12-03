@@ -49,11 +49,18 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 		buttonGroup = new ButtonGroup();
 		panel = new JPanel(new GridLayout(0, model.getColumns(), model.getHGap(), model.getVGap()));
 		panel.setOpaque(false);
-		// rebuildRadioButtons();
-		if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
-			radioButtonArray[0].setSelected(true);
-			setSelected(getMultipleValueModel().getElementAt(0));
+		rebuildRadioButtons();
+		updateData();
+		/*if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
+				radioButtonArray[0].setSelected(true);
+				setSelected(getMultipleValueModel().getElementAt(0));
+			}*/
+
+		if ((getWidget().getData() == null || !getWidget().getData().isValid()) && getWidget().getAutoSelectFirstRow()
+				&& getMultipleValueModel().getSize() > 0) {
+			setSelectedValue(getMultipleValueModel().getElementAt(0));
 		}
+
 	}
 
 	@Override
@@ -64,35 +71,38 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 	@Override
 	protected void proceedToListModelUpdate() {
 		rebuildRadioButtons();
+		updateData();
 	}
 
 	private void rebuildRadioButtons() {
-		panel.removeAll();
-		((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
-		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
-		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
-		buttonGroup = new ButtonGroup();
-		radioButtonArray = new JRadioButton[getMultipleValueModel().getSize()];
-		for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
-			T object = getMultipleValueModel().getElementAt(i);
-			JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
-			rb.setOpaque(false);
-			rb.addActionListener(new RadioButtonListener(rb, object, i));
-			radioButtonArray[i] = rb;
-			panel.add(rb);
-			buttonGroup.add(rb);
-			if (object.equals(getValue())) {
-				rb.doClick();
+		if (panel != null) {
+			panel.removeAll();
+			((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
+			((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
+			((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
+			buttonGroup = new ButtonGroup();
+			radioButtonArray = new JRadioButton[getMultipleValueModel().getSize()];
+			for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
+				T object = getMultipleValueModel().getElementAt(i);
+				JRadioButton rb = new JRadioButton(getStringRepresentation(object), equals(object, selectedValue));
+				rb.setOpaque(false);
+				rb.addActionListener(new RadioButtonListener(rb, object, i));
+				radioButtonArray[i] = rb;
+				panel.add(rb);
+				buttonGroup.add(rb);
+				if (object.equals(getValue())) {
+					rb.doClick();
+				}
 			}
+			updateFont();
+			panel.revalidate();
 		}
-		updateFont();
-		panel.revalidate();
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		T value = getValue();
-		if (notEquals(value, selectedValue) || listModelRequireChange() || multipleValueModel == null) {
+		if (notEquals(value, selectedValue) /*|| listModelRequireChange()*/|| multipleValueModel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
@@ -103,14 +113,14 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 			// TODO: handle selected index
 			rebuildRadioButtons();
 
-			if (selectedValue == null) {
+			/*if (selectedValue == null) {
 				if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
 					radioButtonArray[0].doClick();
 				}
 				setSelected(getMultipleValueModel().getElementAt(0));
 				selectedValue = getMultipleValueModel().getElementAt(0);
 				setValue(selectedValue);
-			}
+			}*/
 
 			widgetUpdating = false;
 			return true;
@@ -177,6 +187,19 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 		if (getFont() != null) {
 			for (JRadioButton rb : radioButtonArray) {
 				rb.setFont(getFont());
+			}
+		}
+	}
+
+	public T getSelectedValue() {
+		return selectedValue;
+	}
+
+	public void setSelectedValue(T selectedValue) {
+		if (selectedValue != null) {
+			int newSelectedIndex = getMultipleValueModel().indexOf(selectedValue);
+			if (newSelectedIndex >= 0 && newSelectedIndex < getMultipleValueModel().getSize()) {
+				radioButtonArray[newSelectedIndex].doClick();
 			}
 		}
 	}

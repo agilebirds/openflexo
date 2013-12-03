@@ -72,6 +72,8 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 		_list.revalidate();
 		_list.repaint();
 
+		proceedToListModelUpdate();
+
 		// updateListModelWhenRequired();
 		updateFont();
 	}
@@ -166,56 +168,58 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 
 	private void proceedToListModelUpdate(FIBListModel aListModel) {
 		// logger.info("************* Updating GUI with " + aListModel);
-		widgetUpdating = true;
-		if (oldListModel != null) {
-			_list.getSelectionModel().removeListSelectionListener(oldListModel);
-		}
-		oldListModel = aListModel;
-		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
-		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
-		if (getWidget().getVisibleRowCount() != null) {
-			_list.setVisibleRowCount(getWidget().getVisibleRowCount());
-		} else {
-			_list.setVisibleRowCount(-1);
-		}
-		if (getWidget().getRowHeight() != null) {
-			_list.setFixedCellHeight(getWidget().getRowHeight());
-		} else {
-			_list.setFixedCellHeight(-1);
-		}
-		_list.setModel(aListModel);
-		_list.revalidate();
-		_list.repaint();
-		_list.getSelectionModel().addListSelectionListener(aListModel);
-		widgetUpdating = false;
-		Object objectToSelect = null;
-		if (getComponent().getSelected().isValid()) {
-			try {
-				objectToSelect = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		if (_list != null) {
+			widgetUpdating = true;
+			if (oldListModel != null) {
+				_list.getSelectionModel().removeListSelectionListener(oldListModel);
 			}
-		}
-		if (objectToSelect == null && getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
-			objectToSelect = _list.getModel().getElementAt(0);
-		}
-		if (objectToSelect != null) {
-			for (int i = 0; i < _list.getModel().getSize(); i++) {
-				if (_list.getModel().getElementAt(i) == objectToSelect) {
-					final int index = i;
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							_list.setSelectedIndex(index);
-						}
-					});
+			oldListModel = aListModel;
+			_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
+			_list.setSelectionMode(getWidget().getSelectionMode().getMode());
+			if (getWidget().getVisibleRowCount() != null) {
+				_list.setVisibleRowCount(getWidget().getVisibleRowCount());
+			} else {
+				_list.setVisibleRowCount(-1);
+			}
+			if (getWidget().getRowHeight() != null) {
+				_list.setFixedCellHeight(getWidget().getRowHeight());
+			} else {
+				_list.setFixedCellHeight(-1);
+			}
+			_list.setModel(aListModel);
+			_list.revalidate();
+			_list.repaint();
+			_list.getSelectionModel().addListSelectionListener(aListModel);
+			widgetUpdating = false;
+			Object objectToSelect = null;
+			if (getComponent().getSelected().isValid()) {
+				try {
+					objectToSelect = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			if ((getWidget().getData() == null || !getWidget().getData().isValid()) && getWidget().getAutoSelectFirstRow()
+					&& _list.getModel().getSize() > 0) {
+				objectToSelect = _list.getModel().getElementAt(0);
+			}
+			if (objectToSelect != null) {
+				for (int i = 0; i < _list.getModel().getSize(); i++) {
+					if (_list.getModel().getElementAt(i) == objectToSelect) {
+						final int index = i;
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								_list.setSelectedIndex(index);
+							}
+						});
+					}
 				}
 			}
 		}
-
 		/*if (getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override

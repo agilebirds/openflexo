@@ -25,6 +25,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.openflexo.antar.binding.BindingValueListChangeListener;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCheckboxList;
 
@@ -48,17 +51,34 @@ public class FIBCheckboxListWidget<T> extends FIBMultipleValueWidget<FIBCheckbox
 
 	private List<T> selectedValues;
 
+	private BindingValueListChangeListener<T, List<T>> listenerToDataAsListValue;
+
 	public FIBCheckboxListWidget(FIBCheckboxList model, FIBController controller) {
 		super(model, controller);
+		listenDataAsListValueChange();
 		panel = new JPanel(new GridLayout(0, model.getColumns(), model.getHGap(), model.getVGap()));
 		panel.setOpaque(false);
 		selectedValues = new ArrayList<T>();
 		rebuildCheckboxes();
-		if (getWidget().getAutoSelectFirstRow() && getMultipleValueModel().getSize() > 0) {
-			checkboxesArray[0].setSelected(true);
-			List<T> newList = new ArrayList<T>();
-			newList.add((T) getMultipleValueModel().getElementAt(0));
-			setSelected(newList);
+
+	}
+
+	private void listenDataAsListValueChange() {
+		if (listenerToDataAsListValue != null) {
+			listenerToDataAsListValue.stopObserving();
+			listenerToDataAsListValue.delete();
+		}
+		if (getComponent().getData() != null && getComponent().getData().isValid()) {
+			listenerToDataAsListValue = new BindingValueListChangeListener<T, List<T>>((DataBinding<List<T>>) ((DataBinding) getComponent()
+					.getData()), getBindingEvaluationContext()) {
+
+				@Override
+				public void bindingValueChanged(Object source, List<T> newValue) {
+					System.out.println(" bindingValueChanged() detected for data list=" + getComponent().getEnable() + " with newValue="
+							+ newValue + " source=" + source);
+					updateData();
+				}
+			};
 		}
 	}
 
@@ -81,49 +101,81 @@ public class FIBCheckboxListWidget<T> extends FIBMultipleValueWidget<FIBCheckbox
 	}
 
 	private void rebuildCheckboxes() {
-		panel.removeAll();
-		((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
-		((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
-		((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
-		checkboxesArray = new JCheckBox[getMultipleValueModel().getSize()];
-		labelsArray = new JLabel[getMultipleValueModel().getSize()];
-		for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
-			T object = (T) getMultipleValueModel().getElementAt(i);
-			String text = getStringRepresentation(object);
-			JCheckBox cb = new JCheckBox(text, containsObject(object));
-			cb.setOpaque(false);
-			cb.addActionListener(new CheckboxListener(cb, object, i));
-			checkboxesArray[i] = cb;
-			if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
-				cb.setHorizontalAlignment(JCheckBox.LEFT);
-				cb.setText(null);
-				final JLabel label = new JLabel(text, getIconRepresentation(object), JLabel.LEADING);
-				Dimension ps = cb.getPreferredSize();
-				cb.setLayout(new BorderLayout());
-				label.setLabelFor(cb);
-				label.setBorder(BorderFactory.createEmptyBorder(0, ps.width, 0, 0));
-				cb.add(label);
+		if (panel != null) {
+			panel.removeAll();
+			((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());
+			((GridLayout) panel.getLayout()).setHgap(getWidget().getHGap());
+			((GridLayout) panel.getLayout()).setVgap(getWidget().getVGap());
+			checkboxesArray = new JCheckBox[getMultipleValueModel().getSize()];
+			labelsArray = new JLabel[getMultipleValueModel().getSize()];
+			for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
+				T object = (T) getMultipleValueModel().getElementAt(i);
+				String text = getStringRepresentation(object);
+				JCheckBox cb = new JCheckBox(text, containsObject(object));
+				cb.setOpaque(false);
+				cb.addActionListener(new CheckboxListener(cb, object, i));
+				checkboxesArray[i] = cb;
+				if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
+					cb.setHorizontalAlignment(JCheckBox.LEFT);
+					cb.setText(null);
+					final JLabel label = new JLabel(text, getIconRepresentation(object), JLabel.LEADING);
+					Dimension ps = cb.getPreferredSize();
+					cb.setLayout(new BorderLayout());
+					label.setLabelFor(cb);
+					label.setBorder(BorderFactory.createEmptyBorder(0, ps.width, 0, 0));
+					cb.add(label);
+				}
+				panel.add(cb);
 			}
-			panel.add(cb);
+			updateFont();
+			panel.revalidate();
+
+			if ((getWidget().getData() == null || !getWidget().getData().isValid()) && getWidget().getAutoSelectFirstRow()
+					&& getMultipleValueModel().getSize() > 0) {
+				checkboxesArray[0].setSelected(true);
+				List<T> newList = Collections.singletonList((T) getMultipleValueModel().getElementAt(0));
+				setSelected(newList);
+				setValue(newList);
+			}
+
 		}
-		updateFont();
-		panel.revalidate();
+
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		List value = getValue();
-		if (notEquals(value, selectedValues) || listModelRequireChange() || multipleValueModel == null) {
+		System.out.println("On est bien la, dans updateWidgetFromModel()");
+		System.out.println("value=" + getValue());
+		System.out.println("selectedValues=" + selectedValues);
+		List<T> value = getValue();
+		if (notEquals(value, selectedValues) /*|| listModelRequireChange()*/|| multipleValueModel == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
 			}
 
 			widgetUpdating = true;
 			selectedValues = value;
-			rebuildCheckboxes();
+			// rebuildCheckboxes();
+			for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
+				T o = getMultipleValueModel().getElementAt(i);
+				if (selectedValues != null) {
+					checkboxesArray[i].setSelected(selectedValues.contains(o));
+				} else {
+					checkboxesArray[i].setSelected(false);
+				}
+			}
+			setSelected(selectedValues);
 
 			widgetUpdating = false;
 			return true;
+		}
+		for (int i = 0; i < getMultipleValueModel().getSize(); i++) {
+			T o = getMultipleValueModel().getElementAt(i);
+			if (selectedValues != null) {
+				checkboxesArray[i].setSelected(selectedValues.contains(o));
+			} else {
+				checkboxesArray[i].setSelected(false);
+			}
 		}
 		return false;
 	}
@@ -209,4 +261,10 @@ public class FIBCheckboxListWidget<T> extends FIBMultipleValueWidget<FIBCheckbox
 		}
 	}
 
+	public JCheckBox getCheckboxAtIndex(int index) {
+		if (index >= 0 && index < checkboxesArray.length) {
+			return checkboxesArray[index];
+		}
+		return null;
+	}
 }

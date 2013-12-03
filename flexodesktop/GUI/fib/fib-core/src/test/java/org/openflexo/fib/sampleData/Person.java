@@ -62,6 +62,8 @@ public class Person extends SampleData {
 	}
 
 	public void setGender(Gender gender) {
+		Gender oldGender = this.gender;
 		this.gender = gender;
+		getPropertyChangeSupport().firePropertyChange("gender", oldGender, gender);
 	}
 }

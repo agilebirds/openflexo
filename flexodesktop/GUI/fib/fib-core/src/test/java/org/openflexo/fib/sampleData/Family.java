@@ -75,9 +75,15 @@ public class Family extends SampleData {
 		return children;
 	}
 
+	public void setChildren(Vector<Person> children) {
+		System.out.println("??????????? setChildren with " + children);
+		this.children = children;
+	}
+
 	public Person createChild() {
 		Person newChild = new Person("John Jr", "Smith", 0, Gender.Male);
 		children.add(newChild);
+		getPropertyChangeSupport().firePropertyChange("children", null, newChild);
 		return newChild;
 	}
 
@@ -108,7 +114,9 @@ public class Family extends SampleData {
 	}
 
 	public void setFather(Person father) {
+		Person oldFather = this.father;
 		this.father = father;
+		getPropertyChangeSupport().firePropertyChange("father", oldFather, father);
 	}
 
 	public Person getMother() {
@@ -116,7 +124,9 @@ public class Family extends SampleData {
 	}
 
 	public void setMother(Person mother) {
+		Person oldMother = this.mother;
 		this.mother = mother;
+		getPropertyChangeSupport().firePropertyChange("mother", oldMother, mother);
 	}
 
 	public Person getBiggestChild() {
@@ -124,7 +134,9 @@ public class Family extends SampleData {
 	}
 
 	public void setBiggestChild(Person biggestChild) {
+		Person oldBiggestChild = this.biggestChild;
 		this.biggestChild = biggestChild;
+		getPropertyChangeSupport().firePropertyChange("biggestChild", oldBiggestChild, biggestChild);
 	}
 
 	public Person getBiggestParent() {
@@ -132,7 +144,9 @@ public class Family extends SampleData {
 	}
 
 	public void setBiggestParent(Person biggestParent) {
+		Person oldBiggestParent = this.biggestParent;
 		this.biggestParent = biggestParent;
+		getPropertyChangeSupport().firePropertyChange("biggestParent", oldBiggestParent, biggestParent);
 	}
 
 	public Person[] getParents() {
@@ -147,12 +161,13 @@ public class Family extends SampleData {
 		return jackies;
 	}
 
-	public void setJackies(Vector<Person> jackies) {
-		this.jackies = jackies;
+	public void addToJackies(Person aNewJacky) {
+		jackies.add(aNewJacky);
+		getPropertyChangeSupport().firePropertyChange("jackies", null, aNewJacky);
 	}
 
-	public void setChildren(Vector<Person> children) {
-		this.children = children;
+	public void setJackies(Vector<Person> jackies) {
+		this.jackies = jackies;
 	}
 
 }
