@@ -386,7 +386,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 	public abstract T getValue();
 
-	protected void updateData() {
+	public void updateData() {
 		setData(getValue());
 	}
 

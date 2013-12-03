@@ -30,7 +30,7 @@ public class TestPerson extends FIBAbstractEditor {
 	@Override
 	public Object[] getData() {
 		Object[] returned = new Object[1];
-		returned[0] = new Family().biggestParent;
+		returned[0] = new Family().getBiggestParent();
 		System.out.println("person=" + returned[0]);
 		return returned;
 	}

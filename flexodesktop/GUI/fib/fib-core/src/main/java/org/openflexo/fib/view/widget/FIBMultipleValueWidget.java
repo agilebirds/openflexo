@@ -96,8 +96,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				public void bindingValueChanged(Object source, List<Object> newValue) {
 					System.out.println(" bindingValueChanged() detected for list=" + getComponent().getEnable() + " with newValue="
 							+ newValue + " source=" + source);
-					getMultipleValueModel().update();
-					proceedToListModelUpdate();
+					updateMultipleValues();
 				}
 			};
 		}
@@ -115,7 +114,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				public void bindingValueChanged(Object source, Object[] newValue) {
 					System.out.println(" bindingValueChanged() detected for array=" + getComponent().getArray() + " with newValue="
 							+ newValue + " source=" + source);
-					proceedToListModelUpdate();
+					updateMultipleValues();
 				}
 			};
 		}
@@ -483,6 +482,11 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		updateListModelWhenRequired();
 		super.updateDataObject(dataObject);
 	}*/
+
+	public void updateMultipleValues() {
+		getMultipleValueModel().update();
+		proceedToListModelUpdate();
+	}
 
 	@Override
 	public boolean update() {

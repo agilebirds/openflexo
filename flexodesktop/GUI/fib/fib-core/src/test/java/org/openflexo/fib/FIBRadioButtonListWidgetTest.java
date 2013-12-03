@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -17,21 +15,21 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBLabel;
-import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.sampleData.Family;
 import org.openflexo.fib.sampleData.Family.Gender;
 import org.openflexo.fib.sampleData.Person;
-import org.openflexo.fib.view.widget.FIBListWidget;
+import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
 import org.openflexo.localization.FlexoLocalization;
 
 import com.google.common.reflect.TypeToken;
 
 /**
- * Test the structural and behavioural features of FIBList widget
+ * Test the structural and behavioural features of FIBRadioButtonList widget
  * 
  * @author sylvain
  * 
@@ -41,20 +39,20 @@ public class FIBRadioButtonListWidgetTest {
 	private static GraphicalContextDelegate gcDelegate;
 
 	private static FIBPanel component;
-	private static FIBLabel listLabel1;
-	private static FIBList list1;
-	private static FIBLabel listLabel2;
-	private static FIBList list2;
-	private static FIBLabel listLabel3;
-	private static FIBList list3;
-	private static FIBLabel listLabel4;
-	private static FIBList list4;
-	private static FIBLabel listLabel5;
-	private static FIBList list5;
-	private static FIBLabel listLabel6;
-	private static FIBList list6;
-	private static FIBLabel listLabel7;
-	private static FIBList list7;
+	private static FIBLabel radioButtonListLabel1;
+	private static FIBRadioButtonList radioButtonList1;
+	private static FIBLabel radioButtonListLabel2;
+	private static FIBRadioButtonList radioButtonList2;
+	private static FIBLabel radioButtonListLabel3;
+	private static FIBRadioButtonList radioButtonList3;
+	private static FIBLabel radioButtonListLabel4;
+	private static FIBRadioButtonList radioButtonList4;
+	private static FIBLabel radioButtonListLabel5;
+	private static FIBRadioButtonList radioButtonList5;
+	private static FIBLabel radioButtonListLabel6;
+	private static FIBRadioButtonList radioButtonList6;
+	private static FIBLabel radioButtonListLabel7;
+	private static FIBRadioButtonList radioButtonList7;
 
 	private static FIBController controller;
 	private static Family family;
@@ -69,63 +67,65 @@ public class FIBRadioButtonListWidgetTest {
 		component.setLayout(Layout.twocols);
 		component.setDataClass(Family.class);
 
-		listLabel1 = new FIBLabel("static_list_auto_select");
-		component.addToSubComponents(listLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list1 = new FIBList();
-		list1.setStaticList("value1,value2,value3");
-		list1.setAutoSelectFirstRow(true);
-		component.addToSubComponents(list1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		radioButtonListLabel1 = new FIBLabel("static_radioButtonList_auto_select");
+		component.addToSubComponents(radioButtonListLabel1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList1 = new FIBRadioButtonList();
+		radioButtonList1.setStaticList("value1,value2,value3");
+		radioButtonList1.setAutoSelectFirstRow(true);
+		component.addToSubComponents(radioButtonList1, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		listLabel2 = new FIBLabel("static_list_no_auto_select");
-		component.addToSubComponents(listLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list2 = new FIBList();
-		list2.setStaticList("value1,value2,value3");
-		list2.setAutoSelectFirstRow(false);
-		component.addToSubComponents(list2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		radioButtonListLabel2 = new FIBLabel("static_radioButtonList_no_auto_select");
+		component.addToSubComponents(radioButtonListLabel2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList2 = new FIBRadioButtonList();
+		radioButtonList2.setStaticList("value1,value2,value3");
+		radioButtonList2.setAutoSelectFirstRow(false);
+		component.addToSubComponents(radioButtonList2, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
 
-		listLabel3 = new FIBLabel("dynamic_list");
-		component.addToSubComponents(listLabel3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list3 = new FIBList();
-		list3.setList(new DataBinding<List<?>>("data.children", list3, List.class, BindingDefinitionType.GET));
-		list3.setAutoSelectFirstRow(true);
-		component.addToSubComponents(list3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
-		assertTrue(list3.getList().isValid());
+		radioButtonListLabel3 = new FIBLabel("dynamic_radioButtonList");
+		component.addToSubComponents(radioButtonListLabel3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList3 = new FIBRadioButtonList();
+		radioButtonList3.setList(new DataBinding<List<?>>("data.children", radioButtonList3, List.class, BindingDefinitionType.GET));
+		radioButtonList3.setAutoSelectFirstRow(true);
+		component.addToSubComponents(radioButtonList3, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		assertTrue(radioButtonList3.getList().isValid());
 
-		listLabel4 = new FIBLabel("dynamic_array");
-		component.addToSubComponents(listLabel4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list4 = new FIBList();
-		list4.setArray(new DataBinding<Object[]>("data.parents", list4, new TypeToken<Object[]>() {
+		radioButtonListLabel4 = new FIBLabel("dynamic_array");
+		component.addToSubComponents(radioButtonListLabel4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList4 = new FIBRadioButtonList();
+		radioButtonList4.setArray(new DataBinding<Object[]>("data.parents", radioButtonList4, new TypeToken<Object[]>() {
 		}.getType(), BindingDefinitionType.GET));
-		list4.setAutoSelectFirstRow(true);
-		component.addToSubComponents(list4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
-		assertTrue(list4.getArray().isValid());
+		radioButtonList4.setAutoSelectFirstRow(true);
+		component.addToSubComponents(radioButtonList4, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		assertTrue(radioButtonList4.getArray().isValid());
 
-		listLabel5 = new FIBLabel("dynamic_list_bound_to_data");
-		component.addToSubComponents(listLabel5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list5 = new FIBList();
-		list5.setData(new DataBinding<Person>("data.biggestChild", list5, Person.class, BindingDefinitionType.GET_SET));
-		list5.setList(new DataBinding<List<?>>("data.children", list5, List.class, BindingDefinitionType.GET));
-		list5.setAutoSelectFirstRow(true);
-		component.addToSubComponents(list5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
-		assertTrue(list5.getData().isValid());
-		assertTrue(list5.getList().isValid());
+		radioButtonListLabel5 = new FIBLabel("dynamic_radioButtonList_bound_to_data");
+		component.addToSubComponents(radioButtonListLabel5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList5 = new FIBRadioButtonList();
+		radioButtonList5
+				.setData(new DataBinding<Person>("data.biggestChild", radioButtonList5, Person.class, BindingDefinitionType.GET_SET));
+		radioButtonList5.setList(new DataBinding<List<?>>("data.children", radioButtonList5, List.class, BindingDefinitionType.GET));
+		radioButtonList5.setAutoSelectFirstRow(true);
+		component.addToSubComponents(radioButtonList5, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		assertTrue(radioButtonList5.getData().isValid());
+		assertTrue(radioButtonList5.getList().isValid());
 
-		listLabel6 = new FIBLabel("enum");
-		component.addToSubComponents(listLabel6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list6 = new FIBList();
-		list6.setData(new DataBinding<Gender>("data.father.gender", list6, Gender.class, BindingDefinitionType.GET_SET));
-		list6.setAutoSelectFirstRow(true);
-		component.addToSubComponents(list6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
-		assertTrue(list6.getData().isValid());
+		radioButtonListLabel6 = new FIBLabel("enum");
+		component.addToSubComponents(radioButtonListLabel6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList6 = new FIBRadioButtonList();
+		radioButtonList6.setData(new DataBinding<Gender>("data.father.gender", radioButtonList6, Gender.class,
+				BindingDefinitionType.GET_SET));
+		radioButtonList6.setAutoSelectFirstRow(true);
+		component.addToSubComponents(radioButtonList6, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		assertTrue(radioButtonList6.getData().isValid());
 
-		listLabel7 = new FIBLabel("dynamic_list_bound_to_selection");
-		component.addToSubComponents(listLabel7, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
-		list7 = new FIBList();
-		list7.setList(new DataBinding<List<?>>("data.children", list7, List.class, BindingDefinitionType.GET));
-		list7.setAutoSelectFirstRow(true);
-		list7.setBoundToSelectionManager(true);
-		component.addToSubComponents(list7, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
-		assertTrue(list7.getList().isValid());
+		radioButtonListLabel7 = new FIBLabel("dynamic_radioButtonList_bound_to_selection");
+		component.addToSubComponents(radioButtonListLabel7, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		radioButtonList7 = new FIBRadioButtonList();
+		radioButtonList7.setList(new DataBinding<List<?>>("data.children", radioButtonList7, List.class, BindingDefinitionType.GET));
+		radioButtonList7.setAutoSelectFirstRow(true);
+		// radioButtonList7.setBoundToSelectionManager(true);
+		component.addToSubComponents(radioButtonList7, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+		assertTrue(radioButtonList7.getList().isValid());
 
 	}
 
@@ -143,21 +143,21 @@ public class FIBRadioButtonListWidgetTest {
 		gcDelegate.addTab("Test2", controller);
 
 		assertNotNull(controller.getRootView());
-		assertNotNull(controller.viewForComponent(listLabel1));
-		assertNotNull(controller.viewForComponent(list1));
-		assertNotNull(controller.viewForComponent(listLabel2));
-		assertNotNull(controller.viewForComponent(list2));
-		assertNotNull(controller.viewForComponent(listLabel3));
-		assertNotNull(controller.viewForComponent(list3));
-		assertNotNull(controller.viewForComponent(listLabel4));
-		assertNotNull(controller.viewForComponent(list4));
+		assertNotNull(controller.viewForComponent(radioButtonListLabel1));
+		assertNotNull(controller.viewForComponent(radioButtonList1));
+		assertNotNull(controller.viewForComponent(radioButtonListLabel2));
+		assertNotNull(controller.viewForComponent(radioButtonList2));
+		assertNotNull(controller.viewForComponent(radioButtonListLabel3));
+		assertNotNull(controller.viewForComponent(radioButtonList3));
+		assertNotNull(controller.viewForComponent(radioButtonListLabel4));
+		assertNotNull(controller.viewForComponent(radioButtonList4));
 
-		assertEquals("value1", (String) controller.viewForComponent(list1).getData());
-		assertEquals(null, controller.viewForComponent(list2).getData());
-		assertEquals(family.getChildren().get(0), controller.viewForComponent(list3).getData());
-		assertEquals(family.getParents()[0], controller.viewForComponent(list4).getData());
-		assertEquals(family.getJackies().get(2), controller.viewForComponent(list5).getData());
-		assertEquals(Gender.Male, controller.viewForComponent(list6).getData());
+		assertEquals("value1", (String) controller.viewForComponent(radioButtonList1).getData());
+		assertEquals(null, controller.viewForComponent(radioButtonList2).getData());
+		assertEquals(family.getChildren().get(0), controller.viewForComponent(radioButtonList3).getData());
+		assertEquals(family.getParents()[0], controller.viewForComponent(radioButtonList4).getData());
+		assertEquals(family.getJackies().get(2), controller.viewForComponent(radioButtonList5).getData());
+		assertEquals(Gender.Male, controller.viewForComponent(radioButtonList6).getData());
 
 		// assertEquals("Robert", controller.viewForComponent(firstNameTF).getData());
 		// assertEquals("Smith", controller.viewForComponent(lastNameTF).getData());
@@ -172,8 +172,8 @@ public class FIBRadioButtonListWidgetTest {
 
 		family.setBiggestChild(family.getChildren().get(0));
 		family.getFather().setGender(Gender.Female);
-		assertEquals(family.getChildren().get(0), controller.viewForComponent(list5).getData());
-		assertEquals(Gender.Female, controller.viewForComponent(list6).getData());
+		assertEquals(family.getChildren().get(0), controller.viewForComponent(radioButtonList5).getData());
+		assertEquals(Gender.Female, controller.viewForComponent(radioButtonList6).getData());
 	}
 
 	/**
@@ -181,11 +181,11 @@ public class FIBRadioButtonListWidgetTest {
 	 */
 	@Test
 	public void test4ModifyValueInWidget() {
-		FIBListWidget<?> w5 = (FIBListWidget<?>) controller.viewForComponent(list5);
-		FIBListWidget<?> w6 = (FIBListWidget<?>) controller.viewForComponent(list6);
+		FIBRadioButtonListWidget<Person> w5 = (FIBRadioButtonListWidget<Person>) controller.viewForComponent(radioButtonList5);
+		FIBRadioButtonListWidget<Gender> w6 = (FIBRadioButtonListWidget<Gender>) controller.viewForComponent(radioButtonList6);
 
-		w5.getDynamicJComponent().setSelectedValue(family.getChildren().get(1), true);
-		w6.getDynamicJComponent().setSelectedValue(Gender.Male, true);
+		w5.setSelectedValue(family.getChildren().get(1));
+		w6.setSelectedValue(Gender.Male);
 
 		assertEquals(family.getChildren().get(1), family.getBiggestChild());
 		assertEquals(Gender.Male, family.getFather().getGender());
@@ -198,51 +198,20 @@ public class FIBRadioButtonListWidgetTest {
 	@Test
 	public void test5ModifyListValueInModel() {
 
-		FIBListWidget<?> w5 = (FIBListWidget<?>) controller.viewForComponent(list5);
+		FIBRadioButtonListWidget<?> w5 = (FIBRadioButtonListWidget<?>) controller.viewForComponent(radioButtonList5);
 
-		assertEquals(5, w5.getDynamicJComponent().getModel().getSize());
+		assertEquals(5, w5.getMultipleValueModel().getSize());
 
 		Person junior = family.createChild();
 
-		assertEquals(6, w5.getDynamicJComponent().getModel().getSize());
+		assertEquals(6, w5.getMultipleValueModel().getSize());
 
 		// System.out.println("new children=" + family.getChildren());
 		// System.out.println("List model = " + w5.getDynamicJComponent().getModel());
 
 		family.setBiggestChild(junior);
-		assertEquals(junior, controller.viewForComponent(list5).getData());
-		assertEquals(junior, w5.getDynamicJComponent().getSelectedValue());
-
-	}
-
-	/**
-	 * Update the model, and check that widgets have well reacted
-	 */
-	@Test
-	public void test6PerfomSomeTestsWithSelection() {
-
-		FIBListWidget<?> w7 = (FIBListWidget<?>) controller.viewForComponent(list7);
-		assertEquals(6, w7.getDynamicJComponent().getModel().getSize());
-
-		assertEquals(Collections.singletonList(family.getChildren().get(0)), w7.getSelection());
-
-		// int[] indices = new int[3];
-		// indices[0] = 1;
-		// indices[1] = 2;
-		// indices[2] = 4;
-		// w7.getDynamicJComponent().setSelectedIndices(indices);
-		w7.getDynamicJComponent().getSelectionModel().addSelectionInterval(1, 2);
-		w7.getDynamicJComponent().getSelectionModel().addSelectionInterval(4, 4);
-
-		List<Person> expectedSelection = new ArrayList<Person>();
-		expectedSelection.add(family.getChildren().get(1));
-		expectedSelection.add(family.getChildren().get(2));
-		expectedSelection.add(family.getChildren().get(4));
-
-		assertEquals(expectedSelection, w7.getSelection());
-
-		controller.setFocusedWidget(w7);
-		assertEquals(expectedSelection, controller.getSelectionLeader().getSelection());
+		assertEquals(junior, controller.viewForComponent(radioButtonList5).getData());
+		assertEquals(junior, w5.getSelectedValue());
 
 	}
 
