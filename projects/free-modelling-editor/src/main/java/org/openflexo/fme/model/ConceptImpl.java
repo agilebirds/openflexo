@@ -40,4 +40,56 @@ public abstract class ConceptImpl implements Concept {
 		}
 		return false;
 	}
+	
+	@Override
+	public String produceHtmlLabel(String label){
+		//setHtmlLabel(getName());
+		StringBuilder sb = new StringBuilder();
+		if(getName()!=null){
+			if(getReadOnly()){
+				sb.append("<html><i>");
+				sb.append(label);
+				sb.append("</i></html>");
+			}
+			else{
+				sb.append("<html>");
+				sb.append(label);
+				sb.append("</html>");
+			}
+		}
+		performSuperSetter(NAME, sb.toString().replaceAll("<[^>]*>", ""));
+		return sb.toString();
+	}
+	
+	/*@Override
+	public String getHtmlLabel() {
+		//setHtmlLabel(getName());
+		StringBuilder sb = new StringBuilder();
+		if(getName()!=null){
+			if(getReadOnly()){
+				sb.append("<html><i>");
+				sb.append(htmlSource);
+				sb.append("</i></html>");
+			}
+			else{
+				sb.append("<html>");
+				sb.append(htmlSource);
+				sb.append("</html>");
+			}
+		}
+		performSuperSetter(NAME, sb.toString().replaceAll("<[^>]*>", ""));
+		return sb.toString();
+	}*/
+	
+	@Override
+	public void setHtmlLabel(String label){
+		if(getReadOnly()&&(!label.replaceAll("<[^>]*>", "").equals(getName()))){
+			return;
+		}
+		else{
+			performSuperSetter(HTML_LABEL, label);
+		}
+		
+		return;
+	}
 }

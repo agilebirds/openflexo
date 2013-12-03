@@ -62,8 +62,6 @@ public class DynamicPalette extends DrawingPalette implements PropertyChangeList
 
 	public void update() {
 
-		System.out.println("Mise a jour des PaletteElement, a priori, j'ai " + getElements());
-
 		List<PaletteElement> elementsToAdd = new ArrayList<PaletteElement>();
 		List<PaletteElement> elementsToRemove = new ArrayList<PaletteElement>(getElements());
 		for (ConceptGRAssociation association : getEditor().getDiagram().getAssociations()) {

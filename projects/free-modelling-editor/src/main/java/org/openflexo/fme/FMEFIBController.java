@@ -26,10 +26,8 @@ import javax.swing.Icon;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fme.model.Concept;
-import org.openflexo.fme.model.DiagramElement;
 import org.openflexo.fme.model.FMEModelObject;
 import org.openflexo.fme.model.Instance;
-import org.openflexo.fme.model.PropertyValue;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -68,9 +66,9 @@ public class FMEFIBController extends FIBController {
 	public void createConcept() {
 		getDiagramEditor().createNewConcept();
 	}
-
-	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
-		return getDiagramEditor().createPropertyValue(element);
+	
+	public void removeConcept(Concept concept) {
+		getDiagramEditor().removeConcept(concept);
 	}
 
 	public Icon getIcon(FMEModelObject object) {

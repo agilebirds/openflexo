@@ -29,11 +29,13 @@ import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
@@ -52,10 +54,8 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
-	// public static final String NAME = "name";
 	public static final String ASSOCIATION = "association";
 	public static final String CONTAINER = "container";
-	public static final String PROPERTY_VALUES = "propertyValues";
 	public static final String INSTANCE = "instance";
 
 	@Getter(value = SHAPES, cardinality = Cardinality.LIST, inverse = CONTAINER)
@@ -89,29 +89,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Remover(CONNECTORS)
 	public void removeFromConnectors(Connector aConnector);
-
-	/*@Getter(value = NAME)
-	@XMLAttribute
-	public String getName();
-
-	@Setter(value = NAME)
-	public void setName(String aName);*/
-
-	@Getter(value = PROPERTY_VALUES, cardinality = Cardinality.LIST)
-	@XMLElement(primary = true)
-	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
-	public List<PropertyValue> getPropertyValues();
-
-	@Setter(PROPERTY_VALUES)
-	public void setPropertyValues(List<PropertyValue> somePropertyValues);
-
-	@Adder(PROPERTY_VALUES)
-	@PastingPoint
-	public void addToPropertyValues(PropertyValue aPropertyValue);
-
-	@Remover(PROPERTY_VALUES)
-	public void removeFromPropertyValues(PropertyValue aPropertyValue);
 
 	@Getter(value = CONTAINER)
 	public DiagramElement<?, ?> getContainer();
@@ -151,4 +128,5 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public void setChanged();
 
 	public boolean hasChanged();
+
 }

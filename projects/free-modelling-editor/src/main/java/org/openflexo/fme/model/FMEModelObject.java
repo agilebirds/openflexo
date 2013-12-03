@@ -36,4 +36,5 @@ public interface FMEModelObject extends AccessibleProxyObject, DeletableProxyObj
 	public void setChanged();
 
 	public boolean hasChanged();
+	
 }

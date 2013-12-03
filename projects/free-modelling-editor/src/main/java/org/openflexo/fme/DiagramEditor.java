@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -41,12 +42,15 @@ import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.fme.dialog.CreateConceptAndInstanceDialog;
 import org.openflexo.fme.dialog.CreateConceptDialog;
 import org.openflexo.fme.dialog.CreateInstanceDialog;
+import org.openflexo.fme.dialog.RemoveConceptDialog;
 import org.openflexo.fme.model.Concept;
 import org.openflexo.fme.model.ConceptGRAssociation;
 import org.openflexo.fme.model.Diagram;
 import org.openflexo.fme.model.DiagramElement;
 import org.openflexo.fme.model.DiagramFactory;
 import org.openflexo.fme.model.Instance;
+import org.openflexo.fme.model.InstanceImpl;
+import org.openflexo.fme.model.PropertyDefinition;
 import org.openflexo.fme.model.PropertyValue;
 import org.openflexo.fme.model.Shape;
 import org.openflexo.localization.FlexoLocalization;
@@ -71,6 +75,7 @@ public class DiagramEditor implements FIBSelectionListener {
 	private static final File NEW_CONCEPT_NEW_INSTANCE_DIALOG = new FileResource("Fib/Dialog/NewConceptNewInstanceDialog.fib");
 	private static final File NEW_CONCEPT_DIALOG = new FileResource("Fib/Dialog/NewConceptDialog.fib");
 	private static final File NEW_INSTANCE_DIALOG = new FileResource("Fib/Dialog/NewInstanceDialog.fib");
+	private static final File REMOVE_CONCEPT_DIALOG = new FileResource("Fib/Dialog/RemoveConceptDialog.fib");
 
 	public static DiagramEditor newDiagramEditor(DiagramFactory factory, FreeModellingEditorApplication application) {
 
@@ -263,7 +268,7 @@ public class DiagramEditor implements FIBSelectionListener {
 
 		newShape.setAssociation(association);
 		container.addToShapes(newShape);
-
+		//updateAllProperties();
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
@@ -297,9 +302,8 @@ public class DiagramEditor implements FIBSelectionListener {
 		returned.setName(instanceName);
 		returned.setConcept(association.getConcept());
 		newShape.setInstance(returned);
-
 		container.addToShapes(newShape);
-
+	//	updateAllProperties();
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
@@ -346,11 +350,24 @@ public class DiagramEditor implements FIBSelectionListener {
 		if (dialog.getStatus() == Status.VALIDATED) {
 			Concept returned = getFactory().newInstance(Concept.class);
 			returned.setName(dialogData.getConceptName());
+			returned.setReadOnly(false);
 			System.out.println("Created " + returned);
 			getDiagram().getDataModel().addToConcepts(returned);
 			return returned;
 		}
 		return null;
+	}
+	
+	
+	public boolean removeConcept(Concept concept) {
+		RemoveConceptDialog dialogData = new RemoveConceptDialog(concept);
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(REMOVE_CONCEPT_DIALOG, dialogData, application.getFrame(), true,
+				application.LOCALIZATION);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			getDiagram().getDataModel().removeFromConcepts(concept);
+			return true;
+		}
+		return false;
 	}
 
 	public Instance createNewConceptAndNewInstance(DiagramElement<?, ?> diagramElement) {
@@ -361,17 +378,29 @@ public class DiagramEditor implements FIBSelectionListener {
 		if (dialog.getStatus() == Status.VALIDATED) {
 			Concept concept = getFactory().newInstance(Concept.class);
 			concept.setName(dialogData.getConceptName());
+			concept.setReadOnly(false);
 			System.out.println("Created " + concept);
 			getDiagram().getDataModel().addToConcepts(concept);
 			diagramElement.getAssociation().setConcept(concept);
+			Instance returned = getFactory().newInstance(Instance.class);
+			//Copy properties
+			List<PropertyValue> copiedProperties = new ArrayList<PropertyValue>();
+			for(PropertyValue pv : diagramElement.getInstance().getPropertyValues()){
+				PropertyValue newPropertyValue = getFactory().newInstance(PropertyValue.class);
+				newPropertyValue.setKey(pv.getKey());
+				newPropertyValue.setValue(pv.getValue());
+				copiedProperties.add(newPropertyValue);
+			}
+			returned.getPropertyValues().addAll(copiedProperties);
 			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
 			diagramElement.getInstance().delete();
-			Instance returned = getFactory().newInstance(Instance.class);
+			
 			returned.setName(dialogData.getInstanceName());
 			returned.setConcept(concept);
 			System.out.println("Created " + returned);
 			concept.addToInstances(returned);
 			diagramElement.setInstance(returned);
+			updatePropertyValues();
 			return returned;
 		}
 		return null;
@@ -382,25 +411,29 @@ public class DiagramEditor implements FIBSelectionListener {
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
+			diagramElement.getAssociation().setConcept(dialogData.getConcept());
+			Instance returned = getFactory().newInstance(Instance.class);
+			//Copy properties
+			List<PropertyValue> copiedProperties = new ArrayList<PropertyValue>();
+			for(PropertyValue pv : diagramElement.getInstance().getPropertyValues()){
+				PropertyValue newPropertyValue = getFactory().newInstance(PropertyValue.class);
+				newPropertyValue.setKey(pv.getKey());
+				newPropertyValue.setValue(pv.getValue());
+				copiedProperties.add(newPropertyValue);
+			}
+			returned.getPropertyValues().addAll(copiedProperties);
 			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
 			diagramElement.getInstance().delete();
-			Instance returned = getFactory().newInstance(Instance.class);
 			returned.setName(dialogData.getInstanceName());
 			returned.setConcept(dialogData.getConcept());
-			diagramElement.getAssociation().setConcept(dialogData.getConcept());
+			
 			System.out.println("Created " + returned);
 			dialogData.getConcept().addToInstances(returned);
 			diagramElement.setInstance(returned);
+			updatePropertyValues();
 			return returned;
 		}
 		return null;
-	}
-
-	public PropertyValue createPropertyValue(DiagramElement<?, ?> element) {
-		PropertyValue returned = getFactory().newInstance(PropertyValue.class);
-		returned.setKey("property");
-		element.addToPropertyValues(returned);
-		return returned;
 	}
 
 	public void delete(List<DiagramElement<?, ?>> objectsToDelete) {
@@ -470,8 +503,208 @@ public class DiagramEditor implements FIBSelectionListener {
 		}
 
 		application.getRepresentedConceptBrowser().getFIBController().selectionCleared();
+		application.getConceptBrowser().getFIBController().selectionCleared();
 		for (DiagramElement e : diagramElements) {
 			application.getRepresentedConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance());
+			if(e.getInstance()!=null){
+				application.getConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance().getConcept());
+			}	
+		}
+		if(diagramElements!=null && !diagramElements.isEmpty()){
+			if(diagramElements.get(0).getInstance()!=instance){
+				setInstance(diagramElements.get(0).getInstance());
+			}
+		}
+	
+	}
+	
+	public String filter = "";
+	
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	public List<Concept> getFilteredConcepts(){
+		List<Concept> filteredConcepts = new ArrayList<Concept>();
+		if(filter.equals("*")){
+			for(Concept concept : getDiagram().getDataModel().getConcepts()){
+				concept.setHtmlLabel(concept.produceHtmlLabel(concept.getName()));
+				filteredConcepts.add(concept);
+			}
+		}
+		if(filter.equals("")){
+			filteredConcepts.clear();
+		}
+		else{
+			for(Concept concept : getDiagram().getDataModel().getConcepts()){
+				if(concept.getName().contains(filter)){
+					String name = concept.getName();
+					StringBuilder sb = new StringBuilder(name);
+
+					int placeOfFiler = name.indexOf(filter);
+					
+					sb.insert(placeOfFiler, "<b>");
+					sb.insert(placeOfFiler+3+filter.length(), "</b>");
+					
+					concept.setHtmlLabel(concept.produceHtmlLabel(sb.toString()));
+					filteredConcepts.add(concept);
+				}
+			}
+		}
+		return filteredConcepts;
+	}
+	
+	private Instance instance;
+	
+	private void setInstance(Instance instance){
+		this.instance = instance;
+		if(instance!=null){
+			updatePropertyValues();
 		}
 	}
+	
+	public void updatePropertyValues(){
+		if(instance!=null){
+			updateDescriptionValues(instance.getDescription());
+			updateProperties();
+			buildDescription(instance);
+		}
+	}
+
+	public void updateProperties(){
+		if(instance!=null && instance.getConcept()!=null)
+		{
+			Concept concept = instance.getConcept();
+			
+			if(concept.getName().equals("None")){
+				return;
+			}
+			
+			// The associated concept properties if any
+			List<PropertyDefinition> conceptProperties = null;
+			if(concept!=null && concept.getProperties()!=null){
+				conceptProperties = concept.getProperties();
+			}
+			 
+			// Synchronize the concept elemts with the diagram element
+			
+			// First check if there is one instance with thsi attribute, otherwise delete it
+			List<PropertyDefinition> propertyToRemove = new ArrayList<PropertyDefinition>();
+			List<Instance> instanceWithPropertyToRemove = new ArrayList<Instance>();
+			for(PropertyDefinition propDef : conceptProperties){
+				boolean validProperty = false;
+				for(Instance instance : concept.getInstances()){
+					if(containsKeyNamed(instance,propDef.getName())){
+						if(instance.getPropertyNamed(propDef.getName()).getValue()!=""){
+							validProperty = true;
+						}
+						else{
+							instanceWithPropertyToRemove.add(instance);
+						}
+					}
+				}
+				if(!validProperty){
+					propertyToRemove.add(propDef);
+					System.out.println("REMOVING: "+propDef);
+					for(Instance instance : instanceWithPropertyToRemove){
+						instance.removeFromPropertyValues(instance.getPropertyNamed(propDef.getName()));
+					}
+				}
+			}
+			
+			conceptProperties.removeAll(propertyToRemove);
+			
+			for(PropertyDefinition propDef : conceptProperties){
+				if(!containsKeyNamed(instance,propDef.getName())){
+					PropertyValue newPropertyValue = getFactory().newInstance(PropertyValue.class);
+					newPropertyValue.setKey(propDef.getName());
+					newPropertyValue.setValue("");
+					instance.addToPropertyValues(newPropertyValue);
+				}
+			}
+			
+			// Copy the new diagram element properties into the concept property list
+			List<PropertyValue> propertyValues = instance.getPropertyValues();
+			for (PropertyValue propertyValue: propertyValues){
+				boolean contains = false;
+				for(PropertyDefinition propDef : conceptProperties){
+					if(propDef.getName().equals(propertyValue.getKey()))
+						contains=true;
+				}
+				if(!contains&&propertyValue.getValue()!=null&&propertyValue.getValue()!=""){
+					PropertyDefinition propertyDefinition = getFactory().newInstance(PropertyDefinition.class);
+					propertyDefinition.setName(propertyValue.getKey());
+					concept.addToProperties(propertyDefinition);
+				}
+			}
+		}
+	}
+	
+	// Update the properties of diagram element from the description
+	private void updateDescriptionValues(String description){
+		// Ensure that the concept properties are here
+		updateProperties();
+		// If the description is not null then parse the description
+		if(description!=null){
+			
+			// Go through the ligns
+			StringTokenizer lignsTk = new StringTokenizer(description,"\n");
+			String key,value = "";
+	
+			while (lignsTk.hasMoreTokens() ) {
+				String lign = lignsTk.nextToken();
+				
+				// Go through one lign
+				StringTokenizer lignTk = new StringTokenizer(lign,"=");
+				PropertyValue newPropertyValue;
+				while (lignTk.hasMoreTokens() ) {
+					// First token is the Key
+					key=lignTk.nextToken();
+					if(instance.getPropertyNamed(key)==null){
+						newPropertyValue = getFactory().newInstance(PropertyValue.class);
+						newPropertyValue.setKey(key);
+						instance.addToPropertyValues(newPropertyValue);
+					}
+					// Second token if exists is the value
+					if(lignTk.hasMoreTokens()){
+						// If the property already exist and there is a value
+						if(instance.getPropertyNamed(key)!=null){
+							value = lignTk.nextToken();
+							instance.getPropertyNamed(key).setValue(value);
+						}
+					}
+					else{
+						instance.getPropertyNamed(key).setValue("");
+					}
+				}
+			}
+		}
+	}
+	
+
+	public boolean containsKeyNamed(Instance instance,String keyName){
+		for(PropertyValue pv : instance.getPropertyValues()){
+			if(pv.getKey().equals(keyName))
+				return true;
+		}
+		return false;
+	}
+	
+
+	public String buildDescription(Instance instance){
+		System.out.println("rebuildDescription");
+		StringBuilder sb = new StringBuilder();
+		List<PropertyValue> propertyValues = instance.getPropertyValues();
+		for(PropertyValue propertyValue: propertyValues){
+			sb.append(propertyValue.getKey());sb.append("=");
+			sb.append(propertyValue.getValue());sb.append("\n");
+		}
+		instance.setDescription(sb.toString());
+		return sb.toString();
+	}
+	
 }
