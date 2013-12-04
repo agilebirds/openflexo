@@ -1,9 +1,6 @@
 package org.openflexo.fib.sampleData;
 
 public class Numbers extends SampleData {
-	public static enum NumberType {
-		ByteType, ShortType, IntegerType, LongType, FloatType, DoubleType;
-	}
 
 	private byte byteP;
 	private short shortP;

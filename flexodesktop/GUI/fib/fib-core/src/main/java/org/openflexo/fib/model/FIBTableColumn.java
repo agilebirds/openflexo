@@ -61,7 +61,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	private static BindingDefinition VALUE_CHANGED_ACTION = new BindingDefinition("valueChangedAction", Void.class,
 			DataBinding.BindingDefinitionType.EXECUTE, false);
 
-	private DataBinding<Object> data;
+	private DataBinding<?> data;
 	private DataBinding<String> format;
 	private DataBinding<String> tooltip;
 	private DataBinding<Color> color;
@@ -120,14 +120,14 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		return null;
 	}
 
-	public DataBinding<Object> getData() {
+	public DataBinding<?> getData() {
 		if (data == null) {
 			data = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return data;
 	}
 
-	public void setData(DataBinding<Object> data) {
+	public void setData(DataBinding<?> data) {
 		if (data != null) {
 			data.setOwner(this);
 			data.setDeclaredType(Object.class);
