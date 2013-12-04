@@ -47,7 +47,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 		System.out.println("XTOF XTOF: JE VEUX TON TYPE!! " + this.toString());
 		return DiagramType.getDiagramType(this.getDiagramSpecification());
 	}
-	
+
 	@Override
 	public boolean getIsPrimaryRole() {
 		return false;
@@ -60,8 +60,14 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	public DiagramSpecificationResource getDiagramSpecificationResource() {
 		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
-			diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
-			logger.info("Looked-up " + diagramSpecificationResource);
+			DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+			if (diagramSpec != null){
+				diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+				logger.info("Looked-up " + diagramSpecificationResource);
+			}
+			else {
+				logger.warning("Enable to load Resource for DiagramSpec URI: " + diagramSpecificationURI);
+			}
 		}
 		return diagramSpecificationResource;
 	}
@@ -82,10 +88,8 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	public DiagramSpecification getDiagramSpecification() {
-		if (getDiagramSpecificationResource() != null) {
-			return getDiagramSpecificationResource().getDiagramSpecification();
-		}
-		return null;
+		DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+		return diagramSpec;
 	}
 
 	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {

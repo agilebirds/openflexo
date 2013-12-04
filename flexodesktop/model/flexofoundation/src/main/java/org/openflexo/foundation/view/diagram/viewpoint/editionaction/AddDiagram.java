@@ -33,6 +33,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -130,7 +131,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	@Override
 	public Type getAssignableType() {
-		return View.class;
+		return DiagramType.class;
 	}
 
 	@Override
