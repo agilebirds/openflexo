@@ -50,6 +50,7 @@ import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
 import org.openflexo.antar.binding.BindingValueChangeListener;
+import org.openflexo.antar.binding.BindingValueListChangeListener;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -91,6 +92,8 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 
 	private BindingValueChangeListener<T> selectedBindingValueChangeListener;
 
+	private BindingValueListChangeListener<T, List<T>> listenerToDataAsListValue;
+
 	public FIBTableWidget(FIBTable fibTable, FIBController controller) {
 		super(fibTable, controller);
 		_fibTable = fibTable;
@@ -100,7 +103,27 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 
 		footer = new FIBTableWidgetFooter(this);
 		buildTable();
+		listenDataAsListValueChange();
 		listenSelectedValueChange();
+	}
+
+	private void listenDataAsListValueChange() {
+		if (listenerToDataAsListValue != null) {
+			listenerToDataAsListValue.stopObserving();
+			listenerToDataAsListValue.delete();
+		}
+		if (getComponent().getData() != null && getComponent().getData().isValid()) {
+			listenerToDataAsListValue = new BindingValueListChangeListener<T, List<T>>((DataBinding<List<T>>) ((DataBinding) getComponent()
+					.getData()), getBindingEvaluationContext()) {
+
+				@Override
+				public void bindingValueChanged(Object source, List<T> newValue) {
+					System.out.println(" bindingValueChanged() detected for data list=" + getComponent().getEnable() + " with newValue="
+							+ newValue + " source=" + source);
+					updateData();
+				}
+			};
+		}
 	}
 
 	private void listenSelectedValueChange() {
@@ -152,6 +175,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
+
 		List<?> valuesBeforeUpdating = getTableModel().getValues();
 		Object wasSelected = getSelectedObject();
 

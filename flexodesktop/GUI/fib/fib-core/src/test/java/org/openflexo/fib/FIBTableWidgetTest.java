@@ -1,5 +1,6 @@
 package org.openflexo.fib;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -26,6 +27,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.sampleData.Family;
 import org.openflexo.fib.sampleData.Family.Gender;
 import org.openflexo.fib.sampleData.Person;
+import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
@@ -96,6 +98,67 @@ public class FIBTableWidgetTest {
 
 		assertNotNull(controller.getRootView());
 		assertNotNull(controller.viewForComponent(table));
+
+		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
+		assertEquals(family.getChildren(), w.getTableModel().getValues());
+		assertEquals(5, w.getDynamicJComponent().getModel().getRowCount());
+	}
+
+	/**
+	 * Update the model, and check that widgets have well reacted
+	 */
+	@Test
+	public void test3ModifyValueInModel() {
+
+		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
+
+		assertEquals(5, w.getDynamicJComponent().getModel().getRowCount());
+		assertEquals("Jacky3", w.getTableModel().getValueAt(4, 0));
+		assertEquals("Smith", w.getTableModel().getValueAt(4, 1));
+		assertEquals((long) 4, w.getTableModel().getValueAt(4, 2));
+		assertEquals(Gender.Male, w.getTableModel().getValueAt(4, 3));
+		assertEquals("Jacky3 Smith aged 4 (Male)", w.getTableModel().getValueAt(4, 4));
+		family.getBiggestChild().setFirstName("Roger");
+		family.getBiggestChild().setLastName("Rabbit");
+		family.getBiggestChild().setAge(12);
+		family.getBiggestChild().setGender(Gender.Female);
+		assertEquals("Roger", w.getTableModel().getValueAt(4, 0));
+		assertEquals("Rabbit", w.getTableModel().getValueAt(4, 1));
+		assertEquals((long) 12, w.getTableModel().getValueAt(4, 2));
+		assertEquals(Gender.Female, w.getTableModel().getValueAt(4, 3));
+		assertEquals("Roger Rabbit aged 12 (Female)", w.getTableModel().getValueAt(4, 4));
+
+		Person junior = family.createChild();
+
+		assertEquals(6, w.getDynamicJComponent().getModel().getRowCount());
+		assertEquals("John Jr", w.getTableModel().getValueAt(5, 0));
+		assertEquals("Smith", w.getTableModel().getValueAt(5, 1));
+		assertEquals((long) 0, w.getTableModel().getValueAt(5, 2));
+		assertEquals(Gender.Male, w.getTableModel().getValueAt(5, 3));
+		assertEquals("John Jr Smith aged 0 (Male)", w.getTableModel().getValueAt(5, 4));
+	}
+
+	/**
+	 * Update the widget, and check that model has well reacted
+	 */
+	@Test
+	public void test4ModifyValueInWidget() {
+
+		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
+
+		w.getTableModel().setValueAt("Jeannot", 2, 0);
+		w.getTableModel().setValueAt("Lapin", 2, 1);
+		w.getTableModel().setValueAt(6, 2, 2);
+		w.getTableModel().setValueAt(Gender.Female, 2, 3);
+
+		Person child = family.getChildren().get(2);
+
+		assertEquals("Jeannot", child.getFirstName());
+		assertEquals("Lapin", child.getLastName());
+		assertEquals(6, child.getAge());
+		assertEquals(Gender.Female, child.getGender());
+		assertEquals("Jeannot Lapin aged 6 (Female)", w.getTableModel().getValueAt(2, 4));
+
 	}
 
 	@BeforeClass
