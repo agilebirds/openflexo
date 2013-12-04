@@ -72,12 +72,12 @@ public class EditionPatternInstanceType implements CustomType {
 
 	@Override
 	public String simpleRepresentation() {
-		return "DiagramType" + ":" + editionPattern;
+		return "EditionPatternInstanceType" + ":" + editionPattern.toString();
 	}
 
 	@Override
 	public String fullQualifiedRepresentation() {
-		return "DiagramType" + ":" + editionPattern;
+		return "EditionPatternInstanceType" + ":" + editionPattern.toString();
 	}
 
 	@Override

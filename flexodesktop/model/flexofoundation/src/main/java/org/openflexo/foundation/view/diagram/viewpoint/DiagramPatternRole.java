@@ -43,8 +43,6 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	@Override
 	public Type getType() {
-		// TODO: il y a un bins avec le bindingModel des VirtualModelSlotInstance, lorsqu'on utilise les navigationScheme...
-		System.out.println("XTOF XTOF: JE VEUX TON TYPE!! " + this.toString());
 		return DiagramType.getDiagramType(this.getDiagramSpecification());
 	}
 

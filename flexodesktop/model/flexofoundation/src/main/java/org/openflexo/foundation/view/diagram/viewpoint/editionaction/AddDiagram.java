@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -45,6 +46,8 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
+	private String diagramSpecificationURI;
+	
 	public AddDiagram(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -131,7 +134,13 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	@Override
 	public Type getAssignableType() {
-		return DiagramType.class;
+		PatternRole PR = getPatternRole();
+		if (PR != null){
+			return PR.getType();
+		}
+		else {
+			return Object.class;
+		}
 	}
 
 	@Override

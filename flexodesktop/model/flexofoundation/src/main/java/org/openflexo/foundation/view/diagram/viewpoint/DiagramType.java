@@ -57,20 +57,13 @@ public class DiagramType extends EditionPatternInstanceType {
 		return diagramSpec;
 	}
 
-	@Override
-	public Class getBaseClass() {
-		if (getDiagram() instanceof VirtualModel) {
-			return VirtualModelInstance.class;
-		} else {
-			return Diagram.class;
-		}
-	}
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
-		// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
+		System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
 		if (aType instanceof DiagramType) {
-			return diagramSpec.isAssignableFrom(((DiagramType) aType).getDiagram());
+			// TODO: Permissive for now!
+			return true;
 		}
 		return false;
 	}
