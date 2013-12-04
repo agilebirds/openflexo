@@ -7,9 +7,11 @@ import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -41,9 +43,11 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	@Override
 	public Type getType() {
-		return View.class;
+		// TODO: il y a un bins avec le bindingModel des VirtualModelSlotInstance, lorsqu'on utilise les navigationScheme...
+		System.out.println("XTOF XTOF: JE VEUX TON TYPE!! " + this.toString());
+		return DiagramType.getDiagramType(this.getDiagramSpecification());
 	}
-
+	
 	@Override
 	public boolean getIsPrimaryRole() {
 		return false;

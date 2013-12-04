@@ -19,65 +19,70 @@
  *
  */
 
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.CustomType;
-import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
- * Represent the type of a EditionPatternInstance of a given EditionPattern
+ * Represent the type of a DiagramInstance of a given Diagram
  * 
  * @author sylvain
  * 
  */
-public class EditionPatternInstanceType implements CustomType {
+public class DiagramType extends EditionPatternInstanceType {
 
-	public static EditionPatternInstanceType getEditionPatternInstanceType(EditionPattern anEditionPattern) {
-		if (anEditionPattern == null) {
+	public static DiagramType getDiagramType(DiagramSpecification aDiagram) {
+		if (aDiagram == null) {
 			return null;
 		}
-		return anEditionPattern.getInstanceType();
+		
+		return aDiagram.getInstanceType();
 	}
 
-	private EditionPattern editionPattern;
+	private DiagramSpecification diagramSpec;
 
-	public EditionPatternInstanceType(EditionPattern anEditionPattern) {
-		this.editionPattern = anEditionPattern;
+	public DiagramType(DiagramSpecification aDiagramSpec) {
+		super(aDiagramSpec);
+		this.diagramSpec = aDiagramSpec;
 	}
 
-	public EditionPattern getEditionPattern() {
-		return editionPattern;
+	public DiagramSpecification getDiagram() {
+		return diagramSpec;
 	}
 
 	@Override
 	public Class getBaseClass() {
-		if (getEditionPattern() instanceof VirtualModel) {
+		if (getDiagram() instanceof VirtualModel) {
 			return VirtualModelInstance.class;
 		} else {
-			return EditionPatternInstance.class;
+			return Diagram.class;
 		}
 	}
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
 		// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
-		if (aType instanceof EditionPatternInstanceType) {
-			return editionPattern.isAssignableFrom(((EditionPatternInstanceType) aType).getEditionPattern());
+		if (aType instanceof DiagramType) {
+			return diagramSpec.isAssignableFrom(((DiagramType) aType).getDiagram());
 		}
 		return false;
 	}
 
 	@Override
 	public String simpleRepresentation() {
-		return "DiagramType" + ":" + editionPattern;
+		return "DiagramType" + ":" + diagramSpec;
 	}
 
 	@Override
 	public String fullQualifiedRepresentation() {
-		return "DiagramType" + ":" + editionPattern;
+		return "DiagramType" + ":" + diagramSpec;
 	}
 
 	@Override

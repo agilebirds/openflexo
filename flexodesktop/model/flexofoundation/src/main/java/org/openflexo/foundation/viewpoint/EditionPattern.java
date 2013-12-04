@@ -89,13 +89,15 @@ public class EditionPattern extends EditionPatternObject {
 	private EditionPatternStructuralFacet structuralFacet;
 	private EditionPatternBehaviouralFacet behaviouralFacet;
 
-	private EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
+	private EditionPatternInstanceType instanceType;
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
+	
+	
 	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		if (builder != null) {
@@ -106,6 +108,7 @@ public class EditionPattern extends EditionPatternObject {
 		editionPatternConstraints = new Vector<EditionPatternConstraint>();
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
+		instanceType = new EditionPatternInstanceType(this);
 	}
 
 	@Override

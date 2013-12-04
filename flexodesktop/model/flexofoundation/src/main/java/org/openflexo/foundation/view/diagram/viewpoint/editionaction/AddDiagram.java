@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -50,15 +51,22 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
+		DataBinding<Object> assig = getAssignation();
+		if (assig!=null && out != null && assig.isSet()) {
+			out.append(assig.toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo " + getDiagramSpecification().getURI() + " from " + getModelSlot().getName()
-				+ " {" + StringUtils.LINE_SEPARATOR, context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
+		DiagramSpecification dSpec = getDiagramSpecification();
+		// NPE Protection
+		// TODO XtoF : when validating a VP, detect the fact that DiagSpec is null
+		if (dSpec != null){
+			out.append(getClass().getSimpleName() + " conformTo " + dSpec.getURI() + " from " + getModelSlot().getName()
+					+ " {" + StringUtils.LINE_SEPARATOR, context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
 		}
+
 		return out.toString();
 	}
 
