@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -53,7 +57,7 @@ public class FIBBrowserWidgetTest {
 
 		browser = new FIBBrowser();
 		browser.setRoot(new DataBinding<Object>("data", browser, Object.class, BindingDefinitionType.GET));
-
+		browser.setBoundToSelectionManager(true);
 		browser.setIteratorClass(Person.class);
 
 		FIBBrowserElement rootElement = new FIBBrowserElement();
@@ -125,6 +129,53 @@ public class FIBBrowserWidgetTest {
 
 		assertEquals(6, root.getChildCount());
 		assertEquals(junior, ((BrowserCell) root.getChildAt(5)).getUserObject());
+	}
+
+	/**
+	 * Try to select some objects, check that selection is in sync with it
+	 */
+	@Test
+	public void test5PerfomSomeTestsWithSelection() {
+
+		FIBBrowserWidget<?> w = (FIBBrowserWidget<?>) controller.viewForComponent(browser);
+
+		w.resetSelection();
+		w.addToSelection(family);
+
+		// The selection is here empty because iterator class has been declared as Person, Family is not a Person, therefore the selection
+		// is null
+		assertEquals(Collections.emptyList()/*Collections.singletonList(family)*/, w.getSelection());
+
+		w.resetSelection();
+		w.addToSelection(family.getChildren().get(0));
+
+		assertEquals(Collections.singletonList(family.getChildren().get(0)), w.getSelection());
+
+		// int[] indices = new int[3];
+		// indices[0] = 1;
+		// indices[1] = 2;
+		// indices[2] = 4;
+		// w7.getDynamicJComponent().setSelectedIndices(indices);
+
+		Person child1 = family.getChildren().get(1);
+		Person child2 = family.getChildren().get(2);
+		Person child4 = family.getChildren().get(4);
+
+		w.resetSelection();
+		w.addToSelection(child1);
+		w.addToSelection(child2);
+		w.addToSelection(child4);
+
+		List<Person> expectedSelection = new ArrayList<Person>();
+		expectedSelection.add(child1);
+		expectedSelection.add(child2);
+		expectedSelection.add(child4);
+
+		assertEquals(expectedSelection, w.getSelection());
+
+		controller.setFocusedWidget(w);
+		assertEquals(expectedSelection, controller.getSelectionLeader().getSelection());
+
 	}
 
 	@BeforeClass

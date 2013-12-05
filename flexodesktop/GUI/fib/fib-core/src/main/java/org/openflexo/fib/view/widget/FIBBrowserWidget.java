@@ -621,6 +621,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 
 	@Override
 	public synchronized void valueChanged(TreeSelectionEvent e) {
+
 		List<T> oldSelection = new ArrayList<T>();
 		oldSelection.addAll(selection);
 		// System.out.println("Selection: " + e);
@@ -658,6 +659,9 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		}
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);
+
+		// System.out.println("selectedObject = " + selectedObject);
+		// System.out.println("selection = " + selection);
 
 		if (selectedObject == null) {
 			setSelectedObject(null);
