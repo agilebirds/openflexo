@@ -376,7 +376,7 @@ public class FIBNumberWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBNumberWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

@@ -322,10 +322,10 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 
 	@Override
 	public Type getDynamicAccessType() {
-		Type[] args = new Type[2];
-		args[0] = getDataType();
-		args[1] = getIteratorType();
-		return new ParameterizedTypeImpl(FIBTableWidget.class, args);
+		// Type[] args = new Type[2];
+		// args[0] = getDataType();
+		// args[1] = getIteratorType();
+		return new ParameterizedTypeImpl(FIBTableWidget.class, getIteratorType());
 	}
 
 	@Override

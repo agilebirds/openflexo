@@ -21,7 +21,7 @@ public class GraphicalContextDelegate {
 	private JTabbedPane tabbedPane;
 	private boolean dontDestroyMe = false;
 
-	public GraphicalContextDelegate() {
+	public GraphicalContextDelegate(final String frameTitle) {
 		eventProcessor = new EventProcessor();
 
 		try {
@@ -29,7 +29,7 @@ public class GraphicalContextDelegate {
 				@Override
 				public void run() {
 					tabbedPane = new JTabbedPane();
-					JFrame frame = new JFrame("FIBTextFieldWidgetTest");
+					JFrame frame = new JFrame(frameTitle);
 					frame.setLayout(new BorderLayout());
 					frame.setSize(new Dimension(1024, 768));
 					frame.setLocationRelativeTo(null);

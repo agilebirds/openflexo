@@ -131,9 +131,9 @@ public class FIBTableActionListener<T> implements ActionListener, BindingEvaluat
 			logger.info("Perform action " + tableAction.getName() + " method " + tableAction.getMethod());
 			// logger.info("controller="+getController()+" of "+getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
-			Object newObject = null;
+			T newObject = null;
 			try {
-				newObject = tableAction.getMethod().getBindingValue(this);
+				newObject = (T) tableAction.getMethod().getBindingValue(this);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -142,7 +142,7 @@ public class FIBTableActionListener<T> implements ActionListener, BindingEvaluat
 				e.printStackTrace();
 			}
 			tableWidget.updateWidgetFromModel();
-			tableWidget.setSelectedObject(newObject);
+			tableWidget.performSelect(newObject);
 
 			/*if (newObject != null) {
 				int index = tableModel.getTableWidget().getValue().indexOf(newObject);

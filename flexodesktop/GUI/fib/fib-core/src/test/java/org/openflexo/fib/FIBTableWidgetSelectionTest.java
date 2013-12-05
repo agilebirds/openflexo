@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -16,13 +14,17 @@ import org.junit.Test;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.BorderLayoutConstraints;
+import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
 import org.openflexo.fib.model.FIBDropDownColumn;
+import org.openflexo.fib.model.FIBLabel;
 import org.openflexo.fib.model.FIBLabelColumn;
 import org.openflexo.fib.model.FIBNumber.NumberType;
 import org.openflexo.fib.model.FIBNumberColumn;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.FIBTable;
+import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBTextFieldColumn;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
@@ -33,17 +35,25 @@ import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Test the structural and behavioural features of FIBTable widget
+ * Test the structural and behavioural features of a simple master-detail pattern driven by a table widget
  * 
  * @author sylvain
  * 
  */
-public class FIBTableWidgetTest {
+public class FIBTableWidgetSelectionTest {
 
 	private static GraphicalContextDelegate gcDelegate;
 
 	private static FIBPanel component;
+	private static FIBPanel detailsPanel;
 	private static FIBTable table;
+
+	private static FIBLabel firstNameLabel;
+	private static FIBTextField firstNameTF;
+	private static FIBLabel lastNameLabel;
+	private static FIBTextField lastNameTF;
+	private static FIBLabel fullNameLabel;
+	private static FIBTextField fullNameTF;
 
 	private static FIBController controller;
 	private static Family family;
@@ -55,14 +65,16 @@ public class FIBTableWidgetTest {
 	public void test1CreateComponent() {
 
 		component = new FIBPanel();
-		component.setLayout(Layout.twocols);
+		component.setLayout(Layout.border);
 		component.setDataClass(Family.class);
 
 		table = new FIBTable();
+		table.setName("table");
 		table.setData(new DataBinding<List<?>>("data.children", table, List.class, BindingDefinitionType.GET));
 		table.setAutoSelectFirstRow(true);
 		table.setIteratorClass(Person.class);
 		table.setBoundToSelectionManager(true);
+		table.setManageDynamicModel(true);
 
 		FIBTextFieldColumn c1 = new FIBTextFieldColumn();
 		c1.setData(new DataBinding<String>("iterator.firstName", c1, String.class, BindingDefinitionType.GET_SET));
@@ -81,8 +93,35 @@ public class FIBTableWidgetTest {
 		c5.setData(new DataBinding<String>("iterator.toString", c5, String.class, BindingDefinitionType.GET));
 		table.addToColumns(c5);
 
-		component.addToSubComponents(table, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, true));
+		detailsPanel = new FIBPanel();
+		detailsPanel.setLayout(Layout.twocols);
+
+		firstNameLabel = new FIBLabel("first_name");
+		detailsPanel.addToSubComponents(firstNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		firstNameTF = new FIBTextField();
+		firstNameTF.setData(new DataBinding<String>("table.selected.firstName", firstNameTF, String.class, BindingDefinitionType.GET_SET));
+		detailsPanel.addToSubComponents(firstNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+
+		lastNameLabel = new FIBLabel("last_name");
+		detailsPanel.addToSubComponents(lastNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		lastNameTF = new FIBTextField();
+		lastNameTF.setData(new DataBinding<String>("table.selected.lastName", lastNameTF, String.class, BindingDefinitionType.GET_SET));
+		detailsPanel.addToSubComponents(lastNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+
+		fullNameLabel = new FIBLabel("full_name");
+		detailsPanel.addToSubComponents(fullNameLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		fullNameTF = new FIBTextField();
+		fullNameTF.setData(new DataBinding<String>("table.selected.firstName + ' ' + table.selected.lastName", fullNameTF, String.class,
+				BindingDefinitionType.GET));
+		detailsPanel.addToSubComponents(fullNameTF, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, false, false));
+
+		component.addToSubComponents(table, new BorderLayoutConstraints(BorderLayoutLocation.west));
+		component.addToSubComponents(detailsPanel, new BorderLayoutConstraints(BorderLayoutLocation.center));
+
 		assertTrue(table.getData().isValid());
+		assertTrue(firstNameTF.getData().isValid());
+		assertTrue(lastNameTF.getData().isValid());
+		assertTrue(fullNameTF.getData().isValid());
 
 	}
 
@@ -111,95 +150,48 @@ public class FIBTableWidgetTest {
 	 * Update the model, and check that widgets have well reacted
 	 */
 	@Test
-	public void test3ModifyValueInModel() {
+	public void test3SelectEditAndCheckValues() {
 
 		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
 
-		assertEquals(5, w.getDynamicJComponent().getModel().getRowCount());
-		assertEquals("Jacky3", w.getTableModel().getValueAt(4, 0));
-		assertEquals("Smith", w.getTableModel().getValueAt(4, 1));
-		assertEquals((long) 4, w.getTableModel().getValueAt(4, 2));
-		assertEquals(Gender.Male, w.getTableModel().getValueAt(4, 3));
-		assertEquals("Jacky3 Smith aged 4 (Male)", w.getTableModel().getValueAt(4, 4));
+		w.getDynamicJComponent().getSelectionModel().clearSelection();
+		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(4, 4);
+
+		assertEquals("Jacky3", controller.viewForComponent(firstNameTF).getData());
+		assertEquals("Smith", controller.viewForComponent(lastNameTF).getData());
+		assertEquals("Jacky3 Smith", controller.viewForComponent(fullNameTF).getData());
+
 		family.getBiggestChild().setFirstName("Roger");
 		family.getBiggestChild().setLastName("Rabbit");
 		family.getBiggestChild().setAge(12);
 		family.getBiggestChild().setGender(Gender.Female);
-		assertEquals("Roger", w.getTableModel().getValueAt(4, 0));
-		assertEquals("Rabbit", w.getTableModel().getValueAt(4, 1));
-		assertEquals((long) 12, w.getTableModel().getValueAt(4, 2));
-		assertEquals(Gender.Female, w.getTableModel().getValueAt(4, 3));
-		assertEquals("Roger Rabbit aged 12 (Female)", w.getTableModel().getValueAt(4, 4));
 
-		Person junior = family.createChild();
-
-		assertEquals(6, w.getDynamicJComponent().getModel().getRowCount());
-		assertEquals("John Jr", w.getTableModel().getValueAt(5, 0));
-		assertEquals("Smith", w.getTableModel().getValueAt(5, 1));
-		assertEquals((long) 0, w.getTableModel().getValueAt(5, 2));
-		assertEquals(Gender.Male, w.getTableModel().getValueAt(5, 3));
-		assertEquals("John Jr Smith aged 0 (Male)", w.getTableModel().getValueAt(5, 4));
-	}
-
-	/**
-	 * Update the widget, and check that model has well reacted
-	 */
-	@Test
-	public void test4ModifyValueInWidget() {
-
-		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
-
-		w.getTableModel().setValueAt("Jeannot", 2, 0);
-		w.getTableModel().setValueAt("Lapin", 2, 1);
-		w.getTableModel().setValueAt(6, 2, 2);
-		w.getTableModel().setValueAt(Gender.Female, 2, 3);
-
-		Person child = family.getChildren().get(2);
-
-		assertEquals("Jeannot", child.getFirstName());
-		assertEquals("Lapin", child.getLastName());
-		assertEquals(6, child.getAge());
-		assertEquals(Gender.Female, child.getGender());
-		assertEquals("Jeannot Lapin aged 6 (Female)", w.getTableModel().getValueAt(2, 4));
+		assertEquals("Roger", controller.viewForComponent(firstNameTF).getData());
+		assertEquals("Rabbit", controller.viewForComponent(lastNameTF).getData());
+		assertEquals("Roger Rabbit", controller.viewForComponent(fullNameTF).getData());
 
 	}
 
 	/**
-	 * Try to select some objects, check that selection is in sync with it
+	 * Update the model, and check that widgets have well reacted
 	 */
 	@Test
-	public void test5PerfomSomeTestsWithSelection() {
+	public void test3SelectMultipleValues() {
 
 		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
-		assertEquals(6, w.getDynamicJComponent().getModel().getRowCount());
 
-		// w.getDynamicJComponent().getSelectionModel().addSelectionInterval(0, 1);
-		assertEquals(Collections.singletonList(family.getChildren().get(0)), w.getSelection());
-
-		// int[] indices = new int[3];
-		// indices[0] = 1;
-		// indices[1] = 2;
-		// indices[2] = 4;
-		// w7.getDynamicJComponent().setSelectedIndices(indices);
 		w.getDynamicJComponent().getSelectionModel().clearSelection();
-		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(1, 2);
-		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(4, 4);
+		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(1, 3);
 
-		List<Person> expectedSelection = new ArrayList<Person>();
-		expectedSelection.add(family.getChildren().get(1));
-		expectedSelection.add(family.getChildren().get(2));
-		expectedSelection.add(family.getChildren().get(4));
-
-		assertEquals(expectedSelection, w.getSelection());
-
-		controller.setFocusedWidget(w);
-		assertEquals(expectedSelection, controller.getSelectionLeader().getSelection());
+		assertEquals("Jacky2", controller.viewForComponent(firstNameTF).getData());
+		assertEquals("Smith", controller.viewForComponent(lastNameTF).getData());
+		assertEquals("Jacky2 Smith", controller.viewForComponent(fullNameTF).getData());
 
 	}
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate(FIBTableWidgetTest.class.getSimpleName());
+		gcDelegate = new GraphicalContextDelegate(FIBTableWidgetSelectionTest.class.getSimpleName());
 	}
 
 	@AfterClass

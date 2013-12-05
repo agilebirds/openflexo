@@ -72,24 +72,24 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 
 		if (object instanceof PatternRole) {
 			if(patternRoleTable!=null){
-				patternRoleTable.setSelectedObject(object);
+				patternRoleTable.setSelected(object);
 			}	
 		} else if (object instanceof EditionScheme) {
 			if(mainTabPanel!=null){
 				mainTabPanel.setSelectedIndex(0);
 			}
 			if(editionSchemeTable!=null){
-				editionSchemeTable.setSelectedObject(object);
+				editionSchemeTable.setSelected(object);
 			}	
 		} else if (object instanceof EditionSchemeParameter) {
 			if(mainTabPanel!=null){
 				mainTabPanel.setSelectedIndex(0);
 			}
 			if(editionSchemeTable!=null){
-				editionSchemeTable.setSelectedObject(((EditionSchemeParameter) object).getEditionScheme());	
+				editionSchemeTable.setSelected(((EditionSchemeParameter) object).getEditionScheme());	
 			}
 			if(parametersTable!=null){
-				parametersTable.setSelectedObject(object);
+				parametersTable.setSelected(object);
 			}
 			// this is not a tab any more
 			// editionSchemePanel.setSelectedIndex(0);
@@ -98,7 +98,7 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 				mainTabPanel.setSelectedIndex(0);
 			}
 			if(editionSchemeTable!=null){
-				editionSchemeTable.setSelectedObject(((EditionAction) object).getEditionScheme());
+				editionSchemeTable.setSelected(((EditionAction) object).getEditionScheme());
 			}
 			// this is not a tab any more
 			// editionSchemePanel.setSelectedIndex(1);
@@ -114,7 +114,7 @@ public abstract class EditionPatternView<EP extends EditionPattern> extends FIBM
 				mainTabPanel.setSelectedIndex(1);
 			}
 			if(inspectorPropertyTable!=null){
-				inspectorPropertyTable.setSelectedObject(object);
+				inspectorPropertyTable.setSelected(object);
 			}
 		}
 	}

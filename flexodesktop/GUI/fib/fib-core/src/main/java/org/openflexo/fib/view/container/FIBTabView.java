@@ -53,7 +53,7 @@ public class FIBTabView<C extends FIBTab, T> extends FIBPanelView<C, T> {
 		// currently selected/visible tab
 		if (getParentView() instanceof FIBTabPanelView) {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
-			if (isVisible() && getResultingJComponent().getParent() == null) {
+			if (isViewVisible() && getResultingJComponent().getParent() == null) {
 				int newIndex = 0;
 				for (FIBView<?, ?, ?> v : getParentView().getSubViews().values()) {
 					if (v instanceof FIBTabView && v.isComponentVisible()) {
@@ -70,7 +70,7 @@ public class FIBTabView<C extends FIBTab, T> extends FIBPanelView<C, T> {
 				if (wasSelected) {
 					parent.getJComponent().setSelectedComponent(getResultingJComponent());
 				}
-			} else if (!isVisible() && getResultingJComponent().getParent() != null) {
+			} else if (!isViewVisible() && getResultingJComponent().getParent() != null) {
 				wasSelected = parent.getJComponent().getSelectedComponent() == getResultingJComponent();
 				parent.getJComponent().remove(getResultingJComponent());
 				logger.fine("********** Removing component " + getComponent().getTitle());

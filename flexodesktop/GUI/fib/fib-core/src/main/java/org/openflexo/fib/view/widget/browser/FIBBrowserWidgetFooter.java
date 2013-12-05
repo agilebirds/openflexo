@@ -123,24 +123,24 @@ public class FIBBrowserWidgetFooter<T> extends JPanel implements MouseListener, 
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			FIBBrowserElement element = elementForObject(_widget.getSelectedObject());
+			FIBBrowserElement element = elementForObject(_widget.getSelected());
 			if (element != null) {
 				List<FIBBrowserActionListener> listeners = new ArrayList<FIBBrowserActionListener>();
 				Map<FIBBrowserAction, FIBBrowserActionListener> browserActions = actions.get(element);
 				if (browserActions != null && browserActions.size() > 0) {
 					for (Entry<FIBBrowserAction, FIBBrowserActionListener> entry : browserActions.entrySet()) {
-						if (entry.getValue().isActive(_widget.getSelectedObject())) {
+						if (entry.getValue().isActive(_widget.getSelected())) {
 							listeners.add(entry.getValue());
 						}
 					}
 				}
 				if (listeners.size() == 1) {
-					listeners.get(0).setSelectedObject(_widget.getSelectedObject());
+					listeners.get(0).setSelectedObject(_widget.getSelected());
 					listeners.get(0).actionPerformed(e);
 				} else if (listeners.size() > 1) {
 					JPopupMenu popupMenu = new JPopupMenu();
 					for (FIBBrowserActionListener actionListener : listeners) {
-						actionListener.setSelectedObject(_widget.getSelectedObject());
+						actionListener.setSelectedObject(_widget.getSelected());
 						JMenuItem menuItem = new JMenuItem(getLocalized(actionListener.getBrowserAction().getName()));
 						menuItem.addActionListener(actionListener);
 						popupMenu.add(menuItem);

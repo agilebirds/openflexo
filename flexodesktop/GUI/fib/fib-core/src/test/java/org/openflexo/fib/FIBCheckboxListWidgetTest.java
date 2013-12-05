@@ -219,7 +219,7 @@ public class FIBCheckboxListWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBCheckboxListWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

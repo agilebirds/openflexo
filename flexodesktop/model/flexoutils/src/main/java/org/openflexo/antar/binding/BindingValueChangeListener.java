@@ -200,6 +200,7 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 		if (newValue != lastNotifiedValue) {
 			lastNotifiedValue = newValue;
 			bindingValueChanged(source, newValue);
+			refreshObserving(false);
 		}
 	}
 

@@ -197,7 +197,7 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 			boolean isActive = false;
 			for (FIBTableAction action : _addActions.keySet()) {
 				FIBTableActionListener<T> actionListener = _addActions.get(action);
-				if (actionListener.isActive(_widget.getSelectedObject())) {
+				if (actionListener.isActive(_widget.getSelected())) {
 					isActive = true;
 				}
 			}
@@ -207,7 +207,7 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 		boolean isMinusActive = false;
 		for (FIBTableAction action : _removeActions.keySet()) {
 			FIBTableActionListener<T> actionListener = _removeActions.get(action);
-			if (actionListener.isActive(_widget.getSelectedObject())) {
+			if (actionListener.isActive(_widget.getSelected())) {
 				isMinusActive = true;
 			}
 		}
@@ -239,8 +239,8 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 	void plusPressed() {
 		for (FIBTableAction action : _addActions.keySet()) {
 			FIBTableActionListener<T> actionListener = _addActions.get(action);
-			if (actionListener.isActive(_widget.getSelectedObject())) {
-				actionListener.performAction(_widget.getSelectedObject());
+			if (actionListener.isActive(_widget.getSelected())) {
+				actionListener.performAction(_widget.getSelected());
 			}
 		}
 	}
@@ -248,9 +248,9 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 	void minusPressed() {
 		for (FIBTableAction action : _removeActions.keySet()) {
 			FIBTableActionListener<T> actionListener = _removeActions.get(action);
-			if (actionListener.isActive(_widget.getSelectedObject())) {
+			if (actionListener.isActive(_widget.getSelected())) {
 				// actionListener.performAction(_tableModel.getSelectedObject(), _tableModel.getSelectedObjects());
-				actionListener.performAction(_widget.getSelectedObject());
+				actionListener.performAction(_widget.getSelected());
 			}
 		}
 	}
@@ -280,12 +280,12 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 
 			for (FIBTableAction action : _addActions.keySet()) {
 				FIBTableActionListener<T> actionListener = _addActions.get(action);
-				actionListener.setSelectedObject(_widget.getSelectedObject());
+				actionListener.setSelectedObject(_widget.getSelected());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
 				menuItem.addActionListener(actionListener);
 				plusActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
+				menuItem.setEnabled(actionListener.isActive(_widget.getSelected()));
 			}
 
 			plusActionMenuNeedsRecomputed = false;
@@ -299,12 +299,12 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 
 			for (FIBTableAction action : _removeActions.keySet()) {
 				FIBTableActionListener<T> actionListener = _removeActions.get(action);
-				actionListener.setSelectedObject(_widget.getSelectedObject());
+				actionListener.setSelectedObject(_widget.getSelected());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
 				menuItem.addActionListener(actionListener);
 				minusActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
+				menuItem.setEnabled(actionListener.isActive(_widget.getSelected()));
 			}
 
 			minusActionMenuNeedsRecomputed = false;
@@ -321,12 +321,12 @@ public class FIBTableWidgetFooter<T> extends JPanel {
 
 			for (FIBTableAction action : _otherActions.keySet()) {
 				FIBTableActionListener<T> actionListener = _otherActions.get(action);
-				actionListener.setSelectedObject(_widget.getSelectedObject());
+				actionListener.setSelectedObject(_widget.getSelected());
 				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
 				JMenuItem menuItem = new JMenuItem(getLocalized(action.getName()));
 				menuItem.addActionListener(actionListener);
 				optionsActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
+				menuItem.setEnabled(actionListener.isActive(_widget.getSelected()));
 			}
 
 			optionsActionMenuNeedsRecomputed = false;

@@ -126,6 +126,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 				public void bindingValueChanged(Object source, Boolean newValue) {
 					System.out.println(" bindingValueChanged() detected for visible=" + getComponent().getVisible() + " with newValue="
 							+ newValue + " source=" + source);
+					updateVisibility();
 				}
 			};
 		}
@@ -179,7 +180,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 		}
 	}
 
-	protected boolean isVisible() {
+	public boolean isViewVisible() {
 		return visible;
 	}
 

@@ -248,7 +248,7 @@ public class FIBListWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBListWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

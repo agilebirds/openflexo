@@ -164,7 +164,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		// List valuesBeforeUpdating = getBrowserModel().getValues();
-		Object wasSelected = getSelectedObject();
+		Object wasSelected = getSelected();
 
 		// boolean debug = false;
 		// if (getWidget().getName() != null && getWidget().getName().equals("PatternRoleTable")) debug=true;
@@ -223,7 +223,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		try {
 			Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 			if (newSelectedObject != null) {
-				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
+				if (returned = notEquals(newSelectedObject, getSelected())) {
 					setSelectedObject(newSelectedObject);
 				}
 			}
@@ -253,13 +253,13 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		if (getRootValue() == null) {
 			return;
 		}
-		if (object == getSelectedObject() && !force) {
+		if (object == getSelected() && !force) {
 			logger.fine("Ignore set selected object");
 			return;
 		}
 
-		T oldSelectedObject = getSelectedObject();
-		if (object == getSelectedObject()) {
+		T oldSelectedObject = getSelected();
+		if (object == getSelected()) {
 			oldSelectedObject = null;
 		}
 
@@ -530,7 +530,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 			if (getComponent().getSelected().isValid()
 					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
 				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
-				if (notEquals(newSelectedObject, getSelectedObject())) {
+				if (notEquals(newSelectedObject, getSelected())) {
 					setSelectedObject(newSelectedObject);
 				}
 			}
@@ -562,7 +562,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	}*/
 
 	@Override
-	public T getSelectedObject() {
+	public T getSelected() {
 		return selectedObject;
 	}
 
@@ -680,9 +680,9 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		System.out.println("getComponent().getSelected().isValid()=" + getComponent().getSelected().isValid());*/
 		if (getComponent() != null) {
 			if (getComponent().getSelected().isValid()) {
-				logger.fine("Sets SELECTED binding with " + getSelectedObject());
+				logger.fine("Sets SELECTED binding with " + getSelected());
 				try {
-					getComponent().getSelected().setBindingValue(getSelectedObject(), getBindingEvaluationContext());
+					getComponent().getSelected().setBindingValue(getSelected(), getBindingEvaluationContext());
 				} catch (TypeMismatchException e1) {
 					e1.printStackTrace();
 				} catch (NullReferenceException e1) {

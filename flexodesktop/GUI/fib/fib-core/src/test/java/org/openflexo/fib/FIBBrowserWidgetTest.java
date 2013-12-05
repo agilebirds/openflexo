@@ -180,7 +180,7 @@ public class FIBBrowserWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBBrowserWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

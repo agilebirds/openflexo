@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface FIBSelectable<T> {
 
-	public T getSelectedObject();
+	public T getSelected();
 
 	public List<T> getSelection();
 

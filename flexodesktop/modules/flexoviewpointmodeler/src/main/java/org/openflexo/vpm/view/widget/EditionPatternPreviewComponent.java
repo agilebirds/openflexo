@@ -134,7 +134,7 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	}
 
 	@Override
-	public Object getSelectedObject() {
+	public Object getSelected() {
 		if (previewController != null) {
 			if (previewController.getSelectedObjects() == null) {
 				return null;

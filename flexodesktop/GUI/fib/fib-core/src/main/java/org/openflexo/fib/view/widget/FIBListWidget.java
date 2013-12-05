@@ -412,7 +412,7 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 	}
 
 	@Override
-	public T getSelectedObject() {
+	public T getSelected() {
 		return getListModel().getSelectedObject();
 	}
 

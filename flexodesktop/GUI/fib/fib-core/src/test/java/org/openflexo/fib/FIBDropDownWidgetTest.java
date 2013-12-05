@@ -208,7 +208,7 @@ public class FIBDropDownWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBDropDownWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

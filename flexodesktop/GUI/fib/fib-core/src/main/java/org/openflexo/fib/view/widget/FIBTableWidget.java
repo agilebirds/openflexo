@@ -138,7 +138,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 				public void bindingValueChanged(Object source, T newValue) {
 					System.out.println(" bindingValueChanged() detected for selected=" + getComponent().getEnable() + " with newValue="
 							+ newValue + " source=" + source);
-					setSelectedObject(newValue);
+					performSelect(newValue);
 				}
 			};
 		}
@@ -176,7 +176,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 	public synchronized boolean updateWidgetFromModel() {
 
 		List<?> valuesBeforeUpdating = getTableModel().getValues();
-		Object wasSelected = getSelectedObject();
+		T wasSelected = getSelected();
 
 		boolean returned = false;
 
@@ -232,18 +232,18 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 		// We restore value if and only if we represent same table
 		if (equals(getTableModel().getValues(), valuesBeforeUpdating) && wasSelected != null) {
 			returned = true;
-			setSelectedObject(wasSelected);
+			setSelected(wasSelected);
 		} else if (areSameValuesOrderIndifferent(getTableModel().getValues(), valuesBeforeUpdating)) {
 			// Same values, only order differs, in this case, still select right object
 			returned = true;
-			setSelectedObject(wasSelected);
+			setSelected(wasSelected);
 		} else {
 			try {
 				if (getComponent().getSelected().isValid()
 						&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
-					Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
-					if (returned = notEquals(newSelectedObject, getSelectedObject())) {
-						setSelectedObject(newSelectedObject);
+					T newSelectedObject = (T) getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+					if (returned = notEquals(newSelectedObject, getSelected())) {
+						setSelected(newSelectedObject);
 					}
 				}
 
@@ -296,35 +296,6 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 
 	public ListSelectionModel getListSelectionModel() {
 		return _table.getSelectionModel();
-	}
-
-	public void setSelectedObject(Object object/*, boolean notify*/) {
-		if (getValue() == null) {
-			return;
-		}
-		if (object == getSelectedObject()) {
-			logger.fine("FIBTableWidget: ignore setSelectedObject");
-			return;
-		}
-		Object oldSelected = getSelectedObject();
-		logger.fine("FIBTable: setSelectedObject with object " + object + " current is " + getSelectedObject());
-		if (object != null) {
-			int index = getTableModel().getValues().indexOf(object);
-			if (index > -1) {
-				index = _table.convertRowIndexToView(index);
-				// if (!notify) _table.getSelectionModel().removeListSelectionListener(getTableModel());
-				getListSelectionModel().setSelectionInterval(index, index);
-				// if (!notify) _table.getSelectionModel().addListSelectionListener(getTableModel());
-			}
-		} else {
-			clearSelection();
-		}
-
-		getPropertyChangeSupport().firePropertyChange(SELECTED, oldSelected, object);
-	}
-
-	public void clearSelection() {
-		getListSelectionModel().clearSelection();
 	}
 
 	@Override
@@ -391,9 +362,9 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 		try {
 			if (getComponent().getSelected().isValid()
 					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
-				if (notEquals(newSelectedObject, getSelectedObject())) {
-					setSelectedObject(newSelectedObject);
+				T newSelectedObject = (T) getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+				if (notEquals(newSelectedObject, getSelected())) {
+					performSelect(newSelectedObject);
 				}
 			}
 		} catch (TypeMismatchException e) {
@@ -609,7 +580,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			leadIndex = _table.convertRowIndexToModel(leadIndex);
 		}
 
-		selectedObject = getTableModel().elementAt(leadIndex);
+		T newSelectedObject = getTableModel().elementAt(leadIndex);
 
 		List<T> oldSelection = selection;
 		List<T> newSelection = new ArrayList<T>();
@@ -619,7 +590,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			}
 		}
 
-		setSelectedObject(selectedObject);
+		setSelected(newSelectedObject);
 		setSelection(newSelection);
 		footer.handleSelectionChanged();
 
@@ -661,8 +632,43 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 	private boolean ignoreNotifications = false;
 
 	@Override
-	public T getSelectedObject() {
+	public T getSelected() {
 		return selectedObject;
+	}
+
+	public void performSelect(T object) {
+		if (object == getSelected()) {
+			logger.fine("FIBTableWidget: ignore performSelect " + object);
+			return;
+		}
+		setSelected(object);
+		if (object != null) {
+			int index = getTableModel().getValues().indexOf(object);
+			if (index > -1) {
+				index = _table.convertRowIndexToView(index);
+				// if (!notify) _table.getSelectionModel().removeListSelectionListener(getTableModel());
+				getListSelectionModel().setSelectionInterval(index, index);
+				// if (!notify) _table.getSelectionModel().addListSelectionListener(getTableModel());
+			}
+		} else {
+			clearSelection();
+		}
+	}
+
+	public void setSelected(T object) {
+
+		if (getValue() == null) {
+			return;
+		}
+		Object oldSelected = getSelected();
+		selectedObject = object;
+		logger.fine("FIBTable: setSelectedObject with object " + object + " current is " + getSelected());
+
+		getPropertyChangeSupport().firePropertyChange(SELECTED, oldSelected, object);
+	}
+
+	public void clearSelection() {
+		getListSelectionModel().clearSelection();
 	}
 
 	@Override

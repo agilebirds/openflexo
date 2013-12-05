@@ -217,7 +217,7 @@ public class FIBRadioButtonListWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBRadioButtonListWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

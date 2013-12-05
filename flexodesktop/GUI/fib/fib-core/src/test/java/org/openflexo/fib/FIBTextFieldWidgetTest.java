@@ -167,7 +167,7 @@ public class FIBTextFieldWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBTextFieldWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass

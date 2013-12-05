@@ -167,7 +167,7 @@ public class FIBTextAreaWidgetTest {
 
 	@BeforeClass
 	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate();
+		gcDelegate = new GraphicalContextDelegate(FIBTextAreaWidgetTest.class.getSimpleName());
 	}
 
 	@AfterClass
