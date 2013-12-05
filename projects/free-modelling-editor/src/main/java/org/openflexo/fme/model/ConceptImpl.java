@@ -19,6 +19,9 @@
  */
 package org.openflexo.fme.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Default implementation for concept
  * 
@@ -61,26 +64,6 @@ public abstract class ConceptImpl implements Concept {
 		return sb.toString();
 	}
 	
-	/*@Override
-	public String getHtmlLabel() {
-		//setHtmlLabel(getName());
-		StringBuilder sb = new StringBuilder();
-		if(getName()!=null){
-			if(getReadOnly()){
-				sb.append("<html><i>");
-				sb.append(htmlSource);
-				sb.append("</i></html>");
-			}
-			else{
-				sb.append("<html>");
-				sb.append(htmlSource);
-				sb.append("</html>");
-			}
-		}
-		performSuperSetter(NAME, sb.toString().replaceAll("<[^>]*>", ""));
-		return sb.toString();
-	}*/
-	
 	@Override
 	public void setHtmlLabel(String label){
 		if(getReadOnly()&&(!label.replaceAll("<[^>]*>", "").equals(getName()))){
@@ -91,5 +74,41 @@ public abstract class ConceptImpl implements Concept {
 		}
 		
 		return;
+	}
+	
+	public void removeUnusedProperties(){
+		// check if there is one instance with this attribute, otherwise delete it
+		List<PropertyDefinition> propertyToRemove = new ArrayList<PropertyDefinition>();
+		List<Instance> instanceWithPropertyToRemove = new ArrayList<Instance>();
+		for(PropertyDefinition propDef : getProperties()){
+			boolean validProperty = false;
+			for(Instance instance : getInstanceWithProperty(propDef)){
+				if(instance.getPropertyNamed(propDef.getName()).getValue()!=""){
+					validProperty = true;
+				}
+				else{
+					instanceWithPropertyToRemove.add(instance);
+				}
+			}
+			if(!validProperty){
+				propertyToRemove.add(propDef);
+				for(Instance instance : instanceWithPropertyToRemove){
+					instance.removeFromPropertyValues(instance.getPropertyNamed(propDef.getName()));
+				}
+			}
+		}
+		
+		getProperties().removeAll(propertyToRemove);
+	}
+	
+	
+	private List<Instance> getInstanceWithProperty(PropertyDefinition propertyDefinition){
+		List<Instance> instanceWithProperty = new ArrayList<Instance>();
+		for(Instance instance : getInstances()){
+			if(instance.getPropertyNamed(propertyDefinition.getName())!=null){
+				instanceWithProperty.add(instance);
+			}
+		}
+		return instanceWithProperty;
 	}
 }

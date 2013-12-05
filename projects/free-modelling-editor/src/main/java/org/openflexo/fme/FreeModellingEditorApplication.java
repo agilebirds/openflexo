@@ -605,7 +605,6 @@ public class FreeModellingEditorApplication {
 		commonPaletteModel.setEditor(diagramEditor);
 		commonPalette.attachToEditor(diagramEditor.getController());
 		dynamicPaletteModel.setEditor(diagramEditor);
-		dynamicPalette.attachToEditor(diagramEditor.getController());
 		inspectors.attachToEditor(diagramEditor.getController());
 
 		/*JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

@@ -68,7 +68,7 @@ public class DynamicPalette extends DrawingPalette implements PropertyChangeList
 			PaletteElement e = elementsForAssociations.get(association);
 			if (e != null) {
 				elementsToRemove.remove(e);
-			} else {
+			} else if(association.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 				e = new DynamicPaletteElement(association);
 				elementsForAssociations.put(association, e);
 				elementsToAdd.add(e);

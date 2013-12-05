@@ -91,6 +91,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
+		
 		return returned;
 	}
 

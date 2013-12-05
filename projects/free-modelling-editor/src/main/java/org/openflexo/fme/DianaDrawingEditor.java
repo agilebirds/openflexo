@@ -244,4 +244,9 @@ public class DianaDrawingEditor extends JDianaInteractiveEditor<Diagram> {
 		}
 		diagramEditor.fireDrawingSelectionChanged(getSelectedDrawables(DiagramElement.class));
 	}
+	
+	public DiagramEditor getDiagramEditor() {
+		return diagramEditor;
+	}
+
 }

@@ -8,9 +8,12 @@ public class CreateConceptDialog {
 	private String conceptName;
 	private DataModel dataModel;
 
-	public CreateConceptDialog(DataModel dataModel) {
+	public CreateConceptDialog(DataModel dataModel, String name) {
 		this.dataModel = dataModel;
-		conceptName = getCandidateConceptName("NewConcept");
+		if(name==null||name.equals("")){
+			name = "NewConcept";
+		}
+		conceptName = getCandidateConceptName(name);
 	}
 
 	public String getConceptName() {

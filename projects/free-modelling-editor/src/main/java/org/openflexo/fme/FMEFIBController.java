@@ -62,9 +62,9 @@ public class FMEFIBController extends FIBController {
 	public void setDiagramEditor(DiagramEditor diagramEditor) {
 		this.diagramEditor = diagramEditor;
 	}
-
-	public void createConcept() {
-		getDiagramEditor().createNewConcept();
+	
+	public void createConcept(String name) {
+		getDiagramEditor().createNewConcept(name);
 	}
 	
 	public void removeConcept(Concept concept) {

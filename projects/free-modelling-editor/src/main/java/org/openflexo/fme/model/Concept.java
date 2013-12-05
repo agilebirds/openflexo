@@ -123,4 +123,6 @@ public interface Concept extends FMEModelObject {
 	@Remover(PROPERTIES)
 	public void removeFromProperties(PropertyDefinition aProperty);
 	
+	public void removeUnusedProperties();
+	
 }
