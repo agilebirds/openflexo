@@ -907,6 +907,13 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 					// We silently escape...
 					// e.printStackTrace();
 				}
+				if (element instanceof FunctionPathElement) {
+					FunctionPathElement functionPathElement = (FunctionPathElement) element;
+					for (FunctionArgument arg : functionPathElement.getArguments()) {
+						DataBinding<?> value = functionPathElement.getParameter(arg);
+						returned.addAll(value.getTargetObjects(context));
+					}
+				}
 				if (current == null) {
 					return returned;
 				}

@@ -1,10 +1,13 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.logging.Logger;
+
+import org.openflexo.antar.binding.Function.FunctionArgument;
 
 /**
  * Modelize a compound path element in a binding path, which is the symbolic representation of a call to a function and with a given amount
@@ -103,6 +106,10 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	@Override
 	public boolean isSettable() {
 		return false;
+	}
+
+	public Collection<FunctionArgument> getArguments() {
+		return parameters.keySet();
 	}
 
 	public DataBinding<?> getParameter(Function.FunctionArgument argument) {
