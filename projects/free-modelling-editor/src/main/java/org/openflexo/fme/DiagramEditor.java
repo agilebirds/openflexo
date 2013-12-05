@@ -496,7 +496,9 @@ public class DiagramEditor implements FIBSelectionListener {
 			System.out.println("Created " + returned);
 			concept.addToInstances(returned);
 			diagramElement.setInstance(returned);
-			updatePropertyValues();
+			
+			setInstance(returned);
+			//	updatePropertyValues();
 			return returned;
 		}
 		return null;
@@ -521,7 +523,9 @@ public class DiagramEditor implements FIBSelectionListener {
 			System.out.println("Created " + returned);
 			dialogData.getConcept().addToInstances(returned);
 			diagramElement.setInstance(returned);
-			updatePropertyValues();
+			
+			setInstance(returned);
+		//	updatePropertyValues();
 			return returned;
 		}
 		return null;
@@ -650,8 +654,10 @@ public class DiagramEditor implements FIBSelectionListener {
 	private void setInstance(Instance instance){
 		this.instance = instance;
 		if(instance!=null){
-			// Update the property values for this instance
-			updatePropertyValues();
+			// Update the property values and property definition
+			updateProperties();
+			// Create a text from the property values
+			instance.buildDescription();
 		}
 	}
 	
