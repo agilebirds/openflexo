@@ -41,7 +41,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -253,12 +252,33 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 						returned = true;
 						// Take care to this option as it may cause many issues
 						// A better solution is to remove this option and let the newSelection manager manage such feature
-						SwingUtilities.invokeLater(new Runnable() {
+						/*System.out.println("lsm class = " + getListSelectionModel().getClass());
+						System.out.println("asi=" + getListSelectionModel().getAnchorSelectionIndex());
+						System.out.println("lsi=" + getListSelectionModel().getLeadSelectionIndex());
+						System.out.println("msi=" + getListSelectionModel().getMinSelectionIndex());
+						System.out.println("msi=" + getListSelectionModel().getMaxSelectionIndex());
+						for (int i = 0; i < 5; i++) {
+							System.out.println("selected (" + i + ") : " + getListSelectionModel().isSelectedIndex(i));
+						}*/
+						getListSelectionModel().clearSelection();
+						getListSelectionModel().setSelectionInterval(0, 0);
+						/*System.out.println("asi=" + getListSelectionModel().getAnchorSelectionIndex());
+						System.out.println("lsi=" + getListSelectionModel().getLeadSelectionIndex());
+						System.out.println("msi=" + getListSelectionModel().getMinSelectionIndex());
+						System.out.println("msi=" + getListSelectionModel().getMaxSelectionIndex());
+						for (int i = 0; i < 5; i++) {
+							System.out.println("selected (" + i + ") : " + getListSelectionModel().isSelectedIndex(i));
+						}*/
+						// System.out.println(getListSelectionModel().);
+						/*getListSelectionModel().clearSelection();
+						getListSelectionModel().setLeadSelectionIndex(0);
+						getListSelectionModel().setAnchorSelectionIndex(0);*/
+						/*SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
 								getListSelectionModel().addSelectionInterval(0, 0);
 							}
-						});
+						});*/
 						// addToSelection(getTableModel().getValues().get(0));
 					}
 				}
@@ -571,6 +591,8 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			logger.fine("valueChanged() selected index=" + getListSelectionModel().getMinSelectionIndex());
 		}
 
+		// System.out.println("received " + e);
+
 		int i = getListSelectionModel().getMinSelectionIndex();
 		int leadIndex = getListSelectionModel().getLeadSelectionIndex();
 		if (!getListSelectionModel().isSelectedIndex(leadIndex)) {
@@ -580,6 +602,8 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			leadIndex = i;
 			i++;
 		}
+
+		// System.out.println("leadIndex=" + leadIndex);
 
 		if (leadIndex > -1) {
 			leadIndex = _table.convertRowIndexToModel(leadIndex);
@@ -598,6 +622,9 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 		setSelectedObject(selectedObject);
 		setSelection(newSelection);
 		footer.handleSelectionChanged();
+
+		// System.out.println("selectedObject=" + selectedObject);
+		// System.out.println("selection=" + newSelection);
 
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);

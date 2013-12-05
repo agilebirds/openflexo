@@ -216,7 +216,7 @@ public class FIBListWidgetTest {
 	}
 
 	/**
-	 * Update the model, and check that widgets have well reacted
+	 * Try to select some objects, check that selection is in sync with it
 	 */
 	@Test
 	public void test6PerfomSomeTestsWithSelection() {

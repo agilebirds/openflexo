@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -31,7 +33,7 @@ import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Test the structural and behavioural features of FIBList widget
+ * Test the structural and behavioural features of FIBTable widget
  * 
  * @author sylvain
  * 
@@ -58,8 +60,9 @@ public class FIBTableWidgetTest {
 
 		table = new FIBTable();
 		table.setData(new DataBinding<List<?>>("data.children", table, List.class, BindingDefinitionType.GET));
-		table.setAutoSelectFirstRow(false);
+		table.setAutoSelectFirstRow(true);
 		table.setIteratorClass(Person.class);
+		table.setBoundToSelectionManager(true);
 
 		FIBTextFieldColumn c1 = new FIBTextFieldColumn();
 		c1.setData(new DataBinding<String>("iterator.firstName", c1, String.class, BindingDefinitionType.GET_SET));
@@ -158,6 +161,39 @@ public class FIBTableWidgetTest {
 		assertEquals(6, child.getAge());
 		assertEquals(Gender.Female, child.getGender());
 		assertEquals("Jeannot Lapin aged 6 (Female)", w.getTableModel().getValueAt(2, 4));
+
+	}
+
+	/**
+	 * Try to select some objects, check that selection is in sync with it
+	 */
+	@Test
+	public void test5PerfomSomeTestsWithSelection() {
+
+		FIBTableWidget<?> w = (FIBTableWidget<?>) controller.viewForComponent(table);
+		assertEquals(6, w.getDynamicJComponent().getModel().getRowCount());
+
+		// w.getDynamicJComponent().getSelectionModel().addSelectionInterval(0, 1);
+		assertEquals(Collections.singletonList(family.getChildren().get(0)), w.getSelection());
+
+		// int[] indices = new int[3];
+		// indices[0] = 1;
+		// indices[1] = 2;
+		// indices[2] = 4;
+		// w7.getDynamicJComponent().setSelectedIndices(indices);
+		w.getDynamicJComponent().getSelectionModel().clearSelection();
+		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(1, 2);
+		w.getDynamicJComponent().getSelectionModel().addSelectionInterval(4, 4);
+
+		List<Person> expectedSelection = new ArrayList<Person>();
+		expectedSelection.add(family.getChildren().get(1));
+		expectedSelection.add(family.getChildren().get(2));
+		expectedSelection.add(family.getChildren().get(4));
+
+		assertEquals(expectedSelection, w.getSelection());
+
+		controller.setFocusedWidget(w);
+		assertEquals(expectedSelection, controller.getSelectionLeader().getSelection());
 
 	}
 
