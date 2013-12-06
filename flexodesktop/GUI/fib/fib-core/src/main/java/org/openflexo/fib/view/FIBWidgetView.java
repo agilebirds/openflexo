@@ -30,9 +30,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,15 +41,13 @@ import javax.swing.SwingUtilities;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingValueChangeListener;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
-import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
@@ -63,7 +58,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
  * @author sylvain
  */
 public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T> extends FIBView<M, J, T> implements FocusListener,
-		Observer, PropertyChangeListener, HasDependencyBinding {
+		PropertyChangeListener /*, HasDependencyBinding*/{
 
 	private static final Logger logger = Logger.getLogger(FIBWidgetView.class.getPackage().getName());
 
@@ -180,7 +175,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	 */
 	public abstract boolean updateModelFromWidget();
 
-	@Override
+	/*@Override
 	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
 		return getWidget().getChainedBindings(binding, object);
 	}
@@ -188,7 +183,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	@Override
 	public List<DataBinding<?>> getDependencyBindings() {
 		return getWidget().getDependencyBindings();
-	}
+	}*/
 
 	@Override
 	public void focusGained(FocusEvent event) {
@@ -409,9 +404,28 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 	}*/
 
-	@Override
+	/*@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("Widget " + getWidget() + " : receive notification " + o);
+		System.out.println("Widget " + getWidget() + " : receive notification " + o);*/
+	/*if (!SwingUtilities.isEventDispatchThread()) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				update(new ArrayList<FIBComponent>());
+			}
+		});
+	} else {
+		update(new ArrayList<FIBComponent>());
+	}*/
+	// }
+
+	@Override
+	public final void propertyChange(PropertyChangeEvent evt) {
+		System.out.println("Widget " + getWidget() + " : propertyChange " + evt);
+		if (evt.getSource() instanceof FIBModelObject) {
+			receivedModelNotifications((FIBModelObject) evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		}
 		/*if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
@@ -425,20 +439,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}*/
 	}
 
-	@Override
-	public final void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("Widget " + getWidget() + " : propertyChange " + evt);
-		/*if (!SwingUtilities.isEventDispatchThread()) {
-			SwingUtilities.invokeLater(new Runnable() {
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
 
-				@Override
-				public void run() {
-					update(new ArrayList<FIBComponent>());
-				}
-			});
-		} else {
-			update(new ArrayList<FIBComponent>());
-		}*/
 	}
 
 	@Override

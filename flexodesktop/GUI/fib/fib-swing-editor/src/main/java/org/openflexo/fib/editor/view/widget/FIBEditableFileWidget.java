@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,12 +29,13 @@ import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBFile;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.widget.FIBFileWidget;
 import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableFileWidget extends FIBFileWidget implements FIBEditableView<FIBFile, JTextField> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableFileWidget.class.getPackage().getName());
 
 	private final FIBEditableViewDelegate<FIBFile, JTextField> delegate;
@@ -52,13 +52,13 @@ public class FIBEditableFileWidget extends FIBFileWidget implements FIBEditableV
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBFile, JTextField>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -72,11 +72,9 @@ public class FIBEditableFileWidget extends FIBFileWidget implements FIBEditableV
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 }

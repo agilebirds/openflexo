@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,9 +28,8 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBCheckboxList;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
@@ -39,6 +37,7 @@ import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableCheckboxListWidget<T> extends FIBCheckboxListWidget<T> implements FIBEditableView<FIBCheckboxList, JPanel> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableCheckboxListWidget.class.getPackage().getName());
 
 	private final FIBEditableViewDelegate<FIBCheckboxList, JPanel> delegate;
@@ -55,13 +54,13 @@ public class FIBEditableCheckboxListWidget<T> extends FIBCheckboxListWidget<T> i
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBCheckboxList, JPanel>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -75,20 +74,16 @@ public class FIBEditableCheckboxListWidget<T> extends FIBCheckboxListWidget<T> i
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBWidget.Parameters.format || n.getAttribute() == FIBWidget.Parameters.localize
-					|| n.getAttribute() == FIBCheckboxList.Parameters.columns || n.getAttribute() == FIBCheckboxList.Parameters.hGap
-					|| n.getAttribute() == FIBCheckboxList.Parameters.vGap || n.getAttribute() == FIBWidget.Parameters.icon
-					|| n.getAttribute() == FIBMultipleValues.Parameters.showIcon) {
-				rebuildCheckboxes();
-			}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		if ((propertyName.equals(FIBWidget.Parameters.format.name())) || (propertyName.equals(FIBWidget.Parameters.localize.name()))
+				|| (propertyName.equals(FIBCheckboxList.Parameters.columns.name()))
+				|| (propertyName.equals(FIBCheckboxList.Parameters.hGap.name()))
+				|| (propertyName.equals(FIBCheckboxList.Parameters.vGap.name())) || (propertyName.equals(FIBWidget.Parameters.icon.name()))
+				|| (propertyName.equals(FIBMultipleValues.Parameters.showIcon.name()))) {
+			rebuildCheckboxes();
 		}
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 }

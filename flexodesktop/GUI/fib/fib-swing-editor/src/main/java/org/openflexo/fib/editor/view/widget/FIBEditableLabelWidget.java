@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,16 +28,15 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBLabel;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.FIBContainerView;
-import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBLabelWidget;
 import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableLabelWidget extends FIBLabelWidget implements FIBEditableView<FIBLabel, JLabel> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableLabelWidget.class.getPackage().getName());
 
 	private FIBEditableViewDelegate<FIBLabel, JLabel> delegate;
@@ -55,13 +53,13 @@ public class FIBEditableLabelWidget extends FIBLabelWidget implements FIBEditabl
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBLabel, JLabel>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -75,28 +73,21 @@ public class FIBEditableLabelWidget extends FIBLabelWidget implements FIBEditabl
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBLabel.Parameters.align) {
-				updateAlign();
-			} else if (n.getAttribute() == FIBLabel.Parameters.label) {
-				relayoutParentBecauseLabelChanged();
-			}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		if (propertyName.equals(FIBLabel.Parameters.align.name())) {
+			updateAlign();
 		}
-
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		if (propertyName.equals(FIBLabel.Parameters.label.name())) {
+			relayoutParentBecauseLabelChanged();
 		}
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 	protected void relayoutParentBecauseLabelChanged() {
-		FIBView parentView = getParentView();
+		FIBContainerView<?, ?, ?> parentView = getParentView();
 		FIBEditorController controller = getEditorController();
-		if (parentView instanceof FIBContainerView) {
-			((FIBContainerView) parentView).updateLayout();
-		}
+		parentView.updateLayout();
 		controller.notifyFocusedAndSelectedObject();
 	}
 

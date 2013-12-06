@@ -45,6 +45,8 @@
 'list'_binding_is_not_valid='list'_binding_is_not_valid
 'list'_binding_is_not_valid_description='list'_binding_is_not_valid_description
 'method'_binding_is_not_valid='method'_binding_is_not_valid
+'method'_binding_is_not_valid\ 'data.addEntry'='method'_binding_is_not_valid 'data.addEntry'
+'method'_binding_is_not_valid\ 'data.deleteEntry(selected)'='method'_binding_is_not_valid 'data.deleteEntry(selected)'
 'method'_binding_is_not_valid_description='method'_binding_is_not_valid_description
 'right_click_action'_binding_is_not_valid='right_click_action'_binding_is_not_valid
 'right_click_action'_binding_is_not_valid_description='right_click_action'_binding_is_not_valid_description

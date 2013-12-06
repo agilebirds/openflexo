@@ -74,7 +74,7 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 		updateData();
 	}
 
-	private void rebuildRadioButtons() {
+	protected void rebuildRadioButtons() {
 		if (panel != null) {
 			panel.removeAll();
 			((GridLayout) panel.getLayout()).setColumns(getWidget().getColumns());

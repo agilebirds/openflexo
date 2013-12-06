@@ -209,7 +209,7 @@ public class ContextualMenu {
 				reusableComponent.setControllerClass(parent.getRootComponent().getControllerClass());
 				reusableComponent.setDataClass(TypeUtils.getBaseClass(params.data.getAnalyzedType()));
 				for (FIBComponent child : reusableComponent.getAllSubComponents()) {
-					for (DataBinding binding : child.getDependencyBindings()) {
+					for (DataBinding<?> binding : child.getDeclaredBindings()) {
 						if (binding.isSet()) {
 							if (binding.toString().startsWith(params.data.toString())) {
 								binding.setUnparsedBinding(binding.toString().replace(params.data.toString(), "data"));

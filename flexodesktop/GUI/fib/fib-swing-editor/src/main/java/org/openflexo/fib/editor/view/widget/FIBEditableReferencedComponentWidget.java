@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,8 +29,7 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAttributeNotification;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBReferencedComponent;
 import org.openflexo.fib.view.widget.FIBReferencedComponentWidget;
 import org.openflexo.logging.FlexoLogger;
@@ -39,6 +37,7 @@ import org.openflexo.logging.FlexoLogger;
 public class FIBEditableReferencedComponentWidget extends FIBReferencedComponentWidget implements
 		FIBEditableView<FIBReferencedComponent, JComponent> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableReferencedComponentWidget.class.getPackage().getName());
 
 	private FIBEditableViewDelegate<FIBReferencedComponent, JComponent> delegate;
@@ -55,13 +54,13 @@ public class FIBEditableReferencedComponentWidget extends FIBReferencedComponent
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBReferencedComponent, JComponent>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -75,18 +74,12 @@ public class FIBEditableReferencedComponentWidget extends FIBReferencedComponent
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBReferencedComponent.Parameters.componentFile) {
-				updateComponent();
-			}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		if (propertyName.equals(FIBReferencedComponent.Parameters.componentFile.name())) {
+			updateComponent();
 		}
-
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 }

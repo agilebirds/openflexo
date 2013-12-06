@@ -526,9 +526,13 @@ public class FIBBrowser extends FIBWidget {
 		performValidation(RootBindingMustBeValid.class, report);
 	}
 
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
+	/**
+	 * Return a list of all bindings declared in the context of this component
+	 * 
+	 * @return
+	 */
+	public List<DataBinding<?>> getDeclaredBindings() {
+		List<DataBinding<?>> returned = super.getDeclaredBindings();
 		returned.add(getSelected());
 		returned.add(getRoot());
 		return returned;

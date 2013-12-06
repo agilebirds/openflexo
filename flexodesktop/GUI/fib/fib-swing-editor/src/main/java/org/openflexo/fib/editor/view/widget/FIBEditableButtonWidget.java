@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,9 +28,8 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBButton;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.widget.FIBButtonWidget;
 import org.openflexo.logging.FlexoLogger;
 
@@ -53,13 +51,13 @@ public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEdita
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBButton, JButton>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -73,21 +71,15 @@ public class FIBEditableButtonWidget extends FIBButtonWidget implements FIBEdita
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBButton.Parameters.label) {
-				updateLabel();
-			}
-			if (n.getAttribute() == FIBButton.Parameters.buttonIcon) {
-				updateIcon();
-			}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		if (propertyName.equals(FIBButton.Parameters.label.name())) {
+			updateLabel();
 		}
-
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		if (propertyName.equals(FIBButton.Parameters.buttonIcon.name())) {
+			updateIcon();
 		}
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 	@Override

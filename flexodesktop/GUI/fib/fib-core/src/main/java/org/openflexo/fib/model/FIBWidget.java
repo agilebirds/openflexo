@@ -663,9 +663,13 @@ public abstract class FIBWidget extends FIBComponent {
 		return null;
 	}
 
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
+	/**
+	 * Return a list of all bindings declared in the context of this component
+	 * 
+	 * @return
+	 */
+	public List<DataBinding<?>> getDeclaredBindings() {
+		List<DataBinding<?>> returned = super.getDeclaredBindings();
 		returned.add(getEnable());
 		return returned;
 	}

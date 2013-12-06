@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,7 +28,7 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.view.widget.FIBNumberWidget.FIBByteWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget.FIBDoubleWidget;
@@ -41,6 +40,7 @@ import org.openflexo.logging.FlexoLogger;
 
 public class FIBEditableNumberWidget {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableNumberWidget.class.getPackage().getName());
 
 	public static class FIBEditableByteWidget extends FIBByteWidget implements FIBEditableView<FIBNumber, JSpinner> {
@@ -59,14 +59,14 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -80,11 +80,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}
@@ -105,13 +103,13 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -125,11 +123,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}
@@ -150,13 +146,13 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -170,11 +166,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}
@@ -195,13 +189,13 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -215,11 +209,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}
@@ -240,13 +232,13 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -260,11 +252,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}
@@ -285,13 +275,13 @@ public class FIBEditableNumberWidget {
 			this.editorController = editorController;
 
 			delegate = new FIBEditableViewDelegate<FIBNumber, JSpinner>(this);
-			model.addObserver(this);
+			model.getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
 
 		@Override
 		public void delete() {
 			delegate.delete();
-			getComponent().deleteObserver(this);
+			getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 			super.delete();
 		}
 
@@ -305,11 +295,9 @@ public class FIBEditableNumberWidget {
 			return delegate;
 		}
 
-		@Override
-		public void update(Observable o, Object dataModification) {
-			if (dataModification instanceof FIBModelNotification) {
-				delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-			}
+		public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+			super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+			delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 		}
 
 	}

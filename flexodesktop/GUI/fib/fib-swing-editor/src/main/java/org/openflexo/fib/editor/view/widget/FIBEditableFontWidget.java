@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -28,13 +27,14 @@ import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.model.FIBFont;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.widget.FIBFontWidget;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.FontSelector;
 
 public class FIBEditableFontWidget extends FIBFontWidget implements FIBEditableView<FIBFont, FontSelector> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableFontWidget.class.getPackage().getName());
 
 	private final FIBEditableViewDelegate<FIBFont, FontSelector> delegate;
@@ -51,13 +51,13 @@ public class FIBEditableFontWidget extends FIBFontWidget implements FIBEditableV
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBFont, FontSelector>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -71,11 +71,9 @@ public class FIBEditableFontWidget extends FIBFontWidget implements FIBEditableV
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 }

@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.editor.view.widget;
 
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,15 +28,15 @@ import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.view.FIBEditableView;
 import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
 import org.openflexo.fib.editor.view.PlaceHolder;
-import org.openflexo.fib.model.FIBAttributeNotification;
-import org.openflexo.fib.model.FIBModelNotification;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBRadioButtonList;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget implements FIBEditableView<FIBRadioButtonList, JPanel> {
+public class FIBEditableRadioButtonListWidget<T> extends FIBRadioButtonListWidget<T> implements FIBEditableView<FIBRadioButtonList, JPanel> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableRadioButtonListWidget.class.getPackage().getName());
 
 	private final FIBEditableViewDelegate<FIBRadioButtonList, JPanel> delegate;
@@ -54,13 +53,13 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 		this.editorController = editorController;
 
 		delegate = new FIBEditableViewDelegate<FIBRadioButtonList, JPanel>(this);
-		model.addObserver(this);
+		model.getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void delete() {
 		delegate.delete();
-		getComponent().deleteObserver(this);
+		getComponent().getPropertyChangeSupport().removePropertyChangeListener(this);
 		super.delete();
 	}
 
@@ -74,19 +73,15 @@ public class FIBEditableRadioButtonListWidget extends FIBRadioButtonListWidget i
 		return delegate;
 	}
 
-	@Override
-	public void update(Observable o, Object dataModification) {
-		if (dataModification instanceof FIBAttributeNotification) {
-			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
-			if (n.getAttribute() == FIBWidget.Parameters.format || n.getAttribute() == FIBWidget.Parameters.localize
-					|| n.getAttribute() == FIBRadioButtonList.Parameters.columns || n.getAttribute() == FIBRadioButtonList.Parameters.hGap
-					|| n.getAttribute() == FIBRadioButtonList.Parameters.vGap) {
-				rebuildRadioButtons();
-			}
+	public void receivedModelNotifications(FIBModelObject o, String propertyName, Object oldValue, Object newValue) {
+		super.receivedModelNotifications(o, propertyName, oldValue, newValue);
+		if ((propertyName.equals(FIBWidget.Parameters.format.name())) || (propertyName.equals(FIBWidget.Parameters.localize.name()))
+				|| (propertyName.equals(FIBRadioButtonList.Parameters.columns.name()))
+				|| (propertyName.equals(FIBRadioButtonList.Parameters.hGap.name()))
+				|| (propertyName.equals(FIBRadioButtonList.Parameters.vGap.name()))) {
+			rebuildRadioButtons();
 		}
-		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
-		}
+		delegate.receivedModelNotifications(o, propertyName, oldValue, newValue);
 	}
 
 }

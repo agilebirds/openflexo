@@ -22,13 +22,11 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,9 +38,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
-import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -54,7 +50,7 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class FIBComponent extends FIBModelObject implements TreeNode, HasDependencyBinding {
+public abstract class FIBComponent extends FIBModelObject implements TreeNode /*, HasDependencyBinding*/{
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
@@ -1288,15 +1284,19 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
 	}
 
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
+	/**
+	 * Return a list of all bindings declared in the context of this component
+	 * 
+	 * @return
+	 */
+	public List<DataBinding<?>> getDeclaredBindings() {
 		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
 		returned.add(getData());
 		returned.add(getVisible());
 		return returned;
 	}
 
-	@Override
+	/*@Override
 	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
 		return null;
 	}
@@ -1311,7 +1311,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 
 	public Date getLastModified() {
 		return lastModified;
