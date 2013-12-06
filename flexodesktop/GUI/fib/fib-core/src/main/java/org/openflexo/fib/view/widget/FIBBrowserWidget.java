@@ -123,6 +123,10 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 
 	@Override
 	public synchronized void delete() {
+		if (selectedBindingValueChangeListener != null) {
+			selectedBindingValueChangeListener.stopObserving();
+			selectedBindingValueChangeListener.delete();
+		}
 		_footer.delete();
 		super.delete();
 	}

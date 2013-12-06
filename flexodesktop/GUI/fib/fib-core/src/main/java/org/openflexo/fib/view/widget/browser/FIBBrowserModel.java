@@ -19,44 +19,37 @@
  */
 package org.openflexo.fib.view.widget.browser;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Icon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.openflexo.antar.binding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.BindingValueChangeListener;
+import org.openflexo.antar.binding.BindingValueListChangeListener;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DependingObjects;
-import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
-import org.openflexo.antar.binding.TargetObject;
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.toolbox.ToolBox;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -267,7 +260,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 	}
 
-	public class BrowserCell extends DefaultMutableTreeNode implements Observer, HasDependencyBinding {
+	public class BrowserCell extends DefaultMutableTreeNode /*implements Observer*/{
 
 		private boolean loaded = false;
 
@@ -296,11 +289,236 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 					logger.info("---------------> Created new DiagramSpecification browser element");
 				}*/
 
-				dependingObjects = new DependingObjects(this);
-				dependingObjects.refreshObserving(browserElementType);
+				// dependingObjects = new DependingObjects(this);
+				// dependingObjects.refreshObserving(browserElementType);
+
+				listenLabelBindingValueChange();
+				listenIconBindingValueChange();
+				listenTooltipBindingValueChange();
+				listenEnabledBindingValueChange();
+				listenVisibleBindingValueChange();
+				listenChildrenDataBindingValueChange();
+				listenChildrenCastBindingValueChange();
+				listenChildrenVisibleBindingValueChange();
 
 			}
 
+		}
+
+		private BindingValueChangeListener<String> labelBindingValueChangeListener;
+		private BindingValueChangeListener<Icon> iconBindingValueChangeListener;
+		private BindingValueChangeListener<String> tooltipBindingValueChangeListener;
+		private BindingValueChangeListener<Boolean> enabledBindingValueChangeListener;
+		private BindingValueChangeListener<Boolean> visibleBindingValueChangeListener;
+		private Map<FIBBrowserElementChildren, BindingValueChangeListener<?>> childrenDataBindingValueChangeListeners;
+		private Map<FIBBrowserElementChildren, BindingValueChangeListener<?>> childrenCastBindingValueChangeListeners;
+		private Map<FIBBrowserElementChildren, BindingValueChangeListener<Boolean>> childrenVisibleBindingValueChangeListeners;
+
+		private void listenChildrenDataBindingValueChange() {
+			if (childrenDataBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenDataBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenDataBindingValueChangeListeners.clear();
+			} else {
+				childrenDataBindingValueChangeListeners = new HashMap<FIBBrowserElement.FIBBrowserElementChildren, BindingValueChangeListener<?>>();
+			}
+			if (browserElementType.getBrowserElement() != null) {
+				for (final FIBBrowserElementChildren children : browserElementType.getBrowserElement().getChildren()) {
+					if (children.getData().isValid()) {
+						BindingValueChangeListener<?> l;
+						if (children.isMultipleAccess()) {
+							l = new BindingValueListChangeListener<Object, List<Object>>(
+									(DataBinding<List<Object>>) (DataBinding) children.getData(), browserElementType) {
+								@Override
+								public void bindingValueChanged(Object source, List<Object> newValue) {
+									System.out.println(" bindingValueChanged() detected for data (as list) of children "
+											+ children.getName() + " of " + browserElementType + " " + children.getData()
+											+ " with newValue=" + newValue + " source=" + source);
+									if (!isDeleted) {
+										BrowserCell.this.update(false);
+									}
+								}
+							};
+						} else {
+							l = new BindingValueChangeListener<Object>(children.getData(), browserElementType) {
+								@Override
+								public void bindingValueChanged(Object source, Object newValue) {
+									System.out.println(" bindingValueChanged() detected for data of children " + children.getName()
+											+ " of " + browserElementType + " " + children.getData() + " with newValue=" + newValue
+											+ " source=" + source);
+									if (!isDeleted) {
+										BrowserCell.this.update(false);
+									}
+								}
+							};
+						}
+						childrenDataBindingValueChangeListeners.put(children, l);
+					}
+				}
+			}
+		}
+
+		private void listenChildrenCastBindingValueChange() {
+			if (childrenCastBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenCastBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenCastBindingValueChangeListeners.clear();
+			} else {
+				childrenCastBindingValueChangeListeners = new HashMap<FIBBrowserElement.FIBBrowserElementChildren, BindingValueChangeListener<?>>();
+			}
+			if (browserElementType.getBrowserElement() != null) {
+				for (final FIBBrowserElementChildren children : browserElementType.getBrowserElement().getChildren()) {
+					if (children.getCast().isValid()) {
+						BindingValueChangeListener<?> l = new BindingValueChangeListener<Object>(children.getCast(), browserElementType) {
+							@Override
+							public void bindingValueChanged(Object source, Object newValue) {
+								System.out.println(" bindingValueChanged() detected for cast of children " + children.getName() + " of "
+										+ browserElementType + " " + children.getCast() + " with newValue=" + newValue + " source="
+										+ source);
+								if (!isDeleted) {
+									BrowserCell.this.update(false);
+								}
+							}
+						};
+						childrenCastBindingValueChangeListeners.put(children, l);
+					}
+				}
+			}
+		}
+
+		private void listenChildrenVisibleBindingValueChange() {
+			if (childrenVisibleBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenVisibleBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenVisibleBindingValueChangeListeners.clear();
+			} else {
+				childrenVisibleBindingValueChangeListeners = new HashMap<FIBBrowserElement.FIBBrowserElementChildren, BindingValueChangeListener<Boolean>>();
+			}
+			if (browserElementType.getBrowserElement() != null) {
+				for (final FIBBrowserElementChildren children : browserElementType.getBrowserElement().getChildren()) {
+					if (children.getVisible().isValid()) {
+						BindingValueChangeListener<Boolean> l = new BindingValueChangeListener<Boolean>(children.getVisible(),
+								browserElementType) {
+							@Override
+							public void bindingValueChanged(Object source, Boolean newValue) {
+								System.out.println(" bindingValueChanged() detected for visble of children " + children.getName() + " of "
+										+ browserElementType + " " + children.getVisible() + " with newValue=" + newValue + " source="
+										+ source);
+								if (!isDeleted) {
+									BrowserCell.this.update(false);
+								}
+							}
+						};
+						childrenVisibleBindingValueChangeListeners.put(children, l);
+					}
+				}
+			}
+		}
+
+		private void listenLabelBindingValueChange() {
+			if (labelBindingValueChangeListener != null) {
+				labelBindingValueChangeListener.stopObserving();
+				labelBindingValueChangeListener.delete();
+			}
+			if (browserElementType.getBrowserElement() != null && browserElementType.getBrowserElement().getLabel().isValid()) {
+				labelBindingValueChangeListener = new BindingValueChangeListener<String>(browserElementType.getBrowserElement().getLabel(),
+						browserElementType) {
+					@Override
+					public void bindingValueChanged(Object source, String newValue) {
+						System.out.println(" bindingValueChanged() detected for label of " + browserElementType + " "
+								+ browserElementType.getBrowserElement().getLabel() + " with newValue=" + newValue + " source=" + source);
+						if (!isDeleted) {
+							BrowserCell.this.update(false);
+						}
+					}
+				};
+			}
+		}
+
+		private void listenIconBindingValueChange() {
+			if (iconBindingValueChangeListener != null) {
+				iconBindingValueChangeListener.stopObserving();
+				iconBindingValueChangeListener.delete();
+			}
+			if (browserElementType.getBrowserElement() != null && browserElementType.getBrowserElement().getIcon().isValid()) {
+				iconBindingValueChangeListener = new BindingValueChangeListener<Icon>(browserElementType.getBrowserElement().getIcon(),
+						browserElementType) {
+					@Override
+					public void bindingValueChanged(Object source, Icon newValue) {
+						System.out.println(" bindingValueChanged() detected for icon of " + browserElementType + " "
+								+ browserElementType.getBrowserElement().getIcon() + " with newValue=" + newValue + " source=" + source);
+						if (!isDeleted) {
+							BrowserCell.this.update(false);
+						}
+					}
+				};
+			}
+		}
+
+		private void listenTooltipBindingValueChange() {
+			if (tooltipBindingValueChangeListener != null) {
+				tooltipBindingValueChangeListener.stopObserving();
+				tooltipBindingValueChangeListener.delete();
+			}
+			if (browserElementType.getBrowserElement() != null && browserElementType.getBrowserElement().getTooltip().isValid()) {
+				tooltipBindingValueChangeListener = new BindingValueChangeListener<String>(browserElementType.getBrowserElement()
+						.getTooltip(), browserElementType) {
+					@Override
+					public void bindingValueChanged(Object source, String newValue) {
+						System.out.println(" bindingValueChanged() detected for tooltip of " + browserElementType + " "
+								+ browserElementType.getBrowserElement().getTooltip() + " with newValue=" + newValue + " source=" + source);
+						if (!isDeleted) {
+							BrowserCell.this.update(false);
+						}
+					}
+				};
+			}
+		}
+
+		private void listenEnabledBindingValueChange() {
+			if (enabledBindingValueChangeListener != null) {
+				enabledBindingValueChangeListener.stopObserving();
+				enabledBindingValueChangeListener.delete();
+			}
+			if (browserElementType.getBrowserElement() != null && browserElementType.getBrowserElement().getEnabled().isValid()) {
+				enabledBindingValueChangeListener = new BindingValueChangeListener<Boolean>(browserElementType.getBrowserElement()
+						.getEnabled(), browserElementType) {
+					@Override
+					public void bindingValueChanged(Object source, Boolean newValue) {
+						System.out.println(" bindingValueChanged() detected for enabled of " + browserElementType + " "
+								+ browserElementType.getBrowserElement().getEnabled() + " with newValue=" + newValue + " source=" + source);
+						if (!isDeleted) {
+							BrowserCell.this.update(false);
+						}
+					}
+				};
+			}
+		}
+
+		private void listenVisibleBindingValueChange() {
+			if (visibleBindingValueChangeListener != null) {
+				visibleBindingValueChangeListener.stopObserving();
+				visibleBindingValueChangeListener.delete();
+			}
+			if (browserElementType.getBrowserElement() != null && browserElementType.getBrowserElement().getVisible().isValid()) {
+				visibleBindingValueChangeListener = new BindingValueChangeListener<Boolean>(browserElementType.getBrowserElement()
+						.getVisible(), browserElementType) {
+					@Override
+					public void bindingValueChanged(Object source, Boolean newValue) {
+						System.out.println(" bindingValueChanged() detected for visible of " + browserElementType + " "
+								+ browserElementType.getBrowserElement().getVisible() + " with newValue=" + newValue + " source=" + source);
+						if (!isDeleted) {
+							BrowserCell.this.update(false);
+						}
+					}
+				};
+			}
 		}
 
 		@Override
@@ -327,12 +545,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			return loaded;
 		}
 
-		@Override
+		/*@Override
 		public List<DataBinding<?>> getDependencyBindings() {
 			return getBrowserElementType().getDependencyBindings(getRepresentedObject());
-		}
+		}*/
 
-		@Override
+		// TODO: repair chained bindings, which is not more supported by this new implementation
+		/*@Override
 		public List<TargetObject> getChainedBindings(DataBinding binding, final TargetObject object) {
 			for (FIBBrowserElementChildren child : browserElementType.getBrowserElement().getChildren()) {
 				if (binding.equals(child.getData()) && child.getCast().isSet() && binding.toString().endsWith(object.propertyName)) {
@@ -383,11 +602,54 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				}
 			}
 			return null;
-		}
+		}*/
 
 		public void delete() {
 
 			logger.fine("Delete BrowserCell for " + getRepresentedObject());
+
+			if (childrenDataBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenDataBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenDataBindingValueChangeListeners.clear();
+			}
+			if (childrenCastBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenCastBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenCastBindingValueChangeListeners.clear();
+			}
+			if (childrenVisibleBindingValueChangeListeners != null) {
+				for (BindingValueChangeListener<?> l : childrenVisibleBindingValueChangeListeners.values()) {
+					l.stopObserving();
+					l.delete();
+				}
+				childrenVisibleBindingValueChangeListeners.clear();
+			}
+
+			if (labelBindingValueChangeListener != null) {
+				labelBindingValueChangeListener.stopObserving();
+				labelBindingValueChangeListener.delete();
+			}
+			if (iconBindingValueChangeListener != null) {
+				iconBindingValueChangeListener.stopObserving();
+				iconBindingValueChangeListener.delete();
+			}
+			if (tooltipBindingValueChangeListener != null) {
+				tooltipBindingValueChangeListener.stopObserving();
+				tooltipBindingValueChangeListener.delete();
+			}
+			if (enabledBindingValueChangeListener != null) {
+				enabledBindingValueChangeListener.stopObserving();
+				enabledBindingValueChangeListener.delete();
+			}
+			if (visibleBindingValueChangeListener != null) {
+				visibleBindingValueChangeListener.stopObserving();
+				visibleBindingValueChangeListener.delete();
+			}
 
 			if (children != null) {
 				for (Object c : children) {
@@ -621,20 +883,16 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				widget.addToSelection(representedObject);
 			}*/
 
-			dependingObjects.refreshObserving(browserElementType);
+			// dependingObjects.refreshObserving(browserElementType);
 
 			for (BrowserCell cell : cellsToForceUpdate) {
 				cell.update(true);
 			}
 		}
 
-		@Override
+		/*@Override
 		public void update(Observable o, Object arg) {
 			// logger.info("Object " + o + " received " + arg);
-
-			/*if (getBrowserElement().getName() != null && getBrowserElement().getName().equals("diagramSpecification")) {
-				logger.info("---------------> update() for DiagramSpecification browser element");
-			}*/
 
 			if (!isDeleted && o == getRepresentedObject()) {
 				update(false);
@@ -645,15 +903,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		public void propertyChange(PropertyChangeEvent evt) {
 			// logger.info("Object " + representedObject + " received " + evt);
 
-			/*if (getBrowserElement().getName() != null && getBrowserElement().getName().equals("diagramSpecification")) {
-				logger.info("---------------> propertyChange() for DiagramSpecification browser element");
-			}*/
-
 			if (!isDeleted) {
 				// System.out.println("cell " + this + " propertyChanged " + evt.getPropertyName() + " for " + evt.getSource());
 				update(false);
 			}
-		}
+		}*/
 
 		public FIBBrowserElement getBrowserElement() {
 			return browserElementType.getBrowserElement();

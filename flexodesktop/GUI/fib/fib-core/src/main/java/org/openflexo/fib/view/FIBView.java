@@ -146,6 +146,16 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 		logger.fine("@@@@@@@@@ Delete view for component " + getComponent());
 
+		if (dataBindingValueChangeListener != null) {
+			dataBindingValueChangeListener.stopObserving();
+			dataBindingValueChangeListener.delete();
+		}
+
+		if (visibleBindingValueChangeListener != null) {
+			visibleBindingValueChangeListener.stopObserving();
+			visibleBindingValueChangeListener.delete();
+		}
+
 		if (isDeleted) {
 			return;
 		}

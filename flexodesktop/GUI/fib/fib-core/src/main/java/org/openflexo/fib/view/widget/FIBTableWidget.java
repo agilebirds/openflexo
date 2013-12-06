@@ -401,6 +401,14 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 
 	@Override
 	public synchronized void delete() {
+		if (listenerToDataAsListValue != null) {
+			listenerToDataAsListValue.stopObserving();
+			listenerToDataAsListValue.delete();
+		}
+		if (selectedBindingValueChangeListener != null) {
+			selectedBindingValueChangeListener.stopObserving();
+			selectedBindingValueChangeListener.delete();
+		}
 		// TODO: re-implement this properly and check that all listeners are properly removed.
 		getFooter().delete();
 		deleteTable();

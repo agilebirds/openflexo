@@ -1413,10 +1413,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode /*
 
 	}
 
-	public void notifiedBindingDecoded(DataBinding<?> binding) {
-		logger.warning("A-t-on encore besoin de ca ?");
-	}
-
 	/*@Override
 	public void notifiedBindingDecoded(DataBinding<?> binding) {
 		if (binding == null) {

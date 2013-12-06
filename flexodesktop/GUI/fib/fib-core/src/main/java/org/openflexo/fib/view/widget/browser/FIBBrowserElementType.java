@@ -106,11 +106,15 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Property
 		return fibBrowserModel;
 	}
 
-	public List<DataBinding<?>> getDependencyBindings(final Object object) {
+	/**
+	 * Return a list of all bindings declared in the context of this browser element
+	 * 
+	 * @return
+	 */
+	public List<DataBinding<?>> getDeclaredBindings() {
 		if (browserElementDefinition == null) {
 			return null;
 		}
-		iteratorObject = object;
 		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
 		returned.add(browserElementDefinition.getLabel());
 		returned.add(browserElementDefinition.getIcon());

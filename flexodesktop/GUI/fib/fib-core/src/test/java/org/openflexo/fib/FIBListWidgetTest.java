@@ -231,6 +231,7 @@ public class FIBListWidgetTest {
 		// indices[1] = 2;
 		// indices[2] = 4;
 		// w7.getDynamicJComponent().setSelectedIndices(indices);
+		w7.getDynamicJComponent().getSelectionModel().clearSelection();
 		w7.getDynamicJComponent().getSelectionModel().addSelectionInterval(1, 2);
 		w7.getDynamicJComponent().getSelectionModel().addSelectionInterval(4, 4);
 

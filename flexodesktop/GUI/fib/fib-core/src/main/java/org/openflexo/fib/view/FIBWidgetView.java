@@ -147,6 +147,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	@Override
 	public synchronized void delete() {
 
+		if (enableBindingValueChangeListener != null) {
+			enableBindingValueChangeListener.stopObserving();
+			enableBindingValueChangeListener.delete();
+		}
+
 		super.delete();
 	}
 

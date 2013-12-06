@@ -120,6 +120,19 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 		}
 	}
 
+	@Override
+	public synchronized void delete() {
+		if (listBindingValueChangeListener != null) {
+			listBindingValueChangeListener.stopObserving();
+			listBindingValueChangeListener.delete();
+		}
+		if (arrayBindingValueChangeListener != null) {
+			arrayBindingValueChangeListener.stopObserving();
+			arrayBindingValueChangeListener.delete();
+		}
+		super.delete();
+	}
+
 	public class FIBMultipleValueModel<T> extends AbstractListModel {
 		private List<T> list = null;
 		private T[] array = null;

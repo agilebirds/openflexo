@@ -133,13 +133,11 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 
-		System.out.println("getValue()=" + getValue());
-		System.out.println("jComboBox.getSelectedItem()=" + jComboBox.getSelectedItem());
+		// System.out.println("getValue()=" + getValue());
+		// System.out.println("jComboBox.getSelectedItem()=" + jComboBox.getSelectedItem());
 		// System.out.println("listModelRequireChange()=" + listModelRequireChange());
 
 		if (notEquals(getValue(), jComboBox.getSelectedItem()) /*|| listModelRequireChange()*/) {
-
-			System.out.println("on update");
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("updateWidgetFromModel()");
@@ -156,8 +154,6 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 
 			return true;
 		}
-
-		System.out.println("on update pas");
 
 		return false;
 	}
@@ -193,10 +189,9 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 	}
 
 	protected void proceedToListModelUpdate() {
-		System.out.println("********* OK, proceedToListModelUpdate");
 		if (jComboBox != null) {
 			jComboBox.setModel(getListModel());
-			System.out.println("New list model = " + getListModel());
+			// System.out.println("New list model = " + getListModel());
 			updateData();
 		}
 	}
