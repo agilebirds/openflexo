@@ -366,7 +366,7 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 
 	@Override
 	public Type getAssignableType() {
-		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		return this.getViewPoint().getInstanceType(getEditionPatternType());
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends

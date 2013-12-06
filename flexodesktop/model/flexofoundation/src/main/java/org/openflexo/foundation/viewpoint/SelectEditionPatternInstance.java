@@ -70,7 +70,7 @@ public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModel
 
 	@Override
 	public EditionPatternInstanceType getFetchedType() {
-		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+		return (EditionPatternInstanceType) EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 	}
 
 	public String _getEditionPatternTypeURI() {

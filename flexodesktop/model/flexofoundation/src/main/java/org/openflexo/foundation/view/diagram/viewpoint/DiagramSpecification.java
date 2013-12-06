@@ -62,10 +62,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	private List<ExampleDiagram> exampleDiagrams;
 	
 
-
-	private DiagramType diagramType;
-
-
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
@@ -99,7 +95,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		super(builder);
 		exampleDiagrams = new ArrayList<ExampleDiagram>();
 		palettes = new ArrayList<DiagramPalette>();
-		diagramType = new DiagramType(this);
 	}
 
 	/**
@@ -159,12 +154,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 				((ExampleDiagramResource) r).getExampleDiagram();
 			}
 		}
-	}
-	
-
-	@Override
-	public DiagramType getInstanceType() {
-		return diagramType;
 	}
 	
 	@Override

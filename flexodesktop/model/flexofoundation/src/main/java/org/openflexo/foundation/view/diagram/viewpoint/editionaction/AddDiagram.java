@@ -134,6 +134,10 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	@Override
 	public Type getAssignableType() {
+		
+		return new DiagramType(null);
+		
+		/*
 		PatternRole PR = getPatternRole();
 		if (PR != null){
 			return PR.getType();
@@ -141,6 +145,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		else {
 			return Object.class;
 		}
+		*/
 	}
 
 	@Override

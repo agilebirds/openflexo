@@ -23,10 +23,6 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.antar.binding.CustomType;
-import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
@@ -36,30 +32,35 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  * @author sylvain
  * 
  */
-public class DiagramType extends VirtualModelInstanceType {
+public class VirtualModelInstanceType extends EditionPatternInstanceType {
 
-	public static DiagramType getDiagramType(DiagramSpecification aDiagram) {		
-		return (DiagramType) aDiagram.getViewPoint().getInstanceType(aDiagram);
+	public VirtualModelInstanceType(VirtualModel<?> aVirtualModel) {
+		super(aVirtualModel);
+		this.editionPattern = aVirtualModel;
 	}
 
-
-	public DiagramType(DiagramSpecification aDiagramSpec) {
-		super(aDiagramSpec);
-		this.editionPattern = aDiagramSpec;
-	}
-
-	public DiagramSpecification getDiagram() {
+	public VirtualModel<?> getVirtualModel() {
 		return (DiagramSpecification) editionPattern;
+	}
+
+
+	@Override
+	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		if (aType instanceof VirtualModelInstanceType) {
+			// TODO: Permissive for now!
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public String simpleRepresentation() {
-		return "DiagramType" + ":" + (DiagramSpecification) editionPattern;
+		return "VirtualModel" + ":" + editionPattern;
 	}
 
 	@Override
 	public String fullQualifiedRepresentation() {
-		return "DiagramType" + ":" + (DiagramSpecification) editionPattern;
+		return "VirtualModel" + ":" + editionPattern;
 	}
 
 }

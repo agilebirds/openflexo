@@ -89,7 +89,6 @@ public class EditionPattern extends EditionPatternObject {
 	private EditionPatternStructuralFacet structuralFacet;
 	private EditionPatternBehaviouralFacet behaviouralFacet;
 
-	private EditionPatternInstanceType instanceType;
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -108,7 +107,6 @@ public class EditionPattern extends EditionPatternObject {
 		editionPatternConstraints = new Vector<EditionPatternConstraint>();
 		structuralFacet = new EditionPatternStructuralFacet(this);
 		behaviouralFacet = new EditionPatternBehaviouralFacet(this);
-		instanceType = new EditionPatternInstanceType(this);
 	}
 
 	@Override
@@ -118,10 +116,6 @@ public class EditionPattern extends EditionPatternObject {
 			validableObjects.add(inspector);
 		}
 		return validableObjects;
-	}
-
-	public EditionPatternInstanceType getInstanceType() {
-		return instanceType;
 	}
 
 	public EditionPatternStructuralFacet getStructuralFacet() {

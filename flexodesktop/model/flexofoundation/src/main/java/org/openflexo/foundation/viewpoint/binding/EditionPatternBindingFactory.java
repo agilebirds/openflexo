@@ -105,7 +105,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 		Type pType = parent.getType();
 		
-		if (parent.getType() instanceof TechnologySpecificCustomType) {
+		if (pType instanceof TechnologySpecificCustomType) {
 			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) pType;
 			TechnologyAdapter ta = parentType.getTechnologyAdapter();
 			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
@@ -169,6 +169,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		else if (pType instanceof EditionPatternInstanceType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = ((EditionPatternInstanceType) pType).getEditionPattern();
+			
 			if (ep instanceof VirtualModel) {
 				VirtualModel<?> vm = (VirtualModel<?>) ep;
 				for (ModelSlot ms : vm.getModelSlots()) {

@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramType;
 
 /**
  * Represent the type of a EditionPatternInstance of a given EditionPattern
@@ -35,15 +36,10 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  */
 public class EditionPatternInstanceType implements CustomType {
 
-	public static EditionPatternInstanceType getEditionPatternInstanceType(EditionPattern anEditionPattern) {
-		if (anEditionPattern == null) {
-			return null;
-		}
-		return anEditionPattern.getInstanceType();
-	}
 
-	private EditionPattern editionPattern;
+	protected EditionPattern editionPattern;
 
+	
 	public EditionPatternInstanceType(EditionPattern anEditionPattern) {
 		this.editionPattern = anEditionPattern;
 	}
@@ -83,5 +79,9 @@ public class EditionPatternInstanceType implements CustomType {
 	@Override
 	public String toString() {
 		return simpleRepresentation();
+	}
+
+	public static Type getEditionPatternInstanceType(EditionPattern anEditionPattern) {
+		return anEditionPattern.getViewPoint().getInstanceType(anEditionPattern);
 	}
 }
