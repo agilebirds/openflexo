@@ -115,7 +115,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 				public void bindingValueChanged(Object source, T newValue) {
 					System.out.println(" bindingValueChanged() detected for selected=" + getComponent().getEnable() + " with newValue="
 							+ newValue + " source=" + source);
-					setSelectedObject(newValue);
+					performSelect(newValue);
 				}
 			};
 		}
@@ -221,10 +221,10 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
 		try {
-			Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+			T newSelectedObject = (T) getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 			if (newSelectedObject != null) {
 				if (returned = notEquals(newSelectedObject, getSelected())) {
-					setSelectedObject(newSelectedObject);
+					setSelected(newSelectedObject);
 				}
 			}
 		} catch (TypeMismatchException e) {
@@ -242,54 +242,6 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 
 	public TreeSelectionModel getTreeSelectionModel() {
 		return _tree.getSelectionModel();
-	}
-
-	public void setSelectedObject(Object object) {
-		setSelectedObject(object, false);
-	}
-
-	public void setSelectedObject(Object object, boolean force) {
-		// logger.info("Select " + object);
-		if (getRootValue() == null) {
-			return;
-		}
-		if (object == getSelected() && !force) {
-			logger.fine("Ignore set selected object");
-			return;
-		}
-
-		T oldSelectedObject = getSelected();
-		if (object == getSelected()) {
-			oldSelectedObject = null;
-		}
-
-		// logger.info("---------------------> FIBBrowserWidget, setSelectedObject from "+getSelectedObject()+" to "+object);
-		if (object != null) {
-			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
-			// logger.info("Select " + cells);
-			getTreeSelectionModel().clearSelection();
-			if (cells != null) {
-				TreePath scrollTo = null;
-				for (BrowserCell cell : cells) {
-					TreePath treePath = cell.getTreePath();
-					if (scrollTo == null) {
-						scrollTo = treePath;
-					}
-					getTreeSelectionModel().addSelectionPath(treePath);
-				}
-				if (scrollTo != null) {
-					_tree.scrollPathToVisible(scrollTo);
-				}
-			}
-		} else {
-			clearSelection();
-		}
-
-		getPropertyChangeSupport().firePropertyChange(SELECTED, oldSelectedObject, object);
-	}
-
-	public void clearSelection() {
-		getTreeSelectionModel().clearSelection();
 	}
 
 	@Override
@@ -529,9 +481,9 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		try {
 			if (getComponent().getSelected().isValid()
 					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
+				T newSelectedObject = (T) getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 				if (notEquals(newSelectedObject, getSelected())) {
-					setSelectedObject(newSelectedObject);
+					performSelect(newSelectedObject);
 				}
 			}
 		} catch (TypeMismatchException e) {
@@ -564,6 +516,77 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	@Override
 	public T getSelected() {
 		return selectedObject;
+	}
+
+	public void performSelect(T object) {
+		if (object == getSelected()) {
+			logger.fine("FIBTableWidget: ignore performSelect " + object);
+			return;
+		}
+		setSelected(object);
+		if (object != null) {
+			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
+			// logger.info("Select " + cells);
+			getTreeSelectionModel().clearSelection();
+			if (cells != null) {
+				TreePath scrollTo = null;
+				for (BrowserCell cell : cells) {
+					TreePath treePath = cell.getTreePath();
+					if (scrollTo == null) {
+						scrollTo = treePath;
+					}
+					getTreeSelectionModel().addSelectionPath(treePath);
+				}
+				if (scrollTo != null) {
+					_tree.scrollPathToVisible(scrollTo);
+				}
+			}
+		} else {
+			clearSelection();
+		}
+	}
+
+	public void setSelected(T object) {
+		// logger.info("Select " + object);
+		if (getRootValue() == null) {
+			return;
+		}
+		if (object == getSelected() /*&& !force*/) {
+			logger.fine("Ignore set selected object");
+			return;
+		}
+
+		T oldSelectedObject = getSelected();
+
+		selectedObject = object;
+
+		// logger.info("---------------------> FIBBrowserWidget, setSelectedObject from "+getSelectedObject()+" to "+object);
+		/*if (object != null) {
+			Collection<BrowserCell> cells = getBrowserModel().getBrowserCell(object);
+			// logger.info("Select " + cells);
+			getTreeSelectionModel().clearSelection();
+			if (cells != null) {
+				TreePath scrollTo = null;
+				for (BrowserCell cell : cells) {
+					TreePath treePath = cell.getTreePath();
+					if (scrollTo == null) {
+						scrollTo = treePath;
+					}
+					getTreeSelectionModel().addSelectionPath(treePath);
+				}
+				if (scrollTo != null) {
+					_tree.scrollPathToVisible(scrollTo);
+				}
+			}
+		} else {
+			clearSelection();
+		}*/
+
+		getPropertyChangeSupport().firePropertyChange(SELECTED, oldSelectedObject, object);
+	}
+
+	public void clearSelection() {
+		getTreeSelectionModel().clearSelection();
 	}
 
 	@Override
@@ -622,40 +645,31 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 	@Override
 	public synchronized void valueChanged(TreeSelectionEvent e) {
 
-		List<T> oldSelection = new ArrayList<T>();
-		oldSelection.addAll(selection);
-		// System.out.println("Selection: " + e);
-
-		/*System.out.println("Paths=" + e.getPaths());
-		for (TreePath tp : e.getPaths()) {
-			System.out.println("> " + tp.getLastPathComponent() + " added=" + e.isAddedPath(tp));
-		}
-		System.out.println("New LEAD="
-				+ (e.getNewLeadSelectionPath() != null ? e.getNewLeadSelectionPath().getLastPathComponent() : "null"));
-		System.out.println("Old LEAD="
-				+ (e.getOldLeadSelectionPath() != null ? e.getOldLeadSelectionPath().getLastPathComponent() : "null")); */
+		List<T> oldSelection = new ArrayList<T>(selection);
+		T newSelectedObject;
+		List<T> newSelection = new ArrayList<T>(selection);
 
 		if (e.getNewLeadSelectionPath() == null || e.getNewLeadSelectionPath().getLastPathComponent() == null) {
-			selectedObject = null;
+			newSelectedObject = null;
 		} else if (e.getNewLeadSelectionPath().getLastPathComponent() instanceof BrowserCell) {
-			selectedObject = (T) ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
+			newSelectedObject = (T) ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
 			for (TreePath tp : e.getPaths()) {
 				if (tp.getLastPathComponent() instanceof BrowserCell) {
 					T obj = (T) ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
 					if (obj != null
 							&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
 						if (e.isAddedPath(tp)) {
-							if (!selection.contains(obj)) {
-								selection.add(obj);
+							if (!newSelection.contains(obj)) {
+								newSelection.add(obj);
 							}
 						} else {
-							selection.remove(obj);
+							newSelection.remove(obj);
 						}
 					}
 				}
 			}
 		} else {
-			selectedObject = null;
+			newSelectedObject = null;
 		}
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);
@@ -663,16 +677,17 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		// System.out.println("selectedObject = " + selectedObject);
 		// System.out.println("selection = " + selection);
 
-		if (selectedObject == null) {
-			setSelectedObject(null);
-		} else if (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(selectedObject.getClass())) {
-			setSelectedObject(selectedObject);
+		if (newSelectedObject == null) {
+			setSelected(null);
+		} else if (getBrowser().getIteratorClass() == null
+				|| getBrowser().getIteratorClass().isAssignableFrom(newSelectedObject.getClass())) {
+			setSelected(newSelectedObject);
 		} else {
 			// If selected element is not of expected class, set selected to be null
 			// (we want to be sure that selected is an instance of IteratorClass)
-			setSelectedObject(null);
+			setSelected(null);
 		}
-		setSelection(selection);
+		setSelection(newSelection);
 
 		/*System.out.println("selectedObject=" + selectedObject);
 		System.out.println("getComponent().getSelected()=" + getComponent().getSelected() + " of "
@@ -703,7 +718,7 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 			getController().updateSelection(this, oldSelection, selection);
 		}
 
-		_footer.setFocusedObject(selectedObject);
+		_footer.setFocusedObject(newSelectedObject);
 
 	}
 }

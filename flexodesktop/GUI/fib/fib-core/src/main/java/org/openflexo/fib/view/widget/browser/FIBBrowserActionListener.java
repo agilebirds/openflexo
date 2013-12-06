@@ -131,13 +131,13 @@ public class FIBBrowserActionListener<T> implements ActionListener, BindingEvalu
 			logger.info("valid=" + getBrowserAction().getMethod().isValid() + " reason:"
 					+ getBrowserAction().getMethod().invalidBindingReason());*/
 			try {
-				final Object newObject = getBrowserAction().getMethod().getBindingValue(this);
+				final T newObject = (T) getBrowserAction().getMethod().getBindingValue(this);
 				// browserModel.fireTableDataChanged();
 				// browserModel.getBrowserWidget().updateWidgetFromModel();
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						widget.setSelectedObject(newObject);
+						widget.setSelected(newObject);
 					}
 				});
 			} catch (TypeMismatchException e) {

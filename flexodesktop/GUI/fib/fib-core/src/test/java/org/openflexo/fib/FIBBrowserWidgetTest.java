@@ -102,7 +102,7 @@ public class FIBBrowserWidgetTest {
 		assertNotNull(controller.getRootView());
 		assertNotNull(controller.viewForComponent(browser));
 
-		FIBBrowserWidget<?> w = (FIBBrowserWidget<?>) controller.viewForComponent(browser);
+		// FIBBrowserWidget<?> w = (FIBBrowserWidget<?>) controller.viewForComponent(browser);
 		// assertEquals(family.getChildren(), w.getTableModel().getValues());
 		// assertEquals(5, w.getDynamicJComponent().getModel().getRowCount());
 	}
