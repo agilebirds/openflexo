@@ -61,7 +61,7 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	@Override
 	public void setGraphicalRepresentation(G graphicalRepresentation) {
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
-			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
+			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);	
 		}
 		performSuperSetter(GRAPHICAL_REPRESENTATION, graphicalRepresentation);
 		if (graphicalRepresentation != null && graphicalRepresentation.getPropertyChangeSupport() != null) {

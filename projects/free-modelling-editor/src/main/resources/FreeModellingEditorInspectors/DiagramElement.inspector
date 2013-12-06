@@ -4,6 +4,8 @@
   <TextField data="data.instance.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
   <Label label="Concept" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
   <TextField data="data.instance.concept.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" readOnly="true"/>
+  <Label label="Properties" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+  <TextArea columns="7" data="data.instance.description" dataClassName="org.openflexo.fme.DiagramElement" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="propertyDialog" localize="true" valueChangedAction="controller.diagramEditor.updatePropertyValues()" />
 <!-- 
 	<Table iteratorClassName="org.openflexo.fme.model.PropertyValue" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" data="data.propertyValues" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
 	    <TextFieldColumn data="iterator.key" title="key" columnWidth="40" resizable="true" displayTitle="true" />
@@ -12,9 +14,8 @@
 	    <DeleteAction method="controller.deletePropertyValue(selected)" name="delete_action" />
  	 </Table>
 -->
- 
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="DiagramElement" />
+  <Parameter name="title" value="Instance" />
 </Panel>

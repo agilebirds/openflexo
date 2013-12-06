@@ -484,21 +484,18 @@ public class DiagramEditor implements FIBSelectionListener {
 			getDiagram().getDataModel().addToConcepts(concept);
 			diagramElement.getAssociation().setConcept(concept);
 			Instance returned = getFactory().newInstance(Instance.class);
-			returned.setName(dialogData.getInstanceName());
-			returned.setConcept(concept);
 			//Copy properties
 			for(PropertyValue pv : diagramElement.getInstance().getPropertyValues()){
 				createNewPropertyValue(returned, pv.getKey(), pv.getValue());
 			}
-			
 			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
 			diagramElement.getInstance().delete();
+			returned.setName(dialogData.getInstanceName());
+			returned.setConcept(concept);
 			System.out.println("Created " + returned);
 			concept.addToInstances(returned);
 			diagramElement.setInstance(returned);
-			
 			setInstance(returned);
-			//	updatePropertyValues();
 			return returned;
 		}
 		return null;
@@ -509,23 +506,22 @@ public class DiagramEditor implements FIBSelectionListener {
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
-			diagramElement.getAssociation().setConcept(dialogData.getConcept());
 			Instance returned = getFactory().newInstance(Instance.class);
-			returned.setName(dialogData.getInstanceName());
-			returned.setConcept(dialogData.getConcept());
 			//Copy properties
 			for(PropertyValue pv : diagramElement.getInstance().getPropertyValues()){
 				createNewPropertyValue(returned, pv.getKey(), pv.getValue());
 			}
 			diagramElement.getInstance().getConcept().removeFromInstances(diagramElement.getInstance());
 			diagramElement.getInstance().delete();
+
+			returned.setName(dialogData.getInstanceName());
+			returned.setConcept(dialogData.getConcept());
 			
+			diagramElement.getAssociation().setConcept(dialogData.getConcept());
 			System.out.println("Created " + returned);
 			dialogData.getConcept().addToInstances(returned);
 			diagramElement.setInstance(returned);
-			
 			setInstance(returned);
-		//	updatePropertyValues();
 			return returned;
 		}
 		return null;
@@ -603,6 +599,7 @@ public class DiagramEditor implements FIBSelectionListener {
 			application.getRepresentedConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance());
 			if(e.getInstance()!=null){
 				application.getConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance().getConcept());
+				//application.getRepresentedConceptBrowser().getFIBController().objectAddedToSelection(e.getInstance().getConcept());
 			}	
 		}
 		if(diagramElements!=null && !diagramElements.isEmpty()){
