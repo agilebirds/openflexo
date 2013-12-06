@@ -46,8 +46,9 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
+	private DiagramSpecificationResource diagramSpecificationResource;
 	private String diagramSpecificationURI;
-	
+
 	public AddDiagram(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -119,14 +120,55 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		this.diagramName = diagramName;
 	}
 
+
+	public DiagramSpecificationResource getDiagramSpecificationResource() {
+		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
+			DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+			if (diagramSpec != null){
+				diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+				logger.info("Looked-up " + diagramSpecificationResource);
+			}
+			else {
+				logger.warning("Enable to load Resource for DiagramSpec URI: " + diagramSpecificationURI);
+			}
+		}
+		return diagramSpecificationResource;
+	}
+
+	public void setDiagramSpecificationResource(DiagramSpecificationResource diagramSpecificationResource) {
+		this.diagramSpecificationResource = diagramSpecificationResource;
+	}
+
+	public String getDiagramSpecificationURI() {
+		if (diagramSpecificationResource != null) {
+			return diagramSpecificationResource.getURI();
+		}
+		return diagramSpecificationURI;
+	}
+
+	public void setDiagramSpecificationURI(String diagramSpecificationURI) {
+		this.diagramSpecificationURI = diagramSpecificationURI;
+	}
+
 	public DiagramSpecification getDiagramSpecification() {
+		DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+		return diagramSpec;
+	}
+
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+		diagramSpecificationResource = diagramSpecification.getResource();
+	}
+
+
+	
+	public DiagramSpecification getPRDiagramSpecification() {
 		if (getPatternRole() instanceof DiagramPatternRole) {
 			return getPatternRole().getDiagramSpecification();
 		}
 		return null;
 	}
 
-	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+	public void setPRDiagramSpecification(DiagramSpecification diagramSpecification) {
 		if (getPatternRole() instanceof DiagramPatternRole) {
 			getPatternRole().setDiagramSpecification(diagramSpecification);
 		}
@@ -135,17 +177,9 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	@Override
 	public Type getAssignableType() {
 		
-		return new DiagramType(null);
+		DiagramSpecification drSpec = this.getDiagramSpecification();
 		
-		/*
-		PatternRole PR = getPatternRole();
-		if (PR != null){
-			return PR.getType();
-		}
-		else {
-			return Object.class;
-		}
-		*/
+		return getViewPoint().getInstanceType(drSpec);
 	}
 
 	@Override
@@ -156,7 +190,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
 		addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
 		addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
-		addDiagramAction.skipChoosePopup = true;
+		// addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
 		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
 			Diagram newDiagram = addDiagramAction.getNewDiagram();

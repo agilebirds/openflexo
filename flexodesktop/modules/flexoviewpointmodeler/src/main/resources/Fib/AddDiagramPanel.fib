@@ -10,6 +10,10 @@
   <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="5" data="data.conditional" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
     <Assignment variable="component.bindable" value="AddDiagramPanel.data" />
   </Custom>
+  <Label label="diagram_type" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=left)" name="DSLabel" localize="true" />
+  <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" localize="true" manageDynamicModel="true" name="DSSelector" index="5" data="data.diagramSpecificationResource" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)">
+        <Assignment variable="component.viewPoint" value="data.viewPoint.resource" />
+  </Custom>
   <Label label="diagram_name" align="right" index="6" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="7" data="data.diagramName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
     <Assignment variable="component.bindable" value="AddDiagramPanel.data" />

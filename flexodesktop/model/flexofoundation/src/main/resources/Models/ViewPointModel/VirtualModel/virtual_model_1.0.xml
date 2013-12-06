@@ -499,6 +499,7 @@
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram"
 		xmlTag="AddDiagram">
 		<property name="diagramName" xmlTag="diagramName" attribute="YES" />
+		<property name="diagramSpecificationURI" xmlTag="diagramSpecificationURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.SelectEditionPatternInstance" xmlTag="SelectEditionPatternInstance">

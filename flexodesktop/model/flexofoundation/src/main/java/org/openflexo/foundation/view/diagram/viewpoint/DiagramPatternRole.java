@@ -15,7 +15,7 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class DiagramPatternRole extends PatternRole<View> {
+public class DiagramPatternRole extends PatternRole<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(DiagramPatternRole.class.getPackage().getName());
 
@@ -100,7 +100,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	@Override
-	public ModelObjectActorReference<View> makeActorReference(View object, EditionPatternInstance epi) {
-		return new ModelObjectActorReference<View>(object, this, epi);
+	public ModelObjectActorReference<Diagram> makeActorReference(Diagram object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<Diagram>(object, this, epi);
 	}
 }
