@@ -44,7 +44,6 @@ import javax.swing.tree.TreePath;
 import org.openflexo.antar.binding.BindingValueChangeListener;
 import org.openflexo.antar.binding.BindingValueListChangeListener;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
@@ -267,7 +266,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		private FIBBrowserElementType browserElementType;
 		private boolean isDeleted = false;
 		private boolean isVisible = true;
-		private DependingObjects dependingObjects;
 
 		public BrowserCell(Object representedObject, BrowserCell father) {
 			setParent(father);
@@ -657,10 +655,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 						((BrowserCell) c).delete();
 					}
 				}
-			}
-
-			if (dependingObjects != null) {
-				dependingObjects.stopObserving();
 			}
 
 			if (getRepresentedObject() != null) {

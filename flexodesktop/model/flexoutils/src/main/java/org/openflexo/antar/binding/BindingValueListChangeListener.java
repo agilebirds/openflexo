@@ -8,7 +8,8 @@ import org.openflexo.logging.FlexoLogger;
 
 /**
  * A listener that tracks evalutated value of a list DataBinding, given a run-time context given by a {@link BindingEvaluationContext}<br>
- * Modifications are detected from the evaluation of the content of the list
+ * Modifications are detected from the evaluation of the content of the list (even if the list is the same, but if values inside the list
+ * are not the same, then change is fired)
  * 
  * @author sylvain
  * 
