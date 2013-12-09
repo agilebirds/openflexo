@@ -12,6 +12,9 @@ public class CreateInstanceDialog {
 
 	public CreateInstanceDialog(DataModel dataModel, String instanceName) {
 		this.dataModel = dataModel;
+		if(instanceName==null||instanceName.equals("")){
+			instanceName = concept.getName();
+		}
 		this.instanceName = instanceName;
 	}
 

@@ -3,7 +3,7 @@
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
     <Table iteratorClassName="org.openflexo.fme.model.Concept" visibleRowCount="3" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="list" data="controller.diagramEditor.filteredConcepts" constraints="border(location=center)">
       <IconColumn data="controller.getIcon(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
-      <TextFieldColumn data="iterator.htmlLabel" title="concept" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+      <TextFieldColumn data="iterator.htmlLabel" format="" title="concept" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
       <AddAction method="controller.createConcept(finder.data)" name="add_action" />
       <RemoveAction method="controller.removeConcept(selected)" isAvailable="(!(selected.readOnly))" name="delete_action" />
       <Dependancy componentName="list" />

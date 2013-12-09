@@ -114,6 +114,7 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Getter(value = INSTANCE)
 	@XMLElement
+	@Embedded
 	public Instance getInstance();
 
 	@Setter(INSTANCE)

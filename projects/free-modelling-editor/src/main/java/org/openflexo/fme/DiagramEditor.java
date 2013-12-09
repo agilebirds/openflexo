@@ -272,16 +272,16 @@ public class DiagramEditor implements FIBSelectionListener {
 
 		Instance instance = getFactory().newInstance(Instance.class);
 		instance.setName(instanceName);
+		
 		instance.setConcept(association.getConcept());
 		newShape.setInstance(instance);
-
 		newShape.setAssociation(association);
-		container.addToShapes(newShape);
 		
+		container.addToShapes(newShape);
+
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
-
 		return newShape;
 	}
 
@@ -473,7 +473,7 @@ public class DiagramEditor implements FIBSelectionListener {
 
 	public Instance createNewConceptAndNewInstance(DiagramElement<?, ?> diagramElement) {
 		CreateConceptAndInstanceDialog dialogData = new CreateConceptAndInstanceDialog(getDiagram().getDataModel(), diagramElement
-				.getInstance().getName());
+				.getInstance().getName()+"");
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_CONCEPT_NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
@@ -502,7 +502,7 @@ public class DiagramEditor implements FIBSelectionListener {
 	}
 
 	public Instance createNewInstance(DiagramElement<?, ?> diagramElement) {
-		CreateInstanceDialog dialogData = new CreateInstanceDialog(getDiagram().getDataModel(), diagramElement.getInstance().getName());
+		CreateInstanceDialog dialogData = new CreateInstanceDialog(getDiagram().getDataModel(), diagramElement.getInstance().getName()+"");
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_INSTANCE_DIALOG, dialogData, application.getFrame(), true,
 				application.LOCALIZATION);
 		if (dialog.getStatus() == Status.VALIDATED) {
@@ -515,24 +515,34 @@ public class DiagramEditor implements FIBSelectionListener {
 			diagramElement.getInstance().delete();
 
 			returned.setName(dialogData.getInstanceName());
-			returned.setConcept(dialogData.getConcept());
-			
+		
 			diagramElement.getAssociation().setConcept(dialogData.getConcept());
 			System.out.println("Created " + returned);
 			dialogData.getConcept().addToInstances(returned);
 			diagramElement.setInstance(returned);
+			returned.setConcept(dialogData.getConcept());
 			setInstance(returned);
 			return returned;
 		}
 		return null;
 	}
 
-	public void delete(List<DiagramElement<?, ?>> objectsToDelete) {
-		System.out.println("Deleting objects: " + objectsToDelete);
+	public void delete(List<DiagramElement<?,?>> objectsToDelete) {
 		Object[] context = objectsToDelete.toArray(new Object[objectsToDelete.size()]);
+		System.out.println("Deleting instance related to diagramElements");
 		for (DiagramElement<?, ?> o : objectsToDelete) {
+			if(o instanceof Shape){
+				o.getContainer().removeFromShapes((Shape)o);
+				if(o.getShapes()!=null) delete((List)o.getShapes());
+				if(o.getConnectors()!=null) delete((List)o.getConnectors());
+				
+			}
+			if(o instanceof Connector){
+				o.getContainer().removeFromConnectors((Connector)o);
+			}
 			o.delete(context);
 		}
+		
 	}
 
 	private boolean isSelectingObjectOnDiagram = false;
@@ -589,8 +599,10 @@ public class DiagramEditor implements FIBSelectionListener {
 		}
 
 		for (Shape s : getDiagram().getShapes()) {
-			s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
-			s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			if(s.getGraphicalRepresentation()!=null){
+				s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
+				s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			}
 		}
 
 		application.getRepresentedConceptBrowser().getFIBController().selectionCleared();
