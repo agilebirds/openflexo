@@ -257,12 +257,12 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	private static Window getActiveWindow() {
 		for (Window w : Window.getWindows()) {
-			if (w.isActive()) {
+			if (w.isActive() && w.isVisible()) {
 				return w;
 			}
 		}
 		for (Window w : Window.getOwnerlessWindows()) {
-			if (w.isActive()) {
+			if (w.isActive() && w.isVisible()) {
 				return w;
 			}
 		}
