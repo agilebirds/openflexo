@@ -25,6 +25,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
+/**
+ * 
+ * @author Guillaume
+ * @deprecated Use regular JButton with rollOverIcon propery instead.
+ */
+@Deprecated
 public class MouseOverButton extends JButton {
 	private MouseAdapter mouseOverAdapter;
 
