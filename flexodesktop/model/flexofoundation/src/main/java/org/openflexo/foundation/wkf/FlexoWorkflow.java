@@ -73,6 +73,7 @@ import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -1782,7 +1783,16 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 				if (projectURI != null) {
 					FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
 					if (projectRef != null) {
-						return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+						if (projectRef.getWorkflow() != null) {
+							return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+						} else {
+							FlexoProject project = projectRef.getReferredProject(true);
+							if (project == null) {
+								throw new RuntimeException(new ProjectLoadingCancelledException());
+							} else {
+								return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							}
+						}
 					}
 				} else {
 					if (reference.getResourceIdentifier() != null) {
