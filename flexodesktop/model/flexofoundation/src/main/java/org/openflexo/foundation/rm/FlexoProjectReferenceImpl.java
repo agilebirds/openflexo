@@ -102,6 +102,11 @@ public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference
 	}
 
 	@Override
+	public FlexoWorkflowResource getWorkflowResource() {
+		return getReferringProject().getImportedWorkflowResource(this);
+	}
+
+	@Override
 	public FlexoWorkflow getWorkflow() {
 		if (getReferredProject() != null) {
 			return getReferredProject().getWorkflow();
