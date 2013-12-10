@@ -349,12 +349,19 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		/**
 		 * 
 		 * @param reference
-		 *            the referense to load
+		 *            the reference to load
 		 * @param silentlyOnly
 		 *            if true, the loading should be silent. This flag is typically meant for interactive loaders.
 		 * @return
 		 */
 		public FlexoProject loadProject(FlexoProjectReference reference, boolean silentlyOnly);
+
+		/**
+		 * The project reference loaded
+		 * 
+		 * @param project
+		 */
+		public void checkForUpdates(FlexoProject project);
 
 	}
 

@@ -45,6 +45,11 @@ public class TestProjectReuse extends FlexoTestCase {
 			return importedProject;
 		}
 
+		@Override
+		public void checkForUpdates(FlexoProject project) {
+			// Nothing to do here
+		}
+
 	}
 
 	public void testProjectDataClassValidity() throws ModelDefinitionException {

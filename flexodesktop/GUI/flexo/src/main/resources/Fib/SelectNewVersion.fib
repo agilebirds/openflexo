@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.module.InteractiveFlexoProjectReferenceLoader$SelectNewVersionFIBModel">
+  <Panel layout="border" hGap="5" vGap="5" darkLevel="0" constraints="border(location=center)">
+    <Table iteratorClassName="org.openflexo.module.InteractiveFlexoProjectReferenceLoader$ServerRestVersionRetrieverModel$RetrieveNewerVersionsOperation" visibleRowCount="10" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" data="data.operations" constraints="border(location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
+      <LabelColumn data="iterator.reference.name" title="Project" columnWidth="250" resizable="true" displayTitle="true" tooltip="(((iterator.reference.uRI + &quot; (&quot;) + iterator.reference.revision) + &quot;)&quot;)" name="label" />
+      <LabelColumn data="iterator.reference.version" title="Current" columnWidth="50" resizable="true" displayTitle="true" name="label" />
+      <DropDownColumn list="iterator.versions" renderAsDropdown="true" data="iterator.newSelectedVersion" format="object.versionNumber" title="New version" columnWidth="80" resizable="true" displayTitle="true" name="dropdown" />
+      <CheckBoxColumn data="iterator.isKeepCurrentVersion" title="Keep current" columnWidth="80" resizable="true" displayTitle="true" name="checkbox" />
+    </Table>
+    <Panel layout="border" borderTitle="Panel" borderTop="10" borderBottom="10" borderLeft="10" borderRight="10" darkLevel="0" constraints="border(location=north)">
+      <Label label="select_version_to_use_for_each_imported_project" constraints="border(location=center)" localize="true" />
+    </Panel>
+  </Panel>
+  <Panel layout="buttons" hGap="5" vGap="5" darkLevel="0" constraints="border(location=south)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="OK" localize="true" constraints="border(location=south)" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" constraints="buttons()" />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>

@@ -229,6 +229,9 @@ public class FlexoResourceManager {
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;
 		project.setResourceManagerInstance(resourceManager);
+		if (projectReferenceLoader != null && project.getProjectData() != null && project.getProjectData().getImportedProjects().size() > 0) {
+			projectReferenceLoader.checkForUpdates(project);
+		}
 		checkExternalRepositories(project);
 		return returned;
 	}

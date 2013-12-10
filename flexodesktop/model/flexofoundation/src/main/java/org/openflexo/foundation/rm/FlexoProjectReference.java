@@ -93,4 +93,6 @@ public interface FlexoProjectReference extends AccessibleProxyObject, FlexoFileR
 	 */
 	public FlexoWorkflow getWorkflow();
 
+	FlexoWorkflowResource getWorkflowResource();
+
 }

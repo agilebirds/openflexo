@@ -233,4 +233,9 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 			return null;
 		}
 	}
+
+	@Override
+	public void checkForUpdates(FlexoProject project) {
+		// Builder does not update anything
+	}
 }
