@@ -310,6 +310,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	public void updateUI() {
 		super.updateUI();
 		if (getTextField() != null) {
+			getTextField().setForeground(null);
+			getTextField().setBackground(null);
 			getTextField().updateUI();
 			defaultForeground = getTextField().getForeground();
 			defaultSelectedColor = getTextField().getSelectedTextColor();
