@@ -2,6 +2,7 @@ package org.openflexo.antar.binding;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -27,7 +28,14 @@ public abstract class BindingValueArrayChangeListener<T> extends BindingValueCha
 
 	protected void fireChange(Object source) {
 
-		T[] newValue = evaluateValue();
+		T[] newValue;
+		try {
+			newValue = evaluateValue();
+		} catch (NullReferenceException e) {
+			logger.warning("Could not evaluate " + getDataBinding() + " with context " + getContext()
+					+ " because NullReferenceException has raised");
+			newValue = null;
+		}
 		if (newValue != lastNotifiedValue) {
 			lastNotifiedValue = newValue;
 			bindingValueChanged(source, newValue);

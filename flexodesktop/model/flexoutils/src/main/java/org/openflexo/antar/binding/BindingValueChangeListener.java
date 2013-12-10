@@ -38,7 +38,13 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 		this.dataBinding = dataBinding;
 		this.context = context;
 		this.dependingObjects = new ArrayList<TargetObject>();
-		lastNotifiedValue = evaluateValue();
+		T newValue;
+		try {
+			newValue = evaluateValue();
+		} catch (NullReferenceException e) {
+			logger.warning("Could not evaluate " + dataBinding + " with context " + context + " because NullReferenceException has raised");
+			newValue = null;
+		}
 		refreshObserving(false);
 	}
 
@@ -51,6 +57,14 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 
 	public List<TargetObject> getChainedBindings(TargetObject object) {
 		return null;
+	}
+
+	public DataBinding<T> getDataBinding() {
+		return dataBinding;
+	}
+
+	public BindingEvaluationContext getContext() {
+		return context;
 	}
 
 	public void refreshObserving() {
@@ -173,13 +187,10 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 		return sb.toString();
 	}
 
-	public T evaluateValue() {
+	public T evaluateValue() throws NullReferenceException {
 		try {
 			return (T) dataBinding.getBindingValue(context);
 		} catch (TypeMismatchException e) {
-			logger.warning("Unexpected exception raised. See logs for details.");
-			e.printStackTrace();
-		} catch (NullReferenceException e) {
 			logger.warning("Unexpected exception raised. See logs for details.");
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
@@ -200,7 +211,13 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 	}
 
 	protected void fireChange(Object source) {
-		T newValue = evaluateValue();
+		T newValue;
+		try {
+			newValue = evaluateValue();
+		} catch (NullReferenceException e) {
+			logger.warning("Could not evaluate " + dataBinding + " with context " + context + " because NullReferenceException has raised");
+			newValue = null;
+		}
 		if (newValue != lastNotifiedValue) {
 			lastNotifiedValue = newValue;
 			bindingValueChanged(source, newValue);
