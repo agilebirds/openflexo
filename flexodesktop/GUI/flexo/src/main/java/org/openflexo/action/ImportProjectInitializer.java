@@ -143,6 +143,7 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 				action.setProjectToImport(editor.getProject());
 			} else {
 				FlexoController.notify(reason);
+				return false;
 			}
 			return true;
 		}
