@@ -371,9 +371,11 @@ public class ServerRestClientModel extends AbstractServerRestClientModel impleme
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			try {
-				List<Project> projects = client.projects(client.createClient(),
-						UriBuilder.fromUri(client.getBASE_URI()).queryParam("projectUri", flexoProject.getProjectURI()).build()).getAsXml(
-						0, 1, "creationDate desc", new GenericType<List<Project>>() {
+				List<Project> projects = client.projects(
+						client.createClient(),
+						UriBuilder.fromUri(client.getBASE_URI()).queryParam("projectUri", flexoProject.getProjectURI())
+								.queryParam("isActive", Boolean.TRUE).build()).getAsXml(0, 1, "creationDate desc",
+						new GenericType<List<Project>>() {
 						});
 				if (projects.size() > 0) {
 					setServerProject(projects.get(0));
