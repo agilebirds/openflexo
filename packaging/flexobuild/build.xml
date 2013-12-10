@@ -153,10 +153,12 @@
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
 			<classpath>
 				<fileset dir="${dist.dir}/lib">
+					<include name="*.jar" />
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
 		</taskdef>
+		<mkdir dir="${dist.dir}/Help"/>
 		<generatehelp resourceDir="${dist.dir}">
 			<language isocode="ENGLISH" title="FlexoToolSet Help">
 				<distribution name="${userType}" />
