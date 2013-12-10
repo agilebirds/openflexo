@@ -118,6 +118,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 		logger.info("GenerateHelpSet");
 		makeFlexoProgress(FlexoLocalization.localizedForKey("generating_helpset"), configurations.size() + 2);
 		getHelpsetDirectory().mkdirs();
+		logger.info("Helpset directory is " + getHelpsetDirectory().getAbsolutePath());
 		for (HelpSetConfiguration config : configurations) {
 			DRMHelpSet helpSet = new DRMHelpSet(DocResourceManager.instance().getDocResourceCenter(), getHelpsetDirectory(), getBaseName(),
 					config);

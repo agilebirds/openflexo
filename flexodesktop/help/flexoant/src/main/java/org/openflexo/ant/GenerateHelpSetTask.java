@@ -59,6 +59,9 @@ public class GenerateHelpSetTask extends Task {
 	// The method executing the task
 	@Override
 	public void execute() throws BuildException {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Classpath is " + System.getProperty("java.class.path"));
+		}
 		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(DocResourceManager.instance().getDocResourceCenter(), null,
 				new DefaultFlexoEditor(null));
 		action.setNote("none");

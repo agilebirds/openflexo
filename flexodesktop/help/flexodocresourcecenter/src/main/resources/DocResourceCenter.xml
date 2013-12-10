@@ -14456,12 +14456,8 @@ forward to the next nodes.</description>
                     </RelatedToDocItem>
                     <RelatedToDocItem id="WKFProjectModuleView" identifier="WKFProjectModuleView" embedded="false" hidden="true">
                       <description>No description</description>
-                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_sub_process" identifier="WKFProjectModuleView-add_new_sub_process" embedded="false" hidden="true">
-                        <description />
-                      </EmbeddingChildDocItem>
-                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_role" identifier="WKFProjectModuleView-add_new_role" embedded="false" hidden="true">
-                        <description />
-                      </EmbeddingChildDocItem>
+                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_sub_process" identifier="WKFProjectModuleView-add_new_sub_process" embedded="false" hidden="true" />
+                      <EmbeddingChildDocItem id="WKFProjectModuleView-add_new_role" identifier="WKFProjectModuleView-add_new_role" embedded="false" hidden="true" />
                       <RelatedToDocItem idref="process_edition" />
                       <RelatedToDocItem idref="process_edition" />
                     </RelatedToDocItem>
@@ -14548,8 +14544,13 @@ forward to the next nodes.</description>
                     <description>No description</description>
                     <RelatedToDocItem idref="DefaultModuleView" />
                     <RelatedToDocItem idref="DefaultModuleView" />
+                    <RelatedToDocItem id="ServerRestClientPerspective$1" identifier="ServerRestClientPerspective$1" embedded="false" hidden="true">
+                      <description>No description</description>
+                      <RelatedToDocItem idref="server_client_perspective" />
+                    </RelatedToDocItem>
                   </RelatedToDocItem>
                 </InheritanceChildDocItem>
+                <InheritanceChildDocItem idref="ServerRestClientPerspective$1" />
                 <EmbeddingChildDocItem idref="process_edition" />
                 <EmbeddingChildDocItem idref="documentation" />
                 <EmbeddingChildDocItem idref="role_editor" />
@@ -15806,6 +15807,10 @@ forward to the next nodes.</description>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneserver_client_perspectiveDefaultModuleView" primaryDocItemId="DefaultModuleView" identifier="DefaultModuleView">
               <description>Documentation on that view</description>
               <DocItem idref="DefaultModuleView" />
+            </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneserver_client_perspectiveServerRestClientPerspective$1" primaryDocItemId="ServerRestClientPerspective$1" identifier="ServerRestClientPerspective$1">
+              <description>Documentation on that view</description>
+              <DocItem idref="ServerRestClientPerspective$1" />
             </DocItemFolder>
             <DocItem idref="server_client_perspective" />
           </DocItemFolder>
