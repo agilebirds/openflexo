@@ -56,7 +56,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 	}
 
 	@Override
-	public synchronized boolean updateWidgetFromModel() {
+	public boolean updateWidgetFromModel() {
 		if (modelUpdating) {
 			return false;
 		}
@@ -71,12 +71,12 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 	 * Update the model given the actual state of the widget
 	 */
 	@Override
-	public synchronized boolean updateModelFromWidget() {
+	public boolean updateModelFromWidget() {
 		// not relevant
 		return false;
 	}
 
-	public synchronized void buttonClicked() {
+	public void buttonClicked() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Button " + getWidget() + " has clicked");
 			logger.fine("Action: " + getWidget().getAction() + " valid=" + getWidget().getAction().isValid());
