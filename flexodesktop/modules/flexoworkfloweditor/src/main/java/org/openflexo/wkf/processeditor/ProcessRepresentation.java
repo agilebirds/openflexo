@@ -406,7 +406,15 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		process.addObserver(this);
 		process.getActivityPetriGraph().addObserver(this);
 
-		updateGraphicalObjectsHierarchy();
+		boolean ok = false;
+		try {
+			updateGraphicalObjectsHierarchy();
+			ok = true;
+		} finally {
+			if (!ok) {
+				delete();
+			}
+		}
 	}
 
 	@Override
