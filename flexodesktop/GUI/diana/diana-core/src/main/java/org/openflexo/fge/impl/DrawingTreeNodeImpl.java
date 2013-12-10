@@ -1063,7 +1063,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			if (getGraphicalRepresentation() == null) {
 				return null;
 			}
-			return (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+			if (getGraphicalRepresentation().hasKey(parameter.getName())) {
+				return (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+			} else {
+				return null;
+			}
 		}
 
 		// If SharedGraphicalRepresentations is active, GR should not be used to store graphical properties
@@ -1073,7 +1077,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			T returned = (T) propertyValues.get(parameter);
 			if (returned == null) {
 				// Init default value with GR
-				returned = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+				if (getGraphicalRepresentation().hasKey(parameter.getName())) {
+					returned = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+				} else {
+					returned = null;
+				}
 				if (returned != null) {
 					propertyValues.put(parameter, returned);
 				}
@@ -1119,8 +1127,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		if (getDrawing().getPersistenceMode() == PersistenceMode.UniqueGraphicalRepresentations) {
 			boolean wasObserving = ignoreNotificationsFrom(getGraphicalRepresentation());
-			T oldValue = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
-			getGraphicalRepresentation().setObjectForKey(value, parameter.getName());
+			T oldValue = null;
+			if (getGraphicalRepresentation().hasKey(parameter.getName())) {
+				oldValue = (T) getGraphicalRepresentation().objectForKey(parameter.getName());
+				getGraphicalRepresentation().setObjectForKey(value, parameter.getName());
+			}
 			if (wasObserving) {
 				observeAgain(getGraphicalRepresentation());
 			}
@@ -1193,6 +1204,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public void setTextStyle(TextStyle style) {
 		setPropertyValue(GraphicalRepresentation.TEXT_STYLE, style);
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		return KeyValueDecoder.hasKey(this, key);
 	}
 
 	@Override

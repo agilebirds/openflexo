@@ -133,6 +133,10 @@ public class KVCObservableObject extends Observable implements KeyValueCoding {
 		KeyValueCoder.setShortValueForKey(this, value, key);
 	}
 
+	public boolean hasKey(String key) {
+		return KeyValueDecoder.hasKey(this, key);
+	}
+
 	@Override
 	public Object objectForKey(String key) {
 		return KeyValueDecoder.objectForKey(this, key);

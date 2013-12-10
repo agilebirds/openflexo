@@ -19,6 +19,8 @@
  */
 package org.openflexo.model.factory;
 
+import java.lang.reflect.Type;
+
 /**
  * Classes implementing this interface are intented to implement Key/Value coding.
  * 
@@ -32,10 +34,36 @@ package org.openflexo.model.factory;
  */
 public interface KeyValueCoding {
 
+	/**
+	 * Return boolean indicating if this object responses (has value for) to supplied key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean hasKey(String key);
+
+	/**
+	 * Return object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public Object objectForKey(String key);
 
+	/**
+	 * Sets an object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public void setObjectForKey(Object value, String key);
 
-	public Class<?> getTypeForKey(String key);
+	/**
+	 * Return type of key/value pair identified by supplied key identifier
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Type getTypeForKey(String key);
 
 }

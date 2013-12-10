@@ -103,20 +103,21 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 					getBindingEvaluationContext()) {
 				@Override
 				public void bindingValueChanged(Object source, Boolean newValue) {
-					System.out.println(" bindingValueChanged() detected for enable=" + getComponent().getEnable() + " with newValue="
-							+ newValue + " source=" + source);
+					// System.out.println(" bindingValueChanged() detected for enable=" + getComponent().getEnable() + " with newValue="
+					// + newValue + " source=" + source);
+					updateEnability();
 				}
 			};
 		}
 	}
 
-	public void updateBindingValueChangeListeners() {
-		System.out.println("++++++++++++++++++++++++ updateBindingValueChangeListeners(). Est-ce vraiment necessaire ?");
-		/*if (listeners != null) {
-			deleteBindingValueChangeListener();
-		}
-		addBindingValueChangeListeners();*/
+	// public void updateBindingValueChangeListeners() {
+	// System.out.println("++++++++++++++++++++++++ updateBindingValueChangeListeners(). Est-ce vraiment necessaire ?");
+	/*if (listeners != null) {
+		deleteBindingValueChangeListener();
 	}
+	addBindingValueChangeListeners();*/
+	// }
 
 	/*private void addBindingValueChangeListeners() {
 		if (listeners != null) {
@@ -473,19 +474,19 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public boolean update() {
 		super.update();
 		updateEnability();
-		if (isComponentVisible()) {
-			updateDynamicTooltip();
-			updateDependingObjects();
+		// if (isComponentVisible()) {
+		updateDynamicTooltip();
+		updateDependingObjects();
 
-			if (updateWidgetFromModel()) {
-				updateComponentsExplicitelyDeclaredAsDependant();
-			}
-		} /* else if (checkValidDataPath()) {
-			// Even if the component is not visible, its visibility may depend
-			// it self from some depending component (which in that situation,
-			// are very important to know, aren'they ?)
-			updateDependingObjects();
-			}*/
+		if (updateWidgetFromModel()) {
+			updateComponentsExplicitelyDeclaredAsDependant();
+		}
+		/*}*//* else if (checkValidDataPath()) {
+				// Even if the component is not visible, its visibility may depend
+				// it self from some depending component (which in that situation,
+				// are very important to know, aren'they ?)
+				updateDependingObjects();
+				}*/
 
 		if (enableBindingValueChangeListener != null) {
 			enableBindingValueChangeListener.refreshObserving();

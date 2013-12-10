@@ -3,6 +3,7 @@ package org.openflexo.fge.swing.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -34,6 +35,8 @@ import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
 @SuppressWarnings("serial")
 public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JShapePreviewPanel> {
+
+	static final Logger logger = Logger.getLogger(JShapePreviewPanel.class.getPackage().getName());
 
 	private Drawing<JShapePreviewPanel> drawing;
 	private DrawingGraphicalRepresentation drawingGR;
@@ -214,6 +217,8 @@ public class JShapePreviewPanel extends JPanel implements ShapePreviewPanel<JSha
 	}
 
 	protected void update() {
+
+		logger.info("************** update() in JShapePreviewPanel");
 
 		// getShape().updateShape();
 

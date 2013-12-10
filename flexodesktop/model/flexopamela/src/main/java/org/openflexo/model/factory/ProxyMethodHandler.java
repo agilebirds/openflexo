@@ -115,6 +115,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private static Method IS_DELETED;
 	private static Method EQUALS_OBJECT;
 	private static Method DESTROY;
+	private static Method HAS_KEY;
 	private static Method OBJECT_FOR_KEY;
 	private static Method SET_OBJECT_FOR_KEY;
 	private static Method GET_TYPE_FOR_KEY;
@@ -158,6 +159,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			IS_BEING_CLONED = CloneableProxyObject.class.getMethod("isBeingCloned");
 			EQUALS_OBJECT = AccessibleProxyObject.class.getMethod("equalsObject", Object.class);
 			DESTROY = AccessibleProxyObject.class.getMethod("destroy");
+			HAS_KEY = KeyValueCoding.class.getMethod("hasKey", String.class);
 			OBJECT_FOR_KEY = KeyValueCoding.class.getMethod("objectForKey", String.class);
 			SET_OBJECT_FOR_KEY = KeyValueCoding.class.getMethod("setObjectForKey", Object.class, String.class);
 			GET_TYPE_FOR_KEY = KeyValueCoding.class.getMethod("getTypeForKey", String.class);
@@ -378,6 +380,9 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeUndeleter(true);
 		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
+		} else if (methodIsEquivalentTo(method, HAS_KEY)) {
+			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
+			return (property != null);
 		} else if (methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
 			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
 			if (property != null) {

@@ -77,7 +77,7 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 		return controller;
 	}
 
-	private Map<GRParameter<?>, Object> storedPropertyValues = new HashMap<GRParameter<?>, Object>();
+	protected Map<GRParameter<?>, Object> storedPropertyValues = new HashMap<GRParameter<?>, Object>();
 
 	/**
 	 * Return property value matching supplied parameter for current selection<br>
@@ -110,22 +110,22 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 	protected <T> T _getPropertyValue(GRParameter<T> parameter) {
 		T returned;
 		if (getSelection().size() == 0) {
-			if (defaultValue != null) {
+			if (defaultValue != null && defaultValue.hasKey(parameter.getName())) {
 				returned = (T) defaultValue.objectForKey(parameter.getName());
 			} else {
 				returned = null;
 			}
 		} else {
 			S style = getStyle(getSelection().get(0));
-			if (style != null) {
+			if (style != null && style.hasKey(parameter.getName())) {
 				returned = (T) style.objectForKey(parameter.getName());
 			} else {
-				if (style != null) {
+				/*if (style != null) {
 					System.out.println("OK, j'ai bien un " + style.getClass().getSimpleName() + " mais c'est dur de lui appliquer "
 							+ parameter);
 					System.out.println("parameter.getDeclaringClass()=" + parameter.getDeclaringClass());
 					System.out.println("style.getClass()=" + style.getClass());
-				}
+				}*/
 				returned = null;
 			}
 		}
@@ -323,8 +323,23 @@ public abstract class InspectedStyle<S extends KeyValueCoding> extends KVCObserv
 
 	protected <T> void _doFireChangedProperty(GRParameter<T> p, T oldValue, T newValue) {
 		pcSupport.firePropertyChange(p.getName(), oldValue, newValue);
+		// System.out.println("fired changed property " + p + " from " + oldValue + " to " + newValue);
 		setChanged();
 		notifyObservers(new FGEAttributeNotification<T>(p, oldValue, newValue));
+	}
+
+	protected <T> void forceFireChangedProperty(GRParameter<T> p) {
+		@SuppressWarnings("unchecked")
+		T storedValue = (T) storedPropertyValues.get(p);
+		T newValue = _getPropertyValue(p);
+		if (requireChange(storedValue, newValue)) {
+			_doFireChangedProperty(p, storedValue, newValue);
+		} else { // otherwise, we force it
+			pcSupport.firePropertyChange(p.getName(), null, newValue);
+			setChanged();
+			notifyObservers(new FGEAttributeNotification<T>(p, null, newValue));
+		}
+
 	}
 
 	/**

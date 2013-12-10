@@ -73,6 +73,11 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 
 	private synchronized void refreshObserving(boolean debug) {
 
+		/*if (dataBinding.toString().equals("ColorBackgroundPanel.data.color")) {
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%% OK, j'ecoute dans le contexte de " + context);
+			Thread.dumpStack();
+		}*/
+
 		if (debug) {
 			logger.info("-------------> refreshObserving() for " + dataBinding + " context=" + context);
 			logger.info("-------------> DependencyBindings:");

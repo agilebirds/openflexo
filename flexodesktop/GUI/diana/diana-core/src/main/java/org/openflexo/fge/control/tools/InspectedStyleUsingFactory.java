@@ -135,6 +135,7 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 	protected class FactoryPropertyChangeListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
+			System.out.println("Tiens, on me previent que " + evt + " pour " + evt.getPropertyName());
 			if (evt.getPropertyName().equals(StyleFactory.STYLE_CLASS_CHANGED)) {
 				if (getSelection().size() == 0) {
 					// In this case style type should be applied as default value, which should be recomputed
@@ -142,9 +143,12 @@ public abstract class InspectedStyleUsingFactory<F extends StyleFactory<S, ST>, 
 				} else {
 					applyNewStyleTypeToSelection((ST) evt.getNewValue());
 				}
+				// We should now force notify all properties related to new style
+				for (GRParameter<?> p : GRParameter.getGRParameters(getInspectedStyleClass())) {
+					forceFireChangedProperty(p);
+				}
 			}
 
-			System.out.println("Tiens, on me previent que " + evt + " pour " + evt.getPropertyName());
 			/*Class<?> inspectedStyleClass = getStyleFactory().getCurrentStyle().getClass();
 			GRParameter param = GRParameter.getGRParameter(inspectedStyleClass, evt.getPropertyName());
 			System.out.println("Found param = " + param);

@@ -101,13 +101,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 			dataBindingValueChangeListener.stopObserving();
 			dataBindingValueChangeListener.delete();
 		}
+
 		if (getComponent().getData() != null && getComponent().getData().isValid()) {
 			dataBindingValueChangeListener = new BindingValueChangeListener<T>((DataBinding<T>) getComponent().getData(),
 					getBindingEvaluationContext()) {
 				@Override
 				public void bindingValueChanged(Object source, T newValue) {
-					System.out.println(" bindingValueChanged() detected for data=" + getComponent().getData() + " with newValue="
-							+ newValue + " source=" + source);
+					// System.out.println(" bindingValueChanged() detected for data=" + getComponent().getData() + " with newValue="
+					// + newValue + " source=" + source);
 					updateData();
 				}
 			};
@@ -124,8 +125,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 					getBindingEvaluationContext()) {
 				@Override
 				public void bindingValueChanged(Object source, Boolean newValue) {
-					System.out.println(" bindingValueChanged() detected for visible=" + getComponent().getVisible() + " with newValue="
-							+ newValue + " source=" + source);
+					// System.out.println(" bindingValueChanged() detected for visible=" + getComponent().getVisible() + " with newValue="
+					// + newValue + " source=" + source);
 					updateVisibility();
 				}
 			};
@@ -184,9 +185,18 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 		T oldData = this.data;
 		if (oldData != data) {
 
-			this.data = data;
-
-			getPropertyChangeSupport().firePropertyChange(DATA, oldData, data);
+			if (getComponent().getDataClass() != null && data != null && getComponent().getDataClass().isAssignableFrom(data.getClass())) {
+				// System.out.println("OK data " + data + " is an instance of " + getComponent().getDataClass());
+				this.data = data;
+				getPropertyChangeSupport().firePropertyChange(DATA, oldData, data);
+			} else {
+				if (getComponent().getDataClass() != null) {
+					// System.out.println("Sorry, data " + data + " of " + data.getClass() + " is not an instance of "
+					// + getComponent().getDataClass());
+				}
+				this.data = null;
+				getPropertyChangeSupport().firePropertyChange(DATA, oldData, null);
+			}
 		}
 	}
 

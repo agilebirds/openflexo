@@ -58,9 +58,9 @@ public class KeyValueDecoder {
 	protected static KeyValueProperty getKeyValuePropertyFromName(Object object, String propertyName)
 			throws InvalidObjectSpecificationException {
 		// If it's a Class, get static properties
-		if (object instanceof Class){
-			return KeyValueCoder.getKeyValuePropertyFromName((Class)object, propertyName, false);
-		}else {
+		if (object instanceof Class) {
+			return KeyValueCoder.getKeyValuePropertyFromName((Class) object, propertyName, false);
+		} else {
 			return KeyValueCoder.getKeyValuePropertyFromName(object.getClass(), propertyName, false);
 		}
 	}
@@ -773,6 +773,15 @@ public class KeyValueDecoder {
 
 		return getKeyValuePropertyFromName(object, propertyName).getType();
 
+	}
+
+	public static boolean hasKey(Object object, String propertyName) {
+		try {
+			getKeyValuePropertyFromName(object, propertyName);
+			return true;
+		} catch (InvalidKeyValuePropertyException e) {
+			return false;
+		}
 	}
 
 	public static boolean isSingleProperty(Object object, String propertyName) throws InvalidObjectSpecificationException {
