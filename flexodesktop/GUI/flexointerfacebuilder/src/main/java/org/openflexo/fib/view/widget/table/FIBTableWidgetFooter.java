@@ -23,15 +23,15 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -66,6 +66,37 @@ public class FIBTableWidgetFooter extends JPanel {
 	 */
 	// private Hashtable<JButton,FIBTableActionListener> _controls;
 
+	class BorderLessButton extends JButton {
+
+		public BorderLessButton() {
+			super();
+		}
+
+		public BorderLessButton(Action a) {
+			super(a);
+		}
+
+		public BorderLessButton(Icon icon) {
+			super(icon);
+		}
+
+		public BorderLessButton(String text, Icon icon) {
+			super(text, icon);
+		}
+
+		public BorderLessButton(String text) {
+			super(text);
+		}
+
+		@Override
+		public void updateUI() {
+			super.updateUI();
+			setContentAreaFilled(false);
+			setBorderPainted(false);
+			setBorder(BorderFactory.createEmptyBorder());
+		}
+	}
+
 	public FIBTableWidgetFooter(FIBTableWidget widget) {
 		super();
 		_widget = widget;
@@ -78,50 +109,30 @@ public class FIBTableWidgetFooter extends JPanel {
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 		plusMinusPanel.setOpaque(false);
-		plusButton = new JButton(FIBIconLibrary.BROWSER_PLUS_ICON);
+		plusButton = new BorderLessButton(FIBIconLibrary.BROWSER_PLUS_ICON);
 		plusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!hasMultiplePlusActions()) {
 					plusPressed();
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
+				} else {
+					getPlusActionMenu().show(plusButton, 0, 0);
 				}
 			}
 
 		});
-		plusButton.setBorder(BorderFactory.createEmptyBorder());
+		plusButton.setPressedIcon(FIBIconLibrary.BROWSER_PLUS_SELECTED_ICON);
 		plusButton.setDisabledIcon(FIBIconLibrary.BROWSER_PLUS_DISABLED_ICON);
-		// plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
-		plusButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled()) {
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_SELECTED_ICON);
-				}
-				if (hasMultiplePlusActions()) {
-					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
-				}
-			}
 
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled()) {
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
-				}
-				if (hasMultiplePlusActions()) {
-					getPlusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-		});
-
-		minusButton = new JButton(FIBIconLibrary.BROWSER_MINUS_ICON);
+		minusButton = new BorderLessButton(FIBIconLibrary.BROWSER_MINUS_ICON);
+		minusButton.setPressedIcon(FIBIconLibrary.BROWSER_MINUS_SELECTED_ICON);
 		minusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!hasMultipleMinusActions()) {
 					minusPressed();
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
+				} else {
+					getMinusActionMenu().show(minusActionMenu, 0, 0);
 				}
 			}
 
@@ -129,58 +140,23 @@ public class FIBTableWidgetFooter extends JPanel {
 		minusButton.setBorder(BorderFactory.createEmptyBorder());
 		minusButton.setDisabledIcon(FIBIconLibrary.BROWSER_MINUS_DISABLED_ICON);
 		// minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
-		minusButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled()) {
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_SELECTED_ICON);
-				}
-				if (hasMultipleMinusActions()) {
-					getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled()) {
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
-				}
-				if (hasMultipleMinusActions()) {
-					getMinusActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-		});
 
 		plusMinusPanel.add(plusButton);
 		plusMinusPanel.add(minusButton);
 
 		add(plusMinusPanel, BorderLayout.WEST);
-		optionsButton = new JButton(FIBIconLibrary.BROWSER_OPTIONS_ICON);
-		optionsButton.setBorder(BorderFactory.createEmptyBorder());
+		optionsButton = new BorderLessButton(FIBIconLibrary.BROWSER_OPTIONS_ICON);
 		optionsButton.setDisabledIcon(FIBIconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
 		add(optionsButton, BorderLayout.EAST);
-
-		optionsButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (optionsButton.isEnabled()) {
-					optionsButton.setIcon(FIBIconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
-				}
-				getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-			}
+		optionsButton.setPressedIcon(FIBIconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
+		optionsButton.addActionListener(new ActionListener() {
 
 			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (optionsButton.isEnabled()) {
-					optionsButton.setIcon(FIBIconLibrary.BROWSER_OPTIONS_ICON);
-				}
-				getOptionActionMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			public void actionPerformed(ActionEvent e) {
+				getOptionActionMenu().show(optionsButton, 0, 0);
 			}
-
 		});
-
-		handleSelectionCleared();
+		handleSelectionChanged();
 
 		revalidate();
 	}
@@ -215,25 +191,6 @@ public class FIBTableWidgetFooter extends JPanel {
 
 		optionsButton.setEnabled(_otherActions.size() > 0 && _widget.isEnabled());
 
-		/*FlexoModelObject focusedObject = getFocusedObject();
-		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
-		plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
-		minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
-		plusActionMenuNeedsRecomputed = true;*/
-	}
-
-	protected void handleSelectionCleared() {
-		handleSelectionChanged();
-
-		/*System.out.println("handleSelectionCleared");
-		
-		plusButton.setEnabled(false);
-		minusButton.setEnabled(false);
-		
-		plusActionMenuNeedsRecomputed = true;
-		minusActionMenuNeedsRecomputed = true;
-		optionsActionMenuNeedsRecomputed = true;
-		*/
 	}
 
 	void plusPressed() {
