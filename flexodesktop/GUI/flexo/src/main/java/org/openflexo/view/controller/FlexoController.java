@@ -106,6 +106,7 @@ import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -1123,23 +1124,33 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (moduleView == null) {
 			moduleView = lookupViewForLocation(location);
 			if (createViewIfRequired && location.getPerspective().hasModuleViewForObject(location.getObject())) {
-				moduleView = createModuleViewForObjectAndPerspective(location.getObject(), location.getPerspective(), location.isEditable());
-				if (moduleView != null) {
-					FlexoModelObject representedObject = moduleView.getRepresentedObject();
-					if (representedObject == null) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("Module view: " + moduleView.getClass().getName() + " does not return its represented object");
+				try {
+					moduleView = createModuleViewForObjectAndPerspective(location.getObject(), location.getPerspective(),
+							location.isEditable());
+					if (moduleView != null) {
+						FlexoModelObject representedObject = moduleView.getRepresentedObject();
+						if (representedObject == null) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("Module view: " + moduleView.getClass().getName()
+										+ " does not return its represented object");
+							}
+							representedObject = location.getObject();
 						}
-						representedObject = location.getObject();
+						manager.new PropertyChangeListenerRegistration(representedObject.getDeletedProperty(), this, representedObject);
+						if (representedObject.getProject() != null
+								&& !manager.hasListener(ProjectClosedNotification.CLOSE, this, representedObject.getProject())) {
+							manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this,
+									representedObject.getProject());
+						}
+						viewsForLocation.put(location, moduleView);
+						locationsForView.put(moduleView, location);
 					}
-					manager.new PropertyChangeListenerRegistration(representedObject.getDeletedProperty(), this, representedObject);
-					if (representedObject.getProject() != null
-							&& !manager.hasListener(ProjectClosedNotification.CLOSE, this, representedObject.getProject())) {
-						manager.new PropertyChangeListenerRegistration(ProjectClosedNotification.CLOSE, this,
-								representedObject.getProject());
+				} catch (RuntimeException ex) {
+					if (ex.getCause() instanceof ProjectLoadingCancelledException) {
+						return null;
+					} else {
+						throw ex;
 					}
-					viewsForLocation.put(location, moduleView);
-					locationsForView.put(moduleView, location);
 				}
 			}
 		}
