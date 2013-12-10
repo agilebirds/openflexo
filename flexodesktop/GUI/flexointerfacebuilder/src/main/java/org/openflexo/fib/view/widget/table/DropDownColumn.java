@@ -32,6 +32,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -80,6 +81,9 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 	}
 
 	protected class DropDownCellRenderer extends FIBTableCellRenderer<T> {
+
+		private JComboBox comboBox;
+
 		public DropDownCellRenderer() {
 			super(DropDownColumn.this);
 		}
@@ -87,11 +91,30 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
 			if (returned instanceof JLabel) {
 				((JLabel) returned).setText(renderValue((T) value));
 				((JLabel) returned).setFont(getFont());
 			}
-			return returned;
+			if (getColumnModel().isRenderAsDropdown()) {
+				JComboBox cb = getComboBox();
+				cb.removeAllItems();
+				cb.addItem(renderValue((T) value));
+				cb.setSelectedIndex(0);
+				if (returned instanceof JComponent) {
+					cb.setToolTipText(((JComponent) returned).getToolTipText());
+				}
+				return cb;
+			} else {
+				return returned;
+			}
+		}
+
+		public JComboBox getComboBox() {
+			if (comboBox == null) {
+				comboBox = new JComboBox();
+			}
+			return comboBox;
 		}
 	}
 
