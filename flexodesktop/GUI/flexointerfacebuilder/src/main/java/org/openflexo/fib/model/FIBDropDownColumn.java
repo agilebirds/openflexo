@@ -34,13 +34,15 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	private static final Logger logger = Logger.getLogger(FIBMultipleValues.class.getPackage().getName());
 
 	public static enum Parameters implements FIBModelAttribute {
-		staticList, list, array
+		staticList, list, array, renderAsDropdown
 	}
 
 	public static BindingDefinition LIST = new BindingDefinition("list", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(
 			Object.class)), BindingDefinitionType.GET, false);
 	public static BindingDefinition ARRAY = new BindingDefinition("array", new GenericArrayTypeImpl(new WilcardTypeImpl(Object.class)),
 			BindingDefinitionType.GET, false);
+
+	private boolean renderAsDropdown = false;
 
 	public String staticList;
 
@@ -97,6 +99,18 @@ public class FIBDropDownColumn extends FIBTableColumn {
 	@Override
 	public ColumnType getColumnType() {
 		return ColumnType.DropDown;
+	}
+
+	public boolean isRenderAsDropdown() {
+		return renderAsDropdown;
+	}
+
+	public void setRenderAsDropdown(boolean renderAsDropdown) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.renderAsDropdown, renderAsDropdown);
+		if (notification != null) {
+			this.renderAsDropdown = renderAsDropdown;
+			hasChanged(notification);
+		}
 	}
 
 }
