@@ -57,12 +57,17 @@ public class LoadAllImportedProject extends FlexoAction<LoadAllImportedProject, 
 		if (project.getProjectData() != null) {
 			for (FlexoProjectReference ref : project.getProjectData().getImportedProjects()) {
 				FlexoProject referredProject = ref.getReferredProject(true);
+				loaded &= referredProject != null;
+			}
+			for (FlexoProjectReference ref : project.getProjectData().getImportedProjects()) {
+				FlexoProject referredProject = ref.getReferredProject(true);
 				if (referredProject != null) {
 					loaded &= loadImportedProjects(referredProject);
 				} else {
 					loaded = false;
 				}
 			}
+
 		}
 		return loaded;
 	}
