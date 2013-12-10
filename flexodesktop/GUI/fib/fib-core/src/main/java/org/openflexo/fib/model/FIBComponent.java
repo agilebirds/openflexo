@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
@@ -39,6 +40,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -871,8 +873,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode /*
 
 	public Type getDynamicAccessType() {
 		if (data != null) {
-			Type[] args = new Type[1];
-			args[0] = getDataType();
+			Type[] args = new Type[3];
+			args[0] = new WilcardTypeImpl(FIBComponent.class);
+			args[1] = new WilcardTypeImpl(JComponent.class);
+			args[2] = getDataType();
 			return new ParameterizedTypeImpl(FIBView.class, args);
 		}
 		return null;

@@ -102,6 +102,8 @@ public class FIBBrowserWidgetSelectionTest2 {
 		personElement.setDataClass(Person.class);
 		personElement.setLabel(new DataBinding<String>("\"My relative: \"+person.toString", browser, String.class,
 				BindingDefinitionType.GET));
+		personElement.setEnabled(new DataBinding<Boolean>("!data.jackies.contains(person)", personElement, Boolean.class,
+				BindingDefinitionType.GET));
 
 		browser.addToElements(personElement);
 

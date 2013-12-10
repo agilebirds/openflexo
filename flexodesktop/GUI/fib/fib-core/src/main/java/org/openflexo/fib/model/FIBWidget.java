@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.Bindable;
@@ -35,6 +36,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ValidationIssue;
 import org.openflexo.fib.model.validation.ValidationReport;
@@ -238,8 +240,10 @@ public abstract class FIBWidget extends FIBComponent {
 			if (getData() != null && getData().isSet()) {
 				return super.getDynamicAccessType();
 			} else {
-				Type[] args = new Type[1];
-				args[0] = getDataType();
+				Type[] args = new Type[3];
+				args[0] = new WilcardTypeImpl(FIBComponent.class);
+				args[1] = new WilcardTypeImpl(JComponent.class);
+				args[2] = getDataType();
 				return new ParameterizedTypeImpl(FIBWidgetView.class, args);
 			}
 		}

@@ -476,6 +476,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (isComponentVisible()) {
 			updateDynamicTooltip();
 			updateDependingObjects();
+
 			if (updateWidgetFromModel()) {
 				updateComponentsExplicitelyDeclaredAsDependant();
 			}
@@ -485,6 +486,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			// are very important to know, aren'they ?)
 			updateDependingObjects();
 			}*/
+
+		if (enableBindingValueChangeListener != null) {
+			enableBindingValueChangeListener.refreshObserving();
+		}
+
 		return true;
 	}
 

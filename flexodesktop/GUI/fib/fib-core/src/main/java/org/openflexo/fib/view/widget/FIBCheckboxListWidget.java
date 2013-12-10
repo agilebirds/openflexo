@@ -82,6 +82,15 @@ public class FIBCheckboxListWidget<T> extends FIBMultipleValueWidget<FIBCheckbox
 		}
 	}
 
+	@Override
+	public boolean update() {
+		super.update();
+		if (listenerToDataAsListValue != null) {
+			listenerToDataAsListValue.refreshObserving();
+		}
+		return true;
+	}
+
 	private boolean containsObject(Object object) {
 		if (selectedValues == null) {
 			return false;

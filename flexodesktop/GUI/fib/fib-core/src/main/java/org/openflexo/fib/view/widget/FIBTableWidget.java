@@ -354,6 +354,12 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 	public boolean update() {
 		super.update();
 		updateSelected();
+		if (selectedBindingValueChangeListener != null) {
+			selectedBindingValueChangeListener.refreshObserving();
+		}
+		if (listenerToDataAsListValue != null) {
+			listenerToDataAsListValue.refreshObserving();
+		}
 		return true;
 	}
 

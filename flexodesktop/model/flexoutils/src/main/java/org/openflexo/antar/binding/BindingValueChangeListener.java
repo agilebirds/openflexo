@@ -53,6 +53,10 @@ public abstract class BindingValueChangeListener<T> implements PropertyChangeLis
 		return null;
 	}
 
+	public void refreshObserving() {
+		refreshObserving(false);
+	}
+
 	private synchronized void refreshObserving(boolean debug) {
 
 		if (debug) {

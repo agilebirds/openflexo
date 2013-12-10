@@ -37,7 +37,7 @@ public abstract class BindingValueListChangeListener<T2, T extends List<T2>> ext
 		} else {
 			// Lists are sames, but values inside lists, may have changed
 			if ((lastKnownValues == null) || (!lastKnownValues.equals(newValue))) {
-				lastKnownValues = new ArrayList<T2>(newValue);
+				lastKnownValues = (newValue != null ? new ArrayList<T2>(newValue) : null);
 				bindingValueChanged(source, newValue);
 			}
 		}

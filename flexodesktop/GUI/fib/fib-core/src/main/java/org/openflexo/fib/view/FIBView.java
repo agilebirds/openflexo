@@ -319,6 +319,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 
 		updateData();
 		updateVisibility();
+
+		if (dataBindingValueChangeListener != null) {
+			dataBindingValueChangeListener.refreshObserving();
+		}
+		if (visibleBindingValueChangeListener != null) {
+			visibleBindingValueChangeListener.refreshObserving();
+		}
+
 		return true;
 	}
 

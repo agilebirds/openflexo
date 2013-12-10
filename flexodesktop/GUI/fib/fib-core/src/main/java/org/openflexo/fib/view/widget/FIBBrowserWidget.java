@@ -477,6 +477,9 @@ public class FIBBrowserWidget<T> extends FIBWidgetView<FIBBrowser, JTree, T> imp
 		updateSelected();
 		// TODO: this should be not necessary
 		getBrowserModel().fireTreeRestructured();
+		if (selectedBindingValueChangeListener != null) {
+			selectedBindingValueChangeListener.refreshObserving();
+		}
 		return true;
 	}
 

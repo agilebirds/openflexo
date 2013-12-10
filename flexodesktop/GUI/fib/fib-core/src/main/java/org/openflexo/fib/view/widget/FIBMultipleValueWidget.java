@@ -505,6 +505,12 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	public boolean update() {
 		super.update();
 		proceedToListModelUpdate();
+		if (listBindingValueChangeListener != null) {
+			listBindingValueChangeListener.refreshObserving();
+		}
+		if (arrayBindingValueChangeListener != null) {
+			arrayBindingValueChangeListener.refreshObserving();
+		}
 		return true;
 	}
 
