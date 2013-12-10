@@ -291,7 +291,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			if (getValue() == null) {
 				getTableModel().setValues(Collections.emptyList());
 			}
-			if (getValue() instanceof List && !getValue().equals(valuesBeforeUpdating)) {
+			if (getValue() instanceof Collection && !getValue().equals(valuesBeforeUpdating)) {
 				getTableModel().setValues(getValue());
 			}
 			footer.setModel(getDataObject());
