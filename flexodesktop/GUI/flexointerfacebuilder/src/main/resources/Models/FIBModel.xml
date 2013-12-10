@@ -391,6 +391,7 @@
     <property name="staticList" xmlTag="staticList" attribute="YES"/> 
     <property name="list" xmlTag="list" attribute="YES"/> 
     <property name="array" xmlTag="array" attribute="YES"/> 
+    <property name="renderAsDropdown" xmlTag="renderAsDropdown" attribute="YES" ignoreDefaultValue="false"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBIconColumn" xmlTag="IconColumn"> 
