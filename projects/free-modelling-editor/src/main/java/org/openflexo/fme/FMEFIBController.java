@@ -19,6 +19,8 @@
  */
 package org.openflexo.fme;
 
+import java.awt.Event;
+import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -69,6 +71,10 @@ public class FMEFIBController extends FIBController {
 	
 	public void removeConcept(Concept concept) {
 		getDiagramEditor().removeConcept(concept);
+	}
+	
+	public void renameConcept(Object concept) {
+		System.out.println("RENAME");
 	}
 
 	public Icon getIcon(FMEModelObject object) {

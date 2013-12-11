@@ -230,6 +230,20 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	}
 
 	
-
+	public List<DiagramElement<?, ?>> getElementsRepresentingConcept(Concept concept) {
+		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
+		if(getInstance()!=null && getInstance().getConcept()!=null){
+			if (getInstance().getConcept() == concept) {
+				returned.add(this);
+			}
+			for (Shape s : getShapes()) {
+				returned.addAll(s.getElementsRepresentingConcept(concept));
+			}
+			for (Connector c : getConnectors()) {
+				returned.addAll(c.getElementsRepresentingConcept(concept));
+			}
+		}
+		return returned;
+	}
 	
 }

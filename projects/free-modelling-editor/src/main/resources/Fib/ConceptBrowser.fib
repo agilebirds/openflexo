@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.fme.model.DataModel" controllerClassName="org.openflexo.fme.FMEFIBController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
-    <Table iteratorClassName="org.openflexo.fme.model.Concept" visibleRowCount="3" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="list" data="controller.diagramEditor.filteredConcepts" constraints="border(location=center)">
+    <Table iteratorClassName="org.openflexo.fme.model.Concept" visibleRowCount="3" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="SingleSelection" localize="true" manageDynamicModel="true" name="list" data="controller.diagramEditor.filteredConcepts" constraints="border(location=center)">
       <IconColumn data="controller.getIcon(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
       <TextFieldColumn data="iterator.htmlLabel" format="" title="concept" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
       <AddAction method="controller.createConcept(finder.data)" name="add_action" />
@@ -17,7 +17,7 @@
     <Label label="all_concepts" align="center" constraints="border(location=north)" localize="true" />
   </Panel>
   <LocalizedDictionary>
-  	<Localized key="all_concepts" lang="English">All concepts</Localized>
+    <Localized key="all_concepts" lang="English">All concepts</Localized>
     <Localized key="all_concepts" lang="French">Tout les concepts</Localized>
     <Localized key="all_concepts" lang="Dutch">All concepts</Localized>
   </LocalizedDictionary>

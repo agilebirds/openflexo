@@ -123,6 +123,8 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public List<DiagramElement<?, ?>> getElementsWithAssociation(ConceptGRAssociation association);
 
 	public List<DiagramElement<?, ?>> getElementsRepresentingInstance(Instance instance);
+	
+	public List<DiagramElement<?, ?>> getElementsRepresentingConcept(Concept concept);
 
 	public void setChanged();
 
