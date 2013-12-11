@@ -56,6 +56,7 @@ import org.openflexo.fme.dialog.CreateConceptAndInstanceDialog;
 import org.openflexo.fme.dialog.CreateConceptDialog;
 import org.openflexo.fme.dialog.CreateInstanceDialog;
 import org.openflexo.fme.dialog.RemoveConceptDialog;
+import org.openflexo.fme.dialog.RenameConceptDialog;
 import org.openflexo.fme.model.Concept;
 import org.openflexo.fme.model.ConceptGRAssociation;
 import org.openflexo.fme.model.Connector;
@@ -94,6 +95,7 @@ public class DiagramEditor implements FIBSelectionListener {
 	private static final File NEW_CONCEPT_DIALOG = new FileResource("Fib/Dialog/NewConceptDialog.fib");
 	private static final File NEW_INSTANCE_DIALOG = new FileResource("Fib/Dialog/NewInstanceDialog.fib");
 	private static final File REMOVE_CONCEPT_DIALOG = new FileResource("Fib/Dialog/RemoveConceptDialog.fib");
+	private static final File RENAME_CONCEPT_DIALOG = new FileResource("Fib/Dialog/RenameConceptDialog.fib");
 
 	public static DiagramEditor newDiagramEditor(DiagramFactory factory, FreeModellingEditorApplication application) {
 
@@ -480,6 +482,17 @@ public class DiagramEditor implements FIBSelectionListener {
 		return false;
 	}
 
+	public boolean renameConcept(Concept concept) {
+		RenameConceptDialog dialogData = new RenameConceptDialog(concept);
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(RENAME_CONCEPT_DIALOG, dialogData, application.getFrame(), true,
+				application.LOCALIZATION);
+		if (dialog.getStatus() == Status.VALIDATED) {
+			concept.setName(dialogData.getConceptName());
+			return true;
+		}
+		return false;
+	}
+	
 	public Instance createNewConceptAndNewInstance(DiagramElement<?, ?> diagramElement) {
 		CreateConceptAndInstanceDialog dialogData = new CreateConceptAndInstanceDialog(getDiagram().getDataModel(), diagramElement
 				.getInstance().getName()+"");
@@ -684,22 +697,24 @@ public class DiagramEditor implements FIBSelectionListener {
 		List<ImageIconResource> icons= new ArrayList<ImageIconResource>();
 		
 		for(DiagramElement de : getDiagram().getElementsWithAssociation(cGrAssoc)){
-			ShapeNodeImpl shape = (ShapeNodeImpl)getDrawing().getDrawingTreeNode(de);
-			JShapeView shapeView = (JShapeView)getController().shapeViewForNode(shape);
+			if(getDrawing().getDrawingTreeNode(de) instanceof ShapeNodeImpl){
+				ShapeNodeImpl shape = (ShapeNodeImpl)getDrawing().getDrawingTreeNode(de);
+				JShapeView shapeView = (JShapeView)getController().shapeViewForNode(shape);
+				
+				BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
+				screenshot = screenshot.getSubimage(10, 20, (int)shape.getWidth()+10,(int) shape.getHeight());
+				screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
 			
-			BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
-			screenshot = screenshot.getSubimage(10, 20, (int)shape.getWidth()+10,(int) shape.getHeight());
-			screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
-		
-			File outputfile = new File("icon"+shape.getIndex()+".png");
-			try {
-				outputfile.createNewFile();
-				ImageIO.write(screenshot, "png", outputfile);
-				icons.add(new ImageIconResource(outputfile.getPath()));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
+				File outputfile = new File("icon"+shape.getIndex()+".png");
+				try {
+					outputfile.createNewFile();
+					ImageIO.write(screenshot, "png", outputfile);
+					icons.add(new ImageIconResource(outputfile.getPath()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 	
+			}
 		}
 		return icons;
 	}

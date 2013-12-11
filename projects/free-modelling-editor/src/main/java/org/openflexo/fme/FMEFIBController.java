@@ -73,8 +73,8 @@ public class FMEFIBController extends FIBController {
 		getDiagramEditor().removeConcept(concept);
 	}
 	
-	public void renameConcept(Object concept) {
-		System.out.println("RENAME");
+	public void renameConcept(Concept concept) {
+		getDiagramEditor().renameConcept(concept);
 	}
 
 	public Icon getIcon(FMEModelObject object) {
