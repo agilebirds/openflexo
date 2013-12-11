@@ -71,7 +71,9 @@ public class FIBRadioButtonListWidget<T> extends FIBMultipleValueWidget<FIBRadio
 	@Override
 	protected void proceedToListModelUpdate() {
 		rebuildRadioButtons();
-		updateData();
+		if (!widgetUpdating && !isDeleted() && getDynamicJComponent() != null) {
+			updateWidgetFromModel();
+		}
 	}
 
 	protected void rebuildRadioButtons() {

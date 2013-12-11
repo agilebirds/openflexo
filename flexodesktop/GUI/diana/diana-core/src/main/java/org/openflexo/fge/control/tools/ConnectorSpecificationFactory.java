@@ -135,8 +135,11 @@ public class ConnectorSpecificationFactory implements StyleFactory<ConnectorSpec
 			return;
 		}
 
+		ConnectorSpecification oldCS = getConnectorSpecification();
+
 		this.connectorType = connectorType;
 		pcSupport.firePropertyChange(STYLE_CLASS_CHANGED, oldConnectorType, getStyleType());
+		pcSupport.firePropertyChange("connectorSpecification", oldCS, getConnectorSpecification());
 		pcSupport.firePropertyChange("styleType", oldConnectorType, getStyleType());
 	}
 

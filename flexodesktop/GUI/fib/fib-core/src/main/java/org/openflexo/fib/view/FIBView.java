@@ -185,7 +185,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent, T> i
 		T oldData = this.data;
 		if (oldData != data) {
 
-			if (getComponent().getDataClass() != null && data != null && getComponent().getDataClass().isAssignableFrom(data.getClass())) {
+			if (getComponent().getDataClass() == null || (data != null && getComponent().getDataClass().isAssignableFrom(data.getClass()))) {
 				// System.out.println("OK data " + data + " is an instance of " + getComponent().getDataClass());
 				this.data = data;
 				getPropertyChangeSupport().firePropertyChange(DATA, oldData, data);

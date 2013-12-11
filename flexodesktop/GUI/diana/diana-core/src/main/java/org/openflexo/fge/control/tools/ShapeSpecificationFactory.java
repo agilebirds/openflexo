@@ -170,8 +170,11 @@ public class ShapeSpecificationFactory implements StyleFactory<ShapeSpecificatio
 			return;
 		}
 
+		ShapeSpecification oldSS = getShapeSpecification();
+
 		this.shapeType = shapeType;
 		pcSupport.firePropertyChange(STYLE_CLASS_CHANGED, oldShapeType, getStyleType());
+		pcSupport.firePropertyChange("shapeSpecification", oldSS, getShapeSpecification());
 		pcSupport.firePropertyChange("styleType", oldShapeType, getStyleType());
 	}
 

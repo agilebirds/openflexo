@@ -140,9 +140,11 @@ public class BackgroundStyleFactory implements StyleFactory<BackgroundStyle, Bac
 			return;
 		}
 
+		BackgroundStyle oldBS = getBackgroundStyle();
+
 		this.backgroundStyleType = backgroundStyleType;
 		pcSupport.firePropertyChange(STYLE_CLASS_CHANGED, oldBackgroundStyleType, getStyleType());
-		pcSupport.firePropertyChange("backgroundStyle", oldBackgroundStyleType, getStyleType());
+		pcSupport.firePropertyChange("backgroundStyle", oldBS, getBackgroundStyle());
 		pcSupport.firePropertyChange("styleType", oldBackgroundStyleType, getStyleType());
 	}
 

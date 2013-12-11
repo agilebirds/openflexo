@@ -121,6 +121,16 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	@Override
+	public void updateData() {
+		super.updateData();
+		Type type = getWidget().getData().getAnalyzedType();
+		if (type instanceof Class && ((Class) type).isEnum()) {
+			updateMultipleValues();
+		}
+
+	}
+
+	@Override
 	public synchronized void delete() {
 		if (listBindingValueChangeListener != null) {
 			listBindingValueChangeListener.stopObserving();

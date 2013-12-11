@@ -192,7 +192,9 @@ public class FIBDropDownWidget<T> extends FIBMultipleValueWidget<FIBDropDown, JC
 		if (jComboBox != null) {
 			jComboBox.setModel(getListModel());
 			// System.out.println("New list model = " + getListModel());
-			updateData();
+			if (!widgetUpdating && !isDeleted() && getDynamicJComponent() != null) {
+				updateWidgetFromModel();
+			}
 		}
 	}
 

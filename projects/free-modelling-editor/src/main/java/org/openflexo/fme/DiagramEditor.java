@@ -417,8 +417,10 @@ public class DiagramEditor implements FIBSelectionListener {
 		List<DiagramElement<?, ?>> reflectingSelection = new ArrayList<DiagramElement<?, ?>>();
 
 		for (Shape s : getDiagram().getShapes()) {
-			s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
-			s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			if (s.getGraphicalRepresentation() != null) {
+				s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
+				s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			}
 		}
 
 		if (selection.size() > 0) {
@@ -464,8 +466,10 @@ public class DiagramEditor implements FIBSelectionListener {
 		}
 
 		for (Shape s : getDiagram().getShapes()) {
-			s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
-			s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			if (s.getGraphicalRepresentation() != null) {
+				s.getGraphicalRepresentation().getForeground().setUseTransparency(false);
+				s.getGraphicalRepresentation().getBackground().setUseTransparency(false);
+			}
 		}
 
 		application.getRepresentedConceptBrowser().getFIBController().selectionCleared();
