@@ -31,13 +31,15 @@ import java.util.List;
 public abstract class ConceptImpl implements Concept {
 
 	public boolean isUsed() {
-		if (getName().equals(NONE_CONCEPT)) {
+		/*if (getName().equals(NONE_CONCEPT)) {
 			return true;
-		}
+		}*/
 		if (getDataModel() != null && getDataModel().getDiagram() != null) {
 			for (ConceptGRAssociation association : getDataModel().getDiagram().getAssociations()) {
 				if (association.getConcept() == this) {
-					return true;
+					if(getInstances()!=null && !getInstances().isEmpty()){
+						return true;
+					}
 				}
 			}
 		}

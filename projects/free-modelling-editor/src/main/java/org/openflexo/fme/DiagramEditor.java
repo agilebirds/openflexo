@@ -19,8 +19,14 @@
  */
 package org.openflexo.fme;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,16 +38,17 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.Icon;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
+import javax.imageio.ImageIO;
 
 import org.jdom2.JDOMException;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.ShapeNodeImpl;
+import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
@@ -64,7 +71,9 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.undo.CompoundEdit;
+import org.openflexo.swing.ImageUtils;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.ImageIconResource;
 
 public class DiagramEditor implements FIBSelectionListener {
 
@@ -652,12 +661,47 @@ public class DiagramEditor implements FIBSelectionListener {
 					sb.insert(placeOfFiler, "<b>");
 					sb.insert(placeOfFiler+3+filter.length(), "</b>");
 					
+					for(ConceptGRAssociation conceptGRAssoc : getDiagram().getAssociations()){
+						if(conceptGRAssoc.getConcept().equals(concept)){
+							for(ImageIconResource icon : captureScreenshots(conceptGRAssoc)){
+								sb.append(icon.getHTMLImg());
+							}
+						}
+					}
+					
+					
 					concept.setHtmlLabel(concept.produceHtmlLabel(sb.toString()));
 					filteredConcepts.add(concept);
 				}
 			}
 		}
 		return filteredConcepts;
+	}
+	
+	
+	public List<ImageIconResource> captureScreenshots(ConceptGRAssociation cGrAssoc) {
+		
+		List<ImageIconResource> icons= new ArrayList<ImageIconResource>();
+		
+		for(DiagramElement de : getDiagram().getElementsWithAssociation(cGrAssoc)){
+			ShapeNodeImpl shape = (ShapeNodeImpl)getDrawing().getDrawingTreeNode(de);
+			JShapeView shapeView = (JShapeView)getController().shapeViewForNode(shape);
+			
+			BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
+			screenshot = screenshot.getSubimage(10, 20, (int)shape.getWidth()+10,(int) shape.getHeight());
+			screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
+		
+			File outputfile = new File("icon"+shape.getIndex()+".png");
+			try {
+				outputfile.createNewFile();
+				ImageIO.write(screenshot, "png", outputfile);
+				icons.add(new ImageIconResource(outputfile.getPath()));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+		}
+		return icons;
 	}
 	
 	private void setInstance(Instance instance){
