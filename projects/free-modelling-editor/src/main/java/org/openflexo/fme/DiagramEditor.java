@@ -443,17 +443,12 @@ public class DiagramEditor implements FIBSelectionListener {
 	
 	public Concept createNewConcept(String name) {
 		CreateConceptDialog dialogData = new CreateConceptDialog(getDiagram().getDataModel(),name);
-		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(NEW_CONCEPT_DIALOG, dialogData, application.getFrame(), true,
-				application.LOCALIZATION);
-		if (dialog.getStatus() == Status.VALIDATED) {
-			Concept returned = getFactory().newInstance(Concept.class);
-			returned.setName(dialogData.getConceptName());
-			returned.setReadOnly(false);
-			System.out.println("Created " + returned);
-			getDiagram().getDataModel().addToConcepts(returned);
-			return returned;
-		}
-		return null;
+		Concept returned = getFactory().newInstance(Concept.class);
+		returned.setName(dialogData.getConceptName());
+		returned.setReadOnly(false);
+		System.out.println("Created " + returned);
+		getDiagram().getDataModel().addToConcepts(returned);
+		return returned;
 	}
 	
 	public PropertyValue createNewPropertyValue(Instance instance, String key, String value){

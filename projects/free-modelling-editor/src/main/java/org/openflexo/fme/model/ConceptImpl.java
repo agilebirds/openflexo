@@ -38,13 +38,6 @@ public abstract class ConceptImpl implements Concept {
 			if(!getInstances().isEmpty()){
 				return true;
 			}
-			/*for (ConceptGRAssociation association : getDataModel().getDiagram().getAssociations()) {
-				if (association.getConcept() == this) {
-					if(getInstances()!=null && !getInstances().isEmpty()){
-						return true;
-					}
-				}
-			}*/
 		}
 		return false;
 	}
