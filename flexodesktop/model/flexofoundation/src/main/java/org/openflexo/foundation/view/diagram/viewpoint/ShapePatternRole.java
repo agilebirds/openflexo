@@ -18,8 +18,6 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 
 	private static final Logger logger = Logger.getLogger(ShapePatternRole.class.getPackage().getName());
 
-	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation is a org.openflexo.fge.ShapeGraphicalRepresentation.
 	private ShapeGraphicalRepresentation _graphicalRepresentation;
 
 	private ShapePatternRole parentShapePatternRole;
@@ -65,7 +63,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 
 	public void updateGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			((ShapeGraphicalRepresentation) _graphicalRepresentation).setsWith(graphicalRepresentation);
+			_graphicalRepresentation.setsWith(graphicalRepresentation);
 			setChanged();
 			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {

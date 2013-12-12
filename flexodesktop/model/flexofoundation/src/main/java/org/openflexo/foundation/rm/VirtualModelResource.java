@@ -5,6 +5,8 @@ import java.io.File;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.PamelaResource;
+import org.openflexo.foundation.viewpoint.FMLModelFactory;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.annotations.Getter;
@@ -16,7 +18,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(VirtualModelResourceImpl.class)
 @XMLElement
-public interface VirtualModelResource<VM extends VirtualModel<VM>> extends FlexoXMLFileResource<VM> {
+public interface VirtualModelResource<VM extends VirtualModel<VM>> extends FlexoXMLFileResource<VM>, PamelaResource<VM, FMLModelFactory> {
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 	public static final String DIRECTORY = "directory";
