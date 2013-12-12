@@ -33,38 +33,6 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		noneConcept.setReadOnly(true);
 		returned.getDataModel().addToConcepts(noneConcept);
 		
-		/*
-		 * Add a pre-Existing BusinessModel
-		 */
-		Concept swComponent = newInstance(Concept.class);
-		swComponent.setName("SWComponent");
-		swComponent.setReadOnly(true);
-		returned.getDataModel().addToConcepts(swComponent);
-		
-		Concept hwComponent = newInstance(Concept.class);
-		hwComponent.setName("HWComponent");
-		hwComponent.setReadOnly(true);
-		returned.getDataModel().addToConcepts(hwComponent);
-		
-		Concept swProcess = newInstance(Concept.class);
-		swProcess.setName("SWProcess");
-		swProcess.setReadOnly(true);
-		returned.getDataModel().addToConcepts(swProcess);
-		
-		Concept message = newInstance(Concept.class);
-		message.setName("Message");
-		message.setReadOnly(true);
-		returned.getDataModel().addToConcepts(message);
-		
-		Concept abstractMessage = newInstance(Concept.class);
-		abstractMessage.setName("AbstractMessage");
-		abstractMessage.setReadOnly(true);
-		returned.getDataModel().addToConcepts(abstractMessage);
-		
-		/*
-		 * End pre-existing BusinessModel
-		 */
-		
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
 		// returned.getEditedDrawing().init();

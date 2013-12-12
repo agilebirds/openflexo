@@ -59,7 +59,7 @@ public class DynamicPalette extends DrawingPalette implements PropertyChangeList
 		super(200, 200, "default");
 		elementsForAssociations = new HashMap<ConceptGRAssociation, PaletteElement>();
 	}
-
+	
 	public void update() {
 
 		List<PaletteElement> elementsToAdd = new ArrayList<PaletteElement>();

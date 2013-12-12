@@ -700,11 +700,12 @@ public class DiagramEditor implements FIBSelectionListener {
 				screenshot = screenshot.getSubimage(10, 20, (int)shape.getWidth()+10,(int) shape.getHeight());
 				screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
 			
-				File outputfile = new File("icon"+shape.getIndex()+".png");
+				//File outputfile = new File("/DynamicMiniIcons/icon"+shape.getIndex()+".png");
+				File outputFile = new FileResource("icon"+shape.getIndex()+".png");
 				try {
-					outputfile.createNewFile();
-					ImageIO.write(screenshot, "png", outputfile);
-					icons.add(new ImageIconResource(outputfile.getPath()));
+					outputFile.createNewFile();
+					ImageIO.write(screenshot, "png", outputFile);
+					icons.add(new ImageIconResource(outputFile.getPath()));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
