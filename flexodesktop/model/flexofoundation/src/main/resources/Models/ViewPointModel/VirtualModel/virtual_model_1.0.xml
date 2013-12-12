@@ -571,6 +571,8 @@
 		<property name="subject" xmlTag="subject" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 		<property name="cellStyle" xmlTag="cellStyle" attribute="YES" />
+		<property name="cellBorderStyle" xmlTag="cellBorderStyle" attribute="YES" />
+		<property name="cellAlignmentStyle" xmlTag="cellAlignmentStyle" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet"
