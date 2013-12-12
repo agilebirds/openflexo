@@ -835,6 +835,26 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable);
 
 	/**
+	 * Retrieve first shape node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ShapeNode<O> getShapeNode(O drawable);
+
+	/**
+	 * Retrieve first connector node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ConnectorNode<O> getConnectorNode(O drawable);
+
+	/**
 	 * Retrieve drawing tree node matching supplied drawable and grBinding
 	 * 
 	 * @param aDrawable
@@ -843,12 +863,44 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable, GRBinding<O, GR> grBinding);
 
 	/**
+	 * Retrieve shape node matching supplied drawable and grBinding
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ShapeNode<O> getShapeNode(O drawable, ShapeGRBinding<O> binding);
+
+	/**
+	 * Retrieve connector node matching supplied drawable and grBinding
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ConnectorNode<O> getConnectorNode(O drawable, ConnectorGRBinding<O> binding);
+
+	/**
 	 * Retrieve drawing tree node matching supplied identifier
 	 * 
 	 * @param identifier
 	 * @return
 	 */
 	public <O> DrawingTreeNode<O, ?> getDrawingTreeNode(DrawingTreeNodeIdentifier<O> identifier);
+
+	/**
+	 * Retrieve shape node matching supplied identifier
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ShapeNode<O> getShapeNode(DrawingTreeNodeIdentifier<O> identifier);
+
+	/**
+	 * Retrieve connector node matching supplied identifier
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O> ConnectorNode<O> getConnectorNode(DrawingTreeNodeIdentifier<O> identifier);
 
 	/**
 	 * Encodes the dependancy between two {@link DrawingTreeNode}

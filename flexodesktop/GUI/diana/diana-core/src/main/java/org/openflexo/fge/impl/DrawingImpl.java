@@ -57,19 +57,19 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 
 	static final Logger logger = Logger.getLogger(DrawingImpl.class.getPackage().getName());
 
-	private Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>> nodes;
+	private final Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>> nodes;
 	private RootNodeImpl<M> rootNode;
 	private M model;
-	private List<PendingConnector<?>> pendingConnectors;
+	private final List<PendingConnector<?>> pendingConnectors;
 
 	private DrawingGRBinding<M> drawingBinding;
 
 	private boolean editable = true;
 
-	private FGEModelFactory factory;
-	private PersistenceMode persistenceMode;
+	private final FGEModelFactory factory;
+	private final PersistenceMode persistenceMode;
 
-	private PropertyChangeSupport pcSupport;
+	private final PropertyChangeSupport pcSupport;
 
 	public DrawingImpl(M model, FGEModelFactory factory, PersistenceMode persistenceMode) {
 		pcSupport = new PropertyChangeSupport(this);
@@ -211,6 +211,40 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	}
 
 	/**
+	 * Retrieve first shape node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O> ShapeNode<O> getShapeNode(O drawable) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(drawable);
+		if (dtn instanceof ShapeNode) {
+			return (ShapeNode<O>) dtn;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve first connector node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O> ConnectorNode<O> getConnectorNode(O drawable) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(drawable);
+		if (dtn instanceof ConnectorNode) {
+			return (ConnectorNode<O>) dtn;
+		}
+		return null;
+	}
+
+	/**
 	 * Retrieve drawing tree node matching supplied drawable and grBinding<br>
 	 * GRBinding value should not be null
 	 * 
@@ -231,6 +265,36 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	}
 
 	/**
+	 * Retrieve shape node matching supplied drawable and grBinding
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O> ShapeNode<O> getShapeNode(O drawable, ShapeGRBinding<O> binding) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(drawable, binding);
+		if (dtn instanceof ShapeNode) {
+			return (ShapeNode<O>) dtn;
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve connector node matching supplied drawable and grBinding
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O> ConnectorNode<O> getConnectorNode(O drawable, ConnectorGRBinding<O> binding) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(drawable, binding);
+		if (dtn instanceof ConnectorNode) {
+			return (ConnectorNode<O>) dtn;
+		}
+		return null;
+	}
+
+	/**
 	 * Retrieve drawing tree node matching supplied identifier<br>
 	 * If GRBinding is null, return first DrawingTreeNode representing supplied drawable
 	 * 
@@ -246,95 +310,35 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		return getDrawingTreeNode(identifier.getDrawable(), identifier.getGRBinding());
 	}
 
-	/*public Enumeration<GraphicalRepresentation> getAllGraphicalRepresentations() {
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		for (Enumeration<DrawingTreeNode<?>> en = _hashMap.elements(); en.hasMoreElements();) {
-			returned.add(en.nextElement().getGraphicalRepresentation());
-		}
-		return returned.elements();
-	}*/
-
-	/*public Enumeration<GraphicalRepresentation> getAllSortedGraphicalRepresentations() {
-		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		for (Enumeration<DrawingTreeNode<?>> en = getAllSortedNodes(); en.hasMoreElements();) {
-			returned.add(en.nextElement().getGraphicalRepresentation());
-		}
-		return returned.elements();
-	}*/
-
-	/*private Enumeration<DrawingTreeNode<?>> getAllSortedNodes() {
-		Vector<DrawingTreeNode<?>> dtnList = new Vector<DrawingTreeNode<?>>();
-		for (Enumeration<DrawingTreeNode<?>> en = _hashMap.elements(); en.hasMoreElements();) {
-			dtnList.add(en.nextElement());
-		}
-		Collections.sort(dtnList, new Comparator<DrawingTreeNode<?>>() {
-			@Override
-			public int compare(DrawingTreeNode<?> o1, DrawingTreeNode<?> o2) {
-				int res = o2.getDepth() - o1.getDepth();
-				if (res != 0) {
-					return res;
-				}
-				if (o2.parentNode == o1.parentNode) {
-					return o2.parentNode.childNodes.indexOf(o1) - o2.parentNode.childNodes.indexOf(o2);
-				}
-				// 1. We first find a common ancestor
-				DrawingTreeNode<?> ancestor = o1.getCommonAncestor(o2);
-				if (ancestor != null) {
-					DrawingTreeNode<?> p1 = null, p2 = null;
-					// 2. We look for a direct child of the common ancestor which is an ancestor of the compared nodes
-					DrawingTreeNode<?> c1 = o1;
-					while (c1.parentNode != ancestor) {
-						c1 = c1.parentNode;
-					}
-					p1 = c1;
-					DrawingTreeNode<?> c2 = o2;
-					while (c2.parentNode != ancestor) {
-						c2 = c2.parentNode;
-					}
-					p2 = c2;
-					// 3. We now return the difference of index between those 2.
-					if (p1 != null && p2 != null) {
-						return ancestor.childNodes.indexOf(p1) - ancestor.childNodes.indexOf(p2);
-					}
-				}
-				if (o1.isAncestorOf(o2)) {
-					return -1;
-				}
-				if (o2.isAncestorOf(o1)) {
-					return 1;
-				}
-				logger.warning("Could not compare " + o1 + " and " + o2);
-				return 0;
-			}
-		});
-		//Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		//for (Enumeration<DrawingTreeNode> en = dtnList.elements(); en.hasMoreElements();) {
-		//	returned.add(en.nextElement().graphicalRepresentation);
-		//}
-		return dtnList.elements();
-	}*/
-
 	/**
-	 * This flag indicates that object hierarchy rebuilding has been started somewhere
+	 * Retrieve shape node matching supplied identifier
+	 * 
+	 * @param aDrawable
+	 * @return
 	 */
-	// private boolean isUpdatingObjectHierarchy = false;
-
-	// private Vector<DrawingTreeNode<?>> nodesToUpdate;
-	// private Vector<DrawingTreeNode<?>> nodesToNotifyAdding;
-
-	// private boolean isGraphicalHierarchyEnabled = true;
-	// private boolean isGraphicalHierarchyDirty = true;
-
-	/*public final void enableGraphicalHierarchy() {
-		isGraphicalHierarchyEnabled = true;
-		if (isGraphicalHierarchyDirty) {
-			updateGraphicalObjectsHierarchy();
+	@Override
+	public <O> ShapeNode<O> getShapeNode(DrawingTreeNodeIdentifier<O> identifier) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(identifier);
+		if (dtn instanceof ShapeNode) {
+			return (ShapeNode<O>) dtn;
 		}
+		return null;
 	}
 
-	public final void disableGraphicalHierarchy() {
-		isGraphicalHierarchyEnabled = false;
-	}*/
+	/**
+	 * Retrieve connector node matching supplied identifier
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O> ConnectorNode<O> getConnectorNode(DrawingTreeNodeIdentifier<O> identifier) {
+		DrawingTreeNode<O, ?> dtn = getDrawingTreeNode(identifier);
+		if (dtn instanceof ConnectorNode) {
+			return (ConnectorNode<O>) dtn;
+		}
+		return null;
+	}
 
 	@Deprecated
 	public void setChanged() {
@@ -678,6 +682,7 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 	/**
 	 * Delete this {@link Drawing} implementation, by deleting all {@link DrawingTreeNode}
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void delete() {
 		if (logger.isLoggable(Level.INFO)) {

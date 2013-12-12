@@ -24,11 +24,13 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.action.AddDiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.VEIconLibrary;
@@ -37,7 +39,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.diagrampalette.DiagramPaletteElementGR;
 
 public class AddDiagramPaletteElementInitializer extends ActionInitializer<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> {
 
@@ -62,16 +63,17 @@ public class AddDiagramPaletteElementInitializer extends ActionInitializer<AddDi
 
 				action.setNewElementName(FlexoController.askForString(FlexoLocalization.localizedForKey("name_for_new_element")));
 				if (action.getGraphicalRepresentation() == null) {
-					action.setGraphicalRepresentation(makePaletteElementGraphicalRepresentation(ShapeType.RECTANGLE));
+					action.setGraphicalRepresentation(makePaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, action));
 				}
 				return true;
 			}
 		};
 	}
 
-	protected DiagramPaletteElementGR makePaletteElementGraphicalRepresentation(ShapeType st) {
-		final DiagramPaletteElementGR gr = new DiagramPaletteElementGR(null, null);
-		gr.setShapeType(st);
+	protected ShapeGraphicalRepresentation makePaletteElementGraphicalRepresentation(ShapeType st, AddDiagramPaletteElement action) {
+		DiagramPaletteFactory factory = action.getFocusedObject().getResource().getFactory();
+
+		ShapeGraphicalRepresentation gr = factory.makeShapeGraphicalRepresentation(st);
 		gr.setX(100);
 		gr.setY(100);
 		gr.setWidth(50);

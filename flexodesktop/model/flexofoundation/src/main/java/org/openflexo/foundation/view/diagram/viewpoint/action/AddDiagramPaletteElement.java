@@ -32,6 +32,7 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteFactory;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
 public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> {
@@ -45,7 +46,8 @@ public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteEleme
 		 * Factory method
 		 */
 		@Override
-		public AddDiagramPaletteElement makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public AddDiagramPaletteElement makeNewAction(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection,
+				FlexoEditor editor) {
 			return new AddDiagramPaletteElement(focusedObject, globalSelection, editor);
 		}
 
@@ -71,6 +73,10 @@ public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteEleme
 
 	AddDiagramPaletteElement(DiagramPalette focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	public DiagramPaletteFactory getDiagramPaletteFactory() {
+		return getFocusedObject().getFactory();
 	}
 
 	@Override

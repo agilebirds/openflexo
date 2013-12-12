@@ -24,17 +24,20 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.action.CreateDiagramPalette;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.diagrampalette.DiagramPaletteGR;
 
 public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {
 
@@ -59,9 +62,15 @@ public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDia
 		return new FlexoActionInitializer<CreateDiagramPalette>() {
 			@Override
 			public boolean run(EventObject e, CreateDiagramPalette action) {
-
-				action.graphicalRepresentation = makePaletteGraphicalRepresentation();
-				return instanciateAndShowDialog(action, VPMCst.CREATE_PALETTE_DIALOG_FIB);
+				FGEModelFactory factory;
+				try {
+					factory = new FGEModelFactoryImpl();
+					action.graphicalRepresentation = makePaletteGraphicalRepresentation(factory);
+					return instanciateAndShowDialog(action, VPMCst.CREATE_PALETTE_DIALOG_FIB);
+				} catch (ModelDefinitionException e1) {
+					e1.printStackTrace();
+					return false;
+				}
 			}
 		};
 	}
@@ -82,8 +91,8 @@ public class CreateDiagramPaletteInitializer extends ActionInitializer<CreateDia
 		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
-	protected DiagramPaletteGR makePaletteGraphicalRepresentation() {
-		final DiagramPaletteGR gr = new DiagramPaletteGR();
+	protected DrawingGraphicalRepresentation makePaletteGraphicalRepresentation(FGEModelFactory factory) {
+		DrawingGraphicalRepresentation gr = factory.makeDrawingGraphicalRepresentation();
 		gr.setDrawWorkingArea(true);
 		gr.setWidth(260);
 		gr.setHeight(300);

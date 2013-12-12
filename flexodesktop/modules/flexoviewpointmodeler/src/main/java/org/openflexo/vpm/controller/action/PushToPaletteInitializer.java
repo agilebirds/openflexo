@@ -26,10 +26,11 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.components.widget.CommonFIB;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
-import org.openflexo.fge.view.ShapeView;
+import org.openflexo.fge.swing.view.JShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
@@ -69,12 +70,13 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 				if (getController().getCurrentModuleView() instanceof ExampleDiagramModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 					ExampleDiagramEditor c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
-					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
-					ShapeView shapeView = c.getDrawingView().shapeViewForNode(gr);
+					ShapeNode<ExampleDiagramShape> shapeNode = c.getDrawing().getShapeNode(action.getFocusedObject());
+					JShapeView shapeView = c.getDrawingView().shapeViewForNode(shapeNode);
 					BufferedImage image = shapeView.getScreenshot();
+					ShapeGraphicalRepresentation gr = shapeNode.getGraphicalRepresentation();
 					ShapeBorder b = gr.getBorder();
 					ShadowStyle ss = gr.getShadowStyle();
-					action.setScreenshot(ScreenshotGenerator.makeImage(image, b.left, b.top,
+					action.setScreenshot(ScreenshotGenerator.makeImage(image, b.getLeft(), b.getTop(),
 							(int) gr.getWidth() + (ss.getDrawShadow() ? ss.getShadowBlur() : 0) + 1,
 							(int) gr.getHeight() + (ss.getDrawShadow() ? ss.getShadowBlur() : 0) + 1));
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
