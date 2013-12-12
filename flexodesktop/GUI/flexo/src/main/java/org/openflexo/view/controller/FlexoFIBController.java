@@ -129,8 +129,9 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		}
 
 		FIBView rv = getRootView();
-		if (rv != null){ 
-			rv.updateDataObject(getDataObject());
+		if (rv != null) {
+			// rv.updateDataObject(getDataObject());
+			rv.update();
 		}
 	}
 

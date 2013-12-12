@@ -20,7 +20,6 @@
 package org.openflexo.inspector;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
@@ -35,7 +34,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.inspector.ModuleInspectorController.EmptySelectionActivated;
@@ -283,7 +281,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 
 	public void refreshComponentVisibility() {
 		if (currentInspectorView != null) {
-			currentInspectorView.update(new ArrayList<FIBComponent>());
+			currentInspectorView.update();
 		}
 	}
 

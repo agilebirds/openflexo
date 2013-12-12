@@ -2,7 +2,7 @@ package org.openflexo.ve.fib;
 
 import java.io.File;
 
-import org.openflexo.fib.FIBTestCase;
+import org.openflexo.fib.utils.FIBTestCase;
 
 public class TestVEInspectors extends FIBTestCase {
 

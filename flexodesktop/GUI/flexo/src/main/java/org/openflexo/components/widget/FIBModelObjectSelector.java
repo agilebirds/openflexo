@@ -451,7 +451,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
 			if (browserWidget != null) {
 				// Force reselect value because tree may have been recomputed
-				browserWidget.setSelectedObject(value, true);
+				browserWidget.setSelected(value);
 			}
 		}
 
