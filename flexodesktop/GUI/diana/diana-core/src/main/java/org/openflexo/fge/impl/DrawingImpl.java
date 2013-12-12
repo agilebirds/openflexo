@@ -675,6 +675,9 @@ public abstract class DrawingImpl<M> implements Drawing<M> {
 		return "Drawing of " + model;
 	}
 
+	/**
+	 * Delete this {@link Drawing} implementation, by deleting all {@link DrawingTreeNode}
+	 */
 	@SuppressWarnings("rawtypes")
 	public void delete() {
 		if (logger.isLoggable(Level.INFO)) {

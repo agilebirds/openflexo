@@ -45,13 +45,13 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @param <D>
  */
-public class SelectionManagingDrawingController<M extends FlexoObject> extends JDianaInteractiveEditor<M> implements SelectionListener {
+public class SelectionManagingDianaEditor<M extends FlexoObject> extends JDianaInteractiveEditor<M> implements SelectionListener {
 
-	private static final Logger logger = Logger.getLogger(SelectionManagingDrawingController.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SelectionManagingDianaEditor.class.getPackage().getName());
 
 	private SelectionManager _selectionManager;
 
-	public SelectionManagingDrawingController(Drawing<M> drawing, SelectionManager selectionManager, FGEModelFactory factory,
+	public SelectionManagingDianaEditor(Drawing<M> drawing, SelectionManager selectionManager, FGEModelFactory factory,
 			SwingToolFactory toolFactory) {
 		super(drawing, factory, toolFactory);
 		_selectionManager = selectionManager;
@@ -142,17 +142,17 @@ public class SelectionManagingDrawingController<M extends FlexoObject> extends J
 		}
 	}
 
-	public static class ShowContextualMenuControl extends MouseClickControlImpl<SelectionManagingDrawingController<?>> {
+	public static class ShowContextualMenuControl extends MouseClickControlImpl<SelectionManagingDianaEditor<?>> {
 
 		public ShowContextualMenuControl(FGEModelFactory factory) {
 			this(factory, false);
 		}
 
 		public ShowContextualMenuControl(FGEModelFactory factory, boolean controlDown) {
-			super("Show contextual menu", MouseButton.RIGHT, 1, new MouseClickControlActionImpl<SelectionManagingDrawingController<?>>() {
+			super("Show contextual menu", MouseButton.RIGHT, 1, new MouseClickControlActionImpl<SelectionManagingDianaEditor<?>>() {
 
 				@Override
-				public boolean handleClick(DrawingTreeNode<?, ?> node, SelectionManagingDrawingController<?> controller,
+				public boolean handleClick(DrawingTreeNode<?, ?> node, SelectionManagingDianaEditor<?> controller,
 						MouseControlContext context) {
 					JFGEView<?, ?> view = controller.getDrawingView().viewForNode(node);
 
@@ -164,13 +164,13 @@ public class SelectionManagingDrawingController<M extends FlexoObject> extends J
 					if (!(node.getDrawable() instanceof FlexoObject)) {
 						return false;
 					}
-					if (!(controller instanceof SelectionManagingDrawingController)) {
+					if (!(controller instanceof SelectionManagingDianaEditor)) {
 						logger.warning("Cannot show contextual menu: controller " + controller
-								+ " does not implement SelectionManagingDrawingController");
+								+ " does not implement SelectionManagingDianaEditor");
 						return false;
 					}
 					FlexoObject o = (FlexoObject) node.getDrawable();
-					SelectionManager selectionManager = ((SelectionManagingDrawingController) controller).getSelectionManager();
+					SelectionManager selectionManager = ((SelectionManagingDianaEditor) controller).getSelectionManager();
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						if (!selectionManager.selectionContains(o)) {
 							if (selectionManager.getSelectionSize() < 2) {

@@ -1,8 +1,10 @@
 package org.openflexo.foundation.view.diagram.rm;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -13,7 +15,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ExampleDiagramResourceImpl.class)
 @XMLElement
-public interface ExampleDiagramResource extends FlexoXMLFileResource<ExampleDiagram> {
+public interface ExampleDiagramResource extends FlexoXMLFileResource<ExampleDiagram>, PamelaResource<ExampleDiagram, ExampleDiagramFactory> {
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 

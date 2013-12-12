@@ -11,6 +11,7 @@ import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -24,16 +25,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 		AccessibleProxyObject {
 
 	private RelativePathFileConverter relativePathFileConverter;
-
 	private StringEncoder encoder;
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
-		}
-		return encoder;
-	}
 
 	public static ExampleDiagramResource makeExampleDiagramResource(DiagramSpecificationResource dsResource, String exampleDiagramName,
 			ViewPointLibrary viewPointLibrary) {
@@ -73,6 +65,22 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private ExampleDiagramResourceImpl() {
+		try {
+			setFactory(new ExampleDiagramFactory());
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (encoder == null) {
+			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
+		}
+		return encoder;
 	}
 
 	@Override

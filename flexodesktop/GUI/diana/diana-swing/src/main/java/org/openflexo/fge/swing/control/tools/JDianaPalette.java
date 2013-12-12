@@ -76,6 +76,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 		}
 	}
 
+	@Override
 	public JScrollPane getComponent() {
 		if (component == null) {
 			component = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -84,9 +85,20 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 		return component;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public JDrawingView<DrawingPalette> getPaletteView() {
 		return (JDrawingView<DrawingPalette>) super.getPaletteView();
+	}
+
+	private JScrollPane scrollPane;
+
+	public JScrollPane getPaletteViewInScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		}
+		return scrollPane;
 	}
 
 	@Override
@@ -402,6 +414,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 
 	}
 
+	@Override
 	public void updatePalette() {
 		super.updatePalette();
 		if (component != null) {
@@ -426,7 +439,7 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 
 		private static DataFlavor _defaultFlavor;
 
-		private TransferedPaletteElement _transferedData;
+		private final TransferedPaletteElement _transferedData;
 
 		public PaletteElementTransferable(PaletteElement element, Point dragOrigin) {
 			_transferedData = new TransferedPaletteElement(element, dragOrigin);
@@ -457,9 +470,9 @@ public class JDianaPalette extends DianaPalette<JComponent, SwingViewFactory> {
 	}
 
 	public static class TransferedPaletteElement {
-		private Point _offset;
+		private final Point _offset;
 
-		private PaletteElement _transfered;
+		private final PaletteElement _transfered;
 
 		public TransferedPaletteElement(PaletteElement element, Point dragOffset) {
 			super();

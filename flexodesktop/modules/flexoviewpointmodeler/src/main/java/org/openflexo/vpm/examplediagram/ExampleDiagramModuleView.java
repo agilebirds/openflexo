@@ -20,7 +20,6 @@
 package org.openflexo.vpm.examplediagram;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
@@ -37,25 +36,21 @@ public class ExampleDiagramModuleView extends JPanel implements ModuleView<Examp
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ExampleDiagramModuleView.class.getPackage().getName());
 
-	private ExampleDiagramController _controller;
+	private final ExampleDiagramEditor editor;
 
-	public ExampleDiagramModuleView(ExampleDiagramController controller) {
+	public ExampleDiagramModuleView(ExampleDiagramEditor editor) {
 		super();
 		setLayout(new BorderLayout());
-		_controller = controller;
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topPanel.add(_controller.getToolbox().getToolPanel());
-		topPanel.add(_controller.getToolbox().getStyleToolBar());
-		topPanel.add(_controller.getToolbox().getLayoutToolBar());
-		add(topPanel, BorderLayout.NORTH);
-		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
+		this.editor = editor;
+		add(editor.getToolsPanel(), BorderLayout.NORTH);
+		add(new JScrollPane(editor.getDrawingView()), BorderLayout.CENTER);
 		validate();
 
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
-	public ExampleDiagramController getController() {
-		return _controller;
+	public ExampleDiagramEditor getController() {
+		return editor;
 	}
 
 	@Override
@@ -66,12 +61,12 @@ public class ExampleDiagramModuleView extends JPanel implements ModuleView<Examp
 
 	@Override
 	public ViewPointPerspective getPerspective() {
-		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
+		return getController().getVPMController().VIEW_POINT_PERSPECTIVE;
 	}
 
 	@Override
 	public ExampleDiagram getRepresentedObject() {
-		return _controller.getExampleDiagram();
+		return editor.getExampleDiagram();
 	}
 
 	@Override

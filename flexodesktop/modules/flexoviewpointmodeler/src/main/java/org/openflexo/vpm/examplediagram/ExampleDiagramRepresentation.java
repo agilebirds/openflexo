@@ -19,175 +19,156 @@
  */
 package org.openflexo.vpm.examplediagram;
 
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.ConnectorGRProvider;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureVisitor;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
+import org.openflexo.toolbox.ToolBox;
 
-public class ExampleDiagramRepresentation extends DrawingImpl<ExampleDiagram> implements GraphicalFlexoObserver,
-		ExampleDiagramConstants {
+public class ExampleDiagramRepresentation extends DrawingImpl<ExampleDiagram> implements ExampleDiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(ExampleDiagramRepresentation.class.getPackage().getName());
 
-	private ExampleDiagramGR graphicalRepresentation;
+	public ExampleDiagramRepresentation(ExampleDiagram model, boolean readOnly) {
+		super(model, model.getResource().getFactory(), PersistenceMode.UniqueGraphicalRepresentations);
+		setEditable(!readOnly);
+	}
 
-	private Boolean ignoreNotifications = true;
+	@Override
+	public void init() {
 
-	private Hashtable<ExampleDiagramShape, ExampleDiagramShapeGR> shapesGR;
-	private Hashtable<ExampleDiagramConnector, ExampleDiagramConnectorGR> connectorsGR;
+		final DrawingGRBinding<ExampleDiagram> drawingBinding = bindDrawing(ExampleDiagram.class, "drawing",
+				new DrawingGRProvider<ExampleDiagram>() {
+					@Override
+					public DrawingGraphicalRepresentation provideGR(ExampleDiagram drawable, FGEModelFactory factory) {
+						return retrieveGraphicalRepresentation(drawable, (ExampleDiagramFactory) factory);
+					}
+				});
+		final ShapeGRBinding<ExampleDiagramShape> shapeBinding = bindShape(ExampleDiagramShape.class, "shape",
+				new ShapeGRProvider<ExampleDiagramShape>() {
+					@Override
+					public ShapeGraphicalRepresentation provideGR(ExampleDiagramShape drawable, FGEModelFactory factory) {
+						return retrieveGraphicalRepresentation(drawable, (ExampleDiagramFactory) factory);
+					}
+				});
+		final ConnectorGRBinding<ExampleDiagramConnector> connectorBinding = bindConnector(ExampleDiagramConnector.class, "connector",
+				shapeBinding, shapeBinding, new ConnectorGRProvider<ExampleDiagramConnector>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(ExampleDiagramConnector drawable, FGEModelFactory factory) {
+						return retrieveGraphicalRepresentation(drawable, (ExampleDiagramFactory) factory);
+					}
+				});
 
-	private boolean readOnly = false;
+		drawingBinding.addToWalkers(new GRStructureVisitor<ExampleDiagram>() {
 
-	public ExampleDiagramRepresentation(ExampleDiagram aShema, boolean readOnly) {
-		super(aShema);
+			@Override
+			public void visit(ExampleDiagram exampleDiagram) {
+				for (ExampleDiagramObject child : exampleDiagram.getChilds()) {
+					if (child instanceof ExampleDiagramShape) {
+						drawShape(shapeBinding, (ExampleDiagramShape) child, exampleDiagram);
+					}
+					if (child instanceof ExampleDiagramConnector) {
+						ExampleDiagramConnector connector = (ExampleDiagramConnector) child;
+						drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape(), exampleDiagram);
+					}
+				}
+			}
+		});
 
-		this.readOnly = readOnly;
-		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
-		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
+		shapeBinding.addToWalkers(new GRStructureVisitor<ExampleDiagramShape>() {
+			@Override
+			public void visit(ExampleDiagramShape aShape) {
+				for (ExampleDiagramObject child : aShape.getChilds()) {
+					if (child instanceof ExampleDiagramShape) {
+						drawShape(shapeBinding, (ExampleDiagramShape) child, aShape);
+					}
+					if (child instanceof ExampleDiagramConnector) {
+						ExampleDiagramConnector connector = (ExampleDiagramConnector) child;
+						drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape(), aShape);
+					}
+				}
+			}
+		});
 
-		shapesGR = new Hashtable<ExampleDiagramShape, ExampleDiagramShapeGR>();
-		connectorsGR = new Hashtable<ExampleDiagramConnector, ExampleDiagramConnectorGR>();
-
-		aShema.addObserver(this);
-
-		updateGraphicalObjectsHierarchy();
-
-		ignoreNotifications = false;
+		shapeBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
+		connectorBinding.setDynamicPropertyValue(GraphicalRepresentation.TEXT, new DataBinding<String>("drawable.name"), true);
 
 	}
 
 	@Override
 	public void delete() {
-		if (graphicalRepresentation != null) {
-			graphicalRepresentation.delete();
-		}
-		if (getExampleDiagram() != null) {
-			getExampleDiagram().deleteObserver(this);
-		}
 		super.delete();
-	}
-
-	@Override
-	protected void beginUpdateObjectHierarchy() {
-		ignoreNotifications = true;
-		super.beginUpdateObjectHierarchy();
-	}
-
-	@Override
-	protected void endUpdateObjectHierarchy() {
-		super.endUpdateObjectHierarchy();
-		ignoreNotifications = false;
-	}
-
-	protected boolean ignoreNotifications() {
-		if (ignoreNotifications == null) {
-			return true;
-		}
-		return ignoreNotifications;
-	}
-
-	@Override
-	protected void buildGraphicalObjectsHierarchy() {
-		buildGraphicalObjectsHierarchyFor(getExampleDiagram());
-	}
-
-	private void buildGraphicalObjectsHierarchyFor(ExampleDiagramObject parent) {
-		// logger.info("buildGraphicalObjectsHierarchyFor "+parent);
-
-		for (ExampleDiagramObject child : parent.getChilds()) {
-			if (!(child instanceof ExampleDiagramConnector)) {
-				addDrawable(child, parent);
-				buildGraphicalObjectsHierarchyFor(child);
-			}
-		}
-		for (ExampleDiagramObject child : parent.getChilds()) {
-			if (child instanceof ExampleDiagramConnector) {
-				addDrawable(child, parent);
-				buildGraphicalObjectsHierarchyFor(child);
-			}
-		}
 	}
 
 	public ExampleDiagram getExampleDiagram() {
 		return getModel();
 	}
 
-	@Override
-	public ExampleDiagramGR getDrawingGraphicalRepresentation() {
-		if (graphicalRepresentation == null) {
-			graphicalRepresentation = new ExampleDiagramGR(this);
+	private DrawingGraphicalRepresentation retrieveGraphicalRepresentation(ExampleDiagram diagram, ExampleDiagramFactory factory) {
+		DrawingGraphicalRepresentation returned = null;
+		if (diagram.getGraphicalRepresentation() != null) {
+			diagram.getGraphicalRepresentation().setFactory(factory);
+			returned = diagram.getGraphicalRepresentation();
+		} else {
+			returned = factory.makeDrawingGraphicalRepresentation();
+			diagram.setGraphicalRepresentation(returned);
 		}
-		return graphicalRepresentation;
+		returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory));
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory, true));
+		}
+		return returned;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
-		if (aDrawable instanceof ExampleDiagramShape) {
-			ExampleDiagramShape shape = (ExampleDiagramShape) aDrawable;
-			ExampleDiagramShapeGR returned = shapesGR.get(shape);
-			if (returned == null) {
-				returned = buildGraphicalRepresentation(shape);
-				shapesGR.put(shape, returned);
-			}
-			return (GraphicalRepresentation) returned;
-		} else if (aDrawable instanceof ExampleDiagramConnector) {
-			ExampleDiagramConnector connector = (ExampleDiagramConnector) aDrawable;
-			ExampleDiagramConnectorGR returned = connectorsGR.get(connector);
-			if (returned == null) {
-				returned = buildGraphicalRepresentation(connector);
-				connectorsGR.put(connector, returned);
-			}
-			return (GraphicalRepresentation) returned;
+	private ShapeGraphicalRepresentation retrieveGraphicalRepresentation(ExampleDiagramShape shape, ExampleDiagramFactory factory) {
+		ShapeGraphicalRepresentation returned = null;
+		if (shape.getGraphicalRepresentation() != null) {
+			shape.getGraphicalRepresentation().setFactory(factory);
+			returned = shape.getGraphicalRepresentation();
+		} else {
+			returned = factory.makeShapeGraphicalRepresentation();
+			shape.setGraphicalRepresentation(returned);
 		}
-		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
-		return null;
+		returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory));
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory, true));
+		}
+		returned.addToMouseDragControls(new DrawEdgeControl(factory));
+		return returned;
 	}
 
-	private ExampleDiagramConnectorGR buildGraphicalRepresentation(ExampleDiagramConnector connector) {
-		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
-			ExampleDiagramConnectorGR graphicalRepresentation = new ExampleDiagramConnectorGR(connector, this);
-			graphicalRepresentation.setsWith(connector.getGraphicalRepresentation());
-			if (!readOnly) {
-				connector.setGraphicalRepresentation(graphicalRepresentation);
-			}
-			return graphicalRepresentation;
+	private ConnectorGraphicalRepresentation retrieveGraphicalRepresentation(ExampleDiagramConnector connector,
+			ExampleDiagramFactory factory) {
+		ConnectorGraphicalRepresentation returned = null;
+		if (connector.getGraphicalRepresentation() != null) {
+			connector.getGraphicalRepresentation().setFactory(factory);
+			returned = connector.getGraphicalRepresentation();
+		} else {
+			returned = factory.makeConnectorGraphicalRepresentation();
+			connector.setGraphicalRepresentation(returned);
 		}
-		ExampleDiagramConnectorGR graphicalRepresentation = new ExampleDiagramConnectorGR(connector, this);
-		if (!readOnly) {
-			connector.setGraphicalRepresentation(graphicalRepresentation);
+		returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory));
+		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			returned.addToMouseClickControls(new ExampleDiagramEditor.ShowContextualMenuControl(factory, true));
 		}
-		return graphicalRepresentation;
-	}
-
-	private ExampleDiagramShapeGR buildGraphicalRepresentation(ExampleDiagramShape shape) {
-		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ExampleDiagramShapeGR graphicalRepresentation = new ExampleDiagramShapeGR(shape, this);
-			graphicalRepresentation.setsWith(shape.getGraphicalRepresentation());
-			if (!readOnly) {
-				shape.setGraphicalRepresentation(graphicalRepresentation);
-			}
-			return graphicalRepresentation;
-		}
-		ExampleDiagramShapeGR graphicalRepresentation = new ExampleDiagramShapeGR(shape, this);
-		if (!readOnly) {
-			shape.setGraphicalRepresentation(graphicalRepresentation);
-		}
-		return graphicalRepresentation;
-	}
-
-	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+		return returned;
 	}
 
 }

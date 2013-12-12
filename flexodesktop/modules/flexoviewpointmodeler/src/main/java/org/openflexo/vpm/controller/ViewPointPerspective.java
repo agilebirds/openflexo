@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
+import org.openflexo.fge.swing.control.tools.JDianaInspectors;
+import org.openflexo.fge.swing.control.tools.JDianaScaleSelector;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
@@ -45,7 +47,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
-import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 import org.openflexo.vpm.view.DiagramEditionPatternView;
 import org.openflexo.vpm.view.DiagramSpecificationView;
@@ -65,10 +67,10 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	private FIBViewPointLibraryBrowser viewPointLibraryBrowser = null;
 
-	/*private FIBViewPointBrowser viewPointBrowser = null;
-	private FIBVirtualModelBrowser virtualModelBrowser = null;
-	private FIBExampleDiagramBrowser exampleDiagramBrowser = null;
-	private FIBDiagramPaletteBrowser diagramPaletteBrowser = null;*/
+	private JDianaInspectors inspectors;
+	private JDianaScaleSelector scaleSelector;
+
+	private JPanel toolsPanel;
 
 	/**
 	 * Default constructor taking controller as argument
@@ -86,6 +88,17 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 		setTopLeftView(viewPointLibraryBrowser);
 
+		scaleSelector = controller.getToolFactory().makeDianaScaleSelector(null);
+		inspectors = controller.getToolFactory().makeDianaInspectors();
+
+		inspectors.getForegroundStyleInspector().setLocation(1000, 100);
+		inspectors.getTextStyleInspector().setLocation(1000, 300);
+		inspectors.getShadowStyleInspector().setLocation(1000, 400);
+		inspectors.getBackgroundStyleInspector().setLocation(1000, 500);
+		inspectors.getShapeInspector().setLocation(1000, 600);
+		inspectors.getConnectorInspector().setLocation(1000, 700);
+		inspectors.getLocationSizeInspector().setLocation(1000, 50);
+
 		infoLabel = new JLabel("ViewPoint perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 		setFooter(infoLabel);
@@ -94,7 +107,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	@Override
 	public JComponent getHeader() {
 		if (_controller.getCurrentModuleView() instanceof ExampleDiagramModuleView) {
-			return ((ExampleDiagramModuleView) _controller.getCurrentModuleView()).getController().getScalePanel();
+			return scaleSelector.getComponent();
 		}
 		return null;
 	}
@@ -192,7 +205,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new DiagramPaletteController(_controller, (DiagramPalette) object, false).getModuleView();
 		}
 		if (object instanceof ExampleDiagram) {
-			return new ExampleDiagramController(_controller, (ExampleDiagram) object, false).getModuleView();
+			return new ExampleDiagramEditor(_controller, (ExampleDiagram) object, false).getModuleView();
 		}
 		return null;
 	}

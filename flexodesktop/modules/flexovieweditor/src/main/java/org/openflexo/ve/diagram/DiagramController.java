@@ -48,10 +48,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.ve.controller.VEController;
 
-public class DiagramController extends SelectionManagingDrawingController<DiagramRepresentation> implements GraphicalFlexoObserver {
+public class DiagramController extends SelectionManagingDianaEditor<DiagramRepresentation> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DiagramController.class.getPackage().getName());
 

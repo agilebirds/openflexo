@@ -27,6 +27,7 @@ package org.openflexo.vpm.controller;
  */
 import java.util.logging.Logger;
 
+import org.openflexo.fge.swing.control.SwingToolFactory;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -52,9 +53,9 @@ import org.openflexo.vpm.view.VPMMainPane;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
 
 /**
- * Controller for this module
+ * This is the controller of ViewPointModeller module
  * 
- * @author yourname
+ * @author sylvain
  */
 public class VPMController extends FlexoController {
 
@@ -62,6 +63,8 @@ public class VPMController extends FlexoController {
 
 	public ViewPointPerspective VIEW_POINT_PERSPECTIVE;
 	public InformationSpacePerspective INFORMATION_SPACE_PERSPECTIVE;
+
+	private SwingToolFactory toolFactory;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -78,6 +81,11 @@ public class VPMController extends FlexoController {
 	 */
 	public VPMController(FlexoModule module) {
 		super(module);
+		toolFactory = new SwingToolFactory(getFlexoFrame());
+	}
+
+	public SwingToolFactory getToolFactory() {
+		return toolFactory;
 	}
 
 	@Override
@@ -147,48 +155,47 @@ public class VPMController extends FlexoController {
 	@Override
 	public void selectAndFocusObject(FlexoObject object) {
 		if (object != null) {
-		logger.info("selectAndFocusObject " + object + "of " + object.getClass().getSimpleName());
-		if (object instanceof EditionPatternObject) {
-			setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
-		} else {
-			setCurrentEditedObjectAsModuleView(object);
-		}
-		if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
-			if (object instanceof ViewPointLibrary) {
-				/*ViewPointLibrary cl = (ViewPointLibrary) object;
-				if (cl.getViewPoints().size() > 0) {
-					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
-				}*/
-			} /*else if (object instanceof OWLMetaModel) {
-				OWLMetaModel ontology = (OWLMetaModel) object;
-				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
-				if (ontology.getClasses().size() > 0) {
-					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
-				}
-				}*/else if (object instanceof ExampleDiagram) {
-				VIEW_POINT_PERSPECTIVE.focusOnExampleDiagram((ExampleDiagram) object);
-			} else if (object instanceof DiagramPalette) {
-				VIEW_POINT_PERSPECTIVE.focusOnPalette((DiagramPalette) object);
-			} else if (object instanceof ViewPoint) {
-				ViewPoint viewPoint = (ViewPoint) object;
-				VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
-			} else if (object instanceof VirtualModel) {
-				VirtualModel<?> virtualModel = (VirtualModel<?>) object;
-				VIEW_POINT_PERSPECTIVE.focusOnVirtualModel(virtualModel);
-			} else if (object instanceof EditionPattern) {
-				EditionPattern pattern = (EditionPattern) object;
-				if (pattern.getEditionSchemes().size() > 0) {
-					getSelectionManager().setSelectedObject(pattern.getEditionSchemes().firstElement());
-				}
-			} else if (object instanceof EditionPatternObject) {
-				if (getCurrentModuleView() instanceof EditionPatternView) {
-					((EditionPatternView) getCurrentModuleView()).tryToSelect((EditionPatternObject) object);
+			logger.info("selectAndFocusObject " + object + "of " + object.getClass().getSimpleName());
+			if (object instanceof EditionPatternObject) {
+				setCurrentEditedObjectAsModuleView(((EditionPatternObject) object).getEditionPattern());
+			} else {
+				setCurrentEditedObjectAsModuleView(object);
+			}
+			if (getCurrentPerspective() == VIEW_POINT_PERSPECTIVE) {
+				if (object instanceof ViewPointLibrary) {
+					/*ViewPointLibrary cl = (ViewPointLibrary) object;
+					if (cl.getViewPoints().size() > 0) {
+						getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
+					}*/
+				} /*else if (object instanceof OWLMetaModel) {
+					OWLMetaModel ontology = (OWLMetaModel) object;
+					VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
+					if (ontology.getClasses().size() > 0) {
+						getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
+					}
+					}*/else if (object instanceof ExampleDiagram) {
+					VIEW_POINT_PERSPECTIVE.focusOnExampleDiagram((ExampleDiagram) object);
+				} else if (object instanceof DiagramPalette) {
+					VIEW_POINT_PERSPECTIVE.focusOnPalette((DiagramPalette) object);
+				} else if (object instanceof ViewPoint) {
+					ViewPoint viewPoint = (ViewPoint) object;
+					VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
+				} else if (object instanceof VirtualModel) {
+					VirtualModel<?> virtualModel = (VirtualModel<?>) object;
+					VIEW_POINT_PERSPECTIVE.focusOnVirtualModel(virtualModel);
+				} else if (object instanceof EditionPattern) {
+					EditionPattern pattern = (EditionPattern) object;
+					if (pattern.getEditionSchemes().size() > 0) {
+						getSelectionManager().setSelectedObject(pattern.getEditionSchemes().firstElement());
+					}
+				} else if (object instanceof EditionPatternObject) {
+					if (getCurrentModuleView() instanceof EditionPatternView) {
+						((EditionPatternView) getCurrentModuleView()).tryToSelect((EditionPatternObject) object);
+					}
 				}
 			}
-		}
-		getSelectionManager().setSelectedObject(object);
-		}
-		else {
+			getSelectionManager().setSelectedObject(object);
+		} else {
 			logger.warning("Cannot set focus on a NULL object");
 		}
 	}

@@ -19,9 +19,9 @@
  */
 package org.openflexo.vpm.view;
 
-import org.openflexo.fib.controller.FIBComponentDynamicModel;
-import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
+import org.openflexo.fib.view.FIBView;
+import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
@@ -57,10 +57,9 @@ public class ViewPointView extends FIBModuleView<ViewPoint> implements FIBMouseC
 	}
 
 	@Override
-	public void mouseClicked(FIBComponentDynamicModel data, int clickCount) {
-		if (data instanceof FIBTableDynamicModel && ((FIBTableDynamicModel) data).getSelected() instanceof FlexoModelObject
-				&& clickCount == 2) {
-			FlexoObject o = (FlexoObject) ((FIBTableDynamicModel) data).getSelected();
+	public void mouseClicked(FIBView<?, ?, ?> view, int clickCount) {
+		if (view instanceof FIBTableWidget && ((FIBTableWidget<?>) view).getSelected() instanceof FlexoModelObject && clickCount == 2) {
+			FlexoObject o = (FlexoObject) ((FIBTableWidget<?>) view).getSelected();
 			if (o instanceof ViewPoint || o instanceof EditionPattern || o instanceof ExampleDiagram || o instanceof DiagramPalette) {
 				getFlexoController().selectAndFocusObject(o);
 			}

@@ -50,12 +50,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.processeditor.gr.WKFObjectGR;
 
-public class ProcessEditorController extends SelectionManagingDrawingController<ProcessRepresentation> {
+public class ProcessEditorController extends SelectionManagingDianaEditor<ProcessRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(ProcessEditorController.class.getPackage().getName());
 

@@ -40,7 +40,7 @@ import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 
 public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> {
@@ -68,7 +68,7 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 			public boolean run(EventObject e, PushToPalette action) {
 				if (getController().getCurrentModuleView() instanceof ExampleDiagramModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					ExampleDiagramController c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
+					ExampleDiagramEditor c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
 					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
 					ShapeView shapeView = c.getDrawingView().shapeViewForNode(gr);
 					BufferedImage image = shapeView.getScreenshot();

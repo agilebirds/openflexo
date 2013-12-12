@@ -28,8 +28,8 @@ import javax.swing.JComponent;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.JDianaViewer;
+import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
@@ -42,7 +42,7 @@ import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
-import org.openflexo.vpm.examplediagram.ExampleDiagramController;
+import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
 
 /**
  * ViewPointModeller module
@@ -54,8 +54,8 @@ public class VPMModule extends FlexoModule implements ExternalVPMModule {
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 
-	private DrawingController<? extends Drawing<? extends FlexoObject>> screenshotController;
-	private DrawingView<? extends Drawing<? extends FlexoObject>> screenshot = null;
+	private JDianaViewer<? extends Drawing<? extends FlexoObject>> screenshotController;
+	private JDrawingView<? extends FlexoObject> screenshot = null;
 	private boolean drawWorkingArea;
 	private FlexoObject screenshotObject;
 
@@ -135,7 +135,7 @@ public class VPMModule extends FlexoModule implements ExternalVPMModule {
 
 		// prevent process to be marked as modified during screenshot generation
 		target.setIgnoreNotifications();
-		screenshotController = new ExampleDiagramController(getCEDController(), target, true);
+		screenshotController = new ExampleDiagramEditor(getCEDController(), target, true);
 
 		screenshot = screenshotController.getDrawingView();
 		drawWorkingArea = screenshot.getDrawingGraphicalRepresentation().getDrawWorkingArea();

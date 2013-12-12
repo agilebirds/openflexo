@@ -50,12 +50,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.UserType;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation.SwimmingLaneRepresentationObjectVisibilityDelegate;
 import org.openflexo.wkf.swleditor.gr.WKFObjectGR;
 
-public class SwimmingLaneEditorController extends SelectionManagingDrawingController<SwimmingLaneRepresentation> {
+public class SwimmingLaneEditorController extends SelectionManagingDianaEditor<SwimmingLaneRepresentation> {
 
 	private static final Logger logger = FlexoLogger.getLogger(SwimmingLaneEditorController.class.getPackage().getName());
 

@@ -22,21 +22,23 @@ package org.openflexo.vpm.examplediagram;
 import java.awt.Graphics;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.view.DrawingView;
+import org.openflexo.fge.swing.view.JDrawingView;
+import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.vpm.examplediagram.DrawEdgeControl.DrawEdgeAction;
 
-public class ExampleDiagramView extends DrawingView<ExampleDiagramRepresentation> {
+@SuppressWarnings("serial")
+public class ExampleDiagramView extends JDrawingView<ExampleDiagram> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ExampleDiagramView.class.getPackage().getName());
 
-	public ExampleDiagramView(ExampleDiagramRepresentation aDrawing, ExampleDiagramController controller) {
-		super(aDrawing, controller);
+	public ExampleDiagramView(ExampleDiagramEditor controller) {
+		super(controller);
 	}
 
 	@Override
-	public ExampleDiagramController getController() {
-		return (ExampleDiagramController) super.getController();
+	public ExampleDiagramEditor getController() {
+		return (ExampleDiagramEditor) super.getController();
 	}
 
 	private DrawEdgeAction _drawEdgeAction;

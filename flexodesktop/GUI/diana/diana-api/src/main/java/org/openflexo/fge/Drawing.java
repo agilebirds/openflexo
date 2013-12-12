@@ -735,6 +735,11 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	public RootNode<M> getRoot();
 
 	/**
+	 * Delete this {@link Drawing} implementation, by deleting all {@link DrawingTreeNode}
+	 */
+	public void delete();
+
+	/**
 	 * Update the whole tree of graphical object hierarchy<br>
 	 * Recursively navigate in the tree to find invalidated nodes. Only invalidated nodes are recomputed (and eventually rebuild if the
 	 * graphical object hierarchy structure has changed)

@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.selection.SelectionManagingDianaEditor;
 
-public class EditionPatternPreviewController extends SelectionManagingDrawingController<EditionPatternPreviewRepresentation> {
+public class EditionPatternPreviewController extends SelectionManagingDianaEditor<EditionPatternPreviewRepresentation> {
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewController.class.getPackage().getName());
 
