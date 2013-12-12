@@ -491,6 +491,16 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 		 */
 		public void paint(FGEDrawingGraphics g);
 
+		/**
+		 * Convenient method used to retrieve 'drawWorkingArea' property value
+		 */
+		public boolean getDrawWorkingArea();
+
+		/**
+		 * Convenient method used to set 'drawWorkingArea' property value
+		 */
+		public void setDrawWorkingArea(boolean drawWorkingArea);
+
 	}
 
 	public interface ShapeNode<O> extends ContainerNode<O, ShapeGraphicalRepresentation> {
@@ -880,7 +890,7 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	 */
 	@SuppressWarnings("serial")
 	public static class DependencyLoopException extends Exception {
-		private List<DrawingTreeNode<?, ?>> dependencies;
+		private final List<DrawingTreeNode<?, ?>> dependencies;
 
 		public DependencyLoopException(List<DrawingTreeNode<?, ?>> dependancies) {
 			this.dependencies = dependancies;
@@ -902,8 +912,8 @@ public interface Drawing<M> extends HasPropertyChangeSupport {
 	 * @param <O>
 	 */
 	public static class DrawingTreeNodeIdentifier<O> {
-		private O drawable;
-		private GRBinding<O, ?> grBinding;
+		private final O drawable;
+		private final GRBinding<O, ?> grBinding;
 
 		public DrawingTreeNodeIdentifier(O drawable, GRBinding<O, ?> grBinding) {
 			super();

@@ -73,7 +73,7 @@ public class ExampleDiagramEditor extends SelectionManagingDianaEditor<ExampleDi
 	private Hashtable<DiagramPalette, JDianaPalette> contextualPalettes;
 
 	public ExampleDiagramEditor(VPMController controller, ExampleDiagram exampleDiagram, boolean readOnly) {
-		super(new ExampleDiagramRepresentation(exampleDiagram, readOnly), controller.getSelectionManager(), exampleDiagram.getResource()
+		super(new ExampleDiagramDrawing(exampleDiagram, readOnly), controller.getSelectionManager(), exampleDiagram.getResource()
 				.getFactory(), controller.getToolFactory());
 
 		vpmController = controller;
@@ -93,8 +93,7 @@ public class ExampleDiagramEditor extends SelectionManagingDianaEditor<ExampleDi
 			toolsPanel.add(stylesWidget.getComponent());
 			toolsPanel.add(layoutWidget.getComponent());
 
-			commonPaletteModel = new CommonPalette();
-			commonPaletteModel.setEditor(this);
+			commonPaletteModel = new CommonPalette(this);
 
 			commonPalette = controller.getToolFactory().makeDianaPalette(commonPaletteModel);
 			commonPalette.attachToEditor(this);

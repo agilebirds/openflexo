@@ -45,7 +45,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
+import org.openflexo.vpm.diagrampalette.DiagramPaletteEditor;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
 import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
@@ -202,7 +202,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 		}
 		if (object instanceof DiagramPalette) {
-			return new DiagramPaletteController(_controller, (DiagramPalette) object, false).getModuleView();
+			return new DiagramPaletteEditor(_controller, (DiagramPalette) object, false).getModuleView();
 		}
 		if (object instanceof ExampleDiagram) {
 			return new ExampleDiagramEditor(_controller, (ExampleDiagram) object, false).getModuleView();

@@ -36,9 +36,9 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DiagramPaletteModuleView.class.getPackage().getName());
 
-	private DiagramPaletteController _controller;
+	private final DiagramPaletteEditor _controller;
 
-	public DiagramPaletteModuleView(final DiagramPaletteController controller) {
+	public DiagramPaletteModuleView(final DiagramPaletteEditor controller) {
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
@@ -49,7 +49,7 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
-	public DiagramPaletteController getController() {
+	public DiagramPaletteEditor getController() {
 		return _controller;
 	}
 
@@ -61,7 +61,7 @@ public class DiagramPaletteModuleView extends JPanel implements ModuleView<Diagr
 
 	@Override
 	public ViewPointPerspective getPerspective() {
-		return getController().getCEDController().VIEW_POINT_PERSPECTIVE;
+		return getController().getVPMController().VIEW_POINT_PERSPECTIVE;
 	}
 
 	public FlexoProject getProject() {

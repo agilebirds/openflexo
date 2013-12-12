@@ -26,9 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.control.DianaInteractiveEditor.EditorTool;
 import org.openflexo.fge.control.DrawingPalette;
 import org.openflexo.fge.control.PaletteElement;
@@ -54,10 +52,12 @@ public class CommonPalette extends DrawingPalette {
 	public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 7);
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
-	private ExampleDiagramEditor editor;
+	private final ExampleDiagramEditor editor;
 
-	public CommonPalette() {
+	public CommonPalette(ExampleDiagramEditor editor) {
 		super(200, 200, "default");
+
+		this.editor = editor;
 
 		ShapeSpecification[] ssp = new ShapeSpecification[11];
 
@@ -90,10 +90,6 @@ public class CommonPalette extends DrawingPalette {
 
 	public ExampleDiagramEditor getEditor() {
 		return editor;
-	}
-
-	public void setEditor(ExampleDiagramEditor editor) {
-		this.editor = editor;
 	}
 
 	private PaletteElement makePaletteElement(ShapeSpecification shapeSpecification, int px, int py) {
@@ -165,10 +161,10 @@ public class CommonPalette extends DrawingPalette {
 					shapeGR.setBackground(getEditor().getInspectedBackgroundStyle().cloneStyle());
 				}
 				if (applyCurrentTextStyle) {
-					shapeGR.setTextStyle((TextStyle) getEditor().getInspectedTextStyle().cloneStyle());
+					shapeGR.setTextStyle(getEditor().getInspectedTextStyle().cloneStyle());
 				}
 				if (applyCurrentShadowStyle) {
-					shapeGR.setShadowStyle((ShadowStyle) getEditor().getInspectedShadowStyle().cloneStyle());
+					shapeGR.setShadowStyle(getEditor().getInspectedShadowStyle().cloneStyle());
 				}
 
 				shapeGR.setX(dropLocation.x);

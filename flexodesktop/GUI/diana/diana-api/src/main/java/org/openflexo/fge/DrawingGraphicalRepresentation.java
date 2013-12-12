@@ -67,9 +67,9 @@ public interface DrawingGraphicalRepresentation extends ContainerGraphicalRepres
 	public static GRParameter<Color> SELECTION_COLOR = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
 			SELECTION_COLOR_KEY, Color.class);
 	public static GRParameter<Boolean> DRAW_WORKING_AREA = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class,
-			DRAW_WORKING_AREA_KEY, Boolean.class);
+			DRAW_WORKING_AREA_KEY, Boolean.TYPE);
 	public static GRParameter<Boolean> IS_RESIZABLE = GRParameter.getGRParameter(DrawingGraphicalRepresentation.class, IS_RESIZABLE_KEY,
-			Boolean.class);
+			Boolean.TYPE);
 
 	/*public static enum DrawingParameters implements GRParameter {
 		backgroundColor, width, height, rectangleSelectingSelectionColor, focusColor, selectionColor, drawWorkingArea, isResizable;

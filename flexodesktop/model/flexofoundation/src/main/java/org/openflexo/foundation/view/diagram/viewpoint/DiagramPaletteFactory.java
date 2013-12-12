@@ -20,6 +20,8 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import org.openflexo.fge.FGEModelFactoryImpl;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 /**
@@ -34,4 +36,16 @@ public class DiagramPaletteFactory extends FGEModelFactoryImpl {
 	public DiagramPaletteFactory() throws ModelDefinitionException {
 		super(DiagramPalette.class, DiagramPaletteElement.class);
 	}
+
+	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR) {
+		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
+		returned.setFactory(this);
+		returned.setsWith(aGR);
+		returned.setIsFocusable(true);
+		returned.setIsSelectable(true);
+		returned.setIsReadOnly(false);
+		returned.setLocationConstraints(LocationConstraints.FREELY_MOVABLE);
+		return returned;
+	}
+
 }

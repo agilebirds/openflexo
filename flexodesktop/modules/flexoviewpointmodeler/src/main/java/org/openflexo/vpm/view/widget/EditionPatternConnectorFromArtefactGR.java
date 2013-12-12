@@ -52,9 +52,9 @@ public class EditionPatternConnectorFromArtefactGR extends ShapeGraphicalReprese
 
 		setWidth(20);
 		setHeight(20);
-		/*addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl());
+		/*addToMouseClickControls(new DiagramPaletteEditor.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM()!=ToolBox.MACOS) {
-			addToMouseClickControls(new DiagramPaletteController.ShowContextualMenuControl(true));
+			addToMouseClickControls(new DiagramPaletteEditor.ShowContextualMenuControl(true));
 		}*/
 		// addToMouseDragControls(new DrawEdgeControl());
 

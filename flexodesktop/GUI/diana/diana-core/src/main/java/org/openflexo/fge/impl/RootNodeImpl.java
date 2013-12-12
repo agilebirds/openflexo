@@ -49,12 +49,6 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	}
 
 	@Override
-	protected void stopDrawableObserving() {
-		System.out.println("????????  qui est le con qui m'empeche de regarder ???");
-		super.stopDrawableObserving();
-	}
-
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("******************************** Received " + evt.getPropertyName() + " " + evt);
 		super.propertyChange(evt);
@@ -198,7 +192,22 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 				&& !getGraphicalRepresentation().getDecorationPainter().paintBeforeDrawing()) {
 			getGraphicalRepresentation().getDecorationPainter().paintDecoration(g.getDrawingDecorationGraphics());
 		}
+	}
 
+	/**
+	 * Convenient method used to retrieve 'drawWorkingArea' property value
+	 */
+	@Override
+	public boolean getDrawWorkingArea() {
+		return getPropertyValue(DrawingGraphicalRepresentation.DRAW_WORKING_AREA);
+	}
+
+	/**
+	 * Convenient method used to set 'drawWorkingArea' property value
+	 */
+	@Override
+	public void setDrawWorkingArea(boolean drawWorkingArea) {
+		setPropertyValue(DrawingGraphicalRepresentation.DRAW_WORKING_AREA, drawWorkingArea);
 	}
 
 }

@@ -42,11 +42,17 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.toolbox.ToolBox;
 
-public class ExampleDiagramRepresentation extends DrawingImpl<ExampleDiagram> implements ExampleDiagramConstants {
+/**
+ * This is the abstraction of a drawing representing an {@link ExampleDiagram}
+ * 
+ * @author sylvain
+ * 
+ */
+public class ExampleDiagramDrawing extends DrawingImpl<ExampleDiagram> implements ExampleDiagramConstants {
 
-	private static final Logger logger = Logger.getLogger(ExampleDiagramRepresentation.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExampleDiagramDrawing.class.getPackage().getName());
 
-	public ExampleDiagramRepresentation(ExampleDiagram model, boolean readOnly) {
+	public ExampleDiagramDrawing(ExampleDiagram model, boolean readOnly) {
 		super(model, model.getResource().getFactory(), PersistenceMode.UniqueGraphicalRepresentations);
 		setEditable(!readOnly);
 	}
