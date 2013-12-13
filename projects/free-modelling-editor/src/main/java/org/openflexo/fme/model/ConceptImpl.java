@@ -19,6 +19,9 @@
  */
 package org.openflexo.fme.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Default implementation for concept
  * 
@@ -28,16 +31,82 @@ package org.openflexo.fme.model;
 public abstract class ConceptImpl implements Concept {
 
 	public boolean isUsed() {
-		if (getName().equals(NONE_CONCEPT)) {
+		/*if (getName().equals(NONE_CONCEPT)) {
 			return true;
-		}
+		}*/
 		if (getDataModel() != null && getDataModel().getDiagram() != null) {
-			for (ConceptGRAssociation association : getDataModel().getDiagram().getAssociations()) {
-				if (association.getConcept() == this) {
-					return true;
-				}
+			if(!getInstances().isEmpty()){
+				return true;
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String produceHtmlLabel(String label){
+		//setHtmlLabel(getName());
+		StringBuilder sb = new StringBuilder();
+		if(getName()!=null){
+			if(getReadOnly()){
+				sb.append("<html><i>");
+				sb.append(label);
+				sb.append("</i></html>");
+			}
+			else{
+				sb.append("<html>");
+				sb.append(label);
+				sb.append("</html>");
+			}
+		}
+		performSuperSetter(NAME, sb.toString().replaceAll("<[^>]*>", ""));
+		return sb.toString();
+	}
+	
+	@Override
+	public void setHtmlLabel(String label){
+		if(getReadOnly()&&(!label.replaceAll("<[^>]*>", "").equals(getName()))){
+			return;
+		}
+		else{
+			performSuperSetter(HTML_LABEL, label);
+		}
+		
+		return;
+	}
+	
+	public void removeUnusedProperties(){
+		// check if there is one instance with this attribute, otherwise delete it
+		List<PropertyDefinition> propertyToRemove = new ArrayList<PropertyDefinition>();
+		List<Instance> instanceWithPropertyToRemove = new ArrayList<Instance>();
+		for(PropertyDefinition propDef : getProperties()){
+			boolean validProperty = false;
+			for(Instance instance : getInstanceWithProperty(propDef)){
+				if(instance.getPropertyNamed(propDef.getName()).getValue()!=""){
+					validProperty = true;
+				}
+				else{
+					instanceWithPropertyToRemove.add(instance);
+				}
+			}
+			if(!validProperty){
+				propertyToRemove.add(propDef);
+				for(Instance instance : instanceWithPropertyToRemove){
+					instance.removeFromPropertyValues(instance.getPropertyNamed(propDef.getName()));
+				}
+			}
+		}
+		
+		getProperties().removeAll(propertyToRemove);
+	}
+	
+	
+	private List<Instance> getInstanceWithProperty(PropertyDefinition propertyDefinition){
+		List<Instance> instanceWithProperty = new ArrayList<Instance>();
+		for(Instance instance : getInstances()){
+			if(instance.getPropertyNamed(propertyDefinition.getName())!=null){
+				instanceWithProperty.add(instance);
+			}
+		}
+		return instanceWithProperty;
 	}
 }

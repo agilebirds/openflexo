@@ -22,6 +22,7 @@ package org.openflexo.fme.model;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
@@ -41,18 +42,16 @@ public interface Connector extends DiagramElement<Connector, ConnectorGraphicalR
 	public static final String START_SHAPE = "startShape";
 	public static final String END_SHAPE = "endShape";
 
-	@Getter(START_SHAPE)
+	@Getter(value = START_SHAPE, inverse = Shape.START_CONNECTORS)
 	@XMLElement(context = "Start")
-	@Embedded
 	@CloningStrategy(StrategyType.CLONE)
 	public Shape getStartShape();
 
 	@Setter(START_SHAPE)
 	public void setStartShape(Shape startShape);
 
-	@Getter(END_SHAPE)
+	@Getter(value=END_SHAPE, inverse = Shape.END_CONNECTORS)
 	@XMLElement(context = "End")
-	@Embedded
 	@CloningStrategy(StrategyType.CLONE)
 	public abstract Shape getEndShape();
 

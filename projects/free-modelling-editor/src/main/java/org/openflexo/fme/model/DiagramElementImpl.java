@@ -47,26 +47,6 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 	public DiagramElementImpl() {
 	}
 
-	/*@Override
-	public String getName() {
-		if (getInstance() != null) {
-			return getInstance().getName();
-		}
-		return (String) performSuperGetter(NAME);
-	}
-
-	@Override
-	public void setName(String aName) {
-		System.out.println("Set new name: " + aName);
-		if (getInstance() != null) {
-			String oldValue = getName();
-			getInstance().setName(aName);
-			getPropertyChangeSupport().firePropertyChange(NAME, oldValue, aName);
-		} else {
-			performSuperSetter(NAME, aName);
-		}
-	}*/
-
 	@Override
 	public Diagram getDiagram() {
 		if (this instanceof Diagram) {
@@ -77,11 +57,11 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void setGraphicalRepresentation(G graphicalRepresentation) {
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
-			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
+			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);	
 		}
 		performSuperSetter(GRAPHICAL_REPRESENTATION, graphicalRepresentation);
 		if (graphicalRepresentation != null && graphicalRepresentation.getPropertyChangeSupport() != null) {
@@ -91,7 +71,6 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-
 		if (evt.getPropertyName().equals(GraphicalRepresentation.TRANSPARENCY_KEY)
 				|| (evt.getPropertyName().equals(BackgroundStyle.USE_TRANSPARENCY_KEY))
 				|| (evt.getPropertyName().equals(BackgroundStyle.TRANSPARENCY_LEVEL_KEY))
@@ -101,7 +80,6 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 
 		// Detected that a graphical property value has changed
-		// System.out.println("propertyChange() " + evt.getPropertyName() + " evt=" + evt);
 		GRParameter<?> p = GRParameter.getGRParameter(evt.getSource().getClass(), evt.getPropertyName());
 		if (p != null && evt.getSource() instanceof FGEObject) {
 			if ((evt.getSource() == getGraphicalRepresentation().getTextStyle())
@@ -220,6 +198,8 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 
 	}
+	
+	
 
 	public List<DiagramElement<?, ?>> getElementsWithAssociation(ConceptGRAssociation association) {
 		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
@@ -249,4 +229,21 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		return returned;
 	}
 
+	
+	public List<DiagramElement<?, ?>> getElementsRepresentingConcept(Concept concept) {
+		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
+		if(getInstance()!=null && getInstance().getConcept()!=null){
+			if (getInstance().getConcept() == concept) {
+				returned.add(this);
+			}
+			for (Shape s : getShapes()) {
+				returned.addAll(s.getElementsRepresentingConcept(concept));
+			}
+			for (Connector c : getConnectors()) {
+				returned.addAll(c.getElementsRepresentingConcept(concept));
+			}
+		}
+		return returned;
+	}
+	
 }

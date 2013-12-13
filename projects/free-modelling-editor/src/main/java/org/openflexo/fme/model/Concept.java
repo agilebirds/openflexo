@@ -52,6 +52,9 @@ public interface Concept extends FMEModelObject {
 	public static final String NAME = "name";
 	public static final String DATA_MODEL = "dataModel";
 	public static final String INSTANCES = "instances";
+	public static final String PROPERTIES = "properties";
+	public static final String READ_ONLY = "read_only";
+	public static final String HTML_LABEL = "html_label";
 
 	@Getter(value = NAME)
 	@XMLAttribute
@@ -87,4 +90,39 @@ public interface Concept extends FMEModelObject {
 	public Instance getInstanceNamed(String instanceName);
 
 	public boolean isUsed();
+	
+	@Getter(value = READ_ONLY, defaultValue="true")
+	@XMLAttribute
+	public boolean getReadOnly();
+
+	@Setter(value = READ_ONLY)
+	public void setReadOnly(boolean readOnly);
+	
+	public String produceHtmlLabel(String label);
+
+	@Getter(value = HTML_LABEL)
+	@XMLAttribute
+	public String getHtmlLabel();
+	
+	@Setter(value = HTML_LABEL)
+	public void setHtmlLabel(String name);
+	
+	@Getter(value = PROPERTIES, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.IGNORE)
+	@Embedded
+	public List<PropertyDefinition> getProperties();
+
+	@Setter(PROPERTIES)
+	public void setProperties(List<PropertyDefinition> someProperties);
+
+	@Adder(PROPERTIES)
+	@PastingPoint
+	public void addToProperties(PropertyDefinition aProperty);
+
+	@Remover(PROPERTIES)
+	public void removeFromProperties(PropertyDefinition aProperty);
+	
+	public void removeUnusedProperties();
+	
 }

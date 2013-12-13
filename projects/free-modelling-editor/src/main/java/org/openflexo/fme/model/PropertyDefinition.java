@@ -17,15 +17,31 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.openflexo.fme.model;
 
-package org.openflexo;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class ApplicationVersion {
-	public static String BUSINESS_APPLICATION_VERSION = "1.7.0";
-	// Must be like x.x.x or x.x or x.xalpha or x.xbeta or x.x.xRCxx or x.x.xalpha x.x.xbeta
-	// This field must be non-final because it will be generated during the build procedure.
-	// If you declare this field final, then the compiler will copy it's value directly and you will not see the value of the build
-	public static String BUILD_ID = "dev";
+/**
+ * Represents a property definition, as s String value associated with a String key
+ * 
+ * @author vincent
+ * 
+ */
+@ModelEntity
+@XMLElement(xmlTag = "PropertyDefinition")
+public interface PropertyDefinition extends FMEModelObject {
 
-	public static String COMMIT_ID = "dev";
+	public static final String NAME = "name";
+
+	@Getter(value = NAME)
+	@XMLAttribute
+	public String getName();
+
+	@Setter(value = NAME)
+	public void setName(String aName);
+
 }

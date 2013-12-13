@@ -69,6 +69,7 @@ import org.openflexo.fge.swing.control.tools.JDianaStyles;
 import org.openflexo.fge.swing.control.tools.JDianaToolSelector;
 import org.openflexo.fib.utils.FlexoLoggingViewer;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
+import org.openflexo.fme.model.BusinessDiagramFactory;
 import org.openflexo.fme.model.Diagram;
 import org.openflexo.fme.model.DiagramFactory;
 import org.openflexo.localization.FlexoLocalization;
@@ -151,7 +152,7 @@ public class FreeModellingEditorApplication {
 		super();
 
 		try {
-			factory = new DiagramFactory();
+			factory = new BusinessDiagramFactory();
 			// System.out.println("factory: " + factory.debug());
 			// FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
 			// injector = Guice.createInjector(injectionModule);
@@ -605,7 +606,6 @@ public class FreeModellingEditorApplication {
 		commonPaletteModel.setEditor(diagramEditor);
 		commonPalette.attachToEditor(diagramEditor.getController());
 		dynamicPaletteModel.setEditor(diagramEditor);
-		dynamicPalette.attachToEditor(diagramEditor.getController());
 		inspectors.attachToEditor(diagramEditor.getController());
 
 		/*JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

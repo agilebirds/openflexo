@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.fme.model.DataModel" controllerClassName="org.openflexo.fme.FMEFIBController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
-    <Table iteratorClassName="org.openflexo.fme.model.Concept" visibleRowCount="3" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="list" data="data.concepts" constraints="border(location=center)">
+    <Table iteratorClassName="org.openflexo.fme.model.Concept" visibleRowCount="3" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="SingleSelection" selected="" localize="true" manageDynamicModel="true" name="list" data="controller.diagramEditor.filteredConcepts" constraints="border(location=center)">
       <IconColumn data="controller.getIcon(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
-      <TextFieldColumn data="iterator.name" title="concept" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
-      <AddAction method="controller.createConcept()" name="add_action" />
+      <TextFieldColumn data="iterator.htmlLabel" title="concept" columnWidth="100" resizable="true" displayTitle="true" name="textfield" />
+      <AddAction method="controller.createConcept(finder.data)" isAvailable="(data.getConceptNamed(finder.data) = null)" name="add_action" />
+      <RemoveAction method="controller.removeConcept(selected)" isAvailable="(!(selected.readOnly))" name="delete_action" />
+      <CustomAction method="controller.createConcept(finder.data)" isAvailable="(data.getConceptNamed(finder.data) = null)" name="custom_action" />
+      <Dependancy componentName="list" />
+      <Dependancy componentName="finder" />
     </Table>
   </Panel>
   <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=north)">
     <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" darkLevel="0" constraints="border(location=center)">
-      <TextField constraints="border(location=center)" localize="true" columns="7" text="TextField" />
-      <Button buttonType="Trigger" label="search" localize="true" constraints="border(location=east)" />
+      <TextField data="controller.diagramEditor.filter" constraints="border(location=center)" name="finder" localize="true" manageDynamicModel="true" columns="7" text="TextField" />
     </Panel>
     <Label label="all_concepts" align="center" constraints="border(location=north)" localize="true" />
   </Panel>
-  <LocalizedDictionary />
+  <LocalizedDictionary>
+    <Localized key="all_concepts" lang="English">All concepts</Localized>
+    <Localized key="all_concepts" lang="French">Tout les concepts</Localized>
+    <Localized key="all_concepts" lang="Dutch">All concepts</Localized>
+  </LocalizedDictionary>
 </Panel>

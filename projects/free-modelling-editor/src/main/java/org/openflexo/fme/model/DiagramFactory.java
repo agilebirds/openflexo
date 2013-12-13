@@ -30,7 +30,9 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		returned.setDataModel(newInstance(DataModel.class));
 		Concept noneConcept = newInstance(Concept.class);
 		noneConcept.setName(Concept.NONE_CONCEPT);
+		noneConcept.setReadOnly(true);
 		returned.getDataModel().addToConcepts(noneConcept);
+		
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
 		// returned.getEditedDrawing().init();
@@ -57,6 +59,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
+		
 		return returned;
 	}
 
@@ -142,6 +145,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 	@Override
 	public void applyBasicControls(ConnectorGraphicalRepresentation connectorGraphicalRepresentation) {
 		super.applyBasicControls(connectorGraphicalRepresentation);
+		connectorGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl(this));
 	}
 
 	@Override

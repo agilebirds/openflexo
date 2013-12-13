@@ -52,10 +52,8 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String SHAPES = "shapes";
 	public static final String CONNECTORS = "connectors";
-	// public static final String NAME = "name";
 	public static final String ASSOCIATION = "association";
 	public static final String CONTAINER = "container";
-	public static final String PROPERTY_VALUES = "propertyValues";
 	public static final String INSTANCE = "instance";
 
 	@Getter(value = SHAPES, cardinality = Cardinality.LIST, inverse = CONTAINER)
@@ -90,29 +88,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	@Remover(CONNECTORS)
 	public void removeFromConnectors(Connector aConnector);
 
-	/*@Getter(value = NAME)
-	@XMLAttribute
-	public String getName();
-
-	@Setter(value = NAME)
-	public void setName(String aName);*/
-
-	@Getter(value = PROPERTY_VALUES, cardinality = Cardinality.LIST)
-	@XMLElement(primary = true)
-	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
-	public List<PropertyValue> getPropertyValues();
-
-	@Setter(PROPERTY_VALUES)
-	public void setPropertyValues(List<PropertyValue> somePropertyValues);
-
-	@Adder(PROPERTY_VALUES)
-	@PastingPoint
-	public void addToPropertyValues(PropertyValue aPropertyValue);
-
-	@Remover(PROPERTY_VALUES)
-	public void removeFromPropertyValues(PropertyValue aPropertyValue);
-
 	@Getter(value = CONTAINER)
 	public DiagramElement<?, ?> getContainer();
 
@@ -123,7 +98,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
 	@XMLElement
 	public G getGraphicalRepresentation();
 
@@ -147,8 +121,11 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 	public List<DiagramElement<?, ?>> getElementsWithAssociation(ConceptGRAssociation association);
 
 	public List<DiagramElement<?, ?>> getElementsRepresentingInstance(Instance instance);
+	
+	public List<DiagramElement<?, ?>> getElementsRepresentingConcept(Concept concept);
 
 	public void setChanged();
 
 	public boolean hasChanged();
+
 }

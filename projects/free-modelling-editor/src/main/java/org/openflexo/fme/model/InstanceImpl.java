@@ -19,22 +19,35 @@
  */
 package org.openflexo.fme.model;
 
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.factory.AccessibleProxyObject;
-import org.openflexo.model.factory.CloneableProxyObject;
-import org.openflexo.model.factory.DeletableProxyObject;
+import java.util.List;
 
 /**
- * Root class for all concepts involved in FreeModellingEditor demonstrator
+ * Default implementation for instance
  * 
  * @author sylvain
  * 
  */
-@ModelEntity
-public interface FMEModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
+public abstract class InstanceImpl implements Instance {
 
-	public void setChanged();
-
-	public boolean hasChanged();
+	@Override
+	public boolean containsKeyNamed(String keyName){
+		for(PropertyValue pv : getPropertyValues()){
+			if(pv.getKey().equals(keyName))
+				return true;
+		}
+		return false;
+	}
 	
+	@Override
+	public String buildDescription(){
+		StringBuilder sb = new StringBuilder();
+		// All properties are printed like this "myProperty=myValue"
+		List<PropertyValue> propertyValues = getPropertyValues();
+		for(PropertyValue propertyValue: propertyValues){
+			sb.append(propertyValue.getKey());sb.append("=");
+			sb.append(propertyValue.getValue());sb.append("\n");
+		}
+		setDescription(sb.toString());
+		return sb.toString();
+	}
 }

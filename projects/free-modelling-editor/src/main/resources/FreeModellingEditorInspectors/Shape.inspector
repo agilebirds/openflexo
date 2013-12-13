@@ -3,5 +3,5 @@
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Shape" />
+  <Parameter name="title" value="Instance" />
 </Panel>
