@@ -38,10 +38,10 @@ public abstract class AddSchemaElementAction<T extends DiagramElement<?>> extend
 	}*/
 
 	@Override
-	public GraphicalElementPatternRole<?> getPatternRole() {
-		PatternRole superPatternRole = super.getPatternRole();
+	public GraphicalElementPatternRole<?, ?> getPatternRole() {
+		PatternRole<?> superPatternRole = super.getPatternRole();
 		if (superPatternRole instanceof GraphicalElementPatternRole) {
-			return (GraphicalElementPatternRole) superPatternRole;
+			return (GraphicalElementPatternRole<?, ?>) superPatternRole;
 		} else if (superPatternRole != null) {
 			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
 			return null;

@@ -5,8 +5,8 @@
       <Panel layout="twocols" border="titled" borderTitle="Layout" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" name="LayoutPanel">
         <Label label="layout" constraints="twocols(location=left)" localize="true" />
         <DropDown data="data.layout" constraints="twocols(location=right)" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
-        <Label label="alignment" constraints="twocols(location=left)" visible="(data.layout = (&quot;flow&quot; | (data.layout = &quot;buttons&quot;)))" localize="true" />
-        <DropDown showReset="true" data="data.flowAlignment" constraints="twocols(location=right)" visible="(data.layout = (&quot;flow&quot; | (data.layout = &quot;buttons&quot;)))" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
+        <Label label="alignment" constraints="twocols(location=left)" visible="(data.layout = &quot;flow&quot;) | (data.layout = &quot;buttons&quot;)" localize="true" />
+        <DropDown showReset="true" data="data.flowAlignment" constraints="twocols(location=right)" visible="(data.layout = &quot;flow&quot;) | (data.layout = &quot;buttons&quot;)" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
         <Label label="axis" constraints="twocols(location=left)" visible="(data.layout = &quot;box&quot;)" localize="true" />
         <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" visible="(data.layout = &quot;box&quot;)" localize="true" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
         <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;location=center)" visible="((data.layout = &quot;flow&quot;) | (data.layout = &quot;grid&quot;))">

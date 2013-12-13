@@ -72,10 +72,10 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 	private final Vector<TargetObject> dependingObjects = new Vector<TargetObject>();
 	private boolean dependingObjectsAreComputed = false;
 
-	private Diagram diagram;
+	private final Diagram diagram;
 	private String name;
 	private DiagramElement<?> parent = null;
-	private Vector<DiagramElement<?>> childs;
+	private final Vector<DiagramElement<?>> childs;
 	private Vector<DiagramElement<?>> ancestors;
 
 	private GR graphicalRepresentation;
@@ -137,7 +137,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 			setChanged();
 			notifyObservers(new NameChanged(oldName, name));
 		}
-		
+
 	}
 
 	public Vector<DiagramElement<?>> getChilds() {
@@ -409,10 +409,10 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation> extends
 		return null;
 	}
 
-	public GraphicalElementPatternRole<?> getPatternRole() {
+	public GraphicalElementPatternRole<?, ?> getPatternRole() {
 		EditionPatternInstance epi = getEditionPatternInstance();
 		if (epi != null && epi.getRoleForActor(this) instanceof GraphicalElementPatternRole) {
-			return (GraphicalElementPatternRole) epi.getRoleForActor(this);
+			return (GraphicalElementPatternRole<?, ?>) epi.getRoleForActor(this);
 		}
 		return null;
 	}

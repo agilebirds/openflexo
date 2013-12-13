@@ -97,7 +97,7 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 		notifiedBindingChanged(this.assignation);
 	}
 
-	public PatternRole getPatternRole() {
+	public PatternRole<?> getPatternRole() {
 		if (getEditionPattern() == null) {
 			return null;
 		}

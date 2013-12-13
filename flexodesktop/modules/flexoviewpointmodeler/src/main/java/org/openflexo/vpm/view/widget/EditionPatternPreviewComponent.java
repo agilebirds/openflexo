@@ -41,7 +41,7 @@ import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
 // TODO: this should inherit from DefaultFIBCustomComponent
 public class EditionPatternPreviewComponent extends JPanel implements FIBCustomComponent<EditionPattern, JPanel>,
-		FIBSelectable<GraphicalElementPatternRole<?>> {
+		FIBSelectable<GraphicalElementPatternRole<?, ?>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewComponent.class.getPackage().getName());
@@ -144,13 +144,13 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	}
 
 	@Override
-	public GraphicalElementPatternRole<?> getSelected() {
+	public GraphicalElementPatternRole<?, ?> getSelected() {
 		if (previewController != null) {
 			if (previewController.getSelectedObjects() == null) {
 				return null;
 			}
 			if (previewController.getSelectedObjects().size() > 0) {
-				return (GraphicalElementPatternRole<?>) previewController.getSelectedObjects().get(0).getDrawable();
+				return (GraphicalElementPatternRole<?, ?>) previewController.getSelectedObjects().get(0).getDrawable();
 			}
 			return null;
 		}
@@ -158,16 +158,16 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	}
 
 	@Override
-	public List<GraphicalElementPatternRole<?>> getSelection() {
+	public List<GraphicalElementPatternRole<?, ?>> getSelection() {
 		if (previewController != null) {
 			if (previewController.getSelectedObjects() == null) {
 				return null;
 			}
 		}
 		if (previewController.getSelectedObjects().size() > 0) {
-			List<GraphicalElementPatternRole<?>> returned = new ArrayList<GraphicalElementPatternRole<?>>();
+			List<GraphicalElementPatternRole<?, ?>> returned = new ArrayList<GraphicalElementPatternRole<?, ?>>();
 			for (DrawingTreeNode<?, ?> dtn : previewController.getSelectedObjects()) {
-				returned.add((GraphicalElementPatternRole<?>) dtn.getDrawable());
+				returned.add((GraphicalElementPatternRole<?, ?>) dtn.getDrawable());
 			}
 			return returned;
 		}
@@ -175,19 +175,19 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	}
 
 	@Override
-	public boolean mayRepresent(GraphicalElementPatternRole<?> o) {
+	public boolean mayRepresent(GraphicalElementPatternRole<?, ?> o) {
 		return o instanceof PatternRole && ((PatternRole) o).getEditionPattern() == editionPattern;
 	}
 
 	@Override
-	public void objectAddedToSelection(GraphicalElementPatternRole<?> o) {
+	public void objectAddedToSelection(GraphicalElementPatternRole<?, ?> o) {
 		if (previewController != null) {
 			previewController.fireObjectSelected(o);
 		}
 	}
 
 	@Override
-	public void objectRemovedFromSelection(GraphicalElementPatternRole<?> o) {
+	public void objectRemovedFromSelection(GraphicalElementPatternRole<?, ?> o) {
 		if (previewController != null) {
 			previewController.fireObjectDeselected(o);
 		}
@@ -201,14 +201,14 @@ public class EditionPatternPreviewComponent extends JPanel implements FIBCustomC
 	}
 
 	@Override
-	public void addToSelection(GraphicalElementPatternRole<?> o) {
+	public void addToSelection(GraphicalElementPatternRole<?, ?> o) {
 		if (previewController != null) {
 			previewController.addToSelectedObjects(previewController.getDrawing().getDrawingTreeNode(o));
 		}
 	}
 
 	@Override
-	public void removeFromSelection(GraphicalElementPatternRole<?> o) {
+	public void removeFromSelection(GraphicalElementPatternRole<?, ?> o) {
 		if (previewController != null) {
 			previewController.removeFromSelectedObjects(previewController.getDrawing().getDrawingTreeNode(o));
 		}

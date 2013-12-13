@@ -4,24 +4,17 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
-import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector> {
+public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector, ConnectorGraphicalRepresentation> {
 
-	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentation.
-	private ConnectorGraphicalRepresentation _graphicalRepresentation;
-
-	// We dont want to import graphical engine in foundation
-	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentation.
-	private Object artifactFromGraphicalRepresentation;
-	private Object artifactToGraphicalRepresentation;
+	private ShapeGraphicalRepresentation artifactFromGraphicalRepresentation;
+	private ShapeGraphicalRepresentation artifactToGraphicalRepresentation;
 
 	public ConnectorPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -38,7 +31,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append("PatternRole " + getName() + " as ConnectorSpecification from " + getVirtualModel().getReflexiveModelSlot().getName() + ";", context);
+		out.append("PatternRole " + getName() + " as ConnectorSpecification from " + getVirtualModel().getReflexiveModelSlot().getName()
+				+ ";", context);
 		return out.toString();
 	}
 
@@ -47,49 +41,21 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 		return FlexoLocalization.localizedForKey("connector");
 	}
 
-	@Override
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return _graphicalRepresentation;
-	}
-
-	@Override
-	public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation) {
-		_graphicalRepresentation = (ConnectorGraphicalRepresentation) graphicalRepresentation;
-		setChanged();
-		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
-	}
-
-	public void updateGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		if (_graphicalRepresentation != null) {
-			((ConnectorGraphicalRepresentation) _graphicalRepresentation).setsWith(graphicalRepresentation);
-			setChanged();
-			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
-		} else {
-			setGraphicalRepresentation(graphicalRepresentation);
-		}
-	}
-
-	// No notification
-	@Override
-	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation graphicalRepresentation) {
-		_graphicalRepresentation = (ConnectorGraphicalRepresentation) graphicalRepresentation;
-	}
-
-	public Object getArtifactFromGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getArtifactFromGraphicalRepresentation() {
 		return artifactFromGraphicalRepresentation;
 	}
 
-	public void setArtifactFromGraphicalRepresentation(Object artifactFromGraphicalRepresentation) {
+	public void setArtifactFromGraphicalRepresentation(ShapeGraphicalRepresentation artifactFromGraphicalRepresentation) {
 		this.artifactFromGraphicalRepresentation = artifactFromGraphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, artifactFromGraphicalRepresentation));
 	}
 
-	public Object getArtifactToGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getArtifactToGraphicalRepresentation() {
 		return artifactToGraphicalRepresentation;
 	}
 
-	public void setArtifactToGraphicalRepresentation(Object artifactToGraphicalRepresentation) {
+	public void setArtifactToGraphicalRepresentation(ShapeGraphicalRepresentation artifactToGraphicalRepresentation) {
 		this.artifactToGraphicalRepresentation = artifactToGraphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, artifactToGraphicalRepresentation));

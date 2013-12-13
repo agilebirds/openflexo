@@ -14,24 +14,29 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
+import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction.ActionMask;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
 
-public abstract class GraphicalElementPatternRole<T extends DiagramElement> extends PatternRole<T> implements Bindable {
+public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, GR extends GraphicalRepresentation> extends PatternRole<T>
+		implements Bindable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementPatternRole.class.getPackage().getName());
 
-	private boolean readOnlyLabel;
+	// private boolean readOnlyLabel;
 
 	private String exampleLabel = "label";
 
 	protected Vector<GraphicalElementSpecification<?, ?>> grSpecifications;
 
 	private Vector<GraphicalElementAction> actions;
+
+	private GR graphicalRepresentation;
 
 	public GraphicalElementPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -55,11 +60,32 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 		return true;
 	}
 
-	public abstract GraphicalRepresentation getGraphicalRepresentation();
+	public final GR getGraphicalRepresentation() {
+		return graphicalRepresentation;
+	}
 
-	public abstract void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation);
+	public final void setGraphicalRepresentation(GR graphicalRepresentation) {
+		GR oldGR = this.graphicalRepresentation;
+		if (this.graphicalRepresentation != graphicalRepresentation) {
+			this.graphicalRepresentation = graphicalRepresentation;
+			setChanged();
+			notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
+		}
+	}
 
-	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation graphicalRepresentation);
+	public final void updateGraphicalRepresentation(GR graphicalRepresentation) {
+		if (getGraphicalRepresentation() != null) {
+			getGraphicalRepresentation().setsWith(graphicalRepresentation);
+			setChanged();
+			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
+		} else {
+			setGraphicalRepresentation(graphicalRepresentation);
+		}
+	}
+
+	protected final void _setGraphicalRepresentationNoNotification(GR graphicalRepresentation) {
+		this.graphicalRepresentation = graphicalRepresentation;
+	}
 
 	private BindingDefinition LABEL;
 

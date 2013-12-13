@@ -537,7 +537,7 @@
      <description>Abstract graphical representation</description>
   	 <property name="identifier" xmlTag="identifier" attribute="YES"/>
   	 <property name="layer" xmlTag="layer" attribute="YES"/>
-  	 <property name="hasText" xmlTag="hasText" attribute="YES"/>
+  	<!--   <property name="hasText" xmlTag="hasText" attribute="YES"/> -->
   	 <property name="text" xmlTag="text" attribute="YES"/>
   	 <property name="isMultilineAllowed" xmlTag="isMultilineAllowed" attribute="YES"/>
   	 <property name="continuousTextEditing" xmlTag="continuousTextEditing" attribute="YES"/>
@@ -555,15 +555,15 @@
   	 <property name="isLabelEditable" xmlTag="isLabelEditable" attribute="YES"/>
  	 <property name="isVisible" xmlTag="isVisible" attribute="YES"/>
   	 <property name="toolTipText" xmlTag="toolTipText" attribute="YES"/>
-     <property name="variables" type="vector" contains="org.openflexo.fge.GRVariable" primary="yes"/>
+     <!--  <property name="variables" type="vector" contains="org.openflexo.fge.GRVariable" primary="yes"/>-->
   </entity>
 	
-   <entity name="org.openflexo.fge.GRVariable" xmlTag="Variable">
+   <!--  <entity name="org.openflexo.fge.GRVariable" xmlTag="Variable">
      <description>Graphical representation variable</description>
    	 <property name="name" xmlTag="name" attribute="YES"/>
    	 <property name="value" xmlTag="value" attribute="YES"/>
    	 <property name="type" xmlTag="type" attribute="YES"/>
-  </entity>
+  </entity>-->
 
    <entity name="org.openflexo.fge.DrawingGraphicalRepresentation" xmlTag="DrawingGraphicalRepresentation">
      <description>Drawing graphical representation</description>
@@ -686,7 +686,7 @@
 		<property name="ratio" xmlTag="ratio" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.connectors.LineConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.LineConnectorSpecification"
 		xmlTag="LineConnector">
 		<description>Single line connector</description>
 		<property name="lineConnectorType" xmlTag="lineConnectorType"
@@ -740,7 +740,7 @@
 	</entity>
 
 
-	<entity name="org.openflexo.fge.connectors.CurveConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.CurveConnectorSpecification"
 		xmlTag="ArcConnector">
 		<description>Curved connector</description>
 		<property name="cpPosition" xmlTag="cpPosition" attribute="YES" />
@@ -752,7 +752,7 @@
 			attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecification"
 		xmlTag="PolyLineConnector">
 		<description>Arc connector</description>
 	</entity>

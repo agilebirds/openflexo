@@ -5,20 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
-import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
-import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 
-public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> {
+public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation> {
 
 	private static final Logger logger = Logger.getLogger(ShapePatternRole.class.getPackage().getName());
-
-	private ShapeGraphicalRepresentation _graphicalRepresentation;
 
 	private ShapePatternRole parentShapePatternRole;
 
@@ -47,34 +42,6 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 	@Override
 	public String getPreciseType() {
 		return FlexoLocalization.localizedForKey("shape");
-	}
-
-	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return _graphicalRepresentation;
-	}
-
-	@Override
-	public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation) {
-		_graphicalRepresentation = (ShapeGraphicalRepresentation) graphicalRepresentation;
-		setChanged();
-		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
-	}
-
-	public void updateGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
-		if (_graphicalRepresentation != null) {
-			_graphicalRepresentation.setsWith(graphicalRepresentation);
-			setChanged();
-			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
-		} else {
-			setGraphicalRepresentation(graphicalRepresentation);
-		}
-	}
-
-	// No notification
-	@Override
-	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation graphicalRepresentation) {
-		_graphicalRepresentation = (ShapeGraphicalRepresentation) graphicalRepresentation;
 	}
 
 	public void tryToFindAGR() {

@@ -374,7 +374,7 @@
 		<property name="ratio" xmlTag="ratio" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.connectors.LineConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.LineConnectorSpecification"
 		xmlTag="LineConnector">
 		<description>Single line connector</description>
 		<property name="lineConnectorType" xmlTag="lineConnectorType"
@@ -424,7 +424,7 @@
 	</entity>
 
 
-	<entity name="org.openflexo.fge.connectors.CurveConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.CurveConnectorSpecification"
 		xmlTag="ArcConnector">
 		<description>Curved connector</description>
 		<property name="cpPosition" xmlTag="cpPosition" attribute="YES" />
@@ -436,7 +436,7 @@
 			attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification"
+	<entity name="org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecification"
 		xmlTag="PolyLineConnector">
 		<description>Arc connector</description>
 	</entity>
