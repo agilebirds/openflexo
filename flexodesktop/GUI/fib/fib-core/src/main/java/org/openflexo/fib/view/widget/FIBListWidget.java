@@ -72,12 +72,12 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 		_list.revalidate();
 		_list.repaint();
 
-		proceedToListModelUpdate();
+		updateMultipleValues();
 
-		// updateListModelWhenRequired();
 		updateFont();
 	}
 
+	@Override
 	public List<T> getSelection() {
 		return selection;
 	}
@@ -232,7 +232,7 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 
 	protected class FIBListModel extends FIBMultipleValueModel<T> implements ListSelectionListener {
 		private T selectedObject;
-		private List<T> selection;
+		private final List<T> selection;
 
 		public FIBListModel() {
 			super();
@@ -286,7 +286,7 @@ public class FIBListWidget<T> extends FIBMultipleValueWidget<FIBList, JList, T, 
 				}
 			}
 
-			setSelected((T) selectedObject);
+			setSelected(selectedObject);
 			setSelectedIndex(leadIndex);
 			setSelection(newSelection);
 

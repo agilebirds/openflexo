@@ -89,8 +89,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			listBindingValueChangeListener.delete();
 		}
 		if (getComponent().getList() != null && getComponent().getList().isValid()) {
-			listBindingValueChangeListener = new BindingValueListChangeListener<Object, List<Object>>(
-					(DataBinding<List<Object>>) ((DataBinding) getComponent().getList()), getBindingEvaluationContext()) {
+			listBindingValueChangeListener = new BindingValueListChangeListener<Object, List<Object>>(((DataBinding) getComponent()
+					.getList()), getBindingEvaluationContext()) {
 
 				@Override
 				public void bindingValueChanged(Object source, List<Object> newValue) {
@@ -158,7 +158,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			list = null;
 			array = null;
 
-			if (getWidget().getList() != null && getWidget().getList().isValid() && getDataObject() != null) {
+
+			if (getWidget().getList() != null && getWidget().getList().isValid() /*&& getDataObject() != null*/) {
 
 				Object accessedList = null;
 				try {
@@ -179,7 +180,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			}
 
-			else if (getWidget().getArray() != null && getWidget().getArray().isValid() && getDataObject() != null) {
+			else if (getWidget().getArray() != null && getWidget().getArray().isValid() /*&& getDataObject() != null*/) {
 
 				Object accessedArray = null;
 				try {
@@ -202,7 +203,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				}*/
 			}
 
-			else if (getWidget().getData() != null && getWidget().getData().isValid() && getDataObject() != null) {
+			else if (getWidget().getData() != null && getWidget().getData().isValid() /*&& getDataObject() != null*/) {
 				/*System.out.println("Binding: "+getWidget().getData().getBinding());
 				System.out.println("isBindingValid: "+getWidget().getData().getBinding().isBindingValid());
 				if (!getWidget().getData().getBinding().isBindingValid()) {
@@ -513,14 +514,16 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 	@Override
 	public boolean update() {
+
 		super.update();
-		proceedToListModelUpdate();
+		updateMultipleValues();
 		if (listBindingValueChangeListener != null) {
 			listBindingValueChangeListener.refreshObserving();
 		}
 		if (arrayBindingValueChangeListener != null) {
 			arrayBindingValueChangeListener.refreshObserving();
 		}
+
 		return true;
 	}
 
