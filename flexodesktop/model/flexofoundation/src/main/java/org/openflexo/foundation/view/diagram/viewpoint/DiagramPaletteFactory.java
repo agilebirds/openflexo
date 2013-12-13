@@ -34,7 +34,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 public class DiagramPaletteFactory extends FGEModelFactoryImpl {
 
 	public DiagramPaletteFactory() throws ModelDefinitionException {
-		super(DiagramPalette.class, DiagramPaletteElement.class);
+		super(/*DiagramPalette.class, DiagramPaletteElement.class*/);
 	}
 
 	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR) {

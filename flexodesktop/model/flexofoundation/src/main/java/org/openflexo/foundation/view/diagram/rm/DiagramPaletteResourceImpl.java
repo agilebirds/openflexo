@@ -11,7 +11,6 @@ import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -47,6 +46,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
+			returned.setFactory(returned.getServiceManager().getXMLSerializationService().getDiagramPaletteFactory());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
 			dsResource.addToContents(returned);
 			return returned;
@@ -66,6 +66,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
+			returned.setFactory(returned.getServiceManager().getXMLSerializationService().getDiagramPaletteFactory());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
 			dsResource.addToContents(returned);
 			return returned;
@@ -73,14 +74,6 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private DiagramPaletteResourceImpl() {
-		try {
-			setFactory(new DiagramPaletteFactory());
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

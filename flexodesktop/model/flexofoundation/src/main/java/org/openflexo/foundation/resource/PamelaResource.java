@@ -19,7 +19,7 @@ public interface PamelaResource<RD extends ResourceData<RD>, F extends ModelFact
 
 	public static final String FACTORY = "factory";
 
-	@Getter(value = FACTORY)
+	@Getter(value = FACTORY, ignoreType = true)
 	public F getFactory();
 
 	@Setter(FACTORY)

@@ -43,7 +43,7 @@ public class ExampleDiagramFactory extends FGEModelFactoryImpl {
 	private int connectorIndex = 0;
 
 	public ExampleDiagramFactory() throws ModelDefinitionException {
-		super(ExampleDiagram.class, ExampleDiagramShape.class, ExampleDiagramConnector.class);
+		super(/*ExampleDiagram.class, ExampleDiagramShape.class, ExampleDiagramConnector.class*/);
 	}
 
 	// Called for NEW

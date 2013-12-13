@@ -32,6 +32,6 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public DiagramFactory() throws ModelDefinitionException {
-		super(DiagramRootPane.class, DiagramShape.class, DiagramConnector.class);
+		super(/*DiagramRootPane.class, DiagramShape.class, DiagramConnector.class*/);
 	}
 }

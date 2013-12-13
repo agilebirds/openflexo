@@ -11,7 +11,6 @@ import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -37,6 +36,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			returned.setFile(exampleDiagramFile);
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
+			returned.setFactory(returned.getServiceManager().getXMLSerializationService().getExampleDiagramFactory());
 			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
 			dsResource.addToContents(returned);
 
@@ -57,6 +57,7 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setURI(dsResource.getURI() + "/" + exampleDiagramFile.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
+			returned.setFactory(returned.getServiceManager().getXMLSerializationService().getExampleDiagramFactory());
 			returned.relativePathFileConverter = new RelativePathFileConverter(exampleDiagramFile.getParentFile());
 			dsResource.addToContents(returned);
 
@@ -65,14 +66,6 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private ExampleDiagramResourceImpl() {
-		try {
-			setFactory(new ExampleDiagramFactory());
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
