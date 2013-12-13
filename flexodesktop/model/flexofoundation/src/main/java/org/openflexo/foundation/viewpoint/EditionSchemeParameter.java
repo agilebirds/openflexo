@@ -35,8 +35,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.toolbox.StringUtils;
 
 public abstract class EditionSchemeParameter extends EditionSchemeObject implements FunctionArgument {
@@ -96,10 +94,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	public abstract WidgetType getWidget();
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, DataBinding.BindingDefinitionType.GET,
-			false);
-	private BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class, DataBinding.BindingDefinitionType.GET,
-			false) {
+	private final BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class,
+			DataBinding.BindingDefinitionType.GET, false);
+	private final BindingDefinition DEFAULT_VALUE = new BindingDefinition("defaultValue", Object.class,
+			DataBinding.BindingDefinitionType.GET, false) {
 		@Override
 		public Type getType() {
 			return EditionSchemeParameter.this.getType();
@@ -146,13 +144,13 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		this.label = label;
 	}
 
-	public boolean getUsePaletteLabelAsDefaultValue() {
+	/*public boolean getUsePaletteLabelAsDefaultValue() {
 		return usePaletteLabelAsDefaultValue;
 	}
 
 	public void setUsePaletteLabelAsDefaultValue(boolean usePaletteLabelAsDefaultValue) {
 		this.usePaletteLabelAsDefaultValue = usePaletteLabelAsDefaultValue;
-	}
+	}*/
 
 	public boolean evaluateCondition(BindingEvaluationContext parameterRetriever) {
 		if (getConditional().isValid()) {
@@ -224,13 +222,14 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?, ?> action) {
-		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
+	public Object getDefaultValue(EditionSchemeAction<?, ?, ?> action) {
+		// DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() :
+		// null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
+		/*if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
 			return paletteElement.getName();
-		}
+		}*/
 		if (getDefaultValue().isValid()) {
 			try {
 				return getDefaultValue().getBindingValue(action);

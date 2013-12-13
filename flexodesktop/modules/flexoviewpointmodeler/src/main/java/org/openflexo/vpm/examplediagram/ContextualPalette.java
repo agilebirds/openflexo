@@ -48,8 +48,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.action.AddExampleDiagramS
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementRemoved;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementInserted;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementRemoved;
 
 public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {
 

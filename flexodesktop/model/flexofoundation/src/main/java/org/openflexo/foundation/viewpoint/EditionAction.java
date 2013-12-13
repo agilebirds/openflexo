@@ -35,7 +35,12 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.action.ActionSchemeAction;
+import org.openflexo.foundation.view.action.CreationSchemeAction;
+import org.openflexo.foundation.view.action.DeletionSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.action.NavigationSchemeAction;
+import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -174,8 +179,26 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 						}
 					}
 					if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
-						contextAction.getEditionPatternInstance().setObjectForPatternRole((FlexoModelObject) assignedObject,
-								assignableAction.getPatternRole());
+						if (contextAction instanceof ActionSchemeAction) {
+							((ActionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+						}
+						if (contextAction instanceof CreationSchemeAction) {
+							((CreationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+						}
+						if (contextAction instanceof DeletionSchemeAction) {
+							((DeletionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+						}
+						if (contextAction instanceof NavigationSchemeAction) {
+							((NavigationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+						}
+						if (contextAction instanceof SynchronizationSchemeAction) {
+							((SynchronizationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
+									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+						}
 					}
 				}
 			}

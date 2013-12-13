@@ -26,23 +26,27 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 
-public class SynchronizationSchemeAction extends EditionSchemeAction<SynchronizationSchemeAction, SynchronizationScheme> {
+public class SynchronizationSchemeAction extends
+		EditionSchemeAction<SynchronizationSchemeAction, SynchronizationScheme, VirtualModelInstance> {
 
 	private static final Logger logger = Logger.getLogger(SynchronizationSchemeAction.class.getPackage().getName());
 
-	private SynchronizationSchemeActionType actionType;
+	private final SynchronizationSchemeActionType actionType;
 
-	public SynchronizationSchemeAction(SynchronizationSchemeActionType actionType, FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public SynchronizationSchemeAction(SynchronizationSchemeActionType actionType, VirtualModelInstance focusedObject,
+			Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		this.actionType = actionType;
 	}
@@ -54,7 +58,6 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 		return null;
 	}
 
-	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
 			return actionType.getEditionPatternInstance();
@@ -139,6 +142,25 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 	public void newEditionPatternInstance(EditionPatternInstance newEditionPatternInstance) {
 		System.out.println("NEW EPI : " + newEditionPatternInstance);
 
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
+		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
+			return getEditionPatternInstance();
+		}
+		return super.getValue(variable);
+	}
+
+	@Override
+	public void setValue(Object value, BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
+		}
+		super.setValue(value, variable);
 	}
 
 }

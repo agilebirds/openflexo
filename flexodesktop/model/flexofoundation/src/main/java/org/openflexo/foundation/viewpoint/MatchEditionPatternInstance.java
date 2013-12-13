@@ -41,7 +41,6 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
@@ -337,9 +336,6 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 
 	public static class MatchingCriteria extends EditionSchemeObject implements Bindable {
 
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
-
 		private MatchEditionPatternInstance action;
 
 		private PatternRole patternRole;
@@ -477,9 +473,6 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 	}
 
 	public static class CreateEditionPatternInstanceParameter extends EditionSchemeObject implements Bindable {
-
-		@SuppressWarnings("unused")
-		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
 
 		private MatchEditionPatternInstance action;
 

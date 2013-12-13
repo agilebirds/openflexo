@@ -26,40 +26,42 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VECut extends FlexoUndoableAction<VECut, DiagramElement<?>, DiagramElement<?>> {
+public class VECut extends FlexoUndoableAction<VECut, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(VECut.class.getPackage().getName());
 
-	public static FlexoActionType<VECut, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<VECut, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<VECut, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VECut, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"cut", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VECut makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public VECut makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VECut(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VECut.actionType, DiagramElement.class);
+		FlexoModelObject.addActionForClass(VECut.actionType, EditionPatternInstance.class);
 	}
 
-	VECut(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	VECut(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

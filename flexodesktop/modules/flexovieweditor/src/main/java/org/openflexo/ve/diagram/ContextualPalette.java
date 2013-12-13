@@ -44,7 +44,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -53,8 +52,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteElementInserted;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.diagram.model.action.AddShape;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementInserted;
 
 public class ContextualPalette extends DrawingPalette implements GraphicalFlexoObserver {
 

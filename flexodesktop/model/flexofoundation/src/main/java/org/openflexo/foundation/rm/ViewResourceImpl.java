@@ -17,8 +17,6 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.rm.DiagramResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -41,8 +39,8 @@ resourceDataClass = View.class, /* ResourceData class which is handled by this r
 builderClass = ViewBuilder.class, /* Builder to be used to deserialize */
 hasBuilder = true, /* Indicates if builder is to be used*/
 contains = { /* Defines the resources which may be embeddded in this resource */
-@SomeResources(resourceType = DiagramResource.class, pattern = "*.diagram"),
-		@SomeResources(resourceType = VirtualModelInstanceResource.class, pattern = "*.vmxml") }, /* */
+/*@SomeResources(resourceType = DiagramResource.class, pattern = "*.diagram"),*/
+@SomeResources(resourceType = VirtualModelInstanceResource.class, pattern = "*.vmxml") }, /* */
 require = { /* Defines the resources which are required for this resource */
 @RequiredResource(resourceType = ViewPointResource.class, value = ViewResource.VIEWPOINT_RESOURCE) })
 public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> implements ViewResource {
@@ -122,10 +120,10 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 						VirtualModelInstanceResource virtualModelInstanceResource = VirtualModelInstanceResourceImpl
 								.retrieveVirtualModelInstanceResource(virtualModelFile, returned);
 						returned.addToContents(virtualModelInstanceResource);
-					} else if (virtualModelFile.getName().endsWith(DiagramResource.DIAGRAM_SUFFIX)) {
+					} /*else if (virtualModelFile.getName().endsWith(DiagramResource.DIAGRAM_SUFFIX)) {
 						DiagramResource diagramResource = DiagramResourceImpl.retrieveDiagramResource(virtualModelFile, returned);
 						returned.addToContents(diagramResource);
-					}
+						}*/
 				}
 			}
 

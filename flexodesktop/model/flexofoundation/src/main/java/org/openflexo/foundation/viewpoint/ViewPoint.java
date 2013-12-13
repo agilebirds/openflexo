@@ -45,8 +45,6 @@ import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
@@ -99,12 +97,12 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private List<VirtualModel<?>> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
-	private EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
+	private final EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
-	private ChainedCollection<ViewPointObject> validableObjects = null;
+	private final ChainedCollection<ViewPointObject> validableObjects = null;
 
 	public static ViewPoint newViewPoint(String baseName, String viewpointURI, File viewpointDir, ViewPointLibrary library) {
 		ViewPointResource vpRes = ViewPointResourceImpl.makeViewPointResource(baseName, viewpointURI, viewpointDir, library);
@@ -155,7 +153,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 		loadViewpointMetaModels();
 
-		for (VirtualModel<?> vm : getVirtualModels()) {
+		/*for (VirtualModel<?> vm : getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				for (PatternRole<?> pr : ep.getPatternRoles()) {
 					if (pr instanceof ShapePatternRole) {
@@ -163,7 +161,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -305,9 +303,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * 
 	 * @return
 	 */
-	public List<DiagramSpecification> getDiagramSpecifications() {
+	/*public List<DiagramSpecification> getDiagramSpecifications() {
 		return getVirtualModels(DiagramSpecification.class, true);
-	}
+	}*/
 
 	/**
 	 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
@@ -363,7 +361,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * 
 	 * @return
 	 */
-	public DiagramSpecification getDiagramSpecificationNamed(String diagramSpecificationName) {
+	/*public DiagramSpecification getDiagramSpecificationNamed(String diagramSpecificationName) {
 		loadVirtualModelsWhenUnloaded();
 		for (VirtualModel vm : getVirtualModels()) {
 			if (vm instanceof DiagramSpecification) {
@@ -376,7 +374,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			}
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
@@ -396,7 +394,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	// Return a default diagram specification (temporary hack to ensure compatibility with old versions)
-	@Deprecated
+	/*@Deprecated
 	public DiagramSpecification getDefaultDiagramSpecification() {
 		loadVirtualModelsWhenUnloaded();
 		for (VirtualModel vm : getVirtualModels()) {
@@ -408,7 +406,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		// DiagramSpecification ds = new DiagramSpecification(this);
 		// addToVirtualModels(ds);
 		return null;
-	}
+	}*/
 
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
@@ -641,7 +639,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	public static class ViewPointBuilder {
 		private ViewPoint viewPoint;
 		private FlexoVersion modelVersion;
-		private ViewPointLibrary viewPointLibrary;
+		private final ViewPointLibrary viewPointLibrary;
 		ViewPointResource resource;
 
 		public ViewPointBuilder(ViewPointLibrary vpLibrary, ViewPointResource resource) {

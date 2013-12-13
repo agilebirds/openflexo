@@ -37,13 +37,13 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.diagram.model.action.AddConnector;
 
 public class DrawEdgeControl extends MouseDragControl {
 

@@ -26,30 +26,32 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VECopy extends FlexoAction<VECopy, DiagramElement<?>, DiagramElement<?>> {
+public class VECopy extends FlexoAction<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(VECopy.class.getPackage().getName());
 
-	public static FlexoActionType<VECopy, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<VECopy, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VECopy, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"copy", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VECopy makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public VECopy makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VECopy(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 
 			return true;
 		}
@@ -57,10 +59,10 @@ public class VECopy extends FlexoAction<VECopy, DiagramElement<?>, DiagramElemen
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VECopy.actionType, DiagramElement.class);
+		FlexoModelObject.addActionForClass(VECopy.actionType, EditionPatternInstance.class);
 	}
 
-	VECopy(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	VECopy(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

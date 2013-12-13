@@ -39,16 +39,16 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDianaEditor;
+import org.openflexo.technologyadapter.diagram.model.action.AddShape;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteInserted;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteRemoved;
 import org.openflexo.ve.controller.VEController;
 
 public class DiagramController extends SelectionManagingDianaEditor<DiagramRepresentation> implements GraphicalFlexoObserver {

@@ -36,8 +36,6 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject.DiagramPaletteBuilder;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject.ExampleDiagramBuilder;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
@@ -67,7 +65,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 		}
 	}
 
-	public ViewPointObject(ExampleDiagramBuilder builder) {
+	/*public ViewPointObject(ExampleDiagramBuilder builder) {
 		if (builder != null) {
 			initializeDeserialization(builder);
 		}
@@ -77,7 +75,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 		if (builder != null) {
 			initializeDeserialization(builder);
 		}
-	}
+	}*/
 
 	@Override
 	public XMLMapping getXMLMapping() {
@@ -177,7 +175,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 		private static int INDENTATION = 2;
 		// private int currentIndentation = 0;
-		private HashMap<String, NamedViewPointObject> nameSpaces;
+		private final HashMap<String, NamedViewPointObject> nameSpaces;
 
 		public FMLRepresentationContext() {
 			// currentIndentation = 0;
@@ -296,7 +294,7 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 
 		protected static class DeleteBinding<C extends ViewPointObject> extends FixProposal<BindingMustBeValid<C>, C> {
 
-			private BindingMustBeValid<C> rule;
+			private final BindingMustBeValid<C> rule;
 
 			public DeleteBinding(BindingMustBeValid<C> rule) {
 				super("delete_this_binding");
@@ -326,8 +324,8 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			} else if (!b.isValid()) {
-				logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getFullyQualifiedName()
-						+ ". Reason: " + b.invalidBindingReason());
+				logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getFullyQualifiedName() + ". Reason: "
+						+ b.invalidBindingReason());
 				return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 						BindingIsRequiredAndMustBeValid.this.getNameKey());
 			}

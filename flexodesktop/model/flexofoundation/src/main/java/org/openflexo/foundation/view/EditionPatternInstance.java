@@ -40,8 +40,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.view.action.DeletionSchemeAction;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
@@ -69,7 +67,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	protected static final String EMPTY_STRING = "<emtpy>";
 
 	private EditionPattern editionPattern;
-	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
+	private final Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
 
 	private Vector<ActorReference<?>> deserializedActorList;
@@ -123,10 +121,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
 		// Pragmatic attempt to fix "inheritance issue...."
 		EditionPattern parentEP = this.getEditionPattern().getParentEditionPattern();
-		while (actorReference == null && parentEP != null ){
-			if (parentEP != null){
+		while (actorReference == null && parentEP != null) {
+			if (parentEP != null) {
 				PatternRole ppPatternRole = parentEP.getPatternRole(patternRole.getName());
-				if (ppPatternRole == patternRole){
+				if (ppPatternRole == patternRole) {
 					patternRole = this.getEditionPattern().getPatternRole(ppPatternRole.getName());
 					actorReference = (ActorReference<T>) actors.get(patternRole);
 				}
@@ -414,7 +412,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 		// logger.warning("EditionPatternInstance deletion !");
 		// deleted = true;
-		if (getEditionPattern().getPrimaryRepresentationRole() != null) {
+		/*if (getEditionPattern().getPrimaryRepresentationRole() != null) {
 			Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
 			if (primaryPatternActor instanceof FlexoModelObject) {
 				DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(
@@ -429,7 +427,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				logger.warning("Actor for role " + getEditionPattern().getPrimaryRepresentationRole() + " is not a FlexoModelObject: is "
 						+ primaryPatternActor);
 			}
-		}
+		}*/
 		return super.delete();
 	}
 
@@ -483,9 +481,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	 */
 	public List<FlexoModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
 		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
-		for(EditionAction editionAction : deletionScheme.getActions()){
-			if(editionAction instanceof DeleteAction){
-				DeleteAction deleteAction = (DeleteAction)editionAction;
+		for (EditionAction editionAction : deletionScheme.getActions()) {
+			if (editionAction instanceof DeleteAction) {
+				DeleteAction deleteAction = (DeleteAction) editionAction;
 
 				returned.add((FlexoModelObject) getPatternActor(deleteAction.getPatternRole()));
 			}
@@ -502,7 +500,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String getDisplayableName() {
-		for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
+		/*for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
 			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
 				try {
 					return (String) pr.getLabel().getBindingValue(this);
@@ -514,8 +512,9 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 					e.printStackTrace();
 				}
 			}
-		}
-		return getEditionPattern().getName();
+		}*/
+		// return getEditionPattern().getName();
+		return getStringRepresentation();
 	}
 
 	@Override

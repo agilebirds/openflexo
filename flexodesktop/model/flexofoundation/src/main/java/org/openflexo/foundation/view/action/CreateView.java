@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.RepositoryFolder;
@@ -34,33 +35,32 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateView extends FlexoAction<CreateView, RepositoryFolder, DiagramElement<?>> {
+public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateView.class.getPackage().getName());
 
-	public static FlexoActionType<CreateView, RepositoryFolder, DiagramElement<?>> actionType = new FlexoActionType<CreateView, RepositoryFolder, DiagramElement<?>>(
+	public static FlexoActionType<CreateView, RepositoryFolder, FlexoObject> actionType = new FlexoActionType<CreateView, RepositoryFolder, FlexoObject>(
 			"create_view", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateView makeNewAction(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public CreateView makeNewAction(RepositoryFolder focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new CreateView(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(RepositoryFolder object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(RepositoryFolder object, Vector<FlexoObject> globalSelection) {
 			return object.getResourceRepository() instanceof ViewLibrary;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(RepositoryFolder object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isEnabledForSelection(RepositoryFolder object, Vector<FlexoObject> globalSelection) {
 			return object != null;
 		}
 
@@ -79,7 +79,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 
 	public boolean skipChoosePopup = false;
 
-	CreateView(RepositoryFolder focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	CreateView(RepositoryFolder focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -143,6 +143,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 		return errorMessage;
 	}
 
+	@Override
 	public boolean isValid() {
 
 		// System.out.println("viewpointResource=" + viewpointResource);

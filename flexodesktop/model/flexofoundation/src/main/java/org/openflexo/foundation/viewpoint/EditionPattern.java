@@ -35,12 +35,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternConstraintInserted;
@@ -78,18 +72,18 @@ public class EditionPattern extends EditionPatternObject {
 	private Vector<EditionPatternConstraint> editionPatternConstraints;
 	private EditionPatternInspector inspector;
 
-	private OntologicObjectPatternRole primaryConceptRole;
-	private GraphicalElementPatternRole primaryRepresentationRole;
+	// private OntologicObjectPatternRole primaryConceptRole;
+	// private GraphicalElementPatternRole primaryRepresentationRole;
 
 	private VirtualModel virtualModel;
 
 	private EditionPattern parentEditionPattern = null;
-	private Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
+	private final Vector<EditionPattern> childEditionPatterns = new Vector<EditionPattern>();
 
-	private EditionPatternStructuralFacet structuralFacet;
-	private EditionPatternBehaviouralFacet behaviouralFacet;
+	private final EditionPatternStructuralFacet structuralFacet;
+	private final EditionPatternBehaviouralFacet behaviouralFacet;
 
-	private EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
+	private final EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -289,7 +283,7 @@ public class EditionPattern extends EditionPatternObject {
 		return getPatternRoles(ClassPatternRole.class);
 	}
 
-	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
+	/*public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
 		return getPatternRoles(GraphicalElementPatternRole.class);
 	}
 
@@ -299,9 +293,9 @@ public class EditionPattern extends EditionPatternObject {
 
 	public List<ConnectorPatternRole> getConnectorPatternRoles() {
 		return getPatternRoles(ConnectorPatternRole.class);
-	}
+	}*/
 
-	public ShapePatternRole getDefaultShapePatternRole() {
+	/*public ShapePatternRole getDefaultShapePatternRole() {
 		List<ShapePatternRole> l = getShapePatternRoles();
 		if (l.size() > 0) {
 			return l.get(0);
@@ -315,7 +309,7 @@ public class EditionPattern extends EditionPatternObject {
 			return l.get(0);
 		}
 		return null;
-	}
+	}*/
 
 	private Vector<String> availablePatternRoleNames = null;
 
@@ -354,21 +348,12 @@ public class EditionPattern extends EditionPatternObject {
 		return null;
 	}
 
-	public Vector<DropScheme> getDropSchemes() {
-		Vector<DropScheme> returned = new Vector<DropScheme>();
+	@SuppressWarnings("unchecked")
+	public <ES extends EditionScheme> List<ES> getEditionSchemes(Class<ES> editionSchemeClass) {
+		List<ES> returned = new ArrayList<ES>();
 		for (EditionScheme es : getEditionSchemes()) {
-			if (es instanceof DropScheme) {
-				returned.add((DropScheme) es);
-			}
-		}
-		return returned;
-	}
-
-	public Vector<LinkScheme> getLinkSchemes() {
-		Vector<LinkScheme> returned = new Vector<LinkScheme>();
-		for (EditionScheme es : getEditionSchemes()) {
-			if (es instanceof LinkScheme) {
-				returned.add((LinkScheme) es);
+			if (editionSchemeClass.isAssignableFrom(es.getClass())) {
+				returned.add((ES) es);
 			}
 		}
 		return returned;
@@ -448,7 +433,7 @@ public class EditionPattern extends EditionPatternObject {
 		return returned;
 	}
 
-	public boolean hasDropScheme() {
+	/*public boolean hasDropScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof DropScheme) {
 				return true;
@@ -464,7 +449,7 @@ public class EditionPattern extends EditionPatternObject {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	public boolean hasActionScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
@@ -518,7 +503,7 @@ public class EditionPattern extends EditionPatternObject {
 		return newCloningScheme;
 	}
 
-	public DropScheme createDropScheme() {
+	/*public DropScheme createDropScheme() {
 		DropScheme newDropScheme = new DropScheme(null);
 		newDropScheme.setEditionPattern(this);
 		newDropScheme.setName("drop");
@@ -532,7 +517,7 @@ public class EditionPattern extends EditionPatternObject {
 		newLinkScheme.setName("link");
 		addToEditionSchemes(newLinkScheme);
 		return newLinkScheme;
-	}
+	}*/
 
 	public ActionScheme createActionScheme() {
 		ActionScheme newActionScheme = new ActionScheme(null);
@@ -573,20 +558,20 @@ public class EditionPattern extends EditionPatternObject {
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
-			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole /*|| pr instanceof StatementPatternRole*/) {
+			if (/*pr instanceof GraphicalElementPatternRole ||*/pr instanceof IndividualPatternRole /*|| pr instanceof StatementPatternRole*/) {
 				rolesToDelete.add(pr);
 			}
 		}
 		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
 			@Override
 			public int compare(PatternRole o1, PatternRole o2) {
-				if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
+				/*if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
 					return 1;
 				} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
 					return -1;
-				}
+				}*/
 
-				if (o1 instanceof ShapePatternRole) {
+				/*if (o1 instanceof ShapePatternRole) {
 					if (o2 instanceof ShapePatternRole) {
 						if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
 							return -1;
@@ -596,7 +581,7 @@ public class EditionPattern extends EditionPatternObject {
 						}
 						return 0;
 					}
-				}
+				}*/
 				return 0;
 			}
 
@@ -699,23 +684,23 @@ public class EditionPattern extends EditionPatternObject {
 		getInspector().notifyBindingModelChanged();
 	}
 
-	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
+	/*public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
 		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
 		if (roles.size() > 0) {
 			return roles.get(0);
 		}
 		return null;
-	}
+	}*/
 
-	public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
+	/*public GraphicalElementPatternRole getDefaultPrimaryRepresentationRole() {
 		List<GraphicalElementPatternRole> roles = getPatternRoles(GraphicalElementPatternRole.class);
 		if (roles.size() > 0) {
 			return roles.get(0);
 		}
 		return null;
-	}
+	}*/
 
-	public OntologicObjectPatternRole getPrimaryConceptRole() {
+	/*public OntologicObjectPatternRole getPrimaryConceptRole() {
 		if (primaryConceptRole == null) {
 			return getDefaultPrimaryConceptRole();
 		}
@@ -735,7 +720,7 @@ public class EditionPattern extends EditionPatternObject {
 
 	public void setPrimaryRepresentationRole(GraphicalElementPatternRole primaryRepresentationRole) {
 		this.primaryRepresentationRole = primaryRepresentationRole;
-	}
+	}*/
 
 	/*@Override
 	public String simpleRepresentation() {
@@ -919,7 +904,7 @@ public class EditionPattern extends EditionPatternObject {
 
 		protected static class CreateDefaultDeletionScheme extends FixProposal<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
 
-			private EditionPattern editionPattern;
+			private final EditionPattern editionPattern;
 			private DeletionScheme newDefaultDeletionScheme;
 
 			public CreateDefaultDeletionScheme(EditionPattern anEditionPattern) {

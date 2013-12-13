@@ -38,7 +38,6 @@ import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -242,7 +241,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		return newVirtualModelInstance;
 	}
 
-	private Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
+	private final Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
 
 	public VirtualModel<?> getVirtualModel() {
 		return virtualModel;
@@ -260,7 +259,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		}
 	}
 
-	public DiagramSpecification getDiagramSpecification() {
+	/*public DiagramSpecification getDiagramSpecification() {
 		if (virtualModel instanceof DiagramSpecification) {
 			return (DiagramSpecification) virtualModel;
 		} else {
@@ -278,7 +277,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 				}
 			}
 		}
-	}
+	}*/
 
 	public ModelSlotInstanceConfiguration<?, ?> getModelSlotInstanceConfiguration(ModelSlot ms) {
 		return modelSlotConfigurations.get(ms);
@@ -339,7 +338,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public void setCreationScheme(CreationScheme creationScheme) {
 		this.creationScheme = creationScheme;
 		if (creationScheme != null) {
-			creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
+			creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(null, null, this);
 			creationSchemeAction.setCreationScheme(creationScheme);
 			creationSchemeAction.addObserver(this);
 		} else {
@@ -360,8 +359,8 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public CreationSchemeAction getCreationSchemeAction() {
 		return creationSchemeAction;
 	}
-	
-	public ViewPoint getViewpoint(){
-		return (ViewPoint) getFocusedObject().getViewPoint(); 
+
+	public ViewPoint getViewpoint() {
+		return getFocusedObject().getViewPoint();
 	}
 }

@@ -32,20 +32,15 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -53,7 +48,6 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -67,8 +61,8 @@ import org.openflexo.toolbox.StringUtils;
  * 
  * @param <A>
  */
-public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
+public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES, O>, ES extends EditionScheme, O extends VirtualModelInstanceObject>
+		extends FlexoAction<A, O, VirtualModelInstanceObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -78,8 +72,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	public boolean escapeParameterRetrievingWhenValid = true;
 
-	public EditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public EditionSchemeAction(FlexoActionType<A, O, VirtualModelInstanceObject> actionType, O focusedObject,
+			Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		variables = new Hashtable<String, Object>();
 		parameterValues = new ParameterValues();
@@ -211,8 +205,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	public abstract ES getEditionScheme();
 
-	public abstract EditionPatternInstance getEditionPatternInstance();
-
 	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
 		return retrieveVirtualModelInstance();
 	}
@@ -287,9 +279,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 					e.printStackTrace();
 				}
 			}
-			if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
-				getEditionPatternInstance().setObjectForPatternRole((FlexoModelObject) assignedObject, assignableAction.getPatternRole());
-			}
 		}
 
 		return assignedObject;
@@ -301,19 +290,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			return getParametersValues();
 		} else if (variable.getVariableName().equals("parametersDefinitions")) {
 			return getEditionScheme().getParameters();
-		} else if (variable instanceof PatternRoleBindingVariable) {
-			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
-		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
-			return getEditionPatternInstance();
 		} else if (variable.getVariableName().equals(EditionScheme.VIRTUAL_MODEL_INSTANCE)) {
 			return getVirtualModelInstance();
-		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
+		} /*else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
 			return getVirtualModelInstance();
-		} else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			} else if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
 			if (getVirtualModelInstance() instanceof Diagram) {
 				return ((Diagram) getVirtualModelInstance()).getRootPane();
 			}
-		}
+			}*/
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
 			return getVirtualModelInstance().getValueForVariable(variable);
@@ -329,10 +314,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	@Override
 	public void setValue(Object value, BindingVariable variable) {
-		if (variable instanceof PatternRoleBindingVariable) {
-			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
-			return;
-		}
 		if (variables.get(variable.getVariableName()) != null) {
 			variables.put(variable.getVariableName(), value);
 			return;
@@ -341,11 +322,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 				+ variable.getClass());
 	}
 
-	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-		// return overridenGraphicalRepresentations.get(patternRole);
-		// TODO temporary desactivate overriden GR
-		return null;
-	}
+	/*	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+			// return overridenGraphicalRepresentations.get(patternRole);
+			// TODO temporary desactivate overriden GR
+			return null;
+		}*/
 
 	public ParameterValues getParametersValues() {
 		return parameterValues;

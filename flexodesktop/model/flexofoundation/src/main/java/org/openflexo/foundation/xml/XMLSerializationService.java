@@ -48,13 +48,9 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.view.diagram.model.DiagramFactory;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteFactory;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.ws.FlexoWSLibrary;
-import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.AccessorInvocationException;
@@ -79,28 +75,12 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 
 	private ModelVersions modelVersions = null;
 
-	private DiagramFactory diagramFactory;
-	private ExampleDiagramFactory exampleDiagramFactory;
-	private DiagramPaletteFactory diagramPaletteFactory;
-
 	public static XMLSerializationService createInstance() {
 		return new XMLSerializationService();
 	}
 
 	private XMLSerializationService() {
 		initialize();
-	}
-
-	public DiagramFactory getDiagramFactory() {
-		return diagramFactory;
-	}
-
-	public ExampleDiagramFactory getExampleDiagramFactory() {
-		return exampleDiagramFactory;
-	}
-
-	public DiagramPaletteFactory getDiagramPaletteFactory() {
-		return diagramPaletteFactory;
 	}
 
 	// Public API
@@ -311,14 +291,14 @@ public class XMLSerializationService extends FlexoServiceImpl implements FlexoSe
 	@Override
 	public void initialize() {
 
-		try {
+		/*try {
 			diagramFactory = new DiagramFactory();
 			exampleDiagramFactory = new ExampleDiagramFactory();
 			diagramPaletteFactory = new DiagramPaletteFactory();
 		} catch (ModelDefinitionException e1) {
 			logger.severe(e1.getMessage());
 			e1.printStackTrace();
-		}
+		}*/
 
 		// We use here a dedicated and resetted String Converter
 		// Fix a bug where relative path converter overrided File converter, and causing big issues

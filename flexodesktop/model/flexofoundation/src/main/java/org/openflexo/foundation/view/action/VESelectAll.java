@@ -25,38 +25,40 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 
-public class VESelectAll extends FlexoGUIAction<VESelectAll, DiagramElement<?>, DiagramElement<?>> {
+public class VESelectAll extends FlexoGUIAction<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject> {
 
-	public static FlexoActionType<VESelectAll, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<VESelectAll, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<VESelectAll, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"select_all", FlexoActionType.editGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public VESelectAll makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public VESelectAll makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new VESelectAll(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VESelectAll.actionType, DiagramElement.class);
+		FlexoModelObject.addActionForClass(VESelectAll.actionType, EditionPatternInstance.class);
 	}
 
-	VESelectAll(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	VESelectAll(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

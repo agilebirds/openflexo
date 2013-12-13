@@ -47,10 +47,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramFactory;
 import org.openflexo.foundation.view.diagram.viewpoint.action.AddExampleDiagramShape;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteInserted;
-import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDianaEditor;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteInserted;
+import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteRemoved;
 import org.openflexo.vpm.controller.VPMController;
 
 public class ExampleDiagramEditor extends SelectionManagingDianaEditor<ExampleDiagram> implements GraphicalFlexoObserver {

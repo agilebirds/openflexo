@@ -135,11 +135,11 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 								VirtualModelResource virtualModelResource = VirtualModelResourceImpl.retrieveVirtualModelResource(f,
 										virtualModelFile, this, getViewPointLibrary());
 								addToContents(virtualModelResource);
-							} else if (d.getRootElement().getName().equals("DiagramSpecification")) {
+							} /*else if (d.getRootElement().getName().equals("DiagramSpecification")) {
 								DiagramSpecificationResource diagramSpecificationResource = DiagramSpecificationResourceImpl
 										.retrieveDiagramSpecificationResource(f, virtualModelFile, this, getViewPointLibrary());
 								addToContents(diagramSpecificationResource);
-							}
+								}*/
 						} catch (JDOMException e) {
 							e.printStackTrace();
 						} catch (IOException e) {

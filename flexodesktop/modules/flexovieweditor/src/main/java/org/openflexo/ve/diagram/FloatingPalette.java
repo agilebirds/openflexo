@@ -59,7 +59,6 @@ import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.view.action.AddConnector;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
@@ -71,6 +70,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.diagram.model.action.AddConnector;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {
 

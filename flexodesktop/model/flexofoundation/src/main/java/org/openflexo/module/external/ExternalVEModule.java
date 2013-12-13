@@ -19,9 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import javax.swing.JComponent;
-
-import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 
 /**
  * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
@@ -30,7 +27,7 @@ import org.openflexo.foundation.view.diagram.rm.DiagramResource;
  * @author yourname
  */
 public interface ExternalVEModule extends ExternalModule {
-	public JComponent createScreenshotForDiagram(DiagramResource diagramResource);
+	// public JComponent createScreenshotForDiagram(VirtualModelInstanceResource diagramResource);
 
 	public float getScreenshotQuality();
 

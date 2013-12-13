@@ -22,16 +22,18 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.localization.LocalizedDelegate;
 
-public class SynchronizationSchemeActionType extends FlexoActionType<SynchronizationSchemeAction, FlexoModelObject, FlexoModelObject> {
+public class SynchronizationSchemeActionType extends
+		FlexoActionType<SynchronizationSchemeAction, VirtualModelInstance, VirtualModelInstanceObject> {
 
-	private SynchronizationScheme synchronizationScheme;
-	private EditionPatternInstance editionPatternInstance;
+	private final SynchronizationScheme synchronizationScheme;
+	private final EditionPatternInstance editionPatternInstance;
 
 	public SynchronizationSchemeActionType(SynchronizationScheme synchronizationScheme, EditionPatternInstance editionPatternInstance) {
 		super(synchronizationScheme.getLabel(), FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE);
@@ -45,23 +47,23 @@ public class SynchronizationSchemeActionType extends FlexoActionType<Synchroniza
 	}
 
 	@Override
-	public boolean isEnabled(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+	public boolean isEnabled(VirtualModelInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 		return isEnabledForSelection(object, globalSelection);
 	}
 
 	@Override
-	public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+	public boolean isEnabledForSelection(VirtualModelInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 		return synchronizationScheme.evaluateCondition(editionPatternInstance);
 	}
 
 	@Override
-	public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+	public boolean isVisibleForSelection(VirtualModelInstance object, Vector<VirtualModelInstanceObject> globalSelection) {
 		return true;
 	}
 
 	@Override
-	public SynchronizationSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
-			FlexoEditor editor) {
+	public SynchronizationSchemeAction makeNewAction(VirtualModelInstance focusedObject,
+			Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		return new SynchronizationSchemeAction(this, focusedObject, globalSelection, editor);
 	}
 

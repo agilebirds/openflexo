@@ -42,7 +42,6 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.RoleList;
@@ -96,9 +95,9 @@ public class ScreenshotGenerator {
 			return getImageNameForRoleList((RoleList) o);
 		} else if (o instanceof FlexoWorkflow) {
 			return getImageNameForWorkflow((FlexoWorkflow) o);
-		} else if (o instanceof Diagram) {
+		} /*else if (o instanceof Diagram) {
 			return getImageNameForDiagram((Diagram) o);
-		}
+			}*/
 		return null;
 	}
 
@@ -154,9 +153,9 @@ public class ScreenshotGenerator {
 	 * @param shema
 	 * @return
 	 */
-	private static String getImageNameForDiagram(Diagram diagram) {
+	/*private static String getImageNameForDiagram(Diagram diagram) {
 		return getImageName(Diagram.getTypeName(), diagram.getName(), diagram.getFlexoID());
-	}
+	}*/
 
 	private static String getImageName(String type, String name, long flexoID) {
 		return trim(formatImageName(type + "-" + name)) + flexoID;
@@ -223,7 +222,7 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotComponentRunnable implements Callable<JComponent> {
-		private FlexoModelObject object;
+		private final FlexoModelObject object;
 
 		protected ScreenshotComponentRunnable(FlexoModelObject object) {
 			this.object = object;
@@ -237,8 +236,8 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotImageRunnable implements Callable<ScreenshotImage> {
-		private FlexoModelObject object;
-		private JComponent component;
+		private final FlexoModelObject object;
+		private final JComponent component;
 
 		protected ScreenshotImageRunnable(JComponent component, FlexoModelObject object) {
 			this.component = component;
@@ -253,8 +252,8 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotFinalizeRunnable implements Callable<Void> {
-		private FlexoModelObject object;
-		private JComponent component;
+		private final FlexoModelObject object;
+		private final JComponent component;
 
 		protected ScreenshotFinalizeRunnable(JComponent component, FlexoModelObject object) {
 			this.component = component;
@@ -319,9 +318,9 @@ public class ScreenshotGenerator {
 								.getComponentDefinition().getWOComponent());
 					} else if (object instanceof ERDiagram) {
 						c = dmModule.createScreenshotForObject((ERDiagram) object);
-					} else if (object instanceof Diagram) {
+					} /*else if (object instanceof Diagram) {
 						c = oeModule.createScreenshotForDiagram(((Diagram) object).getResource());
-					}
+						}*/
 					return c;
 
 				}
@@ -383,9 +382,9 @@ public class ScreenshotGenerator {
 				ieModule = project.getModuleLoader() != null ? project.getModuleLoader().getIEModuleInstance() : null;
 			} else if (object instanceof ERDiagram) {
 				dmModule = project.getModuleLoader() != null ? project.getModuleLoader().getDMModuleInstance() : null;
-			} else if (object instanceof Diagram) {
+			} /*else if (object instanceof Diagram) {
 				oeModule = project.getModuleLoader() != null ? project.getModuleLoader().getVEModuleInstance() : null;
-			}
+				}*/
 		} catch (Throwable e) {
 			logger.severe("Failed to generate screenshot for " + object);
 			e.printStackTrace();

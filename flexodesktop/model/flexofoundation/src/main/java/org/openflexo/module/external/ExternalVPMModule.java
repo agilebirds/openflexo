@@ -19,10 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import javax.swing.JComponent;
-
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 
 /**
  * External view of the module. Declare here all features that you want to be available from outside of this module. Put here as less
@@ -32,9 +28,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
  */
 public interface ExternalVPMModule extends ExternalModule {
 
-	public JComponent createScreenshotForExampleDiagram(ExampleDiagram shema);
+	// public JComponent createScreenshotForExampleDiagram(ExampleDiagram shema);
 
-	public JComponent createScreenshotForDiagramPalette(DiagramPalette palette);
+	// public JComponent createScreenshotForDiagramPalette(DiagramPalette palette);
 
 	public float getScreenshotQuality();
 

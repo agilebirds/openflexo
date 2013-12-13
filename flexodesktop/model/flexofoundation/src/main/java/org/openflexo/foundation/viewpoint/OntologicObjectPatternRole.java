@@ -29,7 +29,7 @@ public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject>
 		super(builder);
 	}
 
-	public boolean getIsPrimaryConceptRole() {
+	/*public boolean getIsPrimaryConceptRole() {
 		if (getEditionPattern() == null) {
 			return false;
 		}
@@ -55,7 +55,7 @@ public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject>
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		setIsPrimaryConceptRole(isPrimary);
-	}
+	}*/
 
 	@Override
 	public TypeAwareModelSlot<?, ?> getModelSlot() {

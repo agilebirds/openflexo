@@ -31,9 +31,6 @@ import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
@@ -65,16 +62,16 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private EditionPattern _editionPattern;
 
-	private EditionSchemeParameters editionSchemeParameters;
+	private final EditionSchemeParameters editionSchemeParameters;
 
 	private boolean definePopupDefaultSize = false;
 	private int width = 800;
 	private int height = 600;
 
-	private EditionSchemeType editionSchemeType = new EditionSchemeType(this);
-	private EditionSchemeActionType editionSchemeActionType = new EditionSchemeActionType(this);
-	private EditionSchemeParametersType editionSchemeParametersType = new EditionSchemeParametersType(this);
-	private EditionSchemeParametersValuesType editionSchemeParametersValuesType = new EditionSchemeParametersValuesType(this);
+	private final EditionSchemeType editionSchemeType = new EditionSchemeType(this);
+	private final EditionSchemeActionType editionSchemeActionType = new EditionSchemeActionType(this);
+	private final EditionSchemeParametersType editionSchemeParametersType = new EditionSchemeParametersType(this);
+	private final EditionSchemeParametersValuesType editionSchemeParametersValuesType = new EditionSchemeParametersValuesType(this);
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -735,7 +732,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		if (getEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
 					.getEditionPatternInstanceType(getEditionPattern())));
-			if (getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
+			/*if (getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
 				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DIAGRAM, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 			} 
@@ -747,12 +744,12 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			else {
 				bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
-			}
+			}*/
 		}
 		// if (this instanceof DiagramEditionScheme) {
-		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
+		/*if (getEditionPattern() != null && getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
-		}
+		}*/
 	}
 
 	@Override

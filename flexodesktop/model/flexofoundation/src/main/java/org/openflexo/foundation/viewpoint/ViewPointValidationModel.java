@@ -21,9 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 
 /**
@@ -71,20 +68,20 @@ public class ViewPointValidationModel extends ValidationModel {
 		// registerRule(new AddDataPropertyStatement.AddDataPropertyStatementActionMustDefineADataProperty());
 		// registerRule(new AddDataPropertyStatement.ValueIsRequiredAndMustBeValid());
 
-		registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
+		/*registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
 		registerRule(new AddShape.AddShapeActionMustHaveAValidContainer());
 
 		registerRule(new AddConnector.AddConnectorActionMustAdressAValidConnectorPatternRole());
 		registerRule(new AddConnector.AddConnectorActionMustHaveAValidStartingShape());
-		registerRule(new AddConnector.AddConnectorActionMustHaveAValidEndingShape());
+		registerRule(new AddConnector.AddConnectorActionMustHaveAValidEndingShape());*/
 
 		registerRule(new DeclarePatternRole.AssignationBindingIsRequiredAndMustBeValid());
 		registerRule(new DeclarePatternRole.ObjectBindingIsRequiredAndMustBeValid());
 
 		registerRule(new DeleteAction.ObjectToDeleteBindingIsRequiredAndMustBeValid());
 
-		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
-		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
+		// registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
+		// registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
 
 		registerRule(new AddEditionPatternInstance.VirtualModelInstanceBindingIsRequiredAndMustBeValid());
 		registerRule(new AddEditionPatternInstance.AddEditionPatternInstanceMustAddressACreationScheme());

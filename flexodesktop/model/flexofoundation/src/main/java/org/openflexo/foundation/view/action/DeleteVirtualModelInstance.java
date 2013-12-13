@@ -28,7 +28,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.model.Diagram;
 
 public class DeleteVirtualModelInstance extends FlexoAction<DeleteVirtualModelInstance, VirtualModelInstance<?, ?>, FlexoObject> {
 
@@ -59,7 +58,7 @@ public class DeleteVirtualModelInstance extends FlexoAction<DeleteVirtualModelIn
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteVirtualModelInstance.actionType, Diagram.class);
+		FlexoModelObject.addActionForClass(DeleteVirtualModelInstance.actionType, VirtualModelInstance.class);
 	}
 
 	DeleteVirtualModelInstance(VirtualModelInstance<?, ?> focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

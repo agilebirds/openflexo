@@ -24,34 +24,34 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
 
-public class DeleteView extends FlexoAction<DeleteView, View, DiagramElement<?>> {
+public class DeleteView extends FlexoAction<DeleteView, View, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteView.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteView, View, DiagramElement<?>> actionType = new FlexoActionType<DeleteView, View, DiagramElement<?>>(
+	public static FlexoActionType<DeleteView, View, FlexoObject> actionType = new FlexoActionType<DeleteView, View, FlexoObject>(
 			"delete_view", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteView makeNewAction(View focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public DeleteView makeNewAction(View focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new DeleteView(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(View view, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(View view, Vector<FlexoObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(View view, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isEnabledForSelection(View view, Vector<FlexoObject> globalSelection) {
 			return view != null;
 		}
 
@@ -61,7 +61,7 @@ public class DeleteView extends FlexoAction<DeleteView, View, DiagramElement<?>>
 		FlexoModelObject.addActionForClass(DeleteView.actionType, View.class);
 	}
 
-	DeleteView(View focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	DeleteView(View focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
