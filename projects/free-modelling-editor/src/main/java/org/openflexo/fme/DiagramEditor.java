@@ -264,7 +264,7 @@ public class DiagramEditor implements FIBSelectionListener {
 
 			getDiagram().addToAssociations(association);
 			// getApplication().getDynamicPaletteModel().addAssociation(association);
-			getApplication().getDynamicPaletteModel().update();
+			//getApplication().getDynamicPaletteModel().update();
 		}
 
 		else {
@@ -289,7 +289,7 @@ public class DiagramEditor implements FIBSelectionListener {
 		newShape.setAssociation(association);
 		
 		container.addToShapes(newShape);
-
+		getApplication().getDynamicPaletteModel().update();
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
@@ -323,7 +323,7 @@ public class DiagramEditor implements FIBSelectionListener {
 		returned.setConcept(association.getConcept());
 		newShape.setInstance(returned);
 		container.addToShapes(newShape);
-
+		getApplication().getDynamicPaletteModel().update();
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
@@ -548,18 +548,40 @@ public class DiagramEditor implements FIBSelectionListener {
 		Object[] context = objectsToDelete.toArray(new Object[objectsToDelete.size()]);
 		System.out.println("Deleting instance related to diagramElements");
 		for (DiagramElement<?, ?> o : objectsToDelete) {
-			if(o instanceof Shape){
-				o.getContainer().removeFromShapes((Shape)o);
-				if(o.getShapes()!=null) delete((List)o.getShapes());
-				if(o.getConnectors()!=null) delete((List)o.getConnectors());
+			if(!(o instanceof Diagram)){
+				o.getAssociation().getConcept().removeFromInstances(o.getInstance());
 				
+				if(o.getDiagram().getElementsWithAssociation(o.getAssociation()).size()==1){
+					o.getDiagram().removeFromAssociations(o.getAssociation());
+				}
+				if(o instanceof Shape){
+					deleteShape((Shape) o);
+				}
+				if(o instanceof Connector){
+					deleteConnector((Connector) o);
+				}
+				o.delete(context);
 			}
-			if(o instanceof Connector){
-				o.getContainer().removeFromConnectors((Connector)o);
-			}
-			o.delete(context);
 		}
-		
+	}
+	
+	private void deleteConnector(Connector connector){
+		connector.getEndShape().removeFromEndConnectors(connector);
+		connector.getStartShape().removeFromStartConnectors(connector);
+		connector.getContainer().removeFromConnectors((Connector)connector);
+	}
+	
+	private void deleteShape(Shape shape){
+		//Li
+		for(Connector connector : shape.getStartConnectors()){
+			deleteConnector(connector);
+		}
+		for(Connector connector : shape.getEndConnectors()){
+			deleteConnector(connector);
+		}
+		if(shape.getShapes()!=null) delete((List)shape.getShapes());
+		if(shape.getConnectors()!=null) delete((List)shape.getConnectors());
+		shape.getContainer().removeFromShapes(shape);
 	}
 
 	private boolean isSelectingObjectOnDiagram = false;

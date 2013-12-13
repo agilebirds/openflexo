@@ -62,7 +62,6 @@ public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentatio
 	@Getter(value = START_CONNECTORS, cardinality = Cardinality.LIST, inverse = Connector.START_SHAPE)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.IGNORE)
-	@Embedded
 	public List<Connector> getStartConnectors();
 
 	@Setter(START_CONNECTORS)

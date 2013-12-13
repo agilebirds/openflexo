@@ -98,7 +98,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Getter(value = GRAPHICAL_REPRESENTATION)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded
 	@XMLElement
 	public G getGraphicalRepresentation();
 
@@ -114,7 +113,6 @@ public interface DiagramElement<M extends DiagramElement<M, G>, G extends Graphi
 
 	@Getter(value = INSTANCE)
 	@XMLElement
-	@Embedded
 	public Instance getInstance();
 
 	@Setter(INSTANCE)

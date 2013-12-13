@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -53,22 +54,42 @@ public class DynamicPalette extends DrawingPalette implements PropertyChangeList
 
 	private DiagramEditor editor;
 
-	private Map<ConceptGRAssociation, PaletteElement> elementsForAssociations;
+	private Hashtable<ConceptGRAssociation, PaletteElement> elementsForAssociations;
 
 	public DynamicPalette() {
 		super(200, 200, "default");
-		elementsForAssociations = new HashMap<ConceptGRAssociation, PaletteElement>();
+		elementsForAssociations = new Hashtable<ConceptGRAssociation, PaletteElement>();
 	}
 	
 	public void update() {
 
 		List<PaletteElement> elementsToAdd = new ArrayList<PaletteElement>();
 		List<PaletteElement> elementsToRemove = new ArrayList<PaletteElement>(getElements());
+		System.out.println("PALETTE ELEMENTS:" + getElements());
+		System.out.println("ELEMENTS ASSOCIATION:" + getEditor().getDiagram().getAssociations());
+		// For each existing association
 		for (ConceptGRAssociation association : getEditor().getDiagram().getAssociations()) {
+			// Retrieve the corresponding palette element
 			PaletteElement e = elementsForAssociations.get(association);
+
+			// If a palette element exist
 			if (e != null) {
-				elementsToRemove.remove(e);
-			} else if(association.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+				// If there is no graphical element then we can delete the palette element
+				// Excepted if the palette element is associated to a ReadOnly concept.
+				// None concept is an exception, 
+				// it is a read only concept but palette elements can be deleted if no diagram elements are presents.
+				if(getEditor().getDiagram().getElementsWithAssociation(association).isEmpty()
+						&& (!association.getConcept().getReadOnly()
+								|| association.getConcept().getName().equals("None"))){
+					System.out.println("No diagram elements with this palette element, delete the palette element");
+					elementsForAssociations.remove(association);
+		
+				}
+				else{
+					elementsToRemove.remove(e);	
+				}
+			} 
+			else if(association.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 				e = new DynamicPaletteElement(association);
 				elementsForAssociations.put(association, e);
 				elementsToAdd.add(e);
