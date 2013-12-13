@@ -11,6 +11,9 @@
 	<name>Technology Adapters</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>flexodiagram</module>
+		<module>flexodiagram-ui</module>
+	
 		<module>owlconnector</module>
 		<module>xsdconnector</module>
 		<module>emfconnector</module>
