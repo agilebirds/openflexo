@@ -42,7 +42,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <T>
  */
 @FIBPanel("Fib/SelectEditionPatternInstancePanel.fib")
-public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
+public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModelSlot, EditionPatternInstance> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectEditionPatternInstance.class.getPackage().getName());
 
@@ -108,9 +108,8 @@ public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModel
 			editionPatternType = ((VirtualModel) getEditionPattern()).getEditionPattern(editionPatternTypeURI);
 		}
 		if (editionPatternType == null && editionPatternTypeURI != null && getModelSlot() instanceof VirtualModelModelSlot) {
-			if (((VirtualModelModelSlot) getModelSlot()).getAddressedVirtualModel() != null) {
-				editionPatternType = ((VirtualModelModelSlot) getModelSlot()).getAddressedVirtualModel().getEditionPattern(
-						editionPatternTypeURI);
+			if (getModelSlot().getAddressedVirtualModel() != null) {
+				editionPatternType = getModelSlot().getAddressedVirtualModel().getEditionPattern(editionPatternTypeURI);
 			}
 		}
 		// System.out.println("return " + editionPatternType);

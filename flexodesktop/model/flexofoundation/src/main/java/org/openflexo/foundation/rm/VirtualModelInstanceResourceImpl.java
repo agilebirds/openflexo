@@ -32,15 +32,15 @@ import org.openflexo.toolbox.StringUtils;
  * @author Sylvain
  * 
  */
-public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelInstance<VMI, ?>> extends FlexoXMLFileResourceImpl<VMI>
-		implements VirtualModelInstanceResource<VMI>, AccessibleProxyObject {
+public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResourceImpl<VirtualModelInstance> implements
+		VirtualModelInstanceResource, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelInstanceResourceImpl.class.getPackage().getName());
 
-	public static VirtualModelInstanceResource<?> makeVirtualModelInstanceResource(String name, VirtualModel virtualModel, View view) {
+	public static VirtualModelInstanceResource makeVirtualModelInstanceResource(String name, VirtualModel virtualModel, View view) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
-			VirtualModelInstanceResourceImpl<?> returned = (VirtualModelInstanceResourceImpl<?>) factory
+			VirtualModelInstanceResourceImpl returned = (VirtualModelInstanceResourceImpl) factory
 					.newInstance(VirtualModelInstanceResource.class);
 			String baseName = name;
 			File xmlFile = new File(view.getResource().getFile().getParentFile(), baseName
@@ -63,11 +63,10 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 		return null;
 	}
 
-	public static VirtualModelInstanceResource<?> retrieveVirtualModelInstanceResource(File virtualModelInstanceFile,
-			ViewResource viewResource) {
+	public static VirtualModelInstanceResource retrieveVirtualModelInstanceResource(File virtualModelInstanceFile, ViewResource viewResource) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
-			VirtualModelInstanceResourceImpl<?> returned = (VirtualModelInstanceResourceImpl<?>) factory
+			VirtualModelInstanceResourceImpl returned = (VirtualModelInstanceResourceImpl) factory
 					.newInstance(VirtualModelInstanceResource.class);
 			String baseName = virtualModelInstanceFile.getName().substring(0,
 					virtualModelInstanceFile.getName().length() - VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX.length());
@@ -99,7 +98,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	}
 
 	@Override
-	public VMI getVirtualModelInstance() {
+	public VirtualModelInstance getVirtualModelInstance() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {
@@ -115,8 +114,8 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	}
 
 	@Override
-	public Class<VMI> getResourceDataClass() {
-		return (Class<VMI>) VirtualModelInstance.class;
+	public Class<VirtualModelInstance> getResourceDataClass() {
+		return VirtualModelInstance.class;
 	}
 
 	@Override
@@ -171,9 +170,9 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	}
 
 	@Override
-	public VMI loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
-		VMI returned = super.loadResourceData(progress);
+	public VirtualModelInstance loadResourceData(IProgress progress) throws ResourceLoadingCancelledException,
+			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
+		VirtualModelInstance returned = super.loadResourceData(progress);
 		if (returned.isSynchronizable()) {
 			returned.synchronize(null);
 		}

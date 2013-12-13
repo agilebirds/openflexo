@@ -56,7 +56,7 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  * @param <MM>
  */
 @FIBPanel("Fib/MatchEditionPatternInstancePanel.fib")
-public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
+public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
 

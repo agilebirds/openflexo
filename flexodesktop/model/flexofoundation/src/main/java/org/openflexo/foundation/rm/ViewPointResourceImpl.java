@@ -194,7 +194,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 
 		returned.init(baseName,/* getDirectory(), getFile(),*/getViewPointLibrary());
 
-		for (VirtualModel<?> vm : returned.getVirtualModels()) {
+		for (VirtualModel vm : returned.getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				ep.finalizeParentEditionPatternDeserialization();
 			}

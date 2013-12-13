@@ -24,7 +24,7 @@ public abstract class FreeModelSlot<RD extends ResourceData<RD>> extends ModelSl
 
 	private static final Logger logger = Logger.getLogger(FreeModelSlot.class.getPackage().getName());
 
-	protected FreeModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
+	protected FreeModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}
 

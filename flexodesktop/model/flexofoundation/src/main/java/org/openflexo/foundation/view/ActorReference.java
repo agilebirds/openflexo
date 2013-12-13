@@ -65,7 +65,7 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	}
 
 	@Override
-	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+	public VirtualModelInstance getVirtualModelInstance() {
 		if (getEditionPatternInstance() != null) {
 			return getEditionPatternInstance().getVirtualModelInstance();
 		}

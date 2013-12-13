@@ -98,11 +98,11 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		FlexoModelObject.addActionForClass(CreateVirtualModelInstance.actionType, View.class);
 	}
 
-	private VirtualModelInstance<?, ?> newVirtualModelInstance;
+	private VirtualModelInstance newVirtualModelInstance;
 
 	private String newVirtualModelInstanceName;
 	private String newVirtualModelInstanceTitle;
-	private VirtualModel<?> virtualModel;
+	private VirtualModel virtualModel;
 	private CreationScheme creationScheme;
 
 	public boolean skipChoosePopup = false;
@@ -243,11 +243,11 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 	private final Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
 
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		return virtualModel;
 	}
 
-	public void setVirtualModel(VirtualModel<?> virtualModel) {
+	public void setVirtualModel(VirtualModel virtualModel) {
 		if (virtualModel != this.virtualModel) {
 			this.virtualModel = virtualModel;
 			modelSlotConfigurations.clear();

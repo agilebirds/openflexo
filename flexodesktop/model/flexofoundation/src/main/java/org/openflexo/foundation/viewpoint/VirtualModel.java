@@ -72,15 +72,15 @@ import org.openflexo.toolbox.ToolBox;
  * @author sylvain
  * 
  */
-public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern implements FlexoMetaModel<VM> {
+public class VirtualModel extends EditionPattern implements FlexoMetaModel<VirtualModel> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModel.class.getPackage().getName());
 
 	private ViewPoint viewPoint;
 	private Vector<EditionPattern> editionPatterns;
-	private List<ModelSlot> modelSlots;
+	private List<ModelSlot<?>> modelSlots;
 	private BindingModel bindingModel;
-	private VirtualModelResource<VM> resource;
+	private VirtualModelResource resource;
 	private LocalizedDictionary localizedDictionary;
 
 	private boolean readOnly = false;
@@ -99,7 +99,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	 * @param viewPoint
 	 * @return
 	 */
-	public static VirtualModel<?> newVirtualModel(String baseName, ViewPoint viewPoint) {
+	public static VirtualModel newVirtualModel(String baseName, ViewPoint viewPoint) {
 		File diagramSpecificationDirectory = new File(viewPoint.getResource().getDirectory(), baseName);
 		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 		ViewPointLibrary viewPointLibrary = viewPoint.getViewPointLibrary();
@@ -118,10 +118,10 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		super(builder);
 		if (builder != null) {
 			builder.setVirtualModel(this);
-			resource = (VirtualModelResource<VM>) builder.resource;
+			resource = builder.resource;
 			viewPoint = builder.getViewPoint();
 		}
-		modelSlots = new ArrayList<ModelSlot>();
+		modelSlots = new ArrayList<ModelSlot<?>>();
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
@@ -353,11 +353,11 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot> modelSlots) {
+	public void setModelSlots(List<ModelSlot<?>> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot> getModelSlots() {
+	public List<ModelSlot<?>> getModelSlots() {
 		// System.out.println("getModelSlots=" + modelSlots);
 		return modelSlots;
 	}
@@ -615,13 +615,13 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	// Implementation of XMLStorageResourceData
 
 	@Override
-	public VirtualModelResource<VM> getResource() {
+	public VirtualModelResource getResource() {
 		return resource;
 	}
 
 	@Override
-	public void setResource(FlexoResource<VM> resource) {
-		this.resource = (VirtualModelResource<VM>) resource;
+	public void setResource(FlexoResource<VirtualModel> resource) {
+		this.resource = (VirtualModelResource) resource;
 	}
 
 	@Override
@@ -662,27 +662,26 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	 * 
 	 */
 	public static class VirtualModelBuilder {
-		private VirtualModel<?> virtualModel;
+		private VirtualModel virtualModel;
 		private FlexoVersion modelVersion;
-		private ViewPointLibrary viewPointLibrary;
-		private ViewPoint viewPoint;
-		VirtualModelResource<?> resource;
+		private final ViewPointLibrary viewPointLibrary;
+		private final ViewPoint viewPoint;
+		VirtualModelResource resource;
 
-		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource<?> resource) {
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource resource) {
 			this.viewPointLibrary = vpLibrary;
 			this.viewPoint = viewPoint;
 			this.resource = resource;
 		}
 
-		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModel<?> virtualModel) {
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModel virtualModel) {
 			this.virtualModel = virtualModel;
 			this.viewPointLibrary = vpLibrary;
 			this.viewPoint = viewPoint;
 			this.resource = virtualModel.getResource();
 		}
 
-		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource<?> resource,
-				FlexoVersion modelVersion) {
+		public VirtualModelBuilder(ViewPointLibrary vpLibrary, ViewPoint viewPoint, VirtualModelResource resource, FlexoVersion modelVersion) {
 			this.modelVersion = modelVersion;
 			this.viewPointLibrary = vpLibrary;
 			this.viewPoint = viewPoint;
@@ -697,11 +696,11 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			return modelVersion;
 		}
 
-		public VirtualModel<?> getVirtualModel() {
+		public VirtualModel getVirtualModel() {
 			return virtualModel;
 		}
 
-		public void setVirtualModel(VirtualModel<?> virtualModel) {
+		public void setVirtualModel(VirtualModel virtualModel) {
 			this.virtualModel = virtualModel;
 		}
 

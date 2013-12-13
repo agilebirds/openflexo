@@ -71,7 +71,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	private boolean isReadOnly;
 	private TechnologyAdapter technologyAdapter;
 	private ViewPoint viewPoint;
-	private VirtualModel<?> virtualModel;
+	private VirtualModel virtualModel;
 
 	private List<Class<? extends PatternRole<?>>> availablePatternRoleTypes;
 	private List<Class<? extends EditionAction<?, ?>>> availableEditionActionTypes;
@@ -83,7 +83,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		this.technologyAdapter = technologyAdapter;
 	}*/
 
-	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
+	protected ModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
 		this.virtualModel = virtualModel;
 		this.viewPoint = virtualModel.getViewPoint();
@@ -157,11 +157,11 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		return null;
 	}
 
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		return virtualModel;
 	}
 
-	public void setVirtualModel(VirtualModel<?> virtualModel) {
+	public void setVirtualModel(VirtualModel virtualModel) {
 		this.virtualModel = virtualModel;
 	}
 

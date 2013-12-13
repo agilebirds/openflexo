@@ -62,7 +62,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingResource);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewResource);
-		//options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource);
+		// options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewResource);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -84,7 +84,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 	}
 
 	@Override
-	public FreeModelSlotInstance<RD, MS> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+	public FreeModelSlotInstance<RD, MS> createModelSlotInstance(VirtualModelInstance vmInstance) {
 		FreeModelSlotInstance<RD, MS> returned = new FreeModelSlotInstance<RD, MS>(vmInstance, getModelSlot());
 		configureModelSlotInstance(returned);
 		return returned;
@@ -111,9 +111,9 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 				if (resource != null) {
 					msInstance.setResourceData(getResource().getResourceData(null));
 				}
-			} else {
+				} else {
 				logger.warning("Could not create SharedEmptyResource for model slot " + getModelSlot());
-			}*/
+				}*/
 			return msInstance;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -200,7 +200,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getResourceUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		}*/
+			}*/
 		return false;
 	}
 }

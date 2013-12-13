@@ -145,7 +145,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = ((EditionPatternInstanceType) parent.getType()).getEditionPattern();
 			if (ep instanceof VirtualModel) {
-				VirtualModel<?> vm = (VirtualModel<?>) ep;
+				VirtualModel vm = (VirtualModel) ep;
 				for (ModelSlot ms : vm.getModelSlots()) {
 					returned.add(getSimplePathElement(ms, parent));
 				}

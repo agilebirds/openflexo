@@ -52,7 +52,7 @@ import org.openflexo.toolbox.StringUtils;
 @DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
-public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI> {
+public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlot.class.getPackage().getName());
 
@@ -60,7 +60,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		super(viewPoint, adapter);
 	}*/
 
-	public VirtualModelModelSlot(VirtualModel<?> virtualModel, VirtualModelTechnologyAdapter adapter) {
+	public VirtualModelModelSlot(VirtualModel virtualModel, VirtualModelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
@@ -124,15 +124,15 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>, VMI> createConfiguration(
+	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot, VirtualModelInstance> createConfiguration(
 			CreateVirtualModelInstance<?> action) {
-		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>, VMI, VM>(this, action);
+		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot>(this, action);
 	}
 
-	private VirtualModelResource<?> virtualModelResource;
+	private VirtualModelResource virtualModelResource;
 	private String virtualModelURI;
 
-	public VirtualModelResource<?> getVirtualModelResource() {
+	public VirtualModelResource getVirtualModelResource() {
 		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI) && getViewPoint() != null) {
 			if (getViewPoint().getVirtualModelNamed(virtualModelURI) != null) {
 				virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
@@ -142,7 +142,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return virtualModelResource;
 	}
 
-	public void setVirtualModelResource(VirtualModelResource<?> virtualModelResource) {
+	public void setVirtualModelResource(VirtualModelResource virtualModelResource) {
 		this.virtualModelResource = virtualModelResource;
 	}
 

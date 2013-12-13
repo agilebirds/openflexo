@@ -70,7 +70,7 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 		super(view, modelSlot);
 	}
 
-	public TypeAwareModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, MS modelSlot) {
+	public TypeAwareModelSlotInstance(VirtualModelInstance vmInstance, MS modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 

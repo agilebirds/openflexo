@@ -61,7 +61,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
 	private ViewResource resource;
-	private List<VirtualModelInstance<?, ?>> vmInstances;
+	private List<VirtualModelInstance> vmInstances;
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	private String title;
 
@@ -101,7 +101,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	public View(FlexoProject project) {
 		super(project);
 		logger.info("Created new view with project " + project);
-		vmInstances = new ArrayList<VirtualModelInstance<?, ?>>();
+		vmInstances = new ArrayList<VirtualModelInstance>();
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 
 	}
@@ -229,20 +229,20 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	// ======================== Virtual Model Instances =========================
 	// ==========================================================================
 
-	public List<VirtualModelInstance<?, ?>> getVirtualModelInstances() {
+	public List<VirtualModelInstance> getVirtualModelInstances() {
 		loadVirtualModelInstancesWhenUnloaded();
 		return vmInstances;
 	}
 
-	public void setVirtualModelInstances(List<VirtualModelInstance<?, ?>> instances) {
+	public void setVirtualModelInstances(List<VirtualModelInstance> instances) {
 		this.vmInstances = instances;
 	}
 
-	public void addToVirtualModelInstances(VirtualModelInstance<?, ?> vmInstance) {
+	public void addToVirtualModelInstances(VirtualModelInstance vmInstance) {
 		vmInstances.add(vmInstance);
 	}
 
-	public void removeFromVirtualModelInstances(VirtualModelInstance<?, ?> vmInstance) {
+	public void removeFromVirtualModelInstances(VirtualModelInstance vmInstance) {
 		vmInstances.remove(vmInstance);
 	}
 
@@ -258,8 +258,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		}
 	}
 
-	public VirtualModelInstance<?, ?> getVirtualModelInstance(String name) {
-		for (VirtualModelInstance<?, ?> vmi : getVirtualModelInstances()) {
+	public VirtualModelInstance getVirtualModelInstance(String name) {
+		for (VirtualModelInstance vmi : getVirtualModelInstances()) {
 			if (vmi.getName().equals(name)) {
 				return vmi;
 			}

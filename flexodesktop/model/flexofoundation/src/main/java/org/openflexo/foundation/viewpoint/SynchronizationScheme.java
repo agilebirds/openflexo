@@ -38,11 +38,11 @@ public class SynchronizationScheme extends AbstractActionScheme {
 	}
 
 	@Override
-	public VirtualModel<?> getVirtualModel() {
-		return (VirtualModel<?>) super.getEditionPattern();
+	public VirtualModel getVirtualModel() {
+		return (VirtualModel) super.getEditionPattern();
 	}
 
-	public void setVirtualModel(VirtualModel<?> virtualModel) {
+	public void setVirtualModel(VirtualModel virtualModel) {
 		setEditionPattern(virtualModel);
 	}
 

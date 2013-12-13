@@ -81,7 +81,7 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	}
 
 	@Override
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		if (getEditionPattern() != null) {
 			return getEditionPattern().getVirtualModel();
 		}

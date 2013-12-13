@@ -37,8 +37,8 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  */
 public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, RD extends ResourceData<RD>> extends FlexoObject {
 
-	private CreateVirtualModelInstance<?> action;
-	private MS modelSlot;
+	private final CreateVirtualModelInstance<?> action;
+	private final MS modelSlot;
 	private ModelSlotInstanceConfigurationOption option;
 
 	public static interface ModelSlotInstanceConfigurationOption {
@@ -133,8 +133,8 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 		return option != null;
 	}
 
-	public abstract ModelSlotInstance<MS, RD> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
-	
+	public abstract ModelSlotInstance<MS, RD> createModelSlotInstance(VirtualModelInstance msInstance);
+
 	private String errorMessage;
 
 	public String getErrorMessage() {

@@ -205,11 +205,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES, O
 
 	public abstract ES getEditionScheme();
 
-	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+	public VirtualModelInstance getVirtualModelInstance() {
 		return retrieveVirtualModelInstance();
 	}
 
-	public abstract VirtualModelInstance<?, ?> retrieveVirtualModelInstance();
+	public abstract VirtualModelInstance retrieveVirtualModelInstance();
 
 	/**
 	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control

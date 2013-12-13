@@ -126,7 +126,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	@Override
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		if (getScheme() != null) {
 			return getScheme().getVirtualModel();
 		}

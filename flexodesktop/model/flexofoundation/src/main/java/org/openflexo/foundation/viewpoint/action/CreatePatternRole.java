@@ -183,10 +183,10 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		return EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass);
 	}
 
-	public VirtualModel<?> getModelSlotVirtualModel() {
+	public VirtualModel getModelSlotVirtualModel() {
 		if (modelSlot instanceof VirtualModelModelSlot) {
-			if (((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource() != null) {
-				return ((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource().getVirtualModel();
+			if (((VirtualModelModelSlot) modelSlot).getVirtualModelResource() != null) {
+				return ((VirtualModelModelSlot) modelSlot).getVirtualModelResource().getVirtualModel();
 			}
 		}
 		return null;

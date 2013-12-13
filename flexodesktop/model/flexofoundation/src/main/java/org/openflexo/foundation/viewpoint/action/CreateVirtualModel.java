@@ -66,7 +66,7 @@ public class CreateVirtualModel extends FlexoAction<CreateVirtualModel, ViewPoin
 
 	public String newVirtualModelName;
 	public String newVirtualModelDescription;
-	private VirtualModel<?> newVirtualModel;
+	private VirtualModel newVirtualModel;
 
 	public Vector<IFlexoOntology> importedOntologies = new Vector<IFlexoOntology>();
 
@@ -102,7 +102,7 @@ public class CreateVirtualModel extends FlexoAction<CreateVirtualModel, ViewPoin
 		return true;
 	}
 
-	public VirtualModel<?> getNewVirtualModel() {
+	public VirtualModel getNewVirtualModel() {
 		return newVirtualModel;
 	}
 

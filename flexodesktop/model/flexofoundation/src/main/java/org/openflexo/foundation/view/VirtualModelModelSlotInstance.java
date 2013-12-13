@@ -39,8 +39,7 @@ import org.openflexo.toolbox.StringUtils;
  * @see VirtualModelModelSlot
  * 
  */
-public class VirtualModelModelSlotInstance<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
-		ModelSlotInstance<VirtualModelModelSlot<VMI, VM>, VMI> {
+public class VirtualModelModelSlotInstance extends ModelSlotInstance<VirtualModelModelSlot, VirtualModelInstance> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlotInstance.class.getPackage().getName());
 
@@ -65,18 +64,18 @@ public class VirtualModelModelSlotInstance<VMI extends VirtualModelInstance<VMI,
 		initializeDeserialization(builder);
 	}
 
-	public VirtualModelModelSlotInstance(View view, VirtualModelModelSlot<VMI, VM> modelSlot) {
+	public VirtualModelModelSlotInstance(View view, VirtualModelModelSlot modelSlot) {
 		super(view, modelSlot);
 	}
 
-	public VirtualModelModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, VirtualModelModelSlot<VMI, VM> modelSlot) {
+	public VirtualModelModelSlotInstance(VirtualModelInstance vmInstance, VirtualModelModelSlot modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 
 	@Override
-	public VMI getResourceData() {
+	public VirtualModelInstance getResourceData() {
 		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(virtualModelInstanceURI)) {
-			VirtualModelInstanceResource<VMI> vmiResource = getProject().getViewLibrary().getVirtualModelInstance(virtualModelInstanceURI);
+			VirtualModelInstanceResource vmiResource = getProject().getViewLibrary().getVirtualModelInstance(virtualModelInstanceURI);
 			if (vmiResource != null) {
 				resourceData = vmiResource.getVirtualModelInstance();
 				resource = vmiResource;
@@ -85,7 +84,7 @@ public class VirtualModelModelSlotInstance<VMI extends VirtualModelInstance<VMI,
 		// Special case to handle reflexive model slots
 		if (resourceData == null && getVirtualModelInstance() != null
 				&& getModelSlot().equals(getVirtualModelInstance().getVirtualModel().getReflexiveModelSlot())) {
-			resourceData = (VMI) getVirtualModelInstance();
+			resourceData = getVirtualModelInstance();
 			if (resourceData != null) {
 				resource = resourceData.getResource();
 			}

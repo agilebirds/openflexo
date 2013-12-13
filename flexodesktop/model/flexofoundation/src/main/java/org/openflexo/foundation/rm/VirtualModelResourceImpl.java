@@ -25,8 +25,8 @@ import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> extends FlexoXMLFileResourceImpl<VM> implements
-		VirtualModelResource<VM>, AccessibleProxyObject {
+public abstract class VirtualModelResourceImpl extends FlexoXMLFileResourceImpl<VirtualModel> implements VirtualModelResource,
+		AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelResourceImpl.class.getPackage().getName());
 
@@ -112,7 +112,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	 * Load the resource data when unloaded
 	 */
 	@Override
-	public VM getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {
@@ -132,7 +132,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	 * Do not force the resource data to be loaded
 	 */
 	@Override
-	public VM getLoadedVirtualModel() {
+	public VirtualModel getLoadedVirtualModel() {
 		if (isLoaded()) {
 			return getVirtualModel();
 		}
@@ -140,8 +140,8 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	}
 
 	@Override
-	public Class<VM> getResourceDataClass() {
-		return (Class<VM>) VirtualModel.class;
+	public Class<VirtualModel> getResourceDataClass() {
+		return VirtualModel.class;
 	}
 
 	/**
@@ -155,10 +155,10 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	 * @throws FileNotFoundException
 	 */
 	@Override
-	public VM loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException, FileNotFoundException,
-			ResourceDependencyLoopException {
+	public VirtualModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException,
+			FileNotFoundException, ResourceDependencyLoopException {
 
-		VM returned = super.loadResourceData(progress);
+		VirtualModel returned = super.loadResourceData(progress);
 		getContainer().getViewPoint().addToVirtualModels(returned);
 		returned.clearIsModified();
 		return returned;

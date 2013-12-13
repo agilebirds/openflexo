@@ -72,12 +72,12 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends EditionPatternInstance
-		implements XMLStorageResourceData<VMI>, FlexoModel<VMI, VM> {
+public class VirtualModelInstance extends EditionPatternInstance implements XMLStorageResourceData<VirtualModelInstance>,
+		FlexoModel<VirtualModelInstance, VirtualModel> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelInstance.class.getPackage().getName());
 
-	private VirtualModelInstanceResource<VMI> resource;
+	private VirtualModelInstanceResource resource;
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	// private Map<ModelSlot, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot, FlexoModel<?, ?>>(); // Do not serialize
 	// this.
@@ -85,7 +85,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	private Hashtable<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances;
 
-	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
+	public static VirtualModelInstanceResource newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
 			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
 
 		VirtualModelInstanceResource newVirtualModelResource = VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(
@@ -144,8 +144,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
-	public VM getEditionPattern() {
-		return (VM) super.getEditionPattern();
+	public VirtualModel getEditionPattern() {
+		return (VirtualModel) super.getEditionPattern();
 	}
 
 	public ViewPoint getViewPoint() {
@@ -155,7 +155,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
-	public VM getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		return getEditionPattern();
 	}
 
@@ -168,7 +168,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
-	public VM getMetaModel() {
+	public VirtualModel getMetaModel() {
 		return getEditionPattern();
 	}
 
@@ -317,7 +317,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	@Deprecated
 	@Override
-	public FlexoStorageResource<VMI> getFlexoResource() {
+	public FlexoStorageResource<VirtualModelInstance> getFlexoResource() {
 		return null;
 	}
 
@@ -327,18 +327,18 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
-	public FlexoXMLFileResource<VMI> getFlexoXMLFileResource() {
+	public FlexoXMLFileResource<VirtualModelInstance> getFlexoXMLFileResource() {
 		return getResource();
 	}
 
 	@Override
-	public VirtualModelInstanceResource<VMI> getResource() {
+	public VirtualModelInstanceResource getResource() {
 		return resource;
 	}
 
 	@Override
-	public void setResource(org.openflexo.foundation.resource.FlexoResource<VMI> resource) {
-		this.resource = (VirtualModelInstanceResource<VMI>) resource;
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<VirtualModelInstance> resource) {
+		this.resource = (VirtualModelInstanceResource) resource;
 	}
 
 	@Override

@@ -32,28 +32,28 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class DeleteVirtualModel extends FlexoAction<DeleteVirtualModel, VirtualModel<?>, ViewPointObject> {
+public class DeleteVirtualModel extends FlexoAction<DeleteVirtualModel, VirtualModel, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteVirtualModel.class.getPackage().getName());
 
-	public static FlexoActionType<DeleteVirtualModel, VirtualModel<?>, ViewPointObject> actionType = new FlexoActionType<DeleteVirtualModel, VirtualModel<?>, ViewPointObject>(
+	public static FlexoActionType<DeleteVirtualModel, VirtualModel, ViewPointObject> actionType = new FlexoActionType<DeleteVirtualModel, VirtualModel, ViewPointObject>(
 			"delete_virtual_model", FlexoActionType.editGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DeleteVirtualModel makeNewAction(VirtualModel<?> focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+		public DeleteVirtualModel makeNewAction(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 			return new DeleteVirtualModel(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(VirtualModel<?> object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
 			return object != null && object.getClass().equals(VirtualModel.class);
 		}
 
 		@Override
-		public boolean isEnabledForSelection(VirtualModel<?> object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModel object, Vector<ViewPointObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -63,7 +63,7 @@ public class DeleteVirtualModel extends FlexoAction<DeleteVirtualModel, VirtualM
 		FlexoModelObject.addActionForClass(DeleteVirtualModel.actionType, VirtualModel.class);
 	}
 
-	DeleteVirtualModel(VirtualModel<?> focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	DeleteVirtualModel(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

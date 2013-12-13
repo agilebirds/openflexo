@@ -57,7 +57,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		//options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
+		// options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -79,7 +79,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 	}
 
 	@Override
-	public TypeAwareModelSlotInstance<M, MM, MS> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+	public TypeAwareModelSlotInstance<M, MM, MS> createModelSlotInstance(VirtualModelInstance vmInstance) {
 		TypeAwareModelSlotInstance<M, MM, MS> returned = new TypeAwareModelSlotInstance<M, MM, MS>(vmInstance, getModelSlot());
 		configureModelSlotInstance(returned);
 		return returned;
@@ -115,7 +115,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}
 			return msInstance;
-		}*/
+			}*/
 		return null;
 	}
 
@@ -190,9 +190,9 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		}*/
+			}*/
 		return false;
 	}
-	
+
 	public abstract boolean isURIEditable();
 }

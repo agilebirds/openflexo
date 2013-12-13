@@ -18,7 +18,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(VirtualModelResourceImpl.class)
 @XMLElement
-public interface VirtualModelResource<VM extends VirtualModel<VM>> extends FlexoXMLFileResource<VM>, PamelaResource<VM, FMLModelFactory> {
+public interface VirtualModelResource extends FlexoXMLFileResource<VirtualModel>, PamelaResource<VirtualModel, FMLModelFactory> {
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 	public static final String DIRECTORY = "directory";
@@ -27,13 +27,13 @@ public interface VirtualModelResource<VM extends VirtualModel<VM>> extends Flexo
 	 * Return virtual model stored by this resource<br>
 	 * Load the resource data when unloaded
 	 */
-	public VM getVirtualModel();
+	public VirtualModel getVirtualModel();
 
 	/**
 	 * Return virtual model stored by this resource when loaded<br>
 	 * Do not force the resource data to be loaded
 	 */
-	public VM getLoadedVirtualModel();
+	public VirtualModel getLoadedVirtualModel();
 
 	@Getter(value = VIEW_POINT_LIBRARY, ignoreType = true)
 	public ViewPointLibrary getViewPointLibrary();

@@ -48,7 +48,7 @@ public class VirtualModelTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new VirtualModelModelSlot(virtualModel, this);
 		}

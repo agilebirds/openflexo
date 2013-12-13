@@ -53,7 +53,7 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
  */
 
 @FIBPanel("Fib/AddEditionPatternInstancePanel.fib")
-public class AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
+public class AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
 

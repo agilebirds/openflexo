@@ -34,8 +34,8 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  */
 public class VirtualModelInstanceBuilder extends XMLResourceDataBuilder<VirtualModelInstanceResource> {
 
-	public VirtualModelInstance<?, ?> vmInstance;
-	private ViewResource viewResource;
+	public VirtualModelInstance vmInstance;
+	private final ViewResource viewResource;
 
 	/**
 	 * Use this constructor to build an Operation Component

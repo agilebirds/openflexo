@@ -91,7 +91,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 	}
 
 	@Override
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		if (getScheme() != null) {
 			return getScheme().getVirtualModel();
 		}
@@ -121,7 +121,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	public ModelSlotInstance<MS, ?> getModelSlotInstance(EditionSchemeAction action) {
 		if (action.getVirtualModelInstance() != null) {
-			return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
+			return action.getVirtualModelInstance().getModelSlotInstance((ModelSlot) getModelSlot());
 		} else {
 			logger.severe("Could not access virtual model instance for action " + action);
 			return null;

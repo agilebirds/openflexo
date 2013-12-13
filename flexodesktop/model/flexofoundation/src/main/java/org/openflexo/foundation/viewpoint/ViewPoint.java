@@ -94,7 +94,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
 	// private List<ModelSlot> modelSlots;
-	private List<VirtualModel<?>> virtualModels;
+	private List<VirtualModel> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
 	private final EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
@@ -137,7 +137,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			resource = builder.resource;
 		}
 		// modelSlots = new ArrayList<ModelSlot>();
-		virtualModels = new ArrayList<VirtualModel<?>>();
+		virtualModels = new ArrayList<VirtualModel>();
 	}
 
 	// Used during deserialization, do not use it
@@ -153,7 +153,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 		loadViewpointMetaModels();
 
-		/*for (VirtualModel<?> vm : getVirtualModels()) {
+		/*for (VirtualModel vm : getVirtualModels()) {
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				for (PatternRole<?> pr : ep.getPatternRoles()) {
 					if (pr instanceof ShapePatternRole) {
@@ -261,7 +261,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		isLoading = true;
 		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
 			if (r instanceof VirtualModelResource) {
-				((VirtualModelResource<?>) r).getVirtualModel();
+				((VirtualModelResource) r).getVirtualModel();
 			}
 		}
 		isLoading = false;
@@ -273,9 +273,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * 
 	 * @return
 	 */
-	public <VM extends VirtualModel<?>> List<VM> getVirtualModels(Class<VM> virtualModelClass, boolean onlyFinalInstances) {
+	public <VM extends VirtualModel> List<VM> getVirtualModels(Class<VM> virtualModelClass, boolean onlyFinalInstances) {
 		List<VM> returned = new ArrayList<VM>();
-		for (VirtualModel<?> vm : getVirtualModels()) {
+		for (VirtualModel vm : getVirtualModels()) {
 			if (onlyFinalInstances) {
 				if (virtualModelClass.equals(vm.getClass())) {
 					returned.add((VM) vm);
@@ -312,17 +312,17 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	 * 
 	 * @return
 	 */
-	public List<VirtualModel<?>> getVirtualModels() {
+	public List<VirtualModel> getVirtualModels() {
 		loadVirtualModelsWhenUnloaded();
 		return virtualModels;
 	}
 
-	public void setVirtualModels(Vector<VirtualModel<?>> virtualModels) {
+	public void setVirtualModels(Vector<VirtualModel> virtualModels) {
 		loadVirtualModelsWhenUnloaded();
 		this.virtualModels = virtualModels;
 	}
 
-	public void addToVirtualModels(VirtualModel<?> virtualModel) {
+	public void addToVirtualModels(VirtualModel virtualModel) {
 		loadVirtualModelsWhenUnloaded();
 		virtualModel.setViewPoint(this);
 		virtualModels.add(virtualModel);
@@ -330,7 +330,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		notifyObservers(new VirtualModelCreated(virtualModel));
 	}
 
-	public void removeFromVirtualModels(VirtualModel<?> virtualModel) {
+	public void removeFromVirtualModels(VirtualModel virtualModel) {
 		loadVirtualModelsWhenUnloaded();
 		virtualModel.setViewPoint(null);
 		virtualModels.remove(virtualModel);
@@ -560,7 +560,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		}*/
 
 		out.append(StringUtils.LINE_SEPARATOR, context);
-		for (VirtualModel<?> vm : getVirtualModels()) {
+		for (VirtualModel vm : getVirtualModels()) {
 			out.append(vm.getFMLRepresentation(context), context, 1);
 			out.append(StringUtils.LINE_SEPARATOR, context, 1);
 		}
@@ -569,7 +569,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	@Override
-	public Collection<VirtualModel<?>> getEmbeddedValidableObjects() {
+	public Collection<VirtualModel> getEmbeddedValidableObjects() {
 		return getVirtualModels();
 	}
 

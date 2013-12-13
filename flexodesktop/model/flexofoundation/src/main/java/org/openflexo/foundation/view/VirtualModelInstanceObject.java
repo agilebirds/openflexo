@@ -49,7 +49,7 @@ public abstract class VirtualModelInstanceObject extends ViewObject {
 	 * 
 	 * @return
 	 */
-	public abstract VirtualModelInstance<?, ?> getVirtualModelInstance();
+	public abstract VirtualModelInstance getVirtualModelInstance();
 
 	/**
 	 * Return the {@link View} where this object is declared and living

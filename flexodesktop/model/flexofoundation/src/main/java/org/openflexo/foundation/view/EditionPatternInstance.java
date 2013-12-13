@@ -68,7 +68,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	private EditionPattern editionPattern;
 	private final Hashtable<PatternRole<?>, ActorReference<?>> actors;
-	private VirtualModelInstance<?, ?> vmInstance;
+	private VirtualModelInstance vmInstance;
 
 	private Vector<ActorReference<?>> deserializedActorList;
 
@@ -541,11 +541,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	@Override
-	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
+	public VirtualModelInstance getVirtualModelInstance() {
 		return vmInstance;
 	}
 
-	public void setVirtualModelInstance(VirtualModelInstance<?, ?> vmInstance) {
+	public void setVirtualModelInstance(VirtualModelInstance vmInstance) {
 		this.vmInstance = vmInstance;
 	}
 

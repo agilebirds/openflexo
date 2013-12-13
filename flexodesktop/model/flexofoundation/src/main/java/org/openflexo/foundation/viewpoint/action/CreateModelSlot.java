@@ -99,7 +99,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 			VirtualModelTechnologyAdapter virtualModelTechnologyAdapter = (VirtualModelTechnologyAdapter) technologyAdapter;
 			newModelSlot = virtualModelTechnologyAdapter.makeModelSlot(VirtualModelModelSlot.class, getFocusedObject());
 			newModelSlot.setName(modelSlotName);
-			((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+			((VirtualModelModelSlot) newModelSlot).setVirtualModelResource(vmRes);
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);
 			newModelSlot.setDescription(description);
@@ -114,7 +114,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 			}*/
 			newModelSlot.setName(modelSlotName);
 			if (newModelSlot instanceof VirtualModelModelSlot) {
-				((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+				((VirtualModelModelSlot) newModelSlot).setVirtualModelResource(vmRes);
 			} else if (newModelSlot instanceof TypeAwareModelSlot) {
 				((TypeAwareModelSlot) newModelSlot).setMetaModelResource(mmRes);
 			}

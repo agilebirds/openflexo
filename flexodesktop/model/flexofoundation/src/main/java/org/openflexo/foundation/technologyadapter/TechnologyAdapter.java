@@ -68,7 +68,7 @@ public abstract class TechnologyAdapter {
 	 * 
 	 * @return a new {@link ModelSlot}
 	 */
-	// public abstract ModelSlot<?> createNewModelSlot(VirtualModel<?> virtualModel);
+	// public abstract ModelSlot<?> createNewModelSlot(VirtualModel virtualModel);
 
 	/**
 	 * Return flag indicating if supplied file represents a valid XSD schema
@@ -333,7 +333,7 @@ public abstract class TechnologyAdapter {
 	 * @param modelSlotClass
 	 * @return
 	 */
-	public abstract <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel);
+	public abstract <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel);
 
 	/**
 	 * Retrieve (creates it when not existant) folder containing supplied file

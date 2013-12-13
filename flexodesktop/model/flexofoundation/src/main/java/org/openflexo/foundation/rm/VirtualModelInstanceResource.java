@@ -20,20 +20,20 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(VirtualModelInstanceResourceImpl.class)
 @XMLElement
-public interface VirtualModelInstanceResource<VMI extends VirtualModelInstance<VMI, ?>> extends FlexoXMLFileResource<VMI>,
-		FlexoProjectResource<VMI>, TechnologyAdapterResource<VMI> {
+public interface VirtualModelInstanceResource extends FlexoXMLFileResource<VirtualModelInstance>,
+		FlexoProjectResource<VirtualModelInstance>, TechnologyAdapterResource<VirtualModelInstance> {
 
 	public static final String VIRTUAL_MODEL_SUFFIX = ".vmxml";
 
 	public static final String VIRTUAL_MODEL_RESOURCE = "virtualModelResource";
 
 	@Getter(value = VIRTUAL_MODEL_RESOURCE, ignoreType = true)
-	public VirtualModelResource<?> getVirtualModelResource();
+	public VirtualModelResource getVirtualModelResource();
 
 	@Setter(VIRTUAL_MODEL_RESOURCE)
-	public void setVirtualModelResource(VirtualModelResource<?> virtualModelResource);
+	public void setVirtualModelResource(VirtualModelResource virtualModelResource);
 
-	public VMI getVirtualModelInstance();
+	public VirtualModelInstance getVirtualModelInstance();
 
 	@Getter(value = CONTAINER, inverse = CONTENTS)
 	@Override

@@ -35,7 +35,7 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	private FlexoMetaModelResource<M, MM> metaModelResource;
 	private String metaModelURI;
 
-	protected TypeAwareModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
+	protected TypeAwareModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}
 
