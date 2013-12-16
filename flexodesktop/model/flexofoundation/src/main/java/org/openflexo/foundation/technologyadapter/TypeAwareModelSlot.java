@@ -32,7 +32,7 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 
 	private static final Logger logger = Logger.getLogger(TypeAwareModelSlot.class.getPackage().getName());
 
-	private FlexoMetaModelResource<M, MM> metaModelResource;
+	private FlexoMetaModelResource<M, MM, ?> metaModelResource;
 	private String metaModelURI;
 
 	protected TypeAwareModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
@@ -122,26 +122,26 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 		return baseName;
 	}
 
-	public abstract FlexoModelResource<M, MM> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<M, MM> metaModelResource)/* {
-															return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri,
-															metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
-															};*/;
+	public abstract FlexoModelResource<M, MM, ?> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<M, MM, ?> metaModelResource)/* {
+																return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri,
+																metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
+																};*/;
 
-	public abstract FlexoModelResource<M, MM> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath,
-			String filename, String modelUri, FlexoMetaModelResource<M, MM> metaModelResource)/* {
-																								if (resourceCenter instanceof FileSystemBasedResourceCenter) {
-																								return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter,
-																								relativePath, filename, modelUri, metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
-																								} else {
-																								logger.warning("Cannot create shared model in a non file-system-based resource center");
-																								return null;
-																								}
-																								};*/;
+	public abstract FlexoModelResource<M, MM, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath,
+			String filename, String modelUri, FlexoMetaModelResource<M, MM, ?> metaModelResource)/* {
+																									if (resourceCenter instanceof FileSystemBasedResourceCenter) {
+																									return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter,
+																									relativePath, filename, modelUri, metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
+																									} else {
+																									logger.warning("Cannot create shared model in a non file-system-based resource center");
+																									return null;
+																									}
+																									};*/;
 
-	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
+	public FlexoMetaModelResource<M, MM, ?> getMetaModelResource() {
 		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
-			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModelWithURI(metaModelURI,
+			metaModelResource = (FlexoMetaModelResource<M, MM, ?>) getInformationSpace().getMetaModelWithURI(metaModelURI,
 					getTechnologyAdapter());
 			logger.info("Looked-up " + metaModelResource + " for " + metaModelURI);
 		}
@@ -154,7 +154,7 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 		return metaModelResource;
 	}
 
-	public void setMetaModelResource(FlexoMetaModelResource<M, MM> metaModelResource) {
+	public void setMetaModelResource(FlexoMetaModelResource<M, MM, ?> metaModelResource) {
 		this.metaModelResource = metaModelResource;
 	}
 

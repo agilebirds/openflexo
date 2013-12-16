@@ -6,21 +6,13 @@ package org.openflexo.technologyadapter.xsd.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
@@ -31,43 +23,37 @@ import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.xml.model.XMLModel;
-import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.technologyadapter.xml.rm.XMLReaderSAXHandler;
 import org.openflexo.technologyadapter.xml.rm.XMLWriter;
-import org.openflexo.technologyadapter.xsd.XSDTechnologyContextManager;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
+import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.toolbox.IProgress;
 
 /**
  * @author xtof
- *
+ * 
  */
 
 // TODO : there is code to refactor to be able to merge XMLFileResourceImpl & XMLXSDFileResourceImpl
 
-public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXSDModel> implements XMLXSDFileResource  {
+public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXSDModel> implements XMLXSDFileResource {
 
-	//Constants
-
-
+	// Constants
 
 	static final String CDATA_TYPE_NAME = "CDATA";
 
 	protected static final Logger logger = Logger.getLogger(XMLXSDFileResourceImpl.class.getPackage().getName());
 
-
 	private XSDMetaModelResource metamodelResource = null;
 
-	// Properties 
+	// Properties
 
 	private boolean isLoaded = false;
-
 
 	/**
 	 * 
@@ -77,8 +63,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public static XMLXSDFileResource makeXMLXSDFileResource(String modelUri,
-			File xmlFile, XSDMetaModelResource metaModelResource,
+	public static XMLXSDFileResource makeXMLXSDFileResource(String modelUri, File xmlFile, XSDMetaModelResource metaModelResource,
 			XSDTechnologyContextManager technologyContextManager) {
 
 		try {
@@ -100,12 +85,12 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas
 
-			if(xmlFile.exists()){
+			if (xmlFile.exists()) {
 				logger.warning("will load an existing File: " + xmlFile.getCanonicalPath());
 				returned.loadResourceData(null);
-			}else{
-			returned.save(null);
-			returned.isLoaded = true;
+			} else {
+				returned.save(null);
+				returned.isLoaded = true;
 			}
 			return returned;
 		} catch (Exception e) {
@@ -119,12 +104,12 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	 */
 
 	@Override
-	public void save(IProgress progress) throws SaveResourceException{
+	public void save(IProgress progress) throws SaveResourceException {
 
 		File myFile = this.getFile();
 
-		if (!myFile.exists()){
-			//Creates a new file
+		if (!myFile.exists()) {
+			// Creates a new file
 			try {
 				myFile.createNewFile();
 			} catch (IOException e) {
@@ -149,10 +134,8 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
 			}
-		}
-		else 
+		} else
 			logger.warning("Model is Empty!");
-
 
 	}
 
@@ -160,8 +143,8 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 		OutputStreamWriter out = null;
 		try {
-			out = new OutputStreamWriter(new FileOutputStream(getFile()),"UTF-8");
-			XMLWriter<XMLXSDFileResource, XMLXSDModel> writer = new XMLWriter<XMLXSDFileResource, XMLXSDModel>(this , out);
+			out = new OutputStreamWriter(new FileOutputStream(getFile()), "UTF-8");
+			XMLWriter<XMLXSDFileResource, XMLXSDModel> writer = new XMLWriter<XMLXSDFileResource, XMLXSDModel>(this, out);
 
 			writer.writeDocument();
 
@@ -174,7 +157,6 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 		logger.info("Wrote " + getFile());
 	}
 
-
 	@Override
 	public XMLXSDModel getModel() {
 		return resourceData;
@@ -182,7 +164,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 	@Override
 	public XMLXSDModel getModelData() {
-		if (!isLoaded()){
+		if (!isLoaded()) {
 			try {
 				resourceData = loadResourceData(null);
 			} catch (FileNotFoundException e) {
@@ -210,12 +192,9 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 		return this.getFile().toURI().toString();
 	}
 
-
 	@Override
-	public XMLXSDModel loadResourceData(IProgress progress)
-			throws ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException,
-			FlexoException {
+	public XMLXSDModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException {
 
 		if (!isLoaded()) {
 
@@ -224,11 +203,11 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				factory.setNamespaceAware(true);
 				factory.setXIncludeAware(true);
-				factory.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
+				factory.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 				SAXParser saxParser = factory.newSAXParser();
 
-
-				XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty> handler = new XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty>(this,false); 
+				XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel, XSOntIndividual, XSOntProperty> handler = new XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel, XSOntIndividual, XSOntProperty>(
+						this, false);
 				saxParser.parse(this.getFile(), handler);
 
 				isLoaded = true;
@@ -242,9 +221,8 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 		return resourceData;
 	}
 
-
 	@Override
-	public FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> getMetaModelResource() {
+	public FlexoMetaModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> getMetaModelResource() {
 		return metamodelResource;
 	}
 
@@ -252,8 +230,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	 * @see org.openflexo.foundation.technologyadapter.FlexoModelResource#setMetaModelResource(org.openflexo.foundation.technologyadapter.FlexoMetaModelResource)
 	 */
 	@Override
-	public void setMetaModelResource(
-			FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> mmRes) {
+	public void setMetaModelResource(FlexoMetaModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> mmRes) {
 
 		metamodelResource = (XSDMetaModelResource) mmRes;
 
@@ -275,14 +252,11 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 		return XMLXSDModel.class;
 	}
 
-
-
 	// Lifecycle Management
 
-
+	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
-
 
 }

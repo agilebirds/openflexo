@@ -26,6 +26,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 
@@ -37,8 +38,9 @@ import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
  */
 @ModelEntity
 @ImplementationClass(OWLOntologyResourceImpl.class)
-public interface OWLOntologyResource extends FlexoFileResource<OWLOntology>, FlexoModelResource<OWLOntology, OWLOntology>,
-		FlexoMetaModelResource<OWLOntology, OWLOntology> {
+public interface OWLOntologyResource extends FlexoFileResource<OWLOntology>,
+		FlexoModelResource<OWLOntology, OWLOntology, OWLTechnologyAdapter>,
+		FlexoMetaModelResource<OWLOntology, OWLOntology, OWLTechnologyAdapter> {
 
 	public static final String ONTOLOGY_LIBRARY = "ontologyLibrary";
 

@@ -1,21 +1,24 @@
 package org.openflexo.technologyadapter.diagram;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
-import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
+import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
@@ -27,9 +30,12 @@ import org.openflexo.technologyadapter.diagram.fml.editionaction.GraphicalAction
 import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
+import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 
 /**
- * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
+ * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter<br>
+ * 
+ * We modelize here the access to a {@link Diagram} conform to a given {@link DiagramSpecification}.
  * 
  * @author sylvain
  * 
@@ -38,29 +44,28 @@ import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 @DeclarePatternRole(FML = "Diagram", patternRoleClass = DiagramPatternRole.class), // Diagrams
 		@DeclarePatternRole(FML = "ShapeSpecification", patternRoleClass = ShapePatternRole.class), // Shapes
 		@DeclarePatternRole(FML = "ConnectorSpecification", patternRoleClass = ConnectorPatternRole.class), // Connectors
-		@DeclarePatternRole(FML = "EditionPatternInstance", patternRoleClass = EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
 @DeclareEditionActions({ // All edition actions available through this model slot
 @DeclareEditionAction(FML = "AddDiagram", editionActionClass = AddDiagram.class),
 		@DeclareEditionAction(FML = "AddShape", editionActionClass = AddShape.class),
 		@DeclareEditionAction(FML = "AddConnector", editionActionClass = AddConnector.class),
-		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class),
-		@DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
+		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
-@DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
-public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> {
+})
+public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> {
 
-	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
 
-	/*public DiagramModelSlot(ViewPoint viewPoint, DiagramTechnologyAdapter adapter) {
-		super(viewPoint, adapter);
-	}*/
-
-	public DiagramModelSlot(DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
-		super(diagramSpecification, adapter);
+	public TypedDiagramModelSlot(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
+		super(virtualModel, adapter);
 	}
 
-	public DiagramModelSlot(VirtualModelBuilder builder) {
+	public TypedDiagramModelSlot(VirtualModel virtualModel, DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
+		this(virtualModel, adapter);
+		setMetaModelResource(diagramSpecification.getResource());
+	}
+
+	public TypedDiagramModelSlot(VirtualModelBuilder builder) {
 		super(builder);
 	}
 
@@ -70,7 +75,7 @@ public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecifi
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "DiagramModelSlot";
+		return "TypedDiagramModelSlot";
 	}
 
 	@Override
@@ -79,6 +84,12 @@ public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecifi
 	}
 
 	@Override
+	public DiagramTechnologyAdapter getTechnologyAdapter() {
+		return (DiagramTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new DiagramPatternRole(null);
@@ -86,10 +97,6 @@ public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecifi
 			return (PR) new ShapePatternRole(null);
 		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ConnectorPatternRole(null);
-		}
-		PR returned = super.makePatternRole(patternRoleClass);
-		if (returned != null) {
-			return returned;
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -121,7 +128,8 @@ public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecifi
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new DeleteAction(null);
 		} else {
-			return super.makeEditionAction(editionActionClass);
+			logger.warning("Unexpected EditionAction: " + editionActionClass.getName());
+			return null;
 		}
 	}
 
@@ -131,12 +139,61 @@ public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecifi
 	}
 
 	@Override
-	public DiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+	public TypedDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		if (action instanceof CreateDiagram) {
-			return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
+			return new TypedDiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
 		} else {
 			logger.warning("Unexpected " + action);
 			return null;
 		}
 	}
+
+	@Override
+	public DiagramResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DiagramResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoMetaModelResource<Diagram, DiagramSpecification, ?> metaModelResource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getURIForObject(
+			TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
+			Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(
+			TypeAwareModelSlotInstance<Diagram, DiagramSpecification, ? extends TypeAwareModelSlot<Diagram, DiagramSpecification>> msInstance,
+			String objectURI) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Type getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -7,23 +7,30 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
- * A {@link FlexoModelResource} is a {@link FlexoResource} specific to a technology and storing a model
+ * A {@link FlexoModelResource} is a {@link FlexoResource} specific to a technology and storing a model conform to a metamodel
  * 
+ * @see FlexoMetaModelResource
  * @author sylvain
  * 
- * @param <RD>
+ * @param <M>
+ *            type of model being handled as resource data
+ * @param <MM>
+ *            type of metamodel
+ * @param <TA>
+ *            type of {@link TechnologyAdapter} handling this conforming pattern
  */
 @ModelEntity
 @XMLElement
-public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends TechnologyAdapterResource<M> {
+public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter> extends
+		TechnologyAdapterResource<M, TA> {
 
 	public static final String META_MODEL_RESOURCE = "metaModelResource";
 
 	@Getter(value = META_MODEL_RESOURCE, ignoreType = true)
-	public FlexoMetaModelResource<M, MM> getMetaModelResource();
+	public FlexoMetaModelResource<M, MM, TA> getMetaModelResource();
 
 	@Setter(META_MODEL_RESOURCE)
-	public void setMetaModelResource(FlexoMetaModelResource<M, MM> aMetaModelResource);
+	public void setMetaModelResource(FlexoMetaModelResource<M, MM, TA> aMetaModelResource);
 
 	/**
 	 * Return the model this resource is storing (same as {@link #getModel()}

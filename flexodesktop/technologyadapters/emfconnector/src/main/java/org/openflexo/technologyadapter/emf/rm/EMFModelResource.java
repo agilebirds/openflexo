@@ -25,6 +25,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.EMFTechnologyContextManager;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -36,7 +37,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
  */
 @ModelEntity
 @ImplementationClass(EMFModelResourceImpl.class)
-public interface EMFModelResource extends FlexoFileResource<EMFModel>, FlexoModelResource<EMFModel, EMFMetaModel> {
+public interface EMFModelResource extends FlexoFileResource<EMFModel>, FlexoModelResource<EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 

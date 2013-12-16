@@ -70,7 +70,8 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
  * @author sylvain
  * 
  */
-public class OWLOntologyLibrary extends TechnologyContextManager implements ModelMaker, RemovalListener<OWLOntology, Set<OWLOntology>> {
+public class OWLOntologyLibrary extends TechnologyContextManager<OWLTechnologyAdapter> implements ModelMaker,
+		RemovalListener<OWLOntology, Set<OWLOntology>> {
 
 	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
 
@@ -81,12 +82,12 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 	public static final String TECHNICAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#technicalDescription";
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
-	private SimpleGraphMaker graphMaker;
+	private final SimpleGraphMaker graphMaker;
 
-	private Map<String, TechnologyAdapterResource<OWLOntology>> ontologies;
+	private final Map<String, OWLOntologyResource> ontologies;
 	private final Map<String, OWLDataType> dataTypes;
 
-	private OntologyObjectConverter ontologyObjectConverter;
+	private final OntologyObjectConverter ontologyObjectConverter;
 
 	protected Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty> statementsWithProperty;
 
@@ -106,7 +107,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
 
-		ontologies = new HashMap<String, TechnologyAdapterResource<OWLOntology>>();
+		ontologies = new HashMap<String, OWLOntologyResource>();
 		dataTypes = new HashMap<String, OWLDataType>();
 
 		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
@@ -390,7 +391,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 	}
 
 	@Override
-	public void registerResource(TechnologyAdapterResource<?> resource) {
+	public void registerResource(TechnologyAdapterResource<?, OWLTechnologyAdapter> resource) {
 		super.registerResource(resource);
 		if (resource instanceof OWLOntologyResource) {
 			registerOntology((OWLOntologyResource) resource);
@@ -398,7 +399,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 	}
 
 	@Override
-	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+	public TechnologyAdapterResource<?, OWLTechnologyAdapter> getResourceWithURI(String uri) {
 		return ontologies.get(uri);
 	}
 
@@ -419,7 +420,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 	/**
 	 * This cache stores all imported ontologies of a related ontology (transitiviy)
 	 */
-	private LoadingCache<OWLOntology, Set<OWLOntology>> allImportedOntologiesMapCache = CacheBuilder.newBuilder().maximumSize(10000)
+	private final LoadingCache<OWLOntology, Set<OWLOntology>> allImportedOntologiesMapCache = CacheBuilder.newBuilder().maximumSize(10000)
 			.expireAfterWrite(10, TimeUnit.MINUTES).removalListener(this).build(new CacheLoader<OWLOntology, Set<OWLOntology>>() {
 				@Override
 				public Set<OWLOntology> load(OWLOntology ontology) {

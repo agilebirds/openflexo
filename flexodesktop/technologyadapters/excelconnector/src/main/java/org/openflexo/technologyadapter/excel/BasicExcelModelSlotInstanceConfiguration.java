@@ -17,7 +17,7 @@ public class BasicExcelModelSlotInstanceConfiguration extends FreeModelSlotInsta
 	protected List<ModelSlotInstanceConfigurationOption> options;
 
 	protected FlexoResourceCenter<?> resourceCenter;
-	protected TechnologyAdapterResource<ExcelWorkbook> modelResource;
+	protected TechnologyAdapterResource<ExcelWorkbook, ExcelTechnologyAdapter> modelResource;
 
 	protected BasicExcelModelSlotInstanceConfiguration(BasicExcelModelSlot ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
@@ -30,7 +30,7 @@ public class BasicExcelModelSlotInstanceConfiguration extends FreeModelSlotInsta
 			resourceUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myExcelModel";
 			relativePath = "/";
 			filename = "myExcelResource.xls";
-		} 
+		}
 	}
 
 }

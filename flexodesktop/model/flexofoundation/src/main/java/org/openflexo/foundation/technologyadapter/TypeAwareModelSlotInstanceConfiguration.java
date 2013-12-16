@@ -45,7 +45,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 	protected List<ModelSlotInstanceConfigurationOption> options;
 
 	protected FlexoResourceCenter<?> resourceCenter;
-	protected FlexoModelResource<M, MM> modelResource;
+	protected FlexoModelResource<M, MM, ?> modelResource;
 	protected String modelUri;
 	protected String relativePath;
 	protected String filename;
@@ -119,7 +119,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 		return null;
 	}
 
-	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(TypeAwareModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
+	private FlexoModelResource<M, MM, ?> createProjectSpecificEmptyModel(TypeAwareModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createProjectSpecificEmptyModel(msInstance.getView(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
@@ -161,11 +161,11 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 		this.filename = filename;
 	}
 
-	public FlexoModelResource<M, MM> getModelResource() {
+	public FlexoModelResource<M, MM, ?> getModelResource() {
 		return modelResource;
 	}
 
-	public void setModelResource(FlexoModelResource<M, MM> modelResource) {
+	public void setModelResource(FlexoModelResource<M, MM, ?> modelResource) {
 		this.modelResource = modelResource;
 	}
 

@@ -21,11 +21,16 @@ package org.openflexo.technologyadapter.diagram;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
+import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 /**
  * This class defines and implements the Openflexo built-in diagram technology adapter
@@ -33,7 +38,12 @@ import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
  * @author sylvain
  * 
  */
-public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter {
+@DeclareModelSlots({ // ModelSlot(s) declaration
+@DeclareModelSlot(FML = "TypedDiagramModelSlot", modelSlotClass = TypedDiagramModelSlot.class), // Typed diagram
+		@DeclareModelSlot(FML = "FreeDiagramModelSlot", modelSlotClass = FreeDiagramModelSlot.class) // A free diagram
+})
+// @DeclareRepositoryType({ OWLOntologyRepository.class })
+public class DiagramTechnologyAdapter extends TechnologyAdapter {
 
 	private static final Logger logger = Logger.getLogger(DiagramTechnologyAdapter.class.getPackage().getName());
 
@@ -47,10 +57,50 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter {
 
 	@Override
 	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
-		if (DiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return (MS) new DiagramModelSlot((DiagramSpecification) virtualModel, this);
+		if (TypedDiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new TypedDiagramModelSlot(virtualModel, this);
+		} else if (FreeDiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new FreeDiagramModelSlot(virtualModel, this);
+		} else {
+			logger.warning("Unexpected model slot: " + modelSlotClass.getName());
+			return null;
 		}
-		return super.makeModelSlot(modelSlotClass, virtualModel);
+	}
+
+	@Override
+	public TechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

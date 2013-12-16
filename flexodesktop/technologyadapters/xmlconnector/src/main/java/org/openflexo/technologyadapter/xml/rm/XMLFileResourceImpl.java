@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -40,7 +41,6 @@ import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xml.model.XMLAttribute;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
@@ -48,25 +48,21 @@ import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.toolbox.IProgress;
 
-
 /**
  * @author xtof
  * 
  */
-public abstract class XMLFileResourceImpl extends
-FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
+public abstract class XMLFileResourceImpl extends FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	// Constants
 
 	static final String CDATA_TYPE_NAME = "CDATA";
 
-	protected static final Logger logger = Logger.getLogger(XMLFileResourceImpl.class
-			.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLFileResourceImpl.class.getPackage().getName());
 
-	// Properties 
+	// Properties
 
 	private boolean isLoaded = false;
-
 
 	/**
 	 * 
@@ -75,12 +71,10 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public static XMLFileResource makeXMLFileResource(File xmlFile,
-			XMLTechnologyContextManager technologyContextManager) {
+	public static XMLFileResource makeXMLFileResource(File xmlFile, XMLTechnologyContextManager technologyContextManager) {
 		try {
 			ModelFactory factory = new ModelFactory(XMLFileResource.class);
-			XMLFileResourceImpl returned = (XMLFileResourceImpl) factory
-					.newInstance(XMLFileResource.class);
+			XMLFileResourceImpl returned = (XMLFileResourceImpl) factory.newInstance(XMLFileResource.class);
 			returned.setName(xmlFile.getName());
 			returned.setFile(xmlFile);
 			returned.setURI(xmlFile.toURI().toString());
@@ -88,14 +82,14 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 
-			technologyContextManager.registerResource((FlexoModelResource<XMLModel, XMLModel>) returned);
+			technologyContextManager.registerResource(returned);
 
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas
 
-			if(!xmlFile.exists()){
+			if (!xmlFile.exists()) {
 
-				if (returned.resourceData == null){
+				if (returned.resourceData == null) {
 					returned.resourceData = new XMLModel(technologyContextManager.getTechnologyAdapter());
 					returned.resourceData.setResource(returned);
 				}
@@ -136,8 +130,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 		if (!hasWritePermission()) {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Permission denied : "
-						+ getFile().getAbsolutePath());
+				logger.warning("Permission denied : " + getFile().getAbsolutePath());
 			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
@@ -149,8 +142,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 			notifyResourceStatusChanged();
 			resourceData.clearIsModified(false);
 			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Succeeding to save Resource " + getURI() + " : "
-						+ getFile().getName());
+				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
 			}
 		}
 
@@ -164,17 +156,16 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 		return this.getFile().toURI().toString();
 	}
 
-
 	private void writeToFile() throws SaveResourceException {
 
 		OutputStreamWriter out = null;
 		try {
-			out = new OutputStreamWriter(new FileOutputStream(getFile()),"UTF-8");
+			out = new OutputStreamWriter(new FileOutputStream(getFile()), "UTF-8");
 			out = new FileWriter(getFile());
-			XMLWriter<XMLFileResource, XMLModel> writer = new XMLWriter<XMLFileResource, XMLModel>(this , out);
+			XMLWriter<XMLFileResource, XMLModel> writer = new XMLWriter<XMLFileResource, XMLModel>(this, out);
 
 			writer.writeDocument();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
@@ -191,7 +182,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	@Override
 	public XMLModel getModelData() {
-		if (!isLoaded()){
+		if (!isLoaded()) {
 			try {
 				resourceData = loadResourceData(null);
 			} catch (FileNotFoundException e) {
@@ -212,13 +203,12 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 	}
 
 	@Override
-	public XMLModel loadResourceData(IProgress progress)
-			throws ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException,
+	public XMLModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException,
 
 			FlexoException {
 
-		if (resourceData == null){
+		if (resourceData == null) {
 			resourceData = new XMLModel(this.getTechnologyAdapter());
 			resourceData.setResource(this);
 		}
@@ -230,7 +220,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				factory.setNamespaceAware(true);
 				factory.setXIncludeAware(true);
-				factory.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
+				factory.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 				SAXParser saxParser = factory.newSAXParser();
 
 				XMLReaderSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute> handler = new XMLReaderSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute>(
@@ -256,10 +246,9 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	// Lifecycle Management
 
-
+	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
-
 
 }

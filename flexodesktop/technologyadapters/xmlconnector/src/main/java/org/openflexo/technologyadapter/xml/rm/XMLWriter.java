@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -40,15 +39,14 @@ import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.IXMLModel;
 
 /**
- * This SaxHandler is used to serialize any XML file, either conformant or not
- * to an XSD file The behavior of the Handler depends on the situation (existing
- * XSD).
+ * This SaxHandler is used to serialize any XML file, either conformant or not to an XSD file The behavior of the Handler depends on the
+ * situation (existing XSD).
  * 
  * @author xtof
  * 
  */
 
-public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends ResourceData<RD>> {
+public class XMLWriter<R extends TechnologyAdapterResource<RD, ?>, RD extends ResourceData<RD>> {
 
 	private R taRes = null;
 	private OutputStreamWriter outputStr = null;
@@ -58,18 +56,16 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 	private static String LINE_SEP = "\n";
 	private static String DEFAULT_NS = "ns1";
 
-	private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory
-			.newInstance();
+	private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
 
-	public XMLWriter(R resource, OutputStreamWriter out)
-			throws XMLStreamException, IOException {
+	public XMLWriter(R resource, OutputStreamWriter out) throws XMLStreamException, IOException {
 		super();
 		this.taRes = resource;
 		outputStr = out;
 	}
 
-
-	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException, IOException {
+	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FlexoException, IOException {
 
 		String NSPrefix = DEFAULT_NS;
 
@@ -81,23 +77,22 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 			NSPrefix = model.getNamespacePrefix();
 			NSURI = model.getNamespaceURI();
 
-			if (NSURI != null && !NSURI.isEmpty()){
-				if(NSPrefix == null || NSPrefix.isEmpty()){
-					NSPrefix = DEFAULT_NS; //default
+			if (NSURI != null && !NSURI.isEmpty()) {
+				if (NSPrefix == null || NSPrefix.isEmpty()) {
+					NSPrefix = DEFAULT_NS; // default
 				}
 				myWriter.setDefaultNamespace(NSURI);
 				myWriter.setPrefix(NSPrefix, NSURI);
 			}
 
 			if (myWriter != null) {
-				myWriter.writeStartDocument("UTF-8","1.0");
+				myWriter.writeStartDocument("UTF-8", "1.0");
 				myWriter.writeCharacters(LINE_SEP);
 
+				IXMLIndividual<?, ?> rootIndiv = ((IXMLModel) taRes.getResourceData(null)).getRoot();
 
-				IXMLIndividual<?,?> rootIndiv = ((IXMLModel) taRes.getResourceData(null)).getRoot();
-
-				if (rootIndiv != null ){
-					writeRootElement(rootIndiv,NSURI, NSPrefix);
+				if (rootIndiv != null) {
+					writeRootElement(rootIndiv, NSURI, NSPrefix);
 					myWriter.writeCharacters(LINE_SEP);
 				}
 
@@ -110,9 +105,8 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 		}
 	}
 
-
-	private void writeRootElement(IXMLIndividual<?, ?> rootIndiv, String nSURI, String nSPrefix) throws XMLStreamException, IOException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
-
+	private void writeRootElement(IXMLIndividual<?, ?> rootIndiv, String nSURI, String nSPrefix) throws XMLStreamException, IOException,
+			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		myWriter.writeStartElement(nSURI, rootIndiv.getName());
 		myWriter.writeNamespace(nSPrefix, nSURI);
@@ -120,68 +114,66 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 		writeAttributes(rootIndiv);
 		myWriter.writeCharacters(LINE_SEP);
 
-		// children node 
-		for (Object i : rootIndiv.getChildren()){
-			writeElement(i,((IXMLIndividual)i).getName());			
+		// children node
+		for (Object i : rootIndiv.getChildren()) {
+			writeElement(i, ((IXMLIndividual) i).getName());
 		}
 		// CDATA
 		String content = rootIndiv.getContentDATA();
-		if (content != null && !content.isEmpty()){
+		if (content != null && !content.isEmpty()) {
 			myWriter.writeCData(content);
 			myWriter.writeCharacters(LINE_SEP);
 		}
 		// Element End
-		myWriter.writeEndElement();		
+		myWriter.writeEndElement();
 		myWriter.writeCharacters(LINE_SEP);
 
 	}
-
 
 	private void writeElement(Object o, String name) throws XMLStreamException {
 		IXMLIndividual indiv = (IXMLIndividual) o;
 
-		myWriter.writeStartElement(NSURI,name);
+		myWriter.writeStartElement(NSURI, name);
 
 		// Attributes
 		writeAttributes(indiv);
-		// children node 
-		for (Object i : indiv.getChildren()){
-			writeElement(i,((IXMLIndividual)i).getName());			
+		// children node
+		for (Object i : indiv.getChildren()) {
+			writeElement(i, ((IXMLIndividual) i).getName());
 		}
 		// CDATA
 		String content = indiv.getContentDATA();
-		if (content != null && !content.isEmpty()){
+		if (content != null && !content.isEmpty()) {
 			myWriter.writeCData(content);
 			myWriter.writeCharacters(LINE_SEP);
 		}
 		// Element End
-		myWriter.writeEndElement();		
+		myWriter.writeEndElement();
 		myWriter.writeCharacters(LINE_SEP);
 	}
 
-
 	private void writeAttributes(IXMLIndividual<?, ?> indiv) throws XMLStreamException {
 		// Simple Attributes First
-		String value = null;				
+		String value = null;
 
-		// Data Properties 
-		for (IXMLAttribute a : indiv.getAttributes()){
-			if (a.isSimpleAttribute() && !a.isElement()){
-				value = (String) indiv.getAttributeStringValue(a);
-				if (value != null){
+		// Data Properties
+		for (IXMLAttribute a : indiv.getAttributes()) {
+			if (a.isSimpleAttribute() && !a.isElement()) {
+				value = indiv.getAttributeStringValue(a);
+				if (value != null) {
 					myWriter.writeAttribute(a.getName(), value);
 				}
 			}
 		}
 
-		for (IXMLAttribute a : indiv.getAttributes()){
-			if (a.isSimpleAttribute() && a.isElement()){
+		for (IXMLAttribute a : indiv.getAttributes()) {
+			if (a.isSimpleAttribute() && a.isElement()) {
 
 				List<?> valueList = (List<?>) indiv.getAttributeValue(a.getName());
 				if (valueList != null && valueList.size() > 0) {
 					myWriter.writeStartElement(a.getName());
-					for (Object o : valueList) { 
-						if ( o != null) {
+					for (Object o : valueList) {
+						if (o != null) {
 							myWriter.writeCData(o.toString());
 						}
 					}
@@ -191,13 +183,13 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 			}
 		}
 		// Object Properties
-		for (IXMLAttribute a : indiv.getAttributes()){
+		for (IXMLAttribute a : indiv.getAttributes()) {
 
-			if (!a.isSimpleAttribute()){
+			if (!a.isSimpleAttribute()) {
 				List<?> valueList = (List<?>) indiv.getAttributeValue(a.getName());
 				if (valueList != null) {
-					for (Object o : valueList) { 
-						this.writeElement(o,a.getName());
+					for (Object o : valueList) {
+						this.writeElement(o, a.getName());
 					}
 				}
 			}
@@ -205,4 +197,3 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 	}
 
 }
-

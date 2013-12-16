@@ -52,9 +52,9 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCel
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.CellStyleAction;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
-import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelCell;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelRow;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
 
 /**
  * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
@@ -70,21 +70,21 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcel
 		@DeclarePatternRole(FML = "ExcelCell", patternRoleClass = ExcelCellPatternRole.class) // Cell
 })
 @DeclareEditionActions({ // All edition actions available through this model slot
-		@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
+@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
 		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
 		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class), // Add sheet
 		@DeclareEditionAction(FML = "CellStyleAction", editionActionClass = CellStyleAction.class) // Cell Style
 })
 @DeclareFetchRequests({ // All requests available through this model slot
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), //Select Excel Sheet
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelRow.class),  //Select Excel Row
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class)  //Select Excel Cell
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class), // Select Excel Sheet
+		@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelRow.class), // Select Excel Row
+		@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelCell.class) // Select Excel Cell
 })
 public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
 
-	private BasicExcelModelSlotURIProcessor uriProcessor;
+	private final BasicExcelModelSlotURIProcessor uriProcessor;
 
 	public BasicExcelModelSlot(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -114,7 +114,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelSheetPatternRole(null);
-		}  else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelCellPatternRole(null);
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ExcelRowPatternRole(null);
@@ -153,7 +153,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 			return (EA) new AddExcelRow(null);
 		} else if (CellStyleAction.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new CellStyleAction(null);
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -171,7 +171,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 			return (FR) new SelectExcelCell(null);
 		} else if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectExcelRow(null);
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -205,16 +205,15 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	public ExcelTechnologyAdapter getTechnologyAdapter() {
 		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
 	}
-	
-	
+
 	@Override
 	public ExcelWorkbookResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
-		return getTechnologyAdapter().createNewWorkbook(view.getProject(),filename, modelUri);
+		return getTechnologyAdapter().createNewWorkbook(view.getProject(), filename, modelUri);
 	}
 
 	@Override
-	public TechnologyAdapterResource<ExcelWorkbook> createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
-			String filename, String modelUri) {
+	public TechnologyAdapterResource<ExcelWorkbook, ExcelTechnologyAdapter> createSharedEmptyResource(
+			FlexoResourceCenter<?> resourceCenter, String relativePath, String filename, String modelUri) {
 		// TODO Auto-generated method stub
 		return null;
 	}

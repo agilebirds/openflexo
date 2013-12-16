@@ -77,7 +77,7 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 	@Override
 	public M getResourceData() {
 		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
-			FlexoModelResource<M, ?> modelResource = (FlexoModelResource<M, ?>) getVirtualModelInstance().getInformationSpace()
+			FlexoModelResource<M, ?, ?> modelResource = (FlexoModelResource<M, ?, ?>) getVirtualModelInstance().getInformationSpace()
 					.getModelWithURI(modelURI, getModelSlot().getTechnologyAdapter());
 			if (modelResource != null) {
 				resourceData = modelResource.getModel();

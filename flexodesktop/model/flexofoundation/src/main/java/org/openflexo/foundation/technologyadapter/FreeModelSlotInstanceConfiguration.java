@@ -50,7 +50,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 	protected List<ModelSlotInstanceConfigurationOption> options;
 
 	protected FlexoResourceCenter<?> resourceCenter;
-	private TechnologyAdapterResource<RD> resource;
+	private TechnologyAdapterResource<RD, ?> resource;
 	protected String resourceUri;
 	protected String relativePath;
 	protected String filename;
@@ -131,11 +131,11 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		return null;
 	}
 
-	private TechnologyAdapterResource<RD> createProjectSpecificEmptyResource(FreeModelSlotInstance<RD, MS> msInstance, MS modelSlot) {
+	private TechnologyAdapterResource<RD, ?> createProjectSpecificEmptyResource(FreeModelSlotInstance<RD, MS> msInstance, MS modelSlot) {
 		return modelSlot.createProjectSpecificEmptyResource(msInstance.getView(), getFilename(), getResourceUri());
 	}
 
-	private TechnologyAdapterResource<RD> createSharedEmptyResource(FreeModelSlotInstance<RD, MS> msInstance, MS modelSlot) {
+	private TechnologyAdapterResource<RD, ?> createSharedEmptyResource(FreeModelSlotInstance<RD, MS> msInstance, MS modelSlot) {
 		return modelSlot.createSharedEmptyResource(getResourceCenter(), getRelativePath(), getFilename(), getResourceUri());
 	}
 
@@ -171,11 +171,11 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		this.filename = filename;
 	}
 
-	public TechnologyAdapterResource<RD> getResource() {
+	public TechnologyAdapterResource<RD, ?> getResource() {
 		return resource;
 	}
 
-	public void setResource(TechnologyAdapterResource<RD> resource) {
+	public void setResource(TechnologyAdapterResource<RD, ?> resource) {
 		this.resource = resource;
 	}
 

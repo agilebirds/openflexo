@@ -22,7 +22,7 @@ package org.openflexo.technologyadapter.powerpoint;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 
-public class PowerpointTechnologyContextManager extends TechnologyContextManager {
+public class PowerpointTechnologyContextManager extends TechnologyContextManager<PowerpointTechnologyAdapter> {
 
 	public PowerpointTechnologyContextManager(PowerpointTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);

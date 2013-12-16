@@ -28,7 +28,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
-public class EMFTechnologyContextManager extends TechnologyContextManager {
+public class EMFTechnologyContextManager extends TechnologyContextManager<EMFTechnologyAdapter> {
 
 	/** Stores all known metamodels where key is the URI of metamodel */
 	protected Map<String, EMFMetaModelResource> metamodels = new HashMap<String, EMFMetaModelResource>();

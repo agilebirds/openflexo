@@ -8,14 +8,13 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl.VirtualModelInstanceInfo;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramBuilder;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
@@ -116,7 +115,7 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 	}
 
 	@Override
-	public TechnologyAdapter getTechnologyAdapter() {
+	public DiagramTechnologyAdapter getTechnologyAdapter() {
 		if (getServiceManager() != null) {
 			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 		}

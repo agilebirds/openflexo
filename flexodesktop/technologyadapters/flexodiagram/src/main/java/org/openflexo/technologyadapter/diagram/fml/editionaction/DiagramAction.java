@@ -21,9 +21,9 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.diagram.DiagramModelSlot;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 
-public abstract class DiagramAction<T> extends AssignableAction<DiagramModelSlot, T> {
+public abstract class DiagramAction<T> extends AssignableAction<TypedDiagramModelSlot, T> {
 
 	public DiagramAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -35,11 +35,11 @@ public abstract class DiagramAction<T> extends AssignableAction<DiagramModelSlot
 	}*/
 
 	@Override
-	public DiagramModelSlot getModelSlot() {
-		DiagramModelSlot returned = super.getModelSlot();
+	public TypedDiagramModelSlot getModelSlot() {
+		TypedDiagramModelSlot returned = super.getModelSlot();
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(DiagramModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(DiagramModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).get(0);
 			}
 		}
 		return returned;

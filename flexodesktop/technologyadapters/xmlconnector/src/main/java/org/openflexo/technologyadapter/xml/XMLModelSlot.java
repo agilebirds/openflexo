@@ -47,27 +47,22 @@ import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
 
 /**
  * @author xtof
- *
+ * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(patternRoleClass=XMLIndividualPatternRole.class, FML = "XMLIndividual"), // Instances
+@DeclarePatternRoles({ @DeclarePatternRole(patternRoleClass = XMLIndividualPatternRole.class, FML = "XMLIndividual"), // Instances
 })
-@DeclareEditionActions({ @DeclareEditionAction(editionActionClass=AddXMLIndividual.class, FML = "AddXMLIndividual"), // Add instance
+@DeclareEditionActions({ @DeclareEditionAction(editionActionClass = AddXMLIndividual.class, FML = "AddXMLIndividual"), // Add instance
 })
-public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
-
+public class XMLModelSlot extends TypeAwareModelSlot<XMLModel, XMLModel> {
 
 	private static final Logger logger = Logger.getLogger(XMLModelSlot.class.getPackage().getName());
 
-	
-
-	protected XMLModelSlot(VirtualModel virtualModel,
-			TechnologyAdapter technologyAdapter) {
+	protected XMLModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}
-	
+
 	@Override
-	public <PR extends PatternRole<?>> PR makePatternRole(
-			Class<PR> patternRoleClass) {
+	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,51 +78,42 @@ public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
 		return XMLTechnologyAdapter.class;
 	}
 
-
 	@Override
-	public <EA extends EditionAction<?, ?>> EA makeEditionAction(
-			Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(
-			Class<FR> fetchRequestClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public FlexoModelResource<XMLModel, XMLModel> createProjectSpecificEmptyModel(
-			View view, String filename, String modelUri,
-			FlexoMetaModelResource<XMLModel, XMLModel> metaModelResource) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public FlexoModelResource<XMLModel, XMLModel> createSharedEmptyModel(
-			FlexoResourceCenter<?> resourceCenter, String relativePath,
-			String filename, String modelUri,
-			FlexoMetaModelResource<XMLModel, XMLModel> metaModelResource) {
+	public FlexoModelResource<XMLModel, XMLModel, ?> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<XMLModel, XMLModel, ?> metaModelResource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FlexoModelResource<XMLModel, XMLModel, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath,
+			String filename, String modelUri, FlexoMetaModelResource<XMLModel, XMLModel, ?> metaModelResource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getURIForObject(
-			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
-			Object o) {
+			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance, Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance,
-			String objectURI) {
+			TypeAwareModelSlotInstance<XMLModel, XMLModel, ? extends TypeAwareModelSlot<XMLModel, XMLModel>> msInstance, String objectURI) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -144,6 +130,5 @@ public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 }

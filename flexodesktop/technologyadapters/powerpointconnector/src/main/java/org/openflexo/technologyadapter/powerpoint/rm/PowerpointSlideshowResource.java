@@ -26,13 +26,15 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.technologyadapter.powerpoint.PowerpointTechnologyAdapter;
 import org.openflexo.technologyadapter.powerpoint.PowerpointTechnologyContextManager;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 
 @ModelEntity
 @ImplementationClass(PowerpointSlideshowResourceImpl.class)
 @XMLElement
-public interface PowerpointSlideshowResource extends FlexoFileResource<PowerpointSlideshow>, TechnologyAdapterResource<PowerpointSlideshow> {
+public interface PowerpointSlideshowResource extends FlexoFileResource<PowerpointSlideshow>,
+		TechnologyAdapterResource<PowerpointSlideshow, PowerpointTechnologyAdapter> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 

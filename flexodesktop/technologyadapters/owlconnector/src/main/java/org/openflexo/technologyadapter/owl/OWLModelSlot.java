@@ -186,7 +186,8 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	@Override
 	public String getURIForObject(
-			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
+			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
+			Object o) {
 		return ((OWLObject) o).getURI();
 	}
 
@@ -209,13 +210,13 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	@Override
 	public OWLOntologyResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<OWLOntology, OWLOntology> metaModelResource) {
+			FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
 		return getTechnologyAdapter().createNewOntology(view.getProject(), filename, modelUri, metaModelResource);
 	}
 
 	@Override
 	public OWLOntologyResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology> metaModelResource) {
+			String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology, ?> metaModelResource) {
 		return getTechnologyAdapter().createNewOntology((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(OWLOntologyResource) metaModelResource);
 	}

@@ -216,7 +216,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
-
 		if (proceed != null) {
 			ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 			if (property != null) {
@@ -836,7 +835,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
 			throws ModelDefinitionException {
-		Object oldValue = invokeGetter(property);
+		Object oldValue;
+		try {
+			oldValue = invokeGetter(property);
+		} catch (Throwable t) {
+			System.out.println("ca chie la");
+			System.out.println("getterMethod=" + property.getGetterMethod());
+			System.out.println("declaringClass=" + property.getGetterMethod().getDeclaringClass());
+			return;
+		}
 		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			if (oldValue != value) {
 				getModelFactory().getUndoManager().addEdit(

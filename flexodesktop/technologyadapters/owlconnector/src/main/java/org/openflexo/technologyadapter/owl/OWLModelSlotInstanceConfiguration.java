@@ -3,11 +3,11 @@ package org.openflexo.technologyadapter.owl;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.toolbox.StringUtils;
 
 public class OWLModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanceConfiguration<OWLOntology, OWLOntology, OWLModelSlot> {
@@ -36,8 +36,8 @@ public class OWLModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanc
 		}
 	}
 
-	private FlexoModelResource<OWLOntology, OWLOntology> createSharedEmptyModel(
-			TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance, OWLModelSlot modelSlot) {
+	private OWLOntologyResource createSharedEmptyModel(TypeAwareModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> msInstance,
+			OWLModelSlot modelSlot) {
 		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}

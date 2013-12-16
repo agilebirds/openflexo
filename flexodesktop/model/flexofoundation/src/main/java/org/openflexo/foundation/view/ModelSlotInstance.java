@@ -53,7 +53,7 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	private VirtualModelInstance vmInstance;
 	private MS modelSlot;
 	protected RD resourceData;
-	protected TechnologyAdapterResource<RD> resource;
+	protected TechnologyAdapterResource<RD, ?> resource;
 	// Serialization/deserialization only, do not use
 	private String modelSlotName;
 
@@ -133,13 +133,13 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 
 	public void setResourceData(RD resourceData) {
 		this.resourceData = resourceData;
-		this.resource = (TechnologyAdapterResource<RD>) resourceData.getResource();
+		this.resource = (TechnologyAdapterResource<RD, ?>) resourceData.getResource();
 	}
 
 	// TODO: rename as getResourceData
 	public abstract RD getResourceData();
 
-	public TechnologyAdapterResource<RD> getResource() {
+	public TechnologyAdapterResource<RD, ?> getResource() {
 		return resource;
 	}
 

@@ -130,7 +130,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	@Override
 	public OWLOntology loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
-		OWLOntology returned = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), (OWLTechnologyAdapter) getTechnologyAdapter());
+		OWLOntology returned = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
 		returned.setResource(this);
 		return returned;
 	}
@@ -220,7 +220,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	}
 
 	@Override
-	public FlexoMetaModelResource<OWLOntology, OWLOntology> getMetaModelResource() {
+	public FlexoMetaModelResource<OWLOntology, OWLOntology, OWLTechnologyAdapter> getMetaModelResource() {
 		logger.warning("FlexoMetaModelResource() not fully implemented in OWLOntologyResource");
 		// TODO: implement this and extends cardinality
 
@@ -228,7 +228,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	}
 
 	@Override
-	public void setMetaModelResource(FlexoMetaModelResource<OWLOntology, OWLOntology> aMetaModelResource) {
+	public void setMetaModelResource(FlexoMetaModelResource<OWLOntology, OWLOntology, OWLTechnologyAdapter> aMetaModelResource) {
 		// TODO: implement this and extends cardinality
 	}
 

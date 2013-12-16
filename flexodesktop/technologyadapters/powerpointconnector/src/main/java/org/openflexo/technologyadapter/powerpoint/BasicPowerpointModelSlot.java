@@ -31,7 +31,6 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -58,22 +57,19 @@ import org.openflexo.technologyadapter.powerpoint.viewpoint.editionaction.Select
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
-		@DeclarePatternRole(FML = "PowerpointSlide", patternRoleClass = PowerpointSlidePatternRole.class),
-		@DeclarePatternRole(FML = "PowerpointShape", patternRoleClass = PowerpointShapePatternRole.class)
-})
+@DeclarePatternRole(FML = "PowerpointSlide", patternRoleClass = PowerpointSlidePatternRole.class),
+		@DeclarePatternRole(FML = "PowerpointShape", patternRoleClass = PowerpointShapePatternRole.class) })
 @DeclareEditionActions({ // All edition actions available through this model slot
-@DeclareEditionAction(FML = "AddPowerpointSlide", editionActionClass = AddPowerpointSlide.class), 
-		@DeclareEditionAction(FML = "AddPowerpointShape", editionActionClass = AddPowerpointShape.class)
-})
+@DeclareEditionAction(FML = "AddPowerpointSlide", editionActionClass = AddPowerpointSlide.class),
+		@DeclareEditionAction(FML = "AddPowerpointShape", editionActionClass = AddPowerpointShape.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectPowerpointSlide.class),
-@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectPowerpointShape.class)
-})
+		@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectPowerpointShape.class) })
 public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow> {
 
 	private static final Logger logger = Logger.getLogger(BasicPowerpointModelSlot.class.getPackage().getName());
 
-	private BasicPowerpointModelSlotURIProcessor uriProcessor;
+	private final BasicPowerpointModelSlotURIProcessor uriProcessor;
 
 	public BasicPowerpointModelSlot(VirtualModel virtualModel, PowerpointTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -101,7 +97,7 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 			return (PR) new PowerpointSlidePatternRole(null);
 		} else if (PowerpointShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new PowerpointShapePatternRole(null);
-		} 
+		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
 	}
@@ -112,7 +108,7 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 			return "slide";
 		} else if (PowerpointShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "shape";
-		} 
+		}
 		return super.defaultPatternRoleName(patternRoleClass);
 	}
 
@@ -140,28 +136,30 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectPowerpointSlide.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectPowerpointSlide(null);
-		} 
+		}
 		if (SelectPowerpointShape.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectPowerpointShape(null);
-		}else {
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<BasicPowerpointModelSlot, PowerpointSlideshow> createConfiguration(CreateVirtualModelInstance<?> action) {
+	public ModelSlotInstanceConfiguration<BasicPowerpointModelSlot, PowerpointSlideshow> createConfiguration(
+			CreateVirtualModelInstance<?> action) {
 		return new BasicPowerpointModelSlotInstanceConfiguration(this, action);
 	}
 
 	@Override
-	public String getURIForObject(FreeModelSlotInstance<PowerpointSlideshow, ? extends FreeModelSlot<PowerpointSlideshow>> msInstance, Object o) {
+	public String getURIForObject(FreeModelSlotInstance<PowerpointSlideshow, ? extends FreeModelSlot<PowerpointSlideshow>> msInstance,
+			Object o) {
 		PowerpointObject powerpointObject = (PowerpointObject) o;
 		return uriProcessor.getURIForObject(msInstance, powerpointObject);
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(FreeModelSlotInstance<PowerpointSlideshow, ? extends FreeModelSlot<PowerpointSlideshow>> msInstance,
-			String objectURI) {
+	public Object retrieveObjectWithURI(
+			FreeModelSlotInstance<PowerpointSlideshow, ? extends FreeModelSlot<PowerpointSlideshow>> msInstance, String objectURI) {
 
 		try {
 			return uriProcessor.retrieveObjectWithURI(msInstance, objectURI);
@@ -177,15 +175,14 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 	public PowerpointTechnologyAdapter getTechnologyAdapter() {
 		return (PowerpointTechnologyAdapter) super.getTechnologyAdapter();
 	}
-	
-	
+
 	@Override
 	public PowerpointSlideshowResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
-		return getTechnologyAdapter().createNewSlideshow(view.getProject(),filename, modelUri);
+		return getTechnologyAdapter().createNewSlideshow(view.getProject(), filename, modelUri);
 	}
 
 	@Override
-	public TechnologyAdapterResource<PowerpointSlideshow> createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
+	public PowerpointSlideshowResource createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
 			String filename, String modelUri) {
 		// TODO Auto-generated method stub
 		return null;

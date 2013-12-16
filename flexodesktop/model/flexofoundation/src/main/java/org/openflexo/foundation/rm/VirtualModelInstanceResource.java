@@ -5,6 +5,7 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -21,7 +22,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ImplementationClass(VirtualModelInstanceResourceImpl.class)
 @XMLElement
 public interface VirtualModelInstanceResource extends FlexoXMLFileResource<VirtualModelInstance>,
-		FlexoProjectResource<VirtualModelInstance>, TechnologyAdapterResource<VirtualModelInstance> {
+		FlexoProjectResource<VirtualModelInstance>, TechnologyAdapterResource<VirtualModelInstance, VirtualModelTechnologyAdapter> {
 
 	public static final String VIRTUAL_MODEL_SUFFIX = ".vmxml";
 

@@ -22,7 +22,7 @@ package org.openflexo.technologyadapter.csv;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 
-public class CSVTechnologyContextManager extends TechnologyContextManager {
+public class CSVTechnologyContextManager extends TechnologyContextManager<CSVTechnologyAdapter> {
 
 	public CSVTechnologyContextManager(CSVTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);

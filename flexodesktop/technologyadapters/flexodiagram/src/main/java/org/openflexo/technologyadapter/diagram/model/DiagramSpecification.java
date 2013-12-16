@@ -37,7 +37,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.diagram.DiagramModelSlot;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
@@ -121,12 +121,12 @@ public class DiagramSpecification extends FlexoObject implements FlexoMetaModel<
 	}
 
 	@Override
-	protected DiagramModelSlot makeReflexiveModelSlot() {
+	protected TypedDiagramModelSlot makeReflexiveModelSlot() {
 		if (getViewPoint().getViewPointLibrary().getServiceManager() != null
 				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
 			DiagramTechnologyAdapter diagramTA = getViewPoint().getViewPointLibrary().getServiceManager()
 					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			DiagramModelSlot returned = diagramTA.makeModelSlot(DiagramModelSlot.class, this);
+			TypedDiagramModelSlot returned = diagramTA.makeModelSlot(TypedDiagramModelSlot.class, this);
 			returned.setVirtualModelResource(getResource());
 			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
 			addToModelSlots(returned);

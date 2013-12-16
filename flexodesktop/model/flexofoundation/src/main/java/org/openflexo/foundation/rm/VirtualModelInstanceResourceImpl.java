@@ -13,7 +13,6 @@ import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -182,16 +181,11 @@ public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResou
 	}
 
 	@Override
-	public TechnologyAdapter getTechnologyAdapter() {
+	public VirtualModelTechnologyAdapter getTechnologyAdapter() {
 		if (getServiceManager() != null) {
 			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(VirtualModelTechnologyAdapter.class);
 		}
 		return null;
-	}
-
-	@Override
-	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
-		// Not applicable
 	}
 
 	@Override

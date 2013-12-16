@@ -28,13 +28,15 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 
 @ModelEntity
 @ImplementationClass(EMFMetaModelResourceImpl.class)
 @XMLElement
-public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, FlexoMetaModelResource<EMFModel, EMFMetaModel> {
+public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>,
+		FlexoMetaModelResource<EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
 
 	public static final String EXTENSION = "extension";
 	public static final String PACKAGE_CLASSNAME = "package.classname";

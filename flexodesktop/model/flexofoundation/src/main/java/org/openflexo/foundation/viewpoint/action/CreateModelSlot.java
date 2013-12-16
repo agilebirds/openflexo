@@ -79,7 +79,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	public String modelSlotName;
 	public String description;
 	public TechnologyAdapter technologyAdapter;
-	public FlexoMetaModelResource<?, ?> mmRes;
+	public FlexoMetaModelResource<?, ?, ?> mmRes;
 	public VirtualModelResource vmRes;
 	public boolean required = true;
 	public boolean readOnly = false;

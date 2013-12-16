@@ -128,7 +128,7 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelSheet(null);
-		}  else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
+		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelCell(null);
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelRow(null);
@@ -155,15 +155,15 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	}
 
 	@Override
-	public FlexoModelResource<ExcelModel, ExcelMetaModel> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<ExcelModel, ExcelMetaModel> metaModelResource) {
+	public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public FlexoModelResource<ExcelModel, ExcelMetaModel> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter,
-			String relativePath, String filename, String modelUri, FlexoMetaModelResource<ExcelModel, ExcelMetaModel> metaModelResource) {
+	public FlexoModelResource<ExcelModel, ExcelMetaModel, ?> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter,
+			String relativePath, String filename, String modelUri, FlexoMetaModelResource<ExcelModel, ExcelMetaModel, ?> metaModelResource) {
 		// TODO Auto-generated method stub
 		return null;
 	}

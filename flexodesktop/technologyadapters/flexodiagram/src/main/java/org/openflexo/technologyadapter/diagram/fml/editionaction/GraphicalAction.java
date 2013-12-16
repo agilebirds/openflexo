@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.technologyadapter.diagram.DiagramModelSlot;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalFeature;
@@ -48,7 +48,7 @@ import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 @FIBPanel("Fib/GraphicalActionPanel.fib")
-public class GraphicalAction extends EditionAction<DiagramModelSlot, DiagramElement<?>> {
+public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 

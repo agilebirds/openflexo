@@ -23,15 +23,8 @@ package org.openflexo.technologyadapter.xsd.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.hibernate.type.Type;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -39,31 +32,23 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.metamodel.XSDDataType;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntologyURIDefinitions;
 import org.openflexo.toolbox.IProgress;
-import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
 /**
@@ -74,12 +59,10 @@ import com.sun.xml.xsom.XSType;
  * 
  */
 
-public abstract class XSDMetaModelResourceImpl extends
-FlexoFileResourceImpl<XSDMetaModel> implements
-XSOntologyURIDefinitions, XSDMetaModelResource {
+public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSDMetaModel> implements XSOntologyURIDefinitions,
+		XSDMetaModelResource {
 
-	private static final Logger logger = Logger
-			.getLogger(XSDMetaModelResourceImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XSDMetaModelResourceImpl.class.getPackage().getName());
 
 	// Properties
 
@@ -90,23 +73,18 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 	private boolean isLoading = false;
 	private boolean isReadOnly = true;
 
-	public static XSDMetaModelResource makeXSDMetaModelResource(
-			File xsdMetaModelFile,
-			String uri,
-			TechnologyContextManager technologyContextManager) {
+	public static XSDMetaModelResource makeXSDMetaModelResource(File xsdMetaModelFile, String uri,
+			XSDTechnologyContextManager technologyContextManager) {
 		try {
 			ModelFactory factory = new ModelFactory(XSDMetaModelResource.class);
-			XSDMetaModelResource returned = factory
-					.newInstance(XSDMetaModelResource.class);
-			returned.setTechnologyAdapter(technologyContextManager
-					.getTechnologyAdapter());
+			XSDMetaModelResource returned = factory.newInstance(XSDMetaModelResource.class);
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setURI(uri);
 			returned.setName("Unnamed");
 			returned.setFile(xsdMetaModelFile);
 
 			// FIXME : check if its ok
-			technologyContextManager
-			.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel>) returned);
+			technologyContextManager.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter>) returned);
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -135,14 +113,12 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 	 * Load the &quot;real&quot; load resource data of this resource.
 	 * 
 	 * @param progress
-	 *            a progress monitor in case the resource data is not
-	 *            immediately available.
+	 *            a progress monitor in case the resource data is not immediately available.
 	 * @return the resource data.
 	 * @throws ResourceLoadingCancelledException
 	 */
 	@Override
-	public XSDMetaModel loadResourceData(IProgress progress)
-			throws ResourceLoadingCancelledException {
+	public XSDMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
 
 		if (loadWhenUnloaded())
 			return resourceData;
@@ -164,25 +140,25 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 		// TODO if a declaration (base) type is derived, get the correct
 		// superclass
 
-		XSDMetaModel aModel = (XSDMetaModel) getMetaModelData();
+		XSDMetaModel aModel = getMetaModelData();
 
 		try {
 
 			for (XSComplexType complexType : fetcher.getComplexTypes()) {
 				try {
-					XSOntClass xsClass =  aModel.getClass(fetcher.getUri(complexType));
-					if (xsClass == null){
+					XSOntClass xsClass = aModel.getClass(fetcher.getUri(complexType));
+					if (xsClass == null) {
 						// create XSOntClass if it does not exist
 						xsClass = aModel.createOntologyClass(complexType.getName(), fetcher.getUri(complexType));
 					}
 					XSType btype = complexType.getBaseType();
 					if (btype != null && !btype.getName().equalsIgnoreCase("anyType")) {
 						XSOntClass superClass = aModel.getClass(fetcher.getUri(btype));
-						if (superClass == null){
+						if (superClass == null) {
 							// create XSOntClass if it does not exist
 							superClass = aModel.createOntologyClass(btype.getName(), fetcher.getUri(btype));
 						}
-						if (superClass != null ) {
+						if (superClass != null) {
 							xsClass.addToSuperClasses(superClass);
 
 						}
@@ -196,12 +172,10 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 			for (XSElementDecl element : fetcher.getElementDecls()) {
 				if (mapsToClass(element)) {
 
-					XSOntClass xsClass = aModel.createOntologyClass(
-							element.getName(), fetcher.getUri(element));
+					XSOntClass xsClass = aModel.createOntologyClass(element.getName(), fetcher.getUri(element));
 					XSType type = element.getType();
 					if (type != null) {
-						XSOntClass superClass = aModel.getClass(fetcher
-								.getUri(type));
+						XSOntClass superClass = aModel.getClass(fetcher.getUri(type));
 						if (superClass != null)
 							xsClass.addToSuperClasses(superClass);
 					}
@@ -213,8 +187,7 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 		}
 	}
 
-	private void addDomainIfPossible(XSOntProperty property, String conceptUri,
-			XSDMetaModel aModel) {
+	private void addDomainIfPossible(XSOntProperty property, String conceptUri, XSDMetaModel aModel) {
 		String ownerUri = fetcher.getOwnerURI(conceptUri);
 		if (ownerUri != null) {
 			XSOntClass owner = aModel.getClass(ownerUri);
@@ -227,7 +200,7 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 
 	private void loadDataProperties() {
 
-		XSDMetaModel aModel = (XSDMetaModel) getMetaModelData();
+		XSDMetaModel aModel = getMetaModelData();
 
 		/*
 		 * for (XSSimpleType simpleType : fetcher.getSimpleTypes()) {
@@ -245,16 +218,14 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element) == false) {
 				String uri = fetcher.getUri(element);
-				XSOntDataProperty xsDataProperty = aModel.createDataProperty(
-						element.getName(), uri, element.getType());
+				XSOntDataProperty xsDataProperty = aModel.createDataProperty(element.getName(), uri, element.getType());
 				addDomainIfPossible(xsDataProperty, uri, aModel);
 			}
 		}
 
 		for (XSAttributeDecl attribute : fetcher.getAttributeDecls()) {
 			String uri = fetcher.getUri(attribute);
-			XSOntDataProperty xsDataProperty = aModel.createDataProperty(
-					attribute.getName(), uri, attribute.getType());
+			XSOntDataProperty xsDataProperty = aModel.createDataProperty(attribute.getName(), uri, attribute.getType());
 			xsDataProperty.setIsFromAttribute(true);
 			addDomainIfPossible(xsDataProperty, uri, aModel);
 		}
@@ -263,16 +234,14 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 
 	private void loadObjectProperties() {
 
-		XSDMetaModel aModel = (XSDMetaModel) getMetaModelData();
+		XSDMetaModel aModel = getMetaModelData();
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				String uri = fetcher.getUri(element);
 				XSOntClass c = aModel.getClass(fetcher.getUri(element));
 				String name = element.getName();
-				XSOntObjectProperty xsObjectProperty = aModel
-						.createObjectProperty(name,
-								fetcher.getNamespace(element) + "#" + name, c);
+				XSOntObjectProperty xsObjectProperty = aModel.createObjectProperty(name, fetcher.getNamespace(element) + "#" + name, c);
 				addDomainIfPossible(xsObjectProperty, uri, aModel);
 			}
 		}
@@ -282,8 +251,7 @@ XSOntologyURIDefinitions, XSDMetaModelResource {
 	public boolean load() {
 
 		if (resourceData == null) {
-			this.resourceData = new XSDMetaModel(getURI(), getFile(),
-					(XSDTechnologyAdapter) getTechnologyAdapter());
+			this.resourceData = new XSDMetaModel(getURI(), getFile(), getTechnologyAdapter());
 			resourceData.setResource(this);
 		}
 

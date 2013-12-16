@@ -98,9 +98,9 @@ public abstract class FreeModelSlot<RD extends ResourceData<RD>> extends ModelSl
 		return baseName;
 	}
 
-	public abstract TechnologyAdapterResource<RD> createProjectSpecificEmptyResource(View view, String filename, String modelUri);
+	public abstract TechnologyAdapterResource<RD, ?> createProjectSpecificEmptyResource(View view, String filename, String modelUri);
 
-	public abstract TechnologyAdapterResource<RD> createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
+	public abstract TechnologyAdapterResource<RD, ?> createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
 			String filename, String modelUri);
 
 	@Override

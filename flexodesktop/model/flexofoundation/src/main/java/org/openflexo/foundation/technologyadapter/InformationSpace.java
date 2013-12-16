@@ -121,9 +121,9 @@ public class InformationSpace extends FlexoServiceImpl {
 		return (FlexoResource<T>) getResource(uri);
 	}
 
-	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
+	public FlexoMetaModelResource<?, ?, ?> getMetaModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
-			FlexoMetaModelResource<?, ?> returned = getMetaModelWithURI(uri, ta);
+			FlexoMetaModelResource<?, ?, ?> returned = getMetaModelWithURI(uri, ta);
 			if (returned != null) {
 				return returned;
 			}
@@ -131,16 +131,16 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
+	public FlexoMetaModelResource<?, ?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter != null && technologyAdapter.getTechnologyContextManager() != null) {
-			return (FlexoMetaModelResource<?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
+			return (FlexoMetaModelResource<?, ?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
 		}
 		return null;
 	}
 
-	public FlexoModelResource<?, ?> getModelWithURI(String uri) {
+	public FlexoModelResource<?, ?, ?> getModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
-			FlexoModelResource<?, ?> returned = getModelWithURI(uri, ta);
+			FlexoModelResource<?, ?, ?> returned = getModelWithURI(uri, ta);
 			if (returned != null) {
 				return returned;
 			}
@@ -148,7 +148,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
+	public FlexoModelResource<?, ?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter == null) {
 			logger.warning("Unexpected null " + technologyAdapter);
 			return null;
@@ -156,7 +156,7 @@ public class InformationSpace extends FlexoServiceImpl {
 			// logger.warning("Unexpected null technologyContextManager for " + technologyAdapter);
 			return null;
 		}
-		return (FlexoModelResource<?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
+		return (FlexoModelResource<?, ?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
 	}
 
 	/**

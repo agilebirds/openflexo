@@ -17,20 +17,23 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.excel;
+package org.openflexo.technologyadapter.diagram.model;
 
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 
-public class ExcelTechnologyContextManager extends TechnologyContextManager<ExcelTechnologyAdapter> {
+/**
+ * Diagram specification factory<br>
+ * Only one instance of this class should be used
+ * 
+ * @author sylvain
+ * 
+ */
+public class DiagramSpecificationFactory extends ModelFactory {
 
-	public ExcelTechnologyContextManager(ExcelTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
-		super(adapter, resourceCenterService);
-	}
-
-	@Override
-	public ExcelTechnologyAdapter getTechnologyAdapter() {
-		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
+	public DiagramSpecificationFactory() throws ModelDefinitionException {
+		super(ModelContextLibrary.getModelContext(DiagramSpecification.class));
 	}
 
 }

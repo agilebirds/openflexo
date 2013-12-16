@@ -80,7 +80,7 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	@Override
 	public RD getResourceData() {
 		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(resourceURI)) {
-			TechnologyAdapterResource<RD> resource = (TechnologyAdapterResource<RD>) getVirtualModelInstance().getInformationSpace()
+			TechnologyAdapterResource<RD, ?> resource = (TechnologyAdapterResource<RD, ?>) getVirtualModelInstance().getInformationSpace()
 					.getResource(resourceURI);
 			if (resource != null) {
 				try {

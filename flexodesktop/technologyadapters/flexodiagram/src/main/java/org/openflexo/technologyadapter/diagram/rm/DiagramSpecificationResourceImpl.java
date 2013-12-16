@@ -10,22 +10,19 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.VirtualModelResourceImpl;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResourceImpl;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResourceImpl;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecificationFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class DiagramSpecificationResourceImpl extends VirtualModelResourceImpl<DiagramSpecification> implements
-		DiagramSpecificationResource {
+public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImpl<DiagramSpecification, DiagramSpecificationFactory>
+		implements DiagramSpecificationResource {
 
 	static final Logger logger = Logger.getLogger(DiagramSpecificationResourceImpl.class.getPackage().getName());
 

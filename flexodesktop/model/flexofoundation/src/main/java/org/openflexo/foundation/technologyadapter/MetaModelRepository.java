@@ -32,7 +32,7 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <R>
  * @param <TA>
  */
-public abstract class MetaModelRepository<R extends FlexoMetaModelResource<M, MM> & FlexoFileResource<MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
+public abstract class MetaModelRepository<R extends FlexoMetaModelResource<M, MM, TA> & FlexoFileResource<MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
 		extends TechnologyAdapterFileResourceRepository<R, TA, MM> {
 
 	/**

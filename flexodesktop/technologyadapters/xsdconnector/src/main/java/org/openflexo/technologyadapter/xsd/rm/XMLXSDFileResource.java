@@ -28,20 +28,20 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
-import org.openflexo.technologyadapter.xsd.XSDTechnologyContextManager;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
- 
+import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 
 /**
  * @author xtof
- *
+ * 
  */
 
 @ModelEntity
 @ImplementationClass(XMLXSDFileResourceImpl.class)
-public interface XMLXSDFileResource extends FlexoFileResource<XMLXSDModel>,  TechnologyAdapterResource<XMLXSDModel>, FlexoModelResource<XMLXSDModel,XSDMetaModel> {
+public interface XMLXSDFileResource extends FlexoFileResource<XMLXSDModel>, TechnologyAdapterResource<XMLXSDModel, XSDTechnologyAdapter>,
+		FlexoModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "XMLTechnologyContextManager";
 
@@ -51,4 +51,3 @@ public interface XMLXSDFileResource extends FlexoFileResource<XMLXSDModel>,  Tec
 	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
 	public void setTechnologyContextManager(XSDTechnologyContextManager technologyContextManager);
 }
-

@@ -44,15 +44,15 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
  * @author sylvain
  * 
  */
-public abstract class TechnologyContextManager extends FlexoObject {
+public abstract class TechnologyContextManager<TA extends TechnologyAdapter> extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
 
-	private TechnologyAdapter adapter;
-	private FlexoResourceCenterService resourceCenterService;
+	private final TechnologyAdapter adapter;
+	private final FlexoResourceCenterService resourceCenterService;
 
 	/** Stores all known resources where key is the URI of resource */
-	protected Map<String, TechnologyAdapterResource<?>> resources = new HashMap<String, TechnologyAdapterResource<?>>();
+	protected Map<String, TechnologyAdapterResource<?, TA>> resources = new HashMap<String, TechnologyAdapterResource<?, TA>>();
 
 	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
 	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
@@ -114,7 +114,7 @@ public abstract class TechnologyContextManager extends FlexoObject {
 	 * 
 	 * @param newModel
 	 */
-	public void registerResource(TechnologyAdapterResource<?> resource) {
+	public void registerResource(TechnologyAdapterResource<?, TA> resource) {
 		resources.put(resource.getURI(), resource);
 	}
 
@@ -124,7 +124,7 @@ public abstract class TechnologyContextManager extends FlexoObject {
 	 * @param uri
 	 * @return
 	 */
-	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+	public TechnologyAdapterResource<?, TA> getResourceWithURI(String uri) {
 		return resources.get(uri);
 	}
 
