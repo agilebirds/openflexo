@@ -14,7 +14,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
 /**
- * Test Diagram model
+ * Test PAMELA in method clash context
  * 
  * @author sylvain
  * 
