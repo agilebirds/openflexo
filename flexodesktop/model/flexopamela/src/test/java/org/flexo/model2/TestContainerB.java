@@ -5,6 +5,7 @@ import org.openflexo.model.annotations.ModelEntity;
 @ModelEntity
 public interface TestContainerB extends TestContainer<TestEmbeddedB>, EmbeddingB {
 
+	// Uncomment this, and the test will pass !!!
 	/*@Override
 	@Getter(value = EMBEDDED)
 	@Embedded
