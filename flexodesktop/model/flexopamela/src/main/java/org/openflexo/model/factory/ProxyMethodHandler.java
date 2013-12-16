@@ -216,6 +216,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
+
 		if (proceed != null) {
 			ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 			if (property != null) {

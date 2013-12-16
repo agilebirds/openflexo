@@ -34,8 +34,8 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 /**
  * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or

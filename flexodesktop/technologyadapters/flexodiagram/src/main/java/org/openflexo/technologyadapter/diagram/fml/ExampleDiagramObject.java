@@ -29,6 +29,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.technologyadapter.diagram.fml.action.GRTemplate;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramConnectorInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramConnectorRemoved;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramShapeInserted;

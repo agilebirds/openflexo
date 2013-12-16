@@ -25,7 +25,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 /**
  * This class defines and implements the Openflexo built-in diagram technology adapter

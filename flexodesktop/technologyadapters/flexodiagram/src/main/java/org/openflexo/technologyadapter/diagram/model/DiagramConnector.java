@@ -19,168 +19,85 @@
  */
 package org.openflexo.technologyadapter.diagram.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.action.GRConnectorTemplate;
 
-public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> implements GRConnectorTemplate {
+@ModelEntity
+@ImplementationClass(DiagramConnectorImpl.class)
+@XMLElement(xmlTag = "Connector")
+public interface DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation>, GRConnectorTemplate {
 
-	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
-
-	private DiagramShape startShape;
-	private DiagramShape endShape;
+	public static final String START_SHAPE = "startShape";
+	public static final String END_SHAPE = "endShape";
 
 	/**
-	 * Constructor invoked during deserialization
+	 * Returns the start shape of this connector
 	 * 
-	 * @param componentDefinition
+	 * @return
 	 */
-	public DiagramConnector(DiagramBuilder builder) {
-		this((Diagram) builder.vmInstance);
-		initializeDeserialization(builder);
-	}
+	@Getter(START_SHAPE)
+	@XMLElement(context = "Start")
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
+	public DiagramShape getStartShape();
 
 	/**
-	 * Default constructor for OEShema
+	 * Sets the start shape of this connector
 	 * 
-	 * @param shemaDefinition
+	 * @return
 	 */
-	public DiagramConnector(Diagram diagram) {
-		super(diagram);
-	}
+	@Setter(START_SHAPE)
+	public void setStartShape(DiagramShape startShape);
 
 	/**
-	 * Common constructor for OEShema
+	 * Returns the end shape of this connector
 	 * 
-	 * @param shemaDefinition
+	 * @return
 	 */
-	public DiagramConnector(Diagram diagram, DiagramShape aStartShape, DiagramShape anEndShape) {
-		super(diagram);
-		setStartShape(aStartShape);
-		setEndShape(anEndShape);
-	}
+	@Getter(END_SHAPE)
+	@XMLElement(context = "End")
+	@Embedded
+	@CloningStrategy(StrategyType.CLONE)
+	public abstract DiagramShape getEndShape();
 
 	/**
-	 * Reset graphical representation to be the one defined in related pattern role
+	 * Sets the end shape of this connector
+	 * 
+	 * @return
 	 */
-	@Override
-	public void resetGraphicalRepresentation() {
-		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.TEXT,
-				GraphicalRepresentation.IS_VISIBLE, GraphicalRepresentation.TRANSPARENCY, GraphicalRepresentation.ABSOLUTE_TEXT_X,
-				GraphicalRepresentation.ABSOLUTE_TEXT_Y);
-		refreshGraphicalRepresentation();
-	}
+	@Setter(END_SHAPE)
+	public abstract void setEndShape(DiagramShape endShape);
 
 	/**
-	 * Refresh graphical representation
+	 * Return parent of this diagram element
+	 * 
+	 * @return
 	 */
-	/*@Override
-	public void refreshGraphicalRepresentation() {
-		super.refreshGraphicalRepresentation();
-		getGraphicalRepresentation().notifyConnectorChanged();
-	}*/
-
 	@Override
-	public boolean delete() {
-		if (getParent() != null) {
-			getParent().removeFromChilds(this);
-		}
-		super.delete();
-		deleteObservers();
-		return true;
-	}
+	@Getter(value = PARENT, inverse = DiagramContainerElement.CONNECTORS)
+	@XMLAttribute
+	public DiagramContainerElement<?> getParent();
 
-	/* @Override
-	 public AddSchemaElementAction getEditionAction() 
-	 {
-	 	return getAddConnectorAction();
-	 }
-	 
-	public AddConnector getAddConnectorAction()
-	{
-		if (getEditionPattern() != null && getPatternRole() != null)
-			return getEditionPattern().getAddConnectorAction(getPatternRole());
-		return null;
-	}*/
-
+	// TODO: comment this when method clash in PAMELA will be solved
+	@Getter(value = GRAPHICAL_REPRESENTATION)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	@XMLElement
 	@Override
-	public String getClassNameKey() {
-		return "oe_connector";
-	}
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation();
 
+	// TODO: comment this when method clash in PAMELA will be solved
+	@Setter(value = GRAPHICAL_REPRESENTATION)
 	@Override
-	public String getFullyQualifiedName() {
-		return getParent().getFullyQualifiedName() + "." + getName();
-	}
-
-	public DiagramShape getEndShape() {
-		return endShape;
-	}
-
-	public void setEndShape(DiagramShape endShape) {
-		this.endShape = endShape;
-		// NPE Protection
-		if (endShape != null) {
-			endShape.addToIncomingConnectors(this);
-		}
-	}
-
-	public DiagramShape getStartShape() {
-		return startShape;
-	}
-
-	public void setStartShape(DiagramShape startShape) {
-		this.startShape = startShape;
-		startShape.addToOutgoingConnectors(this);
-	}
-
-	@Override
-	public boolean isContainedIn(DiagramElement<?> o) {
-		if (o == this) {
-			return true;
-		}
-		if (getParent() != null && getParent() == o) {
-			return true;
-		}
-		if (getParent() != null) {
-			return getParent().isContainedIn(o);
-		}
-		return false;
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		return "ConnectorSpecification" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
-	}
-
-	@Override
-	public ConnectorPatternRole getPatternRole() {
-		return (ConnectorPatternRole) super.getPatternRole();
-	}
-
-	private List<DiagramElement<?>> descendants;
-
-	@Override
-	public List<DiagramElement<?>> getDescendants() {
-		if (descendants == null) {
-			descendants = new ArrayList<DiagramElement<?>>();
-			appendDescendants(this, descendants);
-		}
-		return descendants;
-	}
-
-	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
-		descendants.add(current);
-		for (DiagramElement<?> child : current.getChilds()) {
-			if (child != current) {
-				appendDescendants(child, descendants);
-			}
-		}
-	}
+	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation);
 
 }

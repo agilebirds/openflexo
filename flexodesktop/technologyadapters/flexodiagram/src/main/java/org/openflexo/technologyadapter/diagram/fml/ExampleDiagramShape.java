@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.technologyadapter.diagram.fml.action.GRShapeTemplate;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 public class ExampleDiagramShape extends ExampleDiagramObject implements GRShapeTemplate {
 

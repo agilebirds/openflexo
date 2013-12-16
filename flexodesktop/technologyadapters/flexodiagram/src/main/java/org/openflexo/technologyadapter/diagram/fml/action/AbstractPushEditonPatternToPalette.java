@@ -43,12 +43,12 @@ import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteElement.ConnectorOverridingGraphicalRepresentation;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteElement.ShapeOverridingGraphicalRepresentation;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 

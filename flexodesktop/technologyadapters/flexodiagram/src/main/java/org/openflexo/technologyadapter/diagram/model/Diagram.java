@@ -19,136 +19,85 @@
  */
 package org.openflexo.technologyadapter.diagram.model;
 
-import java.util.logging.Logger;
-
-import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
-import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
-import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
-import org.openflexo.technologyadapter.diagram.rm.DiagramResourceImpl;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents a diagram in Openflexo build-in diagram technology<br>
  * 
- * As such, a {@link Diagram} is a subclass of {@link VirtualModelInstance} (a diagram is a model conform to {@link DiagramMetaModel})
+ * Note that a {@link Diagram} may conform to a {@link DiagramSpecification}
  * 
  * @author sylvain
  * 
  */
-public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification> {
+@ModelEntity
+@ImplementationClass(DiagramImpl.class)
+@XMLElement(xmlTag = "Diagram")
+public interface Diagram extends DiagramContainerElement<DrawingGraphicalRepresentation>, FlexoModel<Diagram, DiagramSpecification>,
+		ResourceData<Diagram> {
 
-	private static final Logger logger = Logger.getLogger(Diagram.class.getPackage().getName());
-
-	private DiagramRootPane rootPane;
-	private DiagramFactory factory;
-
-	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, DiagramSpecification diagramSpecification,
-			View view, DiagramFactory factory) throws InvalidFileNameException, SaveResourceException {
-
-		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view);
-
-		Diagram newDiagram = new Diagram(view, diagramSpecification, factory);
-		newDiagramResource.setResourceData(newDiagram);
-		newDiagram.setResource(newDiagramResource);
-
-		newDiagram.setTitle(diagramTitle);
-
-		newDiagram.save();
-
-		return newDiagramResource;
-	}
+	public static final String TITLE = "title";
+	public static final String DIAGRAM_SPECIFICATION = "diagramSpecification";
+	public static final String RESOURCE = "resource";
 
 	/**
-	 * Constructor invoked during deserialization
+	 * Return title of this diagram
 	 * 
-	 * @param componentDefinition
-	 */
-	public Diagram(DiagramBuilder builder) {
-		super(builder);
-		factory = builder.getFactory();
-	}
-
-	/**
-	 * Default constructor for OEShema
-	 * 
-	 * @param shemaDefinition
-	 */
-	public Diagram(View view, DiagramSpecification diagramSpecification, DiagramFactory factory) {
-		super(view, diagramSpecification);
-		this.factory = factory;
-	}
-
-	public DiagramFactory getFactory() {
-		return factory;
-	}
-
-	@Override
-	public DiagramResource getResource() {
-		return (DiagramResource) super.getResource();
-	}
-
-	public DiagramRootPane getRootPane() {
-		if (rootPane == null) {
-			rootPane = new DiagramRootPane(this);
-		}
-		return rootPane;
-	}
-
-	public void setRootPane(DiagramRootPane rootPane) {
-		this.rootPane = rootPane;
-	}
-
-	@Override
-	public DiagramSpecification getMetaModel() {
-		return getVirtualModel();
-	}
-
-	@Override
-	public TechnologyAdapter getTechnologyAdapter() {
-		return getProject().getServiceManager().getService(TechnologyAdapterService.class)
-				.getTechnologyAdapter(DiagramTechnologyAdapter.class);
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "diagram";
-	}
-
-	public DiagramSpecification getDiagramSpecification() {
-		return getVirtualModel();
-	}
-
-	/**
 	 * @return
 	 */
-	public static final String getTypeName() {
-		return "DIAGRAM";
-	}
+	@Getter(value = TITLE)
+	@XMLAttribute
+	public String getTitle();
 
 	/**
-	 * Return run-time value for {@link BindingVariable} variable
+	 * Sets title of this diagram
 	 * 
-	 * @param variable
+	 * @param aName
+	 */
+	@Setter(value = TITLE)
+	public void setTitle(String aTitle);
+
+	/**
+	 * Return the diagram specification of this diagram (might be null)
+	 * 
 	 * @return
 	 */
 	@Override
-	public Object getValueForVariable(BindingVariable variable) {
-		if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
-			return getRootPane();
-		}
-		return super.getValue(variable);
-	}
+	@Getter(value = DIAGRAM_SPECIFICATION, ignoreType = true)
+	public DiagramSpecification getDiagramSpecification();
 
+	/**
+	 * Sets the diagram specification of this diagram (might be null)
+	 * 
+	 * @param aName
+	 */
+	@Setter(value = DIAGRAM_SPECIFICATION)
+	public void setDiagramSpecification(DiagramSpecification aDiagramSpecification);
+
+	/**
+	 * Return resource for this diagram
+	 * 
+	 * @return
+	 */
 	@Override
-	public void finalizeDeserialization(Object builder) {
-		// TODO Auto-generated method stub
-		super.finalizeDeserialization(builder);
-	}
+	@Getter(value = RESOURCE, ignoreType = true)
+	public FlexoResource<Diagram> getResource();
+
+	/**
+	 * Sets resource for this diagram
+	 * 
+	 * @param aName
+	 */
+	@Override
+	@Setter(value = RESOURCE)
+	public void setResource(FlexoResource<Diagram> aDiagramResource);
+
 }

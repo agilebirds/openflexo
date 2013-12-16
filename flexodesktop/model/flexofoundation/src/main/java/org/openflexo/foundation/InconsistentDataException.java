@@ -19,29 +19,29 @@
  */
 package org.openflexo.foundation;
 
-import java.io.IOException;
+import org.openflexo.model.exceptions.InvalidDataException;
 
 /**
- * Thrown when an IOException occurs
+ * Thrown when managed data is not consistent with model definition
  * 
  * @author sylvain
  * 
  */
 @SuppressWarnings("serial")
-public class IOFlexoException extends FlexoException {
-	private final IOException _targetException;
+public class InconsistentDataException extends FlexoException {
+	private final InvalidDataException targetException;
 
-	public IOFlexoException(IOException targetException) {
-		super("I/O exception", "io_exception");
-		_targetException = targetException;
+	public InconsistentDataException(InvalidDataException targetException) {
+		super("InconsistentDataException", "inconsistent_data_exception");
+		this.targetException = targetException;
 	}
 
-	public IOException getTargetException() {
-		return _targetException;
+	public InvalidDataException getTargetException() {
+		return targetException;
 	}
 
 	@Override
-	public IOException getCause() {
+	public InvalidDataException getCause() {
 		return getTargetException();
 	}
 

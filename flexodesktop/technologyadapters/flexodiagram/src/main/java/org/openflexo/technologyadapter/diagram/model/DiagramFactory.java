@@ -19,7 +19,12 @@
  */
 package org.openflexo.technologyadapter.diagram.model;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactoryImpl;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 /**
@@ -32,6 +37,37 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 public class DiagramFactory extends FGEModelFactoryImpl {
 
 	public DiagramFactory() throws ModelDefinitionException {
-		super(/*DiagramRootPane.class, DiagramShape.class, DiagramConnector.class*/);
+		super(Diagram.class, DiagramShape.class, DiagramConnector.class);
 	}
+
+	public Diagram makeNewDiagram() {
+		return newInstance(Diagram.class);
+	}
+
+	public Diagram makeNewDiagram(DiagramSpecification diagramSpecification) {
+		Diagram returned = newInstance(Diagram.class);
+		returned.setDiagramSpecification(diagramSpecification);
+		return returned;
+	}
+
+	public DiagramShape makeNewShape(String name, ShapeType shapeType, FGEPoint fgePoint, DiagramContainerElement<?> container) {
+		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeType);
+		gr.setX(fgePoint.getX());
+		gr.setY(fgePoint.getY());
+		DiagramShape returned = newInstance(DiagramShape.class);
+		returned.setGraphicalRepresentation(gr);
+		returned.setName(name);
+		container.addToShapes(returned);
+		return returned;
+	}
+
+	public DiagramConnector makeNewConnector(String name, DiagramShape shape1, DiagramShape shape2, DiagramContainerElement<?> container) {
+		ConnectorGraphicalRepresentation gr = makeConnectorGraphicalRepresentation(ConnectorType.LINE);
+		DiagramConnector returned = newInstance(DiagramConnector.class);
+		returned.setGraphicalRepresentation(gr);
+		returned.setName(name);
+		container.addToConnectors(returned);
+		return returned;
+	}
+
 }

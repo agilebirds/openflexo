@@ -30,7 +30,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 public class DeleteDiagramSpecification extends FlexoAction<DeleteDiagramSpecification, DiagramSpecification, ViewPointObject> {
 

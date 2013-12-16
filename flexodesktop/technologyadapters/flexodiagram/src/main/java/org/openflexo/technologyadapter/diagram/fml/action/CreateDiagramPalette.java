@@ -34,7 +34,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {

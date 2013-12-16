@@ -18,7 +18,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.diagram.fml;
+package org.openflexo.technologyadapter.diagram.model;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,6 +28,9 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -36,6 +39,10 @@ import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.DiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
+import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.fml.ExampleDiagram;
+import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteRemoved;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramInserted;
@@ -52,13 +59,12 @@ import org.openflexo.toolbox.ChainedCollection;
  * @author sylvain
  * 
  */
-public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
+public class DiagramSpecification extends FlexoObject implements FlexoMetaModel<DiagramSpecification>, ResourceData<DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());
 
-	private List<DiagramPalette> palettes;
-	private List<ExampleDiagram> exampleDiagrams;
-
+	private final List<DiagramPalette> palettes;
+	private final List<ExampleDiagram> exampleDiagrams;
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -153,12 +159,12 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			}
 		}
 	}
-	
+
 	@Override
 	public DiagramSpecificationResource getResource() {
 		return (DiagramSpecificationResource) super.getResource();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "DiagramSpecification:" + getURI();
@@ -320,6 +326,5 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		super.finalizeDeserialization(builder);
 		updateBindingModel();
 	}
-
 
 }

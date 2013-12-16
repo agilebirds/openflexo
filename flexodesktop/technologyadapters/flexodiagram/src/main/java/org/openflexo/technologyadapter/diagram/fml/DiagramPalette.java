@@ -46,6 +46,7 @@ import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementRemoved;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;

@@ -29,6 +29,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
+@Deprecated
 public interface FlexoXMLSerializable extends XMLSerializable {
 	public XMLStorageResourceData getXMLResourceData();
 

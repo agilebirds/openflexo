@@ -17,6 +17,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.DiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementAction.ActionMask;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalElementActionInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalElementActionRemoved;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationChanged;

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.technologyadapter.diagram.fml.action.GRConnectorTemplate;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 public class ExampleDiagramConnector extends ExampleDiagramObject implements GRConnectorTemplate {
 

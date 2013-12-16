@@ -19,29 +19,29 @@
  */
 package org.openflexo.foundation;
 
-import java.io.IOException;
+import org.jdom2.JDOMException;
 
 /**
- * Thrown when an IOException occurs
+ * Thrown when parsed XML is inconsistent (parse error)
  * 
  * @author sylvain
  * 
  */
 @SuppressWarnings("serial")
-public class IOFlexoException extends FlexoException {
-	private final IOException _targetException;
+public class InvalidXMLException extends FlexoException {
+	private final JDOMException targetException;
 
-	public IOFlexoException(IOException targetException) {
-		super("I/O exception", "io_exception");
-		_targetException = targetException;
+	public InvalidXMLException(JDOMException targetException) {
+		super("InvalidXMLException", "invalid_xml_exception");
+		this.targetException = targetException;
 	}
 
-	public IOException getTargetException() {
-		return _targetException;
+	public JDOMException getTargetException() {
+		return targetException;
 	}
 
 	@Override
-	public IOException getCause() {
+	public JDOMException getCause() {
 		return getTargetException();
 	}
 

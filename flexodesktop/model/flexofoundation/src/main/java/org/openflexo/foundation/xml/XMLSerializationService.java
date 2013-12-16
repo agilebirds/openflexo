@@ -69,6 +69,7 @@ import org.xml.sax.SAXException;
  * @author sguerin
  * 
  */
+@Deprecated
 public class XMLSerializationService extends FlexoServiceImpl implements FlexoService {
 
 	protected static final Logger logger = Logger.getLogger(XMLSerializationService.class.getPackage().getName());

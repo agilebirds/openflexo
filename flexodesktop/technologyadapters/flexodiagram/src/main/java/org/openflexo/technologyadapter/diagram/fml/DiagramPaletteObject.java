@@ -21,6 +21,7 @@ package org.openflexo.technologyadapter.diagram.fml;
 
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
 
 public abstract class DiagramPaletteObject extends NamedViewPointObject {

@@ -20,6 +20,8 @@ import org.openflexo.toolbox.FlexoVersion;
  */
 @ModelEntity
 @XMLElement
+@Deprecated
+/* use PamelaResource instead */
 public interface FlexoXMLFileResource<RD extends ResourceData<RD>> extends FlexoFileResource<RD> {
 
 	public static final String MODEL_VERSION = "modelVersion";

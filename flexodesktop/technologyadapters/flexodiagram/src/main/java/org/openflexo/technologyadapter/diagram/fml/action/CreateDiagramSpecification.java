@@ -29,7 +29,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateDiagramSpecification extends FlexoAction<CreateDiagramSpecification, ViewPoint, ViewPointObject> {

@@ -32,6 +32,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 public class DiagramPaletteElement extends DiagramPaletteObject {
 

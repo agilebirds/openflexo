@@ -19,29 +19,30 @@
  */
 package org.openflexo.foundation;
 
-import java.io.IOException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 /**
- * Thrown when an IOException occurs
+ * Thrown when model definition is inconsistent.<br>
+ * This supposes a programmatic error (and not corrupted data)
  * 
  * @author sylvain
  * 
  */
 @SuppressWarnings("serial")
-public class IOFlexoException extends FlexoException {
-	private final IOException _targetException;
+public class InvalidModelDefinitionException extends FlexoException {
+	private final ModelDefinitionException targetException;
 
-	public IOFlexoException(IOException targetException) {
-		super("I/O exception", "io_exception");
-		_targetException = targetException;
+	public InvalidModelDefinitionException(ModelDefinitionException targetException) {
+		super("InconsistentDataException", "inconsistent_data_exception");
+		this.targetException = targetException;
 	}
 
-	public IOException getTargetException() {
-		return _targetException;
+	public ModelDefinitionException getTargetException() {
+		return targetException;
 	}
 
 	@Override
-	public IOException getCause() {
+	public ModelDefinitionException getCause() {
 		return getTargetException();
 	}
 

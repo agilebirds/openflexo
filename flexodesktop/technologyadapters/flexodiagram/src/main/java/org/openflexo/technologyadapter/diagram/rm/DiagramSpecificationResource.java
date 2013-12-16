@@ -2,18 +2,16 @@ package org.openflexo.technologyadapter.diagram.rm;
 
 import java.util.List;
 
-import org.openflexo.foundation.rm.VirtualModelResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 @ModelEntity
 @ImplementationClass(DiagramSpecificationResourceImpl.class)
 @XMLElement
-public interface DiagramSpecificationResource extends VirtualModelResource<DiagramSpecification> {
+public interface DiagramSpecificationResource extends PamelaResource<DiagramSpecification, DiagramSpecificationFactory> {
 
 	/**
 	 * Return virtual model stored by this resource<br>
