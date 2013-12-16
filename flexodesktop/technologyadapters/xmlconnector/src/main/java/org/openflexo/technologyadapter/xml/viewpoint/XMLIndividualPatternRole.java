@@ -30,12 +30,12 @@ import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 
 /**
  * @author xtof
- *
+ * 
  */
 public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 
 	private String individualURI;
-	
+
 	public XMLIndividualPatternRole(VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -52,7 +52,7 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		// TODO Auto-generated method stub
 		return false;
@@ -62,7 +62,7 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
@@ -71,8 +71,7 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 	}
 
 	@Override
-	public ActorReference<XMLIndividual> makeActorReference(
-			XMLIndividual object, EditionPatternInstance epi) {
+	public ActorReference<XMLIndividual> makeActorReference(XMLIndividual object, EditionPatternInstance epi) {
 		return new XMLActorReference(object, this, epi);
 	}
 
@@ -83,5 +82,5 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 	public void _setIndividualURI(String conceptURI) {
 		this.individualURI = conceptURI;
 	}
-	
+
 }

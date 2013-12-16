@@ -46,7 +46,7 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter {
 	}
 
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (DiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new DiagramModelSlot((DiagramSpecification) virtualModel, this);
 		}

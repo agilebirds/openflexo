@@ -44,10 +44,10 @@ public class PowerpointShapePatternRole extends PatternRole<PowerpointSlide> {
 		return PowerpointSlide.class.getSimpleName();
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
@@ -59,9 +59,9 @@ public class PowerpointShapePatternRole extends PatternRole<PowerpointSlide> {
 		return new PowerpointActorReference(object, this, epi);
 	}
 
-	@Override
+	/*@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 
-	}
+	}*/
 
 }

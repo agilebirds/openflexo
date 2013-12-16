@@ -44,7 +44,7 @@ public class PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
 		return PowerpointSlide.class.getSimpleName();
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		// TODO Auto-generated method stub
 		return false;
@@ -54,7 +54,7 @@ public class PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
@@ -66,6 +66,5 @@ public class PowerpointSlidePatternRole extends PatternRole<PowerpointSlide> {
 	public ActorReference<PowerpointSlide> makeActorReference(PowerpointSlide object, EditionPatternInstance epi) {
 		return new PowerpointActorReference(object, this, epi);
 	}
-	
 
 }

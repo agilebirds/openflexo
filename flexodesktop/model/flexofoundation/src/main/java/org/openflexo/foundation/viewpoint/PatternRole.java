@@ -34,7 +34,9 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * A PatternRole is a structural element of an EditionPattern, which plays a role in this edition pattern
+ * A {@link PatternRole} is a structural element of an EditionPattern, which plays a role in this {@link EditionPattern}<br>
+ * More formerly, a {@link PatternRole} is the specification of an object accessed at run-time (inside an {@link EditionPattern} instance)
+ * 
  * 
  * @author sylvain
  * 
@@ -119,9 +121,9 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		return getEditionPattern().getBindingModel();
 	}
 
-	public abstract boolean getIsPrimaryRole();
+	// public abstract boolean getIsPrimaryRole();
 
-	public abstract void setIsPrimaryRole(boolean isPrimary);
+	// public abstract void setIsPrimaryRole(boolean isPrimary);
 
 	public abstract boolean defaultBehaviourIsToBeDeleted();
 

@@ -44,7 +44,7 @@ public class ExcelRowPatternRole extends PatternRole<ExcelRow> {
 		return ExcelRow.class.getSimpleName();
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		// TODO Auto-generated method stub
 		return false;
@@ -54,7 +54,7 @@ public class ExcelRowPatternRole extends PatternRole<ExcelRow> {
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {

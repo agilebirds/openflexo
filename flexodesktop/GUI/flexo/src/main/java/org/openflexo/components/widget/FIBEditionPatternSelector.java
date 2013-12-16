@@ -91,14 +91,14 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		this.viewPoint = viewPoint;
 	}
 
-	private VirtualModel<?> virtualModel;
+	private VirtualModel virtualModel;
 
-	public VirtualModel<?> getVirtualModel() {
+	public VirtualModel getVirtualModel() {
 		return virtualModel;
 	}
 
 	@CustomComponentParameter(name = "virtualModel", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setVirtualModel(VirtualModel<?> virtualModel) {
+	public void setVirtualModel(VirtualModel virtualModel) {
 		this.virtualModel = virtualModel;
 	}
 

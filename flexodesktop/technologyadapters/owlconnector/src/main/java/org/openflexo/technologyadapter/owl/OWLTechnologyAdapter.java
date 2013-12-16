@@ -84,7 +84,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (OWLModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new OWLModelSlot(virtualModel, this);
 		}

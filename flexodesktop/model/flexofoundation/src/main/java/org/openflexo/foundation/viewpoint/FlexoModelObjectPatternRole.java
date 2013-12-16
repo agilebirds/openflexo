@@ -1,9 +1,9 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import java.lang.reflect.Type;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -90,7 +90,7 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
 	}
@@ -98,7 +98,7 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {

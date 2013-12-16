@@ -65,7 +65,7 @@ public class EMFMetaModelSlot extends ModelSlot<EMFMetaModel> {
 	 * @param virtualModel
 	 * @param adapter
 	 */
-	public EMFMetaModelSlot(VirtualModel<?> virtualModel, EMFTechnologyAdapter adapter) {
+	public EMFMetaModelSlot(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 

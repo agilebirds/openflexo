@@ -48,7 +48,7 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		return "EditionPattern";
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
 	}
@@ -56,7 +56,7 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
-	}
+	}*/
 
 	public EditionPattern getEditionPatternType() {
 		if (getCreationScheme() != null) {

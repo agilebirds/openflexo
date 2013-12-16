@@ -12,7 +12,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
@@ -25,11 +24,11 @@ import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlot, PowerpointShape> {
 
 	private static final Logger logger = Logger.getLogger(AddPowerpointShape.class.getPackage().getName());
-	
+
 	private DataBinding<List<PowerpointShape>> powerpointShapes;
-	
+
 	private DataBinding<PowerpointSlide> powerpointSlide;
-	
+
 	public AddPowerpointShape(VirtualModelBuilder builder) {
 		super(builder);
 		// TODO Auto-generated constructor stub
@@ -43,25 +42,24 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 	@Override
 	public PowerpointShape performAction(EditionSchemeAction action) {
 		PowerpointShape powerpointShape = null;
-		
+
 		FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		if(modelSlotInstance.getResourceData()!=null){
-			
+		if (modelSlotInstance.getResourceData() != null) {
+
 			try {
 				PowerpointSlide powerpointSlide = getPowerpointSlide().getBindingValue(action);
-				if(powerpointSlide!=null){
-			
+				if (powerpointSlide != null) {
+
 					AutoShape shape = new AutoShape(ShapeTypes.Chevron);
-					
+
 					powerpointShape = modelSlotInstance.getResourceData().getConverter()
 							.convertPowerpointShapeToShape(shape, powerpointSlide, null);
 					powerpointSlide.getSlide().addShape(shape);
 					modelSlotInstance.getResourceData().setIsModified();
-				}
-				else{
+				} else {
 					logger.warning("Create a row requires a sheet");
 				}
-				
+
 			} catch (TypeMismatchException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,7 +70,7 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
+
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
 			return null;
@@ -81,7 +79,6 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 		return powerpointShape;
 	}
 
-	
 	public DataBinding<PowerpointSlide> getPowerpointSlide() {
 		if (powerpointSlide == null) {
 			powerpointSlide = new DataBinding<PowerpointSlide>(this, PowerpointSlide.class, DataBinding.BindingDefinitionType.GET);
@@ -99,11 +96,10 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 		}
 		this.powerpointSlide = powerpointSlide;
 	}
-	
-	
+
 	@Override
 	public FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> getModelSlotInstance(EditionSchemeAction action) {
 		return (FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot>) super.getModelSlotInstance(action);
 	}
-	
+
 }

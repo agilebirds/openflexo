@@ -60,7 +60,7 @@ public class XMLModelSlot extends TypeAwareModelSlot<XMLModel,XMLModel> {
 
 	
 
-	protected XMLModelSlot(VirtualModel<?> virtualModel,
+	protected XMLModelSlot(VirtualModel virtualModel,
 			TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}

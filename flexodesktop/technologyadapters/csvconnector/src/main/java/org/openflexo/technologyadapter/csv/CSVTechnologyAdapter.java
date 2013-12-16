@@ -82,7 +82,7 @@ public class CSVTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}

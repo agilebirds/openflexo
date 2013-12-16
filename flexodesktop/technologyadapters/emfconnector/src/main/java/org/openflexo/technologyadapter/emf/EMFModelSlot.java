@@ -113,7 +113,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * @param virtualModel
 	 * @param adapter
 	 */
-	public EMFModelSlot(VirtualModel<?> virtualModel, EMFTechnologyAdapter adapter) {
+	public EMFModelSlot(VirtualModel virtualModel, EMFTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 

@@ -88,7 +88,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
 	}*/
 
-	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
+	public XSDModelSlot(VirtualModel virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 		if (uriProcessorsMap == null) {
 			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();

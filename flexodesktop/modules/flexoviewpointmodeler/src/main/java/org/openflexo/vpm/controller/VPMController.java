@@ -181,7 +181,7 @@ public class VPMController extends FlexoController {
 					ViewPoint viewPoint = (ViewPoint) object;
 					VIEW_POINT_PERSPECTIVE.focusOnViewPoint(viewPoint);
 				} else if (object instanceof VirtualModel) {
-					VirtualModel<?> virtualModel = (VirtualModel<?>) object;
+					VirtualModel virtualModel = (VirtualModel) object;
 					VIEW_POINT_PERSPECTIVE.focusOnVirtualModel(virtualModel);
 				} else if (object instanceof EditionPattern) {
 					EditionPattern pattern = (EditionPattern) object;

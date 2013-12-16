@@ -89,7 +89,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (XSDModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new XSDModelSlot(virtualModel, this);
 		}

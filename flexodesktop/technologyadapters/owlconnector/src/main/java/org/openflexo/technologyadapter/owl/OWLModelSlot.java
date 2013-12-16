@@ -71,7 +71,7 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 		super(viewPoint, adapter);
 	}*/
 
-	public OWLModelSlot(VirtualModel<?> virtualModel, OWLTechnologyAdapter adapter) {
+	public OWLModelSlot(VirtualModel virtualModel, OWLTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 

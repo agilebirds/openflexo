@@ -86,7 +86,7 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private BasicExcelModelSlotURIProcessor uriProcessor;
 
-	public BasicExcelModelSlot(VirtualModel<?> virtualModel, ExcelTechnologyAdapter adapter) {
+	public BasicExcelModelSlot(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 		uriProcessor = new BasicExcelModelSlotURIProcessor();
 

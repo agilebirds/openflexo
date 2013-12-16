@@ -44,10 +44,10 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 		return ExcelSheet.class.getSimpleName();
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
@@ -59,9 +59,9 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 		return new ExcelActorReference(object, this, epi);
 	}
 
-	@Override
+	/*@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 
-	}
+	}*/
 
 }

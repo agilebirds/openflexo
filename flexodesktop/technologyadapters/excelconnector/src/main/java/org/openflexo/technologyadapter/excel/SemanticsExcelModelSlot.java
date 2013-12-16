@@ -70,7 +70,7 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 
 	private static final Logger logger = Logger.getLogger(SemanticsExcelModelSlot.class.getPackage().getName());
 
-	public SemanticsExcelModelSlot(VirtualModel<?> virtualModel, ExcelTechnologyAdapter adapter) {
+	public SemanticsExcelModelSlot(VirtualModel virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 

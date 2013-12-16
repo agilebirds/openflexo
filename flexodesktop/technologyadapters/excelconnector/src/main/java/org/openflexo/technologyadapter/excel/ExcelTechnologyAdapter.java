@@ -89,7 +89,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (BasicExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new BasicExcelModelSlot(virtualModel, this);
 		} else if (SemanticsExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {

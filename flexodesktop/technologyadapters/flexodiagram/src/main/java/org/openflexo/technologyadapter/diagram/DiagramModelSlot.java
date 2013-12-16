@@ -8,6 +8,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -16,7 +17,6 @@ import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramSpecification;
@@ -48,7 +48,7 @@ import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 		@DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
-public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpecification> {
+public class DiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
 

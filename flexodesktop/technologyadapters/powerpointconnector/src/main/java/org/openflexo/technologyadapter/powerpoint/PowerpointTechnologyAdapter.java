@@ -86,7 +86,7 @@ public class PowerpointTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (BasicPowerpointModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new BasicPowerpointModelSlot(virtualModel, this);
 		} else{

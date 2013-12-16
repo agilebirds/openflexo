@@ -123,7 +123,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 		// setBottomLeftView(viewPointBrowser);
 	}
 
-	public void focusOnVirtualModel(VirtualModel<?> virtualModel) {
+	public void focusOnVirtualModel(VirtualModel virtualModel) {
 		logger.info("focusOnVirtualModel " + virtualModel);
 
 		// virtualModelBrowser.setRootObject(virtualModel);
@@ -228,7 +228,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return ((ViewPoint) object).getName();
 		}
 		if (object instanceof VirtualModel) {
-			return ((VirtualModel<?>) object).getName();
+			return ((VirtualModel) object).getName();
 		}
 		if (object instanceof DiagramPalette) {
 			return ((DiagramPalette) object).getName() + " (" + FlexoLocalization.localizedForKey("palette") + ")";

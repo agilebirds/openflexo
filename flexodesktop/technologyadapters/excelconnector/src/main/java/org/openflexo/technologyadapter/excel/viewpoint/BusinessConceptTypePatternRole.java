@@ -46,7 +46,7 @@ public class BusinessConceptTypePatternRole extends PatternRole<BusinessConceptT
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		// TODO Auto-generated method stub
 		return false;
@@ -56,7 +56,7 @@ public class BusinessConceptTypePatternRole extends PatternRole<BusinessConceptT
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {

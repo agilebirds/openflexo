@@ -75,7 +75,7 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 
 	private BasicPowerpointModelSlotURIProcessor uriProcessor;
 
-	public BasicPowerpointModelSlot(VirtualModel<?> virtualModel, PowerpointTechnologyAdapter adapter) {
+	public BasicPowerpointModelSlot(VirtualModel virtualModel, PowerpointTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 		uriProcessor = new BasicPowerpointModelSlotURIProcessor();
 

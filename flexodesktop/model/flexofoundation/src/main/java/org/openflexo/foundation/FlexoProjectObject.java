@@ -255,9 +255,9 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 						PatternRole<?> pr = epi.getRoleForActor(this);
 						if (pr == null) {
 							logger.warning("Found an EditionPatternReference with a null pattern role. Please investigate...");
-						} else if (pr.getIsPrimaryRole()) {
+						} /*else if (pr.getIsPrimaryRole()) {
 							return true;
-						}
+							}*/
 					} else {
 						logger.warning("Cannot find EditionPatternInstance for " + ref);
 					}

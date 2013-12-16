@@ -209,7 +209,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		createVirtualModelInstance.setNewVirtualModelInstanceName("TestNewVirtualModel");
 		createVirtualModelInstance.setNewVirtualModelInstanceTitle("A nice title for a new virtual model instance");
 
-		VirtualModel<?> cityMappingVM = cityMappingVP.getVirtualModelNamed("CityMapping");
+		VirtualModel cityMappingVM = cityMappingVP.getVirtualModelNamed("CityMapping");
 		assertNotNull(cityMappingVM);
 
 		createVirtualModelInstance.setVirtualModel(cityMappingVM);

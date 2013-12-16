@@ -80,7 +80,7 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean getIsPrimaryRole() {
 		return false;
 	}
@@ -88,7 +88,7 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// Not relevant
-	}
+	}*/
 
 	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {

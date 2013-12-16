@@ -112,7 +112,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	@Override
-	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel virtualModel) {
 		if (EMFModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new EMFModelSlot(virtualModel, this);
 		} else if (EMFMetaModelSlot.class.isAssignableFrom(modelSlotClass)) {

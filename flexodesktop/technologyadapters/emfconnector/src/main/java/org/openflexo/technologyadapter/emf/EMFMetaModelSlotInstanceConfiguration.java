@@ -28,7 +28,7 @@ public class EMFMetaModelSlotInstanceConfiguration extends ModelSlotInstanceConf
 	}
 
 	@Override
-	public ModelSlotInstance<EMFMetaModelSlot, EMFMetaModel> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance) {
+	public ModelSlotInstance<EMFMetaModelSlot, EMFMetaModel> createModelSlotInstance(VirtualModelInstance msInstance) {
 		logger.warning("Please implement me !!!!");
 		return null;
 	}
