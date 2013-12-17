@@ -29,9 +29,10 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
@@ -44,7 +45,6 @@ import org.openflexo.foundation.cg.templates.TemplateFileNotification;
 import org.openflexo.foundation.dkv.DKVValidationModel;
 import org.openflexo.foundation.dm.DMValidationModel;
 import org.openflexo.foundation.ie.IEValidationModel;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
@@ -60,11 +60,11 @@ import org.openflexo.velocity.FlexoVelocity;
 
 public abstract class AbstractProjectGenerator<R extends GenerationRepository> extends MetaGenerator<FlexoProject, R> {
 
-	private R repository;
-	private CGTemplates templates;
-	private TemplateLocator templateLocator;
-	private Vector<Generator<? extends FlexoModelObject, R>> generators;
-	private Vector<Logger> loggers;
+	private final R repository;
+	private final CGTemplates templates;
+	private final TemplateLocator templateLocator;
+	private final Vector<Generator<? extends FlexoObject, R>> generators;
+	private final Vector<Logger> loggers;
 	private AbstractGCAction action;
 	public Vector<LogListener> logListeners;
 	private Handler logHandler;
@@ -77,7 +77,7 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		this.repository = repository;
 		this.templates = getDefaultTemplates();
 		this.templateLocator = new TemplateLocator(templates, this);
-		this.generators = new Vector<Generator<? extends FlexoModelObject, R>>();
+		this.generators = new Vector<Generator<? extends FlexoObject, R>>();
 		this.loggers = new Vector<Logger>();
 		this.logListeners = new Vector<LogListener>();
 		this.loggers.add(FlexoVelocity.getLogger());
@@ -183,7 +183,7 @@ public abstract class AbstractProjectGenerator<R extends GenerationRepository> e
 		this.action = action;
 	}
 
-	protected void addToGenerators(Generator<? extends FlexoModelObject, R> generator) {
+	protected void addToGenerators(Generator<? extends FlexoObject, R> generator) {
 		generators.add(generator);
 		if (!loggers.contains(generator.getGeneratorLogger())) {
 			loggers.add(generator.getGeneratorLogger());

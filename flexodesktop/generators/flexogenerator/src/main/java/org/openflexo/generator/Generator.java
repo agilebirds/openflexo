@@ -58,11 +58,13 @@ import org.apache.velocity.tools.generic.DisplayTool;
 import org.apache.velocity.tools.generic.EscapeTool;
 import org.apache.velocity.tools.generic.RenderTool;
 import org.apache.velocity.tools.generic.SortTool;
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
@@ -76,7 +78,6 @@ import org.openflexo.foundation.cg.templates.TemplateFileEdited;
 import org.openflexo.foundation.cg.templates.TemplateFileEditionCancelled;
 import org.openflexo.foundation.cg.templates.TemplateFileRedefined;
 import org.openflexo.foundation.cg.templates.TemplateFileSaved;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
@@ -95,8 +96,7 @@ import org.openflexo.toolbox.ToolBox;
 import org.openflexo.velocity.FlexoVelocity;
 import org.openflexo.velocity.PostVelocityParser;
 
-public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
-		DataFlexoObserver {
+public abstract class Generator<T extends FlexoObject, R extends GenerationRepository> extends FlexoObservable implements DataFlexoObserver {
 
 	private static final String VALID_XML_REGEXP = "[A-Z_a-z\\u00C0\\u00D6\\u00D8-\\u00F6"
 			+ "\\u00F8-\\u02ff\\u0370-\\u037d\\u037f-\\u1fff\\u200c\\u200d\\u2070-\\u218f"
@@ -110,11 +110,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	private Vector<CGTemplate> _usedTemplates = new Vector<CGTemplate>();
 
-	private Vector<CGRepositoryFileResource<?, ?, ? extends CGFile>> generatedResources;
+	private final Vector<CGRepositoryFileResource<?, ?, ? extends CGFile>> generatedResources;
 
 	private Vector<CGRepositoryFileResource> concernedResources = null;
 
-	private T object;
+	private final T object;
 
 	protected AbstractProjectGenerator<R> projectGenerator;
 

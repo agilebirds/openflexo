@@ -22,12 +22,12 @@ package org.openflexo.generator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
 import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.resource.InvalidFileNameException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.CopyOfFileResource;

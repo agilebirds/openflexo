@@ -22,13 +22,13 @@ package org.openflexo.generator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.generator.GeneratedCodeResult;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class MetaGenerator<T extends FlexoModelObject, R extends GenerationRepository> extends Generator<T, R> {
+public abstract class MetaGenerator<T extends FlexoObject, R extends GenerationRepository> extends Generator<T, R> {
 
 	private static final Logger logger = FlexoLogger.getLogger(MetaGenerator.class.getPackage().getName());
 

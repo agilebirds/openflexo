@@ -36,6 +36,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>agilebirdsconnector</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
 			<artifactId>flexofoundation</artifactId>
 		</dependency>
 		<dependency>

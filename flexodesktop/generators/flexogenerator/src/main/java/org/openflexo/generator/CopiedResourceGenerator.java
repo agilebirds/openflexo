@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.generator.GeneratedCopiedFile;
@@ -40,13 +40,12 @@ import org.openflexo.logging.FlexoLogger;
  * @author gpolet
  * 
  */
-public class CopiedResourceGenerator<R extends GenerationRepository> extends Generator<FlexoModelObject, R> implements
-		IFlexoResourceGenerator {
+public class CopiedResourceGenerator<R extends GenerationRepository> extends Generator<FlexoObject, R> implements IFlexoResourceGenerator {
 	private static final Logger logger = FlexoLogger.getLogger(CopiedResourceGenerator.class.getPackage().getName());
 
-	private FlexoCopiedResource copiedResource;
+	private final FlexoCopiedResource copiedResource;
 
-	private Generator<?, R> parent;
+	private final Generator<?, R> parent;
 
 	/**
      *
