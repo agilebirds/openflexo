@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSAbstractFile;
 import org.openflexo.fps.CVSAbstractFile.CommitListener;
@@ -59,7 +59,7 @@ public class CommitFiles extends MultipleFileCVSAction<CommitFiles> implements C
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CommitFiles.actionType, CVSAbstractFile.class);
+		FlexoObject.addActionForClass(CommitFiles.actionType, CVSAbstractFile.class);
 	}
 
 	CommitFiles(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

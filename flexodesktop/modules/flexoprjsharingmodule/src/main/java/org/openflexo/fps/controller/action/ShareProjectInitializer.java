@@ -25,13 +25,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.OpenProjectComponent;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.InfoLabelParameter;
-import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.viewpoint.CheckboxParameter;
+import org.openflexo.foundation.viewpoint.TextAreaParameter;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.FPSPreferences;
 import org.openflexo.fps.action.AddCVSRepository;

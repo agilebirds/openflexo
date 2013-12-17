@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSRepository;
@@ -58,7 +58,7 @@ public class RemoveCVSRepository extends CVSAction<RemoveCVSRepository, CVSRepos
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, CVSRepository.class);
+		FlexoObject.addActionForClass(actionType, CVSRepository.class);
 	}
 
 	RemoveCVSRepository(CVSRepository focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

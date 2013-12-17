@@ -22,7 +22,6 @@ package org.openflexo.fps.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.menu.FlexoMenuBar;
@@ -64,7 +63,7 @@ public class FPSSelectionManager extends SelectionManager {
 	/**
 	 * Returns the root object that can be currently edited
 	 * 
-	 * @return FlexoModelObject
+	 * @return FlexoObject
 	 */
 	@Override
 	public FlexoObject getRootFocusedObject() {
@@ -72,7 +71,7 @@ public class FPSSelectionManager extends SelectionManager {
 	}
 
 	@Override
-	public FlexoModelObject getPasteContext() {
+	public FlexoObject getPasteContext() {
 		// TODO please implement this
 		return null;
 	}

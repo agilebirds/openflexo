@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSConstants;
 import org.openflexo.fps.CVSExplorable;
@@ -65,7 +65,7 @@ public class CVSRefresh extends CVSAction<CVSRefresh, FPSObject> implements CVSE
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FPSObject.class);
+		FlexoObject.addActionForClass(actionType, FPSObject.class);
 	}
 
 	CVSRefresh(FPSObject focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

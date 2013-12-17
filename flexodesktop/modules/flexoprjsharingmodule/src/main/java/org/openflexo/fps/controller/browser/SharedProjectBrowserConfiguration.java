@@ -26,7 +26,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.CustomBrowserFilter;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSContainer;
@@ -145,7 +144,7 @@ class SharedProjectBrowserConfiguration implements BrowserConfiguration {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultRootObject() {
+	public FlexoObject getDefaultRootObject() {
 		return _project;
 	}
 

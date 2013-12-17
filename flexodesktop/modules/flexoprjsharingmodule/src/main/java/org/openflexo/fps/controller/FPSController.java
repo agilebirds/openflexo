@@ -43,14 +43,12 @@ import javax.swing.SwingConstants;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
-import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.viewpoint.CheckboxParameter;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepository.ConnectionType;
@@ -171,7 +169,7 @@ public class FPSController extends FlexoController {
 	}
 
 	@Override
-	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+	public FlexoObject getDefaultObjectToSelect(FlexoProject project) {
 		return getSharedProject();
 	}
 
@@ -394,7 +392,7 @@ public class FPSController extends FlexoController {
 	@Override
 	public void switchToPerspective(FlexoPerspective perspective) {
 		// logger.info("Selection="+getSelectionManager().getSelection());
-		Vector<FlexoModelObject> selection = (Vector<FlexoModelObject>) getSelectionManager().getSelection().clone();
+		Vector<FlexoObject> selection = (Vector<FlexoObject>) getSelectionManager().getSelection().clone();
 		super.switchToPerspective(perspective);
 		if (perspective instanceof FPSPerspective) {
 			((FPSPerspective) perspective).setFilters();

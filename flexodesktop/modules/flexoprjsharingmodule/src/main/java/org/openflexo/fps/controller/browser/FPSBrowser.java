@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.ConfigurableProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.fps.CVSExplorable;
 import org.openflexo.fps.CVSExplorer;
@@ -79,7 +79,7 @@ public abstract class FPSBrowser extends ConfigurableProjectBrowser implements F
 	@Override
 	public void exploringSucceeded(CVSExplorable explorable, CVSExplorer explorer) {
 		logger.info("Exploring " + explorable + " was successfull");
-		focusOn((FlexoModelObject) explorer.getExplorable());
+		focusOn((FlexoObject) explorer.getExplorable());
 	}
 
 }

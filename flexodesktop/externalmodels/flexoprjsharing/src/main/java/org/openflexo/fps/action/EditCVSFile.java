@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSFile.FileContentEditor;
@@ -57,7 +57,7 @@ public class EditCVSFile extends CVSAction<EditCVSFile, CVSFile> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(EditCVSFile.actionType, CVSFile.class);
+		FlexoObject.addActionForClass(EditCVSFile.actionType, CVSFile.class);
 	}
 
 	EditCVSFile(CVSFile focusedObject, Vector<FPSObject> globalSelection, FlexoEditor editor) {

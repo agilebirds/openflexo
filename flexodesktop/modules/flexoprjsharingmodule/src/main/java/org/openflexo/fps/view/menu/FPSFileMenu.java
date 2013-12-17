@@ -32,7 +32,7 @@ import java.util.Enumeration;
 import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.fps.FPSPreferences;
 import org.openflexo.fps.action.OpenSharedProject;
 import org.openflexo.fps.action.ShareProject;
@@ -74,13 +74,13 @@ public class FPSFileMenu extends FileMenu {
 	public void addSpecificItems() {
 		add(new FlexoMenuItem(ShareProject.actionType, getController()) {
 			@Override
-			public FlexoModelObject getFocusedObject() {
+			public FlexoObject getFocusedObject() {
 				return _fpsController.getRepositories();
 			}
 		});
 		add(new FlexoMenuItem(OpenSharedProject.actionType, getController()) {
 			@Override
-			public FlexoModelObject getFocusedObject() {
+			public FlexoObject getFocusedObject() {
 				return _fpsController.getRepositories();
 			}
 		});

@@ -31,7 +31,6 @@ import javax.swing.JTabbedPane;
 
 import org.openflexo.diff.ComputeDiff;
 import org.openflexo.diff.merge.DefaultMergedDocumentType;
-import org.openflexo.foundation.rm.cg.ContentSource;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.controller.FPSController;
 import org.openflexo.localization.FlexoLocalization;
