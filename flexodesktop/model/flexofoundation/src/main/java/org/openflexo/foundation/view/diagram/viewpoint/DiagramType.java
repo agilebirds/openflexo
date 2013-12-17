@@ -38,8 +38,13 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  */
 public class DiagramType extends VirtualModelInstanceType {
 
-	public static DiagramType getDiagramType(DiagramSpecification aDiagram) {		
-		return (DiagramType) aDiagram.getViewPoint().getInstanceType(aDiagram);
+	public static DiagramType getDiagramType(DiagramSpecification aDiagram) {
+		if (aDiagram != null){
+			return (DiagramType) aDiagram.getViewPoint().getInstanceType(aDiagram);
+		}
+		else {
+			return null;
+		}
 	}
 
 
