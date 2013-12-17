@@ -365,8 +365,27 @@ public class XMLMapping {
 	 *                if an error occurs during mapping construction (invalid model)
 	 */
 	public XMLMapping(File modelFile) throws IOException, SAXException, ParserConfigurationException, InvalidModelException {
+		this(modelFile, false);
+	}
+
+	/**
+	 * Creates a new <code>XMLMapping</code> instance given a <code>File</code> object
+	 * 
+	 * @param modelFile
+	 *            a <code>File</code> value
+	 * @exception IOException
+	 *                if an I/O error occurs (file not found, etc...)
+	 * @exception SAXException
+	 *                if parse error occurs
+	 * @exception ParserConfigurationException
+	 *                if a parser configuration error occurs
+	 * @exception InvalidModelException
+	 *                if an error occurs during mapping construction (invalid model)
+	 */
+	public XMLMapping(File modelFile, boolean permissive) throws IOException, SAXException, ParserConfigurationException,
+			InvalidModelException {
 		super();
-		initWithModelFile(modelFile);
+		initWithModelFile(modelFile, permissive);
 	}
 
 	/**
@@ -384,8 +403,27 @@ public class XMLMapping {
 	 *                if an error occurs during mapping construction (invalid model)
 	 */
 	public XMLMapping(InputStream modelInputStream) throws IOException, SAXException, ParserConfigurationException, InvalidModelException {
+		this(modelInputStream, false);
+	}
+
+	/**
+	 * Creates a new <code>XMLMapping</code> instance given a <code>InputStream</code> object
+	 * 
+	 * @param modelInputStream
+	 *            a <code>InputStream</code> value
+	 * @exception IOException
+	 *                if an I/O error occurs (file not found, etc...)
+	 * @exception SAXException
+	 *                if parse error occurs
+	 * @exception ParserConfigurationException
+	 *                if a parser configuration error occurs
+	 * @exception InvalidModelException
+	 *                if an error occurs during mapping construction (invalid model)
+	 */
+	public XMLMapping(InputStream modelInputStream, boolean permissive) throws IOException, SAXException, ParserConfigurationException,
+			InvalidModelException {
 		super();
-		initWithModelInputStream(modelInputStream);
+		initWithModelInputStream(modelInputStream, permissive);
 	}
 
 	/**
@@ -402,10 +440,11 @@ public class XMLMapping {
 	 * @exception InvalidModelException
 	 *                if an error occurs during mapping construction (invalid model)
 	 */
-	protected void initWithModelFile(File modelFile) throws IOException, SAXException, ParserConfigurationException, InvalidModelException {
+	protected void initWithModelFile(File modelFile, boolean permissive) throws IOException, SAXException, ParserConfigurationException,
+			InvalidModelException {
 		FileInputStream in = new FileInputStream(modelFile);
 		try {
-			initWithModelInputStream(in);
+			initWithModelInputStream(in, permissive);
 		} finally {
 			in.close();
 		}
@@ -425,8 +464,8 @@ public class XMLMapping {
 	 * @exception InvalidModelException
 	 *                if an error occurs during mapping construction (invalid model)
 	 */
-	protected void initWithModelInputStream(InputStream modelInputStream) throws IOException, SAXException, ParserConfigurationException,
-			InvalidModelException {
+	protected void initWithModelInputStream(InputStream modelInputStream, boolean permissive) throws IOException, SAXException,
+			ParserConfigurationException, InvalidModelException {
 		Document modelDocument = null;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -436,7 +475,7 @@ public class XMLMapping {
 
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			modelDocument = builder.parse(modelInputStream);
-			initWithModelDocument(modelDocument);
+			initWithModelDocument(modelDocument, permissive);
 		} catch (SAXException e) {
 			throw e;
 		} catch (ParserConfigurationException e) {
@@ -454,7 +493,7 @@ public class XMLMapping {
 	 * @exception InvalidModelException
 	 *                if an error occurs during mapping construction (invalid model)
 	 */
-	protected void initWithModelDocument(Document modelDocument) throws InvalidModelException {
+	protected void initWithModelDocument(Document modelDocument, boolean permissive) throws InvalidModelException {
 
 		NodeList modelNodeList;
 		Node modelNode;
@@ -514,7 +553,7 @@ public class XMLMapping {
 						setDescription(tempNode.getFirstChild().getNodeValue());
 					}
 				} else if (tempNode.getNodeName().equals(XMLMapping.entityLabel)) {
-					updateAndRegisterNewModelEntity(new ModelEntity(tempNode, this));
+					updateAndRegisterNewModelEntity(new ModelEntity(tempNode, this, permissive));
 				} else if (tempNode.getNodeName().equals(XMLMapping.mapIdLabel)) {
 					mapId = new XMLMapId(tempNode, this);
 				} else {
