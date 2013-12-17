@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>technologymodules</artifactId>
-        <version>1.6.1-SNAPSHOT</version>
+        <version>1.7.0-alpha</version>
 	</parent>
 	<artifactId>postgrestechnologymodule</artifactId>
 	<name>PostgresTechnologyModule</name>

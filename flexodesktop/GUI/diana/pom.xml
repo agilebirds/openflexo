@@ -50,12 +50,12 @@
 		    <dependency>
 			   <groupId>org.openflexo</groupId>
 			   <artifactId>flexopamela</artifactId>
-			   <version>1.6.1-SNAPSHOT</version>
+			   <version>1.7.0-alpha</version>
 		    </dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>flexointerfacebuilder</artifactId>
-			    <version>1.6.1-SNAPSHOT</version>
+			    <version>1.7.0-alpha</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
