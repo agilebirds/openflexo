@@ -26,9 +26,7 @@ import java.util.WeakHashMap;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.StorageResourceData;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * 

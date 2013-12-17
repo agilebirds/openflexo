@@ -29,7 +29,7 @@ import org.openflexo.TestInteractiveFlexoEditor;
 import org.openflexo.fge.view.JDrawingView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

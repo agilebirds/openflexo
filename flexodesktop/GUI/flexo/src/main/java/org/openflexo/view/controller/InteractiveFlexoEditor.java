@@ -57,7 +57,7 @@ import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoProgress;

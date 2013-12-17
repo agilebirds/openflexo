@@ -24,7 +24,7 @@ import java.awt.Dimension;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;
 import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;

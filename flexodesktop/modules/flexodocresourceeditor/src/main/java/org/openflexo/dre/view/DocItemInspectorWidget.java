@@ -29,7 +29,7 @@ import org.openflexo.components.widget.CustomInspectorWidget;
 import org.openflexo.dre.DocItemSelector;
 import org.openflexo.drm.DocItem;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;

@@ -22,8 +22,7 @@ package org.openflexo.foundation.validation;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.viewpoint.TextFieldParameter;
 
 /**
  * Automatic fix proposal with parameters

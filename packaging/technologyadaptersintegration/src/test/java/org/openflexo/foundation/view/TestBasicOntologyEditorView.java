@@ -23,7 +23,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.action.CreateView;

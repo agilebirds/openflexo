@@ -48,7 +48,7 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.resource.ProjectLoaded;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;

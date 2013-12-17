@@ -44,7 +44,7 @@ import org.openflexo.foundation.bindings.BindingDefinition;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

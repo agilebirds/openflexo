@@ -43,7 +43,7 @@ import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.action.CreateComponentFromEntity.DMAccessorWidget;
 import org.openflexo.foundation.ie.util.WidgetType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 public class SelectPropertiesAndMethodsPopup extends MultipleObjectSelectorPopup {

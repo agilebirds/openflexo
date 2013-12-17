@@ -27,7 +27,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.ProjectDatabaseRepository;
 import org.openflexo.foundation.dm.eo.DMEOModel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class DMEOModelSelector extends AbstractBrowserSelector<DMEOModel> {
 

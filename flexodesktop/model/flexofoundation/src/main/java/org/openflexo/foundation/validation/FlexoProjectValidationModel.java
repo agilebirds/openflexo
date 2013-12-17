@@ -19,9 +19,7 @@
  */
 package org.openflexo.foundation.validation;
 
-import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * @author gpolet

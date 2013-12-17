@@ -21,9 +21,9 @@ package org.openflexo.foundation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -45,6 +45,8 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
 
 	private FlexoProject project;
+
+	private Vector<FlexoModelObjectReference<?>> referencers;
 
 	/**
 	 * This list contains all EPI's by reference
@@ -88,16 +90,15 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		this.project = project;
 	}
 
-	@Override
+	/*@Override
 	public List<DocType> getDocTypes() {
 		if (getProject() != null) {
 			return getProject().getDocTypes();
 		}
 		return super.getDocTypes();
-	}
+	}*/
 
 	// TODO: Should be refactored with injectors
-	@Deprecated
 	public FlexoServiceManager getServiceManager() {
 		if (getProject() != null) {
 			return getProject().getServiceManager();
@@ -285,6 +286,22 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
 		logger.warning("TODO: implement this");
+	}
+
+	public void addToReferencers(FlexoModelObjectReference<? extends FlexoProjectObject> ref) {
+		if (referencers != null && !referencers.contains(ref)) {
+			referencers.add(ref);
+		}
+	}
+
+	public void removeFromReferencers(FlexoModelObjectReference<? extends FlexoProjectObject> ref) {
+		if (referencers != null) {
+			referencers.remove(ref);
+		}
+	}
+
+	public Vector<FlexoModelObjectReference<?>> getReferencers() {
+		return referencers;
 	}
 
 }

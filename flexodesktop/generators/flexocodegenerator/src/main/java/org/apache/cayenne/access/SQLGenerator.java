@@ -47,7 +47,7 @@ import org.openflexo.foundation.dm.eo.DMEOAttribute;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOPrototype;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.generator.ProjectGenerator;

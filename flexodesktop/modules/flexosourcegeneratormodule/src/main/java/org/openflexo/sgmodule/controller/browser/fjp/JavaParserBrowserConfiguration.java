@@ -26,7 +26,7 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.javaparser.FJPJavaClass;
 import org.openflexo.javaparser.FJPJavaElement;
 import org.openflexo.javaparser.FJPJavaField;

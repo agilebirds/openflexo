@@ -20,7 +20,7 @@
 package org.openflexo.components.widget;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;

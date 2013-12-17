@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 
 public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, FlexoModelObject, FlexoModelObject> {

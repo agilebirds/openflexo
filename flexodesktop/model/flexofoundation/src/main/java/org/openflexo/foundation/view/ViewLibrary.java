@@ -19,28 +19,21 @@
  */
 package org.openflexo.foundation.view;
 
-/*
- * FlexoWorkflow.java
- * Project WorkflowEditor
- *
- * Created by benoit on Mar 3, 2004
- */
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FileResourceRepository;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.rm.ViewResourceImpl;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.view.rm.ViewResourceImpl;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 
 /**
- * The {@link ViewLibrary} contains all {@link FlexoViewResource} referenced in a {@link FlexoProject}
+ * The {@link ViewLibrary} contains all {@link ViewResource} referenced in a {@link FlexoProject}
  * 
  * @author sylvain
  */
@@ -49,7 +42,7 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 
-	private FlexoProject project;
+	private final FlexoProject project;
 
 	/**
 	 * Create a new FlexoComponentLibrary.

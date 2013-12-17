@@ -23,14 +23,11 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
-import org.openflexo.foundation.xml.ViewBuilder;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**

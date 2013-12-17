@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.logging.FlexoLogger;
 

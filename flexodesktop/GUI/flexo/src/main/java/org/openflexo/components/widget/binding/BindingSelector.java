@@ -85,7 +85,7 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.swing.ButtonsControlPanel;

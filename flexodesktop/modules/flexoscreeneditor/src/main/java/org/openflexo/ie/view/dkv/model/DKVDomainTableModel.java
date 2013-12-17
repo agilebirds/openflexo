@@ -30,7 +30,7 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.DuplicateDKVObjectException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.SEIconLibrary;
 
 /**

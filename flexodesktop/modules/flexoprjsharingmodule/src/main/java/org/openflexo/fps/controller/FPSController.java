@@ -50,7 +50,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepository.ConnectionType;

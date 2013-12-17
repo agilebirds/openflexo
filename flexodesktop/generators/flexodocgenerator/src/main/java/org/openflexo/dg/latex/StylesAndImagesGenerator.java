@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.dg.DGGenerator;
 import org.openflexo.foundation.cg.DGRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 
 /**

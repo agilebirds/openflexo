@@ -25,7 +25,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.eo.DMEOAttribute;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Widget allowing to select a DMEOAttribute while browsing the data model

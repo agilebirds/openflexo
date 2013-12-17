@@ -32,7 +32,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
 import org.openflexo.tm.hibernate.impl.HibernateModel;
 

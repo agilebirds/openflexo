@@ -21,10 +21,9 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.ViewBuilder;
 
 /**
  * A {@link ViewObject} an abstract run-time concept (instance) for an object "living" in a {@link View} (instanceof a {@link ViewPoint})
@@ -32,13 +31,13 @@ import org.openflexo.foundation.xml.ViewBuilder;
  * @author sylvain
  * 
  */
-public abstract class ViewObject extends FlexoModelObject {
+public abstract class ViewObject extends FlexoProjectObject {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 
-	public ViewObject(ViewBuilder viewBuilder) {
+	/*public ViewObject(ViewBuilder viewBuilder) {
 		super(viewBuilder.getProject());
-	}
+	}*/
 
 	public ViewObject(FlexoProject project) {
 		super(project);

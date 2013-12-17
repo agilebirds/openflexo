@@ -21,7 +21,7 @@ package org.openflexo.generator.rm;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.generator.FlexoComponentResourceGenerator;
 import org.openflexo.generator.utils.MetaWOGenerator;

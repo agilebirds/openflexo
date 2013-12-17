@@ -21,8 +21,8 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.wkf.FlexoProcess;
+import org.flexo.model.FlexoModelObject;
+import org.flexo.model.FlexoProcess;
 
 /**
  * External view of the WKF Module

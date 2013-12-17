@@ -19,16 +19,9 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.flexo.model.FlexoModelObject;
+import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.ProcessFolder;
-import org.openflexo.foundation.wkf.Role;
-import org.openflexo.foundation.wkf.node.AbstractActivityNode;
-import org.openflexo.foundation.wkf.node.ActionNode;
-import org.openflexo.foundation.wkf.node.OperationNode;
 
 /**
  * Represents an inspector entry for a flexo object

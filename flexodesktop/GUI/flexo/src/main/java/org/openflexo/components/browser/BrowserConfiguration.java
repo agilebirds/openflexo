@@ -20,7 +20,7 @@
 package org.openflexo.components.browser;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 @Deprecated
 public interface BrowserConfiguration extends TreeConfiguration {

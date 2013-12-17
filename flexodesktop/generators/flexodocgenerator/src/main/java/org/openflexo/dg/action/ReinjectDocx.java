@@ -54,7 +54,7 @@ import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.rm.ViewResource;

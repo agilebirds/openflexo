@@ -20,7 +20,7 @@ import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Default implementation for {@link DiagramResource}
+ * Default implementation for {@link ProjectDataResource}
  * 
  * 
  * @author Sylvain

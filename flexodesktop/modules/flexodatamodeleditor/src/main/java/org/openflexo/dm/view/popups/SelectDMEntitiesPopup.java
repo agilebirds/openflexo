@@ -28,7 +28,7 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.DefaultBrowserConfiguration;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.foundation.dm.DMEntity;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class SelectDMEntitiesPopup extends MultipleObjectSelectorPopup {
 

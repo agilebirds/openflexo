@@ -41,7 +41,7 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoFrame;
 

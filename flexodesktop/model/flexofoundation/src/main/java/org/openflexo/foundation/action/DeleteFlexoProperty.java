@@ -21,9 +21,9 @@ package org.openflexo.foundation.action;
 
 import java.util.Vector;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProperty;
 

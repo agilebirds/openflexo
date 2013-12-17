@@ -31,7 +31,7 @@ import org.openflexo.foundation.bindings.BindingDefinition;
 import org.openflexo.foundation.bindings.BindingVariable;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMPropertyImplementationType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Please comment this class

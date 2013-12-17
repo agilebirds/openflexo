@@ -28,7 +28,7 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.icon.WSEIconLibrary;

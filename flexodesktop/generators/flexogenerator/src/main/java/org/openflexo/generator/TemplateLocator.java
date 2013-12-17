@@ -35,7 +35,7 @@ import org.openflexo.foundation.cg.templates.CGTemplateSet;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.generator.exception.TemplateNotFoundException;

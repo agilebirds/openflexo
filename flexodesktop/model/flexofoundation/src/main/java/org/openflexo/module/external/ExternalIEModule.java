@@ -21,9 +21,6 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.wkf.node.OperationNode;
-
 /**
  * External view of the IE Module
  * 

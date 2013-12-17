@@ -71,7 +71,7 @@ import org.openflexo.foundation.param.IntegerParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.model.PropertyListColumn;
 import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;

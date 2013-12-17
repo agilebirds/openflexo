@@ -35,7 +35,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoImportedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoStorageResource;

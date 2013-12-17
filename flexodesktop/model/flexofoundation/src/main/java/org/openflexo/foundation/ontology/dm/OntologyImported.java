@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
-import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 
 /**

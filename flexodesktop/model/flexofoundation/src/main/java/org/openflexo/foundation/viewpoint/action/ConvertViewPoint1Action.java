@@ -22,15 +22,15 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResourceImpl;
 import org.openflexo.logging.FlexoLogger;
 
 /**

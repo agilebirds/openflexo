@@ -26,7 +26,7 @@ import javax.swing.JComponent;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.MetricsValue;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;

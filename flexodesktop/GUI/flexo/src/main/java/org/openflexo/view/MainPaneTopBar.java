@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.openflexo.components.widget.FIBProjectSelector;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;

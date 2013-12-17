@@ -1,50 +1,6 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.logging.Level;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.filter.ElementFilter;
-import org.jdom2.input.SAXBuilder;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoService.ServiceNotification;
-import org.openflexo.foundation.rm.FlexoFileNotFoundException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.LoadXMLResourceException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.MalformedXMLException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.XMLOperationException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.xml.FlexoXMLSerializable;
-import org.openflexo.foundation.xml.XMLSerializationService;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.toolbox.IProgress;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.ModelEntity;
-import org.openflexo.xmlcode.ModelProperty;
-import org.openflexo.xmlcode.SerializationHandler;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Default implementation for {@link FlexoXMLFileResource} (a {@link FlexoFileResource} stored in a XML {@link File})
@@ -57,15 +13,10 @@ import org.openflexo.xmlcode.XMLSerializable;
 public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> extends FlexoFileResourceImpl<RD> implements
 		FlexoXMLFileResource<RD> {
 
-	private boolean isLoading = false;
+	/*private boolean isLoading = false;
 	private boolean isConverting = false;
 	protected boolean performLoadWithPreviousVersion = true;
 
-	/**
-	 * Save the &quot;real&quot; resource data of this resource.
-	 * 
-	 * @throws SaveResourceException
-	 */
 	@Override
 	public final void save(IProgress progress) throws SaveResourceException {
 		if (progress != null) {
@@ -81,15 +32,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 
 	}
 
-	/**
-	 * Load resource data by applying a special scheme handling XML versionning, ie to find right XML version of current resource file.<br>
-	 * If version of stored file is not conform to latest declared version, convert resource file and update it to latest version.
-	 * 
-	 * @throws ProjectLoadingCancelledException
-	 * @throws MalformedXMLException
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResource#loadResourceData()
-	 */
 	@Override
 	public RD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
@@ -445,14 +387,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	/**
-	 * Converts incrementally this resource from fromVersion to toVersion. Everytime the ClassModelVersion requires a manual conversion, the
-	 * converter will call the convert method
-	 * 
-	 * @param fromVersion
-	 * @param toVersion
-	 * @return
-	 */
 	private boolean incrementalConversionFromVersionToVersion(FlexoVersion fromVersion, FlexoVersion toVersion) {
 		FlexoVersion[] v = getXMLSerializationService().getAvailableVersionsForClass(getResourceDataClass());
 		int i = 0;
@@ -509,12 +443,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		return true;
 	}
 
-	/**
-	 * Save current resource data to current XML resource file.<br>
-	 * Forces XML version to be the latest one.
-	 * 
-	 * @return
-	 */
 	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException {
 		System.out.println("Saving " + getFile());
 		if (!hasWritePermission()) {
@@ -581,7 +509,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 	}
 
 	public static class WillWriteFileOnDiskNotification implements ServiceNotification {
-		private File file;
+		private final File file;
 
 		public WillWriteFileOnDiskNotification(File file) {
 			this.file = file;
@@ -645,13 +573,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	/**
-	 * @param version
-	 * @param temporaryFile
-	 * @param lock
-	 * @param clearIsModified
-	 * @throws IOException
-	 */
 	private void postXMLSerialization(FlexoVersion version, File temporaryFile, FileWritingLock lock, boolean clearIsModified)
 			throws IOException {
 		FileUtils.rename(temporaryFile, getFile());
@@ -663,17 +584,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	/**
-	 * @param version
-	 * @param handler
-	 * @param temporaryFile
-	 * @throws FileNotFoundException
-	 * @throws InvalidObjectSpecificationException
-	 * @throws InvalidModelException
-	 * @throws AccessorInvocationException
-	 * @throws DuplicateSerializationIdentifierException
-	 * @throws IOException
-	 */
 	private void performXMLSerialization(FlexoVersion version, SerializationHandler handler, File temporaryFile)
 			throws FileNotFoundException, InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException,
 			DuplicateSerializationIdentifierException, IOException {
@@ -807,14 +717,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	/**
-	 * Manually converts resource file from version v1 to version v2. This methods only warns and does nothing, and must be overriden in
-	 * subclasses !
-	 * 
-	 * @param v1
-	 * @param v2
-	 * @return boolean indicating if conversion was sucessfull
-	 */
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion v1, FlexoVersion v2) {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Unable to find converter for resource " + this + " from version " + v1 + " to version " + v2);
@@ -831,11 +733,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
-	/**
-	 * Returns a boolean indicating if this resource needs a builder to be loaded Returns false and thus must be overriden in subclasses
-	 * 
-	 * @return boolean
-	 */
 	@Override
 	public boolean hasBuilder() {
 		return false;
@@ -874,9 +771,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		return ++lastID;
 	}
 
-	/**
-	 * @return Returns the lastUniqueID.
-	 */
 	public long getLastID() {
 		if (lastUniqueIDHasBeenSet && lastID < 0) {
 			lastID = 0;
@@ -884,10 +778,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		return lastID;
 	}
 
-	/**
-	 * @param lastUniqueID
-	 *            The lastUniqueID to set.
-	 */
 	@Override
 	public void setLastID(long lastUniqueID) {
 		System.out.println(">>>>>>>>>> setLastID with " + lastUniqueID);
@@ -921,6 +811,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		} else {
 			return null;
 		}
-	}
+	}*/
 
 }

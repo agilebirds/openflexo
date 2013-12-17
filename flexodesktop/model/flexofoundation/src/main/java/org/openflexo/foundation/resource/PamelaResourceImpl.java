@@ -6,25 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.flexo.model.FlexoModelObject;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.InconsistentDataException;
 import org.openflexo.foundation.InvalidModelDefinitionException;
 import org.openflexo.foundation.InvalidXMLException;
-import org.openflexo.foundation.rm.FlexoFileNotFoundException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.LoadXMLResourceException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.MalformedXMLException;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.InvalidDataException;
@@ -51,6 +45,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends ModelFactory> extends FlexoFileResourceImpl<RD> implements
 		PamelaResource<RD, F> {
+
+	private static final Logger logger = Logger.getLogger(PamelaResourceImpl.class.getPackage().getName());
 
 	private boolean isLoading = false;
 
@@ -105,7 +101,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_from_disk"));
 		}
 
-		LoadXMLResourceException exception = null;
+		LoadResourceException exception = null;
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Load resource data for " + this);
@@ -153,7 +149,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 	 * 
 	 * @return
 	 */
-	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException {
+	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException, SaveResourcePermissionDeniedException {
 		System.out.println("Saving " + getFile());
 		if (!hasWritePermission()) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -162,18 +158,19 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 			throw new SaveResourcePermissionDeniedException(this);
 		}
 		if (resourceData != null) {
+			logger.warning("I think the SerializationHandler is no more necessary");
 			_saveResourceData(new SerializationHandler() {
 				@Override
 				public void objectWillBeSerialized(XMLSerializable object) {
 					if (object instanceof FlexoModelObject) {
-						((FlexoModelObject) object).initializeSerialization();
+						// ((FlexoModelObject) object).initializeSerialization();
 					}
 				}
 
 				@Override
 				public void objectHasBeenSerialized(XMLSerializable object) {
 					if (object instanceof FlexoModelObject) {
-						((FlexoModelObject) object).finalizeSerialization();
+						// ((FlexoModelObject) object).finalizeSerialization();
 					}
 				}
 			}, clearIsModified);
@@ -204,7 +201,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 		}
 	}
 
-	private void _saveResourceData(SerializationHandler handler, boolean clearIsModified) throws SaveXMLResourceException {
+	private void _saveResourceData(SerializationHandler handler, boolean clearIsModified) throws SaveResourceException {
 		File temporaryFile = null;
 		FileWritingLock lock = willWriteOnDisk();
 

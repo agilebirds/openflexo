@@ -47,7 +47,7 @@ import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.dm.XMLSchemaRepository;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 

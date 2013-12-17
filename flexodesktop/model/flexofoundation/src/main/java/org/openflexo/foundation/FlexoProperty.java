@@ -19,9 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.xml.FlexoBuilder;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class FlexoProperty extends FlexoObject implements XMLSerializable {
@@ -31,13 +28,13 @@ public class FlexoProperty extends FlexoObject implements XMLSerializable {
 	private String name;
 	private String value;
 
-	public FlexoProperty(FlexoBuilder<?> builder) {
+	/*public FlexoProperty(FlexoBuilder<?> builder) {
 		this(builder.getProject());
 	}
 
 	public FlexoProperty(FlexoProjectBuilder builder) {
 		this(builder.project);
-	}
+	}*/
 
 	public FlexoProperty() {
 		super();
@@ -84,16 +81,16 @@ public class FlexoProperty extends FlexoObject implements XMLSerializable {
 		this.owner = owner;
 	}
 
-	@Override
+	/*@Override
 	public String getFullyQualifiedName() {
 		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
-	}
+	}*/
 
-	public XMLStorageResourceData getXMLResourceData() {
+	/*public XMLStorageResourceData getXMLResourceData() {
 		if (getOwner() instanceof FlexoModelObject) {
 			return ((FlexoModelObject) getOwner()).getXMLResourceData();
 		}
 		return null;
-	}
+	}*/
 
 }

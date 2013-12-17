@@ -44,7 +44,7 @@ import org.openflexo.foundation.dm.DMSet;
 import org.openflexo.foundation.dm.DMSet.PackageReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.ExternalRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;

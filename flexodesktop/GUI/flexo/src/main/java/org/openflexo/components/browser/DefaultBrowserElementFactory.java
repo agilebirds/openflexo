@@ -26,7 +26,7 @@ import org.openflexo.components.browser.ie.IEBrowserElementFactory;
 import org.openflexo.components.browser.wkf.WKFBrowserElementFactory;
 import org.openflexo.components.browser.ws.WSBrowserElementFactory;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class DefaultBrowserElementFactory implements BrowserElementFactory {
 

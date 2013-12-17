@@ -21,7 +21,7 @@ package org.openflexo.dg;
 
 import java.io.File;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Please comment this class

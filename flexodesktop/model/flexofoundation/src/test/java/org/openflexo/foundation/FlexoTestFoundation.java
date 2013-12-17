@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation;
 
+import org.flexo.model.FlexoModelObject;
+
 public class FlexoTestFoundation extends FlexoTestCase {
 
 	public FlexoTestFoundation() {

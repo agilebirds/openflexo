@@ -27,11 +27,11 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;

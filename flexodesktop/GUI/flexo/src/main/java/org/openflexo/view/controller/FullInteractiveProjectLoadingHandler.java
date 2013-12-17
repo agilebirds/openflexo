@@ -35,7 +35,7 @@ import org.openflexo.components.AskParametersPanel;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.PropertyListParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

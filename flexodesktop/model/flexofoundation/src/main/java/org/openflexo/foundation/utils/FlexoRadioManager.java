@@ -24,9 +24,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.widget.IERadioButtonWidget;
-
 /**
  * @author gpolet Created on 12 sept. 2005
  */

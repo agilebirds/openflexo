@@ -39,7 +39,7 @@ import org.openflexo.foundation.dm.javaparser.ParsedJavaField;
 import org.openflexo.foundation.dm.javaparser.ParsedJavaMethod;
 import org.openflexo.foundation.dm.javaparser.ParsedJavadoc;
 import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.cg.JavaFileResource;
 import org.openflexo.javaparser.DefaultJavaParser;
 import org.openflexo.logging.FlexoLogger;

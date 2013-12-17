@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorObserver;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -75,10 +74,10 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 
 	private boolean changed = false;
 
-	private Vector<WeakReference<FlexoObserver>> _flexoObservers;
-	private Vector<WeakReference<InspectorObserver>> _inspectorObservers;
+	private final Vector<WeakReference<FlexoObserver>> _flexoObservers;
+	private final Vector<WeakReference<InspectorObserver>> _inspectorObservers;
 
-	private PropertyChangeSupport _pcSupport;
+	private final PropertyChangeSupport _pcSupport;
 
 	/**
 	 * This hastable stores for all classes encountered as observers for this observable a property coded as a Boolean indicating if
@@ -240,7 +239,7 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 				 * progress 2) a recently unregistered FlexoObserver will be
 				 * wrongly notified when it doesn't care
 				 */
-				if (!changed && !(arg instanceof ResourceStatusModification)) {
+				if (!changed /*&& !(arg instanceof ResourceStatusModification)*/) {
 					return;
 				}
 				arrLocal1 = _flexoObservers.toArray(arrLocal1);

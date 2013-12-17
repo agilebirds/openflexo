@@ -21,13 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.ProcessFolder;
-import org.openflexo.foundation.wkf.Role;
-import org.openflexo.foundation.wkf.node.AbstractActivityNode;
-import org.openflexo.foundation.wkf.node.ActionNode;
-import org.openflexo.foundation.wkf.node.OperationNode;
+import org.flexo.model.FlexoModelObject;
+import org.flexo.model.FlexoProcess;
 
 public class FlexoObjectParameter extends EditionSchemeParameter {
 

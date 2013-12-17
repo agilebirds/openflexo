@@ -21,8 +21,8 @@ package org.openflexo.foundation.view.action;
 
 import java.util.Vector;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.view.EditionPatternInstance;

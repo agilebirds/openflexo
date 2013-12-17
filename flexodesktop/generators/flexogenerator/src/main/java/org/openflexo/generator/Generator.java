@@ -76,7 +76,7 @@ import org.openflexo.foundation.cg.templates.TemplateFileEdited;
 import org.openflexo.foundation.cg.templates.TemplateFileEditionCancelled;
 import org.openflexo.foundation.cg.templates.TemplateFileRedefined;
 import org.openflexo.foundation.cg.templates.TemplateFileSaved;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;

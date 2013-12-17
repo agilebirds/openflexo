@@ -37,7 +37,7 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;

@@ -21,7 +21,7 @@ package org.openflexo.components.tabular.model;
 
 import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Please comment this class

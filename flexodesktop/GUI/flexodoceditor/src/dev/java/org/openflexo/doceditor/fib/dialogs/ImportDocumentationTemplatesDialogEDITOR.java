@@ -26,7 +26,7 @@ import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 public class ImportDocumentationTemplatesDialogEDITOR extends ProjectDialogEDITOR {

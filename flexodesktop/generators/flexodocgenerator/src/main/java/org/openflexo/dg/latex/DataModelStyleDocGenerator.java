@@ -19,7 +19,7 @@
  */
 package org.openflexo.dg.latex;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * @author gpolet

@@ -47,7 +47,7 @@ import org.openflexo.foundation.dkv.dm.DKVDataModification;
 import org.openflexo.foundation.dm.dm.DMDataModification;
 import org.openflexo.foundation.ie.dm.IEDataModification;
 import org.openflexo.foundation.ontology.dm.OntologyDataModification;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.event.SGDataModification;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;

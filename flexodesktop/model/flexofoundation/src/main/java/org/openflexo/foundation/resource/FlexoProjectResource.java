@@ -2,9 +2,8 @@ package org.openflexo.foundation.resource;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
@@ -18,7 +17,6 @@ import org.openflexo.model.annotations.XMLElement;
  * 
  */
 @ModelEntity
-@ImplementationClass(FlexoProjectResourceImpl.class)
 @XMLElement
 public interface FlexoProjectResource<RD extends ResourceData<RD>> extends FlexoResource<RD> {
 	public static final String PROJECT = "project";

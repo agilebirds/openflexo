@@ -25,25 +25,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.rm.ViewResourceImpl;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.view.rm.ViewResourceImpl;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -56,7 +51,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class View extends ViewObject implements XMLStorageResourceData<View> {
+public class View extends ViewObject implements ResourceData<View> {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 

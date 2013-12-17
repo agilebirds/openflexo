@@ -38,7 +38,7 @@ import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;

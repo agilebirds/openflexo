@@ -3,7 +3,6 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 
-import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;

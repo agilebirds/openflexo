@@ -2,17 +2,11 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.flexo.model.EventNode;
+import org.flexo.model.FlexoModelObject;
+import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.ProcessFolder;
-import org.openflexo.foundation.wkf.Role;
-import org.openflexo.foundation.wkf.node.AbstractActivityNode;
-import org.openflexo.foundation.wkf.node.ActionNode;
-import org.openflexo.foundation.wkf.node.EventNode;
-import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {

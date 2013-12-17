@@ -9,7 +9,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.toolbox.IProgress;
 
@@ -63,7 +62,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	 */
 	@Override
 	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
+			FileNotFoundException, FlexoException {
 		if (resourceData == null && isLoadable()) {
 			// The resourceData is null, we try to load it
 			resourceData = loadResourceData(progress);

@@ -45,7 +45,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.DocTypeAdded;
 import org.openflexo.foundation.cg.DocTypeRemoved;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableModification;
 import org.openflexo.inspector.InspectableObject;

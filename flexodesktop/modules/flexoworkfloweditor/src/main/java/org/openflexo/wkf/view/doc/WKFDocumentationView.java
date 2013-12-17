@@ -37,7 +37,7 @@ import org.openflexo.components.tabular.model.TextColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.selection.SelectionListener;

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import org.openflexo.dm.view.controller.DiagramPerspective;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.dm.ERDiagram;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.view.ModuleView;
 
 public class DiagramView extends DrawingView<ERDiagramRepresentation> implements ModuleView<ERDiagram>, PropertyChangeListener {

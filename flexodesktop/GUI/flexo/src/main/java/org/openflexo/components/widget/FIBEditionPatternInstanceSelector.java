@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;

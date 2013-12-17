@@ -23,9 +23,8 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;

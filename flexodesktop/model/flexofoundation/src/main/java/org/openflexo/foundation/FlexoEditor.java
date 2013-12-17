@@ -29,8 +29,7 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.action.UndoManager;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ResourceUpdateHandler;
+import org.openflexo.foundation.resource.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public interface FlexoEditor {

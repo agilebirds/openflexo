@@ -25,7 +25,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.ComponentDeleted;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged2;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.generator.ie.PopupComponentGenerator;
 import org.openflexo.logging.FlexoLogger;

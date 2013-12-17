@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;

@@ -22,18 +22,17 @@ package org.openflexo.foundation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.foundation.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceManager;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.xml.XMLSerializationService;
 
 /**
  * Default implementation of a manager of {@link FlexoService}<br>
@@ -49,18 +48,18 @@ import org.openflexo.foundation.xml.XMLSerializationService;
  * @author sylvain
  * 
  */
-public abstract class FlexoServiceManager extends FlexoObject {
+public abstract class FlexoServiceManager /*extends FlexoObject*/{
 
-	private ArrayList<FlexoService> registeredServices;
+	private final ArrayList<FlexoService> registeredServices;
 
 	public FlexoServiceManager() {
 		registeredServices = new ArrayList<FlexoService>();
 	}
 
-	@Override
+	/*@Override
 	public String getFullyQualifiedName() {
 		return "FlexoServiceManager";
-	}
+	}*/
 
 	/**
 	 * Register the supplied service, by adding it in the list of all services managed by this {@link FlexoServiceManager} instance<br>
@@ -116,9 +115,9 @@ public abstract class FlexoServiceManager extends FlexoObject {
 		return getService(FlexoProjectReferenceLoader.class);
 	}
 
-	public XMLSerializationService getXMLSerializationService() {
+	/*public XMLSerializationService getXMLSerializationService() {
 		return getService(XMLSerializationService.class);
-	}
+	}*/
 
 	public ResourceManager getResourceManager() {
 		return getService(ResourceManager.class);
@@ -127,7 +126,7 @@ public abstract class FlexoServiceManager extends FlexoObject {
 	public class ServiceRegistered implements ServiceNotification {
 	}
 
-	protected abstract XMLSerializationService createXMLSerializationService();
+	// protected abstract XMLSerializationService createXMLSerializationService();
 
 	protected abstract FlexoEditor createApplicationEditor();
 

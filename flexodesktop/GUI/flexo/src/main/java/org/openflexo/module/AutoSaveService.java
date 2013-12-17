@@ -44,7 +44,7 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.PropertyListParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;

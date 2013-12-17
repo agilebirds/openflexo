@@ -27,7 +27,7 @@ import javax.swing.JComponent;
 
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTypeOwner;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.PropertyModel;

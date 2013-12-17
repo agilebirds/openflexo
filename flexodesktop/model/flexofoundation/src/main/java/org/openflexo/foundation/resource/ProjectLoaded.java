@@ -1,7 +1,7 @@
 package org.openflexo.foundation.resource;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
-import org.openflexo.foundation.rm.FlexoProject;
 
 public final class ProjectLoaded implements ServiceNotification {
 	private FlexoProject project;

@@ -39,7 +39,7 @@ import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.cg.templates.CGTemplate;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.SGTemplates;

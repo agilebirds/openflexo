@@ -19,19 +19,18 @@
  */
 package org.openflexo.foundation;
 
+import org.openflexo.foundation.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceManager;
 import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.xml.XMLSerializationService;
 
 /**
  * Default implementation of {@link FlexoServiceManager}
@@ -43,8 +42,8 @@ import org.openflexo.foundation.xml.XMLSerializationService;
 public class DefaultFlexoServiceManager extends FlexoServiceManager {
 
 	public DefaultFlexoServiceManager() {
-		XMLSerializationService xmlSerializationService = createXMLSerializationService();
-		registerService(xmlSerializationService);
+		// XMLSerializationService xmlSerializationService = createXMLSerializationService();
+		// registerService(xmlSerializationService);
 		ResourceManager resourceManager = createResourceManager();
 		registerService(resourceManager);
 		FlexoProjectReferenceLoader projectReferenceLoader = createProjectReferenceLoader();
@@ -61,10 +60,10 @@ public class DefaultFlexoServiceManager extends FlexoServiceManager {
 		registerService(viewPointLibrary);
 	}
 
-	@Override
+	/*@Override
 	protected XMLSerializationService createXMLSerializationService() {
 		return XMLSerializationService.createInstance();
-	}
+	}*/
 
 	@Override
 	protected ResourceManager createResourceManager() {

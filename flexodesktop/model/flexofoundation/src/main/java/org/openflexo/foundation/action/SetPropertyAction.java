@@ -25,8 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.wkf.action.OpenPortRegistery;
-import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**

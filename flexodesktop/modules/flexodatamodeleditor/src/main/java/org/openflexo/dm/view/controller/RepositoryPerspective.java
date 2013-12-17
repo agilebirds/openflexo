@@ -38,7 +38,7 @@ import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.JDKRepository;
 import org.openflexo.foundation.dm.WORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;

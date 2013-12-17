@@ -23,11 +23,9 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
-import org.openflexo.foundation.xml.ViewBuilder;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**

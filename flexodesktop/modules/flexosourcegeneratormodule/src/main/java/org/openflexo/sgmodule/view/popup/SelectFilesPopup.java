@@ -41,7 +41,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFolder;
 import org.openflexo.foundation.cg.CGPathElement;
 import org.openflexo.foundation.cg.CGSymbolicDirectory;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.generator.file.AbstractCGFile;
 import org.openflexo.icon.IconLibrary;

@@ -27,8 +27,9 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.XMLSerializableFlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
@@ -47,7 +48,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public abstract class ViewPointObject extends XMLSerializableFlexoObject implements Bindable, Validable {
+public abstract class ViewPointObject extends FlexoObject implements Bindable, Validable, InnerResourceData {
 
 	private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
 

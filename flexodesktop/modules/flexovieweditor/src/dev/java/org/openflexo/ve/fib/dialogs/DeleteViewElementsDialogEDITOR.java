@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.action.DeleteDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;

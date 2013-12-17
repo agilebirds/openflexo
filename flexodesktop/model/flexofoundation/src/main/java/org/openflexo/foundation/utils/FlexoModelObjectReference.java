@@ -22,27 +22,27 @@ package org.openflexo.foundation.utils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.KVCFlexoObject;
+import org.openflexo.foundation.ProjectData;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.FlexoStorageResource.ResourceLoadingListener;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
-import org.openflexo.foundation.rm.ProjectData;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.resource.ResourceLoadingListener;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.factory.EmbeddingType;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * 
@@ -54,7 +54,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @param <O>
  */
-public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFlexoObject implements
+public class FlexoModelObjectReference<O extends FlexoProjectObject> extends KVCFlexoObject implements
 		StringConvertable<FlexoModelObjectReference<O>>, ResourceLoadingListener, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
@@ -78,23 +78,20 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	private static final String SEPARATOR = "#";
 	private static final String PROJECT_SEPARATOR = "|";
+	private static final String ID_SEPARATOR = "_";
 
 	/**
 	 * @return
 	 */
-	public static String getSerializationRepresentationForObject(FlexoModelObject modelObject, boolean serializeClassName) {
-		// HACK: We temporary maintain access to old resource scheme and new one
-		if (modelObject.getXMLResourceData().getFlexoResource() != null) {
-			return modelObject.getProject().getURI() + PROJECT_SEPARATOR
-					+ modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
-					+ modelObject.getSerializationIdentifier() + (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
-		} else if (modelObject.getXMLResourceData().getResource() != null) {
-			return modelObject.getProject().getURI() + PROJECT_SEPARATOR + modelObject.getXMLResourceData().getResource().getURI()
-					+ SEPARATOR + modelObject.getSerializationIdentifier()
+	public static String getSerializationRepresentationForObject(FlexoProjectObject modelObject, boolean serializeClassName) {
+
+		if (modelObject.getResourceData() != null && modelObject.getResourceData().getResource() != null) {
+			return modelObject.getProject().getURI() + PROJECT_SEPARATOR + modelObject.getResourceData().getResource().getURI() + SEPARATOR
+					+ SEPARATOR + modelObject.getUserIdentifier() + ID_SEPARATOR + String.valueOf(modelObject.getFlexoID())
 					+ (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	private String resourceIdentifier;
@@ -138,19 +135,14 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		 * reference, we will have to serialize this without any data which will be a disaster (we should expect NullPointer,
 		 * ArrayIndexOutOfBounds, etc...
 		 */
-		if (modelObject.getXMLResourceData() != null) {
-			// BEGIN @Deprecated
-			if (modelObject.getXMLResourceData().getFlexoResource() != null) {
-				this.resourceIdentifier = modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier();
-			} else // END @Deprecated
-			if (modelObject.getXMLResourceData().getResource() != null) {
-				this.resourceIdentifier = modelObject.getXMLResourceData().getResource().getURI();
+		if (modelObject.getResourceData() != null) {
+			if (modelObject.getResourceData().getResource() != null) {
+				this.resourceIdentifier = modelObject.getResourceData().getResource().getURI();
 			} else {
-				logger.warning("object " + modelObject + " has a XML resource data (" + modelObject.getXMLResourceData()
-						+ ") with null resource ");
+				logger.warning("object " + modelObject + " has a resource data (" + modelObject.getResourceData() + ") with null resource ");
 			}
 		} else {
-			logger.warning("object " + modelObject + " has no XML resource data !");
+			logger.warning("object " + modelObject + " has no resource data !");
 		}
 		this.userIdentifier = modelObject.getUserIdentifier();
 		this.flexoID = modelObject.getFlexoID();
@@ -177,9 +169,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 			}
 			String[] s = modelObjectIdentifier.split(SEPARATOR);
 			this.resourceIdentifier = s[0];
-			this.userIdentifier = s[1].substring(0, s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR));
-			this.flexoID = Long.valueOf(s[1].substring(s[1].lastIndexOf(FlexoModelObject.ID_SEPARATOR)
-					+ FlexoModelObject.ID_SEPARATOR.length()));
+			this.userIdentifier = s[1].substring(0, s[1].lastIndexOf(ID_SEPARATOR));
+			this.flexoID = Long.valueOf(s[1].substring(s[1].lastIndexOf(ID_SEPARATOR) + ID_SEPARATOR.length()));
 			if (s.length == 3) {
 				this.className = s[2];
 				serializeClassName = true;
@@ -198,23 +189,23 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	public void delete(boolean notify) {
 		if (!deleted) {
 			deleted = true;
-		if (getReferringProject() != null) {
-			getReferringProject().removeObjectReferences(this);
-		}
-		// TODO: OLD FlexoResource scheme
-		if (getResource(false) instanceof FlexoXMLStorageResource) {
-			((FlexoXMLStorageResource) getResource(false)).removeResourceLoadingListener(this);
-			((FlexoXMLStorageResource) getResource(false)).getPropertyChangeSupport().removePropertyChangeListener("name", this);
-		}
-		if (modelObject != null) {
-			modelObject.removeFromReferencers(this);
-		}
+			if (getReferringProject() != null) {
+				getReferringProject().removeObjectReferences(this);
+			}
+			// TODO: OLD FlexoResource scheme
+			/*if (getResource(false) instanceof FlexoXMLStorageResource) {
+				((FlexoXMLStorageResource) getResource(false)).removeResourceLoadingListener(this);
+				((FlexoXMLStorageResource) getResource(false)).getPropertyChangeSupport().removePropertyChangeListener("name", this);
+			}*/
+			if (modelObject != null) {
+				modelObject.removeFromReferencers(this);
+			}
 			if (owner != null) {
 				owner.objectDeleted(this);
 			}
-		owner = null;
-		modelObject = null;
-	}
+			owner = null;
+			modelObject = null;
+		}
 	}
 
 	public O getObject() {
@@ -252,47 +243,43 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource(force) == null
-						|| getResource(force).isLoaded()
-						// TODO: OLD FlexoResource scheme
-						&& (!(getResource(force) instanceof FlexoXMLStorageResource) || !((FlexoXMLStorageResource) getResource(force))
-								.getIsLoading())) {
+				} else if (getResource(force) == null || getResource(force).isLoaded()
+				// TODO: OLD FlexoResource scheme
+				/*&& (!(getResource(force) instanceof FlexoXMLStorageResource) || !((FlexoXMLStorageResource) getResource(force))
+						.getIsLoading())*/) {
 					if (getResource(force) == null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
 					}
 					if (force) {
-					owner.objectCantBeFound(this);
+						owner.objectCantBeFound(this);
+					}
 				}
 			}
-		}
 		}
 		return modelObject;
 	}
 
-	private O findObjectInResource(FlexoXMLFileResource resource) {
+	private O findObjectInResource(PamelaResource<?, ?> resource) {
 		try {
 			// Ensure the resource is loaded
-			ResourceData resourceData;
-			resourceData = resource.getResourceData(null);
-			XMLMapping mapping = resource.getXMLSerializationService().getMappingForClassAndVersion(resource.getResourceDataClass(),
-					resource.getModelVersion());
-			Collection<FlexoModelObject> containedObjects = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class,
-					false, true);
-			for (FlexoModelObject temp : containedObjects) {
-				if (temp.getFlexoID() == flexoID && temp.getUserIdentifier().equals(userIdentifier)) {
-					logger.info("Found object " + userIdentifier + "_" + flexoID + " : SUCCEEDED (is " + temp + ")");
-					return (O) temp;
+			ResourceData<?> resourceData = resource.getResourceData(null);
+
+			List<Object> allObjects = resource.getFactory().getEmbeddedObjects(resourceData, EmbeddingType.CLOSURE);
+			for (Object temp : allObjects) {
+				if (temp instanceof FlexoObject) {
+					FlexoObject o = (FlexoObject) temp;
+					if (o.getFlexoID() == flexoID && o.getUserIdentifier().equals(userIdentifier)) {
+						logger.info("Found object " + userIdentifier + "_" + flexoID + " : SUCCEEDED (is " + temp + ")");
+						return (O) temp;
+					}
 				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FlexoException e) {
@@ -300,29 +287,6 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 			e.printStackTrace();
 		}
 		logger.warning("Cannot find object " + userIdentifier + "_" + flexoID + " in resource " + resource);
-		ResourceData resourceData = null;
-		try {
-			resourceData = resource.getResourceData(null);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ResourceLoadingCancelledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FlexoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		XMLMapping mapping = resource.getXMLSerializationService().getMappingForClassAndVersion(resource.getResourceDataClass(),
-				resource.getModelVersion());
-		Collection<FlexoModelObject> containedObjects = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class);
-		Collection<FlexoModelObject> containedObjects2 = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class, false,
-				false);
-		Collection<FlexoModelObject> containedObjects3 = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class, false,
-				true);
 		return null;
 	}
 
@@ -374,7 +338,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		if (resource == null) {
 			FlexoProject enclosingProject = getEnclosingProject(force);
 			if (enclosingProject != null) {
-				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				resource = (PamelaResource) enclosingProject.resourceForKey(resourceIdentifier);
 				// TODO: OLD FlexoResource scheme
 				if (resource != null) {
 					((FlexoXMLStorageResource) resource).addResourceLoadingListener(this);

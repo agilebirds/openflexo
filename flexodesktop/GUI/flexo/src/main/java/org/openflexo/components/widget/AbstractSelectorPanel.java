@@ -52,7 +52,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.SelectionController;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.CustomPopup;
 

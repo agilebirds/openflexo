@@ -34,7 +34,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoWebServerFileResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.ResourceType;

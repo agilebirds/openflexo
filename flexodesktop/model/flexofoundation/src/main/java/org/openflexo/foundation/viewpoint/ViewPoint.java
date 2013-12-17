@@ -35,20 +35,18 @@ import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewPointResourceImpl;
-import org.openflexo.foundation.rm.VirtualModelResource;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResourceImpl;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
@@ -80,7 +78,7 @@ import org.openflexo.xmlcode.StringEncoder;
  * @author sylvain
  * 
  */
-public class ViewPoint extends NamedViewPointObject implements XMLStorageResourceData<ViewPoint> {
+public class ViewPoint extends NamedViewPointObject implements ResourceData<ViewPoint> {
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 

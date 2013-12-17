@@ -53,7 +53,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;

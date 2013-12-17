@@ -102,12 +102,6 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 		return resourceRepository;
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public File getFile() {
 		if (isRootFolder()) {
 			if (getResourceRepository() instanceof FileResourceRepository) {

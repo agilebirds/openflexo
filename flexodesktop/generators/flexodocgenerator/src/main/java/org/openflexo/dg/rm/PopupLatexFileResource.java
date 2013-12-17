@@ -22,7 +22,7 @@ package org.openflexo.dg.rm;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.logging.FlexoLogger;
 

@@ -30,7 +30,7 @@ import org.netbeans.lib.cvsclient.connection.AuthenticationException;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSModule;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepositoryList;

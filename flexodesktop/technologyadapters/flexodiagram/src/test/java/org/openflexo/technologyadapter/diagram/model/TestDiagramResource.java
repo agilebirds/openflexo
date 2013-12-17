@@ -16,7 +16,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Test DiagramResource in Openflexo ResourceManager
+ * Test ProjectDataResource in Openflexo ResourceManager
  * 
  * @author sylvain
  * 

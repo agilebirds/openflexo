@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.InspectableObject;

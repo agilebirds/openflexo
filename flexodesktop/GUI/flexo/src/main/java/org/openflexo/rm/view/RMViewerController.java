@@ -30,7 +30,7 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.swing.JDianaInteractiveViewer;
 import org.openflexo.fge.swing.control.SwingToolFactory;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class RMViewerController extends JDianaInteractiveViewer<FlexoProject> {

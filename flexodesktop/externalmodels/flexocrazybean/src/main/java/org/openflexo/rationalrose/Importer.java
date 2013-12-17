@@ -41,7 +41,7 @@ import org.openflexo.foundation.dm.DMVisibilityType;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.dm.RationalRoseRepository;
 import org.openflexo.foundation.dm.action.CreateDMMethod;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 import cb.parser.EOModelExtractor;

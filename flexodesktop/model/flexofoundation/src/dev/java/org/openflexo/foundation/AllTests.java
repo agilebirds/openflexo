@@ -24,20 +24,10 @@ import java.lang.reflect.InvocationTargetException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.openflexo.antar.binding.TestBinding;
 import org.openflexo.diff.TestDiff;
 import org.openflexo.diff.merge.TestMerge;
 import org.openflexo.diff.merge.TestMerge2;
-import org.openflexo.foundation.cg.TestCGFoundation;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.dm.TestBinding;
-import org.openflexo.foundation.dm.TestDMType;
-import org.openflexo.foundation.dm.TestLoadJar;
-import org.openflexo.foundation.dm.eo.model.TestEOModelCreation;
-import org.openflexo.foundation.dm.eo.model.TestEOModelLoad;
-import org.openflexo.foundation.ie.TestCreateComponent;
-import org.openflexo.foundation.ie.menu.action.TestMenu;
-import org.openflexo.foundation.rm.TestRM;
-import org.openflexo.foundation.wkf.TestDropWKFElement;
 import org.openflexo.utils.UtilsTestSuite;
 import org.openflexo.xmlcode.examples.XMLCoDeTestSuite;
 

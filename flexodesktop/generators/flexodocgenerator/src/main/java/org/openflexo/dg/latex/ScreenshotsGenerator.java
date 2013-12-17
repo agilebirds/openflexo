@@ -32,7 +32,7 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.ViewResource;

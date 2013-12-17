@@ -32,9 +32,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoListModel;
 import org.openflexo.localization.FlexoLocalization;
 

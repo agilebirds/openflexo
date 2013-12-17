@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an object which is part of the model of an EditionScheme

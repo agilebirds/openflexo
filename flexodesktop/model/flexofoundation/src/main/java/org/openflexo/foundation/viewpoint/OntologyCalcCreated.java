@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.dm.OntologyDataModification;
-import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 
 /**
  * Notify that a new viewpoint has been registered in ViewPointLibrary

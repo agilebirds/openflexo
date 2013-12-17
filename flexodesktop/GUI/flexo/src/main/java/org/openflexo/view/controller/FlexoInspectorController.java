@@ -50,7 +50,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.HelpDelegate;
 import org.openflexo.inspector.InspectorController;
 import org.openflexo.inspector.InspectorDelegate;

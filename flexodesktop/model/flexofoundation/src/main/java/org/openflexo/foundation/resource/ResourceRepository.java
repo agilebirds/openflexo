@@ -55,7 +55,7 @@ public abstract class ResourceRepository<R extends FlexoResource<?>> extends Fle
 	 */
 	protected HashMap<String, R> resources;
 
-	private RepositoryFolder<R> rootFolder;
+	private final RepositoryFolder<R> rootFolder;
 
 	/** Stores the object which is the "owner" of this repository */
 	private Object owner;
@@ -212,11 +212,6 @@ public abstract class ResourceRepository<R extends FlexoResource<?>> extends Fle
 	 */
 	public int getSize() {
 		return resources.size();
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return "ResourceRepository";
 	}
 
 	/**

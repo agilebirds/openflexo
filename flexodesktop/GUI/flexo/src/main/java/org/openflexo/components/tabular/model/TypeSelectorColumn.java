@@ -29,7 +29,7 @@ import org.openflexo.components.widget.DMTypeSelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMTypeOwner;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Please comment this class

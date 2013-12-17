@@ -23,10 +23,10 @@ import java.util.Observer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.DocType;
+import org.flexo.model.FlexoModelObject;
+import org.jdom2.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**

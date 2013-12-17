@@ -43,7 +43,7 @@ import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.MethodReference;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference.PropertyReference;
 import org.openflexo.foundation.dm.LoadableDMEntity;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;

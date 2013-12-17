@@ -35,19 +35,20 @@ import org.openflexo.foundation.action.DeleteFlexoProperty;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.SortFlexoProperties;
-import org.openflexo.foundation.rm.FlexoResourceData;
-import org.openflexo.foundation.rm.RMNotification;
-import org.openflexo.foundation.utils.FlexoDocFormat;
+import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HTMLUtils;
 
 /**
  * Super class for any object involved in Openflexo in model layer<br>
+ * 
  * This abstract class represents an object, or "data" in the model-view paradigm.<br>
+ * 
+ * A {@link FlexoObject} always references its ResourceData (the global functional root object)
+ * 
  * This class provides default implementation for validation (see {@link Validable} interface). When relevant, just extends interface
  * {@link Validable} and implements both methods {@link Validable#getDefaultValidationModel()} and
  * {@link Validable#getAllEmbeddedValidableObjects()}
@@ -67,9 +68,6 @@ public abstract class FlexoObject extends FlexoObservable {
 	private Object context;
 
 	private String description;
-
-	private boolean dontGenerate = false;
-	private FlexoDocFormat docFormat;
 
 	private Map<String, String> specificDescriptions;
 	private Vector<FlexoProperty> customProperties;
@@ -109,8 +107,8 @@ public abstract class FlexoObject extends FlexoObservable {
 	 * 
 	 * @return
 	 */
-	@Deprecated
-	public abstract String getFullyQualifiedName();
+	// @Deprecated
+	// public abstract String getFullyQualifiedName();
 
 	/**
 	 * Abstract implementation of delete<br>
@@ -213,89 +211,12 @@ public abstract class FlexoObject extends FlexoObservable {
 		return lastMemoryUpdate;
 	}
 
-	/**
-	 * 
-	 * Notify ResourceManager by forwarding {@link RMNotification} to the related resource, if and only if this object represents the
-	 * resource data itself (@see org.openflexo.foundation.rm.FlexoResourceData). Otherwise, invoking this method is ignored.
-	 * 
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#notifyRM(org.openflexo.foundation.rm.RMNotification)
-	 */
-	public void notifyRM(RMNotification notification) throws FlexoException {
-		if (this instanceof FlexoResourceData && ((FlexoResourceData) this).getFlexoResource() != null) {
-			((FlexoResourceData) this).getFlexoResource().notifyRM(notification);
-		}
-	}
-
-	/**
-	 * Receive a notification that has been propagated by the ResourceManager scheme and coming from a modification on an other resource
-	 * This method is relevant if and only if this object represents the resource data itself (@see
-	 * org.openflexo.foundation.rm.FlexoResourceData). At this level, this method is ignored and just return, so you need to override it in
-	 * subclasses if you want to get the hook to do your stuff !
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#receiveRMNotification(org.openflexo.foundation.rm.RMNotification)
-	 */
-	public void receiveRMNotification(RMNotification notification) throws FlexoException {
-		// Ignore it at this level: please overrides this method in relevant
-		// subclasses !
-	}
-
 	public Object getContext() {
 		return context;
 	}
 
 	public void setContext(Object context) {
 		this.context = context;
-	}
-
-	/**
-	 * @deprecated
-	 * @param dontEscapeLatex
-	 */
-	@Deprecated
-	public void setDontEscapeLatex(boolean dontEscapeLatex) {
-		if (dontEscapeLatex) {
-			setDocFormat(FlexoDocFormat.LATEX);
-		}
-		setChanged();
-		notifyObservers(new DataModification("dontEscapeLatex", null, new Boolean(dontEscapeLatex)));
-	}
-
-	public FlexoDocFormat getDocFormat() {
-		return docFormat;
-	}
-
-	public void setDocFormat(FlexoDocFormat docFormat) {
-		setDocFormat(docFormat, true);
-	}
-
-	public void setDocFormat(FlexoDocFormat docFormat, boolean notify) {
-		FlexoDocFormat old = this.docFormat;
-		this.docFormat = docFormat;
-		if (notify) {
-			setChanged();
-			notifyObservers(new DataModification("docFormat", old, docFormat));
-		}
-	}
-
-	/**
-	 * @return Returns the dontGenerate.
-	 */
-	public boolean getDontGenerate() {
-		return dontGenerate;
-	}
-
-	/**
-	 * @param dontGenerate
-	 *            The dontGenerate to set.
-	 */
-	public void setDontGenerate(boolean dontGenerate) {
-		boolean old = this.dontGenerate;
-		if (old != dontGenerate) {
-			this.dontGenerate = dontGenerate;
-			setChanged();
-			notifyObservers(new WKFAttributeDataModification("dontGenerate", new Boolean(old), new Boolean(dontGenerate)));
-		}
 	}
 
 	// ***************************************************
@@ -616,72 +537,6 @@ public abstract class FlexoObject extends FlexoObservable {
 		return getSpecificDescriptionForKey(key) != null && getSpecificDescriptionForKey(key).trim().length() > 0;
 	}
 
-	public String getUserManualDescription() {
-		return getSpecificDescriptionForKey(DocType.DefaultDocType.UserManual.name());
-	}
-
-	public String getTechnicalDescription() {
-		return getSpecificDescriptionForKey(DocType.DefaultDocType.Technical.name());
-	}
-
-	public String getBusinessDescription() {
-		return getSpecificDescriptionForKey(DocType.DefaultDocType.Business.name());
-	}
-
-	/**
-	 * @param businessDescription
-	 */
-	public void setBusinessDescription(String businessDescription) {
-		if (businessDescription != null) {
-			setSpecificDescriptionsForKey(businessDescription, DocType.DefaultDocType.Business.name());
-		} else {
-			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.Business.name());
-		}
-		setChanged();
-		notifyObservers(new DataModification("businessDescription", null, businessDescription));
-	}
-	
-	
-	// PRI REQUIREMENT
-	/**
-	 * @param freePropertiesDescription
-	 */
-	public void setFreePropertiesDescription(String freePropertiesDescription) {
-		if (freePropertiesDescription != null) {
-			setSpecificDescriptionsForKey(freePropertiesDescription, DocType.DefaultDocType.FreeProperties.name());
-		} else {
-			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.FreeProperties.name());
-		}
-		setChanged();
-		notifyObservers(new DataModification("freePropertiesDescription", null, freePropertiesDescription));
-	}
-
-	/**
-	 * @param technicalDescription
-	 */
-	public void setTechnicalDescription(String technicalDescription) {
-		if (technicalDescription != null) {
-			setSpecificDescriptionsForKey(technicalDescription, DocType.DefaultDocType.Technical.name());
-		} else {
-			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.Technical.name());
-		}
-		setChanged();
-		notifyObservers(new DataModification("technicalDescription", null, technicalDescription));
-	}
-
-	/**
-	 * @param userManualDescription
-	 */
-	public void setUserManualDescription(String userManualDescription) {
-		if (userManualDescription != null) {
-			setSpecificDescriptionsForKey(userManualDescription, DocType.DefaultDocType.UserManual.name());
-		} else {
-			removeSpecificDescriptionsWithKey(DocType.DefaultDocType.UserManual.name());
-		}
-		setChanged();
-		notifyObservers(new DataModification("userManualDescription", null, userManualDescription));
-	}
-
 	public String getSpecificDescriptionForKey(String key) {
 		return specificDescriptions.get(key);
 	}
@@ -793,10 +648,6 @@ public abstract class FlexoObject extends FlexoObservable {
 		}
 	}
 
-	public List<DocType> getDocTypes() {
-		return null;
-	}
-
 	private static HelpRetriever _helpRetriever = null;
 
 	public static interface HelpRetriever {
@@ -833,6 +684,72 @@ public abstract class FlexoObject extends FlexoObservable {
 
 	public static void setHelpRetriever(HelpRetriever retriever) {
 		_helpRetriever = retriever;
+	}
+
+	private static String currentUserIdentifier;
+
+	public static String getCurrentUserIdentifier() {
+		if (currentUserIdentifier == null) {
+			currentUserIdentifier = "FLX".intern();
+		}
+		return currentUserIdentifier;
+	}
+
+	public static void setCurrentUserIdentifier(String aUserIdentifier) {
+		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
+			aUserIdentifier = aUserIdentifier.replace('#', '-');
+			currentUserIdentifier = aUserIdentifier.intern();
+		}
+	}
+
+	private String userIdentifier;
+
+	public String getUserIdentifier() {
+		if (userIdentifier == null) {
+			return getCurrentUserIdentifier();
+		}
+		return userIdentifier;
+	}
+
+	public void setUserIdentifier(String aUserIdentifier) {
+		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
+			aUserIdentifier = aUserIdentifier.replace('#', '-');
+		}
+		userIdentifier = aUserIdentifier != null ? aUserIdentifier.intern() : null;
+	}
+
+	private long flexoID = -1;
+
+	/**
+	 * Returns the flexoID.
+	 * 
+	 * @return
+	 */
+	public long getFlexoID() {
+		if (flexoID < 0) {
+			if (this instanceof InnerResourceData && ((InnerResourceData) this).getResourceData() != null
+					&& ((InnerResourceData) this).getResourceData().getResource() instanceof PamelaResource) {
+				flexoID = ((PamelaResource<?, ?>) ((InnerResourceData) this).getResourceData().getResource()).getNewFlexoID();
+			}
+		}
+		return flexoID;
+	}
+
+	/**
+	 * Sets the flexoID
+	 * 
+	 * @param flexoID
+	 *            The flexoID to set.
+	 */
+	public void setFlexoID(long flexoID) {
+		if (flexoID > 0 && flexoID != this.flexoID) {
+			long oldId = this.flexoID;
+			this.flexoID = flexoID;
+			if (this instanceof InnerResourceData && ((InnerResourceData) this).getResourceData() != null
+					&& ((InnerResourceData) this).getResourceData().getResource() instanceof PamelaResource) {
+				// TODO sets last id of resource ?
+			}
+		}
 	}
 
 }

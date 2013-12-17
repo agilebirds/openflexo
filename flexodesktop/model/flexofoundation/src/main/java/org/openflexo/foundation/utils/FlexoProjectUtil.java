@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FlexoVersion;
 

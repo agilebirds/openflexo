@@ -46,7 +46,7 @@ import org.openflexo.foundation.ie.widget.IELabelWidget;
 import org.openflexo.foundation.ie.widget.IEStringWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.ie.view.controller.ComponentBrowser;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.selection.SelectionListener;

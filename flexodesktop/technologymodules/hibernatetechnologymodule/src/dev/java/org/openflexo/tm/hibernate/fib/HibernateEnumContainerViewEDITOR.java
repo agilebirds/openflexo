@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.fib.ProjectDialogEDITOR;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
 import org.openflexo.tm.hibernate.gui.view.HibernateEnumContainerView;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;

@@ -36,7 +36,7 @@ import org.openflexo.foundation.ie.widget.IELabelWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.OperationPetriGraph;

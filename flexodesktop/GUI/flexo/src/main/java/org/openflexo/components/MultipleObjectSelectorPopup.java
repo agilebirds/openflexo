@@ -41,7 +41,7 @@ import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;

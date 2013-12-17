@@ -27,7 +27,7 @@ import org.openflexo.components.widget.DMEOEntitySelector;
 import org.openflexo.components.widget.DMEntitySelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * @author gpolet

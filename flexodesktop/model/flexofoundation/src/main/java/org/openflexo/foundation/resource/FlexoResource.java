@@ -5,11 +5,6 @@ import java.util.List;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.FlexoResourceTree;
-import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -238,8 +233,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * @return the resource data.
 	 * @throws ResourceLoadingCancelledException
 	 */
-	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException;
+	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException;
 
 	/**
 	 * Sets {@link ResourceData} for this resource
@@ -259,8 +253,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * @throws FileNotFoundException
 	 * @throws FlexoException
 	 */
-	public RD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException;
+	public RD loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException;
 
 	/**
 	 * Delete (dereference) resource data if resource data is loaded<br>
@@ -278,8 +271,8 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	/**
 	 * This method updates the resource.
 	 */
-	public FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
-			ProjectLoadingCancelledException, FlexoException;
+	/*public FlexoResourceTree update() throws ResourceDependencyLoopException, LoadResourceException, FileNotFoundException,
+			ProjectLoadingCancelledException, FlexoException;*/
 
 	/**
 	 * Called to notify that a resource has successfully been loaded

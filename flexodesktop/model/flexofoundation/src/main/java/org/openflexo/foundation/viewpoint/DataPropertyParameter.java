@@ -23,7 +23,6 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DataPropertyParameter extends PropertyParameter {
 

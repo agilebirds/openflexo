@@ -30,7 +30,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
 import org.openflexo.foundation.rm.FlexoDMResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.JavaFileResource;

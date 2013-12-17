@@ -27,7 +27,7 @@ import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Widget allowing to select a DocItem while browsing the DocResourceCenter

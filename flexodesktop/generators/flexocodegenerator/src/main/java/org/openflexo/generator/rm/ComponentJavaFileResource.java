@@ -32,7 +32,7 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentDeleted;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged2;
 import org.openflexo.foundation.rm.FlexoDMResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.cg.JavaFileResource;

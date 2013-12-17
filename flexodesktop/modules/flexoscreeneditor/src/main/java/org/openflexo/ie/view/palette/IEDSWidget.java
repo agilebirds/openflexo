@@ -37,7 +37,7 @@ import org.openflexo.foundation.ie.palette.FlexoIEPalette;
 import org.openflexo.foundation.ie.palette.FlexoIEPalette.FlexoIEPaletteWidget;
 import org.openflexo.foundation.ie.widget.IEAbstractWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.validation.ValidationModel;

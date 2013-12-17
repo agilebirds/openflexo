@@ -41,9 +41,9 @@ public class ModelFactory {
 	private Class<? extends List> listImplementationClass = Vector.class;
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
-	private Map<Class, PAMELAProxyFactory> proxyFactories;
+	private final Map<Class, PAMELAProxyFactory> proxyFactories;
 	private final StringEncoder stringEncoder;
-	private ModelContext modelContext;
+	private final ModelContext modelContext;
 
 	private ModelContext extendedContext;
 
@@ -410,6 +410,20 @@ public class ModelFactory {
 	 * @param context
 	 * @return
 	 */
+	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType) {
+		return getEmbeddedObjects(root, embeddingType, (Object[]) null);
+	}
+
+	/**
+	 * Build and return a List of embedded objects, using meta informations contained in related class All property should be annotated with
+	 * a @Embedded annotation which determine the way of handling this property
+	 * 
+	 * Supplied context is used to determine the closure of objects graph being constructed during this operation.
+	 * 
+	 * @param root
+	 * @param context
+	 * @return
+	 */
 	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType, Object... context) {
 		if (!isProxyObject(root)) {
 			return Collections.emptyList();
@@ -456,8 +470,8 @@ public class ModelFactory {
 	}
 
 	private class ConditionalPresence {
-		private Object object;
-		private List<Object> requiredPresence;
+		private final Object object;
+		private final List<Object> requiredPresence;
 
 		public ConditionalPresence(Object object, List<Object> requiredPresence) {
 			super();

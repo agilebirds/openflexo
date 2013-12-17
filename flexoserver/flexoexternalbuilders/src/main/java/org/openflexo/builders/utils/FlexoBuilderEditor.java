@@ -20,7 +20,7 @@ import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.ProjectGenerator;

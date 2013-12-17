@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.dg.latex.DGLatexGenerator;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.logging.FlexoLogger;

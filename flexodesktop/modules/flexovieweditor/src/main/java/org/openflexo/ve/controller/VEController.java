@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;

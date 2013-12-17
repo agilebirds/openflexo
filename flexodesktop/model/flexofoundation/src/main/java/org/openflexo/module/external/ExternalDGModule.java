@@ -19,7 +19,7 @@
  */
 package org.openflexo.module.external;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * External view of the Documentation Generator Module

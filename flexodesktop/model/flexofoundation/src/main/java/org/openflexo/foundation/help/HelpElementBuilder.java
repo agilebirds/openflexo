@@ -23,15 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.flexo.model.FlexoModelObject;
 import org.jdom2.CDATA;
 import org.jdom2.Element;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.ie.OperationComponentInstance;
-import org.openflexo.foundation.ie.widget.IEButtonWidget;
-import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
-import org.openflexo.foundation.rm.ScreenshotResource;
-import org.openflexo.foundation.wkf.node.ActionNode;
-import org.openflexo.foundation.wkf.node.OperationNode;
 
 public class HelpElementBuilder {
 

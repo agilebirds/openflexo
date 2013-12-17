@@ -45,7 +45,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IERegExp;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.wkf.DuplicateRoleException;

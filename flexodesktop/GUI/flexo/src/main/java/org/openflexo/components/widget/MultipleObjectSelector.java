@@ -28,7 +28,7 @@ import org.openflexo.components.tabular.model.AbstractColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.components.widget.SelectionTabularBrowserModel.SelectionTabularBrowserModelSelectionListener;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.view.controller.FlexoController;
 
 public class MultipleObjectSelector<E extends FlexoObject> extends TabularBrowserView implements

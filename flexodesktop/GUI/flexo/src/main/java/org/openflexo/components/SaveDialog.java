@@ -23,7 +23,7 @@ import java.awt.Component;
 
 import javax.swing.JOptionPane;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

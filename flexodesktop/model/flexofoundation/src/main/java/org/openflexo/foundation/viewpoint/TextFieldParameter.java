@@ -21,8 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-
 public class TextFieldParameter extends EditionSchemeParameter {
 
 	public TextFieldParameter(VirtualModel.VirtualModelBuilder builder) {

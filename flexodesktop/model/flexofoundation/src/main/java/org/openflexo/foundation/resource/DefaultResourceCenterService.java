@@ -6,7 +6,7 @@ import java.util.List;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager.ServiceRegistered;
-import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl.WillWriteFileOnDiskNotification;
+import org.openflexo.foundation.resource.PamelaResourceImpl.WillWriteFileOnDiskNotification;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -144,7 +144,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	 * 
 	 */
 	public class ResourceCenterAdded implements ServiceNotification {
-		private FlexoResourceCenter addedResourceCenter;
+		private final FlexoResourceCenter addedResourceCenter;
 
 		public ResourceCenterAdded(FlexoResourceCenter addedResourceCenter) {
 			this.addedResourceCenter = addedResourceCenter;
@@ -162,7 +162,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	 * 
 	 */
 	public class ResourceCenterRemoved implements ServiceNotification {
-		private FlexoResourceCenter removedResourceCenter;
+		private final FlexoResourceCenter removedResourceCenter;
 
 		public ResourceCenterRemoved(FlexoResourceCenter removedResourceCenter) {
 			this.removedResourceCenter = removedResourceCenter;

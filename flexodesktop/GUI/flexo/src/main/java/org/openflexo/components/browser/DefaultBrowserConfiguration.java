@@ -22,7 +22,7 @@ package org.openflexo.components.browser;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProjectObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 public class DefaultBrowserConfiguration implements BrowserConfiguration {
 

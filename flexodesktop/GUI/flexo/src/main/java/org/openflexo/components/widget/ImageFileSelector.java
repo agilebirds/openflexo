@@ -39,7 +39,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.TextFieldCustomPopup;

@@ -30,9 +30,8 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.action.UndoManager;
-import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ResourceUpdateHandler;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public class DefaultFlexoEditor implements FlexoEditor {
@@ -42,7 +41,7 @@ public class DefaultFlexoEditor implements FlexoEditor {
 
 	private final FlexoProject project;
 	private final FlexoServiceManager serviceManager;
-	private DefaultFlexoResourceUpdateHandler resourceUpdateHandler;
+	private final ResourceUpdateHandler resourceUpdateHandler;
 
 	public DefaultFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
 		this.project = project;
@@ -50,7 +49,13 @@ public class DefaultFlexoEditor implements FlexoEditor {
 		if (project != null) {
 			project.addToEditors(this);
 		}
-		resourceUpdateHandler = new DefaultFlexoResourceUpdateHandler();
+		resourceUpdateHandler = new ResourceUpdateHandler() {
+			@Override
+			public void resourceChanged(FlexoResource<?> resource) {
+				// TODO Auto-generated method stub
+
+			}
+		};
 	}
 
 	@Override

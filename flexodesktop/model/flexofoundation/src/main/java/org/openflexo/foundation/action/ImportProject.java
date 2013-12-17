@@ -2,15 +2,13 @@ package org.openflexo.foundation.action;
 
 import java.util.Vector;
 
+import org.flexo.model.FlexoModelObject;
+import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoPamelaResource;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.ProjectData;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.ProjectData;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 
 public class ImportProject extends FlexoAction<ImportProject, FlexoModelObject, FlexoModelObject> {
 

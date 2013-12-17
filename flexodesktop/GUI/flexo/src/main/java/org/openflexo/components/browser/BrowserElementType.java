@@ -107,7 +107,7 @@ import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;

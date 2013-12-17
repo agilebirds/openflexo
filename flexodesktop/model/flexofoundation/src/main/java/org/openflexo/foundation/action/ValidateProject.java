@@ -22,22 +22,17 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.CodeType;
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.dkv.DKVValidationModel;
-import org.openflexo.foundation.dm.DMValidationModel;
-import org.openflexo.foundation.ie.IEValidationModel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.validation.ValidationFinishedNotification;
 import org.openflexo.foundation.validation.ValidationInitNotification;
 import org.openflexo.foundation.validation.ValidationNotification;
 import org.openflexo.foundation.validation.ValidationProgressNotification;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.wkf.WKFValidationModel;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ValidateProject extends FlexoAction<ValidateProject, FlexoModelObject, FlexoModelObject> {

@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 
 public class ConceptActorReference<T extends IFlexoOntologyObject> extends ActorReference<T> {

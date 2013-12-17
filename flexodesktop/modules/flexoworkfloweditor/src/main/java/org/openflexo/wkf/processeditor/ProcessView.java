@@ -25,7 +25,7 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.edge.WKFEdge;
 import org.openflexo.view.ModuleView;

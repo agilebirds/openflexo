@@ -22,7 +22,6 @@ package org.openflexo.foundation.validation;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.foundation.TargetType;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

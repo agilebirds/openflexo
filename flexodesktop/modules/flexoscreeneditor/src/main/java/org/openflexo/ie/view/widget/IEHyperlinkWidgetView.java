@@ -44,7 +44,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
 import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.IEPreferences;
 import org.openflexo.ie.util.TriggerRepaintDocumentListener;

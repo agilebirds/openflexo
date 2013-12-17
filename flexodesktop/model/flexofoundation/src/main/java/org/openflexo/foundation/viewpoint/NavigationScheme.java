@@ -21,11 +21,11 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 

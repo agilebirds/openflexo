@@ -22,7 +22,7 @@ package org.openflexo.technologyadapter.xml.viewpoint;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;

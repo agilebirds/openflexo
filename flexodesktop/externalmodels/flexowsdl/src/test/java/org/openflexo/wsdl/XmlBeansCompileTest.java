@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;

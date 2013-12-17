@@ -46,7 +46,7 @@ import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.ValidateProject;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;

@@ -26,7 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Widget allowing to select a Key given a Domain browsing DKV model

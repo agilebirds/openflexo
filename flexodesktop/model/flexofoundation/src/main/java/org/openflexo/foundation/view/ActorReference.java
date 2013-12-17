@@ -1,7 +1,6 @@
 package org.openflexo.foundation.view;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.toolbox.StringUtils;

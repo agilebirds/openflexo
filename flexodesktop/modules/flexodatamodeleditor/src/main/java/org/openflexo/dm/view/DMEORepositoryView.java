@@ -41,7 +41,7 @@ import org.openflexo.foundation.dm.action.ImportDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;

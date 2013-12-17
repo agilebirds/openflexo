@@ -3,7 +3,6 @@ package org.openflexo.foundation;
 import java.io.File;
 
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.rm.FlexoProject;
 
 /**
  * Test purposes: implements an FlexoServiceManager with a unique ResourceCenter
@@ -13,7 +12,7 @@ import org.openflexo.foundation.rm.FlexoProject;
  */
 public class TestFlexoServiceManager extends DefaultFlexoServiceManager {
 
-	private File resourceCenterDirectory;
+	private final File resourceCenterDirectory;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
 		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {

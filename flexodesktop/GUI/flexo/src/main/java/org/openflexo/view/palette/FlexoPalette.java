@@ -37,7 +37,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.ve.controller.ViewLibraryPerspective;

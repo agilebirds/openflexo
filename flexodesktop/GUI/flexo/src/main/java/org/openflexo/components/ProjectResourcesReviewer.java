@@ -19,7 +19,7 @@
  */
 package org.openflexo.components;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 
 /**

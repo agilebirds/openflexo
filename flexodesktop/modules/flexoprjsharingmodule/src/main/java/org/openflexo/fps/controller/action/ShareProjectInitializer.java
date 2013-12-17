@@ -31,7 +31,7 @@ import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.InfoLabelParameter;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.FPSPreferences;
 import org.openflexo.fps.action.AddCVSRepository;

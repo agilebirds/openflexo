@@ -22,8 +22,8 @@ package org.openflexo.foundation.view.action;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;

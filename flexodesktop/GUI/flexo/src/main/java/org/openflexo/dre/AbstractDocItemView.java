@@ -76,7 +76,7 @@ import org.openflexo.drm.action.RemoveInheritanceChildItem;
 import org.openflexo.drm.action.RemoveRelatedToItem;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;

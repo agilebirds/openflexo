@@ -57,7 +57,7 @@ import org.openflexo.foundation.ie.widget.InvalidPercentage;
 import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheLeft;
 import org.openflexo.foundation.ie.widget.NotEnoughRoomOnTheRight;
 import org.openflexo.foundation.ie.widget.RowIsNotEmpty;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.ie.IEPreferences;

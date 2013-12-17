@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.components.widget.FIBDescriptionWidget;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.toolbox.FileResource;
 
 public class FIBDescriptionWidgetEDITOR extends ProjectDialogEDITOR {

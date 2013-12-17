@@ -40,7 +40,7 @@ import org.openflexo.components.ProjectResourcesReviewer;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.rm.FlexoGeneratedResource;
 import org.openflexo.foundation.rm.FlexoImportedResource;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.SaveResourceException;

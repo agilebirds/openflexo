@@ -28,7 +28,7 @@ import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.components.tabular.model.EditableStringColumn;
 import org.openflexo.components.tabular.model.IconColumn;
 import org.openflexo.components.tabular.model.StringColumn;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.DuplicateWSObjectException;

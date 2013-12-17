@@ -44,7 +44,7 @@ import org.openflexo.foundation.cg.templates.TemplateFileNotification;
 import org.openflexo.foundation.dkv.DKVValidationModel;
 import org.openflexo.foundation.dm.DMValidationModel;
 import org.openflexo.foundation.ie.IEValidationModel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.GeneratedResourceData;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;

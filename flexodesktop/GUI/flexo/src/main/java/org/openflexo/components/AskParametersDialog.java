@@ -41,7 +41,7 @@ import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParameterDefinition.ValueListener;
 import org.openflexo.foundation.param.ParametersModel;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.TabModelView;
 import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 import org.openflexo.inspector.widget.LabelWidget;

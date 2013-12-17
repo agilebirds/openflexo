@@ -21,9 +21,6 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.openflexo.foundation.dm.DMEntity;
-import org.openflexo.foundation.dm.ERDiagram;
-
 /**
  * External view of the DM Module
  * 

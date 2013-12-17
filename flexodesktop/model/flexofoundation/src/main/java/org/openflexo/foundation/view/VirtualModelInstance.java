@@ -32,17 +32,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
-import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -50,12 +44,13 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**

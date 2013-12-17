@@ -34,7 +34,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.view.controller.IEController;

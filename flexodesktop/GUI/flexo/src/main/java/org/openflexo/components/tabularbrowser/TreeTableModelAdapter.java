@@ -70,7 +70,7 @@ import javax.swing.tree.TreePath;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.tabular.model.AbstractModel;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.logging.FlexoLogger;
 
 /**

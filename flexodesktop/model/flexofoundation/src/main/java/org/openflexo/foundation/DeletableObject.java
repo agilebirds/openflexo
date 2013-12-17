@@ -19,13 +19,14 @@
  */
 package org.openflexo.foundation;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Interface implemented by objects able to be deleted
  * 
  * @author sguerin
  */
+@Deprecated
 public interface DeletableObject {
 
 	/**
@@ -34,12 +35,12 @@ public interface DeletableObject {
 	public boolean delete();
 
 	/**
-	 * Build and return a vector of all the objects that will be deleted during this deletion
+	 * Build and return a list of all the objects that will be deleted during this deletion
 	 * 
 	 * @param aVector
 	 *            of DeletableObject
 	 */
-	public Vector<? extends FlexoModelObject> getAllEmbeddedDeleted();
+	public List<? extends FlexoObject> getAllEmbeddedDeleted();
 
 	/**
 	 * Return a boolean indicating if this object has been deleted

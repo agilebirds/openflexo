@@ -79,7 +79,7 @@ import org.openflexo.foundation.bindings.BindingExpression.BindingValueVariable;
 import org.openflexo.foundation.bindings.BindingValue;
 import org.openflexo.foundation.bindings.StaticBinding;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.MouseOverButton;

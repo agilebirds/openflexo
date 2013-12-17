@@ -25,7 +25,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dkv.DKVModel;
 import org.openflexo.foundation.dkv.Domain;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 
 /**
  * Widget allowing to select a Domain while browsing the DKV model

@@ -21,9 +21,8 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.xml.ViewBuilder;
 
 /**
  * A {@link VirtualModelInstanceObject} an abstract run-time concept (instance) for an object "living" in a {@link VirtualModelInstance}

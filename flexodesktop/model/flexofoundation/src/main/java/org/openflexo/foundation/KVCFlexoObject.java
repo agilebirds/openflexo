@@ -19,43 +19,7 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fge.FGEUtils;
-import org.openflexo.foundation.cg.version.CGVersionIdentifier;
-import org.openflexo.foundation.dm.DMCardinality;
-import org.openflexo.foundation.dm.DMPropertyImplementationType;
-import org.openflexo.foundation.dm.DMVisibilityType;
-import org.openflexo.foundation.dm.eo.DMEOAdaptorType;
-import org.openflexo.foundation.dm.eo.DeleteRuleType;
-import org.openflexo.foundation.dm.eo.JoinSemanticType;
-import org.openflexo.foundation.ie.util.ClientSideEventType;
-import org.openflexo.foundation.ie.util.DateFormatType;
-import org.openflexo.foundation.ie.util.DropDownType;
-import org.openflexo.foundation.ie.util.FolderType;
-import org.openflexo.foundation.ie.util.HyperlinkActionType;
-import org.openflexo.foundation.ie.util.HyperlinkType;
-import org.openflexo.foundation.ie.util.IEControlOperator;
-import org.openflexo.foundation.ie.util.TDCSSType;
-import org.openflexo.foundation.ie.util.TRCSSType;
-import org.openflexo.foundation.ie.util.TextCSSClass;
-import org.openflexo.foundation.ie.util.TextFieldClass;
-import org.openflexo.foundation.ie.util.TextFieldFormatType;
-import org.openflexo.foundation.ie.util.TextFieldType;
-import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoDocFormat;
-import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.wkf.node.ActionType;
-import org.openflexo.foundation.wkf.node.LoopType;
-import org.openflexo.foundation.wkf.node.NodeType;
 import org.openflexo.kvc.KVCObject;
-import org.openflexo.localization.Language;
-import org.openflexo.toolbox.Duration;
-import org.openflexo.toolbox.FileFormat;
-import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.toolbox.RectangleConverter;
-import org.openflexo.xmlcode.StringEncoder;
 
 /**
  * This class intented to be root class for all objects representing data (in the context of Model/View/Controller scheme) in Flexo<br>
@@ -66,7 +30,7 @@ import org.openflexo.xmlcode.StringEncoder;
 @Deprecated
 public abstract class KVCFlexoObject extends KVCObject {
 
-	private static boolean isInitialized = false;
+	/*private static boolean isInitialized = false;
 
 	static {
 		initialize(true);
@@ -119,7 +83,7 @@ public abstract class KVCFlexoObject extends KVCObject {
 		encoder._addConverter(DataBinding.CONVERTER);
 		encoder._addConverter(FGEUtils.DEPRECATED_POINT_CONVERTER);
 		encoder._addConverter(FGEUtils.DEPRECATED_RECT_POLYLIN_CONVERTER);
-	}
+	}*/
 
 	@Override
 	public synchronized String valueForKey(String key) {

@@ -22,9 +22,8 @@ package org.openflexo.foundation.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.logging.FlexoLogger;
 
 public class DefaultProjectLoadingHandler implements ProjectLoadingHandler {

@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 
 /**
  * This class is used to stored the configuration of a {@link VirtualModelModelSlot} which has to be instantiated

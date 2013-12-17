@@ -2,10 +2,9 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 
 public class ModelObjectActorReference<T extends FlexoModelObject> extends ActorReference<T> {

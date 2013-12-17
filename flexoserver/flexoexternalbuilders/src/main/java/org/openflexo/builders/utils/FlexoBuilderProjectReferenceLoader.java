@@ -21,7 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.openflexo.builders.FlexoExternalMain;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectInitializerException;

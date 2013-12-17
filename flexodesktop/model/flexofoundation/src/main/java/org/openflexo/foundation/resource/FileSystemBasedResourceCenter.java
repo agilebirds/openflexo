@@ -33,14 +33,14 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointRepository;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResourceImpl;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
@@ -57,11 +57,11 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
 
-	private File rootDirectory;
+	private final File rootDirectory;
 
 	private ViewPointRepository viewPointRepository;
-	private HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>>();
-	private HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>>();
+	private final HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>>();
+	private final HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>>();
 
 	private TechnologyAdapterService technologyAdapterService;
 
@@ -262,7 +262,7 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 		}
 	}
 
-	private List<File> willBeWrittenFiles = new ArrayList<File>();
+	private final List<File> willBeWrittenFiles = new ArrayList<File>();
 
 	public synchronized void willWrite(File file) {
 		willBeWrittenFiles.add(file);
@@ -280,7 +280,7 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 		return false;
 	}
 
-	private HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>> repositories = new HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>>();
+	private final HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>> repositories = new HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>>();
 
 	private HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>> getRepositoriesForAdapter(
 			TechnologyAdapter technologyAdapter) {
