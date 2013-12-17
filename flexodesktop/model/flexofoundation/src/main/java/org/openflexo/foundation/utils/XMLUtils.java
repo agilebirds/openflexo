@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.xml;
+package org.openflexo.foundation.utils;
 
 /*
  * XMLUtils.java
@@ -36,18 +36,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.xerces.parsers.DOMParser;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.DOMBuilder;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.wkf.node.AbstractNode;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -207,27 +207,28 @@ public class XMLUtils {
 		return newString + message;
 	}
 
-	public static AbstractNode getNodeFromFile(File xmlFile, FlexoProject project) {
-		AbstractNode node;
-		try {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Trying to load " + xmlFile.getAbsolutePath());
-			}
-			XMLMapping wkfMapping = project.getXmlMappings().getWKFMapping();
-			node = (AbstractNode) XMLDecoder.decodeObjectWithMapping(new FileInputStream(xmlFile), wkfMapping, new FlexoProcessBuilder(
-					project), project.getStringEncoder());
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Succeeded loading palette element: " + xmlFile.getName());
-			}
-		} catch (Exception e) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Failed loading palette element: " + xmlFile.getAbsolutePath());
-			}
-			e.printStackTrace();
-			node = null;
-		}
-		return node;
-
+	public static org.jdom2.Document readXMLFile(File f) throws JDOMException, IOException {
+		FileInputStream fio = new FileInputStream(f);
+		SAXBuilder parser = new SAXBuilder();
+		org.jdom2.Document reply = parser.build(fio);
+		return reply;
 	}
 
+	public static org.jdom2.Element getElement(org.jdom2.Document document, String name) {
+		Iterator it = document.getDescendants(new ElementFilter(name));
+		if (it.hasNext()) {
+			return (org.jdom2.Element) it.next();
+		} else {
+			return null;
+		}
+	}
+
+	public static org.jdom2.Element getElement(org.jdom2.Element from, String name) {
+		Iterator it = from.getDescendants(new ElementFilter(name));
+		if (it.hasNext()) {
+			return (org.jdom2.Element) it.next();
+		} else {
+			return null;
+		}
+	}
 }

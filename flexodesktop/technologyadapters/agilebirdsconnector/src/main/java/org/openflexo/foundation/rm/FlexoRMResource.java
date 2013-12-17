@@ -54,7 +54,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.XMLSerializationService;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
@@ -530,7 +530,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 
 	private boolean convertFrom34To35() {
 		try {
-			Document document = XMLUtils.getJDOMDocument(getFile());
+			Document document = XMLUtils2.getJDOMDocument(getFile());
 			Iterator<Element> tableElementIterator = document.getDescendants(new ElementFilter("TextFileResource"));
 			while (tableElementIterator.hasNext()) {
 				Element el = tableElementIterator.next();
@@ -546,7 +546,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			// saveResourceDataWithVersion(new Version("3.5.0"));
 
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 

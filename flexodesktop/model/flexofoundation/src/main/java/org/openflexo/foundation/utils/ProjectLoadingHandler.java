@@ -26,9 +26,9 @@ public interface ProjectLoadingHandler {
 	public boolean loadAndConvertAllOldResourcesToLatestVersion(FlexoProject project, FlexoProgress progress)
 			throws ProjectLoadingCancelledException;
 
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException;
+	public boolean useOlderMappingWhenLoadingFailure(FlexoResource<?> resource) throws ProjectLoadingCancelledException;
 
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException;
+	public boolean upgradeResourceToLatestVersion(FlexoResource<?> resource) throws ProjectLoadingCancelledException;
 
-	public void notifySevereLoadingFailure(FlexoResource r, Exception e);
+	public void notifySevereLoadingFailure(FlexoResource<?> r, Exception e);
 }

@@ -33,7 +33,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;

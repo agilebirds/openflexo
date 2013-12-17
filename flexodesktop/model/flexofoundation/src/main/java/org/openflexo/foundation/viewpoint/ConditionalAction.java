@@ -37,8 +37,8 @@ public class ConditionalAction extends ControlStructureAction {
 
 	private DataBinding<Boolean> condition;
 
-	public ConditionalAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ConditionalAction() {
+		super();
 	}
 
 	@Override

@@ -40,4 +40,11 @@ public interface PamelaResource<RD extends ResourceData<RD>, F extends ModelFact
 
 	public void setLastID(long lastUniqueID);
 
+	/**
+	 * Return the model version currently reflected by executed code (the software version)
+	 * 
+	 * @return
+	 */
+	public FlexoVersion latestVersion();
+
 }

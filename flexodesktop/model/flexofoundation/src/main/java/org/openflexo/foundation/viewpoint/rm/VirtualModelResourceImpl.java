@@ -11,11 +11,16 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
+import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
+import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.viewpoint.VirtualModelModelFactory;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
@@ -25,8 +30,8 @@ import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class VirtualModelResourceImpl extends FlexoXMLFileResourceImpl<VirtualModel> implements VirtualModelResource,
-		AccessibleProxyObject {
+public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<VirtualModel, VirtualModelModelFactory> implements
+		VirtualModelResource, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelResourceImpl.class.getPackage().getName());
 
@@ -97,16 +102,6 @@ public abstract class VirtualModelResourceImpl extends FlexoXMLFileResourceImpl<
 		return encoder;
 	}
 
-	@Override
-	public final VirtualModelBuilder instanciateNewBuilder() {
-		return new VirtualModelBuilder(getViewPointLibrary(), getContainer().getViewPoint(), this, getModelVersion());
-	}
-
-	@Override
-	public boolean hasBuilder() {
-		return true;
-	}
-
 	/**
 	 * Return virtual model stored by this resource<br>
 	 * Load the resource data when unloaded
@@ -118,8 +113,6 @@ public abstract class VirtualModelResourceImpl extends FlexoXMLFileResourceImpl<
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
@@ -155,21 +148,12 @@ public abstract class VirtualModelResourceImpl extends FlexoXMLFileResourceImpl<
 	 * @throws FileNotFoundException
 	 */
 	@Override
-	public VirtualModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException,
-			FileNotFoundException, ResourceDependencyLoopException {
-
+	public VirtualModel loadResourceData(IProgress progress) throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
+			InconsistentDataException, InvalidModelDefinitionException {
 		VirtualModel returned = super.loadResourceData(progress);
 		getContainer().getViewPoint().addToVirtualModels(returned);
 		returned.clearIsModified();
 		return returned;
-	}
-
-	/**
-	 * This method updates the resource.
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		return null;
 	}
 
 	private static class VirtualModelInfo {

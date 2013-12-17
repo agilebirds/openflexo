@@ -19,7 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import javax.swing.JComponent;
 
 /**
  * External view of the DM Module
@@ -27,9 +26,9 @@ import javax.swing.JComponent;
  * @author sguerin
  */
 public interface ExternalDMModule extends ExternalModule {
-	public void showDMEntity(DMEntity entity);
+	// public void showDMEntity(DMEntity entity);
 
-	public JComponent createScreenshotForObject(ERDiagram target);
+	// public JComponent createScreenshotForObject(ERDiagram target);
 
 	public void finalizeScreenshot();
 

@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.action;
 
-import java.util.Vector;
+import java.util.List;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
@@ -38,7 +38,7 @@ public interface FlexoActionSource {
 
 	public FlexoObject getFocusedObject();
 
-	public Vector<? extends FlexoObject> getGlobalSelection();
+	public List<? extends FlexoObject> getGlobalSelection();
 
 	public FlexoEditor getEditor();
 }

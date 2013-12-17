@@ -42,8 +42,8 @@ public class ListParameter extends EditionSchemeParameter {
 	private ListType listType;
 	private DataBinding<List<?>> list;
 
-	public ListParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ListParameter() {
+		super();
 	}
 
 	@Override

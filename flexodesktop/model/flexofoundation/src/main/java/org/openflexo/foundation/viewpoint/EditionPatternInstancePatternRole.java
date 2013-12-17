@@ -16,8 +16,8 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	private String _creationSchemeURI;
 	private String _editionPatternTypeURI;
 
-	public EditionPatternInstancePatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionPatternInstancePatternRole() {
+		super();
 		// logger.severe("############# Created EditionPatternInstancePatternRole " + Integer.toHexString(hashCode()) + " model version="
 		// + builder.getModelVersion() + " file=" + builder.resource.getFile().getAbsolutePath());
 	}

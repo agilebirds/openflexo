@@ -62,8 +62,8 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	private BindingModel inferedBindingModel = null;
 
-	public EditionAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionAction() {
+		super();
 	}
 
 	@Override
@@ -268,7 +268,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned;
-		if (getActionContainer() == null || isDeserializing() /* Prevent StackOverflow !!! */) {
+		if (getActionContainer() == null || isDeserializing()/* Prevent StackOverflow !!! */) {
 			returned = new BindingModel();
 		} else {
 			returned = new BindingModel(getActionContainer().getInferedBindingModel());
@@ -294,6 +294,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		this.conditional = conditional;
 	}
 
+	@Override
 	public String getStringRepresentation() {
 		return getClass().getSimpleName();
 	}

@@ -49,8 +49,8 @@ public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModel
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
 
-	public SelectEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SelectEditionPatternInstance() {
+		super();
 	}
 
 	@Override

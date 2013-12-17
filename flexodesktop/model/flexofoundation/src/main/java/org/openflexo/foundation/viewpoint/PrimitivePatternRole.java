@@ -19,8 +19,8 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 
 	private PrimitiveType primitiveType;
 
-	public PrimitivePatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public PrimitivePatternRole() {
+		super();
 	}
 
 	@Override

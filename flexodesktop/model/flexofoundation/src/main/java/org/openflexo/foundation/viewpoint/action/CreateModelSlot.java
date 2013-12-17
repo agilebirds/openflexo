@@ -24,8 +24,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -72,7 +72,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 
 	static {
 		// FlexoModelObject.addActionForClass(CreateModelSlot.actionType, ViewPoint.class);
-		FlexoModelObject.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
+		FlexoObject.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
 	}
 
 	public String modelSlotName;
@@ -91,7 +91,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Add model slot");
 
 		if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {

@@ -40,8 +40,8 @@ public class ExecutionAction<MS extends ModelSlot<?>> extends AssignableAction<M
 
 	private DataBinding<Object> execution;
 
-	public ExecutionAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ExecutionAction() {
+		super();
 	}
 
 	@Override

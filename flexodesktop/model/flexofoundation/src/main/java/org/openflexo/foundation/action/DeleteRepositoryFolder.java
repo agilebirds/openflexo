@@ -22,8 +22,8 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.RepositoryFolder;
 
 public class DeleteRepositoryFolder extends FlexoAction<DeleteRepositoryFolder, RepositoryFolder, RepositoryFolder> {
@@ -55,7 +55,7 @@ public class DeleteRepositoryFolder extends FlexoAction<DeleteRepositoryFolder, 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteRepositoryFolder.actionType, RepositoryFolder.class);
+		FlexoObject.addActionForClass(DeleteRepositoryFolder.actionType, RepositoryFolder.class);
 	}
 
 	DeleteRepositoryFolder(RepositoryFolder focusedObject, Vector<RepositoryFolder> globalSelection, FlexoEditor editor) {

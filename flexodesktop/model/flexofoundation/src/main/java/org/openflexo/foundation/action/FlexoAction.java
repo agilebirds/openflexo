@@ -22,7 +22,6 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
@@ -358,11 +357,11 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		return new ExecutionContext(this);
 	}
 
-	public void objectCreated(String key, FlexoModelObject object) {
+	public void objectCreated(String key, FlexoObject object) {
 		getExecutionContext().objectCreated(key, object);
 	}
 
-	public void objectDeleted(String key, FlexoModelObject object) {
+	public void objectDeleted(String key, FlexoObject object) {
 		if (getExecutionContext() != null) {
 			getExecutionContext().objectDeleted(key, object);
 		}
@@ -534,13 +533,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		return KeyValueDecoder.isHashtableProperty(this, key);
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getClass().getName();
-	}
-
 	// TODO: Should be refactored with injectors
-	@Deprecated
 	public FlexoServiceManager getServiceManager() {
 		if (getEditor() != null) {
 			return getEditor().getServiceManager();

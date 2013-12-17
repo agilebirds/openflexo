@@ -42,8 +42,8 @@ public class RemoveFromListAction<MS extends ModelSlot<?>, T> extends Assignable
 
 	private DataBinding<Object> value;
 
-	public RemoveFromListAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public RemoveFromListAction() {
+		super();
 	}
 
 	@Override

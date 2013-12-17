@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 public class CheckboxParameter extends EditionSchemeParameter {
 
-	public CheckboxParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CheckboxParameter() {
+		super();
 	}
 
 	@Override

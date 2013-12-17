@@ -36,8 +36,8 @@ public class ClassParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?
 	private DataBinding<IFlexoOntologyClass> conceptValue;
 	private boolean isDynamicConceptValueSet = false;
 
-	public ClassParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ClassParameter() {
+		super();
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.localization.FlexoLocalization;
 
-public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
+public class AgileBirdsObjectPatternRole extends PatternRole<FlexoModelObject> {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoObjectInspectorEntry
 	public static enum FlexoModelObjectType {
@@ -18,7 +18,7 @@ public class FlexoModelObjectPatternRole extends PatternRole<FlexoModelObject> {
 
 	private FlexoModelObjectType flexoModelObjectType;
 
-	public FlexoModelObjectPatternRole(VirtualModel.VirtualModelBuilder builder) {
+	public AgileBirdsObjectPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

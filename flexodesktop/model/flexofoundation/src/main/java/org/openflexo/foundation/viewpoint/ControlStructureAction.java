@@ -35,8 +35,8 @@ public abstract class ControlStructureAction extends EditionAction<ModelSlot<?>,
 
 	private Vector<EditionAction<?, ?>> actions;
 
-	public ControlStructureAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ControlStructureAction() {
+		super();
 		actions = new Vector<EditionAction<?, ?>>();
 	}
 

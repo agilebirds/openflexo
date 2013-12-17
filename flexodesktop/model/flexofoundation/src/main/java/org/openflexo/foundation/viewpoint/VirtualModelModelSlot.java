@@ -35,7 +35,6 @@ import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.toolbox.StringUtils;
 
@@ -64,9 +63,9 @@ public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 		super(virtualModel, adapter);
 	}
 
-	public VirtualModelModelSlot(VirtualModelBuilder builder) {
+	/*public VirtualModelModelSlot(VirtualModelBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	/*public VirtualModelModelSlot(ViewPointBuilder builder) {
 		super(builder);
@@ -85,7 +84,7 @@ public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EditionPatternInstancePatternRole(null);
+			return (PR) new EditionPatternInstancePatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -110,7 +109,7 @@ public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEditionPatternInstance(null);
+			return (EA) new AddEditionPatternInstance();
 		}
 		return null;
 	}
@@ -118,7 +117,7 @@ public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectEditionPatternInstance(null);
+			return (FR) new SelectEditionPatternInstance();
 		}
 		return null;
 	}

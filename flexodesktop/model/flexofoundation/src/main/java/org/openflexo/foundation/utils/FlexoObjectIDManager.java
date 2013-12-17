@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.utils;
 
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -50,16 +54,32 @@ public class FlexoObjectIDManager {
 	}
 
 	public List<FlexoProjectObject> checkProject(boolean fixProblems) {
+
 		// First load all unloaded resources
-		for (FlexoStorageResource<? extends StorageResourceData> resource : project.getStorageResources()) {
-			resource.getResourceData();
+		for (FlexoResource<?> r : project.getResource().getContents()) {
+			try {
+				r.getResourceData(null);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		// Iterate on all objects to validate
 		used = new Hashtable<Long, FlexoProjectObject>();
 		badObjects = new Vector<FlexoProjectObject>();
 		Vector<FlexoProjectObject> objectsToUnregister = new Vector<FlexoProjectObject>();
-		for (FlexoProjectObject object : new Vector<FlexoProjectObject>(project.getAllRegisteredObjects())) {
+
+		// TODO: implement this
+		logger.warning("Not implemented yet");
+
+		/*for (FlexoProjectObject object : new Vector<FlexoProjectObject>(project.getAllRegisteredObjects())) {
 			if (object.getProject() == project) {
 				if (object.getXMLResourceData() == null) {
 					continue;
@@ -80,7 +100,7 @@ public class FlexoObjectIDManager {
 
 		for (FlexoProjectObject obj : objectsToUnregister) {
 			project.unregister(obj);
-		}
+		}*/
 
 		/*for (FlexoProjectObject obj : badObjects) {
 			if (obj instanceof FlexoXMLSerializableObject) {
@@ -95,11 +115,11 @@ public class FlexoObjectIDManager {
 	}
 
 	private void testAndSetID(FlexoProjectObject o, boolean fixProblems) {
-		if (o.isCreatedByCloning()) {
+		/*if (o.isCreatedByCloning()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("An object was found with status beingCloned " + o.getXMLRepresentation());
 			}
-		}
+		}*/
 		if (o.getFlexoID() < 0 || o.getFlexoID() > project.getLastUniqueID()) {
 			// The next line is commented because if there are issues with flexoID, it is likely that the XML encoding of the object used to
 			// retrieve the XML representation will also fail, since it also works with the flexoID
@@ -120,8 +140,8 @@ public class FlexoObjectIDManager {
 			long newID = o.getProject().getNewFlexoID();
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found two different objects with the same flexoID:" + o.getFlexoID() + " Object1: "
-						+ old.getClass().getName() + "[" + old.getSerializationIdentifier() + "]" + " and Object2:"
-						+ o.getClass().getName() + "[" + o.getSerializationIdentifier() + "] Replace id with " + newID);
+						+ old.getClass().getName() + "[" + old.toString() + "]" + " and Object2:" + o.getClass().getName() + "["
+						+ o.toString() + "] Replace id with " + newID);
 			}
 			if (fixProblems) {
 				o.setFlexoID(newID);

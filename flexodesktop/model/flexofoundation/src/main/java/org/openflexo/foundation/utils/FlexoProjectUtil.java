@@ -108,7 +108,9 @@ public class FlexoProjectUtil {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Version is " + v);
 			}
-			return XMLSerializationService.latestRelease().isLesserThan(v);
+			// TODO !!!
+			FlexoVersion applicationVersion = new FlexoVersion("1.7");
+			return applicationVersion.isLesserThan(v);
 		}
 	}
 

@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 public class FloatParameter extends EditionSchemeParameter {
 
-	public FloatParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public FloatParameter() {
+		super();
 	}
 
 	@Override

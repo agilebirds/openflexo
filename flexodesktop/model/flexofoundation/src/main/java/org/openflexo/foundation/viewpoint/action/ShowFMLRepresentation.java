@@ -22,8 +22,8 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -58,7 +58,7 @@ public class ShowFMLRepresentation extends FlexoGUIAction<ShowFMLRepresentation,
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ShowFMLRepresentation.actionType, ViewPointObject.class);
+		FlexoObject.addActionForClass(ShowFMLRepresentation.actionType, ViewPointObject.class);
 	}
 
 	protected ShowFMLRepresentation(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {

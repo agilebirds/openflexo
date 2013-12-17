@@ -13,8 +13,8 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
 
 public abstract class ClassPatternRole<C extends IFlexoOntologyClass> extends OntologicObjectPatternRole<IFlexoOntologyClass> {
 
-	public ClassPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ClassPatternRole() {
+		super();
 	}
 
 	@Override

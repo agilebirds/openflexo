@@ -90,11 +90,11 @@ public class EditionPattern extends EditionPatternObject {
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-		if (builder != null) {
+	public EditionPattern() {
+		super();
+		/*if (builder != null) {
 			virtualModel = builder.getVirtualModel();
-		}
+		}*/
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
 		editionPatternConstraints = new Vector<EditionPatternConstraint>();
@@ -226,7 +226,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public void createConstraint() {
-		EditionPatternConstraint constraint = new EditionPatternConstraint(null);
+		EditionPatternConstraint constraint = new EditionPatternConstraint();
 		addToEditionPatternConstraints(constraint);
 	}
 
@@ -488,7 +488,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public CreationScheme createCreationScheme() {
-		CreationScheme newCreationScheme = new CreationScheme(null);
+		CreationScheme newCreationScheme = new CreationScheme();
 		newCreationScheme.setEditionPattern(this);
 		newCreationScheme.setName("creation");
 		addToEditionSchemes(newCreationScheme);
@@ -496,7 +496,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public CloningScheme createCloningScheme() {
-		CloningScheme newCloningScheme = new CloningScheme(null);
+		CloningScheme newCloningScheme = new CloningScheme();
 		newCloningScheme.setEditionPattern(this);
 		newCloningScheme.setName("clone");
 		addToEditionSchemes(newCloningScheme);
@@ -520,7 +520,7 @@ public class EditionPattern extends EditionPatternObject {
 	}*/
 
 	public ActionScheme createActionScheme() {
-		ActionScheme newActionScheme = new ActionScheme(null);
+		ActionScheme newActionScheme = new ActionScheme();
 		newActionScheme.setEditionPattern(this);
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
@@ -528,7 +528,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public NavigationScheme createNavigationScheme() {
-		NavigationScheme newNavigationScheme = new NavigationScheme(null);
+		NavigationScheme newNavigationScheme = new NavigationScheme();
 		newNavigationScheme.setEditionPattern(this);
 		newNavigationScheme.setName("navigation");
 		addToEditionSchemes(newNavigationScheme);
@@ -554,7 +554,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public DeletionScheme generateDefaultDeletionScheme() {
-		DeletionScheme newDeletionScheme = new DeletionScheme(null);
+		DeletionScheme newDeletionScheme = new DeletionScheme();
 		newDeletionScheme.setName("deletion");
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		for (PatternRole pr : getPatternRoles()) {
@@ -587,7 +587,7 @@ public class EditionPattern extends EditionPatternObject {
 
 		});
 		for (PatternRole pr : rolesToDelete) {
-			DeleteAction a = new DeleteAction(null);
+			DeleteAction a = new DeleteAction();
 			a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
 			newDeletionScheme.addToActions(a);
 		}
@@ -639,7 +639,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public void debug() {
-		System.out.println(getXMLRepresentation());
+		System.out.println(getStringRepresentation());
 	}
 
 	public void save() {
@@ -753,7 +753,7 @@ public class EditionPattern extends EditionPatternObject {
 	 * @return
 	 */
 	public EditionPattern duplicate(String newName) {
-		EditionPattern newEditionPattern = (EditionPattern) cloneUsingXMLMapping();
+		EditionPattern newEditionPattern = (EditionPattern) cloneObject();
 		newEditionPattern.setName(newName);
 		getVirtualModel().addToEditionPatterns(newEditionPattern);
 		return newEditionPattern;

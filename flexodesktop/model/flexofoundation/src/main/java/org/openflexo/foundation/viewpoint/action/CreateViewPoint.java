@@ -25,8 +25,8 @@ import java.net.URL;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -66,7 +66,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateViewPoint.actionType, RepositoryFolder.class);
+		FlexoObject.addActionForClass(CreateViewPoint.actionType, RepositoryFolder.class);
 	}
 
 	private String _newViewPointName;

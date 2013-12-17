@@ -39,8 +39,8 @@ public class IndividualParameter extends InnerModelSlotParameter<TypeAwareModelS
 	private String renderer;
 	private boolean isDynamicConceptValueSet = false;
 
-	public IndividualParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public IndividualParameter() {
+		super();
 	}
 
 	@Override

@@ -39,8 +39,8 @@ public class DeleteAction<MS extends ModelSlot<?>, T extends FlexoObject> extend
 
 	private DataBinding<Object> object;
 
-	public DeleteAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DeleteAction() {
+		super();
 	}
 
 	@Override

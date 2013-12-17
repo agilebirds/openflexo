@@ -30,8 +30,8 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/CloningSchemePanel.fib")
 public class CloningScheme extends AbstractCreationScheme {
 
-	public CloningScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CloningScheme() {
+		super();
 	}
 
 }

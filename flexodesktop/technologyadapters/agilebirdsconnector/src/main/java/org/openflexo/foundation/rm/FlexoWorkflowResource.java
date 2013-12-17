@@ -35,7 +35,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FlexoVersion;
 
@@ -216,7 +216,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				}
 				Document _document = null;
 				Element root_Element = null;
-				_document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				_document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				root_Element = _document.getRootElement();
 				Element newWorkflowElement = new Element("flexoworkflow");
 				newWorkflowElement.setAttribute("workflowName", getName());
@@ -226,7 +226,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Conversion from 0.1 to 1.0 SUCCESSFULL. Save the file.");
 				}
-				boolean returned = XMLUtils.saveXMLFile(_document, getResourceFile().getFile());
+				boolean returned = XMLUtils2.saveXMLFile(_document, getResourceFile().getFile());
 				hasWrittenOnDisk(lock);
 				return returned;
 			} catch (Exception e) {

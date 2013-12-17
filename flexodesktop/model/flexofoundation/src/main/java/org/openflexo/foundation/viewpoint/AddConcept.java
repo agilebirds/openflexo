@@ -33,8 +33,8 @@ public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
-	public AddConcept(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddConcept() {
+		super();
 	}
 
 	public abstract IFlexoOntologyClass getOntologyClass();

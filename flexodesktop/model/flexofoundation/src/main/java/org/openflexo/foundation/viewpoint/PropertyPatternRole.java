@@ -16,8 +16,8 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	private String parentPropertyURI;
 	private String domainURI;
 
-	public PropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public PropertyPatternRole() {
+		super();
 	}
 
 	@Override

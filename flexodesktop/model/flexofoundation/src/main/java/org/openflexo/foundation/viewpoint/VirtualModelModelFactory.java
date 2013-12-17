@@ -17,21 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.rm;
+package org.openflexo.foundation.viewpoint;
+
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 
 /**
- * Used to notify that a resource has been added
+ * {@link ModelFactory} used to handle VirtualModel models<br>
+ * Only one instance of this class should be used in a session
  * 
- * @author sguerin
+ * @author sylvain
+ * 
  */
-public class ExternalRepositorySet extends RMDataModification {
+public class VirtualModelModelFactory extends ModelFactory {
 
-	public ExternalRepositorySet(ProjectExternalRepository repository) {
-		super(null, repository);
+	public VirtualModelModelFactory() throws ModelDefinitionException {
+		super(ModelContextLibrary.getModelContext(VirtualModel.class));
 	}
-
-	public ProjectExternalRepository getProjectExternalRepository() {
-		return (ProjectExternalRepository) newValue();
-	}
-
 }

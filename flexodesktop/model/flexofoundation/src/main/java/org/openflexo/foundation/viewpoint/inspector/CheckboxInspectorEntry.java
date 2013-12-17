@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Represents an inspector entry for a check box (boolean value)
@@ -29,8 +28,8 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  */
 public class CheckboxInspectorEntry extends InspectorEntry {
 
-	public CheckboxInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CheckboxInspectorEntry() {
+		super();
 	}
 
 	@Override

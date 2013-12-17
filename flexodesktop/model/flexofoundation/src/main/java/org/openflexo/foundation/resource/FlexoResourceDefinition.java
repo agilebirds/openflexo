@@ -1,11 +1,9 @@
-package org.openflexo.foundation.rm;
+package org.openflexo.foundation.resource;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.openflexo.foundation.xml.XMLResourceDataBuilder;
 
 /**
  * Annotation for a FlexoResource
@@ -17,11 +15,7 @@ import org.openflexo.foundation.xml.XMLResourceDataBuilder;
 @Target(value = ElementType.TYPE)
 public @interface FlexoResourceDefinition {
 
-	public Class<? extends XMLStorageResourceData> resourceDataClass();
-
-	public boolean hasBuilder() default false;
-
-	public Class<? extends XMLResourceDataBuilder> builderClass() default XMLResourceDataBuilder.class;
+	public Class<? extends ResourceData<?>> resourceDataClass();
 
 	public SomeResources[] contains() default {};
 

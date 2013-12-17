@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -74,8 +74,8 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreatePatternRole.actionType, EditionPattern.class);
-		FlexoModelObject.addActionForClass(CreatePatternRole.actionType, EditionPatternStructuralFacet.class);
+		FlexoObject.addActionForClass(CreatePatternRole.actionType, EditionPattern.class);
+		FlexoObject.addActionForClass(CreatePatternRole.actionType, EditionPatternStructuralFacet.class);
 	}
 
 	private String patternRoleName;
@@ -118,7 +118,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Add pattern role");
 
 		if (modelSlot != null && patternRoleClass != null) {

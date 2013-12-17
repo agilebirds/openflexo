@@ -34,7 +34,7 @@ import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
-import org.openflexo.foundation.rm.ProjectExternalRepository;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;

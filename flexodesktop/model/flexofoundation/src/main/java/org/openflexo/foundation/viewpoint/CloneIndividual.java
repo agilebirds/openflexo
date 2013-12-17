@@ -34,8 +34,8 @@ public abstract class CloneIndividual extends AddIndividual {
 
 	private static final Logger logger = Logger.getLogger(CloneIndividual.class.getPackage().getName());
 
-	public CloneIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CloneIndividual() {
+		super();
 	}
 
 }

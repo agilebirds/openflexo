@@ -24,8 +24,8 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/CreationSchemePanel.fib")
 public class CreationScheme extends AbstractCreationScheme {
 
-	public CreationScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CreationScheme() {
+		super();
 	}
 
 }

@@ -24,21 +24,17 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
-
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-
 
 public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual> {
 
@@ -52,8 +48,8 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 
 	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
 
-	public AddXSIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddXSIndividual() {
+		super();
 	}
 
 	@Override
@@ -75,7 +71,7 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 
 			TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
 			XMLXSDModel model = modelSlotInstance.getResourceData();
-			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
+			XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
 
 			newIndividual = model.createOntologyIndividual(father);
 
@@ -97,8 +93,6 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 				}
 			}
 
-
-
 			// add it to the model
 			// Two phase creation, then addition, to be able to process URIs once you have the property values
 			// and verify that there is no duplicate URIs
@@ -106,17 +100,16 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
 			if (processedURI != null) {
 				Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
-				if (o == null ) {
+				if (o == null) {
 					model.addIndividual(newIndividual);
 					modelSlotInstance.getResourceData().setIsModified();
-				}
-				else {
+				} else {
 					throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
 				}
 
 				return newIndividual;
-			}
-			else return null;
+			} else
+				return null;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();
 			return null;

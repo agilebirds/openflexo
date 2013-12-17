@@ -28,7 +28,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
@@ -37,10 +36,7 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents an object which is part of the model of a ViewPoint
@@ -54,17 +50,17 @@ public abstract class ViewPointObject extends FlexoObject implements Bindable, V
 
 	// private ImportedOntology viewPointOntology = null;
 
-	public ViewPointObject(VirtualModelBuilder builder) {
-		if (builder != null) {
+	public ViewPointObject(/*VirtualModelBuilder builder*/) {
+		/*if (builder != null) {
 			initializeDeserialization(builder);
-		}
+		}*/
 	}
 
-	public ViewPointObject(ViewPointBuilder builder) {
+	/*public ViewPointObject(ViewPointBuilder builder) {
 		if (builder != null) {
 			initializeDeserialization(builder);
 		}
-	}
+	}*/
 
 	/*public ViewPointObject(ExampleDiagramBuilder builder) {
 		if (builder != null) {
@@ -78,13 +74,13 @@ public abstract class ViewPointObject extends FlexoObject implements Bindable, V
 		}
 	}*/
 
-	@Override
+	/*@Override
 	public XMLMapping getXMLMapping() {
 		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getViewPointModel();
 		}
 		return null;
-	}
+	}*/
 
 	/*@Override
 	public void finalizeDeserialization(Object builder) {
@@ -107,7 +103,7 @@ public abstract class ViewPointObject extends FlexoObject implements Bindable, V
 	}
 
 	@Override
-	public ViewPoint getXMLResourceData() {
+	public ViewPoint getResourceData() {
 		return getViewPoint();
 	}
 
@@ -343,9 +339,30 @@ public abstract class ViewPointObject extends FlexoObject implements Bindable, V
 		}
 	}
 
+	public ViewPointModelFactory getFactory() {
+		return getResourceData().getResource().getFactory();
+	}
+
+	public String getStringRepresentation() {
+		return getFactory().stringRepresentation(this);
+	}
+
 	@Deprecated
-	public FlexoProject getProject() {
-		return null;
+	public Object cloneObject() {
+		logger.warning("Not implemented, use CloneableProxyObject when the model will be managed by PAMELA");
+		return this;
+	}
+
+	@Deprecated
+	public boolean isSerializing() {
+		logger.warning("Not implemented, use AccessibleProxyObject when the model will be managed by PAMELA");
+		return false;
+	}
+
+	@Deprecated
+	public boolean isDeserializing() {
+		logger.warning("Not implemented, use AccessibleProxyObject when the model will be managed by PAMELA");
+		return false;
 	}
 
 }

@@ -17,42 +17,34 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.rm;
+package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Please comment this class
+ * Represents a directory outside a project logically bound to some data inside the project<br>
+ * 
+ * This allows to easyly "carry" projects and to connect them to local repository (the most common use stands for code/doc generation, when
+ * generated data is not likely in the project directory)
  * 
  * @author sguerin
  * 
  */
 public class ProjectExternalRepository extends KVCFlexoObject implements XMLSerializable {
-	private FlexoProject _project;
+	private final FlexoProject _project;
 	private String _identifier;
 	private File _directory;
 	private Map<String, String> directoriesForUser = new TreeMap<String, String>();
 
 	private static final String getUserName() {
 		return System.getProperty("user.name");
-	}
-
-	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
-	 * 
-	 * @param builder
-	 */
-	public ProjectExternalRepository(FlexoProjectBuilder builder) {
-		this(builder.project);
 	}
 
 	public ProjectExternalRepository(FlexoProject aProject, String identifier) {
@@ -101,8 +93,8 @@ public class ProjectExternalRepository extends KVCFlexoObject implements XMLSeri
 			directoriesForUser.remove(getUserName());
 		}
 		_isConnected = _directory != null && _directory.exists();
-		getProject().clearCachedFiles();
-		getProject().notifyResourceChanged(null);
+		// getProject().clearCachedFiles();
+		// getProject().notifyResourceChanged(null);
 	}
 
 	public FlexoProject getProject() {
@@ -137,27 +129,36 @@ public class ProjectExternalRepository extends KVCFlexoObject implements XMLSeri
 		_isNormallyConnected = aBoolean;
 	}
 
-	public List<FlexoFileResource<? extends FlexoResourceData>> getRelatedResources() {
-		List<FlexoFileResource<? extends FlexoResourceData>> returned = new Vector<FlexoFileResource<? extends FlexoResourceData>>();
-		for (FlexoResource<? extends FlexoResourceData> resource : getProject()) {
+	// TODO: reimplement this
+	public List<FlexoFileResource<?>> getRelatedResources() {
+		/*List<FlexoFileResource<?>> returned = new Vector<FlexoFileResource<?>>();
+		for (FlexoResource<?> resource : getProject().getServiceManager().getResourceManager().getRegisteredResources()) {
 			if (resource instanceof FlexoFileResource) {
-				FlexoProjectFile pFile = ((FlexoFileResource<? extends FlexoResourceData>) resource).getResourceFile();
+				FlexoFileResource fileResource = (FlexoFileResource)resource;
+				if (FlexoProjectFile.isContainedInProjectDeclaredExternalRepositories(fileResource.getFile(), getProject())) {
+					
+				}
+				
+				FlexoProjectFile pFile = ((FlexoFileResource<?>) resource).getResourceFile();
 				if (pFile.getExternalRepository() == this) {
 					returned.add((FlexoFileResource<? extends FlexoResourceData>) resource);
 				}
 			}
 		}
-		return returned;
+		return returned;*/
+		return null;
 	}
 
-	public List<FlexoFileResource<? extends FlexoResourceData>> getRelatedActiveResources() {
-		List<FlexoFileResource<? extends FlexoResourceData>> returned = new Vector<FlexoFileResource<? extends FlexoResourceData>>();
+	// TODO: reimplement this
+	public List<FlexoFileResource<?>> getRelatedActiveResources() {
+		/*List<FlexoFileResource<? extends FlexoResourceData>> returned = new Vector<FlexoFileResource<? extends FlexoResourceData>>();
 		for (FlexoFileResource<? extends FlexoResourceData> resource : getRelatedResources()) {
 			if (resource.isActive()) {
 				returned.add(resource);
 			}
 		}
-		return returned;
+		return returned;*/
+		return null;
 	}
 
 	public Map<String, String> getDirectoriesForUser() {

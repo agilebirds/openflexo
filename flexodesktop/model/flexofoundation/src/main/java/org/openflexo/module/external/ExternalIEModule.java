@@ -19,7 +19,6 @@
  */
 package org.openflexo.module.external;
 
-import javax.swing.JComponent;
 
 /**
  * External view of the IE Module
@@ -30,9 +29,9 @@ public interface ExternalIEModule extends ExternalModule {
 
 	public ExternalIEController getIEExternalController();
 
-	public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
+	// public JComponent getWOComponentView(ExternalIEController controller, IEWOComponent component);
 
-	public JComponent createViewForOperation(OperationNode operation);
+	// public JComponent createViewForOperation(OperationNode operation);
 
 	public void finalizeScreenshot();
 }

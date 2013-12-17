@@ -104,11 +104,6 @@ public abstract class TechnologyContextManager<TA extends TechnologyAdapter> ext
 		return resourceCenterService;
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getClass().getName();
-	}
-
 	/**
 	 * Called when a new resource was registered, notify the {@link TechnologyContextManager}
 	 * 

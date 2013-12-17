@@ -23,7 +23,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Represents an inspector entry for an ontology property
@@ -38,8 +37,8 @@ public class PropertyInspectorEntry extends InspectorEntry {
 	private boolean isDynamicDomainValueSet = false;
 	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	public PropertyInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public PropertyInspectorEntry() {
+		super();
 	}
 
 	@Override

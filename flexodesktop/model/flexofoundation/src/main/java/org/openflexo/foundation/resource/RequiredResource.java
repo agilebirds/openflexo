@@ -1,4 +1,4 @@
-package org.openflexo.foundation.rm;
+package org.openflexo.foundation.resource;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

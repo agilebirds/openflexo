@@ -44,8 +44,8 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 
 	private String objectPropertyURI;
 
-	public ObjectPropertyAssertion(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ObjectPropertyAssertion() {
+		super();
 	}
 
 	public void _setObjectPropertyURI(String objectPropertyURI) {

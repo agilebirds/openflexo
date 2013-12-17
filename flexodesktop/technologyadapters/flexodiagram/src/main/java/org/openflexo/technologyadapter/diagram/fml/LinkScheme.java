@@ -27,7 +27,6 @@ import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddConnector;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
@@ -46,8 +45,8 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 
 	private boolean isAvailableWithFloatingPalette = true;
 
-	public LinkScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public LinkScheme() {
+		super();
 	}
 
 	public String _getFromTarget() {

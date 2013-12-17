@@ -31,8 +31,8 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
  */
 public class TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS> {
 
-	public TechnologyObjectParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public TechnologyObjectParameter() {
+		super();
 	}
 
 	@Override

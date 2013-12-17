@@ -123,13 +123,13 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		previousValue = getFocusedObject().objectForKey(getKey());
-		if (getFocusedObject() instanceof PortRegistery && getKey().equals("isVisible")) {
+		/*if (getFocusedObject() instanceof PortRegistery && getKey().equals("isVisible")) {
 			if (previousValue != null && !previousValue.equals(getValue())) {
 				OpenPortRegistery.actionType.makeNewEmbeddedAction(((PortRegistery) getFocusedObject()).getProcess(), null, this)
 						.doAction();
 			}
 			return;
-		}
+		}*/
 		try {
 			getFocusedObject().setObjectForKey(getValue(), getKey());
 		} catch (AccessorInvocationException exception) {

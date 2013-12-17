@@ -19,11 +19,10 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-
 public abstract class AbstractCreationScheme extends EditionScheme {
 
-	public AbstractCreationScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AbstractCreationScheme() {
+		super();
 	}
 
 }

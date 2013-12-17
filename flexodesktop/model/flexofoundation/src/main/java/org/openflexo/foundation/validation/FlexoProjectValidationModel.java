@@ -28,22 +28,15 @@ import org.openflexo.foundation.FlexoProject;
 public class FlexoProjectValidationModel extends ValidationModel {
 
 	public FlexoProjectValidationModel(FlexoProject project) {
-		this(project, project.getTargetType());
-	}
-
-	/**
-	 * @param project
-	 */
-	public FlexoProjectValidationModel(FlexoProject project, TargetType targetType) {
-		super(project, targetType);
-		registerRule(new FlexoProject.AllResourcesMustBeDefinedInProject());
+		super(project);
+		// registerRule(new FlexoProject.AllResourcesMustBeDefinedInProject());
 		registerRule(new FlexoProject.FlexoIDMustBeUnique());
-		registerRule(new FlexoProject.NameOfResourceMustBeKeyOfHashtableEntry());
-		registerRule(new FlexoProject.RebuildDependancies());
-		registerRule(new FlexoProject.ComponentInstancesMustDefineAComponent());
-		registerRule(new FlexoProject.GeneratedResourcesMustHaveCGFile());
-		registerRule(new FlexoProject.ModelObjectReferenceMustDefineAnEnclosingProjectID());
-		registerRule(new AbstractActivityNode.ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed());
+		// registerRule(new FlexoProject.NameOfResourceMustBeKeyOfHashtableEntry());
+		// registerRule(new FlexoProject.RebuildDependancies());
+		// registerRule(new FlexoProject.ComponentInstancesMustDefineAComponent());
+		// registerRule(new FlexoProject.GeneratedResourcesMustHaveCGFile());
+		// registerRule(new FlexoProject.ModelObjectReferenceMustDefineAnEnclosingProjectID());
+		// registerRule(new AbstractActivityNode.ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed());
 
 		// Notify that the validation model is complete and that inheritance
 		// computation could be performed

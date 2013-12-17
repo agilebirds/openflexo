@@ -54,17 +54,17 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	private Vector<InspectorEntry> entries;
 	private DataBinding<String> renderer;
 
-	private EditionPatternFormatter formatter;
+	private final EditionPatternFormatter formatter;
 
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
-		EditionPatternInspector returned = new EditionPatternInspector(null);
+		EditionPatternInspector returned = new EditionPatternInspector();
 		returned.setInspectorTitle(ep.getName());
 		ep.setInspector(returned);
 		return returned;
 	}
 
-	public EditionPatternInspector(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionPatternInspector() {
+		super();
 		entries = new Vector<InspectorEntry>();
 		formatter = new EditionPatternFormatter();
 	}
@@ -136,7 +136,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextFieldInspectorEntry createNewTextField() {
-		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry(null);
+		TextFieldInspectorEntry newEntry = new TextFieldInspectorEntry();
 		newEntry.setName("textfield");
 		// newEntry.setLabel("textfield");
 		addToEntries(newEntry);
@@ -144,7 +144,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public TextAreaInspectorEntry createNewTextArea() {
-		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry(null);
+		TextAreaInspectorEntry newEntry = new TextAreaInspectorEntry();
 		newEntry.setName("textarea");
 		// newEntry.setLabel("textarea");
 		addToEntries(newEntry);
@@ -152,7 +152,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IntegerInspectorEntry createNewInteger() {
-		IntegerInspectorEntry newEntry = new IntegerInspectorEntry(null);
+		IntegerInspectorEntry newEntry = new IntegerInspectorEntry();
 		newEntry.setName("integer");
 		// newEntry.setLabel("integer");
 		addToEntries(newEntry);
@@ -160,7 +160,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public CheckboxInspectorEntry createNewCheckbox() {
-		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry(null);
+		CheckboxInspectorEntry newEntry = new CheckboxInspectorEntry();
 		newEntry.setName("checkbox");
 		// newEntry.setLabel("checkbox");
 		addToEntries(newEntry);
@@ -168,7 +168,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public IndividualInspectorEntry createNewIndividual() {
-		IndividualInspectorEntry newEntry = new IndividualInspectorEntry(null);
+		IndividualInspectorEntry newEntry = new IndividualInspectorEntry();
 		newEntry.setName("individual");
 		// newEntry.setLabel("individual");
 		addToEntries(newEntry);
@@ -176,7 +176,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ClassInspectorEntry createNewClass() {
-		ClassInspectorEntry newEntry = new ClassInspectorEntry(null);
+		ClassInspectorEntry newEntry = new ClassInspectorEntry();
 		newEntry.setName("class");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -184,7 +184,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public PropertyInspectorEntry createNewProperty() {
-		PropertyInspectorEntry newEntry = new PropertyInspectorEntry(null);
+		PropertyInspectorEntry newEntry = new PropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -192,7 +192,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public ObjectPropertyInspectorEntry createNewObjectProperty() {
-		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry(null);
+		ObjectPropertyInspectorEntry newEntry = new ObjectPropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
@@ -200,20 +200,20 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	}
 
 	public DataPropertyInspectorEntry createNewDataProperty() {
-		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry(null);
+		DataPropertyInspectorEntry newEntry = new DataPropertyInspectorEntry();
 		newEntry.setName("property");
 		// newEntry.setLabel("class");
 		addToEntries(newEntry);
 		return newEntry;
 	}
 
-	public FlexoObjectInspectorEntry createNewFlexoObject() {
-		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry(null);
+	/*public FlexoObjectInspectorEntry createNewFlexoObject() {
+		FlexoObjectInspectorEntry newEntry = new FlexoObjectInspectorEntry();
 		newEntry.setName("flexoObject");
 		// newEntry.setLabel("flexoObject");
 		addToEntries(newEntry);
 		return newEntry;
-	}
+	}*/
 
 	public InspectorEntry deleteEntry(InspectorEntry entry) {
 		removeFromEntries(entry);

@@ -46,18 +46,16 @@ public abstract class ValidationModel extends FlexoListModel {
 
 	private static final Logger logger = Logger.getLogger(ValidationModel.class.getPackage().getName());
 
-	private Hashtable<Class, Vector<ValidationRule>> _rules;
+	private final Hashtable<Class, Vector<ValidationRule>> _rules;
 
-	private Hashtable<Class, ValidationRuleSet> _inheritedRules;
+	private final Hashtable<Class, ValidationRuleSet> _inheritedRules;
 
 	private boolean recomputeInheritedRules = true;
 
-	private FlexoProject _project;
-	private TargetType _targetType;
+	private final FlexoProject _project;
 
-	public ValidationModel(FlexoProject project, TargetType targetType) {
+	public ValidationModel(FlexoProject project) {
 		super();
-		_targetType = targetType;
 		_project = project;
 		_rules = new Hashtable<Class, Vector<ValidationRule>>();
 		_inheritedRules = new Hashtable<Class, ValidationRuleSet>();
@@ -357,14 +355,14 @@ public abstract class ValidationModel extends FlexoListModel {
 			Class type1 = (Class) e1.nextElement();
 			Vector rulesForType = _rules.get(type1);
 			ValidationRuleSet ruleSet = new ValidationRuleSet(type1, rulesForType);
-			if (_project != null) {
+			/*if (_project != null) {
 				for (Enumeration e2 = rulesForType.elements(); e2.hasMoreElements();) {
 					ValidationRule rule = (ValidationRule) e2.nextElement();
 					if (!rule.isValidForTarget(getTargetType()) || filter != null && !filter.accept(rule)) {
 						ruleSet.removeRule(rule);
 					}
 				}
-			}
+			}*/
 			_inheritedRules.put(type1, ruleSet);
 		}
 		for (Enumeration<Class> e1 = _rules.keys(); e1.hasMoreElements();) {
@@ -390,7 +388,7 @@ public abstract class ValidationModel extends FlexoListModel {
 	}
 
 	private class ClassComparator implements Comparator<Class> {
-		private Collator collator;
+		private final Collator collator;
 
 		ClassComparator() {
 			collator = Collator.getInstance();
@@ -461,12 +459,12 @@ public abstract class ValidationModel extends FlexoListModel {
 		return _inheritedRules.get(_keys.elementAt(index));
 	}
 
-	public TargetType getTargetType() {
+	/*public TargetType getTargetType() {
 		return _targetType;
 	}
 
 	public void setTargetType(CodeType targetType) {
 		_targetType = targetType;
-	}
+	}*/
 
 }

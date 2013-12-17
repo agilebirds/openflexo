@@ -66,8 +66,8 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 	private Vector<MatchingCriteria> matchingCriterias = new Vector<MatchingCriteria>();
 	private Vector<CreateEditionPatternInstanceParameter> parameters = new Vector<CreateEditionPatternInstanceParameter>();
 
-	public MatchEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public MatchEditionPatternInstance() {
+		super();
 	}
 
 	@Override
@@ -343,12 +343,12 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 		private DataBinding<Object> value;
 
 		// Use it only for deserialization
-		public MatchingCriteria(VirtualModel.VirtualModelBuilder builder) {
-			super(builder);
+		public MatchingCriteria() {
+			super();
 		}
 
 		public MatchingCriteria(PatternRole patternRole) {
-			super(null);
+			super();
 			this.patternRole = patternRole;
 		}
 
@@ -481,12 +481,12 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 		private DataBinding<Object> value;
 
 		// Use it only for deserialization
-		public CreateEditionPatternInstanceParameter(VirtualModel.VirtualModelBuilder builder) {
-			super(builder);
+		public CreateEditionPatternInstanceParameter() {
+			super();
 		}
 
 		public CreateEditionPatternInstanceParameter(EditionSchemeParameter param) {
-			super(null);
+			super();
 			this.param = param;
 		}
 

@@ -17,28 +17,37 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
-
-import java.lang.reflect.Type;
+package org.openflexo.foundation.viewpoint.inspector;
 
 import org.flexo.model.FlexoModelObject;
 import org.flexo.model.FlexoProcess;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.wkf.ProcessFolder;
+import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.foundation.wkf.node.OperationNode;
 
-public class FlexoObjectParameter extends EditionSchemeParameter {
+/**
+ * Represents an inspector entry for a flexo object
+ * 
+ * @author sylvain
+ * 
+ */
+public class AgileBirdsObjectInspectorEntry extends InspectorEntry {
 
-	// TODO: unify this this FlexoObjectType in FlexoObjectInspectorEntry and FlexoModelObjectPatternRole
+	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoModelObjectPatternRole
 	public enum FlexoObjectType {
-		Process, ProcessFolder, Role, Activity, Operation, Action
+		Process, ProcessFolder, Role, Activity, Operation, Action, Screen
+	}
+
+	public AgileBirdsObjectInspectorEntry() {
+		super();
 	}
 
 	private FlexoObjectType flexoObjectType;
 
-	public FlexoObjectParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-	}
-
 	@Override
-	public Type getType() {
+	public Class getDefaultDataClass() {
 		if (getFlexoObjectType() == null) {
 			return FlexoModelObject.class;
 		}
@@ -55,15 +64,12 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 			return OperationNode.class;
 		case Action:
 			return ActionNode.class;
+		case Screen:
+			return OperationComponentDefinition.class;
 		default:
 			return FlexoModelObject.class;
 		}
 	};
-
-	@Override
-	public WidgetType getWidget() {
-		return WidgetType.FLEXO_OBJECT;
-	}
 
 	public FlexoObjectType getFlexoObjectType() {
 		return flexoObjectType;
@@ -73,4 +79,28 @@ public class FlexoObjectParameter extends EditionSchemeParameter {
 		this.flexoObjectType = flexoObjectType;
 	}
 
+	@Override
+	public String getWidgetName() {
+		if (getFlexoObjectType() == null) {
+			return "FlexoObjectSelector";
+		}
+		switch (getFlexoObjectType()) {
+		case Process:
+			return "ProcessSelector";
+		case ProcessFolder:
+			return "ProcessFolderSelector";
+		case Role:
+			return "RoleSelector";
+		case Activity:
+			return "ActivitySelector";
+		case Operation:
+			return "OperationSelector";
+		case Action:
+			return "ActionSelector";
+		case Screen:
+			return "ComponentSelector";
+		default:
+			return "FlexoObjectSelector";
+		}
+	}
 }

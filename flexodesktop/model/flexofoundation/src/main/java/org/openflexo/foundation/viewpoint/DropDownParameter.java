@@ -24,8 +24,8 @@ import java.util.Vector;
 
 public class DropDownParameter extends EditionSchemeParameter {
 
-	public DropDownParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DropDownParameter() {
+		super();
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public class IterationAction extends ControlStructureAction {
 
 	private String iteratorName = "item";
 
-	public IterationAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public IterationAction() {
+		super();
 	}
 
 	@Override

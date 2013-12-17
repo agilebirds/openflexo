@@ -19,19 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.fge.FGEModelFactoryImpl;
+import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 
 /**
- * Model factory used along federation layer (FML level) Only one instance of this class should be used in a session
+ * {@link ModelFactory} used to handle ViewPoint models<br>
+ * Only one instance of this class should be used in a session
  * 
  * @author sylvain
  * 
  */
-public class FMLModelFactory extends FGEModelFactoryImpl {
+public class ViewPointModelFactory extends ModelFactory {
 
-	public FMLModelFactory() throws ModelDefinitionException {
-		super();
+	public ViewPointModelFactory() throws ModelDefinitionException {
+		super(ModelContextLibrary.getModelContext(ViewPoint.class));
 	}
-
 }

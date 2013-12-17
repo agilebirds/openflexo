@@ -16,12 +16,19 @@ import org.jdom2.output.Format;
 import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
+import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.utils.XMLUtils;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointModelFactory;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -32,7 +39,7 @@ import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.StringEncoder;
 
-public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<ViewPoint> implements ViewPointResource {
+public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint, ViewPointModelFactory> implements ViewPointResource {
 
 	static final Logger logger = Logger.getLogger(FlexoXMLFileResourceImpl.class.getPackage().getName());
 
@@ -130,7 +137,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 					if (virtualModelFile.exists()) {
 						// TODO: we must find something more efficient
 						try {
-							Document d = FlexoXMLFileResourceImpl.readXMLFile(virtualModelFile);
+							Document d = XMLUtils.readXMLFile(virtualModelFile);
 							if (d.getRootElement().getName().equals("VirtualModel")) {
 								VirtualModelResource virtualModelResource = VirtualModelResourceImpl.retrieveVirtualModelResource(f,
 										virtualModelFile, this, getViewPointLibrary());
@@ -152,19 +159,12 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	}
 
 	@Override
-	public final ViewPointBuilder instanciateNewBuilder() {
-		return new ViewPointBuilder(getViewPointLibrary(), this, getModelVersion());
-	}
-
-	@Override
 	public ViewPoint getViewPoint() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
@@ -183,8 +183,8 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	 * @throws FileNotFoundException
 	 */
 	@Override
-	public ViewPoint loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException, FileNotFoundException,
-			ResourceDependencyLoopException {
+	public ViewPoint loadResourceData(IProgress progress) throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
+			InconsistentDataException, InvalidModelDefinitionException {
 
 		relativePathFileConverter = new RelativePathFileConverter(getDirectory());
 
@@ -209,19 +209,6 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	@Override
 	public Class<ViewPoint> getResourceDataClass() {
 		return ViewPoint.class;
-	}
-
-	/**
-	 * This method updates the resource.
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		return null;
-	}
-
-	@Override
-	public boolean hasBuilder() {
-		return true;
 	}
 
 	/**
@@ -317,8 +304,8 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		logger.fine("Creating directory " + diagramSpecificationDir.getAbsolutePath());
 
 		try {
-			Document viewPointDocument = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
-			Document diagramSpecificationDocument = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
+			Document viewPointDocument = XMLUtils.readXMLFile(xmlFile);
+			Document diagramSpecificationDocument = XMLUtils.readXMLFile(xmlFile);
 
 			for (File f : viewPointDirectory.listFiles()) {
 				if (!f.equals(xmlFile) && !f.equals(diagramSpecificationDir) && !f.getName().endsWith("~")) {
@@ -341,7 +328,7 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 				}
 			}
 
-			Element diagramSpecification = FlexoXMLFileResourceImpl.getElement(diagramSpecificationDocument, "ViewPoint");
+			Element diagramSpecification = XMLUtils.getElement(diagramSpecificationDocument, "ViewPoint");
 			diagramSpecification.setName("DiagramSpecification");
 			FileOutputStream fos = new FileOutputStream(new File(diagramSpecificationDir, "DiagramSpecification.xml"));
 			Format prettyFormat = Format.getPrettyFormat();

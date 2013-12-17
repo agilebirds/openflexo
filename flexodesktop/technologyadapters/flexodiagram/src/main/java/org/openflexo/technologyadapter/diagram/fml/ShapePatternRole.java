@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
@@ -19,8 +18,8 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 
 	// private List<ShapePatternRole> _possibleParentPatternRole;
 
-	public ShapePatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ShapePatternRole() {
+		super();
 	}
 
 	@Override

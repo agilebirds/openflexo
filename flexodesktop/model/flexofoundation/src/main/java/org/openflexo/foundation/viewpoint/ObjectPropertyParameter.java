@@ -36,8 +36,8 @@ public class ObjectPropertyParameter extends PropertyParameter {
 	private DataBinding<IFlexoOntologyClass> rangeValue;
 	private boolean isDynamicRangeValueSet = false;
 
-	public ObjectPropertyParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ObjectPropertyParameter() {
+		super();
 	}
 
 	@Override

@@ -38,14 +38,12 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * A model slot is a named object providing access to a particular data encoded in a given technology A model slot should be seen as a
@@ -84,23 +82,23 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	}*/
 
 	protected ModelSlot(VirtualModel virtualModel, TechnologyAdapter technologyAdapter) {
-		super((VirtualModel.VirtualModelBuilder) null);
+		super();
 		this.virtualModel = virtualModel;
 		this.viewPoint = virtualModel.getViewPoint();
 		this.technologyAdapter = technologyAdapter;
 	}
 
-	protected ModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	protected ModelSlot() {
+		super();
 
-		if (builder != null) {
+		/*if (builder != null) {
 			this.viewPoint = builder.getViewPoint();
 			if (builder.getViewPointLibrary() != null && builder.getViewPointLibrary().getServiceManager() != null
 					&& builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService() != null) {
 				this.technologyAdapter = builder.getViewPointLibrary().getServiceManager().getTechnologyAdapterService()
 						.getTechnologyAdapter(getTechnologyAdapterClass());
 			}
-		}
+		}*/
 	}
 
 	/*public ModelSlot(ViewPointBuilder builder) {
@@ -143,8 +141,6 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
 		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "editionPattern";
-		} else if (FlexoModelObjectPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return "modelObject";
 		} else if (PrimitivePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "primitive";
 		}
@@ -187,8 +183,8 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @return
 	 */
 	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass) {
-		Class[] constructorParams = new Class[1];
-		constructorParams[0] = VirtualModel.VirtualModelBuilder.class;
+		Class[] constructorParams = new Class[0];
+		// constructorParams[0] = VirtualModel.VirtualModelBuilder.class;
 		try {
 			Constructor<A> c = actionClass.getConstructor(constructorParams);
 			return c.newInstance(null);

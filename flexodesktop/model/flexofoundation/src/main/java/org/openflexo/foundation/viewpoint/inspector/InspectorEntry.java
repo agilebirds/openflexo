@@ -49,8 +49,8 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	private DataBinding<Object> data;
 	private DataBinding<Boolean> conditional;
 
-	public InspectorEntry(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public InspectorEntry() {
+		super();
 	}
 
 	@Override
@@ -167,10 +167,10 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	@Override
 	public BindingModel getBindingModel() {
 		EditionPatternInspector inspector = getInspector();
-		if (inspector != null){
+		if (inspector != null) {
 			return getInspector().getBindingModel();
-		}
-		else return null;
+		} else
+			return null;
 	}
 
 	public static class DataBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InspectorEntry> {

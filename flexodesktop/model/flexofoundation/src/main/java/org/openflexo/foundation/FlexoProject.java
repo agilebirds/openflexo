@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -48,12 +50,16 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.resource.DuplicateExternalRepositoryNameException;
+import org.openflexo.foundation.resource.ExternalRepositorySet;
 import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ImportedProjectLoaded;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -96,7 +102,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  * @author sguerin
  */
-public class FlexoProject extends FlexoProjectObject implements Validable, ResourceData<FlexoProject> {
+public class FlexoProject extends ResourceRepository<FlexoResource<?>> implements Validable, ResourceData<FlexoProject> {
 
 	protected static final Logger logger = Logger.getLogger(FlexoProject.class.getPackage().getName());
 
@@ -169,6 +175,9 @@ public class FlexoProject extends FlexoProjectObject implements Validable, Resou
 
 	private IModuleLoader moduleLoader;
 	private FlexoProjectReferenceLoader projectReferenceLoader;
+
+	private List<ProjectExternalRepository> _externalRepositories;
+	private final Map<String, ProjectExternalRepository> repositoriesCache;
 
 	// private List<ModelSlotInstance> models;
 	// private Map<View, Map<ModelSlot, ModelSlotInstance>> modelsAssociationMap; // Do
@@ -307,8 +316,8 @@ public class FlexoProject extends FlexoProjectObject implements Validable, Resou
 			id = ID++;
 		}
 		logger.info("Create new project, ID=" + id);
-		// _externalRepositories = new Vector<ProjectExternalRepository>();
-		// repositoriesCache = new Hashtable<String, ProjectExternalRepository>();
+		_externalRepositories = new ArrayList<ProjectExternalRepository>();
+		repositoriesCache = new Hashtable<String, ProjectExternalRepository>();
 		filesToDelete = new Vector<File>();
 		// resources = new ResourceHashtable();
 		// docTypes = new Vector<DocType>();
@@ -412,11 +421,6 @@ public class FlexoProject extends FlexoProjectObject implements Validable, Resou
 	@Override
 	public void setResource(FlexoResource<FlexoProject> resource) {
 		projectDirectoryResource = (ProjectDirectoryResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return this;
 	}
 
 	/**
@@ -2924,7 +2928,6 @@ public class FlexoProject extends FlexoProjectObject implements Validable, Resou
 	}
 
 	// TODO: Should be refactored with injectors
-	@Override
 	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
 	}
@@ -3404,4 +3407,85 @@ public class FlexoProject extends FlexoProjectObject implements Validable, Resou
 		return returned;
 	}
 
+	public ProjectExternalRepository createExternalRepositoryWithKey(String identifier) throws DuplicateExternalRepositoryNameException {
+		for (ProjectExternalRepository rep : _externalRepositories) {
+			if (rep.getIdentifier().equals(identifier)) {
+				throw new DuplicateExternalRepositoryNameException(null, identifier);
+			}
+		}
+		ProjectExternalRepository returned = new ProjectExternalRepository(this, identifier);
+		addToExternalRepositories(returned);
+		return returned;
+	}
+
+	public String getNextExternalRepositoryIdentifier(String base) {
+		String attempt = base;
+		int i = 0;
+		while (getExternalRepositoryWithKey(attempt) != null) {
+			i++;
+			attempt = base + i;
+		}
+		return attempt;
+	}
+
+	public ProjectExternalRepository getExternalRepositoryWithKey(String identifier) {
+		for (ProjectExternalRepository rep : _externalRepositories) {
+			if (rep.getIdentifier().equals(identifier)) {
+				return rep;
+			}
+		}
+		return null;
+	}
+
+	public ProjectExternalRepository getExternalRepositoryWithDirectory(File directory) {
+		if (directory == null) {
+			return null;
+		}
+		for (ProjectExternalRepository rep : _externalRepositories) {
+			if (rep.getDirectory() != null && rep.getDirectory().equals(directory)) {
+				return rep;
+			}
+		}
+		return null;
+	}
+
+	public ProjectExternalRepository setDirectoryForRepositoryName(String identifier, File directory) {
+		ProjectExternalRepository returned = getExternalRepositoryWithKey(identifier);
+		if (returned == null) {
+			returned = new ProjectExternalRepository(this, identifier);
+			addToExternalRepositories(returned);
+		}
+		if (returned.getDirectory() == null || !returned.getDirectory().equals(directory)) {
+			returned.setDirectory(directory);
+			setChanged();
+			notifyObservers(new ExternalRepositorySet(returned));
+		}
+		return returned;
+	}
+
+	public List<ProjectExternalRepository> getExternalRepositories() {
+		return _externalRepositories;
+	}
+
+	public void setExternalRepositories(List<ProjectExternalRepository> externalRepositories) {
+		_externalRepositories = externalRepositories;
+		repositoriesCache.clear();
+		if (externalRepositories != null) {
+			for (ProjectExternalRepository projectExternalRepository : externalRepositories) {
+				repositoriesCache.put(projectExternalRepository.getIdentifier(), projectExternalRepository);
+			}
+		}
+	}
+
+	public void addToExternalRepositories(ProjectExternalRepository anExternalRepository) {
+		_externalRepositories.add(anExternalRepository);
+		repositoriesCache.put(anExternalRepository.getIdentifier(), anExternalRepository);
+		setChanged();
+	}
+
+	public void removeFromExternalRepositories(ProjectExternalRepository anExternalRepository) {
+		_externalRepositories.remove(anExternalRepository);
+		repositoriesCache.remove(anExternalRepository.getIdentifier());
+		setChanged();
+	}
 }

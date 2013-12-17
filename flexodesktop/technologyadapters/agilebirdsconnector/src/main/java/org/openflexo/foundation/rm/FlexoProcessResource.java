@@ -50,7 +50,7 @@ import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.StringEncoder;
@@ -1641,7 +1641,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			// roles = new Hashtable();
 			// pendingRoles = new Hashtable();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
@@ -1912,7 +1912,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -1947,7 +1947,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 			// roles = new Hashtable();
 			// pendingRoles = new Hashtable();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
@@ -2089,7 +2089,7 @@ public class FlexoProcessResource extends FlexoXMLStorageResource<FlexoProcess> 
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}

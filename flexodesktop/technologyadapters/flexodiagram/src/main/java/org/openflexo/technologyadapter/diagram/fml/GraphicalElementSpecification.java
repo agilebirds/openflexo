@@ -38,13 +38,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private boolean mandatory;
 
 	// Use it only for deserialization
-	public GraphicalElementSpecification(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public GraphicalElementSpecification() {
+		super();
 	}
 
 	public GraphicalElementSpecification(GraphicalElementPatternRole patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
 			boolean mandatory) {
-		super(null);
+		super();
 		this.patternRole = patternRole;
 		this.feature = feature;
 		this.readOnly = readOnly;

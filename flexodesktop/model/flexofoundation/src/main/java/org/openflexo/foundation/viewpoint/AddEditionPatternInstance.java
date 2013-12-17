@@ -61,8 +61,8 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public AddEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddEditionPatternInstance() {
+		super();
 	}
 
 	public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {
@@ -228,12 +228,12 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 		private DataBinding<Object> value;
 
 		// Use it only for deserialization
-		public AddEditionPatternInstanceParameter(VirtualModel.VirtualModelBuilder builder) {
-			super(builder);
+		public AddEditionPatternInstanceParameter() {
+			super();
 		}
 
 		public AddEditionPatternInstanceParameter(EditionSchemeParameter param) {
-			super(null);
+			super();
 			this.param = param;
 		}
 

@@ -13,7 +13,6 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementAction.ActionMask;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
@@ -39,8 +38,8 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 
 	private GR graphicalRepresentation;
 
-	public GraphicalElementPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public GraphicalElementPatternRole() {
+		super();
 		initDefaultSpecifications();
 	}
 

@@ -45,8 +45,8 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 
 	private String variableName = null;
 
-	public AssignableAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AssignableAction() {
+		super();
 	}
 
 	public boolean isAssignationRequired() {

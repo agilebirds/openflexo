@@ -24,8 +24,8 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/ActionSchemePanel.fib")
 public class ActionScheme extends AbstractActionScheme {
 
-	public ActionScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ActionScheme() {
+		super();
 	}
 
 }

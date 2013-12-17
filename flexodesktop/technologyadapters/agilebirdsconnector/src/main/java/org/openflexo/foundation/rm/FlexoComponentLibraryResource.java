@@ -36,7 +36,7 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FlexoVersion;
 
@@ -248,7 +248,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 		protected ComponentLibraryConverter1() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
@@ -288,7 +288,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 			File menuFile = ProjectRestructuration.getExpectedNavigationMenuFile(project);
 			FlexoProjectFile resFile = new FlexoProjectFile(menuFile, project);
 
-			boolean returned = XMLUtils.saveXMLFile(newMenuDocument, resFile.getFile());
+			boolean returned = XMLUtils2.saveXMLFile(newMenuDocument, resFile.getFile());
 
 			FlexoNavigationMenuResource res;
 			try {

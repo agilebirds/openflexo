@@ -69,8 +69,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	private DataBinding<Boolean> conditional;
 	private DataBinding<Object> defaultValue;
 
-	public EditionSchemeParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionSchemeParameter() {
+		super();
 	}
 
 	@Override

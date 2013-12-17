@@ -31,6 +31,7 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.ProjectInitializerException;

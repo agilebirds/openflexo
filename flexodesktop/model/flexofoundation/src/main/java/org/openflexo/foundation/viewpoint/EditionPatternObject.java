@@ -27,8 +27,8 @@ package org.openflexo.foundation.viewpoint;
  */
 public abstract class EditionPatternObject extends NamedViewPointObject {
 
-	public EditionPatternObject(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionPatternObject() {
+		super();
 	}
 
 	public abstract EditionPattern getEditionPattern();

@@ -13,7 +13,6 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 
 /**
@@ -28,8 +27,8 @@ public abstract class FreeModelSlot<RD extends ResourceData<RD>> extends ModelSl
 		super(virtualModel, technologyAdapter);
 	}
 
-	protected FreeModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	protected FreeModelSlot(/*VirtualModelBuilder builder*/) {
+		super(/*builder*/);
 	}
 
 	/**

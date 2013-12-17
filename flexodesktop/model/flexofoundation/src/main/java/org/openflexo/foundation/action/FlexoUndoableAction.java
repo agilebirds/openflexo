@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.FlexoResource;
 
 /**
  * 
@@ -36,11 +37,11 @@ import org.openflexo.foundation.FlexoProject;
  */
 public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends
 		FlexoAction<A, T1, T2> {
-	private WeakHashMap<FlexoStorageResource<?>, Object> _modifiedResources;
+	private final WeakHashMap<FlexoResource<?>, Object> _modifiedResources;
 
 	public FlexoUndoableAction(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		_modifiedResources = new WeakHashMap<FlexoStorageResource<?>, Object>();
+		_modifiedResources = new WeakHashMap<FlexoResource<?>, Object>();
 	}
 
 	protected FlexoProject getProject() {
@@ -60,8 +61,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		// Let's keep in memory the modified resources
 		_modifiedResources.clear();
 		if (getProject() != null) {
-			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
-				if (!r.isModified()) {
+			for (FlexoResource<?> r : getProject().getServiceManager().getResourceManager().getLoadedResources()) {
+				if (!r.getLoadedResourceData().isModified()) {
 					_modifiedResources.put(r, null);
 				}
 			}
@@ -77,8 +78,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		// Now we remove all the resources that are still not modified. The left delta are the resources that have been directly modified by
 		// this action (and the embedded ones)
 		if (getProject() != null) {
-			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
-				if (!r.isModified()) {
+			for (FlexoResource<?> r : getProject().getServiceManager().getResourceManager().getLoadedResources()) {
+				if (!r.getLoadedResourceData().isModified()) {
 					_modifiedResources.remove(r);
 				}
 			}
@@ -92,8 +93,8 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		executionStatus = ExecutionStatus.EXECUTING_UNDO_CORE;
 		_modifiedResources.clear();
 		if (getProject() != null) {
-			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
-				if (!r.isModified()) {
+			for (FlexoResource<?> r : getProject().getServiceManager().getResourceManager().getLoadedResources()) {
+				if (!r.getLoadedResourceData().isModified()) {
 					_modifiedResources.put(r, null);
 				}
 			}
@@ -110,17 +111,17 @@ public abstract class FlexoUndoableAction<A extends FlexoUndoableAction<A, T1, T
 		// Now we remove all the resources that are still not modified. The left delta are the resources that have been directly modified by
 		// this action (and the embedded ones)
 		if (getProject() != null) {
-			for (FlexoStorageResource<? extends StorageResourceData> r : getProject().getStorageResources()) {
-				if (!r.isModified()) {
+			for (FlexoResource<?> r : getProject().getServiceManager().getResourceManager().getLoadedResources()) {
+				if (!r.getLoadedResourceData().isModified()) {
 					_modifiedResources.remove(r);
 				}
 			}
 		}
 
-		Iterator<FlexoStorageResource<?>> i = _modifiedResources.keySet().iterator();
+		Iterator<FlexoResource<?>> i = _modifiedResources.keySet().iterator();
 		while (i.hasNext()) {
-			FlexoStorageResource<?> r = i.next();
-			r.getResourceData().clearIsModified(true);
+			FlexoResource<?> r = i.next();
+			r.getLoadedResourceData().clearIsModified(true);
 		}
 		return (A) this;
 	}

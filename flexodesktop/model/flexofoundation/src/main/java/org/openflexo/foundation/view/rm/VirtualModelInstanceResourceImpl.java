@@ -11,10 +11,17 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
+import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
+import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.utils.XMLUtils;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceModelFactory;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -30,8 +37,8 @@ import org.openflexo.toolbox.StringUtils;
  * @author Sylvain
  * 
  */
-public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResourceImpl<VirtualModelInstance> implements
-		VirtualModelInstanceResource, AccessibleProxyObject {
+public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImpl<VirtualModelInstance, VirtualModelInstanceModelFactory>
+		implements VirtualModelInstanceResource, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelInstanceResourceImpl.class.getPackage().getName());
 
@@ -103,8 +110,6 @@ public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResou
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
 		}
@@ -114,16 +119,6 @@ public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResou
 	@Override
 	public Class<VirtualModelInstance> getResourceDataClass() {
 		return VirtualModelInstance.class;
-	}
-
-	@Override
-	public boolean hasBuilder() {
-		return true;
-	}
-
-	@Override
-	public VirtualModelInstanceBuilder instanciateNewBuilder() {
-		return new VirtualModelInstanceBuilder(getContainer(), this);
 	}
 
 	protected static class VirtualModelInstanceInfo {
@@ -140,8 +135,8 @@ public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResou
 					virtualModelInstanceFile.getName().length() - VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX.length());
 
 			if (virtualModelInstanceFile.exists()) {
-				document = FlexoXMLFileResourceImpl.readXMLFile(virtualModelInstanceFile);
-				Element root = FlexoXMLFileResourceImpl.getElement(document, searchedRootXMLTag);
+				document = XMLUtils.readXMLFile(virtualModelInstanceFile);
+				Element root = XMLUtils.getElement(document, searchedRootXMLTag);
 				if (root != null) {
 					VirtualModelInstanceInfo returned = new VirtualModelInstanceInfo();
 					returned.name = baseName;
@@ -168,8 +163,8 @@ public abstract class VirtualModelInstanceResourceImpl extends FlexoXMLFileResou
 	}
 
 	@Override
-	public VirtualModelInstance loadResourceData(IProgress progress) throws ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
+	public VirtualModelInstance loadResourceData(IProgress progress) throws FlexoFileNotFoundException, IOFlexoException,
+			InvalidXMLException, InconsistentDataException, InvalidModelDefinitionException {
 		VirtualModelInstance returned = super.loadResourceData(progress);
 		if (returned.isSynchronizable()) {
 			returned.synchronize(null);

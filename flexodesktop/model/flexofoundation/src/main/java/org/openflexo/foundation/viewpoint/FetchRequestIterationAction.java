@@ -41,8 +41,8 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 
 	private FetchRequest fetchRequest;
 
-	public FetchRequestIterationAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public FetchRequestIterationAction() {
+		super();
 	}
 
 	@Override

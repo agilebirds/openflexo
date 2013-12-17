@@ -28,8 +28,8 @@ public class DataPropertyParameter extends PropertyParameter {
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DataPropertyParameter() {
+		super();
 	}
 
 	@Override

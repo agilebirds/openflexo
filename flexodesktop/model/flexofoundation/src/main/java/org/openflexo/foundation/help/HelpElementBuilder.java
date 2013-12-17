@@ -23,9 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.flexo.model.FlexoModelObject;
 import org.jdom2.CDATA;
 import org.jdom2.Element;
+import org.openflexo.foundation.FlexoObject;
 
 public class HelpElementBuilder {
 
@@ -35,12 +35,12 @@ public class HelpElementBuilder {
 		reply.setAttribute("shortLabel", helpEntryPoint.getShortHelpLabel());
 		reply.setAttribute("longLabel", helpEntryPoint.getTypedHelpLabel());
 		reply.setAttribute("type", helpEntryPoint.getClass().getName());
-		ScreenshotResource screenshootResource = helpEntryPoint.getProject().getScreenshotResource(
+		/*ScreenshotResource screenshootResource = helpEntryPoint.getProject().getScreenshotResource(
 				helpEntryPoint instanceof OperationNode ? ((OperationNode) helpEntryPoint).getAbstractActivityNode()
 						: (FlexoModelObject) helpEntryPoint, false);
 		if (screenshootResource != null) {
 			reply.setAttribute("screenshootName", screenshootResource.getFileName());
-		}
+		}*/
 		String parents = parentIDs(helpEntryPoint);
 		if (parents.length() > 0) {
 			reply.setAttribute("parents", parents);
@@ -51,27 +51,27 @@ public class HelpElementBuilder {
 			reply.setAttribute("childs", childs);
 		}
 
-		Element d = buildDescriptionElement((FlexoModelObject) helpEntryPoint);
+		Element d = buildDescriptionElement((FlexoObject) helpEntryPoint);
 		if (d != null) {
 			reply.addContent(d);
 		}
 
-		Element sd = buildSpecificDescriptionElement((FlexoModelObject) helpEntryPoint);
+		Element sd = buildSpecificDescriptionElement((FlexoObject) helpEntryPoint);
 		if (sd != null) {
 			reply.addContent(sd);
 		}
 
-		if (helpEntryPoint instanceof OperationNode) {
+		/*if (helpEntryPoint instanceof OperationNode) {
 			Element buttons = buildButtonsElement((OperationNode) helpEntryPoint);
 			if (buttons != null) {
 				reply.addContent(buttons);
 			}
-		}
+		}*/
 
 		return reply;
 	}
 
-	private static Element buildButtonsElement(OperationNode helpEntryPoint) {
+	/*private static Element buildButtonsElement(OperationNode helpEntryPoint) {
 		OperationComponentInstance ci = helpEntryPoint.getComponentInstance();
 		if (ci != null && ci.getAllActionButtonPairs().keySet().size() > 0) {
 			Element reply = new Element("buttons");
@@ -109,9 +109,9 @@ public class HelpElementBuilder {
 			return reply;
 		}
 		return null;
-	}
+	}*/
 
-	private static Element buildSpecificDescriptionElement(FlexoModelObject o) {
+	private static Element buildSpecificDescriptionElement(FlexoObject o) {
 		if (o.getSpecificDescriptions().size() > 0) {
 			Element specificDescriptions = new Element("specificDescriptions");
 			for (Entry<String, String> e : o.getSpecificDescriptions().entrySet()) {
@@ -126,7 +126,7 @@ public class HelpElementBuilder {
 		return null;
 	}
 
-	private static Element buildDescriptionElement(FlexoModelObject o) {
+	private static Element buildDescriptionElement(FlexoObject o) {
 		if (o.hasDescription()) {
 			Element description = new Element("description");
 			description.addContent(new CDATA(o.getDescription()));
@@ -156,15 +156,15 @@ public class HelpElementBuilder {
 		Iterator<ApplicationHelpEntryPoint> it = childs.iterator();
 		while (it.hasNext()) {
 			ApplicationHelpEntryPoint elem = it.next();
-			if (elem instanceof OperationNode) {
+			/*if (elem instanceof OperationNode) {
 				if (((OperationNode) elem).getComponentInstance() != null) {
 					reply.append(((OperationNode) elem).getComponentInstance().getFlexoID());
 					reply.append(",");
 				}
-			} else {
-				reply.append(elem.getFlexoID());
-				reply.append(",");
-			}
+			} else {*/
+			reply.append(elem.getFlexoID());
+			reply.append(",");
+			// }
 
 		}
 		if (reply.length() == 0) {

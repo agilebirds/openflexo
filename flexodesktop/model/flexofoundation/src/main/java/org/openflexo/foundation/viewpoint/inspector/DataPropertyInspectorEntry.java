@@ -21,7 +21,6 @@ package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Represents an inspector entry for an ontology object property
@@ -33,8 +32,8 @@ public class DataPropertyInspectorEntry extends PropertyInspectorEntry {
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyInspectorEntry(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DataPropertyInspectorEntry() {
+		super();
 	}
 
 	@Override

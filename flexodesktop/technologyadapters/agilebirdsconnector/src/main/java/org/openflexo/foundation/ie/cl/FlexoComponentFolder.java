@@ -58,7 +58,7 @@ import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.xml.FlexoComponentLibraryBuilder;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
@@ -558,7 +558,7 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 			super();
 			res = _res;
 			try {
-				document = XMLUtils.getJDOMDocument(res.getFile());
+				document = XMLUtils2.getJDOMDocument(res.getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -630,7 +630,7 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 		}
 
 		private boolean save() {
-			return XMLUtils.saveXMLFile(document, res.getFile());
+			return XMLUtils2.saveXMLFile(document, res.getFile());
 		}
 	}
 

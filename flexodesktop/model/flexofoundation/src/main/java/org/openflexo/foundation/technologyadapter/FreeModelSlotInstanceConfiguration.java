@@ -120,9 +120,6 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

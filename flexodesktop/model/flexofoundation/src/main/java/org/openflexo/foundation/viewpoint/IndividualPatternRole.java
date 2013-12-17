@@ -14,8 +14,8 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
 
 public abstract class IndividualPatternRole<I extends IFlexoOntologyIndividual> extends OntologicObjectPatternRole<I> {
 
-	public IndividualPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public IndividualPatternRole() {
+		super();
 	}
 
 	@Override

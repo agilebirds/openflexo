@@ -22,7 +22,6 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
@@ -64,7 +63,7 @@ public class LoadResourceAction extends FlexoAction<LoadResourceAction, FlexoObj
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(LoadResourceAction.actionType, FlexoObject.class);
+		FlexoObject.addActionForClass(LoadResourceAction.actionType, FlexoObject.class);
 	}
 
 	LoadResourceAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

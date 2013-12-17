@@ -34,8 +34,8 @@ public class NavigationScheme extends AbstractActionScheme {
 
 	private DataBinding<Object> targetObject;
 
-	public NavigationScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public NavigationScheme() {
+		super();
 	}
 
 	public DataBinding<Object> getTargetObject() {

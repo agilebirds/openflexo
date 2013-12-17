@@ -16,7 +16,6 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -39,8 +38,8 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 		super(virtualModel, technologyAdapter);
 	}
 
-	protected TypeAwareModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	protected TypeAwareModelSlot() {
+		super();
 	}
 
 	/**

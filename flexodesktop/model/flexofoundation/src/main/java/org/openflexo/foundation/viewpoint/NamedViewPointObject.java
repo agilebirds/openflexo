@@ -22,8 +22,6 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an object which is part of the model of a ViewPoint, and has a name, a description and can be identified by an URI
@@ -38,13 +36,13 @@ public abstract class NamedViewPointObject extends ViewPointObject {
 	private String name;
 	private String description;
 
-	public NamedViewPointObject(VirtualModelBuilder builder) {
-		super(builder);
+	public NamedViewPointObject(/*VirtualModelBuilder builder*/) {
+		super(/*builder*/);
 	}
 
-	public NamedViewPointObject(ViewPointBuilder builder) {
+	/*public NamedViewPointObject(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	/*public NamedViewPointObject(ExampleDiagramBuilder builder) {
 		super(builder);

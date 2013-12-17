@@ -78,8 +78,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	public EditionScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionScheme() {
+		super();
 		actions = new Vector<EditionAction<?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
 		editionSchemeParameters = new EditionSchemeParameters(this);
@@ -511,7 +511,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createURIParameter() {
-		EditionSchemeParameter newParameter = new URIParameter(null);
+		EditionSchemeParameter newParameter = new URIParameter();
 		newParameter.setName("uri");
 		// newParameter.setLabel("uri");
 		addToParameters(newParameter);
@@ -519,7 +519,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createTextFieldParameter() {
-		EditionSchemeParameter newParameter = new TextFieldParameter(null);
+		EditionSchemeParameter newParameter = new TextFieldParameter();
 		newParameter.setName("textField");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -527,7 +527,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createTextAreaParameter() {
-		EditionSchemeParameter newParameter = new TextAreaParameter(null);
+		EditionSchemeParameter newParameter = new TextAreaParameter();
 		newParameter.setName("textArea");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -535,7 +535,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createIntegerParameter() {
-		EditionSchemeParameter newParameter = new IntegerParameter(null);
+		EditionSchemeParameter newParameter = new IntegerParameter();
 		newParameter.setName("integer");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -543,7 +543,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createCheckBoxParameter() {
-		EditionSchemeParameter newParameter = new CheckboxParameter(null);
+		EditionSchemeParameter newParameter = new CheckboxParameter();
 		newParameter.setName("checkbox");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -551,7 +551,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createDropDownParameter() {
-		EditionSchemeParameter newParameter = new DropDownParameter(null);
+		EditionSchemeParameter newParameter = new DropDownParameter();
 		newParameter.setName("dropdown");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -559,7 +559,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createIndividualParameter() {
-		EditionSchemeParameter newParameter = new IndividualParameter(null);
+		EditionSchemeParameter newParameter = new IndividualParameter();
 		newParameter.setName("individual");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -567,7 +567,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createClassParameter() {
-		EditionSchemeParameter newParameter = new ClassParameter(null);
+		EditionSchemeParameter newParameter = new ClassParameter();
 		newParameter.setName("class");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -575,7 +575,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createPropertyParameter() {
-		EditionSchemeParameter newParameter = new PropertyParameter(null);
+		EditionSchemeParameter newParameter = new PropertyParameter();
 		newParameter.setName("property");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -583,7 +583,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createObjectPropertyParameter() {
-		EditionSchemeParameter newParameter = new ObjectPropertyParameter(null);
+		EditionSchemeParameter newParameter = new ObjectPropertyParameter();
 		newParameter.setName("property");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -591,23 +591,23 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createDataPropertyParameter() {
-		EditionSchemeParameter newParameter = new DataPropertyParameter(null);
+		EditionSchemeParameter newParameter = new DataPropertyParameter();
 		newParameter.setName("property");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
 	}
 
-	public EditionSchemeParameter createFlexoObjectParameter() {
+	/*public EditionSchemeParameter createFlexoObjectParameter() {
 		EditionSchemeParameter newParameter = new FlexoObjectParameter(null);
 		newParameter.setName("flexoObject");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;
-	}
+	}*/
 
 	public EditionSchemeParameter createTechnologyObjectParameter() {
-		EditionSchemeParameter newParameter = new TechnologyObjectParameter(null);
+		EditionSchemeParameter newParameter = new TechnologyObjectParameter();
 		newParameter.setName("technologyObject");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -615,7 +615,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createListParameter() {
-		EditionSchemeParameter newParameter = new ListParameter(null);
+		EditionSchemeParameter newParameter = new ListParameter();
 		newParameter.setName("list");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -623,7 +623,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public EditionSchemeParameter createEditionPatternInstanceParameter() {
-		EditionSchemeParameter newParameter = new EditionPatternInstanceParameter(null);
+		EditionSchemeParameter newParameter = new EditionPatternInstanceParameter();
 		newParameter.setName("editionPatternInstance");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
@@ -765,7 +765,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	 * @return
 	 */
 	public EditionScheme duplicate(String newName) {
-		EditionScheme newEditionScheme = (EditionScheme) cloneUsingXMLMapping();
+		EditionScheme newEditionScheme = (EditionScheme) cloneObject();
 		newEditionScheme.setName(newName);
 		getEditionPattern().addToEditionSchemes(newEditionScheme);
 		return newEditionScheme;

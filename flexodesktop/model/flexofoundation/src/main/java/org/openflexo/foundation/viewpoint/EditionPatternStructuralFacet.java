@@ -26,10 +26,10 @@ import org.openflexo.foundation.validation.Validable;
 
 public class EditionPatternStructuralFacet extends EditionPatternObject implements FlexoFacet<EditionPattern> {
 
-	private EditionPattern editionPattern;
+	private final EditionPattern editionPattern;
 
 	public EditionPatternStructuralFacet(EditionPattern editionPattern) {
-		super(null);
+		super();
 		this.editionPattern = editionPattern;
 	}
 

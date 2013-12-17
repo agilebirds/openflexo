@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInstance;
@@ -12,8 +11,8 @@ import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInst
 @FIBPanel("Fib/AddBusinessConceptInstancePanel.fib")
 public class AddBusinessConceptInstance extends AssignableAction<SemanticsExcelModelSlot, BusinessConceptInstance> {
 
-	public AddBusinessConceptInstance(VirtualModelBuilder builder) {
-		super(builder);
+	public AddBusinessConceptInstance() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

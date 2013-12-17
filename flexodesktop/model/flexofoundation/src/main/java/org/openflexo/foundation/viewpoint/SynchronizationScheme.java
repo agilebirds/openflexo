@@ -33,8 +33,8 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/SynchronizationSchemePanel.fib")
 public class SynchronizationScheme extends AbstractActionScheme {
 
-	public SynchronizationScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SynchronizationScheme() {
+		super();
 	}
 
 	@Override

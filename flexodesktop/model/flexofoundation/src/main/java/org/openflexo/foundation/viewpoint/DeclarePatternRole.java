@@ -40,8 +40,8 @@ public class DeclarePatternRole extends AssignableAction<ModelSlot<?>, FlexoObje
 
 	private DataBinding<Object> object;
 
-	public DeclarePatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DeclarePatternRole() {
+		super();
 	}
 
 	@Override

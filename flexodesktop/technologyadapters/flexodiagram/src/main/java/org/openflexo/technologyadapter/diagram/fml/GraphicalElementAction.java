@@ -45,8 +45,8 @@ public class GraphicalElementAction extends EditionPatternObject {
 
 	private DataBinding<Boolean> conditional;
 
-	public GraphicalElementAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public GraphicalElementAction() {
+		super();
 	}
 
 	@Override

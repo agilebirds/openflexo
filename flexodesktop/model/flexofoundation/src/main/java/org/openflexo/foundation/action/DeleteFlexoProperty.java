@@ -21,7 +21,6 @@ package org.openflexo.foundation.action;
 
 import java.util.Vector;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
@@ -50,7 +49,7 @@ public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoP
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoProperty.class);
+		FlexoObject.addActionForClass(actionType, FlexoProperty.class);
 	}
 
 	public DeleteFlexoProperty(FlexoProperty focusedObject, Vector<FlexoProperty> globalSelection, FlexoEditor editor) {

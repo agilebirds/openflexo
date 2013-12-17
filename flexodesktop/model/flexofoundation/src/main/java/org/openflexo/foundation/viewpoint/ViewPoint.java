@@ -35,10 +35,9 @@ import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.utils.XMLUtils;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
@@ -112,7 +111,11 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 
 		viewpoint.init(baseName, library);
 		viewpoint.loadViewpointMetaModels();
-		viewpoint.save();
+		try {
+			vpRes.save(null);
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+		}
 		return viewpoint;
 	}
 
@@ -128,7 +131,7 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 	}
 
 	// Used during deserialization, do not use it
-	public ViewPoint(ViewPointBuilder builder) {
+	/*public ViewPoint(ViewPointBuilder builder) {
 		super(builder);
 		if (builder != null) {
 			builder.setViewPoint(this);
@@ -136,11 +139,12 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 		}
 		// modelSlots = new ArrayList<ModelSlot>();
 		virtualModels = new ArrayList<VirtualModel>();
-	}
+	}*/
 
 	// Used during deserialization, do not use it
 	private ViewPoint() {
-		this(null);
+		super();
+		virtualModels = new ArrayList<VirtualModel>();
 	}
 
 	public void init(String baseName, /* File viewpointDir, File xmlFile,*/ViewPointLibrary library/*, ViewPointFolder folder*/) {
@@ -409,7 +413,7 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary((ViewPointBuilder) null);
+			localizedDictionary = new LocalizedDictionary();
 			localizedDictionary.setOwner(this);
 		}
 		return localizedDictionary;
@@ -425,10 +429,10 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
-			document = FlexoXMLFileResourceImpl.readXMLFile(aFile);
-			Element root = FlexoXMLFileResourceImpl.getElement(document, "Ontology");
+			document = XMLUtils.readXMLFile(aFile);
+			Element root = XMLUtils.getElement(document, "Ontology");
 			if (root != null) {
-				Element importElement = FlexoXMLFileResourceImpl.getElement(document, "imports");
+				Element importElement = XMLUtils.getElement(document, "imports");
 				if (importElement != null) {
 					Iterator it = importElement.getAttributes().iterator();
 					while (it.hasNext()) {
@@ -573,15 +577,15 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 
 	// Implementation of XMLStorageResourceData
 
-	@Override
+	/*@Override
 	public FlexoStorageResource<ViewPoint> getFlexoResource() {
 		return (FlexoStorageResource<ViewPoint>) getResource();
 	}
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		setResource((ViewPointResource) resource);
-	}
+		setResource(resource);
+	}*/
 
 	@Override
 	public ViewPointResource getResource() {
@@ -593,12 +597,12 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 		this.resource = (ViewPointResource) resource;
 	}
 
-	@Override
+	/*@Override
 	public ViewPointResource getFlexoXMLFileResource() {
 		return getResource();
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void save() {
 		logger.info("Saving ViewPoint to " + getResource().getFile().getAbsolutePath() + "...");
 
@@ -607,7 +611,7 @@ public class ViewPoint extends NamedViewPointObject implements ResourceData<View
 		} catch (SaveResourceException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	@Override
 	public boolean delete() {

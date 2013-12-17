@@ -114,13 +114,13 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	}
 
 	// Used during deserialization, do not use it
-	public VirtualModel(VirtualModelBuilder builder) {
-		super(builder);
-		if (builder != null) {
+	public VirtualModel(/*VirtualModelBuilder builder*/) {
+		super(/*builder*/);
+		/*if (builder != null) {
 			builder.setVirtualModel(this);
 			resource = builder.resource;
 			viewPoint = builder.getViewPoint();
-		}
+		}*/
 		modelSlots = new ArrayList<ModelSlot<?>>();
 		editionPatterns = new Vector<EditionPattern>();
 	}
@@ -131,17 +131,15 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	 * @param viewPoint
 	 */
 	public VirtualModel(ViewPoint viewPoint) {
-		this((VirtualModel.VirtualModelBuilder) null);
+		this();
 		setViewPoint(viewPoint);
 	}
 
-	@Override
-	public void finalizeDeserialization(Object builder) {
+	public void finalizeDeserialization() {
 		finalizeEditionPatternDeserialization();
 		for (EditionPattern ep : getEditionPatterns()) {
 			ep.finalizeEditionPatternDeserialization();
 		}
-		super.finalizeDeserialization(builder);
 		// Ensure access to reflexive model slot
 		getReflexiveModelSlot();
 	}
@@ -312,7 +310,7 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	}
 
 	public SynchronizationScheme createSynchronizationScheme() {
-		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme(null);
+		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme();
 		newSynchronizationScheme.setVirtualModel(this);
 		newSynchronizationScheme.setName("synchronization");
 		addToEditionSchemes(newSynchronizationScheme);
@@ -644,7 +642,7 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary((VirtualModelBuilder) null);
+			localizedDictionary = new LocalizedDictionary();
 			localizedDictionary.setOwner(this);
 		}
 		return localizedDictionary;
@@ -661,7 +659,7 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	 * @author sylvain
 	 * 
 	 */
-	public static class VirtualModelBuilder {
+	/*public static class VirtualModelBuilder {
 		private VirtualModel virtualModel;
 		private FlexoVersion modelVersion;
 		private final ViewPointLibrary viewPointLibrary;
@@ -707,7 +705,7 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 		public ViewPoint getViewPoint() {
 			return viewPoint;
 		}
-	}
+	}*/
 
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {

@@ -28,7 +28,6 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -37,10 +36,10 @@ public class AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
 
-	private String dataPropertyURI = null;
+	private final String dataPropertyURI = null;
 
-	public AddOWLClass(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddOWLClass() {
+		super();
 	}
 
 	@Override

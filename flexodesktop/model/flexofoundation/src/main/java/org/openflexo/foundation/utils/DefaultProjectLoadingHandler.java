@@ -36,19 +36,19 @@ public class DefaultProjectLoadingHandler implements ProjectLoadingHandler {
 	}
 
 	@Override
-	public boolean useOlderMappingWhenLoadingFailure(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean useOlderMappingWhenLoadingFailure(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		return true;
 	}
 
 	@Override
-	public boolean upgradeResourceToLatestVersion(FlexoXMLStorageResource resource) throws ProjectLoadingCancelledException {
+	public boolean upgradeResourceToLatestVersion(FlexoResource<?> resource) throws ProjectLoadingCancelledException {
 		return true;
 	}
 
 	@Override
-	public void notifySevereLoadingFailure(FlexoResource r, Exception e) {
+	public void notifySevereLoadingFailure(FlexoResource<?> r, Exception e) {
 		if (logger.isLoggable(Level.SEVERE)) {
-			logger.log(Level.SEVERE, "Error loading resource " + r.getFullyQualifiedName(), e);
+			logger.log(Level.SEVERE, "Error loading resource " + r.getURI(), e);
 		}
 	}
 }

@@ -40,8 +40,8 @@ public class EditionPatternConstraint extends EditionPatternObject {
 	private EditionPattern editionPattern;
 	private DataBinding<Boolean> constraint;
 
-	public EditionPatternConstraint(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionPatternConstraint() {
+		super();
 	}
 
 	@Override

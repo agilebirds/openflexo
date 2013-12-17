@@ -43,8 +43,8 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 
 	private DataBinding<String> className;
 
-	public AddClass(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddClass() {
+		super();
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public abstract class AddClass<MS extends TypeAwareModelSlot<?, ?>, T extends IF
 
 		protected static class SetsPatternRole extends FixProposal<AddClassActionMustDefineAnOntologyClass, AddClass> {
 
-			private ClassPatternRole patternRole;
+			private final ClassPatternRole patternRole;
 
 			public SetsPatternRole(ClassPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");

@@ -29,13 +29,11 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
-import org.openflexo.technologyadapter.emf.metamodel.EMFEnumIndividual;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -51,8 +49,8 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 
 	private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
 
-	public AddEMFObjectIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddEMFObjectIndividual() {
+		super();
 	}
 
 	@Override
@@ -104,10 +102,9 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							if (value instanceof AEMFMetaModelObjectImpl){
+							if (value instanceof AEMFMetaModelObjectImpl) {
 								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
-							}
-							else {
+							} else {
 								result.getObject().eSet(property.getObject(), value);
 							}
 						} else if (objectPropertyAssertion.getOntologyProperty() instanceof EMFReferenceObjectProperty) {
@@ -117,15 +114,13 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 							Object value = objectPropertyAssertion.getValue(action);
 							logger.info("Value=" + value);
 							// Set Data Attribute in EMF
-							if (value instanceof AEMFMetaModelObjectImpl){
+							if (value instanceof AEMFMetaModelObjectImpl) {
 								result.getObject().eSet(property.getObject(), ((AEMFMetaModelObjectImpl<?>) value).getObject());
-							}
-							else {
-								if (value instanceof EMFObjectIndividual){
-									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
-								}
-								else {
-									((EMFObjectIndividual) result).getObject().eSet(property.getObject(), value);
+							} else {
+								if (value instanceof EMFObjectIndividual) {
+									result.getObject().eSet(property.getObject(), ((EMFObjectIndividual) value).getObject());
+								} else {
+									result.getObject().eSet(property.getObject(), value);
 								}
 							}
 						} else {

@@ -46,7 +46,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.ToolBox;
 
@@ -307,7 +307,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter2() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -377,7 +377,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -397,7 +397,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter3() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -453,7 +453,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -473,7 +473,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter8() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -511,7 +511,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -531,7 +531,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter7() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -568,7 +568,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -587,7 +587,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter6() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -618,7 +618,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -638,7 +638,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter5() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 
@@ -775,7 +775,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}
@@ -822,7 +822,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 		protected ComponentConverter9() {
 			super();
 			try {
-				document = XMLUtils.getJDOMDocument(getResourceFile().getFile());
+				document = XMLUtils2.getJDOMDocument(getResourceFile().getFile());
 				convert();
 				conversionWasSucessfull = save();
 			} catch (Exception e) {
@@ -850,7 +850,7 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 
 		private boolean save() {
 			FileWritingLock lock = willWriteOnDisk();
-			boolean returned = XMLUtils.saveXMLFile(document, getResourceFile().getFile());
+			boolean returned = XMLUtils2.saveXMLFile(document, getResourceFile().getFile());
 			hasWrittenOnDisk(lock);
 			return returned;
 		}

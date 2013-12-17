@@ -42,8 +42,8 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 	private DataBinding<Object> value;
 	private DataBinding<Object> list;
 
-	public AddToListAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddToListAction() {
+		super();
 	}
 
 	@Override
@@ -53,11 +53,10 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 		return out.toString();
 	}
 
-	
 	public boolean isListRequired() {
 		return true;
 	}
-	
+
 	public boolean isValueRequired() {
 		return true;
 	}
@@ -74,11 +73,10 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 		}
 		return null;
 	}
-	
 
 	public Type getListType() {
 		if (getValue().isSet() && getValue().isValid()) {
-			return  new ParameterizedTypeImpl(List.class, getValueType());
+			return new ParameterizedTypeImpl(List.class, getValueType());
 		}
 		return new ParameterizedTypeImpl(List.class, Object.class);
 	}
@@ -111,7 +109,6 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 		}
 		return Object.class;
 	}
-
 
 	public DataBinding<Object> getValue() {
 		if (value == null) {
@@ -178,11 +175,11 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 	protected void updateVariableValue() {
 		value = new DataBinding<Object>("value", this, getValueType(), BindingDefinitionType.GET_SET);
 	}
-	
+
 	protected void updateVariableList() {
 		list = new DataBinding<Object>("list", this, getListType(), BindingDefinitionType.GET_SET);
 	}
-	
+
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 		if (dataBinding == getValue()) {
@@ -205,7 +202,7 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 		}
 
 	}
-	
+
 	public static class ListBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddToListAction> {
 		public ListBindingIsRequiredAndMustBeValid() {
 			super("'list'_binding_is_not_valid", AddToListAction.class);
@@ -219,11 +216,9 @@ public class AddToListAction<MS extends ModelSlot<?>, T> extends EditionAction<M
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action,
-			Object initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, Object initialContext) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 }

@@ -34,8 +34,8 @@ public abstract class ProcedureAction<MS extends ModelSlot<?>, T> extends Editio
 
 	private DataBinding<Object> parameter;
 
-	public ProcedureAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ProcedureAction() {
+		super();
 	}
 
 	public DataBinding<Object> getParameter() {

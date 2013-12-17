@@ -2,43 +2,43 @@ package org.openflexo.foundation.action;
 
 import java.util.Vector;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 
-public class LoadAllImportedProject extends FlexoAction<LoadAllImportedProject, FlexoModelObject, FlexoModelObject> {
+public class LoadAllImportedProject extends FlexoAction<LoadAllImportedProject, FlexoProjectObject, FlexoProjectObject> {
 
-	public static final FlexoActionType<LoadAllImportedProject, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<LoadAllImportedProject, FlexoModelObject, FlexoModelObject>(
+	public static final FlexoActionType<LoadAllImportedProject, FlexoProjectObject, FlexoProjectObject> actionType = new FlexoActionType<LoadAllImportedProject, FlexoProjectObject, FlexoProjectObject>(
 			"load_all_imported_project") {
 
 		@Override
-		public LoadAllImportedProject makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+		public LoadAllImportedProject makeNewAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection,
 				FlexoEditor editor) {
 			return new LoadAllImportedProject(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null && object.getProject() != null && object.getProject().getProjectData() != null
 					&& object.getProject().getProjectData().getImportedProjects().size() > 0;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null && object.getProject() != null && !object.getProject().areAllImportedProjectsLoaded();
 		}
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, GeneratedOutput.class);
-		FlexoModelObject.addActionForClass(actionType, GenerationRepository.class);
-		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+		// FlexoObject.addActionForClass(actionType, GeneratedOutput.class);
+		// FlexoObject.addActionForClass(actionType, GenerationRepository.class);
+		// FlexoObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
-	public LoadAllImportedProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public LoadAllImportedProject(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

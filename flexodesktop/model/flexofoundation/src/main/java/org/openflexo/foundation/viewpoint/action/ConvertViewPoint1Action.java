@@ -22,7 +22,6 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
@@ -68,7 +67,7 @@ public class ConvertViewPoint1Action extends FlexoAction<ConvertViewPoint1Action
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ConvertViewPoint1Action.actionType, FlexoObject.class);
+		FlexoObject.addActionForClass(ConvertViewPoint1Action.actionType, FlexoObject.class);
 	}
 
 	ConvertViewPoint1Action(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

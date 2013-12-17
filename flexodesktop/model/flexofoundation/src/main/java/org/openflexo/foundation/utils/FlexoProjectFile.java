@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.KVCFlexoObject;
+import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
@@ -250,4 +251,27 @@ public class FlexoProjectFile extends KVCFlexoObject implements StringConvertabl
 	public Object clone() {
 		return new FlexoProjectFile(getProject(), getExternalRepository(), getRelativePath());
 	}
+
+	public static boolean isContainedInProject(File aFile, FlexoProject project) {
+		return FileUtils.isFileContainedIn(aFile, project.getProjectDirectory());
+	}
+
+	public static boolean isContainedInProjectDeclaredExternalRepositories(File aFile, FlexoProject project) {
+		for (ProjectExternalRepository externalRepository : project.getExternalRepositories()) {
+			if (FileUtils.isFileContainedIn(aFile, externalRepository.getDirectory())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static ProjectExternalRepository getProjectExternalRepository(File aFile, FlexoProject project) {
+		for (ProjectExternalRepository externalRepository : project.getExternalRepositories()) {
+			if (FileUtils.isFileContainedIn(aFile, externalRepository.getDirectory())) {
+				return externalRepository;
+			}
+		}
+		return null;
+	}
+
 }

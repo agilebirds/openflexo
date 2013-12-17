@@ -25,8 +25,8 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
 public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
 
-	public OntologicObjectPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public OntologicObjectPatternRole() {
+		super();
 	}
 
 	/*public boolean getIsPrimaryConceptRole() {

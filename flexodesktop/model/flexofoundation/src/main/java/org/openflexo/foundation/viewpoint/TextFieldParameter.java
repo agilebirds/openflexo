@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 public class TextFieldParameter extends EditionSchemeParameter {
 
-	public TextFieldParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public TextFieldParameter() {
+		super();
 	}
 
 	@Override

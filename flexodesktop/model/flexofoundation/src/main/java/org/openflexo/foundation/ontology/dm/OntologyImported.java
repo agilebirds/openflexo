@@ -19,13 +19,14 @@
  */
 package org.openflexo.foundation.ontology.dm;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 
 /**
  * @author gpolet
  * 
  */
-public class OntologyImported extends IEDataModification {
+public class OntologyImported extends DataModification {
 	/**
      * 
      */

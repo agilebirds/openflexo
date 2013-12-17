@@ -26,10 +26,10 @@ import org.openflexo.foundation.validation.Validable;
 
 public class EditionSchemeParameters extends EditionSchemeObject implements FlexoFacet<EditionScheme> {
 
-	private EditionScheme editionScheme;
+	private final EditionScheme editionScheme;
 
 	public EditionSchemeParameters(EditionScheme editionScheme) {
-		super(null);
+		super();
 		this.editionScheme = editionScheme;
 	}
 

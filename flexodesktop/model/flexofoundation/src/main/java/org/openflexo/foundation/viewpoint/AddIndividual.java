@@ -48,8 +48,8 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 
 	private DataBinding<String> individualName;
 
-	public AddIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddIndividual() {
+		super();
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
 	}
@@ -181,7 +181,7 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 	}
 
 	public DataPropertyAssertion createDataPropertyAssertion() {
-		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion(null);
+		DataPropertyAssertion newDataPropertyAssertion = new DataPropertyAssertion();
 		addToDataAssertions(newDataPropertyAssertion);
 		return newDataPropertyAssertion;
 	}
@@ -211,7 +211,7 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 	}
 
 	public ObjectPropertyAssertion createObjectPropertyAssertion() {
-		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion(null);
+		ObjectPropertyAssertion newObjectPropertyAssertion = new ObjectPropertyAssertion();
 		addToObjectAssertions(newObjectPropertyAssertion);
 		return newObjectPropertyAssertion;
 	}
@@ -269,7 +269,7 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 
 		protected static class SetsPatternRole extends FixProposal<AddIndividualActionMustDefineAnOntologyClass, AddIndividual> {
 
-			private IndividualPatternRole patternRole;
+			private final IndividualPatternRole patternRole;
 
 			public SetsPatternRole(IndividualPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");

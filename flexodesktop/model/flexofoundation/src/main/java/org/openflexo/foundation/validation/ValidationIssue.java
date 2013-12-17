@@ -28,6 +28,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.utils.FlexoListModel;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -73,8 +74,8 @@ public abstract class ValidationIssue<R extends ValidationRule<R, V>, V extends 
 	}
 
 	public FlexoProject getProject() {
-		if (_object != null && _object instanceof FlexoModelObject) {
-			return ((FlexoModelObject) _object).getProject();
+		if (_object != null && _object instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) _object).getProject();
 		}
 		return null;
 	}

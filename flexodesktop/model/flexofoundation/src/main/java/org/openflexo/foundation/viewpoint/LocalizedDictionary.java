@@ -29,8 +29,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -45,23 +43,23 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	private final Hashtable<Language, Hashtable<String, String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
 
-	public LocalizedDictionary(VirtualModelBuilder builder) {
-		super(builder);
+	public LocalizedDictionary() {
+		super();
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
-		if (builder != null) {
+		/*if (builder != null) {
 			owner = builder.getVirtualModel();
-		}
+		}*/
 	}
 
-	public LocalizedDictionary(ViewPointBuilder builder) {
-		super(builder);
+	/*public LocalizedDictionary() {
+		super();
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
 		if (builder != null) {
 			owner = builder.getViewPoint();
 		}
-	}
+	}*/
 
 	@Override
 	public ViewPoint getViewPoint() {

@@ -23,8 +23,8 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -59,7 +59,7 @@ public class DeleteVirtualModel extends FlexoAction<DeleteVirtualModel, VirtualM
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteVirtualModel.actionType, VirtualModel.class);
+		FlexoObject.addActionForClass(DeleteVirtualModel.actionType, VirtualModel.class);
 	}
 
 	DeleteVirtualModel(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
@@ -67,7 +67,7 @@ public class DeleteVirtualModel extends FlexoAction<DeleteVirtualModel, VirtualM
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Delete VirtualModel");
 		if (getFocusedObject().getResource() != null) {
 			getFocusedObject().getResource().delete();

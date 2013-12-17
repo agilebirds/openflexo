@@ -24,8 +24,8 @@ import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 @FIBPanel("Fib/DeletionSchemePanel.fib")
 public class DeletionScheme extends AbstractActionScheme {
 
-	public DeletionScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DeletionScheme() {
+		super();
 	}
 
 }

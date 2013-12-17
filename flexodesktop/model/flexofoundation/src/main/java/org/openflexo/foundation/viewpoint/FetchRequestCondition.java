@@ -49,8 +49,8 @@ public class FetchRequestCondition extends EditionPatternObject {
 	private FetchRequest fetchRequest;
 	private DataBinding<Boolean> condition;
 
-	public FetchRequestCondition(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public FetchRequestCondition() {
+		super();
 	}
 
 	@Override

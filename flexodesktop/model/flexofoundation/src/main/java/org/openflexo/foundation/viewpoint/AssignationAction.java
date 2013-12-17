@@ -32,7 +32,6 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
-
 @FIBPanel("Fib/AssignationActionPanel.fib")
 public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
@@ -40,8 +39,8 @@ public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
 	private DataBinding<Object> value;
 
-	public AssignationAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AssignationAction() {
+		super();
 	}
 
 	@Override

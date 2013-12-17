@@ -39,8 +39,8 @@ public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlo
 
 	private DataBinding<IFlexoOntologyClass> domainValue;
 
-	public PropertyParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public PropertyParameter() {
+		super();
 	}
 
 	@Override

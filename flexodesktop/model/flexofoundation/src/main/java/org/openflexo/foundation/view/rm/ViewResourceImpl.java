@@ -12,11 +12,21 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
+import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
+import org.openflexo.foundation.resource.FlexoResourceDefinition;
+import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.RequiredResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.resource.SomeResources;
+import org.openflexo.foundation.utils.XMLUtils;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.ViewModelFactory;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -36,14 +46,12 @@ import org.openflexo.xmlcode.StringEncoder;
  */
 @FlexoResourceDefinition( /* This is the resource specification*/
 resourceDataClass = View.class, /* ResourceData class which is handled by this resource */
-builderClass = ViewBuilder.class, /* Builder to be used to deserialize */
-hasBuilder = true, /* Indicates if builder is to be used*/
 contains = { /* Defines the resources which may be embeddded in this resource */
 /*@SomeResources(resourceType = ProjectDataResource.class, pattern = "*.diagram"),*/
 @SomeResources(resourceType = VirtualModelInstanceResource.class, pattern = "*.vmxml") }, /* */
 require = { /* Defines the resources which are required for this resource */
 @RequiredResource(resourceType = ViewPointResource.class, value = ViewResource.VIEWPOINT_RESOURCE) })
-public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> implements ViewResource {
+public abstract class ViewResourceImpl extends PamelaResourceImpl<View, ViewModelFactory> implements ViewResource {
 
 	static final Logger logger = Logger.getLogger(ViewResourceImpl.class.getPackage().getName());
 
@@ -137,24 +145,12 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 	}
 
 	@Override
-	public boolean hasBuilder() {
-		return true;
-	}
-
-	@Override
-	public final ViewBuilder instanciateNewBuilder() {
-		return new ViewBuilder(this);
-	}
-
-	@Override
 	public View getView() {
 		try {
 			return getResourceData(null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
@@ -181,8 +177,8 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 	 * @throws FileNotFoundException
 	 */
 	@Override
-	public View loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FlexoException, FileNotFoundException,
-			ResourceDependencyLoopException {
+	public View loadResourceData(IProgress progress) throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
+			InconsistentDataException, InvalidModelDefinitionException {
 
 		relativePathFileConverter = new RelativePathFileConverter(getDirectory());
 
@@ -196,17 +192,9 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 		return View.class;
 	}
 
-	/**
-	 * This method updates the resource.
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		return null;
-	}
-
 	@Override
 	public List<VirtualModelInstanceResource> getVirtualModelInstanceResources() {
-		View view = getView();
+		// View view = getView();
 		return getContents(VirtualModelInstanceResource.class);
 	}
 
@@ -220,6 +208,7 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 
 	private static class ViewInfo {
 		public String viewPointURI;
+		@SuppressWarnings("unused")
 		public String viewPointVersion;
 		public String name;
 	}
@@ -233,8 +222,8 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 
 			if (xmlFile.exists()) {
-				document = FlexoXMLFileResourceImpl.readXMLFile(xmlFile);
-				Element root = FlexoXMLFileResourceImpl.getElement(document, "View");
+				document = XMLUtils.readXMLFile(xmlFile);
+				Element root = XMLUtils.getElement(document, "View");
 				if (root != null) {
 					ViewInfo returned = new ViewInfo();
 					returned.name = baseName;

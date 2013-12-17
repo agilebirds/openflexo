@@ -49,8 +49,8 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	private ModelSlot<?> modelSlot;
 
-	public PatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public PatternRole() {
+		super();
 	}
 
 	@Override

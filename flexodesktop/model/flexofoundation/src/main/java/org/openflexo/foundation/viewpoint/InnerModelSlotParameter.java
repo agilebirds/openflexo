@@ -26,8 +26,8 @@ public abstract class InnerModelSlotParameter<MS extends ModelSlot<?>> extends E
 
 	private MS modelSlot;
 
-	public InnerModelSlotParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public InnerModelSlotParameter() {
+		super();
 	}
 
 	public MS getModelSlot() {

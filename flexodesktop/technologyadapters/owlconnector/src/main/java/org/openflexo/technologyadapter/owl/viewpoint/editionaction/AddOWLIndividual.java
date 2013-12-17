@@ -31,7 +31,6 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -44,10 +43,10 @@ public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLIndividual>
 
 	private static final Logger logger = Logger.getLogger(AddOWLIndividual.class.getPackage().getName());
 
-	private String dataPropertyURI = null;
+	private final String dataPropertyURI = null;
 
-	public AddOWLIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddOWLIndividual() {
+		super();
 	}
 
 	@Override

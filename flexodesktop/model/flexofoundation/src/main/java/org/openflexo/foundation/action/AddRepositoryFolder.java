@@ -22,8 +22,8 @@ package org.openflexo.foundation.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.RepositoryFolder;
 
 public class AddRepositoryFolder extends FlexoAction<AddRepositoryFolder, RepositoryFolder, RepositoryFolder> {
@@ -55,7 +55,7 @@ public class AddRepositoryFolder extends FlexoAction<AddRepositoryFolder, Reposi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddRepositoryFolder.actionType, RepositoryFolder.class);
+		FlexoObject.addActionForClass(AddRepositoryFolder.actionType, RepositoryFolder.class);
 	}
 
 	private RepositoryFolder newFolder;

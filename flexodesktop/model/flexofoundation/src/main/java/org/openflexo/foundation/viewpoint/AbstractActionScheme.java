@@ -31,8 +31,8 @@ public abstract class AbstractActionScheme extends EditionScheme {
 
 	private DataBinding<Boolean> conditional;
 
-	public AbstractActionScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AbstractActionScheme() {
+		super();
 	}
 
 	public DataBinding<Boolean> getConditional() {

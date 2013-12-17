@@ -9,8 +9,8 @@ public abstract class ObjectPropertyPatternRole<P extends IFlexoOntologyObjectPr
 
 	private String rangeURI;
 
-	public ObjectPropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ObjectPropertyPatternRole() {
+		super();
 	}
 
 	@Override

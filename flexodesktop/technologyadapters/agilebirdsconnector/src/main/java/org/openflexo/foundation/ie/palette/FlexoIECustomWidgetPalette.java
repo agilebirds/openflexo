@@ -41,7 +41,7 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.widget.IESequenceTopComponent;
 import org.openflexo.foundation.ie.widget.IESequenceWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
-import org.openflexo.foundation.xml.XMLUtils;
+import org.openflexo.foundation.xml.XMLUtils2;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileUtils;
@@ -198,7 +198,7 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 		protected boolean convertTopSequenceToWidgetSequence() {
 			try {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				Document document = XMLUtils.getJDOMDocument(new ByteArrayInputStream(getXML().getBytes("UTF-8")));
+				Document document = XMLUtils2.getJDOMDocument(new ByteArrayInputStream(getXML().getBytes("UTF-8")));
 				Iterator sequence = document.getDescendants(new ElementFilter("IESequenceTopComponent"));
 				boolean hasSequenceTopComponent = false;
 				while (sequence.hasNext()) {
@@ -207,7 +207,7 @@ public class FlexoIECustomWidgetPalette extends FlexoIEPalette<FlexoIECustomWidg
 					element.setName("IESequenceWidget");
 				}
 				if (hasSequenceTopComponent) {
-					XMLUtils.saveXMLFile(document, baos);
+					XMLUtils2.saveXMLFile(document, baos);
 				}
 				if (getTargetClass() == IESequenceTopComponent.class) {
 					properties.put(PaletteAttribute.TARGET_CLASS_MODEL.getAttributeTag(), IESequenceWidget.class.getName());

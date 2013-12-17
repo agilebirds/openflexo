@@ -29,8 +29,8 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter<Vir
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
 
-	public EditionPatternInstanceParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EditionPatternInstanceParameter() {
+		super();
 	}
 
 	@Override

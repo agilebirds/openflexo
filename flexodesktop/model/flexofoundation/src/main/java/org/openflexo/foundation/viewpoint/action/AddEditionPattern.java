@@ -23,8 +23,8 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -60,7 +60,7 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualMod
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddEditionPattern.actionType, VirtualModel.class);
+		FlexoObject.addActionForClass(AddEditionPattern.actionType, VirtualModel.class);
 	}
 
 	private String _newEditionPatternName;
@@ -73,10 +73,10 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualMod
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Add new edition pattern");
 
-		_newEditionPattern = new EditionPattern(null);
+		_newEditionPattern = new EditionPattern();
 		_newEditionPattern.setName(getNewEditionPatternName());
 		getFocusedObject().addToEditionPatterns(_newEditionPattern);
 	}

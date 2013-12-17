@@ -13,7 +13,6 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
@@ -26,23 +25,23 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCell> {
 
 	private static final Logger logger = Logger.getLogger(AddExcelCell.class.getPackage().getName());
-	
+
 	private DataBinding<String> value;
-	
+
 	private DataBinding<Integer> columnIndex;
-	
+
 	private DataBinding<Integer> rowIndex;
-	
+
 	private DataBinding<ExcelRow> row;
-	
+
 	private DataBinding<ExcelSheet> sheet;
-	
+
 	private CellType cellType = null;
-	
+
 	private boolean isRowIndex = false;
-	
-	public AddExcelCell(VirtualModelBuilder builder) {
-		super(builder);
+
+	public AddExcelCell() {
+		super();
 	}
 
 	@Override
@@ -52,51 +51,45 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 
 	@Override
 	public ExcelCell performAction(EditionSchemeAction action) {
-		
+
 		ExcelCell excelCell = null;
-		
+
 		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		if(modelSlotInstance.getResourceData()!=null){
-			
+		if (modelSlotInstance.getResourceData() != null) {
+
 			try {
-				ExcelRow excelRow=null;
-				if(isRowIndex){
+				ExcelRow excelRow = null;
+				if (isRowIndex) {
 					Integer rowIndex = getRowIndex().getBindingValue(action);
 					ExcelSheet excelSheet = getSheet().getBindingValue(action);
 					excelRow = excelSheet.getRowAt(rowIndex);
-				}
-				else{
+				} else {
 					excelRow = getRow().getBindingValue(action);
 				}
-				
+
 				Integer columnIndex = getColumnIndex().getBindingValue(action);
 				// If this is possible, create the cell
-				if(columnIndex!=null){
-					if(excelRow!=null){
+				if (columnIndex != null) {
+					if (excelRow != null) {
 						Cell cell = null;
 						String value = getValue().getBindingValue(action);
 						// If this cell exists, just get it
-						if(excelRow.getCellAt(columnIndex)!=null){
+						if (excelRow.getCellAt(columnIndex) != null) {
 							excelCell = excelRow.getCellAt(columnIndex);
-						}
-						else{
+						} else {
 							cell = excelRow.getRow().createCell(columnIndex);
-							excelCell = modelSlotInstance.getResourceData().getConverter()
-									.convertExcelCellToCell(cell, excelRow, null);
+							excelCell = modelSlotInstance.getResourceData().getConverter().convertExcelCellToCell(cell, excelRow, null);
 						}
-						if(value!=null){
+						if (value != null) {
 							excelCell.setCellValue(value);
-						}
-						else{
+						} else {
 							logger.warning("Create a cell requires a value.");
 						}
 						modelSlotInstance.getResourceData().setIsModified();
-					}
-					else{
+					} else {
 						logger.warning("Create a cell requires a row.");
 					}
-				}
-				else{
+				} else {
 					logger.warning("Create a cell requires a column index.");
 				}
 			} catch (TypeMismatchException e) {
@@ -109,7 +102,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
+
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
 			return null;
@@ -122,7 +115,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 	public FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> getModelSlotInstance(EditionSchemeAction action) {
 		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
 	}
-	
+
 	public DataBinding<String> getValue() {
 		if (value == null) {
 			value = new DataBinding<String>(this, String.class, DataBinding.BindingDefinitionType.GET);
@@ -140,7 +133,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		}
 		this.value = value;
 	}
-	
+
 	public DataBinding<Integer> getRowIndex() {
 		if (rowIndex == null) {
 			rowIndex = new DataBinding<Integer>(this, Integer.class, DataBinding.BindingDefinitionType.GET);
@@ -158,7 +151,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		}
 		this.rowIndex = rowIndex;
 	}
-	
+
 	public DataBinding<Integer> getColumnIndex() {
 		if (columnIndex == null) {
 			columnIndex = new DataBinding<Integer>(this, Integer.class, DataBinding.BindingDefinitionType.GET);
@@ -176,7 +169,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		}
 		this.columnIndex = columnIndex;
 	}
-	
+
 	public CellType getCellType() {
 		if (cellType == null) {
 			if (_cellTypeName != null) {
@@ -195,7 +188,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 	}
 
 	private List<CellType> availableCellTypes = null;
-	
+
 	public List<CellType> getAvailableCellTypes() {
 		if (availableCellTypes == null) {
 			availableCellTypes = new Vector<CellType>();
@@ -236,7 +229,7 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		}
 		this.row = row;
 	}
-	
+
 	public DataBinding<ExcelSheet> getSheet() {
 		if (sheet == null) {
 			sheet = new DataBinding<ExcelSheet>(this, ExcelSheet.class, DataBinding.BindingDefinitionType.GET);
@@ -263,5 +256,4 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 		this.isRowIndex = isRowIndex;
 	}
 
-	
 }

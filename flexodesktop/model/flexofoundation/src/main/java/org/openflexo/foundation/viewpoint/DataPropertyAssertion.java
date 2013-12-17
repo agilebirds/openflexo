@@ -38,8 +38,8 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	private String dataPropertyURI;
 	private DataBinding<Object> value;
 
-	public DataPropertyAssertion(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DataPropertyAssertion() {
+		super();
 	}
 
 	public String _getDataPropertyURI() {

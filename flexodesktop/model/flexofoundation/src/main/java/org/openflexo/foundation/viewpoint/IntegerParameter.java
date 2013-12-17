@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 public class IntegerParameter extends EditionSchemeParameter {
 
-	public IntegerParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public IntegerParameter() {
+		super();
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.List;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationChanged;
@@ -16,8 +15,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	private ShapeGraphicalRepresentation artifactFromGraphicalRepresentation;
 	private ShapeGraphicalRepresentation artifactToGraphicalRepresentation;
 
-	public ConnectorPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ConnectorPatternRole() {
+		super();
 	}
 
 	@Override

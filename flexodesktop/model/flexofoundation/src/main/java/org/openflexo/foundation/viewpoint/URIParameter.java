@@ -37,8 +37,8 @@ public class URIParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, 
 
 	private DataBinding<String> baseURI;
 
-	public URIParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public URIParameter() {
+		super();
 	}
 
 	@Override

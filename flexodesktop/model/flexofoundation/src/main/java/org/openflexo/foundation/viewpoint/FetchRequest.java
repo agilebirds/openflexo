@@ -46,8 +46,8 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 	// null in fetch request is not embedded in an iteration
 	private FetchRequestIterationAction embeddingIteration;
 
-	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public FetchRequest() {
+		super();
 		conditions = new Vector<FetchRequestCondition>();
 	}
 
@@ -110,7 +110,7 @@ public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends Assignabl
 	}
 
 	public FetchRequestCondition createCondition() {
-		FetchRequestCondition newCondition = new FetchRequestCondition(null);
+		FetchRequestCondition newCondition = new FetchRequestCondition();
 		addToConditions(newCondition);
 		return newCondition;
 	}

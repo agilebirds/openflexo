@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 
 public class TextAreaParameter extends EditionSchemeParameter {
 
-	public TextAreaParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public TextAreaParameter() {
+		super();
 	}
 
 	@Override

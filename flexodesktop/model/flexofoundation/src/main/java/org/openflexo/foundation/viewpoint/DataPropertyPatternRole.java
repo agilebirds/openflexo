@@ -12,8 +12,8 @@ public abstract class DataPropertyPatternRole<P extends IFlexoOntologyDataProper
 
 	private BuiltInDataType dataType;
 
-	public DataPropertyPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DataPropertyPatternRole() {
+		super();
 	}
 
 	@Override

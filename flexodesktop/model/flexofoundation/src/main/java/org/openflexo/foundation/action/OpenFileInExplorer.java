@@ -24,19 +24,19 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ToolBox;
 
-public class OpenFileInExplorer extends FlexoAction<OpenFileInExplorer, FlexoModelObject, FlexoModelObject> {
+public class OpenFileInExplorer extends FlexoAction<OpenFileInExplorer, FlexoProjectObject, FlexoProjectObject> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = FlexoLogger.getLogger(OpenFileInExplorer.class.getPackage().getName());
 
-	public static FlexoActionType<OpenFileInExplorer, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<OpenFileInExplorer, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<OpenFileInExplorer, FlexoProjectObject, FlexoProjectObject> actionType = new FlexoActionType<OpenFileInExplorer, FlexoProjectObject, FlexoProjectObject>(
 			ToolBox.getPLATFORM() == ToolBox.MACOS ? "open_in_finder" : "open_in_explorer", FlexoActionType.defaultGroup,
 			FlexoActionType.NORMAL_ACTION_TYPE) {
 
@@ -44,17 +44,18 @@ public class OpenFileInExplorer extends FlexoAction<OpenFileInExplorer, FlexoMod
 		 * Factory method
 		 */
 		@Override
-		public OpenFileInExplorer makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public OpenFileInExplorer makeNewAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection,
+				FlexoEditor editor) {
 			return new OpenFileInExplorer(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
@@ -62,7 +63,7 @@ public class OpenFileInExplorer extends FlexoAction<OpenFileInExplorer, FlexoMod
 
 	private File fileToOpen;
 
-	public OpenFileInExplorer(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public OpenFileInExplorer(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

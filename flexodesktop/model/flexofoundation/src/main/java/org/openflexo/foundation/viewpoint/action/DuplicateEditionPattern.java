@@ -23,8 +23,8 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -61,7 +61,7 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
+		FlexoObject.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
 	}
 
 	DuplicateEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
@@ -72,7 +72,7 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 	public EditionPattern newEditionPattern;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Duplicate edition pattern");
 
 		newEditionPattern = getFocusedObject().duplicate(newName);

@@ -93,12 +93,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	/**
 	 * Constructor invoked during deserialization
 	 */
-	public EditionPatternInstance(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		vmInstance = builder.vmInstance;
+	public EditionPatternInstance(VirtualModelInstance virtualModelInstance) {
+		super(virtualModelInstance.getProject());
+		vmInstance = virtualModelInstance;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
 		// actorList = new Vector<ActorReference<?>>();
-		initializeDeserialization(builder);
+		// initializeDeserialization(builder);
 	}
 
 	public EditionPatternInstance(EditionPattern aPattern, VirtualModelInstance vmInstance, FlexoProject project) {
@@ -189,7 +189,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		sb.append("EditionPattern: " + (editionPattern != null ? editionPattern.getName() : getEditionPatternURI() + "[NOT_FOUND]") + "\n");
 		sb.append("Instance: " + getFlexoID() + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (PatternRole<?> patternRole : actors.keySet()) {
-			FlexoModelObject object = actors.get(patternRole);
+			FlexoProjectObject object = actors.get(patternRole);
 			sb.append("Role: " + patternRole + " : " + object + "\n");
 		}
 		return sb.toString();
@@ -294,9 +294,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 	}
 
-	@Override
-	public void finalizeDeserialization(Object builder) {
-		super.finalizeDeserialization(builder);
+	public void finalizeDeserialization() {
 		finalizeActorsDeserialization();
 	}
 
@@ -496,24 +494,24 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return DELETED_PROPERTY;
 	}*/
 
-	@Override
-	public String getDisplayableName() {
-		/*for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
-			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
-				try {
-					return (String) pr.getLabel().getBindingValue(this);
-				} catch (TypeMismatchException e) {
-					e.printStackTrace();
-				} catch (NullReferenceException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
+	// @Override
+	// public String getDisplayableName() {
+	/*for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
+		if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
+			try {
+				return (String) pr.getLabel().getBindingValue(this);
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
-		}*/
-		// return getEditionPattern().getName();
-		return getStringRepresentation();
-	}
+		}
+	}*/
+	// return getEditionPattern().getName();
+	// return getStringRepresentation();
+	// }
 
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
@@ -523,7 +521,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 
-	@Override
+	/*@Override
 	public String getFullyQualifiedName() {
 		return getVirtualModelInstance().getFullyQualifiedName() + "." + getEditionPattern().getURI() + "." + getFlexoID();
 	}
@@ -531,10 +529,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	@Override
 	public String getClassNameKey() {
 		return "edition_pattern_instance";
-	}
+	}*/
 
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public VirtualModelInstance getResourceData() {
 		return getVirtualModelInstance();
 	}
 
@@ -604,7 +602,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + ":" + (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "_"
-				+ (getName() != null ? getName() : getFlexoID()) + (hasValidRenderer() ? " [" + getStringRepresentation() + "]" : "");
+				+ getFlexoID() + (hasValidRenderer() ? " [" + getStringRepresentation() + "]" : "");
 	}
 
 }

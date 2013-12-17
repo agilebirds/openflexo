@@ -19,17 +19,12 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.FlexoObject;
@@ -42,11 +37,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.xml.sax.SAXException;
 
 /**
  * The {@link ViewPointLibrary} manages all references to all {@link ViewPoint} known in a JVM instance.<br>
@@ -66,8 +57,8 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 
 	private FlexoServiceManager serviceManager;
 
-	private XMLMapping viewPointModel_0_1;
-	private XMLMapping viewPointModel_1_0;
+	// private XMLMapping viewPointModel_0_1;
+	// private XMLMapping viewPointModel_1_0;
 
 	public ViewPointLibrary() {
 		super();
@@ -180,7 +171,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 		return vpRes;
 	}
 
-	protected XMLMapping getViewPointModel() {
+	/*protected XMLMapping getViewPointModel() {
 		if (viewPointModel_1_0 == null) {
 			File viewPointModelFile = new FileResource("Models/ViewPointModel/viewpoint_model_1.0.xml");
 			try {
@@ -212,11 +203,11 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 			}
 		}
 		return viewPointModel_1_0;
-	}
+	}*/
 
-	private XMLMapping VIEW_POINT_PALETTE_MODEL;
+	// private XMLMapping VIEW_POINT_PALETTE_MODEL;
 
-	protected XMLMapping get_VIEW_POINT_PALETTE_MODEL() {
+	/*protected XMLMapping get_VIEW_POINT_PALETTE_MODEL() {
 		if (VIEW_POINT_PALETTE_MODEL == null) {
 			File calcPaletteModelFile = new FileResource("Models/ViewPointModel/ViewPointPaletteModel.xml");
 			try {
@@ -248,11 +239,11 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 			}
 		}
 		return VIEW_POINT_PALETTE_MODEL;
-	}
+	}*/
 
-	private XMLMapping EXAMPLE_DRAWING_MODEL;
+	// private XMLMapping EXAMPLE_DRAWING_MODEL;
 
-	protected XMLMapping get_EXAMPLE_DRAWING_MODEL() {
+	/*protected XMLMapping get_EXAMPLE_DRAWING_MODEL() {
 		if (EXAMPLE_DRAWING_MODEL == null) {
 			File calcDrawingModelFile = new FileResource("Models/ViewPointModel/ExampleDrawingModel.xml");
 			try {
@@ -284,7 +275,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 			}
 		}
 		return EXAMPLE_DRAWING_MODEL;
-	}
+	}*/
 
 	public EditionPattern getEditionPattern(String editionPatternURI) {
 		if (editionPatternURI.indexOf("#") > -1) {

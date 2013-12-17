@@ -32,7 +32,7 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 public class ViewPointValidationModel extends ValidationModel {
 
 	public ViewPointValidationModel() {
-		super(null, null);
+		super(null);
 
 		registerRule(new EditionPattern.EditionPatternShouldHaveRoles());
 		registerRule(new EditionPattern.EditionPatternShouldHaveEditionSchemes());

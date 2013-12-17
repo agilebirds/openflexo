@@ -28,7 +28,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
@@ -40,8 +39,8 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 	private String target;
 	private ShapePatternRole targetPatternRole;
 
-	public DropScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DropScheme() {
+		super();
 	}
 
 	public String _getTarget() {

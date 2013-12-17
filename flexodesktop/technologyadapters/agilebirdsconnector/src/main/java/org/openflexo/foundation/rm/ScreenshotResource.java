@@ -30,9 +30,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.AgileBirdsObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.AgileBirdsObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoProject;

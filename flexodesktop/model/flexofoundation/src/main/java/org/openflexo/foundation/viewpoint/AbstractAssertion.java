@@ -34,8 +34,8 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 	private AddIndividual _action;
 	private DataBinding<Boolean> conditional;
 
-	public AbstractAssertion(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AbstractAssertion() {
+		super();
 	}
 
 	@Override

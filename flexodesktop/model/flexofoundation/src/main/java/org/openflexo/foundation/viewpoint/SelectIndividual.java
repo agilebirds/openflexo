@@ -48,8 +48,8 @@ public abstract class SelectIndividual<MS extends TypeAwareModelSlot<?, ?>, T ex
 
 	private String typeURI = null;
 
-	public SelectIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SelectIndividual() {
+		super();
 	}
 
 	@Override

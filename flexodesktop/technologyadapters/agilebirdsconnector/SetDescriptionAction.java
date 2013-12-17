@@ -23,21 +23,21 @@ import java.util.Observer;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
 import org.jdom2.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**
  * @author gpolet
  * 
  */
-public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionAction, FlexoModelObject, FlexoModelObject> {
+public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionAction, FlexoProjectObject, FlexoProjectObject> {
 
 	private static final Logger logger = Logger.getLogger(SetDescriptionAction.class.getPackage().getName());
 
-	public static class SetPropertyActionType extends FlexoActionType<SetDescriptionAction, FlexoModelObject, FlexoModelObject> {
+	public static class SetPropertyActionType extends FlexoActionType<SetDescriptionAction, FlexoProjectObject, FlexoProjectObject> {
 		private Vector<Observer> _observers;
 
 		protected SetPropertyActionType(String actionName) {
@@ -45,17 +45,17 @@ public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionActi
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProjectObject object, Vector<FlexoProjectObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public SetDescriptionAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
+		public SetDescriptionAction makeNewAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection,
 				FlexoEditor editor) {
 			return new SetDescriptionAction(focusedObject, globalSelection, editor);
 		}
@@ -88,7 +88,7 @@ public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionActi
 	 * @param globalSelection
 	 * @param editor
 	 */
-	protected SetDescriptionAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	protected SetDescriptionAction(FlexoProjectObject focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -151,7 +151,7 @@ public class SetDescriptionAction extends FlexoUndoableAction<SetDescriptionActi
 		this.value = value;
 	}
 
-	public static SetDescriptionAction makeAction(FlexoModelObject object, DocType key, String value, FlexoEditor editor) {
+	public static SetDescriptionAction makeAction(FlexoProjectObject object, DocType key, String value, FlexoEditor editor) {
 		SetDescriptionAction returned = actionType.makeNewAction(object, null, editor);
 		returned.setDocType(key);
 		returned.setValue(value);
