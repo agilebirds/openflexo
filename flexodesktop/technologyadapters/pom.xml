@@ -31,6 +31,8 @@
 		<module>excelconnector-ui</module>
 		<module>powerpointconnector-ui</module>
 
+		<module>agilebirdsconnector</module>
+		<module>agilebirdsconnector-ui</module>
 	</modules>
 	<build>
 		<!--  <resources>

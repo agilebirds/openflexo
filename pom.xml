@@ -795,6 +795,39 @@
 
 			<!-- Technology adaptors -->
 
+			<!--  AgileBirds Modeller -->
+			
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>agilebirdsconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
 			<!--  OWL -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
