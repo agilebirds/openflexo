@@ -366,7 +366,15 @@ public class AddEditionPatternInstance extends AssignableAction<VirtualModelMode
 
 	@Override
 	public Type getAssignableType() {
-		return this.getViewPoint().getInstanceType(getEditionPatternType());
+		// NPE Protection
+		ViewPoint vp = this.getViewPoint();
+		if (vp != null){
+			return vp.getInstanceType(getEditionPatternType());
+		}
+		else {
+			logger.warning("Adding FlexoConcept Instance in a null ViewPoint !");
+			return null;
+		}
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
