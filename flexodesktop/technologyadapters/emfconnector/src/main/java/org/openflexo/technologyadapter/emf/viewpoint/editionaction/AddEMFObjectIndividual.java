@@ -49,6 +49,7 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValueAsList;
 
 /**
  * Create EMF Object.
@@ -114,11 +115,12 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 				
 				// Put it in its container
 				if (container == null){
-					container = modelSlotInstance.getResourceData().getEMFResource().getContents();
-					container.add(eObject);
+					modelSlotInstance.getResourceData().getEMFResource().getContents().add(eObject);
 				}
 				else {
+					// TODO This needs strong testing
 					container.add(result);
+					result.setContainPropertyValue((EMFObjectIndividualReferenceObjectPropertyValueAsList) container);
 				}
 				
 				

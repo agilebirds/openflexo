@@ -43,19 +43,21 @@ import org.openflexo.technologyadapter.emf.model.io.EMFModelConverter;
  * 
  * @author xtof
  */
-public class EMFObjectIndividualReferenceObjectPropertyAsList extends EMFObjectIndividualReferenceObjectPropertyValue implements List<EMFObjectIndividual> {
+public class EMFObjectIndividualReferenceObjectPropertyValueAsList extends EMFObjectIndividualReferenceObjectPropertyValue implements List<EMFObjectIndividual> {
 
 
-	private static final Logger logger = Logger.getLogger(EMFObjectIndividualReferenceObjectPropertyAsList.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EMFObjectIndividualReferenceObjectPropertyValueAsList.class.getPackage().getName());
 
 
 	private EObjectEList referencelist;
 
-	public EMFObjectIndividualReferenceObjectPropertyAsList(EMFModel model, EObject eObject, EReference aReference, Object refList) {
+	public EMFObjectIndividualReferenceObjectPropertyValueAsList(EMFModel model, EObject eObject, EReference aReference, Object refList) {
 		super(model, eObject, aReference);
 		this.referencelist = (EObjectEList) refList;
 	}
 
+
+	
 	/********************************************
 	 * Methods so that it acts as a List
 	 */

@@ -1,3 +1,24 @@
+/*
+ * (c) Copyright 2012-2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 /** Copyright (c) 2012, THALES SYSTEMES AEROPORTES - All Rights Reserved
  * Author : Gilles Besançon
  *
@@ -26,6 +47,7 @@
  * Contributors :
  *
  */
+
 package org.openflexo.technologyadapter.emf.model;
 
 import java.util.ArrayList;
@@ -57,7 +79,7 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 
 	private static final Logger logger = Logger.getLogger(EMFObjectIndividual.class.getPackage().getName());
 	
-	private static EMFObjectIndividualReferenceObjectPropertyValue containingPropertyValue;
+	private static EMFObjectIndividualReferenceObjectPropertyValueAsList containingPropertyValue;
 	
 	
 	/**
@@ -286,7 +308,12 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		// TODO XTOF => implement an actual deletion mechanism
 		// TODO URGENT => there might be a memory leak here !
 		logger.warning("YOU NEED TO IMPLEMENT AN ACTUAL DELETION MECHANISM");
-		this.getEMFModel().getEMFResource().getContents().remove(this.getObject());
+		if (this.containingPropertyValue == null){
+			this.getEMFModel().getEMFResource().getContents().remove(this.getObject());
+		}
+		else {
+			containingPropertyValue.remove(this);
+		}
 		return super.delete();
 	}
 
@@ -335,4 +362,14 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		// return "EMFObjectIndividual/" + getTypes().get(0) + ":" + getName() + "uri=" + getURI();
 		return getTypes().get(0).getName() + ":" + getName();
 	}
+	
+	
+	public EMFObjectIndividualReferenceObjectPropertyValueAsList getContainingPropertyValue(){
+		return this.containingPropertyValue;
+	}
+	
+	public void setContainPropertyValue(EMFObjectIndividualReferenceObjectPropertyValueAsList container) {
+		containingPropertyValue = container;
+	}
+	
 }

@@ -70,16 +70,15 @@ public class ObjectReferenceFeatureAssociationPathElement extends SimplePathElem
 		EObject object = ((EMFObjectIndividual) target).getObject();
 		Object emfAnswer = object.eGet(objectProperty.getObject());
 		Object returned = null;
-		
+
 		if (emfAnswer instanceof EObjectEList) {
-			returned = model.getConverter().convertIndividualReferenceList(model, object, objectProperty, emfAnswer);
-		/*System.out.println("ObjectReferenceFeatureAssociationPathElement, Je retourne " + returned + " of "
-				+ (returned != null ? returned.getClass() : null));*/
+			returned = model.getConverter().convertIndividualReferenceList(model, object, objectProperty);
 		}
 		else {
 			returned = model.getConverter().convertIndividualReference(model, emfAnswer);
-		}
+			}
 		return returned;
+
 	}
 
 	@Override

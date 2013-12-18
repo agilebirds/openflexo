@@ -44,7 +44,7 @@ import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyAsList;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValueAsList;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
@@ -100,6 +100,16 @@ public class EMFModelConverter {
 		if (individuals.get(eObject) == null) {
 			individual = builder.buildObjectIndividual(model, eObject);
 			individuals.put(eObject, individual);
+			EStructuralFeature eContainingFeature = eObject.eContainingFeature();
+			if (eContainingFeature != null) {
+				eContainingFeature.eContainer();
+				EObject eContainer = eObject.eContainer();
+				EMFObjectIndividual containingIndiv = individuals.get(eContainer);
+				if (containingIndiv == null) {
+					containingIndiv = convertObjectIndividual(model, eContainer);
+				}
+				// containingIndiv.getPr
+			}
 
 			// Attribute
 			for (EAttribute eAttribute : eObject.eClass().getEAllAttributes()) {
@@ -125,26 +135,31 @@ public class EMFModelConverter {
 	 * @return
 	 */
 	public Object convertIndividualReference(EMFModel model,Object reference) {
-	
+
 		if (reference instanceof EObject) {
 			return convertObjectIndividual(model, (EObject) reference);
-		} else if (reference instanceof Enum) {
+		}else if (reference instanceof Enum) {
 			return reference;
 		} else {
 			logger.warning("Unexpected " + reference + " of " + (reference != null ? reference.getClass() : null));
 			return reference;
 		}
 	}
-	
-	public Object convertIndividualReferenceList(EMFModel model,Object object, EMFReferenceObjectProperty property, Object refList) {
-		if (refList instanceof EObjectEList) {
-			EMFObjectIndividualReferenceObjectPropertyAsList returned = new EMFObjectIndividualReferenceObjectPropertyAsList(model, (EObject) object, (EReference) property.getObject(), refList);
-			return returned;
-			
-		} else {
-			logger.warning("Unexpected " + property + " of " + (property != null ? property.getClass() : null));
-			return property;
+
+
+	public Object convertIndividualReferenceList(EMFModel model,EObject object, EMFReferenceObjectProperty property) {
+
+		EMFObjectIndividual individual;
+
+		if (individuals.get(object) == null) {
+			individual = builder.buildObjectIndividual(model, object);
+			individuals.put(object, individual);
 		}
+
+		EMFObjectIndividualReferenceObjectPropertyValue propertyValue = convertObjectIndividualReferenceObjectPropertyValue(model, object, property.getObject());
+
+		return propertyValue;
+
 	}
 
 	/**
@@ -269,4 +284,5 @@ public class EMFModelConverter {
 	public Map<EObject, Map<EStructuralFeature, IFlexoOntologyPropertyValue>> getPropertyValues() {
 		return propertyValues;
 	}
+
 }

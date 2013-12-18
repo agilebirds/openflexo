@@ -32,12 +32,14 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObjectPropertyValue;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValueAsList;
 
 /**
  * EMF Model Builder.
@@ -102,6 +104,14 @@ public class EMFModelBuilder {
 	 */
 	public EMFObjectIndividualReferenceObjectPropertyValue buildObjectIndividualReferenceObjectPropertyValue(EMFModel model,
 			EObject eObject, EReference eReference) {
-		return new EMFObjectIndividualReferenceObjectPropertyValue(model, eObject, eReference);
-	}
+		
+		 Object refList = eObject.eGet(eObject.eClass().getEStructuralFeature(eReference.getFeatureID()));
+		
+		if (refList instanceof EObjectEList){
+			return new EMFObjectIndividualReferenceObjectPropertyValueAsList(model, eObject, eReference, refList);
+		}
+		else {
+			return new EMFObjectIndividualReferenceObjectPropertyValue(model, eObject, eReference);
+		} 
+	} 
 }
