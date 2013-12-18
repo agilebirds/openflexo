@@ -70,9 +70,6 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 
 	public VirtualModelInstance<?, ?> getVirtualModelInstance(EditionSchemeAction<?, ?> action) {
 		try {
-			System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
-			System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " + getVirtualModelInstance().invalidBindingReason());
-			System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
 			return getVirtualModelInstance().getBindingValue(action);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
@@ -90,7 +87,6 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 		if (virtualModelInstance == null) {
 			virtualModelInstance = new DataBinding<VirtualModelInstance>(this, VirtualModelInstance.class,
 					DataBinding.BindingDefinitionType.GET);
-			virtualModelInstance.setBindingName("virtualModelInstance");
 		}
 		return virtualModelInstance;
 	}
@@ -202,15 +198,19 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 	public EditionPatternInstance performAction(EditionSchemeAction action) {
 		logger.info("Perform performDeleteEditionPatternInstance " + action);
 		VirtualModelInstance<?, ?> vmInstance = getVirtualModelInstance(action);
-		logger.info("VirtualModelInstance: " + vmInstance);
 
 		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewEmbeddedAction(null, null, action);
-		deletionSchemeAction.setVirtualModelInstance(vmInstance);
-		deletionSchemeAction.setDeletionScheme(getDeletionScheme());
+		
 		try {
 			EditionPatternInstance objectToDelete = (EditionPatternInstance) getObject().getBindingValue(action);
+			// if VmInstance is null, use the one of the EPI
+			vmInstance = objectToDelete.getVirtualModelInstance();
+			
 			logger.info("EditionPatternInstance To Delete: " + objectToDelete);
+			logger.info("VirtualModelInstance: " + vmInstance);
 			deletionSchemeAction.setEditionPatternInstanceToDelete(objectToDelete);
+			deletionSchemeAction.setVirtualModelInstance(vmInstance);
+			deletionSchemeAction.setDeletionScheme(getDeletionScheme());
 
 			for (DeleteEditionPatternInstanceParameter p : getParameters()) {
 				EditionSchemeParameter param = p.getParam();
@@ -222,6 +222,8 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 			}
 			logger.info("Performing action");
 			deletionSchemeAction.doAction();
+			// Finally delete the FlexoConcept
+			objectToDelete.delete();
 
 		} catch (TypeMismatchException e1) {
 			e1.printStackTrace();

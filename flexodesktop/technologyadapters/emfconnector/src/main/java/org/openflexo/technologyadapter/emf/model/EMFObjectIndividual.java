@@ -31,6 +31,7 @@ package org.openflexo.technologyadapter.emf.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -53,6 +54,9 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
  */
 public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements IFlexoOntologyIndividual {
 
+
+	private static final Logger logger = Logger.getLogger(EMFObjectIndividual.class.getPackage().getName());
+	
 	/**
 	 * Constructor.
 	 * 
@@ -272,6 +276,15 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 			propertyValues.add(ontology.getConverter().getPropertyValues().get(object).get(structuralFeature));
 		}
 		return Collections.unmodifiableList(propertyValues);
+	}
+
+	@Override
+	public boolean delete() {
+		// TODO XTOF => implement an actual deletion mechanism
+		// TODO URGENT => there might be a memory leak here !
+		logger.warning("YOU NEED TO IMPLEMENT AN ACTUAL DELETION MECHANISM");
+		this.getEMFModel().getEMFResource().getContents().remove(this.getObject());
+		return super.delete();
 	}
 
 	/**
