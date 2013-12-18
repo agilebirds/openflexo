@@ -19,8 +19,6 @@
  */
 package org.openflexo.fme;
 
-import java.awt.Event;
-import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -64,17 +62,21 @@ public class FMEFIBController extends FIBController {
 	public void setDiagramEditor(DiagramEditor diagramEditor) {
 		this.diagramEditor = diagramEditor;
 	}
-	
+
 	public void createConcept(String name) {
 		getDiagramEditor().createNewConcept(name);
 	}
-	
+
 	public void removeConcept(Concept concept) {
 		getDiagramEditor().removeConcept(concept);
 	}
-	
+
 	public void renameConcept(Concept concept) {
 		getDiagramEditor().renameConcept(concept);
+	}
+
+	public void activePipette() {
+		getDiagramEditor().setHasPipette();
 	}
 
 	public Icon getIcon(FMEModelObject object) {

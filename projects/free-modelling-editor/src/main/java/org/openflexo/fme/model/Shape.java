@@ -24,15 +24,14 @@ import java.util.List;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
-import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PastingPoint;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.Getter.Cardinality;
 
 /**
  * A shape element in a diagram
@@ -46,7 +45,7 @@ public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentatio
 
 	public static final String START_CONNECTORS = "start_connectors";
 	public static final String END_CONNECTORS = "end_connectors";
-	
+
 	/*@Getter(value = GRAPHICAL_REPRESENTATION)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
@@ -57,11 +56,14 @@ public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentatio
 	@Setter(value = GRAPHICAL_REPRESENTATION)
 	@Override
 	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation);*/
-	
-	
+
+	@Override
+	public boolean delete(Object... context);
+
 	@Getter(value = START_CONNECTORS, cardinality = Cardinality.LIST, inverse = Connector.START_SHAPE)
-	@XMLElement(primary = true)
-	@CloningStrategy(StrategyType.IGNORE)
+	@XMLElement(context = "start", primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	// @Embedded(closureConditions = { Connector.END_SHAPE }, deletionConditions = { Connector.END_SHAPE })
 	public List<Connector> getStartConnectors();
 
 	@Setter(START_CONNECTORS)
@@ -73,10 +75,11 @@ public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentatio
 
 	@Remover(START_CONNECTORS)
 	public void removeFromStartConnectors(Connector aConnector);
-	
+
 	@Getter(value = END_CONNECTORS, cardinality = Cardinality.LIST, inverse = Connector.END_SHAPE)
-	@XMLElement(primary = true)
-	@CloningStrategy(StrategyType.IGNORE)
+	@XMLElement(context = "end", primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	// @Embedded(closureConditions = { Connector.START_SHAPE }, deletionConditions = { Connector.START_SHAPE })
 	public List<Connector> getEndConnectors();
 
 	@Setter(END_CONNECTORS)
@@ -88,5 +91,5 @@ public interface Shape extends DiagramElement<Shape, ShapeGraphicalRepresentatio
 
 	@Remover(END_CONNECTORS)
 	public void removeFromEndConnectors(Connector aConnector);
-	
+
 }

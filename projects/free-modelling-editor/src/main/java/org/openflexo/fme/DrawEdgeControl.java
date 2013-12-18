@@ -24,11 +24,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.control.AbstractDianaEditor;
 import org.openflexo.fge.control.MouseControlContext;
 import org.openflexo.fge.control.actions.MouseDragControlActionImpl;
@@ -79,9 +77,9 @@ public class DrawEdgeControl extends MouseDragControlImpl<DianaDrawingEditor> {
 					/*Connector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(), controller
 							.getDrawing().getModel());*/
 					DrawingTreeNode<?, ?> fatherNode = FGEUtils.getFirstCommonAncestor(fromShape, toShape);
-					Connector newConnector = ((DianaDrawingEditor) controller).getDiagramEditor().createNewConnector(controller
-							.getDrawing().getModel(),fromShape.getDrawable(),toShape.getDrawable());
-					
+					Connector newConnector = ((DianaDrawingEditor) controller).getDiagramEditor().createNewConnector(
+							controller.getDrawing().getModel(), fromShape.getDrawable(), toShape.getDrawable());
+
 					((DiagramElement<?, ?>) fatherNode.getDrawable()).addToConnectors(newConnector);
 					System.out.println("Add new connector !");
 					factory.getUndoManager().stopRecording(drawEdge);

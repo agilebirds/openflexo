@@ -9,6 +9,7 @@ import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fme.DrawEdgeControl;
+import org.openflexo.fme.PipetteControl;
 import org.openflexo.fme.ShowContextualMenuControl;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.undo.CompoundEdit;
@@ -32,7 +33,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		noneConcept.setName(Concept.NONE_CONCEPT);
 		noneConcept.setReadOnly(true);
 		returned.getDataModel().addToConcepts(noneConcept);
-		
+
 		// returned.setFactory(this);
 		// returned.setIndex(totalOccurences);
 		// returned.getEditedDrawing().init();
@@ -59,7 +60,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		returned.setGraphicalRepresentation(makeNewConnectorGR(ConnectorType.LINE));
 		returned.setStartShape(from);
 		returned.setEndShape(to);
-		
+
 		return returned;
 	}
 
@@ -146,6 +147,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 	public void applyBasicControls(ConnectorGraphicalRepresentation connectorGraphicalRepresentation) {
 		super.applyBasicControls(connectorGraphicalRepresentation);
 		connectorGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl(this));
+		connectorGraphicalRepresentation.addToMouseClickControls(new PipetteControl(this), true);
 	}
 
 	@Override
@@ -160,6 +162,7 @@ public class DiagramFactory extends FGEModelFactoryImpl {
 		super.applyBasicControls(shapeGraphicalRepresentation);
 		shapeGraphicalRepresentation.addToMouseClickControls(new ShowContextualMenuControl(this));
 		shapeGraphicalRepresentation.addToMouseDragControls(new DrawEdgeControl(this));
+		shapeGraphicalRepresentation.addToMouseClickControls(new PipetteControl(this), true);
 	}
 
 }

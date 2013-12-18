@@ -91,7 +91,6 @@ public class AbstractFIBPanel extends JPanel implements PropertyChangeListener, 
 		} else {
 			add(fibView.getJComponent(), BorderLayout.CENTER);
 		}
-
 		validate();
 		revalidate();
 

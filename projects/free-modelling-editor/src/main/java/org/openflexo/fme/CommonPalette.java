@@ -55,21 +55,22 @@ public class CommonPalette extends DrawingPalette {
 	public CommonPalette() {
 		super(200, 200, "default");
 
-		ShapeSpecification[] ssp = new ShapeSpecification[11];
+		ShapeSpecification[] ssp = new ShapeSpecification[10];
 
 		ssp[0] = FACTORY.makeShape(ShapeType.RECTANGLE);
 		ssp[1] = FACTORY.makeShape(ShapeType.RECTANGLE);
 		((Rectangle) ssp[1]).setIsRounded(true);
 		((Rectangle) ssp[1]).setArcSize(20);
 		ssp[2] = FACTORY.makeShape(ShapeType.SQUARE);
-		ssp[3] = FACTORY.makeShape(ShapeType.RECTANGULAROCTOGON);
-		ssp[4] = FACTORY.makeShape(ShapeType.OVAL);
-		ssp[5] = FACTORY.makeShape(ShapeType.CIRCLE);
-		ssp[6] = FACTORY.makeShape(ShapeType.LOSANGE);
-		ssp[7] = FACTORY.makeShape(ShapeType.POLYGON);
-		ssp[8] = FACTORY.makeShape(ShapeType.TRIANGLE);
-		ssp[9] = FACTORY.makeShape(ShapeType.STAR);
-		ssp[10] = FACTORY.makeShape(ShapeType.ARC);
+		// Bug with this
+		// ssp[3] = FACTORY.makeShape(ShapeType.RECTANGULAROCTOGON);
+		ssp[3] = FACTORY.makeShape(ShapeType.OVAL);
+		ssp[4] = FACTORY.makeShape(ShapeType.CIRCLE);
+		ssp[5] = FACTORY.makeShape(ShapeType.LOSANGE);
+		ssp[6] = FACTORY.makeShape(ShapeType.POLYGON);
+		ssp[7] = FACTORY.makeShape(ShapeType.TRIANGLE);
+		ssp[8] = FACTORY.makeShape(ShapeType.STAR);
+		ssp[9] = FACTORY.makeShape(ShapeType.ARC);
 
 		int px = 0;
 		int py = 0;

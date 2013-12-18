@@ -20,10 +20,6 @@
 package org.openflexo.fme.model;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.model.annotations.CloningStrategy;
-import org.openflexo.model.annotations.CloningStrategy.StrategyType;
-import org.openflexo.model.annotations.Getter.Cardinality;
-import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
@@ -44,15 +40,13 @@ public interface Connector extends DiagramElement<Connector, ConnectorGraphicalR
 
 	@Getter(value = START_SHAPE, inverse = Shape.START_CONNECTORS)
 	@XMLElement(context = "Start")
-	@CloningStrategy(StrategyType.CLONE)
 	public Shape getStartShape();
 
 	@Setter(START_SHAPE)
 	public void setStartShape(Shape startShape);
 
-	@Getter(value=END_SHAPE, inverse = Shape.END_CONNECTORS)
+	@Getter(value = END_SHAPE, inverse = Shape.END_CONNECTORS)
 	@XMLElement(context = "End")
-	@CloningStrategy(StrategyType.CLONE)
 	public abstract Shape getEndShape();
 
 	@Setter(END_SHAPE)

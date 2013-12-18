@@ -57,11 +57,11 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void setGraphicalRepresentation(G graphicalRepresentation) {
 		if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getPropertyChangeSupport() != null) {
-			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);	
+			getGraphicalRepresentation().getPropertyChangeSupport().removePropertyChangeListener(this);
 		}
 		performSuperSetter(GRAPHICAL_REPRESENTATION, graphicalRepresentation);
 		if (graphicalRepresentation != null && graphicalRepresentation.getPropertyChangeSupport() != null) {
@@ -198,8 +198,6 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 
 	}
-	
-	
 
 	public List<DiagramElement<?, ?>> getElementsWithAssociation(ConceptGRAssociation association) {
 		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
@@ -229,10 +227,9 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		return returned;
 	}
 
-	
 	public List<DiagramElement<?, ?>> getElementsRepresentingConcept(Concept concept) {
 		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
-		if(getInstance()!=null && getInstance().getConcept()!=null){
+		if (getInstance() != null && getInstance().getConcept() != null) {
 			if (getInstance().getConcept() == concept) {
 				returned.add(this);
 			}
@@ -245,5 +242,19 @@ public abstract class DiagramElementImpl<M extends DiagramElement<M, G>, G exten
 		}
 		return returned;
 	}
-	
+
+	public List<DiagramElement<?, ?>> getElementsWithGraphicalRepresentation(GraphicalRepresentation gr) {
+		List<DiagramElement<?, ?>> returned = new ArrayList<DiagramElement<?, ?>>();
+		if (getGraphicalRepresentation() == gr) {
+			returned.add(this);
+		}
+		for (Shape s : getShapes()) {
+			returned.addAll(s.getElementsWithGraphicalRepresentation(gr));
+		}
+		for (Connector c : getConnectors()) {
+			returned.addAll(c.getElementsWithGraphicalRepresentation(gr));
+		}
+		return returned;
+	}
+
 }
