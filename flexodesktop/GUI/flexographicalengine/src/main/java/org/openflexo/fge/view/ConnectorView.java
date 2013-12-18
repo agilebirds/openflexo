@@ -133,7 +133,12 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	@Override
 	public DrawingView<?> getDrawingView() {
-		return getController().getDrawingView();
+		DrawingController<?> controller = getController();
+		if (controller != null) {
+			return getController().getDrawingView();
+		}
+		else 
+			return null;
 	}
 
 	@Override
