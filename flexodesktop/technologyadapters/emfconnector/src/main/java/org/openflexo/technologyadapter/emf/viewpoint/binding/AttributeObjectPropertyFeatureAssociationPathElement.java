@@ -1,9 +1,30 @@
+/*
+ * (c) Copyright 2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.openflexo.technologyadapter.emf.viewpoint.binding;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.ecore.EObject;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -66,8 +87,9 @@ public class AttributeObjectPropertyFeatureAssociationPathElement extends Simple
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
-		Object emfAnswer = ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
-		Object returned = model.getConverter().convertIndividualReference(model, emfAnswer);
+		EObject object = ((EMFObjectIndividual) target).getObject();
+		Object emfAnswer = object.eGet(objectProperty.getObject());
+		Object returned = model.getConverter().convertIndividualReference(model, object, emfAnswer);
 		// System.out.println("AttributeObjectPropertyFeatureAssociationPathElement, Je retourne " + returned + " of " + (returned != null ?
 		// returned.getClass() : null));
 		return returned;

@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.ecore.EObject;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -65,8 +66,9 @@ public class ObjectReferenceFeatureAssociationPathElement extends SimplePathElem
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
-		Object emfAnswer = ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
-		Object returned = model.getConverter().convertIndividualReference(model, emfAnswer);
+		EObject object = ((EMFObjectIndividual) target).getObject();
+		Object emfAnswer = object.eGet(objectProperty.getObject());
+		Object returned = model.getConverter().convertIndividualReference(model,object, emfAnswer);
 		/*System.out.println("ObjectReferenceFeatureAssociationPathElement, Je retourne " + returned + " of "
 				+ (returned != null ? returned.getClass() : null));*/
 		return returned;

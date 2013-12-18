@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFIndividualReferenceObjectPropertyAsList;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
@@ -121,13 +122,17 @@ public class EMFModelConverter {
 	 * @param eObject
 	 * @return
 	 */
-	public Object convertIndividualReference(EMFModel model, Object reference) {
+	public Object convertIndividualReference(EMFModel model, EObject referee, Object reference) {
 		if (reference instanceof EObjectEList) {
+			/*
 			ArrayList<EMFObjectIndividual> returned = new ArrayList<EMFObjectIndividual>();
 			for (Object item : (EObjectEList) reference) {
 				returned.add(convertObjectIndividual(model, (EObject) item));
 			}
+			*/
+			EMFIndividualReferenceObjectPropertyAsList returned = new EMFIndividualReferenceObjectPropertyAsList(model, referee, (EReference) reference);
 			return returned;
+			
 		} else if (reference instanceof EObject) {
 			return convertObjectIndividual(model, (EObject) reference);
 		} else if (reference instanceof Enum) {
