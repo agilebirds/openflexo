@@ -89,7 +89,7 @@ public class AttributeObjectPropertyFeatureAssociationPathElement extends Simple
 		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
 		EObject object = ((EMFObjectIndividual) target).getObject();
 		Object emfAnswer = object.eGet(objectProperty.getObject());
-		Object returned = model.getConverter().convertIndividualReference(model, object, emfAnswer);
+		Object returned = model.getConverter().convertIndividualReference(model, emfAnswer);
 		// System.out.println("AttributeObjectPropertyFeatureAssociationPathElement, Je retourne " + returned + " of " + (returned != null ?
 		// returned.getClass() : null));
 		return returned;

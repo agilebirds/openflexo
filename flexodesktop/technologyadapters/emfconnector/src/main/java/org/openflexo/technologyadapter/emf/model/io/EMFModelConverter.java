@@ -43,7 +43,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFIndividualReferenceObjectPropertyAsList;
+import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyAsList;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
@@ -119,27 +120,30 @@ public class EMFModelConverter {
 	 * Convert single EMF Object or EObjectList of EMF Object to EMF Object Individual or List of EMF Object Individual
 	 * 
 	 * @param model
+	 * @param emfAnswer 
 	 * @param eObject
 	 * @return
 	 */
-	public Object convertIndividualReference(EMFModel model, EObject referee, Object reference) {
-		if (reference instanceof EObjectEList) {
-			/*
-			ArrayList<EMFObjectIndividual> returned = new ArrayList<EMFObjectIndividual>();
-			for (Object item : (EObjectEList) reference) {
-				returned.add(convertObjectIndividual(model, (EObject) item));
-			}
-			*/
-			EMFIndividualReferenceObjectPropertyAsList returned = new EMFIndividualReferenceObjectPropertyAsList(model, referee, (EReference) reference);
-			return returned;
-			
-		} else if (reference instanceof EObject) {
+	public Object convertIndividualReference(EMFModel model,Object reference) {
+	
+		if (reference instanceof EObject) {
 			return convertObjectIndividual(model, (EObject) reference);
 		} else if (reference instanceof Enum) {
 			return reference;
 		} else {
 			logger.warning("Unexpected " + reference + " of " + (reference != null ? reference.getClass() : null));
 			return reference;
+		}
+	}
+	
+	public Object convertIndividualReferenceList(EMFModel model,Object object, EMFReferenceObjectProperty property, Object refList) {
+		if (refList instanceof EObjectEList) {
+			EMFObjectIndividualReferenceObjectPropertyAsList returned = new EMFObjectIndividualReferenceObjectPropertyAsList(model, (EObject) object, (EReference) property.getObject(), refList);
+			return returned;
+			
+		} else {
+			logger.warning("Unexpected " + property + " of " + (property != null ? property.getClass() : null));
+			return property;
 		}
 	}
 

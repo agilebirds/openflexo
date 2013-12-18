@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -68,9 +69,16 @@ public class ObjectReferenceFeatureAssociationPathElement extends SimplePathElem
 		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
 		EObject object = ((EMFObjectIndividual) target).getObject();
 		Object emfAnswer = object.eGet(objectProperty.getObject());
-		Object returned = model.getConverter().convertIndividualReference(model,object, emfAnswer);
+		Object returned = null;
+		
+		if (emfAnswer instanceof EObjectEList) {
+			returned = model.getConverter().convertIndividualReferenceList(model, object, objectProperty, emfAnswer);
 		/*System.out.println("ObjectReferenceFeatureAssociationPathElement, Je retourne " + returned + " of "
 				+ (returned != null ? returned.getClass() : null));*/
+		}
+		else {
+			returned = model.getConverter().convertIndividualReference(model, emfAnswer);
+		}
 		return returned;
 	}
 
