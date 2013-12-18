@@ -144,7 +144,6 @@ public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T exten
 		} else {
 			ontologyClassURI = null;
 		}
-		System.out.println("ontologyClassURI=" + ontologyClassURI);
 	}
 
 	public String _getOntologyClassURI() {
