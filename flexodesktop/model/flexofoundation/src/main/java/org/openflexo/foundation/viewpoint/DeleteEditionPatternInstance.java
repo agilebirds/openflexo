@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.CompoundIssue;
@@ -69,9 +70,9 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 
 	public VirtualModelInstance<?, ?> getVirtualModelInstance(EditionSchemeAction<?, ?> action) {
 		try {
-			// System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
-			// System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " + getVirtualModelInstance().invalidBindingReason());
-			// System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
+			System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
+			System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " + getVirtualModelInstance().invalidBindingReason());
+			System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
 			return getVirtualModelInstance().getBindingValue(action);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
@@ -202,18 +203,33 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 		logger.info("Perform performDeleteEditionPatternInstance " + action);
 		VirtualModelInstance<?, ?> vmInstance = getVirtualModelInstance(action);
 		logger.info("VirtualModelInstance: " + vmInstance);
-		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
+
+		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewEmbeddedAction(null, null, action);
 		deletionSchemeAction.setVirtualModelInstance(vmInstance);
 		deletionSchemeAction.setDeletionScheme(getDeletionScheme());
-		for (DeleteEditionPatternInstanceParameter p : getParameters()) {
-			EditionSchemeParameter param = p.getParam();
-			Object value = p.evaluateParameterValue(action);
-			logger.info("For parameter " + param + " value is " + value);
-			if (value != null) {
-				deletionSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+		try {
+			EditionPatternInstance objectToDelete = (EditionPatternInstance) getObject().getBindingValue(action);
+			logger.info("EditionPatternInstance To Delete: " + objectToDelete);
+			deletionSchemeAction.setEditionPatternInstanceToDelete(objectToDelete);
+
+			for (DeleteEditionPatternInstanceParameter p : getParameters()) {
+				EditionSchemeParameter param = p.getParam();
+				Object value = p.evaluateParameterValue(action);
+				logger.info("For parameter " + param + " value is " + value);
+				if (value != null) {
+					deletionSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+				}
 			}
+			logger.info("Performing action");
+			deletionSchemeAction.doAction();
+
+		} catch (TypeMismatchException e1) {
+			e1.printStackTrace();
+		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
 		}
-		deletionSchemeAction.doAction();
 		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
 			logger.info("Successfully performed performDeleteEditionPattern " + action);
 			return deletionSchemeAction.getEditionPatternInstance();
@@ -281,22 +297,12 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 		}
 
 		public Object evaluateParameterValue(EditionSchemeAction<?, ?> action) {
-			if (getValue() == null || getValue().isUnset()) {
-				/*logger.info("Binding for " + param.getName() + " is not set");
-				if (param instanceof URIParameter) {
-					logger.info("C'est une URI, de base " + ((URIParameter) param).getBaseURI());
-					logger.info("Je retourne " + ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action));
-					return ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action);
-				} else if (param.getDefaultValue() != null && param.getDefaultValue().isSet() && param.getDefaultValue().isValid()) {
-					return param.getDefaultValue().getBinding().getBindingValue(action);
-				}
-				if (param.getIsRequired()) {
-					logger.warning("Required parameter missing: " + param + ", some strange behaviour may happen from now...");
-				}*/
+			DataBinding<Object> val = getValue();
+			if (val == null || val.isUnset()) {
 				return null;
-			} else if (getValue().isValid()) {
+			} else if (val.isValid()) {
 				try {
-					return getValue().getBindingValue(action);
+					return val.getBindingValue(action);
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
@@ -366,7 +372,7 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 	}
 
 	public static class DeleteEditionPatternInstanceMustAddressADeletionScheme extends
-			ValidationRule<DeleteEditionPatternInstanceMustAddressADeletionScheme, DeleteEditionPatternInstance> {
+	ValidationRule<DeleteEditionPatternInstanceMustAddressADeletionScheme, DeleteEditionPatternInstance> {
 		public DeleteEditionPatternInstanceMustAddressADeletionScheme() {
 			super(DeleteEditionPatternInstance.class, "delete_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
@@ -388,7 +394,7 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 	}
 
 	public static class DeleteEditionPatternInstanceParametersMustBeValid extends
-			ValidationRule<DeleteEditionPatternInstanceParametersMustBeValid, DeleteEditionPatternInstance> {
+	ValidationRule<DeleteEditionPatternInstanceParametersMustBeValid, DeleteEditionPatternInstance> {
 
 		public DeleteEditionPatternInstanceParametersMustBeValid() {
 			super(DeleteEditionPatternInstance.class, "delete_edition_pattern_parameters_must_be_valid");
@@ -431,7 +437,7 @@ public class DeleteEditionPatternInstance  extends DeleteAction<VirtualModelMode
 	}
 
 	public static class VirtualModelInstanceBindingIsRequiredAndMustBeValid extends
-			BindingIsRequiredAndMustBeValid<DeleteEditionPatternInstance> {
+	BindingIsRequiredAndMustBeValid<DeleteEditionPatternInstance> {
 		public VirtualModelInstanceBindingIsRequiredAndMustBeValid() {
 			super("'virtual_model_instance'_binding_is_not_valid", DeleteEditionPatternInstance.class);
 		}
