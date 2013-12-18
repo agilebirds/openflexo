@@ -673,7 +673,7 @@ public class DiagramEditor implements FIBSelectionListener {
 		getController().setSelectedObjects(dtnSelection);
 		isSelectingObjectOnDiagram = false;
 
-		if (selection.get(0) instanceof Concept) {
+		if (!selection.isEmpty() && selection.get(0) instanceof Concept) {
 			setCurrentGraphicalRepresentation(null);
 			setCurrentConcept((Concept) selection.get(0));
 		}
@@ -760,24 +760,24 @@ public class DiagramEditor implements FIBSelectionListener {
 		for (ConceptGRAssociation conceptGRAssoc : getDiagram().getAssociations()) {
 			if (conceptGRAssoc.getConcept().equals(concept)) {
 				if (!getDiagram().getElementsWithAssociation(conceptGRAssoc).isEmpty()) {
-					DiagramElement element = getDiagram().getElementsWithAssociation(conceptGRAssoc).get(0);
-					ShapeNodeImpl shapeNode = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(element);
-					JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shapeNode);
-					BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
-					screenshot = screenshot.getSubimage(10, 20, (int) shapeNode.getWidth() + 10, (int) shapeNode.getHeight());
-					screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
-
-					File outputFile = new FileResource("icon" + shapeNode.getIndex() + ".png");
-					try {
-						outputFile.createNewFile();
-						ImageIO.write(screenshot, "png", outputFile);
-						icons.add(new ImageIconResource(outputFile.getPath()));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					DiagramElement<?, ?> element = getDiagram().getElementsWithAssociation(conceptGRAssoc).get(0);
+					if (getDrawing().getDrawingTreeNode(element) instanceof ShapeNodeImpl) {
+						ShapeNodeImpl shapeNode = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(element);
+						JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shapeNode);
+						BufferedImage screenshot = shapeView.getScreenshot();
+						screenshot = screenshot.getSubimage(10, 20, (int) shapeNode.getWidth() + 10, (int) shapeNode.getHeight());
+						screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
+						File outputFile = new File("icon" + shapeNode.getIndex() + ".png");
+						try {
+							outputFile.createNewFile();
+							ImageIO.write(screenshot, "png", outputFile);
+							icons.add(new ImageIconResource(outputFile.getPath()));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
-
 			}
 		}
 		return icons;
@@ -790,6 +790,9 @@ public class DiagramEditor implements FIBSelectionListener {
 			updateProperties();
 			// Create a text from the property values
 			instance.buildDescription();
+			if (getFactory().getUndoManager().isBeeingRecording()) {
+				getFactory().getUndoManager().stopRecording(getFactory().getUndoManager().getCurrentEdition());
+			}
 		}
 	}
 

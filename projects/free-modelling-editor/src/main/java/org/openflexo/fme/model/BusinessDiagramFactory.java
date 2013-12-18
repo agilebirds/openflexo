@@ -55,6 +55,8 @@ public class BusinessDiagramFactory extends DiagramFactory {
 	public Diagram makeNewDiagram() {
 		Diagram diagram = super.makeNewDiagram();
 
+		CompoundEdit edit = getUndoManager().startRecording("Create new Businesses Concepts");
+
 		/*
 		 * Add a pre-Existing BusinessModel and a graphical representation
 		 */
@@ -130,6 +132,7 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		/*
 		 * End pre-existing BusinessModel
 		 */
+		getUndoManager().stopRecording(edit);
 
 		return diagram;
 	}
@@ -143,12 +146,10 @@ public class BusinessDiagramFactory extends DiagramFactory {
 	}
 
 	private Concept createConcept(Diagram diagram, String name) {
-		CompoundEdit edit = getUndoManager().startRecording("Create new Business Concept");
 		Concept concept = newInstance(Concept.class);
 		concept.setName(name);
 		concept.setReadOnly(true);
 		diagram.getDataModel().addToConcepts(concept);
-		getUndoManager().stopRecording(edit);
 		return concept;
 	}
 

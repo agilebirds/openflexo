@@ -115,7 +115,6 @@ public class CommonPalette extends DrawingPalette {
 		gr.setBackground(FACTORY.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 		gr.setAllowToLeaveBounds(false);
-
 		return makePaletteElement(gr, true, true, true, true);
 
 	}

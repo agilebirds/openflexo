@@ -59,7 +59,10 @@ public class PipetteControl extends MouseClickControlImpl<DianaDrawingEditor> {
 
 			if (((DianaDrawingEditor) controller).getDiagramEditor().hasPipette()) {
 
-				CompoundEdit applyPipette = factory.getUndoManager().startRecording("Apply Pipette");
+				CompoundEdit applyPipette = null;
+				if (!factory.getUndoManager().isBeeingRecording()) {
+					applyPipette = factory.getUndoManager().startRecording("Apply Pipette");
+				}
 
 				// Prepare variables
 				diagramEditor = ((DianaDrawingEditor) controller).getDiagramEditor();
@@ -76,7 +79,9 @@ public class PipetteControl extends MouseClickControlImpl<DianaDrawingEditor> {
 					applyGraphicalProperties();
 				}
 
-				factory.getUndoManager().stopRecording(applyPipette);
+				if (applyPipette != null) {
+					factory.getUndoManager().stopRecording(applyPipette);
+				}
 
 				return true;
 			}

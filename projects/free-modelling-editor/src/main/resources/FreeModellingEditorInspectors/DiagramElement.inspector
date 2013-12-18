@@ -17,5 +17,5 @@
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Instance" />
+  <Parameter name="title" value="DiagramElement" />
 </Panel>
