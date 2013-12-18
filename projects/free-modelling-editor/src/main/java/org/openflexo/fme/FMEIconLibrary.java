@@ -37,4 +37,5 @@ public class FMEIconLibrary {
 	public static final ImageIcon PIPETTE_ICON = new ImageIconResource("Icons/Pipette.png");
 	public static final ImageIcon NO_PIPETTE_ICON = new ImageIconResource("Icons/NoPipette.png");
 	public static final ImageIcon GR_ICON = new ImageIconResource("Icons/GR.png");
+
 }

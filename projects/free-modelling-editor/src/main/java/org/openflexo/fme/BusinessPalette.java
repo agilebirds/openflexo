@@ -86,7 +86,7 @@ public class BusinessPalette extends DrawingPalette {
 				.getGraphicalRepresentation());
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
-		gr.setWidth(40);
+		gr.setWidth(30);
 		gr.setHeight(30);
 		return makePaletteElement(gr, true, true, true, true, cGRa);
 
@@ -114,7 +114,7 @@ public class BusinessPalette extends DrawingPalette {
 
 				CompoundEdit edit = getEditor().getFactory().getUndoManager().startRecording("Dragging new Element");
 
-				ShapeGraphicalRepresentation shapeGR = getEditor().getFactory().makeNewShapeGR(getGraphicalRepresentation());
+				// ShapeGraphicalRepresentation shapeGR = getEditor().getFactory().makeNewShapeGR(getGraphicalRepresentation());
 
 				Shape newShape = getEditor().createNewShape(container, cGRa, dropLocation);
 

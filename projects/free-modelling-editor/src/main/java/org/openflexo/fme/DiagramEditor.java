@@ -759,22 +759,25 @@ public class DiagramEditor implements FIBSelectionListener {
 
 		for (ConceptGRAssociation conceptGRAssoc : getDiagram().getAssociations()) {
 			if (conceptGRAssoc.getConcept().equals(concept)) {
-				DiagramElement element = getDiagram().getElementsWithAssociation(conceptGRAssoc).get(0);
-				ShapeNodeImpl shapeNode = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(element);
-				JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shapeNode);
-				BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
-				screenshot = screenshot.getSubimage(10, 20, (int) shapeNode.getWidth() + 10, (int) shapeNode.getHeight());
-				screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
+				if (!getDiagram().getElementsWithAssociation(conceptGRAssoc).isEmpty()) {
+					DiagramElement element = getDiagram().getElementsWithAssociation(conceptGRAssoc).get(0);
+					ShapeNodeImpl shapeNode = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(element);
+					JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shapeNode);
+					BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
+					screenshot = screenshot.getSubimage(10, 20, (int) shapeNode.getWidth() + 10, (int) shapeNode.getHeight());
+					screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
 
-				File outputFile = new FileResource("icon" + shapeNode.getIndex() + ".png");
-				try {
-					outputFile.createNewFile();
-					ImageIO.write(screenshot, "png", outputFile);
-					icons.add(new ImageIconResource(outputFile.getPath()));
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					File outputFile = new FileResource("icon" + shapeNode.getIndex() + ".png");
+					try {
+						outputFile.createNewFile();
+						ImageIO.write(screenshot, "png", outputFile);
+						icons.add(new ImageIconResource(outputFile.getPath()));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+
 			}
 		}
 		return icons;

@@ -19,6 +19,29 @@ public class BusinessDiagramFactory extends DiagramFactory {
 	private static final File HW_COMPONENT = new FileResource("Images/hardware.png");
 	private static final File SW_COMPONENT = new FileResource("Images/software.png");
 
+	private static final File AND_OPERATOR = new FileResource("Images/AndOperator.gif");
+	private static final File COMPLEX_OPERATOR = new FileResource("Images/ComplexOperator.gif");
+	private static final File EXCLUSIVE_OPERATOR = new FileResource("Images/ExclusiveEventBasedOperator.gif");
+	private static final File IF_OPERATOR = new FileResource("Images/IfOperator.gif");
+	private static final File LOOP_OPERATOR = new FileResource("Images/LoopOperator.gif");
+	private static final File INCLUSIVE_OPERATOR = new FileResource("Images/InclusiveOperator.gif");
+	private static final File OR_OPERATOR = new FileResource("Images/OrOperator.gif");
+
+	private static final File START_MESSAGE_EVENT = new FileResource("Images/StartMessage.png");
+	private static final File START_CONDITION_EVENT = new FileResource("Images/StartCondition.png");
+	private static final File START_ERROR_EVENT = new FileResource("Images/StartError.png");
+	private static final File START_SIGNAL_EVENT = new FileResource("Images/StartSignal.png");
+	private static final File START_TIMER_EVENT = new FileResource("Images/StartTimer.png");
+
+	private static final File INTERMEDIATE_MESSAGE_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_CANCEL_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_TIMER_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_CONDITION_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_ERROR_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_SIGNAL_EVENT = new FileResource("Images/IntermediateMessage.png");
+	private static final File INTERMEDIATE_LINK_EVENT = new FileResource("Images/IntermediateMessage.png");
+
 	private List<ConceptGRAssociation> bpmnConceptAndRelations;
 	private List<ConceptGRAssociation> codesignConceptAndRelations;
 
@@ -40,23 +63,83 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		Concept hwComponent = createConcept(diagram, "HWComponent");
 		Concept swComponent = createConcept(diagram, "SWComponent");
 
-		codesignConceptAndRelations.add(createNewAssociation(hwComponent, diagram, null, HW_COMPONENT));
-		codesignConceptAndRelations.add(createNewAssociation(swComponent, diagram, null, SW_COMPONENT));
+		ShapeGraphicalRepresentation hwGR = createHWGR();
+		ShapeGraphicalRepresentation swGR = createSWGR();
+
+		codesignConceptAndRelations.add(createNewAssociation(hwComponent, diagram, hwGR));
+		codesignConceptAndRelations.add(createNewAssociation(swComponent, diagram, swGR));
 
 		// BPMN
 		Concept activity = createConcept(diagram, "Activity");
 		Concept gateway = createConcept(diagram, "Gateway");
-		Concept event = createConcept(diagram, "Event");
+		Concept and = createConcept(diagram, "And");
+		Concept complex = createConcept(diagram, "Complex");
+		Concept exclusive = createConcept(diagram, "Exclusive");
+		Concept ifOp = createConcept(diagram, "If");
+		Concept inclusive = createConcept(diagram, "Inclusive");
+		Concept loop = createConcept(diagram, "Loop");
+		Concept or = createConcept(diagram, "Or");
+		Concept startEvent = createConcept(diagram, "StartEvent");
+		Concept startMessageEvent = createConcept(diagram, "StartMessageEvent");
+		Concept startConditionEvent = createConcept(diagram, "StartConditionEvent");
+		Concept startErrorEvent = createConcept(diagram, "StartErrorEvent");
+		Concept startSignalEvent = createConcept(diagram, "StartSignalEvent");
+		Concept startTimerEvent = createConcept(diagram, "StartTimerEvent");
+		Concept intermediateEvent = createConcept(diagram, "IntermediateEvent");
+		Concept intermediateMessageEvent = createConcept(diagram, "IntermediateMessageEvent");
+		Concept endEvent = createConcept(diagram, "EndEvent");
 
-		bpmnConceptAndRelations.add(createNewAssociation(activity, diagram, createActivityGR(), null));
-		bpmnConceptAndRelations.add(createNewAssociation(event, diagram, createEventGR(), null));
-		bpmnConceptAndRelations.add(createNewAssociation(gateway, diagram, createGatewayGR(), null));
-		bpmnConceptAndRelations.add(createNewAssociation(gateway, diagram, createGatewayGR(), null));
+		ShapeGraphicalRepresentation activityGR = createActivityGR();
+		ShapeGraphicalRepresentation gatewayGR = createGatewayGR();
+		ShapeGraphicalRepresentation andGR = createOperatorGR(AND_OPERATOR);
+		ShapeGraphicalRepresentation complexGR = createOperatorGR(COMPLEX_OPERATOR);
+		ShapeGraphicalRepresentation exclusiveGR = createOperatorGR(EXCLUSIVE_OPERATOR);
+		ShapeGraphicalRepresentation ifGR = createOperatorGR(IF_OPERATOR);
+		ShapeGraphicalRepresentation inclusiveGR = createOperatorGR(INCLUSIVE_OPERATOR);
+		ShapeGraphicalRepresentation loopGR = createOperatorGR(LOOP_OPERATOR);
+		ShapeGraphicalRepresentation orGR = createOperatorGR(OR_OPERATOR);
+		ShapeGraphicalRepresentation startEventGR = createEventGR(null);
+		ShapeGraphicalRepresentation startMessageEventGR = createEventGR(START_MESSAGE_EVENT);
+		ShapeGraphicalRepresentation startConditionEventGR = createEventGR(START_CONDITION_EVENT);
+		ShapeGraphicalRepresentation startErrorEventGR = createEventGR(START_ERROR_EVENT);
+		ShapeGraphicalRepresentation startSignalEventGR = createEventGR(START_SIGNAL_EVENT);
+		ShapeGraphicalRepresentation startTimerEventGR = createEventGR(START_TIMER_EVENT);
+		ShapeGraphicalRepresentation intermediateEventGR = createEventGR(null);
+		ShapeGraphicalRepresentation intermediateMessageEventGR = createEventGR(INTERMEDIATE_MESSAGE_EVENT);
+		ShapeGraphicalRepresentation endEventGR = createEndEventGR(null);
+
+		bpmnConceptAndRelations.add(createNewAssociation(activity, diagram, activityGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startEvent, diagram, startEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startMessageEvent, diagram, startMessageEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startConditionEvent, diagram, startConditionEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startErrorEvent, diagram, startErrorEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startSignalEvent, diagram, startSignalEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(startTimerEvent, diagram, startTimerEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(endEvent, diagram, endEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(intermediateEvent, diagram, intermediateEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(intermediateMessageEvent, diagram, intermediateMessageEventGR));
+		bpmnConceptAndRelations.add(createNewAssociation(gateway, diagram, gatewayGR));
+		bpmnConceptAndRelations.add(createNewAssociation(and, diagram, andGR));
+		bpmnConceptAndRelations.add(createNewAssociation(complex, diagram, complexGR));
+		bpmnConceptAndRelations.add(createNewAssociation(exclusive, diagram, exclusiveGR));
+		bpmnConceptAndRelations.add(createNewAssociation(ifOp, diagram, ifGR));
+		bpmnConceptAndRelations.add(createNewAssociation(inclusive, diagram, inclusiveGR));
+		bpmnConceptAndRelations.add(createNewAssociation(loop, diagram, loopGR));
+		bpmnConceptAndRelations.add(createNewAssociation(or, diagram, orGR));
+
 		/*
 		 * End pre-existing BusinessModel
 		 */
 
 		return diagram;
+	}
+
+	public List<ConceptGRAssociation> getBpmnConceptAndRelations() {
+		return bpmnConceptAndRelations;
+	}
+
+	public List<ConceptGRAssociation> getCodesignConceptAndRelations() {
+		return codesignConceptAndRelations;
 	}
 
 	private Concept createConcept(Diagram diagram, String name) {
@@ -69,50 +152,54 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		return concept;
 	}
 
-	private ConceptGRAssociation createNewAssociation(Concept concept, Diagram diagram, ShapeGraphicalRepresentation sGR, File image) {
-
+	private ConceptGRAssociation createNewAssociation(Concept concept, Diagram diagram, ShapeGraphicalRepresentation sGR) {
 		ConceptGRAssociation conceptAssoc = newInstance(ConceptGRAssociation.class);
 		conceptAssoc.setConcept(concept);
-
-		if (sGR == null) {
-			sGR = newInstance(ShapeGraphicalRepresentation.class);
-			sGR.setShapeType(ShapeType.RECTANGLE);
-			applyDefaultProperties(sGR);
-			sGR.setWidth(40);
-			sGR.setHeight(30);
-		}
-
-		if (image != null) {
-			sGR.setBackgroundType(BackgroundStyleType.IMAGE);
-			sGR.getForeground().setNoStroke(true);
-			sGR.getShadowStyle().setDrawShadow(false);
-			BackgroundImageBackgroundStyle backgroundImage = (BackgroundImageBackgroundStyle) sGR.getBackground();
-			backgroundImage.setFitToShape(true);
-			backgroundImage.setImageFile(image);
-		}
-
 		conceptAssoc.setGraphicalRepresentation(sGR);
 		diagram.addToAssociations(conceptAssoc);
-
 		return conceptAssoc;
 	}
 
-	public List<ConceptGRAssociation> getBpmnConceptAndRelations() {
-		return bpmnConceptAndRelations;
+	private ShapeGraphicalRepresentation createShapeGraphicalRepresentation() {
+		ShapeGraphicalRepresentation sGR = newInstance(ShapeGraphicalRepresentation.class);
+		sGR.setShapeType(ShapeType.RECTANGLE);
+		applyDefaultProperties(sGR);
+		sGR.setWidth(40);
+		sGR.setHeight(30);
+		return sGR;
 	}
 
-	public List<ConceptGRAssociation> getCodesignConceptAndRelations() {
-		return codesignConceptAndRelations;
+	private ShapeGraphicalRepresentation createImage(ShapeGraphicalRepresentation sGR, File image, boolean stroke, boolean shadow) {
+		sGR.setBackgroundType(BackgroundStyleType.IMAGE);
+		sGR.getForeground().setNoStroke(stroke);
+		sGR.getShadowStyle().setDrawShadow(shadow);
+		BackgroundImageBackgroundStyle backgroundImage = (BackgroundImageBackgroundStyle) sGR.getBackground();
+		backgroundImage.setFitToShape(true);
+		backgroundImage.setImageFile(image);
+		return sGR;
+	}
+
+	private ShapeGraphicalRepresentation createHWGR() {
+		ShapeGraphicalRepresentation sGR = createShapeGraphicalRepresentation();
+		sGR = createImage(sGR, HW_COMPONENT, true, false);
+		return sGR;
+	}
+
+	private ShapeGraphicalRepresentation createSWGR() {
+		ShapeGraphicalRepresentation sGR = createShapeGraphicalRepresentation();
+		sGR = createImage(sGR, SW_COMPONENT, true, false);
+		return sGR;
 	}
 
 	private ShapeGraphicalRepresentation createActivityGR() {
 		ShapeSpecification shapeSpecification = makeShape(ShapeType.RECTANGLE);
 		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeSpecification);
-		// applyDefaultProperties(gr);
-		gr.setWidth(40);
-		gr.setHeight(30);
+		gr.setWidth(200);
+		gr.setHeight(150);
 		((Rectangle) shapeSpecification).setIsRounded(true);
-		((Rectangle) shapeSpecification).setArcSize(30);
+		((Rectangle) shapeSpecification).setArcSize(15);
+		gr.setText("Activity");
+		gr.setIsFloatingLabel(false);
 		return gr;
 	}
 
@@ -120,17 +207,55 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		ShapeSpecification shapeSpecification = makeShape(ShapeType.LOSANGE);
 		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeSpecification);
 		applyDefaultProperties(gr);
-		gr.setWidth(40);
-		gr.setHeight(30);
+		gr.setWidth(90);
+		gr.setHeight(90);
+		gr.setText("Gateway");
+		gr.setIsFloatingLabel(false);
 		return gr;
 	}
 
-	private ShapeGraphicalRepresentation createEventGR() {
-		ShapeSpecification shapeSpecification = makeShape(ShapeType.CIRCLE);
+	private ShapeGraphicalRepresentation createOperatorGR(File image) {
+		ShapeSpecification shapeSpecification = makeShape(ShapeType.LOSANGE);
 		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeSpecification);
-		// applyDefaultProperties(gr);
+		applyDefaultProperties(gr);
 		gr.setWidth(40);
-		gr.setHeight(30);
+		gr.setHeight(40);
+		if (image != null) {
+			gr = createImage(gr, image, false, false);
+		}
+		gr.setIsFloatingLabel(true);
+		gr.setAbsoluteTextX(40);
+		gr.setAbsoluteTextY(70);
 		return gr;
 	}
+
+	private ShapeGraphicalRepresentation createEventGR(File image) {
+		ShapeSpecification shapeSpecification = makeShape(ShapeType.CIRCLE);
+		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeSpecification);
+		gr.setWidth(30);
+		gr.setHeight(30);
+		if (image != null) {
+			gr = createImage(gr, image, false, false);
+		}
+		gr.setIsFloatingLabel(true);
+		gr.setAbsoluteTextX(40);
+		gr.setAbsoluteTextY(70);
+		return gr;
+	}
+
+	private ShapeGraphicalRepresentation createEndEventGR(File image) {
+		ShapeSpecification shapeSpecification = makeShape(ShapeType.CIRCLE);
+		ShapeGraphicalRepresentation gr = makeShapeGraphicalRepresentation(shapeSpecification);
+		gr.setWidth(30);
+		gr.setHeight(30);
+		gr.getForeground().setLineWidth(3);
+		if (image != null) {
+			gr = createImage(gr, image, false, false);
+		}
+		gr.setIsFloatingLabel(true);
+		gr.setAbsoluteTextX(40);
+		gr.setAbsoluteTextY(70);
+		return gr;
+	}
+
 }

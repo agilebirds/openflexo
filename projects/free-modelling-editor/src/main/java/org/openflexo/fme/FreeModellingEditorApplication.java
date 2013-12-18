@@ -268,8 +268,8 @@ public class FreeModellingEditorApplication {
 		paletteTabbedPane = new JTabbedPane();
 		palettePanel.add(paletteTabbedPane, BorderLayout.CENTER);
 		paletteTabbedPane.add("common", commonPalette.getComponent());
-		paletteTabbedPane.add("business", businessPalette.getComponent());
-		paletteTabbedPane.add("process", processPalette.getComponent());
+		paletteTabbedPane.add("codesign", businessPalette.getComponent());
+		paletteTabbedPane.add("bpmn", processPalette.getComponent());
 
 		splitPanel = new JXMultiSplitPane(layout);
 		splitPanel.add(representedConceptBrowser, "left.top");
