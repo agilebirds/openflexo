@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -4040,7 +4041,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return reply;
 	}
 
-	public static final String ONTOLOGY_URI = "http://www.agilebirds.com/projects";
+	public static final String ONTOLOGY_URI = "http://www.openflexo.org/projects";
 	public static final String RESOURCES = "resources";
 
 	public String getProjectVersionURI() {
