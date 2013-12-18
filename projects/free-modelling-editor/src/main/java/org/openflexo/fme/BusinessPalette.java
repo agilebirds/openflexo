@@ -63,11 +63,13 @@ public class BusinessPalette extends DrawingPalette {
 		int px = 0;
 		int py = 0;
 		for (ConceptGRAssociation cGRa : associations) {
-			addElement(makePaletteElement(cGRa, px, py));
-			px = px + 1;
-			if (px == 3) {
-				px = 0;
-				py++;
+			if (cGRa.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+				addElement(makePaletteElement(cGRa, px, py));
+				px = px + 1;
+				if (px == 3) {
+					px = 0;
+					py++;
+				}
 			}
 		}
 	}
@@ -89,7 +91,6 @@ public class BusinessPalette extends DrawingPalette {
 		gr.setWidth(30);
 		gr.setHeight(30);
 		return makePaletteElement(gr, true, true, true, true, cGRa);
-
 	}
 
 	private PaletteElement makePaletteElement(final ShapeGraphicalRepresentation gr, final boolean applyCurrentForeground,

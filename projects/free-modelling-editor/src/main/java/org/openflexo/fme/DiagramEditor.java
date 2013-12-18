@@ -333,21 +333,32 @@ public class DiagramEditor implements FIBSelectionListener {
 	public Connector createNewConnector(DiagramElement container, Shape from, Shape to) {
 
 		CompoundEdit edit = null;
-		ConceptGRAssociation association;
+		ConceptGRAssociation association = null;
 		Connector newConnector;
 
 		if (!getFactory().getUndoManager().isBeeingRecording()) {
 			edit = getFactory().getUndoManager().startRecording("Creating new connector");
 		}
 
-		final List<ConnectorGraphicalRepresentation> connectorGrs = new ArrayList<ConnectorGraphicalRepresentation>();
+		/*final List<ConnectorGraphicalRepresentation> connectorGrs = new ArrayList<ConnectorGraphicalRepresentation>();
 		for (Connector connector : getDiagram().getConnectors()) {
 			connectorGrs.add(connector.getGraphicalRepresentation());
-		}
+		}*/
 
 		newConnector = getFactory().makeNewConnector(from, to, container.getDiagram());
 
 		// Lets see about ConceptGRAssociation
+
+		/*Concept fromConcept = from.getAssociation().getConcept();
+		Concept toConcept = to.getAssociation().getConcept();
+		// association = retrieveConnectorAssociation(fromConcept, to);
+		if (fromConcept.getName().equals("HWComponent") && toConcept.getName().equals("SWComponent")) {
+			for (ConceptGRAssociation assoc : getDiagram().getAssociations()) {
+				if (assoc.getConcept().getName().equals("Bus")) {
+					association = assoc;
+				}
+			}
+		}*/
 
 		association = retrieveAssociation(newConnector.getGraphicalRepresentation());
 		if (association == null) {

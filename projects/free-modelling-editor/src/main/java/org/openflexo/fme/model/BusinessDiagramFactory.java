@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.ShapeSpecification;
@@ -64,12 +65,15 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		// CODESIGN
 		Concept hwComponent = createConcept(diagram, "HWComponent");
 		Concept swComponent = createConcept(diagram, "SWComponent");
+		// Concept bus = createConcept(diagram, "Bus");
 
 		ShapeGraphicalRepresentation hwGR = createHWGR();
 		ShapeGraphicalRepresentation swGR = createSWGR();
+		// ConnectorGraphicalRepresentation busGR = createBusGR();
 
 		codesignConceptAndRelations.add(createNewAssociation(hwComponent, diagram, hwGR));
 		codesignConceptAndRelations.add(createNewAssociation(swComponent, diagram, swGR));
+		// codesignConceptAndRelations.add(createNewAssociation(bus, diagram, busGR));
 
 		// BPMN
 		Concept activity = createConcept(diagram, "Activity");
@@ -153,7 +157,7 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		return concept;
 	}
 
-	private ConceptGRAssociation createNewAssociation(Concept concept, Diagram diagram, ShapeGraphicalRepresentation sGR) {
+	private ConceptGRAssociation createNewAssociation(Concept concept, Diagram diagram, GraphicalRepresentation sGR) {
 		ConceptGRAssociation conceptAssoc = newInstance(ConceptGRAssociation.class);
 		conceptAssoc.setConcept(concept);
 		conceptAssoc.setGraphicalRepresentation(sGR);
@@ -191,6 +195,18 @@ public class BusinessDiagramFactory extends DiagramFactory {
 		sGR = createImage(sGR, SW_COMPONENT, true, false);
 		return sGR;
 	}
+
+	/*private ConnectorGraphicalRepresentation createBusGR() {
+		ConnectorGraphicalRepresentation cGR = newInstance(ConnectorGraphicalRepresentation.class);
+		applyDefaultProperties(cGR);
+		applyBasicControls(cGR);
+		cGR.getForeground().setColor(Color.CYAN);
+		cGR.getForeground().setLineWidth(5.0);
+		cGR.getForeground().setJoinStyle(JoinStyle.JOIN_MITER);
+		cGR.getForeground().setCapStyle(CapStyle.CAP_SQUARE);
+		cGR.getForeground().setDashStyle(DashStyle.PLAIN_STROKE);
+		return cGR;
+	}*/
 
 	private ShapeGraphicalRepresentation createActivityGR() {
 		ShapeSpecification shapeSpecification = makeShape(ShapeType.RECTANGLE);
