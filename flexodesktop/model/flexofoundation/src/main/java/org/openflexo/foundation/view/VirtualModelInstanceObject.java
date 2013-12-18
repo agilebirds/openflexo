@@ -35,10 +35,6 @@ public abstract class VirtualModelInstanceObject extends ViewObject {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelInstanceObject.class.getPackage().getName());
 
-	public VirtualModelInstanceObject(ViewBuilder viewBuilder) {
-		super(viewBuilder);
-	}
-
 	public VirtualModelInstanceObject(FlexoProject project) {
 		super(project);
 	}

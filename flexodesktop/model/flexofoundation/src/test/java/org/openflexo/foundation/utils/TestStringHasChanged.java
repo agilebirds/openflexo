@@ -17,23 +17,24 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation;
+package org.openflexo.foundation.utils;
 
-import org.flexo.model.TestModelObject;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class FlexoTestFoundation extends FlexoTestCase {
+import org.junit.Test;
+import org.openflexo.foundation.FlexoObject;
 
-	public FlexoTestFoundation() {
-		super("TestFlexoFoundation");
-	}
+public class TestStringHasChanged {
 
+	@Test
 	public void testStringHasChanged() {
-		assertTrue(TestModelObject.stringHasChanged(null, "Something"));
-		assertTrue(TestModelObject.stringHasChanged("Something", null));
-		assertTrue(TestModelObject.stringHasChanged("Something", "something"));
-		assertTrue(TestModelObject.stringHasChanged("Something", "SomethingElse"));
-		assertFalse(TestModelObject.stringHasChanged("Something", "Something"));
-		assertFalse(TestModelObject.stringHasChanged(null, null));
+		assertTrue(FlexoObject.stringHasChanged(null, "Something"));
+		assertTrue(FlexoObject.stringHasChanged("Something", null));
+		assertTrue(FlexoObject.stringHasChanged("Something", "something"));
+		assertTrue(FlexoObject.stringHasChanged("Something", "SomethingElse"));
+		assertFalse(FlexoObject.stringHasChanged("Something", "Something"));
+		assertFalse(FlexoObject.stringHasChanged(null, null));
 	}
 
 }

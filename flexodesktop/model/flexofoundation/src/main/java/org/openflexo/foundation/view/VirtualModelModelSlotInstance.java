@@ -44,53 +44,35 @@ public class VirtualModelModelSlotInstance extends ModelSlotInstance<VirtualMode
 	// Serialization/deserialization only, do not use
 	private String virtualModelInstanceURI;
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public VirtualModelModelSlotInstance(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public VirtualModelModelSlotInstance(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	public VirtualModelModelSlotInstance(View view, VirtualModelModelSlot modelSlot) {
+	/*public VirtualModelModelSlotInstance(View view, VirtualModelModelSlot modelSlot) {
 		super(view, modelSlot);
-	}
+	}*/
 
 	public VirtualModelModelSlotInstance(VirtualModelInstance vmInstance, VirtualModelModelSlot modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 
 	@Override
-	public VirtualModelInstance getResourceData() {
-		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(virtualModelInstanceURI)) {
+	public VirtualModelInstance getAccessedResourceData() {
+		if (getVirtualModelInstance() != null && accessedResourceData == null && StringUtils.isNotEmpty(virtualModelInstanceURI)) {
 			VirtualModelInstanceResource vmiResource = getProject().getViewLibrary().getVirtualModelInstance(virtualModelInstanceURI);
 			if (vmiResource != null) {
-				resourceData = vmiResource.getVirtualModelInstance();
+				accessedResourceData = vmiResource.getVirtualModelInstance();
 				resource = vmiResource;
 			}
 		}
 		// Special case to handle reflexive model slots
-		if (resourceData == null && getVirtualModelInstance() != null
+		if (accessedResourceData == null && getVirtualModelInstance() != null
 				&& getModelSlot().equals(getVirtualModelInstance().getVirtualModel().getReflexiveModelSlot())) {
-			resourceData = getVirtualModelInstance();
-			if (resourceData != null) {
-				resource = resourceData.getResource();
+			accessedResourceData = getVirtualModelInstance();
+			if (accessedResourceData != null) {
+				resource = accessedResourceData.getResource();
 			}
 		}
-		if (resourceData == null && StringUtils.isNotEmpty(virtualModelInstanceURI)) {
+		if (accessedResourceData == null && StringUtils.isNotEmpty(virtualModelInstanceURI)) {
 			logger.warning("Cannot find virtual model instance " + virtualModelInstanceURI);
 		}
-		return resourceData;
+		return accessedResourceData;
 	}
 
 	// Serialization/deserialization only, do not use

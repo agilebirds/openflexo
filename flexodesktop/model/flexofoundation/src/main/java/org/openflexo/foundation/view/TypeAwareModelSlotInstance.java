@@ -46,46 +46,28 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 	// Serialization/deserialization only, do not use
 	private String modelURI;
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public TypeAwareModelSlotInstance(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public TypeAwareModelSlotInstance(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	public TypeAwareModelSlotInstance(View view, MS modelSlot) {
+	/*public TypeAwareModelSlotInstance(View view, MS modelSlot) {
 		super(view, modelSlot);
-	}
+	}*/
 
 	public TypeAwareModelSlotInstance(VirtualModelInstance vmInstance, MS modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 
 	@Override
-	public M getResourceData() {
-		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
+	public M getAccessedResourceData() {
+		if (getVirtualModelInstance() != null && accessedResourceData == null && StringUtils.isNotEmpty(modelURI)) {
 			FlexoModelResource<M, ?, ?> modelResource = (FlexoModelResource<M, ?, ?>) getVirtualModelInstance().getInformationSpace()
 					.getModelWithURI(modelURI, getModelSlot().getTechnologyAdapter());
 			if (modelResource != null) {
-				resourceData = modelResource.getModel();
+				accessedResourceData = modelResource.getModel();
 				resource = modelResource;
 			}
 		}
-		if (resourceData == null && StringUtils.isNotEmpty(modelURI)) {
+		if (accessedResourceData == null && StringUtils.isNotEmpty(modelURI)) {
 			logger.warning("cannot find model " + modelURI);
 		}
-		return resourceData;
+		return accessedResourceData;
 	}
 
 	// Serialization/deserialization only, do not use
@@ -102,7 +84,7 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 	}
 
 	public M getModel() {
-		return getResourceData();
+		return getAccessedResourceData();
 	}
 
 	@Override

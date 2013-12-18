@@ -22,13 +22,13 @@ package org.openflexo.foundation.dm.eo.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 
 /**
  * @author gpolet
  * 
  */
-public class TestEOModelLoad extends FlexoTestCase {
+public class TestEOModelLoad extends AgileBirdsTestCase {
 
 	public TestEOModelLoad() {
 		super("TestEOModelLoad");

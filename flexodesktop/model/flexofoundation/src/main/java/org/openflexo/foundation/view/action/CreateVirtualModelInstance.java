@@ -24,14 +24,16 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.resource.InvalidFileNameException;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
@@ -52,49 +54,49 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  *            type of action, required to manage introspection for inheritance
  */
-public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelInstance<A>> extends FlexoAction<A, View, TestModelObject>
+public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelInstance<A>> extends FlexoAction<A, View, FlexoProjectObject>
 		implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CreateVirtualModelInstance.class.getPackage().getName());
 
 	public static class CreateConcreteVirtualModelInstance extends CreateVirtualModelInstance<CreateConcreteVirtualModelInstance> {
-		CreateConcreteVirtualModelInstance(View focusedObject, Vector<TestModelObject> globalSelection, FlexoEditor editor) {
+		CreateConcreteVirtualModelInstance(View focusedObject, Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 			super(actionType, focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public VirtualModelInstanceResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException {
+		public VirtualModelInstanceResource makeVirtualModelInstanceResource() throws SaveResourceException {
 			return VirtualModelInstance.newVirtualModelInstance(getNewVirtualModelInstanceName(), getNewVirtualModelInstanceTitle(),
 					getVirtualModel(), getFocusedObject());
 		}
 	}
 
-	public static FlexoActionType<CreateConcreteVirtualModelInstance, View, TestModelObject> actionType = new FlexoActionType<CreateConcreteVirtualModelInstance, View, TestModelObject>(
+	public static FlexoActionType<CreateConcreteVirtualModelInstance, View, FlexoProjectObject> actionType = new FlexoActionType<CreateConcreteVirtualModelInstance, View, FlexoProjectObject>(
 			"instantiate_virtual_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateConcreteVirtualModelInstance makeNewAction(View focusedObject, Vector<TestModelObject> globalSelection,
+		public CreateConcreteVirtualModelInstance makeNewAction(View focusedObject, Vector<FlexoProjectObject> globalSelection,
 				FlexoEditor editor) {
 			return new CreateConcreteVirtualModelInstance(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(View object, Vector<TestModelObject> globalSelection) {
+		public boolean isVisibleForSelection(View object, Vector<FlexoProjectObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(View object, Vector<TestModelObject> globalSelection) {
+		public boolean isEnabledForSelection(View object, Vector<FlexoProjectObject> globalSelection) {
 			return object != null;
 		}
 
 	};
 
 	static {
-		TestModelObject.addActionForClass(CreateVirtualModelInstance.actionType, View.class);
+		FlexoObject.addActionForClass(CreateVirtualModelInstance.actionType, View.class);
 	}
 
 	private VirtualModelInstance newVirtualModelInstance;
@@ -106,8 +108,8 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 	public boolean skipChoosePopup = false;
 
-	public CreateVirtualModelInstance(FlexoActionType<A, View, TestModelObject> actionType, View focusedObject,
-			Vector<TestModelObject> globalSelection, FlexoEditor editor) {
+	public CreateVirtualModelInstance(FlexoActionType<A, View, FlexoProjectObject> actionType, View focusedObject,
+			Vector<FlexoProjectObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		modelSlotConfigurations = new Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>>();
 	}
@@ -166,7 +168,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		}
 
 		System.out.println("Saving file again...");
-		newVirtualModelInstance.save();
+		newVirtualModelInstanceResource.save(null);
 	}
 
 	private String errorMessage;

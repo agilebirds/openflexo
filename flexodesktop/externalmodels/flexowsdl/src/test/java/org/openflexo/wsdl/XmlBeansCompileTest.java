@@ -22,14 +22,14 @@ package org.openflexo.wsdl;
 import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.toolbox.FileResource;
 
-public class XmlBeansCompileTest extends FlexoTestCase {
+public class XmlBeansCompileTest extends AgileBirdsTestCase {
 
 	public XmlBeansCompileTest(String name) {
 		super(name);

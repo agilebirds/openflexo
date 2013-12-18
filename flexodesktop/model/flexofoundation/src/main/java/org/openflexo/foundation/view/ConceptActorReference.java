@@ -24,23 +24,6 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 		objectURI = msInstance.getModelSlot().getURIForObject(msInstance, o);
 	}
 
-	// Constructor used during deserialization
-	public ConceptActorReference(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "concept_actor_reference";
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public T retrieveObject() {
 		if (object == null) {
@@ -63,7 +46,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 	public String _getObjectURI() {
 		if (object != null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
-		    objectURI = msInstance.getModelSlot().getURIForObject(msInstance, object);
+			objectURI = msInstance.getModelSlot().getURIForObject(msInstance, object);
 		}
 		return objectURI;
 	}

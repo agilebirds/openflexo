@@ -27,13 +27,13 @@ import java.util.zip.ZipException;
 
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ZipUtils;
 
-public class TestConvertion extends FlexoTestCase {
+public class TestConvertion extends AgileBirdsTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestConvertion.class.getPackage().getName());
 

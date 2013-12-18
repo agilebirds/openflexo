@@ -21,9 +21,9 @@ package org.openflexo.foundation.ie;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 
-public abstract class FlexoIETestCase extends FlexoTestCase {
+public abstract class FlexoIETestCase extends AgileBirdsTestCase {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoIETestCase.class.getPackage().getName());

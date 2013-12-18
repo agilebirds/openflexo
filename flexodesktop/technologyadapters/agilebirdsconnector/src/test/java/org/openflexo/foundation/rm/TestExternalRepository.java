@@ -23,11 +23,11 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestExternalRepository extends FlexoTestCase {
+public class TestExternalRepository extends AgileBirdsTestCase {
 
 	public TestExternalRepository(String arg0) {
 		super(arg0);

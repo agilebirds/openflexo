@@ -89,7 +89,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
-				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setAccessedResourceData(getModelResource().getModel());
 				msInstance.setModelURI(getModelResource().getURI());
 			} else {
 				logger.warning("No model for model slot " + getModelSlot());
@@ -98,7 +98,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 			modelResource = createProjectSpecificEmptyModel(msInstance, getModelSlot());
 			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
-				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setAccessedResourceData(getModelResource().getModel());
 				msInstance.setModelURI(getModelResource().getURI());
 				System.out.println("***** Created model resource " + getModelResource());
 				System.out.println("***** Created model " + getModelResource().getModel());

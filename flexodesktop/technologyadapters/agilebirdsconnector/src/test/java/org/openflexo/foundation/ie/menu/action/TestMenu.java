@@ -22,12 +22,12 @@ package org.openflexo.foundation.ie.menu.action;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestMenu extends FlexoTestCase {
+public class TestMenu extends AgileBirdsTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestMenu.class.getPackage().getName());
 

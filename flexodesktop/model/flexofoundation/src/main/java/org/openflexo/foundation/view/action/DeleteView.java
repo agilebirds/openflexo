@@ -22,7 +22,6 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
@@ -58,7 +57,7 @@ public class DeleteView extends FlexoAction<DeleteView, View, FlexoObject> {
 	};
 
 	static {
-		TestModelObject.addActionForClass(DeleteView.actionType, View.class);
+		FlexoObject.addActionForClass(DeleteView.actionType, View.class);
 	}
 
 	DeleteView(View focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

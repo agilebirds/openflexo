@@ -33,8 +33,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -51,7 +49,6 @@ import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A {@link VirtualModelInstance} is the run-time concept (instance) of a {@link VirtualModel}.<br>
@@ -67,7 +64,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sylvain
  * 
  */
-public class VirtualModelInstance extends EditionPatternInstance implements XMLStorageResourceData<VirtualModelInstance>,
+public class VirtualModelInstance extends EditionPatternInstance implements ResourceData<VirtualModelInstance>,
 		FlexoModel<VirtualModelInstance, VirtualModel> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelInstance.class.getPackage().getName());
@@ -81,7 +78,7 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 	private Hashtable<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances;
 
 	public static VirtualModelInstanceResource newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
-			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
+			VirtualModel virtualModel, View view) throws SaveResourceException {
 
 		VirtualModelInstanceResource newVirtualModelResource = VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(
 				virtualModelName, virtualModel, view);
@@ -93,25 +90,22 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 
 		view.getResource().notifyContentsAdded(newVirtualModelResource);
 
-		newVirtualModelInstance.save();
+		newVirtualModelResource.save(null);
 
 		return newVirtualModelResource;
 	}
 
 	/**
-	 * Constructor invoked during deserialization
+	 * Default constructor with view, virtual model and resource
 	 */
-	public VirtualModelInstance(VirtualModelInstanceBuilder builder) {
-		this(builder.getView(), builder.getVirtualModel());
-		setResource(builder.getResource());
-		builder.vmInstance = this;
-		initializeDeserialization(builder);
+	public VirtualModelInstance(View view, VirtualModel virtualModel, VirtualModelInstanceResource resource) {
+		this(view, virtualModel);
+		setResource(resource);
 	}
 
 	/**
-	 * Default constructor for OEShema
+	 * Default constructor with view and virtual model
 	 * 
-	 * @param shemaDefinition
 	 */
 	public VirtualModelInstance(View view, VirtualModel virtualModel) {
 		super(virtualModel, null, view.getProject());
@@ -123,11 +117,10 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 
 	@Override
 	public String getURI() {
-		if (getResource() == null) {
-			return super.getURI();
-		} else {
+		if (getResource() != null) {
 			return getResource().getURI();
 		}
+		return null;
 	}
 
 	@Override
@@ -310,22 +303,6 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 		return null;
 	}
 
-	@Deprecated
-	@Override
-	public FlexoStorageResource<VirtualModelInstance> getFlexoResource() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-	}
-
-	@Override
-	public FlexoXMLFileResource<VirtualModelInstance> getFlexoXMLFileResource() {
-		return getResource();
-	}
-
 	@Override
 	public VirtualModelInstanceResource getResource() {
 		return resource;
@@ -336,13 +313,6 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 		this.resource = (VirtualModelInstanceResource) resource;
 	}
 
-	@Override
-	public void save() throws SaveResourceException {
-		getResource().save(null);
-		// getFlexoResource().saveResourceData();
-	}
-
-	@Override
 	public String getName() {
 		if (getResource() != null) {
 			return getResource().getName();
@@ -364,18 +334,8 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + getName();
-	}
-
-	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public VirtualModelInstance getResourceData() {
 		return this;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getShemaMapping();
 	}
 
 	@Override
@@ -401,8 +361,8 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 			}
 		}
 		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
-			ModelSlotInstance reflexiveModelSlotInstance = new VirtualModelModelSlotInstance(getView(), (VirtualModelModelSlot) modelSlot);
-			reflexiveModelSlotInstance.setResourceData(this);
+			ModelSlotInstance reflexiveModelSlotInstance = new VirtualModelModelSlotInstance(this, (VirtualModelModelSlot) modelSlot);
+			reflexiveModelSlotInstance.setAccessedResourceData(this);
 			addToModelSlotInstances(reflexiveModelSlotInstance);
 			return reflexiveModelSlotInstance;
 		}
@@ -482,7 +442,7 @@ public class VirtualModelInstance extends EditionPatternInstance implements XMLS
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
 			if (instance.getResourceData() instanceof FlexoModel) {
-				allModels.add((FlexoModel<?, ?>) instance.getResourceData());
+				allModels.add(instance.getResourceData());
 			}
 		}
 		return allModels;

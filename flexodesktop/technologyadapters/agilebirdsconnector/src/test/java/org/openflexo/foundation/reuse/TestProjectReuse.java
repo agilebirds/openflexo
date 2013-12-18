@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ProjectData;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.RemoveImportedProject;
@@ -21,7 +21,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestProjectReuse extends FlexoTestCase {
+public class TestProjectReuse extends AgileBirdsTestCase {
 
 	private static final String SUB_PROCESS_NAME = "My Sub Process";
 	private static final String SUB_PROCESS_NODE_NAME = "A Sub Process Node";

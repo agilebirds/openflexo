@@ -23,7 +23,6 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
@@ -66,7 +65,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoO
 	};
 
 	static {
-		TestModelObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
+		FlexoObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
 	}
 
 	private View newView;
@@ -83,7 +82,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoO
 	}
 
 	@Override
-	protected void doAction(Object context) throws SaveResourceException, InvalidFileNameException {
+	protected void doAction(Object context) throws SaveResourceException {
 		logger.info("Add view in folder " + getFolder());
 
 		if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {

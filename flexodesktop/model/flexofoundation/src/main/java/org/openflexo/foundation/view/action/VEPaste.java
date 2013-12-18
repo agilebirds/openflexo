@@ -22,8 +22,8 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -58,7 +58,7 @@ public class VEPaste extends FlexoUndoableAction<VEPaste, VirtualModelInstanceOb
 	};
 
 	static {
-		TestModelObject.addActionForClass(VEPaste.actionType, EditionPatternInstance.class);
+		FlexoObject.addActionForClass(VEPaste.actionType, EditionPatternInstance.class);
 	}
 
 	VEPaste(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {

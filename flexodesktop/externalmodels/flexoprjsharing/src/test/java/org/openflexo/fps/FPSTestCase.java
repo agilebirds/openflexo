@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.action.AddTab;
 import org.openflexo.foundation.ie.action.DropIEElement;
@@ -50,7 +50,7 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 
-public abstract class FPSTestCase extends FlexoTestCase {
+public abstract class FPSTestCase extends AgileBirdsTestCase {
 
 	protected static final String TEST_SUB_PROCESS = "TestSubProcess";
 	protected static final String TEST_SUB_PROCESS_2 = "TestSubProcess2";

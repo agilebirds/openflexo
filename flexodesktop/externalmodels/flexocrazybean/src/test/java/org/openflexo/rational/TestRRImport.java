@@ -24,13 +24,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestRRImport extends FlexoTestCase {
+public class TestRRImport extends AgileBirdsTestCase {
 
 	private static final Logger logger = FlexoLogger.getLogger(TestRRImport.class.getPackage().getName());
 

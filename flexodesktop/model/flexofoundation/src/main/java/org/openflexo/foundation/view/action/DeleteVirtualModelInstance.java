@@ -22,7 +22,6 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -58,7 +57,7 @@ public class DeleteVirtualModelInstance extends FlexoAction<DeleteVirtualModelIn
 	};
 
 	static {
-		TestModelObject.addActionForClass(DeleteVirtualModelInstance.actionType, VirtualModelInstance.class);
+		FlexoObject.addActionForClass(DeleteVirtualModelInstance.actionType, VirtualModelInstance.class);
 	}
 
 	DeleteVirtualModelInstance(VirtualModelInstance focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

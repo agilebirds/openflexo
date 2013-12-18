@@ -68,6 +68,8 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
+import org.openflexo.foundation.utils.ProjectInitializerException;
+import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FlexoProjectValidationModel;
@@ -237,8 +239,8 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	// ======================= New project procedure =========================
 	// =======================================================================
 
-	public static FlexoEditor newProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoProgress progress,
-			FlexoServiceManager serviceManager) {
+	public static FlexoEditor newProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
+			FlexoProgress progress) throws ProjectInitializerException {
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
 		project.setServiceManager(serviceManager);
@@ -295,22 +297,29 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		return editor;
 	}
 
+	// TODO: add ProjectLoadingHandler to the parameters
+	public static FlexoEditor openProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
+			FlexoProgress progress) throws ProjectInitializerException, ProjectLoadingCancelledException {
+		return null;
+	}
+
 	/**
-	 *
+	 * Internal constructor<br>
+	 * 
 	 */
-	private FlexoProject(FlexoServiceManager serviceManager) {
+	/*private FlexoProject(FlexoServiceManager serviceManager) {
 		super(null);
 		this.serviceManager = serviceManager;
 		// xmlMappings = serviceManager.getXMLSerializationService();
 		stringEncoder = new FlexoProjectStringEncoder();
 		stringEncoder._initialize();
 		// Just to be sure, we initialize them here
-		/*if (allRegisteredObjects == null) {
-			allRegisteredObjects = new Vector<FlexoModelObject>();
-		}*/
-		/*if (_recentlyCreatedObjects == null) {
-			_recentlyCreatedObjects = new Vector<FlexoModelObject>();
-		}*/
+		//if (allRegisteredObjects == null) {
+		//	allRegisteredObjects = new Vector<FlexoModelObject>();
+		//}
+		//if (_recentlyCreatedObjects == null) {
+		//	_recentlyCreatedObjects = new Vector<FlexoModelObject>();
+		//}
 		editors = new Vector<FlexoEditor>();
 		synchronized (FlexoProject.class) {
 			id = ID++;
@@ -321,7 +330,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		filesToDelete = new Vector<File>();
 		// resources = new ResourceHashtable();
 		// docTypes = new Vector<DocType>();
-	}
+	}*/
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate project from this constructor
@@ -346,7 +355,29 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	}
 
 	private FlexoProject(File aProjectDirectory, FlexoServiceManager serviceManager) {
-		this(serviceManager);
+		super(null);
+		this.serviceManager = serviceManager;
+		// xmlMappings = serviceManager.getXMLSerializationService();
+		stringEncoder = new FlexoProjectStringEncoder();
+		stringEncoder._initialize();
+		// Just to be sure, we initialize them here
+		/*if (allRegisteredObjects == null) {
+			allRegisteredObjects = new Vector<FlexoModelObject>();
+		}*/
+		/*if (_recentlyCreatedObjects == null) {
+			_recentlyCreatedObjects = new Vector<FlexoModelObject>();
+		}*/
+		editors = new Vector<FlexoEditor>();
+		synchronized (FlexoProject.class) {
+			id = ID++;
+		}
+		logger.info("Create new project, ID=" + id);
+		_externalRepositories = new ArrayList<ProjectExternalRepository>();
+		repositoriesCache = new Hashtable<String, ProjectExternalRepository>();
+		filesToDelete = new Vector<File>();
+		// resources = new ResourceHashtable();
+		// docTypes = new Vector<DocType>();
+
 		setProjectDirectory(aProjectDirectory);
 		projectName = aProjectDirectory.getName().replaceAll(BAD_CHARACTERS_REG_EXP, " ");
 		if (projectName.endsWith(".prj")) {
@@ -3354,7 +3385,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
 					if (msi.getResourceData() instanceof FlexoModel) {
-						returned.add((FlexoModel<?, ?>) msi.getResourceData());
+						returned.add(msi.getResourceData());
 					}
 				}
 			}

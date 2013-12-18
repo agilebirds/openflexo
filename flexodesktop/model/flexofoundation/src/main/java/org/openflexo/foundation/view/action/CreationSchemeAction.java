@@ -88,7 +88,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	private EditionPatternInstance editionPatternInstance;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		logger.info("Create EditionPatternInstance using CreationScheme");
 		logger.info("getEditionPattern()=" + getEditionPattern());
 

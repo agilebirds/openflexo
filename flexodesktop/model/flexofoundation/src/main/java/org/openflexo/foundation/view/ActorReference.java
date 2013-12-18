@@ -24,9 +24,9 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	}
 
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public VirtualModelInstance getResourceData() {
 		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getXMLResourceData();
+			return getEditionPatternInstance().getResourceData();
 		}
 		return null;
 	}

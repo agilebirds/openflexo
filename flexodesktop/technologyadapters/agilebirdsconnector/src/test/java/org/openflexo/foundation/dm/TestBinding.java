@@ -22,7 +22,7 @@ package org.openflexo.foundation.dm;
 import javax.naming.InvalidNameException;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.action.AddComponent;
@@ -36,8 +36,8 @@ public class TestBinding extends FlexoDMTestCase {
 
 	public void test0Binding() {
 		FlexoEditor editor = createProject("BindingTest");
-		FlexoComponentFolder _cf = FlexoTestCase.createFolder("BindingTestFolder", null, editor);
-		IEWOComponent component = FlexoTestCase.createComponent("BindingTestComponent", _cf,
+		FlexoComponentFolder _cf = AgileBirdsTestCase.createFolder("BindingTestFolder", null, editor);
+		IEWOComponent component = AgileBirdsTestCase.createComponent("BindingTestComponent", _cf,
 				AddComponent.ComponentType.OPERATION_COMPONENT, editor);
 		DMProperty testProperty = createProperty(component.getComponentDMEntity(), "testProperty", editor);
 

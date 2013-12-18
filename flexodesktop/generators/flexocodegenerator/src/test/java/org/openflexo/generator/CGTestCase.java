@@ -36,7 +36,7 @@ import org.openflexo.diff.merge.MergeChange.MergeChangeSource;
 import org.openflexo.diff.merge.MergeChange.MergeChangeType;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGRepository;
@@ -107,7 +107,7 @@ import org.openflexo.generator.utils.DotClasspathGenerator;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 
-public abstract class CGTestCase extends FlexoTestCase implements ProjectGeneratorFactory {
+public abstract class CGTestCase extends AgileBirdsTestCase implements ProjectGeneratorFactory {
 
 	public CGTestCase(String name) {
 		super(name);

@@ -23,9 +23,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -65,7 +65,7 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	};
 
 	static {
-		TestModelObject.addActionForClass(actionType, EditionPatternInstance.class);
+		FlexoObject.addActionForClass(actionType, EditionPatternInstance.class);
 	}
 
 	private VirtualModelInstance vmInstance;
@@ -78,7 +78,7 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	// private EditionPatternInstance editionPatternInstanceToDelete;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete EditionPatternInstance using DeletionScheme");
 			logger.fine("getDeletionScheme()=" + getDeletionScheme());

@@ -110,9 +110,9 @@ import org.openflexo.xmlcode.KeyValueCoder;
  * @author gpolet
  * 
  */
-public abstract class FlexoTestCase extends TestCase {
+public abstract class AgileBirdsTestCase extends TestCase {
 
-	private static final Logger logger = FlexoLogger.getLogger(FlexoTestCase.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(AgileBirdsTestCase.class.getPackage().getName());
 
 	protected static FlexoEditor _editor;
 	protected static FlexoProject _project;
@@ -158,10 +158,10 @@ public abstract class FlexoTestCase extends TestCase {
 
 	}
 
-	public FlexoTestCase() {
+	public AgileBirdsTestCase() {
 	}
 
-	public FlexoTestCase(String name) {
+	public AgileBirdsTestCase(String name) {
 		super(name);
 		KVCFlexoObject.initialize(false);
 	}

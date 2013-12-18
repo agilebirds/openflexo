@@ -21,9 +21,9 @@ package org.openflexo.foundation.wkf;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 
-public abstract class FlexoWKFTestCase extends FlexoTestCase {
+public abstract class FlexoWKFTestCase extends AgileBirdsTestCase {
 
 	protected static final Logger logger = Logger.getLogger(FlexoWKFTestCase.class.getPackage().getName());
 

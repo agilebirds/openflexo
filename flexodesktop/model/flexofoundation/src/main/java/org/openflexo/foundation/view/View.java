@@ -26,8 +26,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.SaveResourceException;
@@ -40,7 +38,6 @@ import org.openflexo.foundation.view.rm.ViewResourceImpl;
 import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A {@link View} is the run-time concept (instance) of a {@link ViewPoint}.<br>
@@ -61,7 +58,7 @@ public class View extends ViewObject implements ResourceData<View> {
 	private String title;
 
 	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<ViewResource> folder,
-			FlexoProject project) throws InvalidFileNameException, SaveResourceException {
+			FlexoProject project) throws SaveResourceException {
 
 		ViewResource newViewResource = ViewResourceImpl.makeViewResource(viewName, folder, viewPoint, project.getViewLibrary());
 
@@ -72,20 +69,22 @@ public class View extends ViewObject implements ResourceData<View> {
 		newView.setTitle(viewTitle);
 
 		// Save it
-		newView.save();
+		newViewResource.save(null);
+
+		// newView.save();
 
 		return newView;
 	}
 
 	/**
-	 * Constructor invoked during deserialization
+	 * Default Constructor
 	 * 
 	 */
-	public View(ViewBuilder builder) {
-		this(builder.getProject());
-		setResource(builder.getResource());
-		builder.view = this;
-		initializeDeserialization(builder);
+	public View(FlexoProject project, ViewResource resource/*ViewBuilder builder*/) {
+		super(project/*builder.getProject()*/);
+		setResource(resource/*builder.getResource()*/);
+		// builder.view = this;
+		// initializeDeserialization(builder);
 	}
 
 	/**
@@ -101,14 +100,14 @@ public class View extends ViewObject implements ResourceData<View> {
 
 	}
 
-	@Override
+	/*@Override
 	public String getURI() {
 		if (getResource() == null) {
 			return super.getURI();
 		} else {
 			return getResource().getURI();
 		}
-	}
+	}*/
 
 	@Override
 	public View getView() {
@@ -124,24 +123,8 @@ public class View extends ViewObject implements ResourceData<View> {
 	}
 
 	@Override
-	public XMLStorageResourceData<?> getXMLResourceData() {
+	public View getResourceData() {
 		return this;
-	}
-
-	@Deprecated
-	@Override
-	public FlexoStorageResource<View> getFlexoResource() {
-		return null;
-	}
-
-	@Deprecated
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-	}
-
-	@Override
-	public FlexoXMLFileResource<View> getFlexoXMLFileResource() {
-		return resource;
 	}
 
 	@Override
@@ -154,17 +137,16 @@ public class View extends ViewObject implements ResourceData<View> {
 		this.resource = (ViewResource) resource;
 	}
 
-	@Override
+	/*@Override
 	public void save() throws SaveResourceException {
 		getResource().save(null);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public String getClassNameKey() {
 		return "view";
-	}
+	}*/
 
-	@Override
 	public String getName() {
 		if (getResource() != null) {
 			return getResource().getName();
@@ -172,7 +154,6 @@ public class View extends ViewObject implements ResourceData<View> {
 		return null;
 	}
 
-	@Override
 	public void setName(String name) {
 		if (getResource() != null) {
 			getResource().setName(name);
@@ -192,26 +173,11 @@ public class View extends ViewObject implements ResourceData<View> {
 		}
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + getName();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getShemaMapping();
-	}
-
 	public ViewPoint getViewPoint() {
 		if (getResource() != null) {
 			return getResource().getViewPoint();
 		}
 		return null;
-	}
-
-	@Override
-	public String getDisplayableDescription() {
-		return "View " + getName() + (getViewPoint() != null ? " (calc " + getViewPoint().getName() + ")" : "");
 	}
 
 	@Override
@@ -361,7 +327,7 @@ public class View extends ViewObject implements ResourceData<View> {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance<?, ?> instance : getModelSlotInstances()) {
 			if (instance.getResourceData() instanceof FlexoModel) {
-				allModels.add((FlexoModel<?, ?>) instance.getResourceData());
+				allModels.add(instance.getResourceData());
 			}
 		}
 		return allModels;

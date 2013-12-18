@@ -23,12 +23,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.dkv.action.AddDomainAction;
 import org.openflexo.foundation.dkv.action.AddKeyAction;
 import org.openflexo.foundation.dkv.action.AddLanguageAction;
 
-public abstract class DKVTestCase extends FlexoTestCase {
+public abstract class DKVTestCase extends AgileBirdsTestCase {
 
 	public DKVTestCase(String arg0) {
 		super(arg0);

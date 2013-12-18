@@ -93,7 +93,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 		try {
 			if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingResource) {
 				if (resource != null) {
-					msInstance.setResourceData(getResource().getResourceData(null));
+					msInstance.setAccessedResourceData(getResource().getResourceData(null));
 				} else {
 					logger.warning("No resource for model slot " + getModelSlot());
 				}
@@ -101,7 +101,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 				resource = createProjectSpecificEmptyResource(msInstance, getModelSlot());
 				System.out.println("***** modelResource = " + resource);
 				if (resource != null) {
-					msInstance.setResourceData(getResource().getResourceData(null));
+					msInstance.setAccessedResourceData(getResource().getResourceData(null));
 				} else {
 					logger.warning("Could not create ProjectSpecificEmtpyResource for model slot " + getModelSlot());
 				}

@@ -1,12 +1,12 @@
 package org.openflexo.foundation.xml;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ProjectData;
 import org.openflexo.model.ModelContext;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
-public class TestPAMELAResourceData extends FlexoTestCase {
+public class TestPAMELAResourceData extends AgileBirdsTestCase {
 
 	private ModelFactory modelFactory;
 

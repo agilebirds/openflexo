@@ -48,48 +48,27 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	// Serialization/deserialization only, do not use
 	private String resourceURI;
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public FreeModelSlotInstance(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public FreeModelSlotInstance(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	public FreeModelSlotInstance(View view, MS modelSlot) {
+	/*public FreeModelSlotInstance(View view, MS modelSlot) {
 		super(view, modelSlot);
-	}
+	}*/
 
 	public FreeModelSlotInstance(VirtualModelInstance vmInstance, MS modelSlot) {
 		super(vmInstance, modelSlot);
 	}
 
 	@Override
-	public RD getResourceData() {
-		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(resourceURI)) {
+	public RD getAccessedResourceData() {
+		if (getVirtualModelInstance() != null && accessedResourceData == null && StringUtils.isNotEmpty(resourceURI)) {
 			TechnologyAdapterResource<RD, ?> resource = (TechnologyAdapterResource<RD, ?>) getVirtualModelInstance().getInformationSpace()
 					.getResource(resourceURI);
 			if (resource != null) {
 				try {
-					resourceData = resource.getResourceData(null);
+					accessedResourceData = resource.getResourceData(null);
 					this.resource = resource;
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ResourceLoadingCancelledException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ResourceDependencyLoopException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (FlexoException e) {
@@ -98,10 +77,10 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 				}
 			}
 		}
-		if (resourceData == null && StringUtils.isNotEmpty(resourceURI)) {
+		if (accessedResourceData == null && StringUtils.isNotEmpty(resourceURI)) {
 			logger.warning("cannot find resource " + resourceURI);
 		}
-		return resourceData;
+		return accessedResourceData;
 	}
 
 	// Serialization/deserialization only, do not use
@@ -118,7 +97,7 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	}
 
 	public RD getModel() {
-		return getResourceData();
+		return getAccessedResourceData();
 	}
 
 	@Override

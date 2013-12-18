@@ -53,7 +53,7 @@ public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImp
 			returned.setProject(view.getProject());
 			returned.setName(name);
 			returned.setFile(xmlFile);
-			returned.setURI(view.getURI() + "/" + baseName);
+			returned.setURI(view.getResource().getURI() + "/" + baseName);
 			returned.setVirtualModelResource(virtualModel.getResource());
 
 			returned.setServiceManager(view.getProject().getServiceManager());

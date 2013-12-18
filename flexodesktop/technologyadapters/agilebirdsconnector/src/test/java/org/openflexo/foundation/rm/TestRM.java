@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.ie.IEOperationComponent;
@@ -60,7 +60,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestRM extends FlexoTestCase {
+public class TestRM extends AgileBirdsTestCase {
 
 	public TestRM() {
 		super(TEST_RM);

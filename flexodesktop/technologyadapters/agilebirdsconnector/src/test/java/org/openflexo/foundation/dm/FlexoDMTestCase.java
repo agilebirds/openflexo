@@ -21,10 +21,10 @@ package org.openflexo.foundation.dm;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.ie.FlexoIETestCase;
 
-public abstract class FlexoDMTestCase extends FlexoTestCase {
+public abstract class FlexoDMTestCase extends AgileBirdsTestCase {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoIETestCase.class.getPackage().getName());

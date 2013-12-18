@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.AgileBirdsTestCase;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
@@ -32,7 +32,7 @@ import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
 
-public class TestCGFoundation extends FlexoTestCase {
+public class TestCGFoundation extends AgileBirdsTestCase {
 
 	public TestCGFoundation(String arg0) {
 		super(arg0);

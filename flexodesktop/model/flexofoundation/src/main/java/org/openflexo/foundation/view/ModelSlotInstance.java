@@ -23,7 +23,6 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -49,38 +48,20 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	private View view;
 	private VirtualModelInstance vmInstance;
 	private MS modelSlot;
-	protected RD resourceData;
+	protected RD accessedResourceData;
 	protected TechnologyAdapterResource<RD, ?> resource;
 	// Serialization/deserialization only, do not use
 	private String modelSlotName;
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public ModelSlotInstance(ViewBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	protected ModelSlotInstance(FlexoProject project) {
+	/*public ModelSlotInstance(FlexoProject project) {
 		super(project);
-	}
+	}*/
 
-	/**
-	 * Constructor invoked during deserialization
-	 * 
-	 */
-	public ModelSlotInstance(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
-	}
-
-	public ModelSlotInstance(View view, MS modelSlot) {
+	/*public ModelSlotInstance(View view, MS modelSlot) {
 		super(view.getProject());
 		this.view = view;
 		this.modelSlot = modelSlot;
-	}
+	}*/
 
 	public ModelSlotInstance(VirtualModelInstance vmInstance, MS modelSlot) {
 		super(vmInstance.getProject());
@@ -90,12 +71,7 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return getProject().getFullyQualifiedName() + "." + view.getName() + "." + modelSlot.getName();
-	}
-
-	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public VirtualModelInstance getResourceData() {
 		return getVirtualModelInstance();
 	}
 
@@ -128,13 +104,14 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 		return modelSlot;
 	}
 
-	public void setResourceData(RD resourceData) {
-		this.resourceData = resourceData;
-		this.resource = (TechnologyAdapterResource<RD, ?>) resourceData.getResource();
+	public void setAccessedResourceData(RD accessedResourceData) {
+		this.accessedResourceData = accessedResourceData;
+		this.resource = (TechnologyAdapterResource<RD, ?>) accessedResourceData.getResource();
 	}
 
-	// TODO: rename as getResourceData
-	public abstract RD getResourceData();
+	public RD getAccessedResourceData() {
+		return accessedResourceData;
+	}
 
 	public TechnologyAdapterResource<RD, ?> getResource() {
 		return resource;
@@ -154,15 +131,10 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	}
 
 	@Override
-	public String getClassNameKey() {
-		return "model_slot_instance";
-	}
-
-	@Override
 	public String toString() {
 		return "ModelSlotInstance:"
-				+ (getModelSlot() != null ? getModelSlot().getName() + ":" + getModelSlot().getClass().getSimpleName() + "_"
-						+ (getName() != null ? getName() : getFlexoID()) : "null");
+				+ (getModelSlot() != null ? getModelSlot().getName() + ":" + getModelSlot().getClass().getSimpleName() + "_" + getFlexoID()
+						: "null");
 	}
 
 	/**

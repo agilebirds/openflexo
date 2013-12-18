@@ -123,12 +123,6 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 
 	public abstract List<ModelSlotInstanceConfigurationOption> getAvailableOptions();
 
-	@Deprecated
-	@Override
-	public String getFullyQualifiedName() {
-		return null;
-	};
-
 	public boolean isValidConfiguration() {
 		return option != null;
 	}
