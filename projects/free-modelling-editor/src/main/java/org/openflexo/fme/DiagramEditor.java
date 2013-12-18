@@ -264,8 +264,6 @@ public class DiagramEditor implements FIBSelectionListener {
 			association.setConcept(getDiagram().getDataModel().getConceptNamed(Concept.NONE_CONCEPT));
 
 			getDiagram().addToAssociations(association);
-			// getApplication().getDynamicPaletteModel().addAssociation(association);
-			// getApplication().getDynamicPaletteModel().update();
 		}
 
 		else {
@@ -323,7 +321,7 @@ public class DiagramEditor implements FIBSelectionListener {
 		returned.setConcept(association.getConcept());
 		newShape.setInstance(returned);
 		container.addToShapes(newShape);
-		// getApplication().getDynamicPaletteModel().update();
+
 		if (edit != null) {
 			getFactory().getUndoManager().stopRecording(edit);
 		}
@@ -743,12 +741,8 @@ public class DiagramEditor implements FIBSelectionListener {
 					sb.insert(placeOfFiler, "<b>");
 					sb.insert(placeOfFiler + 3 + filter.length(), "</b>");
 
-					for (ConceptGRAssociation conceptGRAssoc : getDiagram().getAssociations()) {
-						if (conceptGRAssoc.getConcept().equals(concept)) {
-							for (ImageIconResource icon : captureScreenshots(conceptGRAssoc)) {
-								sb.append(icon.getHTMLImg());
-							}
-						}
+					for (ImageIconResource icon : captureScreenshots(concept)) {
+						sb.append(icon.getHTMLImg());
 					}
 
 					concept.setHtmlLabel(concept.produceHtmlLabel(sb.toString()));
@@ -759,21 +753,20 @@ public class DiagramEditor implements FIBSelectionListener {
 		return filteredConcepts;
 	}
 
-	public List<ImageIconResource> captureScreenshots(ConceptGRAssociation cGrAssoc) {
+	public List<ImageIconResource> captureScreenshots(Concept concept) {
 
 		List<ImageIconResource> icons = new ArrayList<ImageIconResource>();
 
-		for (DiagramElement de : getDiagram().getElementsWithAssociation(cGrAssoc)) {
-			if (getDrawing().getDrawingTreeNode(de) instanceof ShapeNodeImpl) {
-				ShapeNodeImpl shape = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(de);
-				JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shape);
-
+		for (ConceptGRAssociation conceptGRAssoc : getDiagram().getAssociations()) {
+			if (conceptGRAssoc.getConcept().equals(concept)) {
+				DiagramElement element = getDiagram().getElementsWithAssociation(conceptGRAssoc).get(0);
+				ShapeNodeImpl shapeNode = (ShapeNodeImpl) getDrawing().getDrawingTreeNode(element);
+				JShapeView shapeView = (JShapeView) getController().shapeViewForNode(shapeNode);
 				BufferedImage screenshot = ImageUtils.createImageFromComponent(shapeView);
-				screenshot = screenshot.getSubimage(10, 20, (int) shape.getWidth() + 10, (int) shape.getHeight());
+				screenshot = screenshot.getSubimage(10, 20, (int) shapeNode.getWidth() + 10, (int) shapeNode.getHeight());
 				screenshot = ImageUtils.scaleImage(screenshot, 20, 20);
 
-				// File outputfile = new File("/DynamicMiniIcons/icon"+shape.getIndex()+".png");
-				File outputFile = new FileResource("icon" + shape.getIndex() + ".png");
+				File outputFile = new FileResource("icon" + shapeNode.getIndex() + ".png");
 				try {
 					outputFile.createNewFile();
 					ImageIO.write(screenshot, "png", outputFile);
