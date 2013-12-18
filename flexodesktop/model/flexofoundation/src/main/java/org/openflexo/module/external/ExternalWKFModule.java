@@ -21,7 +21,7 @@ package org.openflexo.module.external;
 
 import javax.swing.JComponent;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 
 /**
@@ -31,7 +31,7 @@ import org.flexo.model.FlexoProcess;
  */
 public interface ExternalWKFModule extends ExternalModule {
 
-	public JComponent createScreenshotForObject(FlexoModelObject target);
+	public JComponent createScreenshotForObject(TestModelObject target);
 
 	public float getScreenshotQuality();
 

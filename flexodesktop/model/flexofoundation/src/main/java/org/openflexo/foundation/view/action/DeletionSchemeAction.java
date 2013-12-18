@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -65,7 +65,7 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, EditionPatternInstance.class);
+		TestModelObject.addActionForClass(actionType, EditionPatternInstance.class);
 	}
 
 	private VirtualModelInstance vmInstance;

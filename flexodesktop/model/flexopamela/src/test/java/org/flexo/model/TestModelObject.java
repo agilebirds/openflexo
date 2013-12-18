@@ -16,17 +16,17 @@ import org.openflexo.model.factory.DeletableProxyObject;
 
 @ModelEntity(isAbstract = true)
 @ImplementationClass(FlexoModelObjectImpl.class)
-public interface FlexoModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
+public interface TestModelObject extends AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
 
 	public static final String FLEXO_ID = "flexoId";
 	public static final String NAME = "name";
 	public static final String DELETED = "deleted";
 
 	@Initializer
-	public FlexoModelObject init();
+	public TestModelObject init();
 
 	@Initializer
-	public FlexoModelObject init(@Parameter(FLEXO_ID) String flexoId);
+	public TestModelObject init(@Parameter(FLEXO_ID) String flexoId);
 
 	// @XMLProperty(id="flexoId",kind=Kind.GETTER,xml="flexoID",defaultValue="00000")
 

@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -162,14 +162,14 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 			_saveResourceData(new SerializationHandler() {
 				@Override
 				public void objectWillBeSerialized(XMLSerializable object) {
-					if (object instanceof FlexoModelObject) {
+					if (object instanceof TestModelObject) {
 						// ((FlexoModelObject) object).initializeSerialization();
 					}
 				}
 
 				@Override
 				public void objectHasBeenSerialized(XMLSerializable object) {
-					if (object instanceof FlexoModelObject) {
+					if (object instanceof TestModelObject) {
 						// ((FlexoModelObject) object).finalizeSerialization();
 					}
 				}

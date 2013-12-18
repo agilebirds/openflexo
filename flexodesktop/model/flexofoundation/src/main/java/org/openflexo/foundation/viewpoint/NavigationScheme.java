@@ -21,7 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -40,7 +40,7 @@ public class NavigationScheme extends AbstractActionScheme {
 
 	public DataBinding<Object> getTargetObject() {
 		if (targetObject == null) {
-			targetObject = new DataBinding<Object>(this, FlexoModelObject.class, BindingDefinitionType.GET);
+			targetObject = new DataBinding<Object>(this, TestModelObject.class, BindingDefinitionType.GET);
 			targetObject.setBindingName("targetObject");
 		}
 		return targetObject;
@@ -50,16 +50,16 @@ public class NavigationScheme extends AbstractActionScheme {
 		if (targetObject != null) {
 			targetObject.setOwner(this);
 			targetObject.setBindingName("targetObject");
-			targetObject.setDeclaredType(FlexoModelObject.class);
+			targetObject.setDeclaredType(TestModelObject.class);
 			targetObject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.targetObject = targetObject;
 	}
 
-	public FlexoModelObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
+	public TestModelObject evaluateTargetObject(EditionPatternInstance editionPatternInstance) {
 		if (getTargetObject().isValid()) {
 			try {
-				return (FlexoModelObject) getTargetObject().getBindingValue(editionPatternInstance);
+				return (TestModelObject) getTargetObject().getBindingValue(editionPatternInstance);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

@@ -58,7 +58,7 @@ public class SaveGeneratedFile extends GCAction<SaveGeneratedFile, CGFile> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(SaveGeneratedFile.actionType, CGFile.class);
+		TestModelObject.addActionForClass(SaveGeneratedFile.actionType, CGFile.class);
 	}
 
 	SaveGeneratedFile(CGFile focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

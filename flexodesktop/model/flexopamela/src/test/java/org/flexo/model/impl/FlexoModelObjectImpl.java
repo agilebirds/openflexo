@@ -2,11 +2,11 @@ package org.flexo.model.impl;
 
 import javassist.util.proxy.ProxyObject;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.factory.ProxyMethodHandler;
 
-public abstract class FlexoModelObjectImpl implements FlexoModelObject {
+public abstract class FlexoModelObjectImpl implements TestModelObject {
 
 	@Override
 	public String deriveName() {

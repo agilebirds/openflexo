@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -178,26 +178,26 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 							e.printStackTrace();
 						}
 					}
-					if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
+					if (assignableAction.getPatternRole() != null && assignedObject instanceof TestModelObject) {
 						if (contextAction instanceof ActionSchemeAction) {
 							((ActionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+									(TestModelObject) assignedObject, assignableAction.getPatternRole());
 						}
 						if (contextAction instanceof CreationSchemeAction) {
 							((CreationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+									(TestModelObject) assignedObject, assignableAction.getPatternRole());
 						}
 						if (contextAction instanceof DeletionSchemeAction) {
 							((DeletionSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+									(TestModelObject) assignedObject, assignableAction.getPatternRole());
 						}
 						if (contextAction instanceof NavigationSchemeAction) {
 							((NavigationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+									(TestModelObject) assignedObject, assignableAction.getPatternRole());
 						}
 						if (contextAction instanceof SynchronizationSchemeAction) {
 							((SynchronizationSchemeAction) contextAction).getEditionPatternInstance().setObjectForPatternRole(
-									(FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+									(TestModelObject) assignedObject, assignableAction.getPatternRole());
 						}
 					}
 				}

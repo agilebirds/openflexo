@@ -69,7 +69,7 @@ public class IncludeInGeneration extends MultipleFileGCAction<IncludeInGeneratio
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(IncludeInGeneration.actionType, CGObject.class);
+		TestModelObject.addActionForClass(IncludeInGeneration.actionType, CGObject.class);
 	}
 
 	/**

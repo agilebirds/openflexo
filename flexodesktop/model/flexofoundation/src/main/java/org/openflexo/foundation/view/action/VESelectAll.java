@@ -21,7 +21,7 @@ package org.openflexo.foundation.view.action;
 
 import java.util.Vector;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
@@ -55,7 +55,7 @@ public class VESelectAll extends FlexoGUIAction<VESelectAll, VirtualModelInstanc
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VESelectAll.actionType, EditionPatternInstance.class);
+		TestModelObject.addActionForClass(VESelectAll.actionType, EditionPatternInstance.class);
 	}
 
 	VESelectAll(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
@@ -191,8 +191,8 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		Object assignedObject = super.performAction(action, performedActions);
 		if (assignedObject != null && action instanceof AssignableAction) {
 			AssignableAction assignableAction = (AssignableAction) action;
-			if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
-				getEditionPatternInstance().setObjectForPatternRole((FlexoModelObject) assignedObject, assignableAction.getPatternRole());
+			if (assignableAction.getPatternRole() != null && assignedObject instanceof TestModelObject) {
+				getEditionPatternInstance().setObjectForPatternRole((TestModelObject) assignedObject, assignableAction.getPatternRole());
 			}
 		}
 

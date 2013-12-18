@@ -35,7 +35,7 @@ public interface FlexoProcess extends WKFObject {
 
 	@Override
 	@Initializer
-	public FlexoModelObject init(String flexoId);
+	public TestModelObject init(String flexoId);
 
 	@Getter(value = FOO, defaultValue = "4")
 	@XMLAttribute(xmlTag = FOO)

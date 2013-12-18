@@ -21,7 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -45,7 +45,7 @@ public class AgileBirdsObjectParameter extends EditionSchemeParameter {
 	@Override
 	public Type getType() {
 		if (getFlexoObjectType() == null) {
-			return FlexoModelObject.class;
+			return TestModelObject.class;
 		}
 		switch (getFlexoObjectType()) {
 		case Process:
@@ -61,7 +61,7 @@ public class AgileBirdsObjectParameter extends EditionSchemeParameter {
 		case Action:
 			return ActionNode.class;
 		default:
-			return FlexoModelObject.class;
+			return TestModelObject.class;
 		}
 	};
 

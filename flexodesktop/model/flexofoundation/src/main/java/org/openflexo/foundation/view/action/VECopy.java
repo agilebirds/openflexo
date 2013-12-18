@@ -22,7 +22,7 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -59,7 +59,7 @@ public class VECopy extends FlexoAction<VECopy, VirtualModelInstanceObject, Virt
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(VECopy.actionType, EditionPatternInstance.class);
+		TestModelObject.addActionForClass(VECopy.actionType, EditionPatternInstance.class);
 	}
 
 	VECopy(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {

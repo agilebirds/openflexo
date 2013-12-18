@@ -22,7 +22,7 @@ package org.openflexo.foundation.view.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -80,7 +80,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 		return getNavigationScheme().evaluateCondition(actionType.getEditionPatternInstance());
 	}
 
-	public FlexoModelObject getTargetObject() {
+	public TestModelObject getTargetObject() {
 		if (getNavigationScheme() == null) {
 			logger.warning("No navigation scheme. Please investigate !");
 			return null;

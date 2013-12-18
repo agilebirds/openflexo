@@ -53,7 +53,7 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 		/**
 		 * Overrides isEnabled
 		 * 
-		 * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.FlexoModelObject, java.util.Vector)
+		 * @see org.openflexo.foundation.action.FlexoActionType#isEnabled(org.openflexo.foundation.TestModelObject, java.util.Vector)
 		 */
 		@Override
 		public boolean isEnabled(CGObject object, Vector<CGObject> globalSelection) {
@@ -63,7 +63,7 @@ public class GenerateAndWrite extends MultipleFileGCAction<GenerateAndWrite> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(GenerateAndWrite.actionType, CGObject.class);
+		TestModelObject.addActionForClass(GenerateAndWrite.actionType, CGObject.class);
 	}
 
 	GenerateAndWrite(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

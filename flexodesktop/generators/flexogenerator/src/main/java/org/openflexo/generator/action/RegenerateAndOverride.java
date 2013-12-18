@@ -54,7 +54,7 @@ public class RegenerateAndOverride extends MultipleFileGCAction<RegenerateAndOve
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RegenerateAndOverride.actionType, CGObject.class);
+		TestModelObject.addActionForClass(RegenerateAndOverride.actionType, CGObject.class);
 	}
 
 	RegenerateAndOverride(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

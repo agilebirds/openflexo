@@ -36,7 +36,7 @@ import javax.management.relation.RoleList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 import org.flexo.model.WKFObject;
 import org.openflexo.foundation.FlexoProject;
@@ -171,7 +171,7 @@ public class ScreenshotGenerator {
 		return BAD_FILE_NAME_CHARACTERS_PATTERN.matcher(imageName).replaceAll(REPLACEMENT);
 	}
 
-	public static ScreenshotImage getImage(FlexoModelObject object) {
+	public static ScreenshotImage getImage(TestModelObject object) {
 		if (object == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Object is null: cannot generate screenshot");
@@ -213,9 +213,9 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotComponentRunnable implements Callable<JComponent> {
-		private final FlexoModelObject object;
+		private final TestModelObject object;
 
-		protected ScreenshotComponentRunnable(FlexoModelObject object) {
+		protected ScreenshotComponentRunnable(TestModelObject object) {
 			this.object = object;
 		}
 
@@ -227,10 +227,10 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotImageRunnable implements Callable<ScreenshotImage> {
-		private final FlexoModelObject object;
+		private final TestModelObject object;
 		private final JComponent component;
 
-		protected ScreenshotImageRunnable(JComponent component, FlexoModelObject object) {
+		protected ScreenshotImageRunnable(JComponent component, TestModelObject object) {
 			this.component = component;
 			this.object = object;
 		}
@@ -243,10 +243,10 @@ public class ScreenshotGenerator {
 	}
 
 	private static class ScreenshotFinalizeRunnable implements Callable<Void> {
-		private final FlexoModelObject object;
+		private final TestModelObject object;
 		private final JComponent component;
 
-		protected ScreenshotFinalizeRunnable(JComponent component, FlexoModelObject object) {
+		protected ScreenshotFinalizeRunnable(JComponent component, TestModelObject object) {
 			this.component = component;
 			this.object = object;
 		}
@@ -259,7 +259,7 @@ public class ScreenshotGenerator {
 
 	}
 
-	private static JComponent getScreenshotComponent(FlexoModelObject object) {
+	private static JComponent getScreenshotComponent(TestModelObject object) {
 		ExternalWKFModule wkfModule = null;
 		ExternalIEModule ieModule = null;
 		ExternalDMModule dmModule = null;
@@ -356,7 +356,7 @@ public class ScreenshotGenerator {
 		}
 	}
 
-	private static void finalizeScreenshotGeneration(JComponent c, FlexoModelObject object) {
+	private static void finalizeScreenshotGeneration(JComponent c, TestModelObject object) {
 		ExternalWKFModule wkfModule = null;
 		ExternalIEModule ieModule = null;
 		ExternalDMModule dmModule = null;

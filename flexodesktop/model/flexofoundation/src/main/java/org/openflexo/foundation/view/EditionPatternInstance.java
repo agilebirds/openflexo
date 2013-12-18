@@ -26,7 +26,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
@@ -462,11 +462,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	/**
 	 * Return the list of objects that will be deleted if default DeletionScheme is used
 	 */
-	public List<FlexoModelObject> objectsThatWillBeDeleted() {
-		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+	public List<TestModelObject> objectsThatWillBeDeleted() {
+		Vector<TestModelObject> returned = new Vector<TestModelObject>();
 		for (PatternRole<?> pr : getEditionPattern().getPatternRoles()) {
-			if (pr.defaultBehaviourIsToBeDeleted() && getPatternActor(pr) instanceof FlexoModelObject) {
-				returned.add((FlexoModelObject) getPatternActor(pr));
+			if (pr.defaultBehaviourIsToBeDeleted() && getPatternActor(pr) instanceof TestModelObject) {
+				returned.add((TestModelObject) getPatternActor(pr));
 			}
 		}
 		return returned;
@@ -475,13 +475,13 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	/**
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
-	public List<FlexoModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
-		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+	public List<TestModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
+		Vector<TestModelObject> returned = new Vector<TestModelObject>();
 		for (EditionAction editionAction : deletionScheme.getActions()) {
 			if (editionAction instanceof DeleteAction) {
 				DeleteAction deleteAction = (DeleteAction) editionAction;
 
-				returned.add((FlexoModelObject) getPatternActor(deleteAction.getPatternRole()));
+				returned.add((TestModelObject) getPatternActor(deleteAction.getPatternRole()));
 			}
 		}
 		return returned;

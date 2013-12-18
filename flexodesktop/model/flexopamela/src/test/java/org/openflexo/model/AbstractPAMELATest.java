@@ -3,7 +3,7 @@ package org.openflexo.model;
 import junit.framework.TestCase;
 
 import org.flexo.model.AbstractNode;
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 import org.flexo.model.StartNode;
 import org.flexo.model.TokenEdge;
@@ -20,7 +20,7 @@ public abstract class AbstractPAMELATest extends TestCase {
 	}
 
 	protected void validateBasicModelContext(ModelContext modelContext) throws ModelDefinitionException {
-		ModelEntity<FlexoModelObject> modelObjectEntity = modelContext.getModelEntity(FlexoModelObject.class);
+		ModelEntity<TestModelObject> modelObjectEntity = modelContext.getModelEntity(TestModelObject.class);
 		ModelEntity<FlexoProcess> processEntity = modelContext.getModelEntity(FlexoProcess.class);
 		ModelEntity<AbstractNode> abstractNodeEntity = modelContext.getModelEntity(AbstractNode.class);
 		ModelEntity<StartNode> startNodeEntity = modelContext.getModelEntity(StartNode.class);
@@ -37,10 +37,10 @@ public abstract class AbstractPAMELATest extends TestCase {
 		assertNotNull(nodesProperty);
 		ModelProperty<? super FlexoProcess> fooProperty = processEntity.getModelProperty(FlexoProcess.FOO);
 		assertNotNull(fooProperty);
-		assertNotNull(modelObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(processEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID));
-		assertNotNull(wkfObjectEntity.getModelProperty(FlexoModelObject.FLEXO_ID).getSetter());
+		assertNotNull(modelObjectEntity.getModelProperty(TestModelObject.FLEXO_ID));
+		assertNotNull(processEntity.getModelProperty(TestModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(TestModelObject.FLEXO_ID));
+		assertNotNull(wkfObjectEntity.getModelProperty(TestModelObject.FLEXO_ID).getSetter());
 
 		ModelProperty<? super WKFObject> wkfObjectProcessProperty = wkfObjectEntity.getModelProperty(WKFObject.PROCESS);
 		assertNotNull(wkfObjectProcessProperty);

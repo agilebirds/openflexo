@@ -60,7 +60,7 @@ public class MarkAsMerged extends MultipleFileGCAction<MarkAsMerged> {
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(MarkAsMerged.actionType, CGObject.class);
+		TestModelObject.addActionForClass(MarkAsMerged.actionType, CGObject.class);
 	}
 
 	MarkAsMerged(CGObject focusedObject, Vector<CGObject> globalSelection, FlexoEditor editor) {

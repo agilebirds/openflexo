@@ -23,7 +23,7 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
@@ -66,7 +66,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoO
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
+		TestModelObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
 	}
 
 	private View newView;

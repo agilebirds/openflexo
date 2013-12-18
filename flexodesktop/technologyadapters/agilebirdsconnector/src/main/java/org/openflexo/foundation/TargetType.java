@@ -28,7 +28,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author gpolet
  * 
  */
-public abstract class TargetType extends FlexoModelObject {
+public abstract class TargetType extends TestModelObject {
 	public TargetType(FlexoProject project) {
 		super(project);
 	}

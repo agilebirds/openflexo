@@ -33,11 +33,11 @@ public interface AbstractNode extends WKFObject {
 	// Conveninent method to automatically create an abstract node with a name
 	@Override
 	@Initializer
-	public AbstractNode init(@Parameter(FlexoModelObject.NAME) String name);
+	public AbstractNode init(@Parameter(TestModelObject.NAME) String name);
 
 	// Conveninent method to automatically create an abstract node with a name & a flexoID
 	@Initializer
-	public AbstractNode init(@Parameter(FlexoModelObject.FLEXO_ID) String flexoID, @Parameter(FlexoModelObject.NAME) String name);
+	public AbstractNode init(@Parameter(TestModelObject.FLEXO_ID) String flexoID, @Parameter(TestModelObject.NAME) String name);
 
 	@Override
 	public boolean delete(Object... context);

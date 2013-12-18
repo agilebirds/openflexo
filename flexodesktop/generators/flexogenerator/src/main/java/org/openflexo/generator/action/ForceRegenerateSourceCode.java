@@ -62,7 +62,7 @@ public class ForceRegenerateSourceCode extends MultipleFileGCAction<ForceRegener
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ForceRegenerateSourceCode.actionType, CGObject.class);
+		TestModelObject.addActionForClass(ForceRegenerateSourceCode.actionType, CGObject.class);
 	}
 
 	/*    private class ForceRegenerateSourceCodeForFile extends GenerateSourceCode.CGFileRunnable {

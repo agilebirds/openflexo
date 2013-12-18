@@ -24,15 +24,15 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 
 public class ObjectGenerationException extends GenerationException {
-	private FlexoModelObject failedObjectGeneration;
+	private TestModelObject failedObjectGeneration;
 
-	public ObjectGenerationException(FlexoModelObject failedObjectGeneration, String message, String localizationKey,
+	public ObjectGenerationException(TestModelObject failedObjectGeneration, String message, String localizationKey,
 			AbstractProjectGenerator<? extends GenerationRepository> projectGenerator) {
 		super(message, localizationKey);
 		this.failedObjectGeneration = failedObjectGeneration;
 	}
 
-	public FlexoModelObject getFailedObjectGeneration() {
+	public TestModelObject getFailedObjectGeneration() {
 		return failedObjectGeneration;
 	}
 }

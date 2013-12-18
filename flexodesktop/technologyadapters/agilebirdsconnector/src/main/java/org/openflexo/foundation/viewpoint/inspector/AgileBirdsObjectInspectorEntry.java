@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -49,7 +49,7 @@ public class AgileBirdsObjectInspectorEntry extends InspectorEntry {
 	@Override
 	public Class getDefaultDataClass() {
 		if (getFlexoObjectType() == null) {
-			return FlexoModelObject.class;
+			return TestModelObject.class;
 		}
 		switch (getFlexoObjectType()) {
 		case Process:
@@ -67,7 +67,7 @@ public class AgileBirdsObjectInspectorEntry extends InspectorEntry {
 		case Screen:
 			return OperationComponentDefinition.class;
 		default:
-			return FlexoModelObject.class;
+			return TestModelObject.class;
 		}
 	};
 

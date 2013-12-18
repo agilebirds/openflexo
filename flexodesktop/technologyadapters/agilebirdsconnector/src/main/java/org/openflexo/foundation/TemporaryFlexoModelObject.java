@@ -56,7 +56,7 @@ public class TemporaryFlexoModelObject extends AgileBirdsObject {
 	/**
 	 * Overrides getClassNameKey
 	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 * @see org.openflexo.foundation.TestModelObject#getClassNameKey()
 	 */
 	@Override
 	public String getClassNameKey() {

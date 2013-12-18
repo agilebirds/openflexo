@@ -3,13 +3,13 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 
 import org.flexo.model.EventNode;
-import org.flexo.model.FlexoModelObject;
+import org.flexo.model.TestModelObject;
 import org.flexo.model.FlexoProcess;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.localization.FlexoLocalization;
 
-public class AgileBirdsObjectPatternRole extends PatternRole<FlexoModelObject> {
+public class AgileBirdsObjectPatternRole extends PatternRole<TestModelObject> {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoObjectInspectorEntry
 	public static enum FlexoModelObjectType {
@@ -100,8 +100,8 @@ public class AgileBirdsObjectPatternRole extends PatternRole<FlexoModelObject> {
 	}
 
 	@Override
-	public ModelObjectActorReference<FlexoModelObject> makeActorReference(FlexoModelObject object, EditionPatternInstance epi) {
-		return new ModelObjectActorReference<FlexoModelObject>(object, this, epi);
+	public ModelObjectActorReference<TestModelObject> makeActorReference(TestModelObject object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<TestModelObject>(object, this, epi);
 	}
 
 }
