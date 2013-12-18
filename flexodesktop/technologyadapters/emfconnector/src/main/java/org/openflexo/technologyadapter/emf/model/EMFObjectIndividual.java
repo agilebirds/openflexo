@@ -57,6 +57,9 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 
 	private static final Logger logger = Logger.getLogger(EMFObjectIndividual.class.getPackage().getName());
 	
+	private static EMFObjectIndividualReferenceObjectPropertyValue containingPropertyValue;
+	
+	
 	/**
 	 * Constructor.
 	 * 
