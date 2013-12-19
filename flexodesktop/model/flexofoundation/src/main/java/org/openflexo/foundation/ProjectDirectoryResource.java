@@ -2,13 +2,17 @@ package org.openflexo.foundation;
 
 import java.io.FileNotFoundException;
 
+import org.openflexo.foundation.ProjectDirectoryResource.ProjectDirectoryResourceImpl;
 import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.IProgress;
 
 /**
  * A {@link ProjectDirectoryResource} is the resource denoting the {@link FlexoProject} directory on disk
@@ -19,6 +23,7 @@ import org.openflexo.model.factory.ModelFactory;
  * 
  */
 @ModelEntity
+@ImplementationClass(ProjectDirectoryResourceImpl.class)
 public interface ProjectDirectoryResource extends FlexoProjectResource<FlexoProject>, FlexoFileResource<FlexoProject> {
 
 	/**
@@ -63,6 +68,13 @@ public interface ProjectDirectoryResource extends FlexoProjectResource<FlexoProj
 				e.printStackTrace();
 			}
 			return null;
+		}
+
+		@Override
+		public void save(IProgress progress) throws SaveResourceException {
+			if (!getFile().exists()) {
+				getFile().mkdirs();
+			}
 		}
 	}
 

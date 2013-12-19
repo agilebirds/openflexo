@@ -53,6 +53,9 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
 			viewPointResource.addToContents(returned);
 			viewPointResource.notifyContentsAdded(returned);
+
+			returned.setFactory(new VirtualModelModelFactory());
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -86,6 +89,8 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 			logger.fine("VirtualModelResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
 			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
+
+			returned.setFactory(new VirtualModelModelFactory());
 
 			return returned;
 		} catch (ModelDefinitionException e) {

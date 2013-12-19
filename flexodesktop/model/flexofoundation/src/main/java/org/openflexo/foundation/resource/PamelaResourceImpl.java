@@ -206,7 +206,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 		FileWritingLock lock = willWriteOnDisk();
 
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Saving resource " + this + " : " + getFile().getName() + " version=" + getModelVersion());
+			logger.info("Saving resource " + this + " : " + getFile() + " version=" + getModelVersion());
 		}
 
 		try {

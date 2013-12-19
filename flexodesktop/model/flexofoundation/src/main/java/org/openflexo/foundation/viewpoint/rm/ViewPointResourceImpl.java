@@ -73,6 +73,8 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
 
+			returned.setFactory(new ViewPointModelFactory());
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -110,6 +112,9 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 			} else {
 				returned.setModelVersion(new FlexoVersion(vpi.modelVersion));
 			}
+
+			returned.setFactory(new ViewPointModelFactory());
+
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 

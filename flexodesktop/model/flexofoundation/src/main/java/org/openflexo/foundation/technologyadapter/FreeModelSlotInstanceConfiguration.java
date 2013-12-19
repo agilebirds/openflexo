@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
@@ -56,8 +57,11 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 
 	protected FreeModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
-		resourceCenter = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager().getResourceCenterService()
-				.getUserResourceCenter();
+		FlexoResourceCenterService rcService = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager()
+				.getResourceCenterService();
+		if (rcService.getResourceCenters().size() > 0) {
+			resourceCenter = rcService.getResourceCenters().get(0);
+		}
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingResource);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewResource);

@@ -37,8 +37,6 @@ public interface FlexoResourceCenterService extends FlexoService, AccessibleProx
 	@Remover(RESOURCE_CENTERS)
 	public void removeFromResourceCenters(FlexoResourceCenter resourceCenter);
 
-	public UserResourceCenter getUserResourceCenter();
-
 	/**
 	 * Save all locations for registered resource centers on disk
 	 */

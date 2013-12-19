@@ -108,6 +108,78 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 	protected static final Logger logger = Logger.getLogger(FlexoProject.class.getPackage().getName());
 
+	public static FlexoEditor newProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
+			FlexoProgress progress) throws ProjectInitializerException {
+
+		if (aProjectDirectory.exists()) {
+			throw new ProjectInitializerException("This directory already exists: " + aProjectDirectory, aProjectDirectory);
+		}
+
+		// System.out.println("create directory " + aProjectDirectory);
+		// aProjectDirectory.mkdirs();
+
+		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
+		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
+		project.setServiceManager(serviceManager);
+		FlexoEditor editor = editorFactory.makeFlexoEditor(project, serviceManager);
+		project.setLastUniqueID(0);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Building project: " + aProjectDirectory.getAbsolutePath());
+		}
+
+		try {
+			// project.setTimestampsHaveBeenLoaded(true);
+			project.setCreationUserId(FlexoObject.getCurrentUserIdentifier());
+			project.setCreationDate(new Date());
+			// project.setFlexoResource(rmResource);
+			// project.registerResource(rmResource);
+			// project.dataModelIsBuilding = true;
+			// DMModel.createNewDMModel(project);
+			// project.dataModelIsBuilding = false;
+			// FlexoComponentLibrary.createNewComponentLibrary(project);
+			// FlexoWorkflow.createNewWorkflow(project);
+			// FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
+			// DKVModel.createNewDKVModel(project);
+			// TOCData tocData = project.getTOCData();
+			// TOCRepository repository = TOCRepository.createTOCRepositoryForDocType(tocData, project.getDocTypes().get(0));
+			// repository.setTitle(project.getName());
+			// tocData.addToRepositories(repository);
+			// GeneratedDoc.createNewGeneratedDoc(project);
+			project.initJavaFormatter();
+			// importInitialImages(project, editor);
+			// Eventually log the result
+			/*if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Getting this RM File:\n" + project.getFlexoRMResource().getResourceXMLRepresentation());
+			}*/
+			try {
+				// This needs to be called to ensure the consistency of the
+				// project
+				project.setGenerateSnapshot(false);
+				project.save(progress);
+				project.setGenerateSnapshot(true);
+			} catch (SaveResourceException e) {
+				if (logger.isLoggable(Level.SEVERE)) {
+					logger.severe("Could not save all resources for project: " + project.getProjectName() + " located in "
+							+ project.getProjectDirectory().getAbsolutePath());
+				}
+			}
+		} catch (Exception e) {
+			// Warns about the exception
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
+			}
+			e.printStackTrace();
+		}
+
+		return editor;
+	}
+
+	// TODO: add ProjectLoadingHandler to the parameters
+	public static FlexoEditor openProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
+			FlexoProgress progress) throws ProjectInitializerException, ProjectLoadingCancelledException {
+		return null;
+	}
+
 	public static final String PROJECT_DIRECTORY = "projectDirectory";
 	public static final String PROJECT_DATA = "projectData";
 	public static final String REVISION = "revision";
@@ -233,74 +305,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 			// _addConverter(imageFileConverter);
 			_addConverter(DataBinding.CONVERTER);
 		}
-	}
-
-	// =======================================================================
-	// ======================= New project procedure =========================
-	// =======================================================================
-
-	public static FlexoEditor newProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
-			FlexoProgress progress) throws ProjectInitializerException {
-		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
-		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
-		project.setServiceManager(serviceManager);
-		FlexoEditor editor = editorFactory.makeFlexoEditor(project, serviceManager);
-		project.setLastUniqueID(0);
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Building project: " + aProjectDirectory.getAbsolutePath());
-		}
-
-		try {
-			// project.setTimestampsHaveBeenLoaded(true);
-			project.setCreationUserId(FlexoObject.getCurrentUserIdentifier());
-			project.setCreationDate(new Date());
-			// project.setFlexoResource(rmResource);
-			// project.registerResource(rmResource);
-			// project.dataModelIsBuilding = true;
-			// DMModel.createNewDMModel(project);
-			// project.dataModelIsBuilding = false;
-			// FlexoComponentLibrary.createNewComponentLibrary(project);
-			// FlexoWorkflow.createNewWorkflow(project);
-			// FlexoNavigationMenu.createNewFlexoNavigationMenu(project);
-			// DKVModel.createNewDKVModel(project);
-			// TOCData tocData = project.getTOCData();
-			// TOCRepository repository = TOCRepository.createTOCRepositoryForDocType(tocData, project.getDocTypes().get(0));
-			// repository.setTitle(project.getName());
-			// tocData.addToRepositories(repository);
-			// GeneratedDoc.createNewGeneratedDoc(project);
-			project.initJavaFormatter();
-			// importInitialImages(project, editor);
-			// Eventually log the result
-			/*if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Getting this RM File:\n" + project.getFlexoRMResource().getResourceXMLRepresentation());
-			}*/
-			try {
-				// This needs to be called to ensure the consistency of the
-				// project
-				project.setGenerateSnapshot(false);
-				project.save(progress);
-				project.setGenerateSnapshot(true);
-			} catch (SaveResourceException e) {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("Could not save all resources for project: " + project.getProjectName() + " located in "
-							+ project.getProjectDirectory().getAbsolutePath());
-				}
-			}
-		} catch (Exception e) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
-			}
-			e.printStackTrace();
-		}
-
-		return editor;
-	}
-
-	// TODO: add ProjectLoadingHandler to the parameters
-	public static FlexoEditor openProject(File aProjectDirectory, FlexoEditorFactory editorFactory, FlexoServiceManager serviceManager,
-			FlexoProgress progress) throws ProjectInitializerException, ProjectLoadingCancelledException {
-		return null;
 	}
 
 	/**
@@ -487,6 +491,10 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project...");
 		}
+
+		getResource().save(progress);
+		getProjectDataResource().save(progress);
+
 		// saveModifiedResources(progress, true);
 
 		logger.warning("Project saving not implemented yet");

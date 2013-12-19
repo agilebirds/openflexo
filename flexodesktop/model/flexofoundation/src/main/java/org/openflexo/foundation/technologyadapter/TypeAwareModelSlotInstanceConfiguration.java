@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -52,8 +53,11 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 
 	protected TypeAwareModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
-		resourceCenter = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager().getResourceCenterService()
-				.getUserResourceCenter();
+		FlexoResourceCenterService rcService = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager()
+				.getResourceCenterService();
+		if (rcService.getResourceCenters().size() > 0) {
+			resourceCenter = rcService.getResourceCenters().get(0);
+		}
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);

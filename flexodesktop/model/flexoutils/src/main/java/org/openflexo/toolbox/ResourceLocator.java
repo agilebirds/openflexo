@@ -196,8 +196,8 @@ public class ResourceLocator {
 		File file2 = new File(f.getAbsolutePath() + "/src/test/resources");
 		File file3 = new File(f.getAbsolutePath() + "/src/dev/resources");
 		// File file4 = new File(f.getAbsolutePath());
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Adding directory " + file1.getAbsolutePath());
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Adding directory " + file1.getAbsolutePath());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Adding directory " + file2.getAbsolutePath());

@@ -10,7 +10,6 @@ import org.openflexo.foundation.resource.PamelaResourceImpl.WillWriteFileOnDiskN
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.toolbox.FileUtils;
 
 /**
  * Default implementation for the {@link FlexoResourceCenterService} Manage the {@link UserResourceCenter} and the default
@@ -20,8 +19,6 @@ import org.openflexo.toolbox.FileUtils;
  * 
  */
 public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
-
-	private UserResourceCenter userResourceCenter;
 
 	/**
 	 * Instantiate a new DefaultResourceCenterService with only the UserResourceCenter
@@ -33,7 +30,6 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
 			factory.setImplementingClassForInterface(DefaultResourceCenterService.class, FlexoResourceCenterService.class);
 			DefaultResourceCenterService returned = (DefaultResourceCenterService) factory.newInstance(FlexoResourceCenterService.class);
-			returned.addUserResourceCenter();
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -100,25 +96,10 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	public DefaultResourceCenterService() {
 	}
 
-	public UserResourceCenter addUserResourceCenter() {
-		File userResourceCenterStorageFile = new File(FileUtils.getDocumentDirectory(), "FlexoUserResourceCenter/ResourceCenterData.xml");
-		if (!userResourceCenterStorageFile.getParentFile().canWrite()) {
-			userResourceCenterStorageFile = new File(System.getProperty("user.home"), "FlexoUserResourceCenter/ResourceCenterData.xml");
-		}
-		userResourceCenter = new UserResourceCenter(userResourceCenterStorageFile);
-		addToResourceCenters(userResourceCenter);
-		return userResourceCenter;
-	}
-
 	public DirectoryResourceCenter addToDirectoryResourceCenter(File aDirectory) {
 		DirectoryResourceCenter returned = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(aDirectory);
 		addToResourceCenters(returned);
 		return returned;
-	}
-
-	@Override
-	public UserResourceCenter getUserResourceCenter() {
-		return userResourceCenter;
 	}
 
 	@Override
