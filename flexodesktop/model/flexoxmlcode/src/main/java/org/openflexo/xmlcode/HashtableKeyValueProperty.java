@@ -23,6 +23,8 @@ package org.openflexo.xmlcode;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -85,6 +87,40 @@ public class HashtableKeyValueProperty extends KeyValueProperty {
 	 */
 	public boolean typeInheritsFromMap() {
 		return Map.class.isAssignableFrom(getType());
+	}
+
+	public Type getAccessedType() {
+		if (field != null) {
+			return field.getGenericType();
+		} else if (getGetMethod() != null) {
+			return getGetMethod().getGenericReturnType();
+		} else {
+			return null;
+		}
+	}
+
+	public Class<?> getKeyType() {
+		if (getAccessedType() instanceof ParameterizedType && ((ParameterizedType) getAccessedType()).getActualTypeArguments().length > 0) {
+			Type returned = ((ParameterizedType) getAccessedType()).getActualTypeArguments()[0];
+			if (returned instanceof Class) {
+				return (Class<?>) returned;
+			} else if (returned instanceof ParameterizedType && ((ParameterizedType) returned).getRawType() instanceof Class) {
+				return (Class<?>) ((ParameterizedType) returned).getRawType();
+			}
+		}
+		return Object.class;
+	}
+
+	public Class<?> getContentType() {
+		if (getAccessedType() instanceof ParameterizedType && ((ParameterizedType) getAccessedType()).getActualTypeArguments().length > 0) {
+			Type returned = ((ParameterizedType) getAccessedType()).getActualTypeArguments()[1];
+			if (returned instanceof Class) {
+				return (Class<?>) returned;
+			} else if (returned instanceof ParameterizedType && ((ParameterizedType) returned).getRawType() instanceof Class) {
+				return (Class<?>) ((ParameterizedType) returned).getRawType();
+			}
+		}
+		return Object.class;
 	}
 
 	/**

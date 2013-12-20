@@ -174,7 +174,7 @@ public class TestXMLMappings extends FlexoTestCase {
 	}
 
 	protected void checkXMLMapping(XMLMapping mapping) throws Exception {
-		Iterator<ModelEntity> i = mapping.allModelEntities();
+		Iterator<ModelEntity> i = mapping.allModelEntitiesStoredByXMLTags();
 		while (i.hasNext()) {
 			ModelEntity me = i.next();
 			checkModelEntity(me);

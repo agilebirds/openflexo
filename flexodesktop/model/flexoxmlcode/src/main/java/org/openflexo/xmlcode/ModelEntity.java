@@ -316,7 +316,6 @@ public class ModelEntity {
 							throw new InvalidModelException(message);
 						} else {
 							System.err.println("[XMLCODE_ISSUE] " + message);
-							return;
 						}
 					} else {
 						String message = "Class "
@@ -329,7 +328,6 @@ public class ModelEntity {
 
 						} else {
 							System.err.println("[XMLCODE_ISSUE] " + message);
-							return;
 						}
 					}
 				}
@@ -360,8 +358,13 @@ public class ModelEntity {
 				}
 
 				if (!hasInitializerWithoutParameter() && !hasFinalizerWithParameter()) {
-					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding initializing method : "
-							+ initializer);
+					if (!permissive) {
+						throw new InvalidModelException("Class " + getName()
+								+ " does not implement specified decoding initializing method : " + initializer);
+					} else {
+						System.err.println("[XMLCODE_ISSUE] " + "Class " + getName()
+								+ " does not implement specified decoding initializing method : " + initializer);
+					}
 				}
 			}
 
@@ -390,8 +393,13 @@ public class ModelEntity {
 				}
 
 				if (!hasFinalizerWithoutParameter() && !hasFinalizerWithParameter()) {
-					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding finalizing method : "
-							+ finalizer);
+					if (!permissive) {
+						throw new InvalidModelException("Class " + getName()
+								+ " does not implement specified decoding finalizing method : " + finalizer);
+					} else {
+						System.err.println("[XMLCODE_ISSUE] " + "Class " + getName()
+								+ " does not implement specified decoding finalizing method : " + finalizer);
+					}
 				}
 			}
 		} catch (InvalidModelException e) {
@@ -424,6 +432,7 @@ public class ModelEntity {
 		_availableContexts.addAll(locallyDefinedContexts);
 
 		_xmlTagsForContext = new Hashtable<String, String[]>();
+
 	}
 
 	/**
@@ -648,6 +657,9 @@ public class ModelEntity {
 	}
 
 	public Iterator<ModelProperty> getModelPropertiesIterator() {
+		if (orderedModelProperties == null) {
+			return null;
+		}
 		return orderedModelProperties.iterator();
 		// return modelProperties.elements();
 	}

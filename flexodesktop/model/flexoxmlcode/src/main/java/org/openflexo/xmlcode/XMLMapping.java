@@ -585,6 +585,7 @@ public class XMLMapping {
 	 *            a <code>ModelEntity</code> value
 	 */
 	private void updateAndRegisterNewModelEntity(ModelEntity aModelEntity) {
+
 		for (Map.Entry<String, ModelEntity> e : modelEntitiesStoredByClassName.entrySet()) {
 			ModelEntity tempModelEntity = e.getValue();
 			if (tempModelEntity.inheritsFrom(aModelEntity)) {
@@ -622,6 +623,8 @@ public class XMLMapping {
 		}
 
 		modelEntitiesStoredByClassName.put(aModelEntity.getName(), aModelEntity);
+
+		System.out.println("Registered entity for " + aModelEntity.getName());
 
 	}
 
@@ -734,9 +737,20 @@ public class XMLMapping {
 	/**
 	 * Returns all <code>ModelEntity</code> objects stored in an Enumeration
 	 */
-	public Iterator<ModelEntity> allModelEntities() {
+	public Iterator<ModelEntity> allModelEntitiesStoredByXMLTags() {
 		if (modelEntitiesStoredByXMLTag != null) {
 			return modelEntitiesStoredByXMLTag.values().iterator();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all <code>ModelEntity</code> objects stored in an Enumeration
+	 */
+	public Iterator<ModelEntity> allModelEntitiesStoredByClassNames() {
+		if (modelEntitiesStoredByClassName != null) {
+			return modelEntitiesStoredByClassName.values().iterator();
 		} else {
 			return null;
 		}
@@ -747,7 +761,7 @@ public class XMLMapping {
 	 * able to maps the two old mappings.
 	 */
 	public void appendXMLMapping(XMLMapping aMapping) {
-		Iterator<ModelEntity> i = aMapping.allModelEntities();
+		Iterator<ModelEntity> i = aMapping.allModelEntitiesStoredByXMLTags();
 		if (i != null) {
 			while (i.hasNext()) {
 				storesNewModelEntity(i.next());
