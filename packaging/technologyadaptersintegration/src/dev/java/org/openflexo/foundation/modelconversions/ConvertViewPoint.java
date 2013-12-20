@@ -5,14 +5,14 @@ import java.io.IOException;
 
 import org.openflexo.xmlcode.pamelagenerator.PAMELAGenerator;
 
-public class ConvertVirtualModel {
+public class ConvertViewPoint {
 
 	public static void main(String[] args) {
 		File currentDir = new File(System.getProperty("user.dir"));
 		File foundationResourceDir = new File(currentDir.getParentFile().getParentFile(),
 				"flexodesktop/model/flexofoundation/src/main/resources");
 		File foundationJavaDir = new File(currentDir.getParentFile().getParentFile(), "flexodesktop/model/flexofoundation/src/main/java");
-		File mappingFile = new File(foundationResourceDir, "Models/ViewPointModel/VirtualModel/virtual_model_1.0.xml");
+		File mappingFile = new File(foundationResourceDir, "Models/ViewPointModel/viewpoint_model_1.0.xml");
 		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("PAMELAGenerator", "");
