@@ -22,6 +22,12 @@ package org.openflexo.foundation.viewpoint;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
 /**
  * Represents an object which is part of the model of a ViewPoint, and has a name, a description and can be identified by an URI
@@ -29,28 +35,19 @@ import org.openflexo.foundation.NameChanged;
  * @author sylvain
  * 
  */
-public abstract class NamedViewPointObject extends ViewPointObject {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(NamedViewPointObject.NamedViewPointObjectImpl.class)
+public abstract interface NamedViewPointObject extends ViewPointObject {
 
-	private static final Logger logger = Logger.getLogger(NamedViewPointObject.class.getPackage().getName());
+	@PropertyIdentifier(type = String.class)
+	public static final String NAME_KEY = "name";
 
-	private String name;
-	private String description;
+	@Getter(value = NAME_KEY)
+	@XMLAttribute
+	public String getName();
 
-	public NamedViewPointObject(/*VirtualModelBuilder builder*/) {
-		super(/*builder*/);
-	}
-
-	/*public NamedViewPointObject(ViewPointBuilder builder) {
-		super(builder);
-	}*/
-
-	/*public NamedViewPointObject(ExampleDiagramBuilder builder) {
-		super(builder);
-	}
-
-	public NamedViewPointObject(DiagramPaletteBuilder builder) {
-		super(builder);
-	}*/
+	@Setter(NAME_KEY)
+	public void setName(String name);
 
 	/**
 	 * Return the URI of the {@link NamedViewPointObject}<br>
@@ -60,34 +57,56 @@ public abstract class NamedViewPointObject extends ViewPointObject {
 	 * 
 	 * @return String representing unique URI of this object
 	 */
-	public abstract String getURI();
+	public String getURI();
 
-	public String getName() {
-		return name;
-	}
+	public static abstract class NamedViewPointObjectImpl extends ViewPointObjectImpl implements NamedViewPointObject {
 
-	public void setName(String name) {
-		if (requireChange(this.name, name)) {
-			String oldName = this.name;
-			this.name = name;
-			setChanged();
-			notifyObservers(new NameChanged(oldName, name));
+		private static final Logger logger = Logger.getLogger(NamedViewPointObject.class.getPackage().getName());
+
+		private String name;
+		private String description;
+
+		public NamedViewPointObjectImpl(/*VirtualModelBuilder builder*/) {
+			super(/*builder*/);
 		}
-	}
 
-	@Override
-	public final String getDescription() {
-		return description;
-	}
+		/*public NamedViewPointObjectImpl(ViewPointBuilder builder) {
+			super(builder);
+		}*/
 
-	@Override
-	public final void setDescription(String description) {
-		if (requireChange(this.description, description)) {
-			String oldDescription = this.description;
-			this.description = description;
-			setChanged();
-			notifyObservers(new NameChanged(oldDescription, description));
+		/*public NamedViewPointObjectImpl(ExampleDiagramBuilder builder) {
+			super(builder);
 		}
-	}
 
+		public NamedViewPointObjectImpl(DiagramPaletteBuilder builder) {
+			super(builder);
+		}*/
+
+		/**
+		 * Return the URI of the {@link NamedViewPointObject}<br>
+		 * The convention for URI are following: <viewpoint_uri>/<virtual_model_name>#<edition_pattern_name>.<edition_scheme_name> <br>
+		 * eg<br>
+		 * http://www.mydomain.org/MyViewPoint/MyVirtualModel#MyEditionPattern.MyEditionScheme
+		 * 
+		 * @return String representing unique URI of this object
+		 */
+		@Override
+		public abstract String getURI();
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public void setName(String name) {
+			if (requireChange(this.name, name)) {
+				String oldName = this.name;
+				this.name = name;
+				setChanged();
+				notifyObservers(new NameChanged(oldName, name));
+			}
+		}
+
+	}
 }

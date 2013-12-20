@@ -127,9 +127,14 @@ public class PAMELAGenerator {
 		sb.append(parsedJavaFile.prelude);
 
 		sb.append("@ModelEntity" + (entity.isAbstract() ? "(isAbstract = true)" : "") + LINE_SEPARATOR);
-		sb.append("@ImplementationClass(" + interfaceClassName + "." + implementationClassName + ")" + LINE_SEPARATOR);
+		sb.append("@ImplementationClass(" + interfaceClassName + "." + implementationClassName + ".class)" + LINE_SEPARATOR);
 		if (!entity.isAbstract()) {
-			sb.append("@XMLElement(xmlTag" + entity.getDefaultXmlTag() + ")" + LINE_SEPARATOR);
+			if (entity.getDefaultXmlTag().equals(interfaceClassName)) {
+				sb.append("@XMLElement" + LINE_SEPARATOR);
+			} else {
+				sb.append("@XMLElement(xmlTag=\"" + entity.getDefaultXmlTag() + "\")" + LINE_SEPARATOR);
+			}
+			sb.append("@XMLElement(xmlTag=\"" + entity.getDefaultXmlTag() + "\")" + LINE_SEPARATOR);
 		}
 
 		sb.append(parsedJavaFile.header.headerForInterface() + "{" + LINE_SEPARATOR);
@@ -150,7 +155,7 @@ public class PAMELAGenerator {
 		// File outputFile = new File(sourceFile.getParent(), entity.getRelatedClass().getSimpleName() + "2.java");
 		// saveToFile(outputFile, sb.toString(), null);
 
-		saveToFile(sourceFile, sb.toString(), null);
+		// saveToFile(sourceFile, sb.toString(), null);
 	}
 
 	private String buildInterfaceInnerSourceCode(ModelEntity entity) {
@@ -164,6 +169,8 @@ public class PAMELAGenerator {
 		if (it == null) {
 			return "// WARNING: could not find any property in this class" + LINE_SEPARATOR;
 		}
+
+		sb.append(LINE_SEPARATOR);
 
 		while (it.hasNext()) {
 			ModelProperty p = it.next();

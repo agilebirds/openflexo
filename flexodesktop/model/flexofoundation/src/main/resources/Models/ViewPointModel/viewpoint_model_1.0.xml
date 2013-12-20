@@ -2,6 +2,11 @@
 
 <model builder="org.openflexo.foundation.viewpoint.ViewPoint$ViewPointBuilder"  handlesReferences="yes" serializationMode="pseudoTree">
 
+  <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+     <property name="name" xmlTag="name" attribute="yes"/>
+     <property name="value" xmlTag="value" attribute="yes"/>
+  </entity>
+
   <entity name="org.openflexo.foundation.FlexoObject" abstract="YES" finalizer="finalizeDeserialization">
    <description>Root class for all objects of Flexo</description>
   	<property name="userIdentifier" xmlTag="userID" attribute="YES" copyable="no" description="Unique ID of the user (used for team synchronization)"/>

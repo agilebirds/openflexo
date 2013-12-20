@@ -19,78 +19,104 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 
-public class FlexoProperty extends FlexoObject implements XMLSerializable {
+public interface FlexoProperty extends FlexoObject {
 
-	private FlexoObject owner;
+	@PropertyIdentifier(type = FlexoObject.class)
+	public static final String OWNER_KEY = "owner";
+	@PropertyIdentifier(type = String.class)
+	public static final String NAME_KEY = "name";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-	private String name;
-	private String value;
+	@Getter(NAME_KEY)
+	@XMLAttribute
+	public String getName();
 
-	/*public FlexoProperty(FlexoBuilder<?> builder) {
-		this(builder.getProject());
-	}
+	@Setter(NAME_KEY)
+	public void setName(String name);
 
-	public FlexoProperty(FlexoProjectBuilder builder) {
-		this(builder.project);
-	}*/
+	@Getter(VALUE_KEY)
+	@XMLAttribute
+	public String getValue();
 
-	public FlexoProperty() {
-		super();
-	}
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
 
-	public FlexoProperty(FlexoObject owner) {
-		this();
-		this.owner = owner;
-	}
+	@Getter(value = OWNER_KEY, ignoreType = true)
+	public FlexoObject getOwner();
 
-	@Override
-	public boolean delete() {
-		if (getOwner() != null) {
-			getOwner().removeFromCustomProperties(this);
+	@Setter(OWNER_KEY)
+	public void setOwner(FlexoObject owner);
+
+	public static abstract class FlexoPropertyImpl extends FlexoObservable implements FlexoProperty {
+
+		private FlexoObject owner;
+
+		private String name;
+		private String value;
+
+		/*public FlexoProperty(FlexoBuilder<?> builder) {
+			this(builder.getProject());
 		}
-		return super.delete();
-	}
 
-	public String getName() {
-		return name;
-	}
+		public FlexoProperty(FlexoProjectBuilder builder) {
+			this(builder.project);
+		}*/
 
-	public void setName(String name) {
-		this.name = name;
-		setChanged();
-		notifyObservers(new DataModification("name", null, name));
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-		setChanged();
-		notifyObservers(new DataModification("value", null, value));
-	}
-
-	public FlexoObject getOwner() {
-		return owner;
-	}
-
-	public void setOwner(FlexoObject owner) {
-		this.owner = owner;
-	}
-
-	/*@Override
-	public String getFullyQualifiedName() {
-		return getOwner() != null ? getOwner().getFullyQualifiedName() : "No owner" + "." + name + "=" + value;
-	}*/
-
-	/*public XMLStorageResourceData getXMLResourceData() {
-		if (getOwner() instanceof FlexoModelObject) {
-			return ((FlexoModelObject) getOwner()).getXMLResourceData();
+		public FlexoPropertyImpl() {
+			super();
 		}
-		return null;
-	}*/
 
+		public FlexoPropertyImpl(FlexoObject owner) {
+			this();
+			this.owner = owner;
+		}
+
+		@Override
+		public boolean delete(Object... context) {
+			if (getOwner() != null) {
+				getOwner().removeFromCustomProperties(this);
+			}
+			return performSuperDelete(context);
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public void setName(String name) {
+			this.name = name;
+			setChanged();
+			notifyObservers(new DataModification("name", null, name));
+		}
+
+		@Override
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public void setValue(String value) {
+			this.value = value;
+			setChanged();
+			notifyObservers(new DataModification("value", null, value));
+		}
+
+		@Override
+		public FlexoObject getOwner() {
+			return owner;
+		}
+
+		@Override
+		public void setOwner(FlexoObject owner) {
+			this.owner = owner;
+		}
+	}
 }

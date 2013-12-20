@@ -23,77 +23,132 @@ import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class LocalizedEntry extends ViewPointObject {
+@ModelEntity
+@ImplementationClass(LocalizedEntry.LocalizedEntryImpl.class)
+@XMLElement(xmlTag = "Localized")
+public interface LocalizedEntry extends ViewPointObject {
 
-	private LocalizedDictionary _dictionary;
+	@PropertyIdentifier(type = LocalizedDictionary.class)
+	public static final String LOCALIZED_DICTIONARY_KEY = "localizedDictionary";
+	@PropertyIdentifier(type = String.class)
+	public static final String KEY_KEY = "key";
+	@PropertyIdentifier(type = String.class)
+	public static final String LANGUAGE_KEY = "language";
+	@PropertyIdentifier(type = String.class)
+	public static final String VALUE_KEY = "value";
 
-	private String key;
-	private String language;
-	private String value;
+	@Getter(value = KEY_KEY)
+	@XMLAttribute
+	public String getKey();
 
-	public LocalizedEntry() {
-		super();
-	}
+	@Setter(KEY_KEY)
+	public void setKey(String key);
 
-	public LocalizedEntry(LocalizedDictionary localizedDictionary, String key, String language, String value) {
-		super();
-		setLocalizedDictionary(localizedDictionary);
-		this.key = key;
-		this.language = language;
-		this.value = value;
-	}
+	@Getter(value = LANGUAGE_KEY)
+	@XMLAttribute(xmlTag = "lang")
+	public String getLanguage();
 
-	public void setLocalizedDictionary(LocalizedDictionary dict) {
-		_dictionary = dict;
-	}
+	@Setter(LANGUAGE_KEY)
+	public void setLanguage(String language);
 
-	@Override
-	public LocalizedDictionary getLocalizedDictionary() {
-		return _dictionary;
-	}
+	@Getter(value = VALUE_KEY)
+	public String getValue();
 
-	@Override
-	public ViewPoint getViewPoint() {
-		return getLocalizedDictionary().getViewPoint();
-	}
+	@Setter(VALUE_KEY)
+	public void setValue(String value);
 
-	public String getKey() {
-		return key;
-	}
+	@Getter(value = LOCALIZED_DICTIONARY_KEY, inverse = LocalizedDictionary.ENTRIES_KEY)
+	public LocalizedDictionary getLocalizedDictionary();
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+	@Setter(LOCALIZED_DICTIONARY_KEY)
+	public void setLocalizedDictionary(LocalizedDictionary owner);
 
-	public String getLanguage() {
-		return language;
-	}
+	public static abstract class LocalizedEntryImpl extends ViewPointObjectImpl implements LocalizedEntry {
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+		private LocalizedDictionary _dictionary;
 
-	public String getValue() {
-		return value;
-	}
+		private String key;
+		private String language;
+		private String value;
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+		public LocalizedEntryImpl() {
+			super();
+		}
 
-	@Override
-	public BindingModel getBindingModel() {
-		return getViewPoint().getBindingModel();
-	}
+		public LocalizedEntryImpl(LocalizedDictionary localizedDictionary, String key, String language, String value) {
+			super();
+			setLocalizedDictionary(localizedDictionary);
+			this.key = key;
+			this.language = language;
+			this.value = value;
+		}
 
-	@Override
-	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getFullyQualifiedName() + ">";
-	}
+		@Override
+		public void setLocalizedDictionary(LocalizedDictionary dict) {
+			_dictionary = dict;
+		}
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
+		@Override
+		public LocalizedDictionary getLocalizedDictionary() {
+			return _dictionary;
+		}
+
+		@Override
+		public ViewPoint getViewPoint() {
+			return getLocalizedDictionary().getViewPoint();
+		}
+
+		@Override
+		public String getKey() {
+			return key;
+		}
+
+		@Override
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+		@Override
+		public String getLanguage() {
+			return language;
+		}
+
+		@Override
+		public void setLanguage(String language) {
+			this.language = language;
+		}
+
+		@Override
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getViewPoint().getBindingModel();
+		}
+
+		@Override
+		public String getFMLRepresentation(FMLRepresentationContext context) {
+			return "<not_implemented:" + getFullyQualifiedName() + ">";
+		}
+
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
 	}
 }

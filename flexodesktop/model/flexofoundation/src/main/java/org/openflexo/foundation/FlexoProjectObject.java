@@ -40,7 +40,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public abstract class FlexoProjectObject extends FlexoObject implements XMLSerializable, ReferenceOwner {
+public abstract class FlexoProjectObject extends DeprecatedFlexoObject implements XMLSerializable, ReferenceOwner {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
 

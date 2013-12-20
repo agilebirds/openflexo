@@ -129,7 +129,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 		try {
 			// project.setTimestampsHaveBeenLoaded(true);
-			project.setCreationUserId(FlexoObject.getCurrentUserIdentifier());
+			project.setCreationUserId(FlexoObjectImpl.getCurrentUserIdentifier());
 			project.setCreationDate(new Date());
 			// project.setFlexoResource(rmResource);
 			// project.registerResource(rmResource);

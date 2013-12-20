@@ -531,8 +531,14 @@ public class XMLMapping {
 					try {
 						builderClass = Class.forName(tempAttribute.getNodeValue());
 					} catch (ClassNotFoundException e) {
-						throw new InvalidModelException("Builder defined for this model matches no known class: '"
-								+ tempAttribute.getNodeValue() + "'");
+						if (!permissive) {
+							throw new InvalidModelException("Builder defined for this model matches no known class: '"
+									+ tempAttribute.getNodeValue() + "'");
+						} else {
+							System.err.println("[XMLCODE_ISSUE] " + "Builder defined for this model matches no known class: '"
+									+ tempAttribute.getNodeValue() + "'");
+
+						}
 					}
 				} else {
 					throw new InvalidModelException("Invalid attribute '" + tempAttribute.getNodeName()
