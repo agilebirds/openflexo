@@ -47,6 +47,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
  */
 public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionSchemeObject {
 
+
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
 	private MS modelSlot;
@@ -295,120 +296,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		}
 	}
 
-	/*public AddShape createAddShapeAction() {
-		AddShape newAction = new AddShape(null);
-		if (getEditionPattern().getDefaultShapePatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddClass createAddClassAction() {
-		AddClass newAction = new AddClass(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddIndividual createAddIndividualAction() {
-		AddIndividual newAction = new AddIndividual(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
-		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
-		AddDataPropertyStatement newAction = new AddDataPropertyStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddIsAStatement createAddIsAPropertyAction() {
-		AddIsAStatement newAction = new AddIsAStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddRestrictionStatement createAddRestrictionAction() {
-		AddRestrictionStatement newAction = new AddRestrictionStatement(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddConnector createAddConnectorAction() {
-		AddConnector newAction = new AddConnector(null);
-		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public DeclarePatternRole createDeclarePatternRoleAction() {
-		DeclarePatternRole newAction = new DeclarePatternRole(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public GraphicalAction createGraphicalAction() {
-		GraphicalAction newAction = new GraphicalAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CreateDiagram createAddDiagramAction() {
-		CreateDiagram newAction = new CreateDiagram(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public AddEditionPattern createAddEditionPatternAction() {
-		AddEditionPattern newAction = new AddEditionPattern(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public ConditionalAction createConditionalAction() {
-		ConditionalAction newAction = new ConditionalAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public IterationAction createIterationAction() {
-		IterationAction newAction = new IterationAction(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneShape createCloneShapeAction() {
-		CloneShape newAction = new CloneShape(null);
-		if (getEditionPattern().getDefaultShapePatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneConnector createCloneConnectorAction() {
-		CloneConnector newAction = new CloneConnector(null);
-		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
-			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
-		}
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}
-
-	public CloneIndividual createCloneIndividualAction() {
-		CloneIndividual newAction = new CloneIndividual(null);
-		insertActionAtCurrentIndex(newAction);
-		return newAction;
-	}*/
-
 	/**
 	 * Creates a new {@link EditionAction} of supplied class, and add it to parent container at the index where this action is itself
 	 * registered<br>
@@ -433,5 +320,6 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		}
 
 	}
-
+	
+	
 }

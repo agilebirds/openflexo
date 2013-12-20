@@ -1,5 +1,6 @@
 package org.openflexo.foundation.view.diagram;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
@@ -14,6 +15,7 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramType;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
@@ -23,6 +25,7 @@ import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
@@ -67,6 +70,12 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	/*public DiagramModelSlot(ViewPointBuilder builder) {
 		super(builder);
 	}*/
+
+	
+	@Override
+	public Type getType() {
+		return DiagramType.getDiagramType((DiagramSpecification) getAddressedVirtualModel());
+	}
 
 	@Override
 	public String getFullyQualifiedName() {

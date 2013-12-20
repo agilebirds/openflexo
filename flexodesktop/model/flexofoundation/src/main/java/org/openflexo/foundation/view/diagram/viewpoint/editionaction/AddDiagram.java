@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -26,12 +27,14 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -43,6 +46,9 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(AddDiagram.class.getPackage().getName());
 
+	private DiagramSpecificationResource diagramSpecificationResource;
+	private String diagramSpecificationURI;
+
 	public AddDiagram(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -50,15 +56,22 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		if (getAssignation().isSet()) {
-			out.append(getAssignation().toString() + " = (", context);
+		DataBinding<Object> assig = getAssignation();
+		if (assig!=null && out != null && assig.isSet()) {
+			out.append(assig.toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo " + getDiagramSpecification().getURI() + " from " + getModelSlot().getName()
-				+ " {" + StringUtils.LINE_SEPARATOR, context);
-		out.append("}", context);
-		if (getAssignation().isSet()) {
-			out.append(")", context);
+		DiagramSpecification dSpec = getDiagramSpecification();
+		// NPE Protection
+		// TODO XtoF : when validating a VP, detect the fact that DiagSpec is null
+		if (dSpec != null){
+			out.append(getClass().getSimpleName() + " conformTo " + dSpec.getURI() + " from " + getModelSlot().getName()
+					+ " {" + StringUtils.LINE_SEPARATOR, context);
+			out.append("}", context);
+			if (getAssignation().isSet()) {
+				out.append(")", context);
+			}
 		}
+
 		return out.toString();
 	}
 
@@ -107,14 +120,55 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		this.diagramName = diagramName;
 	}
 
+
+	public DiagramSpecificationResource getDiagramSpecificationResource() {
+		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
+			DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+			if (diagramSpec != null){
+				diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+				logger.info("Looked-up " + diagramSpecificationResource);
+			}
+			else {
+				logger.warning("Enable to load Resource for DiagramSpec URI: " + diagramSpecificationURI);
+			}
+		}
+		return diagramSpecificationResource;
+	}
+
+	public void setDiagramSpecificationResource(DiagramSpecificationResource diagramSpecificationResource) {
+		this.diagramSpecificationResource = diagramSpecificationResource;
+	}
+
+	public String getDiagramSpecificationURI() {
+		if (diagramSpecificationResource != null) {
+			return diagramSpecificationResource.getURI();
+		}
+		return diagramSpecificationURI;
+	}
+
+	public void setDiagramSpecificationURI(String diagramSpecificationURI) {
+		this.diagramSpecificationURI = diagramSpecificationURI;
+	}
+
 	public DiagramSpecification getDiagramSpecification() {
+		DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+		return diagramSpec;
+	}
+
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+		diagramSpecificationResource = diagramSpecification.getResource();
+	}
+
+
+	
+	public DiagramSpecification getPRDiagramSpecification() {
 		if (getPatternRole() instanceof DiagramPatternRole) {
 			return getPatternRole().getDiagramSpecification();
 		}
 		return null;
 	}
 
-	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+	public void setPRDiagramSpecification(DiagramSpecification diagramSpecification) {
 		if (getPatternRole() instanceof DiagramPatternRole) {
 			getPatternRole().setDiagramSpecification(diagramSpecification);
 		}
@@ -122,7 +176,10 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	@Override
 	public Type getAssignableType() {
-		return View.class;
+		
+		DiagramSpecification drSpec = this.getDiagramSpecification();
+		
+		return getViewPoint().getInstanceType(drSpec);
 	}
 
 	@Override
@@ -133,7 +190,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
 		addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
 		addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
-		addDiagramAction.skipChoosePopup = true;
+		// addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
 		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
 			Diagram newDiagram = addDiagramAction.getNewDiagram();

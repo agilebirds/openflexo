@@ -37,7 +37,7 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter<Vir
 	@Override
 	public Type getType() {
 		if (getEditionPatternType() != null) {
-			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
+			return getViewPoint().getInstanceType(getEditionPatternType());
 		}
 		return EditionPatternInstance.class;
 	};

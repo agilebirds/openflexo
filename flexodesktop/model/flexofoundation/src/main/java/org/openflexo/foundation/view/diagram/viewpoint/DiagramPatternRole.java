@@ -7,13 +7,15 @@ import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
-public class DiagramPatternRole extends PatternRole<View> {
+public class DiagramPatternRole extends PatternRole<Diagram> {
 
 	private static final Logger logger = Logger.getLogger(DiagramPatternRole.class.getPackage().getName());
 
@@ -41,7 +43,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	@Override
 	public Type getType() {
-		return View.class;
+		return DiagramType.getDiagramType(this.getDiagramSpecification());
 	}
 
 	@Override
@@ -56,8 +58,14 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	public DiagramSpecificationResource getDiagramSpecificationResource() {
 		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
-			diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
-			logger.info("Looked-up " + diagramSpecificationResource);
+			DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+			if (diagramSpec != null){
+				diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+				logger.info("Looked-up " + diagramSpecificationResource);
+			}
+			else {
+				logger.warning("Enable to load Resource for DiagramSpec URI: " + diagramSpecificationURI);
+			}
 		}
 		return diagramSpecificationResource;
 	}
@@ -78,10 +86,8 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	public DiagramSpecification getDiagramSpecification() {
-		if (getDiagramSpecificationResource() != null) {
-			return getDiagramSpecificationResource().getDiagramSpecification();
-		}
-		return null;
+		DiagramSpecification diagramSpec = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI);
+		return diagramSpec;
 	}
 
 	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
@@ -94,7 +100,7 @@ public class DiagramPatternRole extends PatternRole<View> {
 	}
 
 	@Override
-	public ModelObjectActorReference<View> makeActorReference(View object, EditionPatternInstance epi) {
-		return new ModelObjectActorReference<View>(object, this, epi);
+	public ModelObjectActorReference<Diagram> makeActorReference(Diagram object, EditionPatternInstance epi) {
+		return new ModelObjectActorReference<Diagram>(object, this, epi);
 	}
 }

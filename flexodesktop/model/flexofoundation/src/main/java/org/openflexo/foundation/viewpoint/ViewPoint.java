@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -23,8 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -46,7 +49,9 @@ import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramType;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.VirtualModelInstanceType;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.VirtualModelCreated;
@@ -100,6 +105,48 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
 	private EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
+
+	// Maps to reference all the EditionPatternInstanceType, DiagramType, VirtualModelType used in this context
+
+	private Map<EditionPattern,EditionPatternInstanceType>  editionPatternTypesMap = new  HashMap<EditionPattern,EditionPatternInstanceType>();
+	private Map<EditionPattern,VirtualModelInstanceType>  virtualModelTypesMap= new HashMap<EditionPattern,VirtualModelInstanceType>();
+	private Map<EditionPattern,DiagramType>  diagramTypesMap = new HashMap<EditionPattern,DiagramType>();
+
+	/** 
+	 * Retrieves the right type given the EditionPattern 
+	 */
+
+	public EditionPatternInstanceType getInstanceType(EditionPattern anEditionPattern) {
+		EditionPatternInstanceType instanceType = null;
+
+		if (anEditionPattern != null) {
+			if (anEditionPattern instanceof DiagramSpecification){
+				instanceType = diagramTypesMap.get(anEditionPattern);
+				if (instanceType == null){
+					instanceType = new DiagramType((DiagramSpecification) anEditionPattern);
+					diagramTypesMap.put(anEditionPattern, (DiagramType) instanceType);
+				}
+
+			}
+			else if (anEditionPattern instanceof VirtualModel){
+				instanceType = virtualModelTypesMap.get(anEditionPattern);
+				if (instanceType == null){
+					instanceType = new VirtualModelInstanceType((VirtualModel) anEditionPattern);
+					virtualModelTypesMap.put(anEditionPattern, (VirtualModelInstanceType) instanceType);
+				}
+			}
+			else {
+				instanceType = editionPatternTypesMap.get(anEditionPattern);
+				if (instanceType == null){
+					instanceType = new EditionPatternInstanceType(anEditionPattern);
+					editionPatternTypesMap.put(anEditionPattern, instanceType);
+				}
+			}
+		}
+
+		return instanceType;
+	}
+
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation

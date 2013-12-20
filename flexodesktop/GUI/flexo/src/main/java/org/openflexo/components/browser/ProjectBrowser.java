@@ -43,6 +43,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ie.IEWOComponent;
+import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
@@ -1187,8 +1188,12 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	@Override
 	public boolean mayRepresents(FlexoObject anObject) {
-		if (anObject instanceof IEWOComponent) {
-			return _elements.get(anObject) != null || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
+		// NPE Protection
+		if (anObject instanceof IEWOComponent && _elements != null ) {
+			ComponentDefinition cd = ((IEWOComponent) anObject).getComponentDefinition();
+			if (cd != null){
+			return _elements.get(anObject) != null || mayRepresents(cd);
+			}
 		}
 		return _elements != null && anObject != null && _elements.get(anObject) != null;
 	}

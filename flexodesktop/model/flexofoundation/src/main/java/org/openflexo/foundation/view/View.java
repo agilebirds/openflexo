@@ -1,5 +1,6 @@
 /*
  * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -260,8 +261,14 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	public VirtualModelInstance<?, ?> getVirtualModelInstance(String name) {
 		for (VirtualModelInstance<?, ?> vmi : getVirtualModelInstances()) {
-			if (vmi.getName().equals(name)) {
-				return vmi;
+			String lName = vmi.getName();
+			if (lName != null){
+				if (vmi.getName().equals(name)) {
+					return vmi;
+				}
+			}
+			else{
+				logger.warning("Name of VirtualModel is null: " + this.toString());
 			}
 		}
 		return null;

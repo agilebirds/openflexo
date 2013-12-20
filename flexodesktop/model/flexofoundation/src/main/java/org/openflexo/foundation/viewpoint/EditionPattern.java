@@ -89,13 +89,14 @@ public class EditionPattern extends EditionPatternObject {
 	private EditionPatternStructuralFacet structuralFacet;
 	private EditionPatternBehaviouralFacet behaviouralFacet;
 
-	private EditionPatternInstanceType instanceType = new EditionPatternInstanceType(this);
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
+	
+	
 	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		if (builder != null) {
@@ -115,10 +116,6 @@ public class EditionPattern extends EditionPatternObject {
 			validableObjects.add(inspector);
 		}
 		return validableObjects;
-	}
-
-	public EditionPatternInstanceType getInstanceType() {
-		return instanceType;
 	}
 
 	public EditionPatternStructuralFacet getStructuralFacet() {

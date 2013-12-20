@@ -37,8 +37,8 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 
 	@Override
 	public Type getType() {
-		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
-	}
+		return this.getViewPoint().getInstanceType(getEditionPatternType());
+		}
 
 	@Override
 	public String getPreciseType() {

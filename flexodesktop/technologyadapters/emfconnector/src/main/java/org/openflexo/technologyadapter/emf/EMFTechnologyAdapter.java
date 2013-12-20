@@ -528,6 +528,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		EMFModelResource emfModelResource = EMFModelResourceImpl.makeEMFModelResource(modelUri, modelFile, emfMetaModelResource,
 				getTechnologyContextManager());
 		getTechnologyContextManager().registerResource(emfModelResource);
+		// XTOF: Commented out as it throws error when model is empty
+		/*
 		try {
 			emfModelResource.save(null);
 		} catch (SaveResourceException e) {
@@ -535,6 +537,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		}
 		System.out.println("Created empty model " + modelFile.getAbsolutePath() + " as " + modelUri + " conform to "
 				+ metaModelResource.getURI());
+				*/
 		return emfModelResource;
 	}
 

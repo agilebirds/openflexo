@@ -36,6 +36,7 @@ import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -54,11 +55,12 @@ import org.openflexo.toolbox.ChainedCollection;
  */
 public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
+
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());
 
 	private List<DiagramPalette> palettes;
 	private List<ExampleDiagram> exampleDiagrams;
-
+	
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation

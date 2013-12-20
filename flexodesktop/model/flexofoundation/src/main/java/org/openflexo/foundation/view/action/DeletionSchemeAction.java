@@ -89,8 +89,12 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	@Override
 	public VirtualModelInstance getVirtualModelInstance() {
 		if (vmInstance == null) {
-			if (getFocusedObject() instanceof VirtualModelInstance) {
+			FlexoModelObject vObject = getFocusedObject();
+			if (vObject instanceof VirtualModelInstance) {
 				vmInstance = (VirtualModelInstance) getFocusedObject();
+			}
+			else if (vObject instanceof EditionPatternInstance ) {
+				vmInstance = ((EditionPatternInstance) vObject).getVirtualModelInstance();
 			}
 		}
 		return vmInstance;
