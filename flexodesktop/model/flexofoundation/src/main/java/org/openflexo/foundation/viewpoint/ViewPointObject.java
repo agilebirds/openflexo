@@ -51,6 +51,8 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 
 	public ViewPoint getViewPoint();
 
+	public ViewPointLibrary getViewPointLibrary();
+
 	public ViewPointModelFactory getFactory();
 
 	public String getFMLRepresentation();
@@ -60,6 +62,11 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 	public static abstract class ViewPointObjectImpl extends FlexoObjectImpl implements ViewPointObject {
 
 		private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
+
+		@Override
+		public ViewPointLibrary getViewPointLibrary() {
+			return getViewPoint().getViewPointLibrary();
+		}
 
 		@Override
 		public InformationSpace getInformationSpace() {

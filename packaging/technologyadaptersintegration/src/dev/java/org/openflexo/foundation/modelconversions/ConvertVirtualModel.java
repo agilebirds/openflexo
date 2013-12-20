@@ -9,6 +9,7 @@ public class ConvertVirtualModel {
 
 	public static void main(String[] args) {
 		File currentDir = new File(System.getProperty("user.dir"));
+		File rootDir = currentDir.getParentFile().getParentFile().getParentFile();
 		File foundationResourceDir = new File(currentDir.getParentFile().getParentFile(),
 				"flexodesktop/model/flexofoundation/src/main/resources");
 		File foundationJavaDir = new File(currentDir.getParentFile().getParentFile(), "flexodesktop/model/flexofoundation/src/main/java");
@@ -21,7 +22,7 @@ public class ConvertVirtualModel {
 			e.printStackTrace();
 		}
 		File outputDir = new File(tempFile.getParentFile(), "PAMELAGenerator");
-		PAMELAGenerator generator = new PAMELAGenerator(mappingFile, foundationJavaDir, outputDir);
+		PAMELAGenerator generator = new PAMELAGenerator(mappingFile, rootDir, outputDir);
 	}
 
 }

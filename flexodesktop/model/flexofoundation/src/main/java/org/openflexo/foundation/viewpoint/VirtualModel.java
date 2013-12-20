@@ -48,11 +48,12 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.foundation.viewpoint.rm.VirtualModelResourceImpl;
 import org.openflexo.toolbox.ChainedCollection;
@@ -100,11 +101,11 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	 * @return
 	 */
 	public static VirtualModel newVirtualModel(String baseName, ViewPoint viewPoint) {
-		File diagramSpecificationDirectory = new File(viewPoint.getResource().getDirectory(), baseName);
+		File diagramSpecificationDirectory = new File(((ViewPointResource) viewPoint.getResource()).getDirectory(), baseName);
 		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 		ViewPointLibrary viewPointLibrary = viewPoint.getViewPointLibrary();
 		VirtualModelResource vmRes = VirtualModelResourceImpl.makeVirtualModelResource(diagramSpecificationDirectory,
-				diagramSpecificationXMLFile, viewPoint.getResource(), viewPointLibrary);
+				diagramSpecificationXMLFile, (ViewPointResource) viewPoint.getResource(), viewPointLibrary);
 		VirtualModel virtualModel = new VirtualModel(viewPoint);
 		vmRes.setResourceData(virtualModel);
 		virtualModel.setResource(vmRes);
@@ -637,20 +638,6 @@ public class VirtualModel extends EditionPattern implements FlexoMetaModel<Virtu
 	public TechnologyAdapter getTechnologyAdapter() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public LocalizedDictionary getLocalizedDictionary() {
-		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary();
-			localizedDictionary.setOwner(this);
-		}
-		return localizedDictionary;
-	}
-
-	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary) {
-		localizedDictionary.setOwner(this);
-		this.localizedDictionary = localizedDictionary;
 	}
 
 	/**

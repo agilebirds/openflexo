@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -65,7 +66,7 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoO
 	};
 
 	static {
-		FlexoObject.addActionForClass(CreateView.actionType, RepositoryFolder.class);
+		FlexoObjectImpl.addActionForClass(CreateView.actionType, RepositoryFolder.class);
 	}
 
 	private View newView;
@@ -141,7 +142,6 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, FlexoO
 		return errorMessage;
 	}
 
-	@Override
 	public boolean isValid() {
 
 		// System.out.println("viewpointResource=" + viewpointResource);

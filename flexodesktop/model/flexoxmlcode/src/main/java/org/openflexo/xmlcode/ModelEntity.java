@@ -293,6 +293,8 @@ public class ModelEntity {
 				}
 			}
 
+			System.out.println("Init class " + relatedClass);
+
 			// Looking for constructors
 			try {
 				constructorWithoutParameter = relatedClass.getConstructor((Class<?>[]) null);

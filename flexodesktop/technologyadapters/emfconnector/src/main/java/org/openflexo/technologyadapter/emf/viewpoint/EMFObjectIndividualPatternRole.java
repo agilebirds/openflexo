@@ -20,14 +20,12 @@
 package org.openflexo.technologyadapter.emf.viewpoint;
 
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 public class EMFObjectIndividualPatternRole extends IndividualPatternRole<EMFObjectIndividual> {
 
-	public EMFObjectIndividualPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public EMFObjectIndividualPatternRole() {
+		super();
 	}
 
 }

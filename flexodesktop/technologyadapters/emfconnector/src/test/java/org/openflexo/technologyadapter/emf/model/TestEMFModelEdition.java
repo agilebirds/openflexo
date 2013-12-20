@@ -38,11 +38,9 @@ import java.util.logging.Logger;
 import org.junit.Test;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.TestFlexoServiceManager;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
@@ -64,7 +62,7 @@ import org.openflexo.toolbox.FileResource;
  * 
  */
 public class TestEMFModelEdition {
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestEMFModelEdition.class.getPackage().getName());
 
 	@Test
 	public void test() {
@@ -113,9 +111,6 @@ public class TestEMFModelEdition {
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,7 +119,7 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividual addEMFObjectIndividual(EMFModelResource emfModelResource, String classURI) {
 		EMFObjectIndividual result = null;
-		AddEMFObjectIndividual addObject = new AddEMFObjectIndividual(null);
+		AddEMFObjectIndividual addObject = new AddEMFObjectIndividual();
 		// addObject.setEMFModelResource(emfModelResource);
 		// addObject.setEMFClassURI(classURI);
 		result = addObject.performAction(null);
@@ -134,7 +129,7 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividual removeEMFObjectIndividual(EMFModelResource emfModelResource, EMFObjectIndividual objectIndividual) {
 		EMFObjectIndividual result = null;
-		RemoveEMFObjectIndividual removeObject = new RemoveEMFObjectIndividual(null);
+		RemoveEMFObjectIndividual removeObject = new RemoveEMFObjectIndividual();
 		// removeObject.setEMFModelResource(emfModelResource);
 		// removeObject.setObjectIndividual(objectIndividual);
 		removeObject.performAction(null);
@@ -145,9 +140,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualAttributeDataPropertyValue addEMFObjectIndividualAttributeDataPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		AddEMFObjectIndividualAttributeDataPropertyValue addName = new AddEMFObjectIndividualAttributeDataPropertyValue(null);
+		AddEMFObjectIndividualAttributeDataPropertyValue addName = new AddEMFObjectIndividualAttributeDataPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeDataProperty((EMFAttributeDataProperty)
 		// emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
@@ -159,9 +154,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualAttributeDataPropertyValue removeEMFObjectIndividualAttributeDataPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		RemoveEMFObjectIndividualAttributeDataPropertyValue addName = new RemoveEMFObjectIndividualAttributeDataPropertyValue(null);
+		RemoveEMFObjectIndividualAttributeDataPropertyValue addName = new RemoveEMFObjectIndividualAttributeDataPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeDataProperty((EMFAttributeDataProperty)
 		// emfMetaModelResource.getResourceData(null).getDataProperty(propertyURI));
@@ -173,9 +168,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualAttributeObjectPropertyValue addEMFObjectIndividualAttributeObjectPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeObjectPropertyValue result = null;
-		AddEMFObjectIndividualAttributeObjectPropertyValue addName = new AddEMFObjectIndividualAttributeObjectPropertyValue(null);
+		AddEMFObjectIndividualAttributeObjectPropertyValue addName = new AddEMFObjectIndividualAttributeObjectPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
 		// propertyURI));
@@ -187,9 +182,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualAttributeObjectPropertyValue removeEMFObjectIndividualAttributeObjectPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualAttributeObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualAttributeObjectPropertyValue addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue(null);
+		RemoveEMFObjectIndividualAttributeObjectPropertyValue addName = new RemoveEMFObjectIndividualAttributeObjectPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setAttributeObjectProperty((EMFAttributeObjectProperty) emfMetaModelResource.getResourceData(null).getDataProperty(
 		// propertyURI));
@@ -201,9 +196,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualReferenceObjectPropertyValue addEMFObjectIndividualReferenceObjectPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		AddEMFObjectIndividualReferenceObjectPropertyValue addName = new AddEMFObjectIndividualReferenceObjectPropertyValue(null);
+		AddEMFObjectIndividualReferenceObjectPropertyValue addName = new AddEMFObjectIndividualReferenceObjectPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));
@@ -215,9 +210,9 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividualReferenceObjectPropertyValue removeEMFObjectIndividualReferenceObjectPropertyValue(
 			EMFMetaModelResource emfMetaModelResource, EMFObjectIndividual objectIndividual, String propertyURI, Object value)
-			throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
-		RemoveEMFObjectIndividualReferenceObjectPropertyValue addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue(null);
+		RemoveEMFObjectIndividualReferenceObjectPropertyValue addName = new RemoveEMFObjectIndividualReferenceObjectPropertyValue();
 		// addName.setObjectIndividual(objectIndividual);
 		// addName.setReferenceObjectProperty((EMFReferenceObjectProperty) emfMetaModelResource.getResourceData(null).getObjectProperty(
 		// propertyURI));
@@ -229,7 +224,7 @@ public class TestEMFModelEdition {
 
 	protected EMFObjectIndividual createParameterSet(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
 			String name, List<EMFObjectIndividual> ownedParameters) throws FileNotFoundException, ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FlexoException {
+			FlexoException {
 		EMFObjectIndividual result = null;
 		// ParameterSet object
 		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/ParameterSet");
@@ -245,8 +240,7 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividual createIntParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Integer value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FlexoException {
+			String name, Integer value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividual result = null;
 		// IntParameter object
 		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/IntParameterValue");
@@ -260,8 +254,7 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividual createDoubleParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Double value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FlexoException {
+			String name, Double value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividual result = null;
 		// DoubleParameter object
 		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/DoubleParameterValue");
@@ -275,8 +268,7 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividual createBoolParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, Boolean value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FlexoException {
+			String name, Boolean value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividual result = null;
 		// BoolParameter object
 		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/BoolParameterValue");
@@ -290,8 +282,7 @@ public class TestEMFModelEdition {
 	}
 
 	protected EMFObjectIndividual createStringParameter(EMFModelResource emfModelResource, EMFMetaModelResource emfMetaModelResource,
-			String name, String value) throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FlexoException {
+			String name, String value) throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		EMFObjectIndividual result = null;
 		// StringParameter object
 		result = addEMFObjectIndividual(emfModelResource, "http://www.thalesgroup.com/parameters/1.0/StringParameterValue");

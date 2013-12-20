@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.DeprecatedFlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.toolbox.FileUtils;
 
@@ -46,7 +46,7 @@ import org.openflexo.toolbox.FileUtils;
  * @param <R>
  * @param <TA>
  */
-public abstract class ResourceRepository<R extends FlexoResource<?>> extends DeprecatedFlexoObject implements DataFlexoObserver {
+public abstract class ResourceRepository<R extends FlexoResource<?>> extends DefaultFlexoObject implements DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(ResourceRepository.class.getPackage().getName());
 

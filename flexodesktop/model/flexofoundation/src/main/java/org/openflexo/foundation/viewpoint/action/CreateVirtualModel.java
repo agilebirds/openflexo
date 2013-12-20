@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -61,7 +61,7 @@ public class CreateVirtualModel extends FlexoAction<CreateVirtualModel, ViewPoin
 	};
 
 	static {
-		FlexoObject.addActionForClass(CreateVirtualModel.actionType, ViewPoint.class);
+		FlexoObjectImpl.addActionForClass(CreateVirtualModel.actionType, ViewPoint.class);
 	}
 
 	public String newVirtualModelName;

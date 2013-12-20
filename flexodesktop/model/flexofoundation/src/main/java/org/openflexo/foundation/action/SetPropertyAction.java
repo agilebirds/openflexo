@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**
@@ -81,7 +82,7 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	private boolean performValidate = true;
 
 	static {
-		FlexoObject.addActionForClass(actionType, FlexoObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	/**

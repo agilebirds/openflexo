@@ -35,7 +35,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFEnumClassPatternRole;
@@ -75,8 +74,8 @@ public class EMFMetaModelSlot extends ModelSlot<EMFMetaModel> {
 	 * 
 	 * @param builder
 	 */
-	public EMFMetaModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public EMFMetaModelSlot() {
+		super();
 	}
 
 	@Override
@@ -103,9 +102,9 @@ public class EMFMetaModelSlot extends ModelSlot<EMFMetaModel> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFClassClassPatternRole(null);
+			return (PR) new EMFClassClassPatternRole();
 		} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFEnumClassPatternRole(null);
+			return (PR) new EMFEnumClassPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;

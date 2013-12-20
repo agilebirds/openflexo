@@ -8,12 +8,15 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 
 /**
- * TODO: This class should disappear !!!!!
+ * This is the default non-abstract implementation of {@link FlexoObject}.<br>
+ * Use it only when you don't want to encode your model using PAMELA
+ * 
+ * TODO: This class should not be used
  * 
  * @author sylvain
  * 
  */
-public class DeprecatedFlexoObject extends FlexoObjectImpl {
+public class DefaultFlexoObject extends FlexoObjectImpl {
 
 	@Override
 	public void setCustomProperties(List<FlexoProperty> customProperties) {

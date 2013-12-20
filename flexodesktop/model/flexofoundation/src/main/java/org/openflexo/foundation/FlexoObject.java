@@ -42,6 +42,7 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -106,6 +107,8 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 	@Setter(DESCRIPTION_KEY)
 	public void setDescription(String description);
 
+	public boolean hasDescription();
+
 	@Getter(value = HAS_SPECIFIC_DESCRIPTIONS_KEY, defaultValue = "false")
 	@XMLAttribute(xmlTag = "useSpecificDescriptions")
 	public boolean getHasSpecificDescriptions();
@@ -119,7 +122,7 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 	@Setter(SPECIFIC_DESCRIPTIONS_KEY)
 	public void setSpecificDescriptions(Map<String, String> specificDescriptions);
 
-	@Getter(value = CUSTOM_PROPERTIES_KEY, cardinality = Cardinality.LIST)
+	@Getter(value = CUSTOM_PROPERTIES_KEY, cardinality = Cardinality.LIST, inverse = FlexoProperty.OWNER_KEY)
 	public List<FlexoProperty> getCustomProperties();
 
 	@Setter(CUSTOM_PROPERTIES_KEY)
@@ -130,6 +133,20 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 
 	@Remover(CUSTOM_PROPERTIES_KEY)
 	public void removeFromCustomProperties(FlexoProperty aCustomPropertie);
+
+	@Finder(attribute = FlexoProperty.NAME_KEY, collection = CUSTOM_PROPERTIES_KEY)
+	public FlexoProperty getPropertyNamed(String name);
+
+	public List<FlexoActionType<?, ?, ?>> getActionList();
+
+	@Deprecated
+	public void setChanged();
+
+	@Deprecated
+	public void notifyObservers();
+
+	@Deprecated
+	public void notifyObservers(DataModification arg);
 
 	public static abstract class FlexoObjectImpl extends FlexoObservable implements FlexoObject {
 
@@ -300,6 +317,7 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 		// Action management
 		// ***************************************************
 
+		@Override
 		public final List<FlexoActionType<?, ?, ?>> getActionList() {
 			return getActionList(getClass());
 		}
@@ -536,6 +554,7 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 			return getPropertyNamed(name) != null;
 		}
 
+		@Override
 		public FlexoProperty getPropertyNamed(String name) {
 			if (name == null) {
 				for (FlexoProperty p : getCustomProperties()) {
@@ -551,16 +570,6 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 				}
 			}
 			return null;
-		}
-
-		public String getNextPropertyName() {
-			String base = FlexoLocalization.localizedForKey("property");
-			String attempt = base;
-			int i = 1;
-			while (getPropertyNamed(attempt) != null) {
-				attempt = base + "-" + i++;
-			}
-			return attempt;
 		}
 
 		public List<FlexoProperty> getProperties(String name) {
@@ -603,6 +612,7 @@ public abstract interface FlexoObject extends AccessibleProxyObject, DeletablePr
 			}
 		}
 
+		@Override
 		public boolean hasDescription() {
 			return getDescription() != null && getDescription().trim().length() > 0;
 		}

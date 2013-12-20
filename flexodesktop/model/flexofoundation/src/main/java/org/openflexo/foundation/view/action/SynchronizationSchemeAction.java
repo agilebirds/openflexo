@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelInstanceObject;
@@ -123,7 +123,7 @@ public class SynchronizationSchemeAction extends
 		for (EditionPatternInstance epi : getVirtualModelInstance().getEPInstances(editionPatternType)) {
 			boolean allCriteriasMatching = true;
 			for (PatternRole pr : criterias.keySet()) {
-				if (!FlexoObject.areSameValue(epi.getPatternActor(pr), criterias.get(pr))) {
+				if (!FlexoObjectImpl.areSameValue(epi.getPatternActor(pr), criterias.get(pr))) {
 					allCriteriasMatching = false;
 				}
 			}

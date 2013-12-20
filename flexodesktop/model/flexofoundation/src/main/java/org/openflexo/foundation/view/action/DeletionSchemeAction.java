@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -65,7 +65,7 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, EditionPatternInstance.class);
+		FlexoObjectImpl.addActionForClass(actionType, EditionPatternInstance.class);
 	}
 
 	private VirtualModelInstance vmInstance;

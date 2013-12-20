@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.logging.FlexoLogger;
@@ -63,7 +64,7 @@ public class LoadResourceAction extends FlexoAction<LoadResourceAction, FlexoObj
 	};
 
 	static {
-		FlexoObject.addActionForClass(LoadResourceAction.actionType, FlexoObject.class);
+		FlexoObjectImpl.addActionForClass(LoadResourceAction.actionType, FlexoObject.class);
 	}
 
 	LoadResourceAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

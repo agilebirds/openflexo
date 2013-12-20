@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.junit.Test;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointImpl;
 
 /**
  * This unit test is intented to test ViewPoint creation facilities
@@ -14,7 +15,7 @@ public class TestCreateViewPoint extends ViewPointTestCase {
 	public void testCreateViewPoint() {
 		instanciateTestServiceManager();
 		System.out.println("ResourceCenter= " + resourceCenter);
-		ViewPoint newViewPoint = ViewPoint.newViewPoint("TestViewPoint", "http://openflexo.org/test/TestViewPoint",
+		ViewPoint newViewPoint = ViewPointImpl.newViewPoint("TestViewPoint", "http://openflexo.org/test/TestViewPoint",
 				resourceCenter.getDirectory(), serviceManager.getViewPointLibrary());
 	}
 

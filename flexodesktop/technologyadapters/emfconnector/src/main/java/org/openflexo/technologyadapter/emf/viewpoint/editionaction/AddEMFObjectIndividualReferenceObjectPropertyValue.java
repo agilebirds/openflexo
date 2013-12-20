@@ -43,7 +43,6 @@ import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -71,8 +70,8 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue extends
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualReferenceObjectPropertyValue(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddEMFObjectIndividualReferenceObjectPropertyValue() {
+		super();
 	}
 
 	@Override
@@ -191,7 +190,7 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue extends
 	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
 		TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getResourceData();
+		EMFModel model = modelSlotInstance.getAccessedResourceData();
 		// Add Reference in EMF
 		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action).getObject());
 		// if (referenceObjectProperty.getObject().getUpperBound() != 1) {

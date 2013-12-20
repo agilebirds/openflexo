@@ -31,7 +31,6 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.SelectIndividual;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFEnumClass;
@@ -49,8 +48,8 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EM
 
 	private static final Logger logger = Logger.getLogger(SelectEMFObjectIndividual.class.getPackage().getName());
 
-	public SelectEMFObjectIndividual(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SelectEMFObjectIndividual() {
+		super();
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EM
 
 		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
-		EMFModel emfModel = getModelSlotInstance(action).getResourceData();
+		EMFModel emfModel = getModelSlotInstance(action).getAccessedResourceData();
 		Resource resource = emfModel.getEMFResource();
 		IFlexoOntologyClass flexoOntologyClass = getType();
 		List<EObject> selectedEMFIndividuals = new ArrayList<EObject>();

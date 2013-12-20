@@ -23,18 +23,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 
 public class TestStringHasChanged {
 
 	@Test
 	public void testStringHasChanged() {
-		assertTrue(FlexoObject.stringHasChanged(null, "Something"));
-		assertTrue(FlexoObject.stringHasChanged("Something", null));
-		assertTrue(FlexoObject.stringHasChanged("Something", "something"));
-		assertTrue(FlexoObject.stringHasChanged("Something", "SomethingElse"));
-		assertFalse(FlexoObject.stringHasChanged("Something", "Something"));
-		assertFalse(FlexoObject.stringHasChanged(null, null));
+		assertTrue(FlexoObjectImpl.stringHasChanged(null, "Something"));
+		assertTrue(FlexoObjectImpl.stringHasChanged("Something", null));
+		assertTrue(FlexoObjectImpl.stringHasChanged("Something", "something"));
+		assertTrue(FlexoObjectImpl.stringHasChanged("Something", "SomethingElse"));
+		assertFalse(FlexoObjectImpl.stringHasChanged("Something", "Something"));
+		assertFalse(FlexoObjectImpl.stringHasChanged(null, null));
 	}
 
 }

@@ -34,7 +34,6 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -44,8 +43,8 @@ public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModelSl
 
 	private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
 
-	public SetEMFPropertyValue(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SetEMFPropertyValue() {
+		super();
 	}
 
 	private DataBinding<Object> subject;

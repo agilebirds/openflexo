@@ -29,10 +29,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.emf.EMFTechnologyContextManager;
@@ -96,7 +94,6 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 		return this.getFile().toURI().toString();
 	}
 
-	
 	/**
 	 * Instanciates a new {@link OWLOntologyResource} asserting we are about to built a resource matching an existing file in the file
 	 * system<br>
@@ -138,8 +135,7 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 	 * @throws FlexoException
 	 */
 	@Override
-	public EMFModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
+	public EMFModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException {
 		try {
 			getEMFResource().load(null);
 			EMFModelConverter converter = new EMFModelConverter();
@@ -165,9 +161,6 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {
@@ -201,9 +194,6 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			e.printStackTrace();
 			return null;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			return null;
 		} catch (FlexoException e) {

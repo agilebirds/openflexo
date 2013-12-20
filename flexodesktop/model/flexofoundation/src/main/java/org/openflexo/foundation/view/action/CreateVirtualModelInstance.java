@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoProjectObject;
@@ -96,7 +96,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	};
 
 	static {
-		FlexoObject.addActionForClass(CreateVirtualModelInstance.actionType, View.class);
+		FlexoObjectImpl.addActionForClass(CreateVirtualModelInstance.actionType, View.class);
 	}
 
 	private VirtualModelInstance newVirtualModelInstance;
@@ -190,7 +190,6 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		}
 	}
 
-	@Override
 	public boolean isValid() {
 		if (virtualModel == null) {
 			errorMessage = noVirtualModelSelectedMessage();

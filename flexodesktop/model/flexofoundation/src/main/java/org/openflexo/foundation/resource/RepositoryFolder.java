@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 
 /**
  * Represents a folder, as an organization item inside a {@link ResourceRepository}
@@ -13,7 +13,7 @@ import org.openflexo.foundation.FlexoObject;
  * @author sylvain
  * 
  */
-public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
+public class RepositoryFolder<R extends FlexoResource<?>> extends DefaultFlexoObject {
 
 	private static final Logger logger = Logger.getLogger(RepositoryFolder.class.getPackage().getName());
 

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -72,7 +72,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 
 	static {
 		// FlexoModelObject.addActionForClass(CreateModelSlot.actionType, ViewPoint.class);
-		FlexoObject.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
+		FlexoObjectImpl.addActionForClass(CreateModelSlot.actionType, VirtualModel.class);
 	}
 
 	public String modelSlotName;

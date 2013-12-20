@@ -77,10 +77,10 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 				EMFClassClass emfClassClass = (EMFClassClass) aClass;
 				// Create EMF Object
 				EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-				modelSlotInstance.getResourceData().getEMFResource().getContents().add(eObject);
+				modelSlotInstance.getAccessedResourceData().getEMFResource().getContents().add(eObject);
 				// Instanciate Wrapper.
-				result = modelSlotInstance.getResourceData().getConverter()
-						.convertObjectIndividual(modelSlotInstance.getResourceData(), eObject);
+				result = modelSlotInstance.getAccessedResourceData().getConverter()
+						.convertObjectIndividual(modelSlotInstance.getAccessedResourceData(), eObject);
 				for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 					if (dataPropertyAssertion.evaluateCondition(action)) {
 						logger.info("DataPropertyAssertion=" + dataPropertyAssertion);

@@ -82,7 +82,7 @@ public abstract class ViewResourceImpl extends PamelaResourceImpl<View, ViewMode
 			returned.setFile(xmlFile);
 			returned.setDirectory(viewDirectory);
 			returned.setViewLibrary(viewLibrary);
-			returned.setViewPointResource(viewPoint.getResource());
+			returned.setViewPointResource((ViewPointResource) viewPoint.getResource());
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewDirectory);
 			viewLibrary.registerResource(returned, folder);
 

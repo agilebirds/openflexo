@@ -27,7 +27,6 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.toolbox.StringUtils;
 
@@ -118,7 +117,7 @@ public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends Editi
 	}
 
 	public void setVariableName(String variableName) {
-		if (!FlexoObject.areSameValue(variableName, this.variableName)) {
+		if (!FlexoObjectImpl.areSameValue(variableName, this.variableName)) {
 			this.variableName = variableName;
 			if (StringUtils.isNotEmpty(variableName)) {
 				updateVariableAssignation();

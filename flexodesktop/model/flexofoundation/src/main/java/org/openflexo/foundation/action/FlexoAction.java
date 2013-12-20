@@ -25,13 +25,12 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
  * Abstract representation of an action on Flexo model (model edition primitive)
@@ -42,7 +41,7 @@ import org.openflexo.xmlcode.KeyValueDecoder;
  * 
  * @author sguerin
  */
-public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends FlexoObject {
+public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends FlexoObservable {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
 
@@ -53,13 +52,8 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	private Object _invoker;
 	private FlexoProgress _flexoProgress;
 	private FlexoEditor _editor;
-	private ExecutionContext _executionContext;
 
-	@Override
 	public boolean delete() {
-		if (_executionContext != null) {
-			_executionContext.delete();
-		}
 		_editor = null;
 		_flexoProgress = null;
 		_invoker = null;
@@ -71,6 +65,11 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		_focusedObject = null;
 		_actionType = null;
 		return true;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return null;
 	}
 
 	public enum ExecutionStatus {
@@ -223,12 +222,10 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 
 	protected abstract void doAction(Object context) throws FlexoException;
 
-	@Override
 	public Object getContext() {
 		return _context;
 	}
 
-	@Override
 	public void setContext(Object context) {
 		_context = context;
 	}
@@ -325,46 +322,8 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		boolean isFirst = true;
 		StringBuilder returned = new StringBuilder();
 		returned.append("FlexoAction: ").append(getClass().getName()).append("[");
-		if (getExecutionContext() != null) {
-			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
-				FlexoObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
-				returned.append(isFirst ? "" : " ").append("CREATED:").append(key).append("/").append(o);
-				isFirst = false;
-			}
-			for (String key : getExecutionContext().getObjectsDeletedWhileExecutingAction().keySet()) {
-				FlexoObject o = getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
-				returned.append(isFirst ? "" : " ").append("DELETED:").append(key).append("/").append(o);
-				isFirst = false;
-			}
-		}
 		returned.append("]");
 		return returned.toString();
-	}
-
-	public ExecutionContext getExecutionContext() {
-		// If not supplied, create default ExecutionContext
-		if (_executionContext == null) {
-			_executionContext = createDefaultExecutionContext();
-		}
-		return _executionContext;
-	}
-
-	public void setExecutionContext(ExecutionContext executionContext) {
-		_executionContext = executionContext;
-	}
-
-	protected ExecutionContext createDefaultExecutionContext() {
-		return new ExecutionContext(this);
-	}
-
-	public void objectCreated(String key, FlexoObject object) {
-		getExecutionContext().objectCreated(key, object);
-	}
-
-	public void objectDeleted(String key, FlexoObject object) {
-		if (getExecutionContext() != null) {
-			getExecutionContext().objectDeleted(key, object);
-		}
 	}
 
 	/**
@@ -394,145 +353,6 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	protected void replacedVectorPropertyValue(String propertyKey, int index, Object newValue, Object oldValue, Object originalValue) {
 	}
 
-	// ==============================================================
-	// ============= Key/Value coding implementation ================
-	// ==============================================================
-
-	@Override
-	public String valueForKey(String key) {
-		if (_editor != null) {
-			return KeyValueDecoder.valueForKey(this, key, _editor.getProject().getStringEncoder());
-		} else {
-			return KeyValueDecoder.valueForKey(this, key);
-		}
-	}
-
-	@Override
-	public void setValueForKey(String valueAsString, String key) {
-		if (_editor != null) {
-			KeyValueCoder.setValueForKey(this, valueAsString, key, _editor.getProject().getStringEncoder());
-		} else {
-			KeyValueCoder.setValueForKey(this, valueAsString, key);
-		}
-	}
-
-	@Override
-	public boolean booleanValueForKey(String key) {
-		return KeyValueDecoder.booleanValueForKey(this, key);
-	}
-
-	@Override
-	public byte byteValueForKey(String key) {
-		return KeyValueDecoder.byteValueForKey(this, key);
-	}
-
-	@Override
-	public char characterForKey(String key) {
-		return KeyValueDecoder.characterValueForKey(this, key);
-	}
-
-	@Override
-	public double doubleValueForKey(String key) {
-		return KeyValueDecoder.doubleValueForKey(this, key);
-	}
-
-	@Override
-	public float floatValueForKey(String key) {
-		return KeyValueDecoder.floatValueForKey(this, key);
-	}
-
-	@Override
-	public int integerValueForKey(String key) {
-		return KeyValueDecoder.integerValueForKey(this, key);
-	}
-
-	@Override
-	public long longValueForKey(String key) {
-		return KeyValueDecoder.longValueForKey(this, key);
-	}
-
-	@Override
-	public short shortValueForKey(String key) {
-		return KeyValueDecoder.shortValueForKey(this, key);
-	}
-
-	@Override
-	public void setBooleanValueForKey(boolean value, String key) {
-		KeyValueCoder.setBooleanValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setByteValueForKey(byte value, String key) {
-		KeyValueCoder.setByteValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setCharacterForKey(char value, String key) {
-		KeyValueCoder.setCharacterValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setDoubleValueForKey(double value, String key) {
-		KeyValueCoder.setDoubleValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setFloatValueForKey(float value, String key) {
-		KeyValueCoder.setFloatValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setIntegerValueForKey(int value, String key) {
-		KeyValueCoder.setIntegerValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setLongValueForKey(long value, String key) {
-		KeyValueCoder.setLongValueForKey(this, value, key);
-	}
-
-	@Override
-	public void setShortValueForKey(short value, String key) {
-		KeyValueCoder.setShortValueForKey(this, value, key);
-	}
-
-	@Override
-	public Object objectForKey(String key) {
-		return KeyValueDecoder.objectForKey(this, key);
-	}
-
-	@Override
-	public void setObjectForKey(Object value, String key) {
-		KeyValueCoder.setObjectForKey(this, value, key);
-	}
-
-	// Retrieving type
-
-	@Override
-	public Class<?> getTypeForKey(String key) {
-		return KeyValueDecoder.getTypeForKey(this, key);
-	}
-
-	@Override
-	public boolean isSingleProperty(String key) {
-		return KeyValueDecoder.isSingleProperty(this, key);
-	}
-
-	@Override
-	public boolean isArrayProperty(String key) {
-		return KeyValueDecoder.isArrayProperty(this, key);
-	}
-
-	@Override
-	public boolean isVectorProperty(String key) {
-		return KeyValueDecoder.isVectorProperty(this, key);
-	}
-
-	@Override
-	public boolean isHashtableProperty(String key) {
-		return KeyValueDecoder.isHashtableProperty(this, key);
-	}
-
 	// TODO: Should be refactored with injectors
 	public FlexoServiceManager getServiceManager() {
 		if (getEditor() != null) {
@@ -541,5 +361,14 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 			return ((FlexoProjectObject) getFocusedObject()).getServiceManager();
 		}
 		return null;
+	}
+
+	/**
+	 * Return flag indicating if this action is valid to be executed (true if the parameters of action are well set)
+	 * 
+	 * @return
+	 */
+	public boolean isValid() {
+		return true;
 	}
 }

@@ -366,7 +366,7 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 	/**
 	 * Marks this <tt>Observable</tt> object as having been changed; the <tt>hasChanged</tt> method will now return <tt>true</tt>.
 	 */
-	protected synchronized void setChanged() {
+	public synchronized void setChanged() {
 		changed = true;
 	}
 
@@ -378,7 +378,7 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 	 * @see java.util.Observable#notifyFlexoObservers()
 	 * @see java.util.Observable#notifyFlexoObservers(java.lang.Object)
 	 */
-	protected synchronized void clearChanged() {
+	public synchronized void clearChanged() {
 		changed = false;
 	}
 

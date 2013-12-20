@@ -22,11 +22,7 @@ package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.logging.Logger;
 
@@ -35,9 +31,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoResourceTree;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
 import org.openflexo.toolbox.IProgress;
@@ -66,8 +59,6 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
-			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
 		}
@@ -89,13 +80,12 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		// Load class and instanciate.
 
 		try {
-			if (f != null){
+			if (f != null) {
 
-				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));				
+				classLoader = new JarInDirClassLoader(Collections.singletonList(getFile()));
 				ePackageClass = classLoader.loadClass(getPackageClassName());
-				
-			}
-			else {
+
+			} else {
 				classLoader = EMFMetaModelResourceImpl.class.getClassLoader();
 				ePackageClass = classLoader.loadClass(getPackageClassName());
 			}
@@ -109,10 +99,9 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 					if (resourceFactoryClass != null) {
 						setResourceFactory((Resource.Factory) resourceFactoryClass.newInstance());
 
-
 						if (getPackage() != null && getPackage().getNsURI().equalsIgnoreCase(getURI()) && getResourceFactory() != null) {
 
-							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
+							EMFMetaModelConverter converter = new EMFMetaModelConverter(getTechnologyAdapter());
 							result = converter.convertMetaModel(getPackage());
 							result.setResource(this);
 							this.resourceData = result;
@@ -144,17 +133,6 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	@Override
 	public void save(IProgress progress) {
 		logger.info("MetaModel is not supposed to be modified.");
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.resource.FlexoResource#update()
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		logger.info("MetaModel is not supposed to be updated.");
-		return null;
 	}
 
 	@Override

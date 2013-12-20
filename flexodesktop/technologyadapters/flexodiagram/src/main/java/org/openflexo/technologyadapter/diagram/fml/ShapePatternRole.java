@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 

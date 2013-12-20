@@ -29,7 +29,8 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests

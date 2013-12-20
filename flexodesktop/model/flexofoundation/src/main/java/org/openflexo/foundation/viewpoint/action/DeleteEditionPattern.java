@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -59,7 +59,7 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, Edit
 	};
 
 	static {
-		FlexoObject.addActionForClass(DeleteEditionPattern.actionType, EditionPattern.class);
+		FlexoObjectImpl.addActionForClass(DeleteEditionPattern.actionType, EditionPattern.class);
 	}
 
 	DeleteEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {

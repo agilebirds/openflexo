@@ -42,7 +42,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
@@ -123,8 +122,8 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	 * 
 	 * @param builder
 	 */
-	public EMFModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public EMFModelSlot() {
+		super();
 	}
 
 	/**
@@ -161,11 +160,11 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFObjectIndividualPatternRole(null);
+			return (PR) new EMFObjectIndividualPatternRole();
 		} else if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFClassClassPatternRole(null);
+			return (PR) new EMFClassClassPatternRole();
 		} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EMFEnumClassPatternRole(null);
+			return (PR) new EMFEnumClassPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -182,19 +181,19 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEMFObjectIndividual(null);
+			return (EA) new AddEMFObjectIndividual();
 		} else if (AddEMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEMFObjectIndividualAttributeDataPropertyValue(null);
+			return (EA) new AddEMFObjectIndividualAttributeDataPropertyValue();
 		} else if (AddEMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEMFObjectIndividualAttributeObjectPropertyValue(null);
+			return (EA) new AddEMFObjectIndividualAttributeObjectPropertyValue();
 		} else if (AddEMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEMFObjectIndividualReferenceObjectPropertyValue(null);
+			return (EA) new AddEMFObjectIndividualReferenceObjectPropertyValue();
 		} else if (RemoveEMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new RemoveEMFObjectIndividualAttributeDataPropertyValue(null);
+			return (EA) new RemoveEMFObjectIndividualAttributeDataPropertyValue();
 		} else if (RemoveEMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new RemoveEMFObjectIndividualAttributeObjectPropertyValue(null);
+			return (EA) new RemoveEMFObjectIndividualAttributeObjectPropertyValue();
 		} else if (RemoveEMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new RemoveEMFObjectIndividualReferenceObjectPropertyValue(null);
+			return (EA) new RemoveEMFObjectIndividualReferenceObjectPropertyValue();
 		}
 		return null;
 	}
@@ -202,7 +201,7 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEMFObjectIndividual.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectEMFObjectIndividual(null);
+			return (FR) new SelectEMFObjectIndividual();
 		}
 		return null;
 	}

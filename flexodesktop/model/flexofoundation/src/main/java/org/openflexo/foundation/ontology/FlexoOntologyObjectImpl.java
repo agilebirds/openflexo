@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 
 /**
  * This is the default abstract implementation of all objects encoding models or metamodels conform to FlexoOntology layer
@@ -29,7 +29,7 @@ import org.openflexo.foundation.FlexoObject;
  * @author sylvain
  * 
  */
-public abstract class FlexoOntologyObjectImpl extends FlexoObject {
+public abstract class FlexoOntologyObjectImpl extends DefaultFlexoObject {
 
 	private static final Logger logger = Logger.getLogger(FlexoOntologyObjectImpl.class.getPackage().getName());
 

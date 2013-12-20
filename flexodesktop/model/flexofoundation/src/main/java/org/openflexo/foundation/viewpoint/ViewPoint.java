@@ -46,10 +46,13 @@ import org.openflexo.foundation.viewpoint.dm.VirtualModelDeleted;
 import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.foundation.viewpoint.rm.ViewPointResourceImpl;
 import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
+import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -100,8 +103,8 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 	public static final String MODEL_VERSION_KEY = "modelVersion";
 	@PropertyIdentifier(type = LocalizedDictionary.class)
 	public static final String LOCALIZED_DICTIONARY_KEY = "localizedDictionary";
-
-	public ViewPointLibrary getViewPointLibrary();
+	@PropertyIdentifier(type = List.class)
+	public static final String VIRTUAL_MODELS_KEY = "virtualModels";
 
 	@Getter(value = VIEW_POINT_URI_KEY)
 	@XMLAttribute(xmlTag = "uri")
@@ -130,6 +133,39 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 	@Setter(LOCALIZED_DICTIONARY_KEY)
 	public void setLocalizedDictionary(LocalizedDictionary localizedDictionary);
 
+	/**
+	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
+	public EditionPattern getEditionPattern(String editionPatternId);
+
+	/**
+	 * Return all {@link VirtualModel} defined in this {@link ViewPoint}
+	 * 
+	 * @return
+	 */
+	@Getter(value = VIRTUAL_MODELS_KEY, cardinality = Cardinality.LIST/*, inverse = VirtualModel.VIEWPOINT_KEY*/)
+	public List<VirtualModel> getVirtualModels();
+
+	@Setter(VIRTUAL_MODELS_KEY)
+	public void setVirtualModels(Vector<VirtualModel> virtualModels);
+
+	@Adder(VIRTUAL_MODELS_KEY)
+	public void addToVirtualModels(VirtualModel virtualModel);
+
+	@Remover(VIRTUAL_MODELS_KEY)
+	public void removeFromVirtualModels(VirtualModel virtualModel);
+
+	public VirtualModel getVirtualModelNamed(String virtualModelName);
+
+	/**
+	 * Default implementation for {@link ViewPoint}
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	public static abstract class ViewPointImpl extends NamedViewPointObjectImpl implements ViewPoint {
 
 		private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
@@ -373,16 +409,19 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 		 * 
 		 * @return
 		 */
+		@Override
 		public List<VirtualModel> getVirtualModels() {
 			loadVirtualModelsWhenUnloaded();
 			return virtualModels;
 		}
 
+		@Override
 		public void setVirtualModels(Vector<VirtualModel> virtualModels) {
 			loadVirtualModelsWhenUnloaded();
 			this.virtualModels = virtualModels;
 		}
 
+		@Override
 		public void addToVirtualModels(VirtualModel virtualModel) {
 			loadVirtualModelsWhenUnloaded();
 			virtualModel.setViewPoint(this);
@@ -391,6 +430,7 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 			notifyObservers(new VirtualModelCreated(virtualModel));
 		}
 
+		@Override
 		public void removeFromVirtualModels(VirtualModel virtualModel) {
 			loadVirtualModelsWhenUnloaded();
 			virtualModel.setViewPoint(null);
@@ -404,6 +444,7 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 		 * 
 		 * @return
 		 */
+		@Override
 		public VirtualModel getVirtualModelNamed(String virtualModelName) {
 			loadVirtualModelsWhenUnloaded();
 			for (VirtualModel vm : getVirtualModels()) {
@@ -443,6 +484,7 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 		 * @param editionPatternId
 		 * @return
 		 */
+		@Override
 		public EditionPattern getEditionPattern(String editionPatternId) {
 			for (VirtualModel vm : getVirtualModels()) {
 				EditionPattern returned = vm.getEditionPattern(editionPatternId);

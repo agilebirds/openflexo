@@ -27,7 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
@@ -47,7 +47,7 @@ import org.openflexo.xmlcode.StringEncoder;
  * @author sylvain
  * 
  */
-public class ViewPointLibrary extends FlexoObject implements FlexoService, Validable {
+public class ViewPointLibrary extends DefaultFlexoObject implements FlexoService, Validable {
 
 	private static final Logger logger = Logger.getLogger(ViewPointLibrary.class.getPackage().getName());
 

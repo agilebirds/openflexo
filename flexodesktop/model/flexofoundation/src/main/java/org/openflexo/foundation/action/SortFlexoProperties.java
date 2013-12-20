@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
 
 public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoObject, FlexoObject> {
@@ -51,7 +52,7 @@ public class SortFlexoProperties extends FlexoAction<SortFlexoProperties, FlexoO
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, FlexoObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	private String name;

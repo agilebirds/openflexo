@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -60,7 +60,7 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualMod
 	};
 
 	static {
-		FlexoObject.addActionForClass(AddEditionPattern.actionType, VirtualModel.class);
+		FlexoObjectImpl.addActionForClass(AddEditionPattern.actionType, VirtualModel.class);
 	}
 
 	private String _newEditionPatternName;

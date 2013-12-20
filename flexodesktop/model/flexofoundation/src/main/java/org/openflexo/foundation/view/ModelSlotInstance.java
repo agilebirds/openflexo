@@ -104,15 +104,32 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 		return modelSlot;
 	}
 
+	/**
+	 * Return the data this model slot gives access to.<br>
+	 * This is the data contractualized by the related model slot
+	 * 
+	 * @return
+	 */
+	public RD getAccessedResourceData() {
+		return accessedResourceData;
+	}
+
+	/**
+	 * Sets the data this model slot gives access to.<br>
+	 * 
+	 * @param accessedResourceData
+	 */
 	public void setAccessedResourceData(RD accessedResourceData) {
 		this.accessedResourceData = accessedResourceData;
 		this.resource = (TechnologyAdapterResource<RD, ?>) accessedResourceData.getResource();
 	}
 
-	public RD getAccessedResourceData() {
-		return accessedResourceData;
-	}
-
+	/**
+	 * Return the resource of the data this model slot gives access to.<br>
+	 * This is the data contractualized by the related model slot
+	 * 
+	 * @return
+	 */
 	public TechnologyAdapterResource<RD, ?> getResource() {
 		return resource;
 	}

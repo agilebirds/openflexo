@@ -47,7 +47,7 @@ public interface FlexoProperty extends FlexoObject {
 	@Setter(VALUE_KEY)
 	public void setValue(String value);
 
-	@Getter(value = OWNER_KEY, ignoreType = true)
+	@Getter(value = OWNER_KEY, ignoreType = true, inverse = FlexoObject.CUSTOM_PROPERTIES_KEY)
 	public FlexoObject getOwner();
 
 	@Setter(OWNER_KEY)
@@ -67,15 +67,6 @@ public interface FlexoProperty extends FlexoObject {
 		public FlexoProperty(FlexoProjectBuilder builder) {
 			this(builder.project);
 		}*/
-
-		public FlexoPropertyImpl() {
-			super();
-		}
-
-		public FlexoPropertyImpl(FlexoObject owner) {
-			this();
-			this.owner = owner;
-		}
 
 		@Override
 		public boolean delete(Object... context) {

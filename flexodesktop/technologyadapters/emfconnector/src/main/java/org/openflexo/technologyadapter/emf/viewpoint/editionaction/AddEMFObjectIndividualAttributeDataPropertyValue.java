@@ -42,7 +42,6 @@ import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
@@ -69,8 +68,8 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 	 * 
 	 * @param builder
 	 */
-	public AddEMFObjectIndividualAttributeDataPropertyValue(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddEMFObjectIndividualAttributeDataPropertyValue() {
+		super();
 	}
 
 	@Override
@@ -181,7 +180,7 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
 		TypeAwareModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getResourceData();
+		EMFModel model = modelSlotInstance.getAccessedResourceData();
 		// // Add Attribute in EMF
 		getSubject(action).getObject().eSet(((EMFAttributeDataProperty) getDataProperty()).getObject(), getValue(action));
 		// // Instanciate Wrapper

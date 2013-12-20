@@ -24,7 +24,12 @@ import java.util.Vector;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
+import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.foundation.resource.PamelaResource;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.model.factory.ModelFactory;
 
 public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoObject, FlexoObject> {
 
@@ -49,7 +54,7 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoObject,
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, FlexoObject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoObject.class);
 	}
 
 	private String name;
@@ -66,16 +71,26 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoObject,
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		if (getFocusedObject() != null) {
-			createdProperty = new FlexoProperty(getFocusedObject());
-			if (getName() != null) {
-				createdProperty.setName(getName());
-			} else {
-				createdProperty.setName(getFocusedObject().getNextPropertyName());
+
+			if (getFocusedObject() instanceof InnerResourceData
+					&& ((InnerResourceData) getFocusedObject()).getResourceData().getResource() instanceof PamelaResource) {
+
+				ModelFactory factory = ((PamelaResource) ((InnerResourceData) getFocusedObject()).getResourceData().getResource())
+						.getFactory();
+
+				createdProperty = factory.newInstance(FlexoProperty.class);
+				createdProperty.setOwner(getFocusedObject());
+
+				if (getName() != null) {
+					createdProperty.setName(getName());
+				} else {
+					createdProperty.setName(getNextPropertyName(getFocusedObject()));
+				}
+				if (getValue() != null) {
+					createdProperty.setValue(getValue());
+				}
+				getFocusedObject().addToCustomProperties(createdProperty);
 			}
-			if (getValue() != null) {
-				createdProperty.setValue(getValue());
-			}
-			getFocusedObject().addToCustomProperties(createdProperty, isInsertSorted());
 		}
 	}
 
@@ -109,6 +124,16 @@ public class AddFlexoProperty extends FlexoAction<AddFlexoProperty, FlexoObject,
 
 	public void setInsertSorted(boolean insertSorted) {
 		this.insertSorted = insertSorted;
+	}
+
+	public String getNextPropertyName(FlexoObject owner) {
+		String base = FlexoLocalization.localizedForKey("property");
+		String attempt = base;
+		int i = 1;
+		while (owner.getPropertyNamed(attempt) != null) {
+			attempt = base + "-" + i++;
+		}
+		return attempt;
 	}
 
 }

@@ -62,13 +62,17 @@ public class PAMELAGenerator {
 			ModelEntity entity = it.next();
 			// System.out.println("entity: " + entity.getName());
 			File sourceFile = getSourceFile(entity);
-			System.out.println("Processing source file: " + sourceFile);
-			try {
+			if (sourceFile == null) {
+				System.err.println("ERROR: cannot lookup source file for " + entity.getName());
+			} else {
+				System.out.println("Processing source file: " + sourceFile);
+			}
+			/*try {
 				generateEntity(entity, sourceFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 
 		/*Class builderClass = xmlMapping.builderClass();

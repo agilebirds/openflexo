@@ -25,7 +25,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -74,8 +74,8 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 	};
 
 	static {
-		FlexoObject.addActionForClass(CreatePatternRole.actionType, EditionPattern.class);
-		FlexoObject.addActionForClass(CreatePatternRole.actionType, EditionPatternStructuralFacet.class);
+		FlexoObjectImpl.addActionForClass(CreatePatternRole.actionType, EditionPattern.class);
+		FlexoObjectImpl.addActionForClass(CreatePatternRole.actionType, EditionPatternStructuralFacet.class);
 	}
 
 	private String patternRoleName;

@@ -32,7 +32,6 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObjectPropertyValue;
@@ -52,8 +51,8 @@ public class RemoveEMFObjectIndividualAttributeObjectPropertyValue extends
 	 * 
 	 * @param builder
 	 */
-	public RemoveEMFObjectIndividualAttributeObjectPropertyValue(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public RemoveEMFObjectIndividualAttributeObjectPropertyValue() {
+		super();
 	}
 
 	/**

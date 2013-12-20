@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -61,7 +61,7 @@ public class DuplicateEditionPattern extends FlexoAction<DuplicateEditionPattern
 	};
 
 	static {
-		FlexoObject.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
+		FlexoObjectImpl.addActionForClass(DuplicateEditionPattern.actionType, EditionPattern.class);
 	}
 
 	DuplicateEditionPattern(EditionPattern focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {

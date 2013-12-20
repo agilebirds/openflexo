@@ -26,7 +26,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -75,8 +75,8 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 	};
 
 	static {
-		FlexoObject.addActionForClass(CreateEditionAction.actionType, EditionScheme.class);
-		FlexoObject.addActionForClass(CreateEditionAction.actionType, EditionAction.class);
+		FlexoObjectImpl.addActionForClass(CreateEditionAction.actionType, EditionScheme.class);
+		FlexoObjectImpl.addActionForClass(CreateEditionAction.actionType, EditionAction.class);
 	}
 
 	public static enum CreateEditionActionChoice {

@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.toolbox.IProgress;
@@ -23,7 +24,7 @@ import org.openflexo.toolbox.IProgress;
  * @author Sylvain
  * 
  */
-public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends FlexoObject implements FlexoResource<RD> {
+public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends FlexoObjectImpl implements FlexoResource<RD> {
 
 	static final Logger logger = Logger.getLogger(FlexoResourceImpl.class.getPackage().getName());
 

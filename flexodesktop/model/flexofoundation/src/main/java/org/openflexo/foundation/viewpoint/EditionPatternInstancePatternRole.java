@@ -5,7 +5,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
-import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
+
 
 public class EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance> {
 

@@ -21,9 +21,9 @@
 		<property name="modelSlots" type="vector" contains="org.openflexo.foundation.technologyadapter.ModelSlot" primary="YES"/>
 	</entity>
 
-	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification"
+	<!--  <entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification"
 		xmlTag="DiagramSpecification" finalizer="finalizeDeserialization">
-	</entity>
+	</entity>-->
 
 	<entity name="org.openflexo.foundation.technologyadapter.ModelSlot" abstract="yes" contexts="Addressed">
 		<property name="isRequired" xmlTag="isRequired" attribute="YES" />

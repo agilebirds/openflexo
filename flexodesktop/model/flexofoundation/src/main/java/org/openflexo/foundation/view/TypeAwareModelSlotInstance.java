@@ -54,6 +54,12 @@ public class TypeAwareModelSlotInstance<M extends FlexoModel<M, MM>, MM extends 
 		super(vmInstance, modelSlot);
 	}
 
+	/**
+	 * Return the data this model slot gives access to.<br>
+	 * This is the data contractualized by the related model slot
+	 * 
+	 * @return
+	 */
 	@Override
 	public M getAccessedResourceData() {
 		if (getVirtualModelInstance() != null && accessedResourceData == null && StringUtils.isNotEmpty(modelURI)) {

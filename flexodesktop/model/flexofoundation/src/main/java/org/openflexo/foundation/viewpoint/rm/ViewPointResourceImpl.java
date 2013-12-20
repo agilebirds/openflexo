@@ -27,6 +27,7 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.utils.XMLUtils;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointImpl;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointModelFactory;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -193,7 +194,7 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 
 		relativePathFileConverter = new RelativePathFileConverter(getDirectory());
 
-		ViewPoint returned = super.loadResourceData(progress);
+		ViewPointImpl returned = (ViewPointImpl) super.loadResourceData(progress);
 
 		String baseName = getDirectory().getName().substring(0, getDirectory().getName().length() - 10);
 

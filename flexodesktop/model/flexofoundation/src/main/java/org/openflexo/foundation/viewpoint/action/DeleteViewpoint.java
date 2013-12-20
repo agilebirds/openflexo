@@ -24,7 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -59,7 +59,7 @@ public class DeleteViewpoint extends FlexoAction<DeleteViewpoint, ViewPoint, Vie
 	};
 
 	static {
-		FlexoObject.addActionForClass(DeleteViewpoint.actionType, ViewPoint.class);
+		FlexoObjectImpl.addActionForClass(DeleteViewpoint.actionType, ViewPoint.class);
 	}
 
 	DeleteViewpoint(ViewPoint focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {

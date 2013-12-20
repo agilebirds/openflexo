@@ -37,12 +37,13 @@ import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
@@ -61,7 +62,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  * @see org.openflexo.foundation.view.View
  * @see org.openflexo.foundation.view.ModelSlotInstance
  * */
-public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointObject {
+public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointObjectImpl {
 
 	private static final Logger logger = Logger.getLogger(ModelSlot.class.getPackage().getName());
 
@@ -391,6 +392,162 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 
 	public String getModelSlotDescription() {
 		return getTechnologyAdapter().getName();
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
