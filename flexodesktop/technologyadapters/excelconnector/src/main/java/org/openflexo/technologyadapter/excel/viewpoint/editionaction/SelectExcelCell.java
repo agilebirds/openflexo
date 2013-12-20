@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
@@ -20,9 +19,8 @@ public class SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell
 
 	private static final Logger logger = Logger.getLogger(SelectExcelCell.class.getPackage().getName());
 
-	public SelectExcelCell(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-		// TODO Auto-generated constructor stub
+	public SelectExcelCell() {
+		super();
 	}
 
 	@Override
@@ -42,11 +40,11 @@ public class SelectExcelCell extends FetchRequest<BasicExcelModelSlot, ExcelCell
 			return null;
 		}
 
-		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getResourceData();
+		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getAccessedResourceData();
 
 		List<ExcelCell> selectedExcelCells = new ArrayList<ExcelCell>(0);
-		for(ExcelSheet excelSheet : excelWorkbook.getExcelSheets()){
-			for(ExcelRow excelRow : excelSheet.getExcelRows()){
+		for (ExcelSheet excelSheet : excelWorkbook.getExcelSheets()) {
+			for (ExcelRow excelRow : excelSheet.getExcelRows()) {
 				selectedExcelCells.addAll(excelRow.getExcelCells());
 			}
 		}

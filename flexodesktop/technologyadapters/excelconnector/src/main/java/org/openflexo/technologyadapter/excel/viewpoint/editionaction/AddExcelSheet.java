@@ -13,7 +13,6 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
@@ -26,18 +25,18 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
 	private DataBinding<String> sheetName;
-	
+
 	private DataBinding<List<ExcelRow>> sheetRows;
-	
-	public AddExcelSheet(VirtualModelBuilder builder) {
-		super(builder);
+
+	public AddExcelSheet() {
+		super();
 	}
 
 	@Override
 	public Type getAssignableType() {
 		return ExcelSheet.class;
 	}
-	
+
 	@Override
 	public ExcelSheet performAction(EditionSchemeAction action) {
 
@@ -45,25 +44,23 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		if (modelSlotInstance.getResourceData() != null) {
-			Workbook wb = modelSlotInstance.getResourceData().getWorkbook();
+			Workbook wb = modelSlotInstance.getAccessedResourceData().getWorkbook();
 			Sheet sheet = null;
 			try {
-				if(wb!=null){
+				if (wb != null) {
 					String name = getSheetName().getBindingValue(action);
-					if(name!=null){
+					if (name != null) {
 						// Create an Excel Sheet
 						sheet = wb.createSheet(name);
 						// Instanciate Wrapper.
-						result = modelSlotInstance.getResourceData().getConverter()
-								.convertExcelSheetToSheet(sheet, modelSlotInstance.getResourceData(), null);
-						modelSlotInstance.getResourceData().addToExcelSheets(result);
-						modelSlotInstance.getResourceData().setIsModified();
-					}
-					else{
+						result = modelSlotInstance.getAccessedResourceData().getConverter()
+								.convertExcelSheetToSheet(sheet, modelSlotInstance.getAccessedResourceData(), null);
+						modelSlotInstance.getAccessedResourceData().addToExcelSheets(result);
+						modelSlotInstance.getAccessedResourceData().setIsModified();
+					} else {
 						logger.warning("Create a sheet requires a name");
 					}
-				}
-				else{
+				} else {
 					logger.warning("Create a sheet requires a workbook");
 				}
 			} catch (TypeMismatchException e) {
@@ -76,7 +73,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-				
+
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
 			return null;
@@ -125,5 +122,5 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 		}
 		this.sheetRows = sheetRows;
 	}
-	
+
 }

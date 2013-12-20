@@ -11,7 +11,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
@@ -24,10 +23,9 @@ public class SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow> 
 	private static final Logger logger = Logger.getLogger(SelectExcelRow.class.getPackage().getName());
 
 	private DataBinding<ExcelSheet> excelSheet;
-	
-	public SelectExcelRow(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-		// TODO Auto-generated constructor stub
+
+	public SelectExcelRow() {
+		super();
 	}
 
 	@Override
@@ -47,18 +45,17 @@ public class SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow> 
 			return null;
 		}
 
-		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getResourceData();
+		ExcelWorkbook excelWorkbook = (ExcelWorkbook) getModelSlotInstance(action).getAccessedResourceData();
 
 		List<ExcelRow> selectedExcelRows = new ArrayList<ExcelRow>();
 		ExcelSheet excelSheet;
 		try {
 			excelSheet = getExcelSheet().getBindingValue(action);
-		
-			if(excelSheet!=null){
+
+			if (excelSheet != null) {
 				selectedExcelRows.addAll(excelSheet.getExcelRows());
-			}
-			else{
-				for(ExcelSheet excelSheetItem : excelWorkbook.getExcelSheets()){
+			} else {
+				for (ExcelSheet excelSheetItem : excelWorkbook.getExcelSheets()) {
 					selectedExcelRows.addAll(excelSheetItem.getExcelRows());
 				}
 			}
@@ -77,7 +74,7 @@ public class SelectExcelRow extends FetchRequest<BasicExcelModelSlot, ExcelRow> 
 
 		return returned;
 	}
-	
+
 	public DataBinding<ExcelSheet> getExcelSheet() {
 		if (excelSheet == null) {
 			excelSheet = new DataBinding<ExcelSheet>(this, ExcelSheet.class, DataBinding.BindingDefinitionType.GET);

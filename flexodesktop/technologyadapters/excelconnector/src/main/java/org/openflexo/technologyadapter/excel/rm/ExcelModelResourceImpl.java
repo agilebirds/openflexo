@@ -27,10 +27,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
@@ -121,8 +119,7 @@ public abstract class ExcelModelResourceImpl extends FlexoFileResourceImpl<Excel
 	 * @throws FlexoException
 	 */
 	@Override
-	public ExcelModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
+	public ExcelModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException {
 		ExcelModel resourceData = null; // TODO: insert loading code here
 		setResourceData(resourceData);
 		return resourceData;
@@ -142,9 +139,6 @@ public abstract class ExcelModelResourceImpl extends FlexoFileResourceImpl<Excel
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {
@@ -178,9 +172,6 @@ public abstract class ExcelModelResourceImpl extends FlexoFileResourceImpl<Excel
 			e.printStackTrace();
 			return null;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			return null;
 		} catch (FlexoException e) {

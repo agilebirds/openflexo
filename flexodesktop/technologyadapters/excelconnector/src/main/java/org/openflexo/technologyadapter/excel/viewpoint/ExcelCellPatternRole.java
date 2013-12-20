@@ -24,13 +24,12 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 
 public class ExcelCellPatternRole extends PatternRole<ExcelCell> {
 
-	public ExcelCellPatternRole(VirtualModelBuilder builder) {
-		super(builder);
+	public ExcelCellPatternRole() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

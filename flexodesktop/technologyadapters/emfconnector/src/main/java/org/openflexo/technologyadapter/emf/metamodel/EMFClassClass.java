@@ -96,18 +96,6 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getDescription()
 	 */
 	@Override

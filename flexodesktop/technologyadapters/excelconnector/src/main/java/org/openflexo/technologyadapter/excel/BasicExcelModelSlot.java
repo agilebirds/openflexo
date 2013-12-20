@@ -40,7 +40,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
@@ -92,8 +91,8 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	}
 
-	public BasicExcelModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public BasicExcelModelSlot() {
+		super();
 		uriProcessor = new BasicExcelModelSlotURIProcessor();
 	}
 
@@ -113,11 +112,11 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelSheetPatternRole(null);
+			return (PR) new ExcelSheetPatternRole();
 		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelCellPatternRole(null);
+			return (PR) new ExcelCellPatternRole();
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelRowPatternRole(null);
+			return (PR) new ExcelRowPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -146,13 +145,13 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelSheet(null);
+			return (EA) new AddExcelSheet();
 		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelCell(null);
+			return (EA) new AddExcelCell();
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelRow(null);
+			return (EA) new AddExcelRow();
 		} else if (CellStyleAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new CellStyleAction(null);
+			return (EA) new CellStyleAction();
 		} else {
 			return null;
 		}
@@ -166,11 +165,11 @@ public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectExcelSheet.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectExcelSheet(null);
+			return (FR) new SelectExcelSheet();
 		} else if (SelectExcelCell.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectExcelCell(null);
+			return (FR) new SelectExcelCell();
 		} else if (SelectExcelRow.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectExcelRow(null);
+			return (FR) new SelectExcelRow();
 		} else {
 			return null;
 		}

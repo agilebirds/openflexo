@@ -39,7 +39,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
 import org.openflexo.technologyadapter.excel.viewpoint.BusinessConceptInstancePatternRole;
@@ -74,8 +73,8 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 		super(virtualModel, adapter);
 	}
 
-	public SemanticsExcelModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public SemanticsExcelModelSlot() {
+		super();
 	}
 
 	@Override
@@ -94,11 +93,11 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelSheetPatternRole(null);
+			return (PR) new ExcelSheetPatternRole();
 		} else if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelCellPatternRole(null);
+			return (PR) new ExcelCellPatternRole();
 		} else if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ExcelRowPatternRole(null);
+			return (PR) new ExcelRowPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -127,11 +126,11 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelSheet(null);
+			return (EA) new AddExcelSheet();
 		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelCell(null);
+			return (EA) new AddExcelCell();
 		} else if (AddExcelRow.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelRow(null);
+			return (EA) new AddExcelRow();
 		} else {
 			return null;
 		}

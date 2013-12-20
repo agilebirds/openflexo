@@ -76,17 +76,6 @@ public class EMFObjectIndividualAttributeObjectPropertyValue extends AEMFModelOb
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		return getName();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
 	 */
 	@Override
@@ -136,7 +125,7 @@ public class EMFObjectIndividualAttributeObjectPropertyValue extends AEMFModelOb
 				List<?> valueList = (List<?>) object.eGet(attribute);
 				for (Object value : valueList) {
 					if (ontology.getMetaModel().getConverter().getEnumLiterals().get(value) != null) {
-						result.add((IFlexoOntologyConcept) (ontology.getMetaModel().getConverter().getEnumLiterals().get(value)));
+						result.add((ontology.getMetaModel().getConverter().getEnumLiterals().get(value)));
 					}
 				}
 			}

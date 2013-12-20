@@ -103,18 +103,6 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		// FIXME Tab Name
-		return getName();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getURI()
 	 */
 	@Override

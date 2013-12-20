@@ -96,19 +96,6 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	}
 
 	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		// FIXME Tab Name
-		return getURI();
-	}
-
-	/**
 	 * Follow the link.
 	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntology#getURI()

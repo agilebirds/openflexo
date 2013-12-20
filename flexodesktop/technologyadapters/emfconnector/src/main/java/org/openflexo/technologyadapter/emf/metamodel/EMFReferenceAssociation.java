@@ -61,18 +61,6 @@ public class EMFReferenceAssociation extends AEMFMetaModelObjectImpl<EReference>
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
 	 */
 	@Override

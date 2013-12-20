@@ -25,8 +25,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoResourceTree;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
 import org.openflexo.toolbox.IProgress;
 
@@ -46,8 +44,6 @@ public abstract class ExcelMetaModelResourceImpl extends FlexoFileResourceImpl<E
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
@@ -69,17 +65,6 @@ public abstract class ExcelMetaModelResourceImpl extends FlexoFileResourceImpl<E
 	@Override
 	public void save(IProgress progress) {
 		logger.info("MetaModel is not supposed to be modified.");
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.resource.FlexoResource#update()
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		logger.info("MetaModel is not supposed to be updated.");
-		return null;
 	}
 
 	@Override

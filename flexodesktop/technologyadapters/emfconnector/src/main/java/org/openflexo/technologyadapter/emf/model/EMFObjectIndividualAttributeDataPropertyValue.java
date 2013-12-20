@@ -68,17 +68,6 @@ public class EMFObjectIndividualAttributeDataPropertyValue extends AEMFModelObje
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		return getName();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
 	 */
 	@Override

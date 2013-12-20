@@ -22,11 +22,11 @@ package org.openflexo.technologyadapter.excel.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 
@@ -38,9 +38,8 @@ public class ExcelActorReference<T extends ExcelObject> extends ActorReference<T
 	private String objectURI;
 
 	// Constructor used during deserialization
-	public ExcelActorReference(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
+	public ExcelActorReference(FlexoProject project) {
+		super(project);
 	}
 
 	public ExcelActorReference(T o, PatternRole<T> aPatternRole, EditionPatternInstance epi) {
@@ -60,7 +59,7 @@ public class ExcelActorReference<T extends ExcelObject> extends ActorReference<T
 	public T retrieveObject() {
 		if (object == null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
-			if(msInstance.getResource()==null){
+			if (msInstance.getResource() == null) {
 				msInstance.getResourceData();
 			}
 			if (msInstance.getResource() != null) {
@@ -88,17 +87,6 @@ public class ExcelActorReference<T extends ExcelObject> extends ActorReference<T
 
 	public void _setObjectURI(String objectURI) {
 		this.objectURI = objectURI;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "xml_actor_reference";
 	}
 
 }

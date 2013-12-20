@@ -1,13 +1,13 @@
 package org.openflexo.technologyadapter.excel.model;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
-public abstract class ExcelObject extends FlexoObject implements TechnologyObject{
+public abstract class ExcelObject extends DefaultFlexoObject implements TechnologyObject {
 
-	private ExcelTechnologyAdapter technologyAdapter;
-	
+	private final ExcelTechnologyAdapter technologyAdapter;
+
 	private String uri;
 
 	public ExcelObject(ExcelTechnologyAdapter adapter) {
@@ -26,11 +26,6 @@ public abstract class ExcelObject extends FlexoObject implements TechnologyObjec
 	public ExcelTechnologyAdapter getTechnologyAdapter() {
 		// TODO Auto-generated method stub
 		return technologyAdapter;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getName();
 	}
 
 	public String getUri() {

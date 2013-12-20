@@ -34,13 +34,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.model.io.BasicExcelModelConverter;
@@ -58,9 +55,9 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	private static final Logger logger = Logger.getLogger(ExcelWorkbookResourceImpl.class.getPackage().getName());
 
 	private boolean isLoaded = false;
-	
-	private boolean isXSSFFormat =false;
-	
+
+	private final boolean isXSSFFormat = false;
+
 	/**
 	 * Creates a new {@link ExcelModelResource} asserting this is an explicit creation: no file is present on file system<br>
 	 * This method should not be used to retrieve the resource from a file in the file system, use
@@ -83,7 +80,7 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			returned.setURI(modelURI);
 			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			technologyContextManager.registerResource(returned);
-			
+
 			try {
 				ExcelWorkbook resourceData = returned.loadResourceData(null);
 				returned.setResourceData(resourceData);
@@ -93,7 +90,7 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			} catch (SaveResourceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}catch (InvalidExcelFormatException e) {
+			} catch (InvalidExcelFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -143,36 +140,35 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 
 		ExcelWorkbook resourceData = null;
 		Workbook wbOpenned = null;
-		
+
 		try {
-			if (!getFile().exists()){
-				//Creates a new file
+			if (!getFile().exists()) {
+				// Creates a new file
 				getFile().createNewFile();
-				if(getFile().getName().endsWith(".xls")){
+				if (getFile().getName().endsWith(".xls")) {
 					wbOpenned = new HSSFWorkbook();
-				}else{
+				} else {
 					wbOpenned = new XSSFWorkbook();
 				}
 				// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 				BasicExcelModelConverter converter = new BasicExcelModelConverter();
-				resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
+				resourceData = converter.convertExcelWorkbook(wbOpenned, getTechnologyAdapter());
 				// TODO how to change this?
 				resourceData.setResource(this/*retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager())*/);
 				setResourceData(resourceData);
 				FileOutputStream fos = new FileOutputStream(getFile());
 				wbOpenned.write(fos);
 				fos.close();
-			}
-			else{
+			} else {
 				FileInputStream fis = new FileInputStream(getFile());
-				if(getFile().getName().endsWith(".xls")){
+				if (getFile().getName().endsWith(".xls")) {
 					wbOpenned = new HSSFWorkbook(fis);
-				}else{
+				} else {
 					wbOpenned = new XSSFWorkbook(fis);
 				}
 				// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 				BasicExcelModelConverter converter = new BasicExcelModelConverter();
-				resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
+				resourceData = converter.convertExcelWorkbook(wbOpenned, getTechnologyAdapter());
 				// TODO how to change this?
 				resourceData.setResource(this/*retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager())*/);
 				setResourceData(resourceData);
@@ -183,7 +179,7 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 		} catch (OfficeXmlFileException e) {
 			// TODO: load an XSSFWorkbook
 			throw new InvalidExcelFormatException(this, e);
-		} 
+		}
 		return resourceData;
 	}
 
@@ -201,9 +197,6 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {

@@ -52,12 +52,6 @@ public class ExcelModel extends ExcelObject implements FlexoModel<ExcelModel, Ex
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public FlexoResource<ExcelModel> getResource() {
 		return resource;
 	}

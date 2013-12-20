@@ -33,14 +33,13 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implements XMLSerializable {
+public class BasicExcelModelSlotURIProcessor extends NamedViewPointObjectImpl implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlotURIProcessor.class.getPackage().getName());
 
@@ -49,7 +48,7 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 
 	// Cache des URis Pour aller plus vite ??
 	// TODO some optimization required
-	private Map<String, ExcelObject> uriCache = new HashMap<String, ExcelObject>();
+	private final Map<String, ExcelObject> uriCache = new HashMap<String, ExcelObject>();
 
 	public void setModelSlot(BasicExcelModelSlot excelModelSlot) {
 		modelSlot = excelModelSlot;
@@ -82,11 +81,11 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 	}
 
 	public BasicExcelModelSlotURIProcessor() {
-		super((VirtualModelBuilder) null);
+		super();
 	}
 
 	public BasicExcelModelSlotURIProcessor(String typeURI) {
-		super((VirtualModelBuilder) null);
+		super();
 		this.typeURI = URI.create(typeURI);
 	}
 
@@ -94,7 +93,7 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 
 	public String getURIForObject(ModelSlotInstance msInstance, ExcelObject excelObject) {
 		String builtURI = null;
-		
+
 		try {
 			builtURI = URLEncoder.encode(excelObject.getUri(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -116,7 +115,6 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 		ExcelObject o = uriCache.get(objectURI);
 		return o;
 	}
-
 
 	@Override
 	public BindingModel getBindingModel() {
@@ -144,6 +142,162 @@ public class BasicExcelModelSlotURIProcessor extends NamedViewPointObject implem
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -94,13 +94,6 @@ public interface Validable {
 	public Collection<Validable> getAllEmbeddedValidableObjects();
 
 	/**
-	 * Returns fully qualified name for this object
-	 * 
-	 * @return
-	 */
-	public String getFullyQualifiedName();
-
-	/**
 	 * Return a flag indicating if this object was deleted
 	 * 
 	 * @return

@@ -78,7 +78,8 @@ public class AddExcelCell extends AssignableAction<BasicExcelModelSlot, ExcelCel
 							excelCell = excelRow.getCellAt(columnIndex);
 						} else {
 							cell = excelRow.getRow().createCell(columnIndex);
-							excelCell = modelSlotInstance.getResourceData().getConverter().convertExcelCellToCell(cell, excelRow, null);
+							excelCell = modelSlotInstance.getAccessedResourceData().getConverter()
+									.convertExcelCellToCell(cell, excelRow, null);
 						}
 						if (value != null) {
 							excelCell.setCellValue(value);

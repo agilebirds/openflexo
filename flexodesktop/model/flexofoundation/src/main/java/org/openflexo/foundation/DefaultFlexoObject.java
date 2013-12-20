@@ -192,10 +192,4 @@ public class DefaultFlexoObject extends FlexoObjectImpl {
 		return null;
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

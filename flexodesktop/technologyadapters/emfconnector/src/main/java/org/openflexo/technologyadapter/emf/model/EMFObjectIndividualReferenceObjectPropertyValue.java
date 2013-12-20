@@ -74,17 +74,6 @@ public class EMFObjectIndividualReferenceObjectPropertyValue extends AEMFModelOb
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	@Deprecated
-	public String getFullyQualifiedName() {
-		return getName();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
 	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#getDisplayableDescription()
 	 */
 	@Override
@@ -134,7 +123,7 @@ public class EMFObjectIndividualReferenceObjectPropertyValue extends AEMFModelOb
 				List<?> valueList = (List<?>) object.eGet(reference);
 				for (Object value : valueList) {
 					if (ontology.getConverter().getIndividuals().get(value) != null) {
-						result.add((IFlexoOntologyConcept) (ontology.getConverter().getIndividuals().get(value)));
+						result.add((ontology.getConverter().getIndividuals().get(value)));
 					}
 				}
 			}

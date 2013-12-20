@@ -56,7 +56,8 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 							excelRow = excelSheet.getRowAt(rowIndex);
 						} else {
 							Row row = excelSheet.getSheet().createRow(rowIndex);
-							excelRow = modelSlotInstance.getResourceData().getConverter().convertExcelRowToRow(row, excelSheet, null);
+							excelRow = modelSlotInstance.getAccessedResourceData().getConverter()
+									.convertExcelRowToRow(row, excelSheet, null);
 						}
 						if (getExcelCells().getBindingValue(action) != null) {
 							excelRow.getExcelCells().addAll(getExcelCells().getBindingValue(action));
