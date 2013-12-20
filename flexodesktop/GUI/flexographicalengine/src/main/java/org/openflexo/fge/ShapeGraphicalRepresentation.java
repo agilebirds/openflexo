@@ -38,7 +38,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -685,6 +684,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (newLocation == null) {
 			return;
 		}
+		updateConstraints();
 		newLocation = computeConstrainedLocation(newLocation);
 		FGEPoint oldLocation = getLocation();
 		if (!newLocation.equals(oldLocation)) {
@@ -915,6 +915,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				observeParentGRBecauseMyLocationReferToIt = true;
 				// logger.info("Start observe my father");
 			}
+			if (locationConstraints == LocationConstraints.RELATIVE_TO_PARENT && getContainerGraphicalRepresentation() != null) {
+				getContainerGraphicalRepresentation().addObserver(this);
+				observeParentGRBecauseMyLocationReferToIt = true;
+				// logger.info("Start observe my father");
+			}
 		}
 	}
 
@@ -943,6 +948,11 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				return getLocationConstrainedArea().getNearestPoint(newLocation);
 			}
 		}
+		/*if (getLocationConstraints() == LocationConstraints.RELATIVE_TO_PARENT) {
+			updateConstraints();
+			return newLocation;
+		}*/
+
 		return newLocation;
 	}
 
@@ -1846,7 +1856,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		//logger.info("Binding changed to " + dataBinding);
+		// logger.info("Binding changed to " + dataBinding);
 
 		super.notifiedBindingChanged(dataBinding);
 		if (dataBinding == getXConstraints() && dataBinding.isValid()) {
@@ -2545,9 +2555,9 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		background.setTransparencyLevel(transparency.floatValue());
 		foreground.setUseTransparency(true);
 		foreground.setTransparencyLevel(transparency.floatValue());
-		//super.setTranparency(transparency);
+		// super.setTranparency(transparency);
 	}
-	
+
 	@Override
 	public Point getLabelLocation(double scale) {
 		Point point;
