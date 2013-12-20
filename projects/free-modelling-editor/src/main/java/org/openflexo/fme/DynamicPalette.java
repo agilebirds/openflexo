@@ -70,10 +70,11 @@ public class DynamicPalette extends DrawingPalette implements PropertyChangeList
 			PaletteElement e = elementsForAssociations.get(association);
 
 			if (getEditor().getDiagram().getElementsWithAssociation(association).isEmpty()) {
-
-				// If there is no graphical element then we can delete the palette element
-				System.out.println("No diagram elements with this palette element, delete the palette element");
-				elementsForAssociations.remove(association);
+				if (getEditor().getDiagram().getElementsWithGraphicalRepresentation(association.getGraphicalRepresentation()).isEmpty()) {
+					// If there is no graphical element then we can delete the palette element
+					System.out.println("No diagram elements with this palette element, delete the palette element");
+					elementsForAssociations.remove(association);
+				}
 
 			}
 			// If a palestte element exist
