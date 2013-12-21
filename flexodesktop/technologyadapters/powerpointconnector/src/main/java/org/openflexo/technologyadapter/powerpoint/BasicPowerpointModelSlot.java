@@ -39,7 +39,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointObject;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 import org.openflexo.technologyadapter.powerpoint.rm.PowerpointSlideshowResource;
@@ -77,8 +76,8 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 
 	}
 
-	public BasicPowerpointModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public BasicPowerpointModelSlot() {
+		super();
 		uriProcessor = new BasicPowerpointModelSlotURIProcessor();
 	}
 
@@ -94,9 +93,9 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (PowerpointSlidePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new PowerpointSlidePatternRole(null);
+			return (PR) new PowerpointSlidePatternRole();
 		} else if (PowerpointShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new PowerpointShapePatternRole(null);
+			return (PR) new PowerpointShapePatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -119,9 +118,9 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddPowerpointSlide.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddPowerpointSlide(null);
+			return (EA) new AddPowerpointSlide();
 		} else if (AddPowerpointShape.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddPowerpointShape(null);
+			return (EA) new AddPowerpointShape();
 		} else {
 			return null;
 		}
@@ -135,10 +134,10 @@ public class BasicPowerpointModelSlot extends FreeModelSlot<PowerpointSlideshow>
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectPowerpointSlide.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectPowerpointSlide(null);
+			return (FR) new SelectPowerpointSlide();
 		}
 		if (SelectPowerpointShape.class.isAssignableFrom(fetchRequestClass)) {
-			return (FR) new SelectPowerpointShape(null);
+			return (FR) new SelectPowerpointShape();
 		} else {
 			return null;
 		}

@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,13 +32,10 @@ import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.powerpoint.PowerpointTechnologyAdapter;
 import org.openflexo.technologyadapter.powerpoint.PowerpointTechnologyContextManager;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 import org.openflexo.technologyadapter.powerpoint.model.io.BasicPowerpointModelConverter;
@@ -51,12 +47,13 @@ import org.openflexo.toolbox.IProgress;
  * @author vincent,sguerin
  * 
  */
-public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceImpl<PowerpointSlideshow> implements PowerpointSlideshowResource {
+public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceImpl<PowerpointSlideshow> implements
+		PowerpointSlideshowResource {
 
 	private static final Logger logger = Logger.getLogger(PowerpointSlideshowResourceImpl.class.getPackage().getName());
 
 	private boolean isLoaded = false;
-	
+
 	/**
 	 * Creates a new {@link ExcelModelResource} asserting this is an explicit creation: no file is present on file system<br>
 	 * This method should not be used to retrieve the resource from a file in the file system, use
@@ -71,7 +68,8 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			PowerpointTechnologyContextManager technologyContextManager) {
 		try {
 			ModelFactory factory = new ModelFactory(PowerpointSlideshowResource.class);
-			PowerpointSlideshowResourceImpl returned = (PowerpointSlideshowResourceImpl) factory.newInstance(PowerpointSlideshowResource.class);
+			PowerpointSlideshowResourceImpl returned = (PowerpointSlideshowResourceImpl) factory
+					.newInstance(PowerpointSlideshowResource.class);
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(excelFile.getName());
@@ -79,7 +77,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			returned.setURI(modelURI);
 			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			technologyContextManager.registerResource(returned);
-			
+
 			try {
 				PowerpointSlideshow resourceData = returned.loadResourceData(null);
 				returned.setResourceData(resourceData);
@@ -89,7 +87,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			} catch (SaveResourceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}catch (InvalidPowerpointFormatException e) {
+			} catch (InvalidPowerpointFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -105,10 +103,12 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 	 * system<br>
 	 * 
 	 */
-	public static PowerpointSlideshowResource retrievePowerpointSlideshowResource(File modelFile, PowerpointTechnologyContextManager technologyContextManager) {
+	public static PowerpointSlideshowResource retrievePowerpointSlideshowResource(File modelFile,
+			PowerpointTechnologyContextManager technologyContextManager) {
 		try {
 			ModelFactory factory = new ModelFactory(PowerpointSlideshowResource.class);
-			PowerpointSlideshowResourceImpl returned = (PowerpointSlideshowResourceImpl) factory.newInstance(PowerpointSlideshowResource.class);
+			PowerpointSlideshowResourceImpl returned = (PowerpointSlideshowResourceImpl) factory
+					.newInstance(PowerpointSlideshowResource.class);
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(modelFile.getName());
@@ -139,27 +139,26 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 
 		PowerpointSlideshow resourceData = null;
 		SlideShow ssOpenned = null;
-		
+
 		try {
-			if (!getFile().exists()){
-				//Creates a new file
+			if (!getFile().exists()) {
+				// Creates a new file
 				getFile().createNewFile();
 				ssOpenned = new SlideShow();
 				// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 				BasicPowerpointModelConverter converter = new BasicPowerpointModelConverter();
-				resourceData = converter.convertPowerpointSlideshow(ssOpenned, (PowerpointTechnologyAdapter) getTechnologyAdapter());
+				resourceData = converter.convertPowerpointSlideshow(ssOpenned, getTechnologyAdapter());
 				// TODO how to change this?
 				resourceData.setResource(this/*retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager())*/);
 				setResourceData(resourceData);
 				FileOutputStream fos = new FileOutputStream(getFile());
 				ssOpenned.write(fos);
 				fos.close();
-			}
-			else{
+			} else {
 				FileInputStream fis = new FileInputStream(getFile());
 				ssOpenned = new SlideShow(fis);
 				BasicPowerpointModelConverter converter = new BasicPowerpointModelConverter();
-				resourceData = converter.convertPowerpointSlideshow(ssOpenned, (PowerpointTechnologyAdapter) getTechnologyAdapter());
+				resourceData = converter.convertPowerpointSlideshow(ssOpenned, getTechnologyAdapter());
 				resourceData.setResource(this);
 				setResourceData(resourceData);
 				fis.close();
@@ -169,7 +168,7 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 		} catch (OfficeXmlFileException e) {
 			// TODO: load an XSSFWorkbook
 			throw new InvalidPowerpointFormatException(this, e);
-		} 
+		}
 		return resourceData;
 	}
 
@@ -187,9 +186,6 @@ public abstract class PowerpointSlideshowResourceImpl extends FlexoFileResourceI
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {

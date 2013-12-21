@@ -68,7 +68,7 @@ public class AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 		OWLClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getResourceData().createOntologyClass(newClassName, father);
+			newClass = getModelSlotInstance(action).getAccessedResourceData().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

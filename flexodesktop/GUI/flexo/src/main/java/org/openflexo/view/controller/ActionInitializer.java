@@ -30,6 +30,7 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionEnableCondition;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -41,7 +42,6 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.view.FlexoFrame;
 
@@ -80,14 +80,14 @@ public abstract class ActionInitializer<A extends FlexoAction<A, T1, T2>, T1 ext
 		}
 	}
 
-	public boolean instanciateAndShowDialog(FlexoObject object, File fibFile) {
+	public boolean instanciateAndShowDialog(Object object, File fibFile) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(fibComponent, object, FlexoFrame.getActiveFrame(), true,
 				new FlexoFIBController(fibComponent, getController()));
 		return dialog.getStatus() == Status.VALIDATED;
 	}
 
-	public Status instanciateShowDialogAndReturnStatus(FlexoObject object, File fibFile) {
+	public Status instanciateShowDialogAndReturnStatus(Object object, File fibFile) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(fibComponent, object, FlexoFrame.getActiveFrame(), true,
 				new FlexoFIBController(fibComponent, getController()));

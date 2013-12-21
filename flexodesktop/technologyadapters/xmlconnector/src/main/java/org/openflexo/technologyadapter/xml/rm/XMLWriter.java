@@ -32,7 +32,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
@@ -64,8 +63,7 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD, ?>, RD extends Re
 		outputStr = out;
 	}
 
-	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FlexoException, IOException {
+	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, FlexoException, IOException {
 
 		String NSPrefix = DEFAULT_NS;
 
@@ -106,7 +104,7 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD, ?>, RD extends Re
 	}
 
 	private void writeRootElement(IXMLIndividual<?, ?> rootIndiv, String nSURI, String nSPrefix) throws XMLStreamException, IOException,
-			ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			ResourceLoadingCancelledException, FlexoException {
 
 		myWriter.writeStartElement(nSURI, rootIndiv.getName());
 		myWriter.writeNamespace(nSPrefix, nSURI);

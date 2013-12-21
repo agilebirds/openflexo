@@ -288,36 +288,6 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 	}
 
 	@Override
-	public String getTechnicalDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.TECHNICAL_DESCRIPTION_URI));
-	}
-
-	@Override
-	public void setTechnicalDescription(String technicalDescription) {
-		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.TECHNICAL_DESCRIPTION_URI), technicalDescription);
-	};
-
-	@Override
-	public String getBusinessDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.BUSINESS_DESCRIPTION_URI));
-	}
-
-	@Override
-	public void setBusinessDescription(String businessDescription) {
-		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.BUSINESS_DESCRIPTION_URI), businessDescription);
-	}
-
-	@Override
-	public String getUserManualDescription() {
-		return (String) getPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.USER_MANUAL_DESCRIPTION_URI));
-	}
-
-	@Override
-	public void setUserManualDescription(String userManualDescription) {
-		setPropertyValue(getOntology().getDataProperty(OWLOntologyLibrary.USER_MANUAL_DESCRIPTION_URI), userManualDescription);
-	}
-
-	@Override
 	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		// No feature associations for this kind of concept
 		return Collections.emptyList();

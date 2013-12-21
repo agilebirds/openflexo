@@ -23,22 +23,17 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 
-public class TestProjectOntologyManipulations extends FlexoTestCase {
+public class TestProjectOntologyManipulations extends OpenflexoRunTimeTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestProjectOntologyManipulations.class.getPackage().getName());
 
 	private static FlexoEditor _editor;
 	private static FlexoProject _project;
 
 	private static File _resourceCenterDirectory;
-
-	public TestProjectOntologyManipulations(String name) {
-		super(name);
-	}
 
 	/**
 	 * Instanciate new ResourceCenter

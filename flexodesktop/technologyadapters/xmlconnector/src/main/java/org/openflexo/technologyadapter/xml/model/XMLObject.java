@@ -21,13 +21,13 @@
 
 package org.openflexo.technologyadapter.xml.model;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.DefaultFlexoObject;
 
 /**
  * @author xtof
- *
+ * 
  */
-public abstract class XMLObject extends FlexoObject {
+public abstract class XMLObject extends DefaultFlexoObject {
 
 	// Only for genericity purpose for now...
 

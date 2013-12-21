@@ -18,10 +18,8 @@ import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xml.rm.XMLReaderSAXHandler;
@@ -173,9 +171,6 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			} catch (ResourceLoadingCancelledException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (FlexoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -193,8 +188,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	}
 
 	@Override
-	public XMLXSDModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
+	public XMLXSDModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException {
 
 		if (!isLoaded()) {
 
@@ -236,15 +230,6 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 		this.getModel().setMetaModel(mmRes.getMetaModelData());
 
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.FlexoObject#getFullyQualifiedName()
-	 */
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

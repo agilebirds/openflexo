@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -56,7 +56,7 @@ public class AddAnnotationStatement extends FlexoAction<AddAnnotationStatement, 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddAnnotationStatement.actionType, OWLConcept.class);
+		FlexoObjectImpl.addActionForClass(AddAnnotationStatement.actionType, OWLConcept.class);
 	}
 
 	AddAnnotationStatement(OWLConcept focusedObject, Vector<OWLConcept> globalSelection, FlexoEditor editor) {

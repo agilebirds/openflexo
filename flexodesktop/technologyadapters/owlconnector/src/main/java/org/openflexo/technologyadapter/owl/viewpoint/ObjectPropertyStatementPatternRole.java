@@ -4,14 +4,13 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
@@ -23,8 +22,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 
 	static final Logger logger = FlexoLogger.getLogger(ObjectPropertyStatementPatternRole.class.getPackage().toString());
 
-	public ObjectPropertyStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public ObjectPropertyStatementPatternRole() {
+		super();
 	}
 
 	@Override
@@ -102,20 +101,8 @@ public class ObjectPropertyStatementPatternRole extends StatementPatternRole<Obj
 		}
 
 		// Constructor used during deserialization
-		public ObjectPropertyStatementActorReference(VirtualModelInstanceBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "object_property_statement_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
+		public ObjectPropertyStatementActorReference(FlexoProject project) {
+			super(project);
 		}
 
 		@Override

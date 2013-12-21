@@ -43,7 +43,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
@@ -97,8 +96,8 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		}
 	}
 
-	public XSDModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public XSDModelSlot() {
+		super();
 		if (uriProcessorsMap == null) {
 			uriProcessorsMap = new Hashtable<String, XSURIProcessor>();
 		}
@@ -137,9 +136,9 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (XSClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new XSClassPatternRole(null);
+			return (PR) new XSClassPatternRole();
 		} else if (XSIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new XSIndividualPatternRole(null);
+			return (PR) new XSIndividualPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -166,13 +165,13 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddXSIndividual(null);
+			return (EA) new AddXSIndividual();
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddXSClass(null);
+			return (EA) new AddXSClass();
 		} else if (SetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new SetXMLDocumentRoot(null);
+			return (EA) new SetXMLDocumentRoot();
 		} else if (GetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new GetXMLDocumentRoot(null);
+			return (EA) new GetXMLDocumentRoot();
 		} else {
 			return null;
 		}

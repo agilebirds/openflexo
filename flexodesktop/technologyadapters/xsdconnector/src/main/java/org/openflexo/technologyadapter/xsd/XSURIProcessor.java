@@ -215,7 +215,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 				}
 
 			} else if (mappingStyle == MappingStyle.SINGLETON) {
-				List<?> indivList = ((XSOntology) msInstance.getResourceData()).getIndividualsOfClass(getMappedClass());
+				List<?> indivList = ((XSOntology) msInstance.getAccessedResourceData()).getIndividualsOfClass(getMappedClass());
 				if (indivList.size() > 1) {
 					throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type "
 							+ this._getTypeURI().toString());

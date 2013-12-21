@@ -70,7 +70,7 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 		try {
 
 			TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeAwareModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
-			XMLXSDModel model = modelSlotInstance.getResourceData();
+			XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
 			XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
 
 			newIndividual = model.createOntologyIndividual(father);

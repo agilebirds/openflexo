@@ -4,10 +4,9 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -18,8 +17,8 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 
 	static final Logger logger = FlexoLogger.getLogger(SubClassStatementPatternRole.class.getPackage().toString());
 
-	public SubClassStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public SubClassStatementPatternRole() {
+		super();
 	}
 
 	@Override
@@ -53,20 +52,8 @@ public class SubClassStatementPatternRole extends StatementPatternRole<SubClassS
 		}
 
 		// Constructor used during deserialization
-		public SubClassStatementActorReference(VirtualModelInstanceBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "sub_class_statement_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
+		public SubClassStatementActorReference(FlexoProject project) {
+			super(project);
 		}
 
 		@Override

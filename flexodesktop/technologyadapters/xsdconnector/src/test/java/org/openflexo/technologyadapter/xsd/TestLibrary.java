@@ -1,5 +1,11 @@
 package org.openflexo.technologyadapter.xsd;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +14,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
@@ -24,7 +30,7 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
 import org.openflexo.toolbox.FileResource;
 
-public class TestLibrary extends FlexoTestCase {
+public class TestLibrary extends OpenflexoRunTimeTestCase {
 
 	private static final String FILE_NAME = "library";
 
@@ -36,10 +42,6 @@ public class TestLibrary extends FlexoTestCase {
 	private static XSDMetaModelRepository mmRepository;
 	private static XMLModelRepository modelRepository;
 	private static ApplicationContext testApplicationContext;
-
-	public TestLibrary(String name) {
-		super(name);
-	}
 
 	public static File openTestXSD(String filename) throws FileNotFoundException {
 		// TODO Use resource manager?

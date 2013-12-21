@@ -38,10 +38,10 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
-
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
@@ -58,8 +58,8 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 	private String objectPropertyURI = null;
 	private DataBinding<Object> object;
 
-	public AddObjectPropertyStatement(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddObjectPropertyStatement() {
+		super();
 	}
 
 	@Override
@@ -253,7 +253,7 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		protected static class SetsPatternRole extends
 				FixProposal<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
 
-			private ObjectPropertyStatementPatternRole patternRole;
+			private final ObjectPropertyStatementPatternRole patternRole;
 
 			public SetsPatternRole(ObjectPropertyStatementPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");

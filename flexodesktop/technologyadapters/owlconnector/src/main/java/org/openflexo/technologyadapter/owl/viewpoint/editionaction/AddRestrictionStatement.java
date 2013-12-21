@@ -33,7 +33,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -52,8 +51,8 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 
 	private String propertyURI;
 
-	public AddRestrictionStatement(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddRestrictionStatement() {
+		super();
 	}
 
 	public String _getPropertyURI() {
@@ -217,8 +216,8 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
 			RestrictionType restrictionType = getRestrictionType(action);
 			int cardinality = getCardinality(action);
-			OWLRestriction restriction = getModelSlotInstance(action).getResourceData().createRestriction((OWLClass) subject, property,
-					restrictionType, cardinality, (OWLClass) object);
+			OWLRestriction restriction = getModelSlotInstance(action).getAccessedResourceData().createRestriction((OWLClass) subject,
+					property, restrictionType, cardinality, (OWLClass) object);
 
 			if (subject instanceof OWLClass) {
 				if (subject instanceof OWLClass) {

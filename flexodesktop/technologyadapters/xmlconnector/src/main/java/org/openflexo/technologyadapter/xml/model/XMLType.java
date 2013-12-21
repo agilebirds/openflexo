@@ -22,28 +22,25 @@ package org.openflexo.technologyadapter.xml.model;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-
 
 public class XMLType extends XMLObject implements Type, IXMLType {
 
-	
-	private XMLModel containerModel;
-	
+	private final XMLModel containerModel;
+
 	/* Properties */
-	
+
 	private String Name;
 	private String NameSpaceURI;
-	private String NSPrefix;
+	private final String NSPrefix;
 
-
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLType.class
-			.getPackage().getName());
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger
+			.getLogger(XMLType.class.getPackage().getName());
 
 	/**
 	 * Default Constructor
-	 * @param qName 
+	 * 
+	 * @param qName
 	 * 
 	 * @param adapter
 	 */
@@ -51,37 +48,33 @@ public class XMLType extends XMLObject implements Type, IXMLType {
 	public XMLType(String aName, XMLModel model) {
 		super();
 		this.containerModel = model;
-			this.Name = aName;
-			this.NameSpaceURI = null;
-			this.NSPrefix = null;
+		this.Name = aName;
+		this.NameSpaceURI = null;
+		this.NSPrefix = null;
 	}
-
 
 	public XMLType(String nsURI, String lName, String qName, XMLModel model) {
 		super();
 		this.containerModel = model;
-			Name = lName;
-			NameSpaceURI = nsURI; 
-			NSPrefix = qName.replaceAll(":"+lName, "");
+		Name = lName;
+		NameSpaceURI = nsURI;
+		NSPrefix = qName.replaceAll(":" + lName, "");
 	}
-
 
 	public void setName(String name) throws Exception {
-			this.Name = name;
+		this.Name = name;
 	}
 
-
-	@Override
 	public String getFullyQualifiedName() {
-		if (NameSpaceURI != null && !NameSpaceURI.isEmpty())	return NSPrefix +":"+ Name;
-		else return Name;
+		if (NameSpaceURI != null && !NameSpaceURI.isEmpty())
+			return NSPrefix + ":" + Name;
+		else
+			return Name;
 	}
-
 
 	public String getName() {
 		return Name;
 	}
-
 
 	public String getNameSpaceURI() {
 		return NameSpaceURI;
@@ -91,23 +84,17 @@ public class XMLType extends XMLObject implements Type, IXMLType {
 		NameSpaceURI = nameSpaceURI;
 	}
 
-
-
+	@Override
 	public String getURI() {
 		if (NameSpaceURI != null) {
-		return NameSpaceURI + "#" + Name;
-		}
-		else {
+			return NameSpaceURI + "#" + Name;
+		} else {
 			return Name;
 		}
 	}
 
-
-
 	public TechnologyAdapter getTechnologyAdapter() {
 		return containerModel.getTechnologyAdapter();
 	}
-
-
 
 }

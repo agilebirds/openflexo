@@ -25,7 +25,7 @@ public class OWLModelSlotInstanceConfiguration extends TypeAwareModelSlotInstanc
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
 			if (modelResource != null) {
-				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setAccessedResourceData(getModelResource().getModel());
 				msInstance.setModelURI(getModelResource().getURI());
 			} else {
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());

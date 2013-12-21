@@ -37,7 +37,6 @@ import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
@@ -213,9 +212,6 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLTechnologyAd
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ResourceLoadingCancelledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (FlexoException e) {

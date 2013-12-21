@@ -37,10 +37,8 @@ import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xml.model.XMLAttribute;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
@@ -191,9 +189,6 @@ public abstract class XMLFileResourceImpl extends FlexoFileResourceImpl<XMLModel
 			} catch (ResourceLoadingCancelledException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (FlexoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -203,10 +198,9 @@ public abstract class XMLFileResourceImpl extends FlexoFileResourceImpl<XMLModel
 	}
 
 	@Override
-	public XMLModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException,
+	public XMLModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException,
 
-			FlexoException {
+	FlexoException {
 
 		if (resourceData == null) {
 			resourceData = new XMLModel(this.getTechnologyAdapter());

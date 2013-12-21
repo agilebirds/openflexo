@@ -19,12 +19,12 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import java.util.UUID;
 
 public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implements IFlexoOntologyObject, XSOntologyURIDefinitions {
 
@@ -33,21 +33,20 @@ public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implem
 
 	protected String uri;
 	private String name;
-	private XSOntology ontology;
+	private final XSOntology ontology;
 
-	private XSDTechnologyAdapter technologyAdapter;
+	private final XSDTechnologyAdapter technologyAdapter;
 
 	protected AbstractXSOntObject(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super();
 
 		technologyAdapter = adapter;
 		this.name = name;
-		if (uri == null ){
+		if (uri == null) {
 			// defaults to a UUID in case no URI provided, as for individuals e.g.
 			// TODO: fix this when refactoring XSDConnector that should not inherit from FlexoOntology!
 			this.uri = UUID.randomUUID().toString();
-			}
-		else {
+		} else {
 			this.uri = uri;
 		}
 		this.ontology = ontology;
@@ -89,15 +88,9 @@ public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implem
 		return ontology;
 	}
 
-
 	@Override
 	public XSOntology getOntology() {
 		return ontology;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getURI();
 	}
 
 }

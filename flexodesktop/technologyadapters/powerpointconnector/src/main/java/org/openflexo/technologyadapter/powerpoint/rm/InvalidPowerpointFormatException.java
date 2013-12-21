@@ -1,7 +1,7 @@
 package org.openflexo.technologyadapter.powerpoint.rm;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
-import org.openflexo.foundation.rm.LoadResourceException;
+import org.openflexo.foundation.resource.LoadResourceException;
 
 public class InvalidPowerpointFormatException extends LoadResourceException {
 

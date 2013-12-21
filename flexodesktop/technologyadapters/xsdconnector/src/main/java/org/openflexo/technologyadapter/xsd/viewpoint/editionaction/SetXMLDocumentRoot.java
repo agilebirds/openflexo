@@ -27,39 +27,32 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ProcedureAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
-import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndividual> {
 
-
 	private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
 
-
-	public SetXMLDocumentRoot(VirtualModelBuilder builder) {
-		super(builder);
+	public SetXMLDocumentRoot() {
+		super();
 	}
-
 
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
 
 		ModelSlotInstance<XSDModelSlot, XMLXSDModel> modelSlotInstance = (ModelSlotInstance<XSDModelSlot, XMLXSDModel>) getModelSlotInstance(action);
-		XMLXSDModel model = modelSlotInstance.getResourceData();
-		XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
+		XMLXSDModel model = modelSlotInstance.getAccessedResourceData();
+		XSDModelSlot modelSlot = modelSlotInstance.getModelSlot();
 
 		XSOntIndividual rootIndiv = null;
-		
+
 		try {
 			Object o = getParameter().getBindingValue(action);
-			if (o instanceof XSOntIndividual){
+			if (o instanceof XSOntIndividual) {
 				rootIndiv = (XSOntIndividual) o;
-			}
-			else{
+			} else {
 				logger.warning("Invalid value in Binding :" + getParameter().getUnparsedBinding());
 			}
 		} catch (TypeMismatchException e) {
@@ -72,14 +65,12 @@ public class SetXMLDocumentRoot extends ProcedureAction<XSDModelSlot, XSOntIndiv
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if (rootIndiv != null){
+
+		if (rootIndiv != null) {
 			model.setRoot(rootIndiv);
 		}
-		
+
 		return rootIndiv;
 	}
-
-
 
 }

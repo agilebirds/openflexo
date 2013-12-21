@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
@@ -12,8 +13,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -24,8 +23,8 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 
 	static final Logger logger = FlexoLogger.getLogger(DataPropertyStatementPatternRole.class.getPackage().toString());
 
-	public DataPropertyStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DataPropertyStatementPatternRole() {
+		super();
 	}
 
 	@Override
@@ -103,20 +102,8 @@ public class DataPropertyStatementPatternRole extends StatementPatternRole<DataP
 		}
 
 		// Constructor used during deserialization
-		public DataPropertyStatementActorReference(VirtualModelInstanceBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "data_property_statement_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
+		public DataPropertyStatementActorReference(FlexoProject project) {
+			super(project);
 		}
 
 		@Override

@@ -33,14 +33,13 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
-
-public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject implements XMLSerializable {
+public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObjectImpl implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(BasicPowerpointModelSlotURIProcessor.class.getPackage().getName());
 
@@ -49,7 +48,7 @@ public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject i
 
 	// Cache des URis Pour aller plus vite ??
 	// TODO some optimization required
-	private Map<String, PowerpointObject> uriCache = new HashMap<String, PowerpointObject>();
+	private final Map<String, PowerpointObject> uriCache = new HashMap<String, PowerpointObject>();
 
 	public void setModelSlot(BasicPowerpointModelSlot powerpointModelSlot) {
 		modelSlot = powerpointModelSlot;
@@ -82,11 +81,11 @@ public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject i
 	}
 
 	public BasicPowerpointModelSlotURIProcessor() {
-		super((VirtualModelBuilder) null);
+		super();
 	}
 
 	public BasicPowerpointModelSlotURIProcessor(String typeURI) {
-		super((VirtualModelBuilder) null);
+		super();
 		this.typeURI = URI.create(typeURI);
 	}
 
@@ -94,7 +93,7 @@ public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject i
 
 	public String getURIForObject(ModelSlotInstance msInstance, PowerpointObject powerpointObject) {
 		String builtURI = null;
-		
+
 		try {
 			builtURI = URLEncoder.encode(powerpointObject.getUri(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -116,7 +115,6 @@ public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject i
 		PowerpointObject o = uriCache.get(objectURI);
 		return o;
 	}
-
 
 	@Override
 	public BindingModel getBindingModel() {
@@ -144,6 +142,162 @@ public class BasicPowerpointModelSlotURIProcessor extends NamedViewPointObject i
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -18,7 +18,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
@@ -75,8 +74,8 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 		super(virtualModel, adapter);
 	}
 
-	public OWLModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public OWLModelSlot() {
+		super();
 	}
 
 	/*public OWLModelSlot(ViewPointBuilder builder) {
@@ -107,23 +106,23 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLClassPatternRole(null);
+			return (PR) new OWLClassPatternRole();
 		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLIndividualPatternRole(null);
+			return (PR) new OWLIndividualPatternRole();
 		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLPropertyPatternRole(null);
+			return (PR) new OWLPropertyPatternRole();
 		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLDataPropertyPatternRole(null);
+			return (PR) new OWLDataPropertyPatternRole();
 		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new OWLObjectPropertyPatternRole(null);
+			return (PR) new OWLObjectPropertyPatternRole();
 		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new DataPropertyStatementPatternRole(null);
+			return (PR) new DataPropertyStatementPatternRole();
 		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ObjectPropertyStatementPatternRole(null);
+			return (PR) new ObjectPropertyStatementPatternRole();
 		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new RestrictionStatementPatternRole(null);
+			return (PR) new RestrictionStatementPatternRole();
 		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new SubClassStatementPatternRole(null);
+			return (PR) new SubClassStatementPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -164,17 +163,17 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddOWLIndividual(null);
+			return (EA) new AddOWLIndividual();
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddOWLClass(null);
+			return (EA) new AddOWLClass();
 		} else if (AddDataPropertyStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddDataPropertyStatement(null);
+			return (EA) new AddDataPropertyStatement();
 		} else if (AddObjectPropertyStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddObjectPropertyStatement(null);
+			return (EA) new AddObjectPropertyStatement();
 		} else if (AddRestrictionStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddRestrictionStatement(null);
+			return (EA) new AddRestrictionStatement();
 		} else if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddSubClassStatement(null);
+			return (EA) new AddSubClassStatement();
 		}
 		return null;
 	}

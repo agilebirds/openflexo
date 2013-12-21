@@ -24,14 +24,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
-import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
+import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 
 public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObjects, OWLConcept, OWLConcept> {
@@ -71,7 +71,7 @@ public class DeleteOntologyObjects extends FlexoUndoableAction<DeleteOntologyObj
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteOntologyObjects.actionType, OWLConcept.class);
+		FlexoObjectImpl.addActionForClass(DeleteOntologyObjects.actionType, OWLConcept.class);
 	}
 
 	protected static Vector<OWLConcept> objectsToDelete(OWLConcept focusedObject, Vector<OWLConcept> globalSelection) {

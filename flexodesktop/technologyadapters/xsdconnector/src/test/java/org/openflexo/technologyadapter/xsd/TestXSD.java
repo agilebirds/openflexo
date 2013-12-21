@@ -19,10 +19,14 @@
  */
 package org.openflexo.technologyadapter.xsd;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -31,7 +35,7 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.toolbox.FileResource;
 
-public class TestXSD extends FlexoTestCase {
+public class TestXSD extends OpenflexoRunTimeTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestXSD.class.getPackage().getName());
 
@@ -40,10 +44,6 @@ public class TestXSD extends FlexoTestCase {
 	private static FlexoResourceCenter<?> resourceCenter;
 	private static XSDMetaModelRepository mmRepository;
 	private static XMLModelRepository modelRepository;
-
-	public TestXSD(String name) {
-		super(name);
-	}
 
 	/**
 	 * Instanciate test ResourceCenter
@@ -66,9 +66,9 @@ public class TestXSD extends FlexoTestCase {
 		XSDMetaModelResource libraryRes = mmRepository.getResource("http://www.example.org/Library");
 		assertNotNull(libraryRes);
 		// TODO
-		//		assertFalse(libraryRes.isLoaded());
+		// assertFalse(libraryRes.isLoaded());
 		assertNotNull(libraryRes.getMetaModelData());
-		//		assertTrue(libraryRes.isLoaded());
+		// assertTrue(libraryRes.isLoaded());
 
 		logger.info("Classes: " + libraryRes.getMetaModelData().getClasses());
 
@@ -82,7 +82,7 @@ public class TestXSD extends FlexoTestCase {
 		XSDMetaModelResource mavenRes = mmRepository.getResource("http://maven.apache.org/POM/4.0.0");
 		assertNotNull(mavenRes);
 		// TODO
-		//		assertFalse(mavenRes.isLoaded());
+		// assertFalse(mavenRes.isLoaded());
 		assertNotNull(mavenRes.getMetaModelData());
 		assertTrue(mavenRes.isLoaded());
 

@@ -30,7 +30,7 @@ public abstract class OWLObject extends FlexoOntologyObjectImpl implements IFlex
 
 	private static final Logger logger = Logger.getLogger(OWLObject.class.getPackage().getName());
 
-	private OWLTechnologyAdapter technologyAdapter;
+	private final OWLTechnologyAdapter technologyAdapter;
 
 	public OWLObject(OWLTechnologyAdapter adapter) {
 		super();
@@ -54,8 +54,4 @@ public abstract class OWLObject extends FlexoOntologyObjectImpl implements IFlex
 		return getTechnologyAdapter().getOntologyLibrary();
 	}
 
-	@Override
-	public final String getFullyQualifiedName() {
-		return getClass().getSimpleName() + "." + getURI();
-	}
 }

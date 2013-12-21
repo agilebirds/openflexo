@@ -24,13 +24,12 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlide;
 
 public class PowerpointShapePatternRole extends PatternRole<PowerpointSlide> {
 
-	public PowerpointShapePatternRole(VirtualModelBuilder builder) {
-		super(builder);
+	public PowerpointShapePatternRole() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

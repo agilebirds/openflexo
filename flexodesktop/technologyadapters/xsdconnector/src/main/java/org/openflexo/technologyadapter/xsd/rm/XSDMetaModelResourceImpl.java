@@ -29,18 +29,13 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoResourceTree;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntologyURIDefinitions;
 import org.openflexo.toolbox.IProgress;
@@ -84,7 +79,7 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 			returned.setFile(xsdMetaModelFile);
 
 			// FIXME : check if its ok
-			technologyContextManager.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter>) returned);
+			technologyContextManager.registerResource(returned);
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -100,8 +95,6 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 		} catch (FlexoException e) {
 			e.printStackTrace();
@@ -311,14 +304,6 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 	@Override
 	public void save(IProgress progress) {
 		logger.info("Not implemented yet");
-	}
-
-	/**
-	 * This method updates the resource.
-	 */
-	@Override
-	public FlexoResourceTree update() {
-		return null;
 	}
 
 	@Override

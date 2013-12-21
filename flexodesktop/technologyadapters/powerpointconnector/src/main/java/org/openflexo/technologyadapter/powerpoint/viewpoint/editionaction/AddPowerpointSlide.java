@@ -2,7 +2,6 @@ package org.openflexo.technologyadapter.powerpoint.viewpoint.editionaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.poi.hslf.model.Slide;
@@ -13,10 +12,8 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.powerpoint.BasicPowerpointModelSlot;
-import org.openflexo.technologyadapter.powerpoint.model.PowerpointShape;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlide;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 
@@ -24,18 +21,18 @@ import org.openflexo.technologyadapter.powerpoint.model.PowerpointSlideshow;
 public class AddPowerpointSlide extends AssignableAction<BasicPowerpointModelSlot, PowerpointSlide> {
 
 	private static final Logger logger = Logger.getLogger(AddPowerpointSlide.class.getPackage().getName());
-	
+
 	private DataBinding<Integer> slideIndex;
-	
-	public AddPowerpointSlide(VirtualModelBuilder builder) {
-		super(builder);
+
+	public AddPowerpointSlide() {
+		super();
 	}
 
 	@Override
 	public Type getAssignableType() {
 		return PowerpointSlide.class;
 	}
-	
+
 	@Override
 	public PowerpointSlide performAction(EditionSchemeAction action) {
 
@@ -44,22 +41,21 @@ public class AddPowerpointSlide extends AssignableAction<BasicPowerpointModelSlo
 		FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		if (modelSlotInstance.getResourceData() != null) {
 			try {
-				SlideShow ss = modelSlotInstance.getResourceData().getSlideShow();
+				SlideShow ss = modelSlotInstance.getAccessedResourceData().getSlideShow();
 				Slide slide = null;
-				if(ss!=null){
+				if (ss != null) {
 					slide = ss.createSlide();
 					Integer slideIndex = getSlideIndex().getBindingValue(action);
-					if(slideIndex!=null){
+					if (slideIndex != null) {
 						slide.setSlideNumber(slideIndex);
 					}
-					
+
 					// Instanciate Wrapper.
-					result = modelSlotInstance.getResourceData().getConverter()
-							.convertPowerpointSlideToSlide(slide, modelSlotInstance.getResourceData(), null);
-					modelSlotInstance.getResourceData().addToPowerpointSlides(result);
-					modelSlotInstance.getResourceData().setIsModified();
-				}
-				else{
+					result = modelSlotInstance.getAccessedResourceData().getConverter()
+							.convertPowerpointSlideToSlide(slide, modelSlotInstance.getAccessedResourceData(), null);
+					modelSlotInstance.getAccessedResourceData().addToPowerpointSlides(result);
+					modelSlotInstance.getAccessedResourceData().setIsModified();
+				} else {
 					logger.warning("Create a sheet requires a workbook");
 				}
 			} catch (TypeMismatchException e) {
@@ -71,7 +67,7 @@ public class AddPowerpointSlide extends AssignableAction<BasicPowerpointModelSlo
 			} catch (InvocationTargetException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
 			return null;
@@ -79,7 +75,7 @@ public class AddPowerpointSlide extends AssignableAction<BasicPowerpointModelSlo
 
 		return result;
 	}
-	
+
 	public DataBinding<Integer> getSlideIndex() {
 		if (slideIndex == null) {
 			slideIndex = new DataBinding<Integer>(this, Integer.class, DataBinding.BindingDefinitionType.GET);
@@ -103,5 +99,4 @@ public class AddPowerpointSlide extends AssignableAction<BasicPowerpointModelSlo
 		return (FreeModelSlotInstance<PowerpointSlideshow, BasicPowerpointModelSlot>) super.getModelSlotInstance(action);
 	}
 
-	
 }

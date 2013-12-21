@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.DuplicateURIException;
@@ -64,7 +64,7 @@ public class CreateDataProperty extends FlexoAction<CreateDataProperty, OWLObjec
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateDataProperty.actionType, OWLOntology.class);
+		FlexoObjectImpl.addActionForClass(CreateDataProperty.actionType, OWLOntology.class);
 	}
 
 	public String newPropertyName;
@@ -100,6 +100,7 @@ public class CreateDataProperty extends FlexoAction<CreateDataProperty, OWLObjec
 		return getFocusedObject().getFlexoOntology();
 	}
 
+	@Override
 	public boolean isValid() {
 		boolean returned = !StringUtils.isEmpty(newPropertyName) && getOntology().testValidURI(newPropertyName);
 		validURILabel = returned ? VALID_URI_LABEL : INVALID_URI_LABEL;

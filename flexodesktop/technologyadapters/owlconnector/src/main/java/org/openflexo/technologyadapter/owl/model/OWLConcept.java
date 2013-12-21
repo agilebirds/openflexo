@@ -28,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
@@ -66,8 +65,8 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 
 	private boolean domainsAndRangesAreUpToDate = false;
 	private boolean domainsAndRangesAreRecursivelyUpToDate = false;
-	private Set<OWLProperty> declaredPropertiesTakingMySelfAsRange;
-	private Set<OWLProperty> declaredPropertiesTakingMySelfAsDomain;
+	private final Set<OWLProperty> declaredPropertiesTakingMySelfAsRange;
+	private final Set<OWLProperty> declaredPropertiesTakingMySelfAsDomain;
 	protected List<OWLProperty> propertiesTakingMySelfAsRange;
 	protected List<OWLProperty> propertiesTakingMySelfAsDomain;
 
@@ -669,7 +668,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		}
 	}
 
-	public void deleteAnnotation(PropertyStatement annotation) throws DuplicateMethodSignatureException {
+	public void deleteAnnotation(PropertyStatement annotation) {
 		removePropertyStatement(annotation);
 	}
 

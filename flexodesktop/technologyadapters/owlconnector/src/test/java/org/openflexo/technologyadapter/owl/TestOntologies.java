@@ -19,11 +19,15 @@
  */
 package org.openflexo.technologyadapter.owl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.TestFlexoServiceManager;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
@@ -38,17 +42,13 @@ import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
 import org.openflexo.toolbox.FileResource;
 
-public class TestOntologies extends FlexoTestCase {
+public class TestOntologies extends OpenflexoRunTimeTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestOntologies.class.getPackage().getName());
 
 	private static TestFlexoServiceManager testServiceManager;
 	private static OWLTechnologyAdapter owlAdapter;
 	private static OWLOntologyLibrary ontologyLibrary;
-
-	public TestOntologies(String name) {
-		super(name);
-	}
 
 	/**
 	 * Instanciate test ResourceCenter

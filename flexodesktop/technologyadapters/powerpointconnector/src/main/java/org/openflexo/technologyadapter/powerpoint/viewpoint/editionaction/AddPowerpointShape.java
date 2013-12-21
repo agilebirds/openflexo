@@ -13,7 +13,6 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.powerpoint.BasicPowerpointModelSlot;
 import org.openflexo.technologyadapter.powerpoint.model.PowerpointShape;
@@ -29,8 +28,8 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 
 	private DataBinding<PowerpointSlide> powerpointSlide;
 
-	public AddPowerpointShape(VirtualModelBuilder builder) {
-		super(builder);
+	public AddPowerpointShape() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -52,7 +51,7 @@ public class AddPowerpointShape extends AssignableAction<BasicPowerpointModelSlo
 
 					AutoShape shape = new AutoShape(ShapeTypes.Chevron);
 
-					powerpointShape = modelSlotInstance.getResourceData().getConverter()
+					powerpointShape = modelSlotInstance.getAccessedResourceData().getConverter()
 							.convertPowerpointShapeToShape(shape, powerpointSlide, null);
 					powerpointSlide.getSlide().addShape(shape);
 					modelSlotInstance.getResourceData().setIsModified();

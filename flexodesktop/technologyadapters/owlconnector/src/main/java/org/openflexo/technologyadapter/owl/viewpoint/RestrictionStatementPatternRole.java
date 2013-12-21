@@ -2,10 +2,9 @@ package org.openflexo.technologyadapter.owl.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 
@@ -13,8 +12,8 @@ import org.openflexo.technologyadapter.owl.model.OWLRestriction;
 @Deprecated
 public class RestrictionStatementPatternRole extends StatementPatternRole {
 
-	public RestrictionStatementPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public RestrictionStatementPatternRole() {
+		super();
 	}
 
 	@Override
@@ -49,20 +48,8 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 		}
 
 		// Constructor used during deserialization
-		public RestrictionStatementActorReference(VirtualModelInstanceBuilder builder) {
-			super(builder.getProject());
-			initializeDeserialization(builder);
-		}
-
-		@Override
-		public String getClassNameKey() {
-			return "sub_class_statement_actor_reference";
-		}
-
-		@Override
-		public String getFullyQualifiedName() {
-			// TODO Auto-generated method stub
-			return null;
+		public RestrictionStatementActorReference(FlexoProject project) {
+			super(project);
 		}
 
 		@Override

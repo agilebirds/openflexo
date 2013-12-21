@@ -19,12 +19,15 @@
  */
 package org.openflexo.technologyadapter.owl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.TestFlexoServiceManager;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.technologyadapter.owl.gui.OWLOntologyBrowserModel;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
@@ -37,17 +40,13 @@ import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
 import org.openflexo.toolbox.FileResource;
 
-public class TestOntologyBrowserModel extends FlexoTestCase {
+public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestOntologyBrowserModel.class.getPackage().getName());
 
 	private static TestFlexoServiceManager testApplicationContext;
 	private static OWLTechnologyAdapter owlAdapter;
 	private static OWLOntologyLibrary ontologyLibrary;
-
-	public TestOntologyBrowserModel(String name) {
-		super(name);
-	}
 
 	/**
 	 * Instanciate new ResourceCenter

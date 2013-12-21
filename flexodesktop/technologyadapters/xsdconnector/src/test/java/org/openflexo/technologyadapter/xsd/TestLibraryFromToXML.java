@@ -1,5 +1,9 @@
 package org.openflexo.technologyadapter.xsd;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,13 +16,12 @@ import javax.xml.transform.TransformerException;
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
@@ -31,7 +34,7 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.toolbox.FileResource;
 
-public class TestLibraryFromToXML extends FlexoTestCase {
+public class TestLibraryFromToXML extends OpenflexoRunTimeTestCase {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(TestLibraryFromToXML.class
 			.getPackage().getName());
@@ -50,10 +53,6 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static XMLModelRepository modelRepository;
 	private static String baseDirName;
 
-	public TestLibraryFromToXML(String name) {
-		super(name);
-	}
-
 	private static final void dumpIndividual(IXMLIndividual<XSOntIndividual, XSOntProperty> indiv, String prefix) {
 
 		System.out.println(prefix + "Indiv : " + indiv.getName() + "  ==> " + indiv.getUUID());
@@ -62,24 +61,23 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 			XSPropertyValue pv = ((XSOntIndividual) indiv).getPropertyValue(x);
 			List<? extends Object> values = null;
 
-			if (pv != null){
-				values =pv.getValues();
+			if (pv != null) {
+				values = pv.getValues();
 			}
 
 			if (x.isSimpleAttribute()) {
-				System.out.print(prefix + "   Data attr : " + x.getName() );
-				if (values != null){
+				System.out.print(prefix + "   Data attr : " + x.getName());
+				if (values != null) {
 					System.out.println("  =  " + values.toString());
-				}
-				else {
+				} else {
 					System.out.println("");
 				}
 			} else {
-				System.out.println(prefix + "   Object attr : " + x.getName() );
-				if (values != null){
-					for (Object o : values){
+				System.out.println(prefix + "   Object attr : " + x.getName());
+				if (values != null) {
+					for (Object o : values) {
 						XSOntIndividual child = (XSOntIndividual) o;
-						dumpIndividual((IXMLIndividual<XSOntIndividual, XSOntProperty>) child, prefix + "      ");
+						dumpIndividual(child, prefix + "      ");
 					}
 				}
 
@@ -90,8 +88,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		for (IXMLIndividual<XSOntIndividual, XSOntProperty> x : indiv.getChildren()) {
 			if (x != indiv) {
 				dumpIndividual(x, prefix + "     ");
-			}
-			else {
+			} else {
 				logger.info("NON MAIS NON!!!! CELA NE DOIT PAS ARRIVER");
 			}
 		}
@@ -122,7 +119,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	}
 
 	public void test0LibraryFromXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
-	ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			ResourceLoadingCancelledException, FlexoException {
 
 		log("test0LibraryFromXML()");
 
@@ -147,7 +144,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	}
 
 	public void test1LibraryToXML() throws ParserConfigurationException, TransformerException, FileNotFoundException,
-	ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+			ResourceLoadingCancelledException, FlexoException {
 
 		log("test1LibraryToXML()");
 

@@ -25,7 +25,6 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 
 /**
@@ -36,8 +35,8 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 
 	private String individualURI;
 
-	public XMLIndividualPatternRole(VirtualModelBuilder builder) {
-		super(builder);
+	public XMLIndividualPatternRole() {
+		super();
 	}
 
 	@Override

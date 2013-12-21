@@ -30,7 +30,7 @@ import java.util.Map;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.xml.model.IXMLMetaModel;
@@ -42,23 +42,17 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
-
-public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel>,IXMLMetaModel, TechnologyObject {
-
-
+public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel>, IXMLMetaModel, TechnologyObject {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSDMetaModel.class.getPackage()
 			.getName());
 
-
-	private XSOntClass thingClass;
-
-
+	private final XSOntClass thingClass;
 
 	public XSDMetaModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
-		super(ontologyURI,xsdFile,adapter);
+		super(ontologyURI, xsdFile, adapter);
 
-		this.thingClass = new XSOntClass(this,"Thing", XS_THING_URI, getTechnologyAdapter());
+		this.thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
 
 		addClass(thingClass);
 	}
@@ -76,13 +70,11 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		logger.warning("XSDMetaModels are not supposed to be saved !!!");
 	}
 
-
 	@Override
 	public List<IFlexoOntologyMetaModel> getMetaModels() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public FlexoResource<XSDMetaModel> getResource() {
@@ -91,15 +83,11 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 
 	@Override
 	public void setResource(FlexoResource<XSDMetaModel> resource) {
-		this.modelResource =  (XSDMetaModelResource) resource;
+		this.modelResource = resource;
 	}
 
-
-
-
-	//*****************************************************************************
+	// *****************************************************************************
 	// IXMLMetaModel related Functions
-
 
 	@Override
 	public Type getTypeFromURI(String uri) {
@@ -112,9 +100,8 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		return null;
 	}
 
-	//*****************************************************************************
+	// *****************************************************************************
 	// IFlexoOntology related Functions
-
 
 	@Override
 	public List<XSOntDataProperty> getDataProperties() {
@@ -124,10 +111,10 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 	public static String findNamespaceURI(File f) {
 		// This is for MetaModel Only => should not be used for XML Models
 		// FIXME : useless for models
-		String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(f,true);
-		if (schemaURI != null && !schemaURI.equals("")){
+		String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(f, true);
+		if (schemaURI != null && !schemaURI.equals("")) {
 			return schemaURI;
-		}else{
+		} else {
 			return "http://www.openflexo.org/XSD/" + f.getName();
 		}
 	}
@@ -148,13 +135,12 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		return dataProperties.get(propertyURI);
 	}
 
-
 	@Override
 	public XSOntClass getRootConcept() {
 		return thingClass;
 	}
 
-	//*****************************************************************************
+	// *****************************************************************************
 	// Utility Functions when building the model
 
 	private XSDDataType computeDataType(XSSimpleType simpleType) {
@@ -165,7 +151,6 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		}
 		return returned;
 	}
-
 
 	private boolean addClass(XSOntClass c) {
 		if (classes.containsKey(c.getURI()) == false) {
@@ -183,18 +168,16 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 	}
 
 	public XSOntClass createOntologyClass(String name, String uri, XSOntClass superClass) throws DuplicateURIException {
-		XSOntClass xsClass = createOntologyClass(name,uri);
+		XSOntClass xsClass = createOntologyClass(name, uri);
 		xsClass.addToSuperClasses(superClass);
 		return xsClass;
 	}
 
-
 	public XSOntClass createOntologyClass(String name, XSOntClass superClass) throws DuplicateURIException {
 		String uri = this.getURI() + "#" + "name";
-		XSOntClass xsClass = createOntologyClass(name,uri, superClass);
+		XSOntClass xsClass = createOntologyClass(name, uri, superClass);
 		return xsClass;
 	}
-
 
 	public XSOntDataProperty createDataProperty(String name, String uri, XSType aType) {
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri, getTechnologyAdapter());
@@ -209,7 +192,5 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		property.newRangeFound(c);
 		return property;
 	}
-
-
 
 }

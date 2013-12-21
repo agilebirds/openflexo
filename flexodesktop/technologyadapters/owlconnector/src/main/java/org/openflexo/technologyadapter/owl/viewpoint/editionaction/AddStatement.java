@@ -32,7 +32,6 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
@@ -42,8 +41,8 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
-	public AddStatement(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddStatement() {
+		super();
 	}
 
 	public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {

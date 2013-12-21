@@ -29,10 +29,8 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -128,8 +126,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	 * @throws FlexoException
 	 */
 	@Override
-	public OWLOntology loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
-			FileNotFoundException, FlexoException {
+	public OWLOntology loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException {
 		OWLOntology returned = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
 		returned.setResource(this);
 		return returned;
@@ -149,9 +146,6 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {
@@ -193,9 +187,6 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			clearIsModified(true);
 			logger.info("Wrote " + getFile());
 		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} catch (FlexoException e) {
@@ -240,9 +231,6 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			e.printStackTrace();
 			return null;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ResourceDependencyLoopException e) {
 			e.printStackTrace();
 			return null;
 		} catch (FlexoException e) {

@@ -71,7 +71,7 @@ public class AddXSClass extends AddClass<XSDModelSlot, XSOntClass> {
 			logger.info("Adding class " + newClassName + " as " + father);
 			// FIXME : Something wrong here!
 			// newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
-			newClass = getModelSlotInstance(action).getResourceData().getMetaModel().createOntologyClass(newClassName, father);
+			newClass = getModelSlotInstance(action).getAccessedResourceData().getMetaModel().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

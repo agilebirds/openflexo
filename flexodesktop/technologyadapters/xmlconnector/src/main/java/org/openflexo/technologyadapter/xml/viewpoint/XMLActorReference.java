@@ -24,14 +24,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.view.ActorReference;
-import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLObject;
 
 public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
@@ -42,35 +38,31 @@ public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
 	private String objectURI;
 
 	// Constructor used during deserialization
-	public XMLActorReference(VirtualModelInstanceBuilder builder) {
-		super(builder.getProject());
-		initializeDeserialization(builder);
+	public XMLActorReference(FlexoProject project) {
+		super(project);
 	}
 
-	public XMLActorReference(T o,
-			PatternRole<T> aPatternRole,
-			EditionPatternInstance epi) {	
-			
-			super(epi.getProject());
-			setEditionPatternInstance(epi);
-			setPatternRole(aPatternRole);
-			object = o;
+	public XMLActorReference(T o, PatternRole<T> aPatternRole, EditionPatternInstance epi) {
 
-			ModelSlotInstance msInstance = getModelSlotInstance();
-			/** Model Slot is responsible for URI mapping */
-		    objectURI = msInstance.getModelSlot().getURIForObject(msInstance, o);
-		
+		super(epi.getProject());
+		setEditionPatternInstance(epi);
+		setPatternRole(aPatternRole);
+		object = o;
+
+		ModelSlotInstance msInstance = getModelSlotInstance();
+		/** Model Slot is responsible for URI mapping */
+		objectURI = msInstance.getModelSlot().getURIForObject(msInstance, o);
+
 	}
 
-	
 	@Override
 	public T retrieveObject() {
 		if (object == null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
 			if (msInstance.getResource() != null) {
-				// object = (T) getProject().getObject(objectURI); 
+				// object = (T) getProject().getObject(objectURI);
 				/** Model Slot is responsible for URI mapping */
-				 object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);
+				object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);
 			} else {
 				logger.warning("Could not access to model in model slot " + getModelSlotInstance());
 				logger.warning("Searched " + getModelSlotInstance().getResource().getURI());
@@ -83,11 +75,10 @@ public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
 
 	}
 
-
 	public String _getObjectURI() {
 		if (object != null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
-		    objectURI = msInstance.getModelSlot().getURIForObject(msInstance, object);
+			objectURI = msInstance.getModelSlot().getURIForObject(msInstance, object);
 		}
 		return objectURI;
 	}
@@ -95,18 +86,5 @@ public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
 	public void _setObjectURI(String objectURI) {
 		this.objectURI = objectURI;
 	}
-
-	
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "xml_actor_reference";
-	}
-
 
 }

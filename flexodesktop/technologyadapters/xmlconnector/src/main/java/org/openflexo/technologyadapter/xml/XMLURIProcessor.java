@@ -22,7 +22,6 @@
 package org.openflexo.technologyadapter.xml;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -38,19 +37,16 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.IXMLType;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
-import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.xmlcode.XMLSerializable;
-
-
 
 /* Correct processing of XML Objects URIs needs to add an internal class to store
  * for each XMLType wich are the XML Elements (attributes or CDATA, or...) that will be 
@@ -59,15 +55,14 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 // TODO Manage the fact that URI May Change
 
-public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializable {
+public class XMLURIProcessor extends NamedViewPointObjectImpl implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(XMLURIProcessor.class.getPackage().getName());
 
 	// mapping styles enumeration
-	
+
 	public enum MappingStyle {
-		ATTRIBUTE_VALUE,
-		SINGLETON;
+		ATTRIBUTE_VALUE, SINGLETON;
 	}
 
 	// Properties actually used to calculate URis
@@ -76,11 +71,10 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	private IXMLType mappedClass;
 	private TypeAwareModelSlot<?, ?> modelSlot;
 	private IXMLAttribute baseAttributeForURI;
-	
+
 	// Cache des URis Pour aller plus vite ??
 	// TODO some optimization required
-	private Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
-
+	private final Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
 
 	public void setModelSlot(ModelSlot aModelSlot) {
 		modelSlot = (TypeAwareModelSlot<?, ?>) aModelSlot;
@@ -132,10 +126,10 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	public IXMLAttribute getBaseAttributeForURI() {
 		return baseAttributeForURI;
 	}
-	
+
 	public void setBaseAttributeForURI(IXMLAttribute baseAttributeForURI) {
 		this.baseAttributeForURI = baseAttributeForURI;
-		if (this.baseAttributeForURI != null ){
+		if (this.baseAttributeForURI != null) {
 			this.attributeName = this.baseAttributeForURI.getName();
 		}
 	}
@@ -160,10 +154,10 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 			String mmURI = modelSlot.getMetaModelURI();
 			if (mmURI != null) {
 				// FIXME : to be re-factored
-				XMLFileResource  mmResource = (XMLFileResource) modelSlot.getMetaModelResource();
+				XMLFileResource mmResource = (XMLFileResource) modelSlot.getMetaModelResource();
 				if (mmResource != null) {
-					mappedClass = ((XMLModel) mmResource.getModelData()).getTypeFromURI(typeURI.toString());
-					} else {
+					mappedClass = mmResource.getModelData().getTypeFromURI(typeURI.toString());
+				} else {
 					logger.warning("unable to map typeURI to an XMLType, as metaModelResource is Null ");
 				}
 			} else
@@ -174,11 +168,11 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	}
 
 	public XMLURIProcessor() {
-		super((VirtualModelBuilder) null);
+		super();
 	}
 
 	public XMLURIProcessor(String typeURI) {
-		super((VirtualModelBuilder) null);
+		super();
 		this.typeURI = URI.create(typeURI);
 	}
 
@@ -201,28 +195,27 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 
 				Object value = ((IXMLIndividual) xsO).getAttributeValue(attributeName);
 				try {
-					builtURI = URLEncoder.encode(value.toString(),"UTF-8");
+					builtURI = URLEncoder.encode(value.toString(), "UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					logger.warning("Cannot process URI - Unexpected encoding error");
 					e.printStackTrace();
 				}
-			} 
-			else if (mappingStyle == MappingStyle.SINGLETON ){
+			} else if (mappingStyle == MappingStyle.SINGLETON) {
 				// TODO singleton here
-			}
-			else{
+			} else {
 				logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
 			}
 		}
 
-		if (builtURI != null){
-			if(uriCache.get(builtURI) == null){
+		if (builtURI != null) {
+			if (uriCache.get(builtURI) == null) {
 				// TODO Manage the fact that URI May Change
 				uriCache.put(builtURI, xsO);
 			}
 		}
-		completeURIStr.append(typeURI.getScheme()).append("://").append(typeURI.getHost() ).append(typeURI.getPath()).append("?").append(builtURI).append("#").append(typeURI.getFragment());
-		return  completeURIStr.toString();
+		completeURIStr.append(typeURI.getScheme()).append("://").append(typeURI.getHost()).append(typeURI.getPath()).append("?")
+				.append(builtURI).append("#").append(typeURI.getFragment());
+		return completeURIStr.toString();
 	}
 
 	// get the Object given the URI
@@ -236,22 +229,22 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 		}
 
 		// modelResource must also be loaded!
-		
+
 		FlexoModelResource resource = (FlexoModelResource) msInstance.getResource();
 		if (!resource.isLoaded()) {
 			resource.getModelData();
 		}
-		
+
 		// retrieve object
 		if (o == null) {
 
 			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
 
-				for (IXMLIndividual obj: ((XMLModel) msInstance.getResourceData()).getIndividualsOfType(mappedClass)){
+				for (IXMLIndividual obj : ((XMLModel) msInstance.getAccessedResourceData()).getIndividualsOfType(mappedClass)) {
 
-					Object value = ((IXMLIndividual) obj).getAttributeValue(attributeName);
+					Object value = obj.getAttributeValue(attributeName);
 					try {
-						if (value.equals(URLDecoder.decode(objectURI,"UTF-8"))){
+						if (value.equals(URLDecoder.decode(objectURI, "UTF-8"))) {
 							return obj;
 						}
 					} catch (UnsupportedEncodingException e) {
@@ -260,7 +253,7 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 					}
 				}
 
-			} else{
+			} else {
 				logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
 			}
 		}
@@ -268,22 +261,22 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 		return o;
 	}
 
-
 	// get the right URIProcessor for URI
 
-	static public String retrieveTypeURI(ModelSlotInstance msInstance, String objectURI){
+	static public String retrieveTypeURI(ModelSlotInstance msInstance, String objectURI) {
 
 		URI fullURI;
 		StringBuffer typeURIStr = new StringBuffer();
 
 		fullURI = URI.create(objectURI);
-		typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost() ).append(fullURI.getPath()).append("#").append(fullURI.getFragment());
+		typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost()).append(fullURI.getPath()).append("#")
+				.append(fullURI.getFragment());
 
 		return typeURIStr.toString();
 	}
 
 	// TODO ... To support Notification
-	
+
 	@Override
 	public BindingModel getBindingModel() {
 		// TODO Auto-generated method stub
@@ -310,6 +303,162 @@ public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializ
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

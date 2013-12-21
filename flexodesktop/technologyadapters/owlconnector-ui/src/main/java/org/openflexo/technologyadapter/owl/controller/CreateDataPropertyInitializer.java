@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
@@ -57,7 +57,7 @@ public class CreateDataPropertyInitializer extends ActionInitializer<CreateDataP
 		return new FlexoActionFinalizer<CreateDataProperty>() {
 			@Override
 			public boolean run(EventObject e, CreateDataProperty action) {
-				getController().getSelectionManager().setSelectedObject((FlexoModelObject) action.getNewProperty());
+				getController().getSelectionManager().setSelectedObject((FlexoObject) action.getNewProperty());
 				return true;
 			}
 		};
