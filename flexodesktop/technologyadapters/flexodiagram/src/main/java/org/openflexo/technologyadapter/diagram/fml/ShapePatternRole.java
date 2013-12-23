@@ -9,6 +9,8 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation> {
@@ -47,7 +49,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 	public void tryToFindAGR() {
 		if (getGraphicalRepresentation() == null) {
 			// Try to find one somewhere
-			for (DiagramPalette palette : getVirtualModel().getPalettes()) {
+			for (DiagramPalette palette : getDiagramSpecification().getPalettes()) {
 				for (DiagramPaletteElement e : palette.getElements()) {
 					if (e.getEditionPattern() == getEditionPattern()) {
 						setGraphicalRepresentation(e.getGraphicalRepresentation());
@@ -129,7 +131,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 	 */
 	public List<ShapePatternRole> getPossibleParentShapePatternRoles() {
 		List<ShapePatternRole> returned = new ArrayList<ShapePatternRole>();
-		List<ShapePatternRole> shapesPatternRoles = getEditionPattern().getShapePatternRoles();
+		List<ShapePatternRole> shapesPatternRoles = getEditionPattern().getPatternRoles(ShapePatternRole.class);
 		for (ShapePatternRole shapePatternRole : shapesPatternRoles) {
 			if (!shapePatternRole.isContainedIn(this)) {
 				returned.add(shapePatternRole);
@@ -147,14 +149,6 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public boolean isIncludedInPrimaryRepresentationRole() {
-		if (getParentShapePatternRole() != null && getParentShapePatternRole() != this) {
-			return getParentShapePatternRole().isIncludedInPrimaryRepresentationRole();
-		}
-		return super.isIncludedInPrimaryRepresentationRole();
 	}
 
 	public static GraphicalFeature<Double, ShapeGraphicalRepresentation> POS_X_FEATURE = new GraphicalFeature<Double, ShapeGraphicalRepresentation>(

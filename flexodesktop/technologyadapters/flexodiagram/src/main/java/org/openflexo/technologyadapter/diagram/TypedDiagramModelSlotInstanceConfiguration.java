@@ -20,8 +20,8 @@
 package org.openflexo.technologyadapter.diagram;
 
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 

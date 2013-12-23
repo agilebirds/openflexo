@@ -34,7 +34,7 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.fml.ExampleDiagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, DiagramSpecification, ViewPointObject> {

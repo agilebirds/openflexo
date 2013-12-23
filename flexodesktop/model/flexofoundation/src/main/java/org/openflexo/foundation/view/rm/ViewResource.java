@@ -1,10 +1,8 @@
 package org.openflexo.foundation.view.rm;
 
-import java.io.File;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
+import org.openflexo.foundation.resource.DirectoryContainerResource;
 import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.PamelaResource;
@@ -28,7 +26,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ViewResourceImpl.class)
 @XMLElement
-public interface ViewResource extends PamelaResource<View, ViewModelFactory>, FlexoProjectResource<View> {
+public interface ViewResource extends PamelaResource<View, ViewModelFactory>, FlexoProjectResource<View>, DirectoryContainerResource<View> {
 
 	public static final String VIEW_SUFFIX = ".view";
 
@@ -43,13 +41,6 @@ public interface ViewResource extends PamelaResource<View, ViewModelFactory>, Fl
 
 	@Setter(VIEW_LIBRARY)
 	public void setViewLibrary(ViewLibrary viewLibrary);
-
-	@Getter(DIRECTORY)
-	@XmlAttribute
-	public File getDirectory();
-
-	@Setter(DIRECTORY)
-	public void setDirectory(File file);
 
 	@Getter(value = VIEWPOINT_RESOURCE, ignoreType = true)
 	public ViewPointResource getViewPointResource();

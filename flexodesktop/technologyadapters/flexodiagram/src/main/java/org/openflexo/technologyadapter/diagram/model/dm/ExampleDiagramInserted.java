@@ -19,22 +19,22 @@
  */
 package org.openflexo.technologyadapter.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
 
 /**
- * Notify that a new view has been added
+ * Notify that a new example diagram has been added to DiagramSpecification
  * 
  * @author sguerin
  * 
  */
 public class ExampleDiagramInserted extends ViewPointDataModification {
 
-	private DiagramSpecification _parent;
+	private final DiagramSpecification _parent;
 
-	public ExampleDiagramInserted(ExampleDiagram shema, DiagramSpecification parent) {
-		super(null, shema);
+	public ExampleDiagramInserted(Diagram exampleDiagram, DiagramSpecification parent) {
+		super(null, exampleDiagram);
 		_parent = parent;
 	}
 

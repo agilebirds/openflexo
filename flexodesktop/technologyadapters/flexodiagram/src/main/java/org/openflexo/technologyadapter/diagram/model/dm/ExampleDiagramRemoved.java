@@ -19,9 +19,9 @@
  */
 package org.openflexo.technologyadapter.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
 
 /**
  * Notify that a new view has been added
@@ -31,16 +31,16 @@ import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
  */
 public class ExampleDiagramRemoved extends ViewPointDataModification {
 
-	private DiagramSpecification _parent;
+	private final DiagramSpecification _parent;
 
-	public ExampleDiagramRemoved(ExampleDiagram shema, DiagramSpecification parent) {
-		super(shema, null);
+	public ExampleDiagramRemoved(Diagram exampleDiagram, DiagramSpecification parent) {
+		super(exampleDiagram, null);
 		_parent = parent;
 	}
 
 	@Override
-	public ExampleDiagram oldValue() {
-		return (ExampleDiagram) super.oldValue();
+	public Diagram oldValue() {
+		return (Diagram) super.oldValue();
 	}
 
 	public DiagramSpecification getParent() {

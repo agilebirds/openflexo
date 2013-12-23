@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.diagram.fml;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -10,13 +11,17 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.technologyadapter.diagram.FreeDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementAction.ActionMask;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalElementActionInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalElementActionRemoved;
 import org.openflexo.technologyadapter.diagram.model.dm.GraphicalRepresentationChanged;
@@ -50,9 +55,20 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 		}
 	}
 
-	@Override
-	public DiagramSpecification getVirtualModel() {
-		return (DiagramSpecification) super.getVirtualModel();
+	public DiagramSpecification getDiagramSpecification() {
+		if (getModelSlot() instanceof TypedDiagramModelSlot) {
+			try {
+				return ((TypedDiagramModelSlot) getModelSlot()).getMetaModelResource().getResourceData(null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -135,7 +151,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 		return getEditionPattern().getInspector().getBindingModel();
 	}*/
 
-	public boolean getIsPrimaryRepresentationRole() {
+	/*public boolean getIsPrimaryRepresentationRole() {
 		if (getEditionPattern() == null) {
 			return false;
 		}
@@ -166,9 +182,10 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 	public void setIsPrimaryRole(boolean isPrimary) {
 		setIsPrimaryRepresentationRole(isPrimary);
 	}
+	*/
 
 	public boolean containsShapes() {
-		for (ShapePatternRole role : getEditionPattern().getShapePatternRoles()) {
+		for (ShapePatternRole role : getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 			if (role.getParentShapePatternRole() == this) {
 				return true;
 			}
@@ -230,7 +247,7 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 	}
 
 	public GraphicalElementAction createAction() {
-		GraphicalElementAction newAction = new GraphicalElementAction(null);
+		GraphicalElementAction newAction = new GraphicalElementAction();
 		addToActions(newAction);
 		return newAction;
 	}
@@ -338,16 +355,21 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement<GR>, 
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = { LABEL_FEATURE, VISIBLE_FEATURE, TRANSPARENCY_FEATURE };
 
 	@Override
-	public ModelObjectActorReference<T> makeActorReference(T object, EditionPatternInstance epi) {
-		return new ModelObjectActorReference<T>(object, this, epi);
+	public ModelObjectActorReference makeActorReference(T object, EditionPatternInstance epi) {
+		// TODO
+		// return new ModelObjectActorReference<T>(object, this, epi);
+		return null;
 	}
 
 	@Override
-	public TypedDiagramModelSlot getModelSlot() {
-		TypedDiagramModelSlot returned = (TypedDiagramModelSlot) super.getModelSlot();
+	public ModelSlot<?> getModelSlot() {
+		ModelSlot<?> returned = super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(TypedDiagramModelSlot.class).get(0);
+			}
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FreeDiagramModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(FreeDiagramModelSlot.class).get(0);
 			}
 		}
 		return returned;

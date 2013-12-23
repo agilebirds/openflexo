@@ -19,9 +19,9 @@
  */
 package org.openflexo.technologyadapter.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
 /**
  * Notify that a new palette has been added
@@ -31,7 +31,7 @@ import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
  */
 public class DiagramPaletteInserted extends ViewPointDataModification {
 
-	private DiagramSpecification _parent;
+	private final DiagramSpecification _parent;
 
 	public DiagramPaletteInserted(DiagramPalette palette, DiagramSpecification parent) {
 		super(null, palette);

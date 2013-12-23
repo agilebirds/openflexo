@@ -10,7 +10,7 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
 import org.openflexo.toolbox.StringUtils;
 
@@ -47,7 +47,8 @@ public class DiagramPatternRole extends PatternRole<View> {
 
 	public DiagramSpecificationResource getDiagramSpecificationResource() {
 		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
-			diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+			diagramSpecificationResource = (DiagramSpecificationResource) getModelSlot().getTechnologyAdapter()
+					.getTechnologyContextManager().getResourceWithURI(diagramSpecificationURI);
 			logger.info("Looked-up " + diagramSpecificationResource);
 		}
 		return diagramSpecificationResource;

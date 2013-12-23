@@ -18,7 +18,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.diagram.model;
+package org.openflexo.technologyadapter.diagram.metamodel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,14 +34,11 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
-import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.fml.ExampleDiagram;
 import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteRemoved;
@@ -50,11 +47,12 @@ import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramRemoved;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResourceImpl;
-import org.openflexo.technologyadapter.diagram.rm.ExampleDiagramResource;
 import org.openflexo.toolbox.ChainedCollection;
 
 /**
- * A {@link DiagramSpecification} is the specification of a Diagram
+ * A {@link DiagramSpecification} is the specification of a Diagram<br>
+ * 
+ * A {@link DiagramSpecification} contains some palettes and example diagrams
  * 
  * @author sylvain
  * 
@@ -81,10 +79,8 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 	 * @param viewPoint
 	 * @return
 	 */
-	public static DiagramSpecification newDiagramSpecification(String baseName, ViewPoint viewPoint) {
-		File diagramSpecificationDirectory = new File(viewPoint.getResource().getDirectory(), baseName);
+	public static DiagramSpecification newDiagramSpecification(String baseName, File diagramSpecificationDirectory) {
 		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
-		ViewPointLibrary viewPointLibrary = viewPoint.getViewPointLibrary();
 		DiagramSpecificationResource dsRes = DiagramSpecificationResourceImpl.makeDiagramSpecificationResource(
 				diagramSpecificationDirectory, diagramSpecificationXMLFile, viewPoint.getResource(), viewPointLibrary);
 		DiagramSpecification diagramSpecification = new DiagramSpecification(viewPoint);
@@ -326,6 +322,21 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 		}*/
 		super.finalizeDeserialization(builder);
 		updateBindingModel();
+	}
+
+	public String getName() {
+		if (getResource() != null) {
+			return getResource().getName();
+		}
+		return null;
+	}
+
+	public void setName(String name) {
+		if (requireChange(getName(), name)) {
+			if (getResource() != null) {
+				getResource().setName(name);
+			}
+		}
 	}
 
 }

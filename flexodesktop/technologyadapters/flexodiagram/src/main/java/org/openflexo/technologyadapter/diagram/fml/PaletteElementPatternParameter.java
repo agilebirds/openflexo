@@ -19,27 +19,27 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
-import java.util.Collection;
-
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
-public class PaletteElementPatternParameter extends DiagramPaletteObject {
+public class PaletteElementPatternParameter extends NamedViewPointObjectImpl {
 
 	private EditionSchemeParameter _parameter;
 	private DiagramPaletteElement _element;
 	private String value;
 
-	public PaletteElementPatternParameter(DiagramPaletteBuilder builder) {
-		super(builder);
+	public PaletteElementPatternParameter() {
+		super();
 	}
 
 	public PaletteElementPatternParameter(EditionSchemeParameter p) {
-		super((DiagramPaletteBuilder) null);
+		super();
 		_parameter = p;
 		setName(p.getName());
 		setValue(p.getDefaultValue().toString());
@@ -50,19 +50,14 @@ public class PaletteElementPatternParameter extends DiagramPaletteObject {
 		return null;
 	}
 
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return null;
-	}
-
 	public String getValue() {
 		if (getParameter() != null) {
 			if (getParameter() instanceof URIParameter) {
 				return "< Computed URI >";
 			}
-			if (getParameter().getUsePaletteLabelAsDefaultValue()) {
+			/*if (getParameter().getUsePaletteLabelAsDefaultValue()) {
 				return "< Takes palette element label >";
-			}
+			}*/
 		}
 		return value;
 	}
@@ -73,12 +68,11 @@ public class PaletteElementPatternParameter extends DiagramPaletteObject {
 
 	public boolean isEditable() {
 		if (getParameter() != null) {
-			return !(getParameter() instanceof URIParameter) && !getParameter().getUsePaletteLabelAsDefaultValue();
+			return !(getParameter() instanceof URIParameter) /*&& !getParameter().getUsePaletteLabelAsDefaultValue()*/;
 		}
 		return true;
 	}
 
-	@Override
 	public DiagramPalette getPalette() {
 		if (getElement() != null) {
 			return getElement().getPalette();
@@ -86,7 +80,6 @@ public class PaletteElementPatternParameter extends DiagramPaletteObject {
 		return null;
 	}
 
-	@Override
 	public DiagramSpecification getVirtualModel() {
 		if (getElement() != null) {
 			return getElement().getVirtualModel();

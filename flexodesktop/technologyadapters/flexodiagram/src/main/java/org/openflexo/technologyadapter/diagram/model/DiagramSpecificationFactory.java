@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.diagram.model;
 import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
 /**
  * Diagram specification factory<br>

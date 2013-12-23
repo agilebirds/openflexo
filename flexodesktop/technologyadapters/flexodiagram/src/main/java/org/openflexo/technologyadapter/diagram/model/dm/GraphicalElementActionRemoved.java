@@ -19,21 +19,21 @@
  */
 package org.openflexo.technologyadapter.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
+import org.openflexo.technologyadapter.diagram.fml.GraphicalElementAction;
+import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 
 public class GraphicalElementActionRemoved extends ViewPointDataModification {
 
-	private GraphicalElementPatternRole _parent;
+	private final GraphicalElementPatternRole<?, ?> parent;
 
-	public GraphicalElementActionRemoved(GraphicalElementAction action, GraphicalElementPatternRole parent) {
+	public GraphicalElementActionRemoved(GraphicalElementAction action, GraphicalElementPatternRole<?, ?> parent) {
 		super(action, null);
-		_parent = parent;
+		this.parent = parent;
 	}
 
-	public GraphicalElementPatternRole getParent() {
-		return _parent;
+	public GraphicalElementPatternRole<?, ?> getParent() {
+		return parent;
 	}
 
 }

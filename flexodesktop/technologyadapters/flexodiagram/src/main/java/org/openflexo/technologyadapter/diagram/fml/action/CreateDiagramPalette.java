@@ -33,8 +33,8 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, DiagramSpecification, ViewPointObject> {

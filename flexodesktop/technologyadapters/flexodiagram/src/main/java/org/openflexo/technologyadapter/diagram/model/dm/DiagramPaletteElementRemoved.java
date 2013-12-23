@@ -19,9 +19,9 @@
  */
 package org.openflexo.technologyadapter.diagram.model.dm;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 
 /**
  * Notify that a new element has been removed from palette
@@ -31,7 +31,7 @@ import org.openflexo.foundation.viewpoint.dm.ViewPointDataModification;
  */
 public class DiagramPaletteElementRemoved extends ViewPointDataModification {
 
-	private DiagramPalette _parent;
+	private final DiagramPalette _parent;
 
 	public DiagramPaletteElementRemoved(DiagramPaletteElement element, DiagramPalette parent) {
 		// super(element, null);

@@ -19,46 +19,181 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
-import org.openflexo.foundation.viewpoint.NamedViewPointObject;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
-import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
-public abstract class DiagramPaletteObject extends NamedViewPointObject {
+public abstract class DiagramPaletteObject extends FlexoObjectImpl {
 
-	public DiagramPaletteObject(DiagramPaletteBuilder builder) {
-		super(builder);
+	public DiagramPaletteObject() {
+		super();
 	}
 
 	public abstract DiagramPalette getPalette();
 
-	public abstract DiagramSpecification getVirtualModel();
+	public abstract DiagramSpecification getDiagramSpecification();
 
 	@Override
-	public final ViewPoint getViewPoint() {
-		if (getVirtualModel() != null) {
-			return getVirtualModel().getViewPoint();
-		}
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static class DiagramPaletteBuilder {
-		public DiagramSpecification diagramSpecification;
-		public DiagramPalette diagramPalette;
-		public DiagramPaletteResource resource;
-		private DiagramPaletteFactory factory;
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
 
-		public DiagramPaletteBuilder(DiagramSpecification diagramSpecification, DiagramPaletteResource resource,
-				DiagramPaletteFactory factory) {
-			this.diagramSpecification = diagramSpecification;
-			this.resource = resource;
-			this.factory = factory;
-		}
+	}
 
-		public DiagramPaletteFactory getFactory() {
-			return factory;
-		}
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

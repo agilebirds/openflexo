@@ -80,8 +80,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	}
 
 	public void setStartShapeAsDefinedInAction(boolean flag) {
-		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
-			setStartShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		if (!flag && getEditionPattern().getPatternRoles(ShapePatternRole.class).size() > 0) {
+			setStartShapePatternRole(getEditionPattern().getPatternRoles(ShapePatternRole.class).get(0));
 		} else {
 			// System.out.println("setStartShapePatternRole with null");
 			setStartShapePatternRole(null);
@@ -104,8 +104,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	}
 
 	public void setEndShapeAsDefinedInAction(boolean flag) {
-		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
-			setEndShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
+		if (!flag && getEditionPattern().getPatternRoles(ShapePatternRole.class).size() > 0) {
+			setEndShapePatternRole(getEditionPattern().getPatternRoles(ShapePatternRole.class).get(0));
 		} else {
 			// System.out.println("setEndShapePatternRole with null");
 			setEndShapePatternRole(null);
@@ -156,6 +156,6 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = {};
 
 	public List<ShapePatternRole> getShapePatternRoles() {
-		return getEditionPattern().getShapePatternRoles();
+		return getEditionPattern().getPatternRoles(ShapePatternRole.class);
 	}
 }

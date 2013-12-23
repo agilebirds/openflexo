@@ -29,6 +29,7 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
 /**
  * Represents a diagram in Openflexo build-in diagram technology<br>

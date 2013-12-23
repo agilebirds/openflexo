@@ -10,12 +10,11 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecificationFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.RelativePathFileConverter;
@@ -26,8 +25,8 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 
 	static final Logger logger = Logger.getLogger(DiagramSpecificationResourceImpl.class.getPackage().getName());
 
-	public static DiagramSpecificationResource makeDiagramSpecificationResource(File diagramSpecificationDirectory,
-			File diagramSpecificationXMLFile, ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
+	public static DiagramSpecificationResource makeDiagramSpecificationResource(String uri, File diagramSpecificationDirectory,
+			File diagramSpecificationXMLFile, FlexoServiceManager serviceManager) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
@@ -35,12 +34,11 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 			returned.setName(diagramSpecificationDirectory.getName());
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setFile(diagramSpecificationXMLFile);
-			returned.setViewPointLibrary(viewPointLibrary);
-			returned.setURI(viewPointResource.getURI() + "/" + diagramSpecificationDirectory.getName());
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
-			returned.relativePathFileConverter = new RelativePathFileConverter(diagramSpecificationDirectory);
-			viewPointResource.addToContents(returned);
-			viewPointResource.notifyContentsAdded(returned);
+			returned.setURI(uri);
+			returned.setServiceManager(serviceManager);
+			returned.setRelativePathFileConverter(new RelativePathFileConverter(diagramSpecificationDirectory));
+			// viewPointResource.addToContents(returned);
+			// viewPointResource.notifyContentsAdded(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -49,7 +47,7 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	}
 
 	public static DiagramSpecificationResource retrieveDiagramSpecificationResource(File diagramSpecificationDirectory,
-			File diagramSpecificationXMLFile, ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
+			File diagramSpecificationXMLFile, FlexoServiceManager serviceManager) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
@@ -61,7 +59,7 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 				// Unable to retrieve infos, just abort
 				return null;
 			}
-			returned.setURI(viewPointResource.getURI() + "/" + diagramSpecificationDirectory.getName());
+			returned.setURI(vpi.uri);
 			returned.setFile(xmlFile);
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setName(vpi.name);
@@ -69,9 +67,8 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
 			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
-			returned.setViewPointLibrary(viewPointLibrary);
 
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
+			returned.setServiceManager(serviceManager);
 
 			logger.fine("DiagramSpecificationResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
@@ -135,6 +132,7 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	}
 
 	private static class DiagramSpecificationInfo {
+		public String uri;
 		public String version;
 		public String name;
 		public String modelVersion;
@@ -157,7 +155,10 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 					Iterator<Attribute> it = root.getAttributes().iterator();
 					while (it.hasNext()) {
 						Attribute at = it.next();
-						if (at.getName().equals("name")) {
+						if (at.getName().equals("uri")) {
+							logger.fine("Returned " + at.getValue());
+							returned.uri = at.getValue();
+						} else if (at.getName().equals("name")) {
 							logger.fine("Returned " + at.getValue());
 							returned.name = at.getValue();
 						} else if (at.getName().equals("version")) {

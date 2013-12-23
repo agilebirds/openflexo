@@ -34,8 +34,8 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresenta
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/AddDiagramPanel.fib")

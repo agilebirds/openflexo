@@ -26,8 +26,8 @@ import org.openflexo.technologyadapter.diagram.fml.editionaction.AddConnector;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddDiagram;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.GraphicalAction;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 
@@ -51,7 +51,7 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> {
+public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> implements DiagramModelSlot {
 
 	private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
 

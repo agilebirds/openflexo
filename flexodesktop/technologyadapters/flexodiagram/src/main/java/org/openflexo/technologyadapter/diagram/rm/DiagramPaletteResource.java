@@ -7,8 +7,8 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 
 @ModelEntity
 @ImplementationClass(DiagramPaletteResourceImpl.class)

@@ -1,10 +1,8 @@
 package org.openflexo.foundation.viewpoint.rm;
 
-import java.io.File;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
+import org.openflexo.foundation.resource.DirectoryContainerResource;
 import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -18,7 +16,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ViewPointResourceImpl.class)
 @XMLElement
-public interface ViewPointResource extends PamelaResource<ViewPoint, ViewPointModelFactory> {
+public interface ViewPointResource extends PamelaResource<ViewPoint, ViewPointModelFactory>, DirectoryContainerResource<ViewPoint> {
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 	public static final String DIRECTORY = "directory";
@@ -30,13 +28,6 @@ public interface ViewPointResource extends PamelaResource<ViewPoint, ViewPointMo
 
 	@Setter(VIEW_POINT_LIBRARY)
 	public void setViewPointLibrary(ViewPointLibrary viewPointLibrary);
-
-	@Getter(DIRECTORY)
-	@XmlAttribute
-	public File getDirectory();
-
-	@Setter(DIRECTORY)
-	public void setDirectory(File file);
 
 	public List<VirtualModelResource> getVirtualModelResources();
 

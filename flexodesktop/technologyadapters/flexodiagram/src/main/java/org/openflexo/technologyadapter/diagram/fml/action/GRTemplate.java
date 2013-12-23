@@ -3,7 +3,7 @@ package org.openflexo.technologyadapter.diagram.fml.action;
 import java.util.List;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
 /**
  * Access to the graphical repesentation as well as a diagram specification

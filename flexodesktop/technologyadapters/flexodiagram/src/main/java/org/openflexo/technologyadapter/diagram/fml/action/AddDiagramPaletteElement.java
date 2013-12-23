@@ -31,9 +31,9 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 
 public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteElement, DiagramPalette, ViewPointObject> {
 

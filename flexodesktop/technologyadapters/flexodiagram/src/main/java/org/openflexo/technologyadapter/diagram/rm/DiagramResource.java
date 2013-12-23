@@ -8,9 +8,9 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.DiagramFactory;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
 /**
  * This is the {@link FlexoResource} encoding a {@link Diagram}

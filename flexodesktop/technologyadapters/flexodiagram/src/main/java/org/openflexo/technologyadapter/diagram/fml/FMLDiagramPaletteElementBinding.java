@@ -19,7 +19,9 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -28,16 +30,27 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
-import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
-public class DiagramPaletteElement extends DiagramPaletteObject {
+/**
+ * Encodes the binding between {@link DiagramPaletteElement} (part of {@link DiagramSpecification}) and FML
+ * 
+ * @author sylvain
+ * 
+ */
+public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 
-	private static final Logger logger = Logger.getLogger(DiagramPaletteElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(FMLDiagramPaletteElementBinding.class.getPackage().getName());
 
 	private String _editionPatternId;
 	private String _dropSchemeName;
@@ -49,59 +62,25 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	private boolean boundLabelToElementName = true;
 
-	// Represent graphical representation to be used as representation in the palette
-	private ShapeGraphicalRepresentation graphicalRepresentation;
-
 	// Represent graphical representation to be used as overriding representation
-	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
+	private final Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
 
-	private DiagramPaletteElement parent = null;
+	private final DiagramPaletteElement paletteElement = null;
+
 	// private Vector<DiagramPaletteElement> childs;
 
-	private DiagramPalette _palette;
-
-	public DiagramPaletteElement(DiagramPaletteBuilder builder) {
-		super(builder);
+	public FMLDiagramPaletteElementBinding() {
+		super();
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
 		parameters = new Vector<PaletteElementPatternParameter>();
 	}
 
-	public DiagramPaletteFactory getFactory() {
-		return _palette.getFactory();
-	}
-
-	@Override
-	public String getURI() {
-		return getVirtualModel().getURI() + "." + getName();
-	}
-
-	@Override
-	public Collection<? extends Validable> getEmbeddedValidableObjects() {
-		return getOverridingGraphicalRepresentations();
-	}
-
-	public DiagramSpecification getDiagramSpecification() {
-		if (getPalette() != null) {
-			return getPalette().getDiagramSpecification();
-		}
+	public/*DiagramModelSlot*/ModelSlot<?> getDiagramModelSlot() {
 		return null;
 	}
 
-	@Override
-	public DiagramSpecification getVirtualModel() {
-		if (getPalette() != null) {
-			return getPalette().getVirtualModel();
-		}
-		return null;
-	}
-
-	@Override
-	public DiagramPalette getPalette() {
-		return _palette;
-	}
-
-	public void setPalette(DiagramPalette palette) {
-		_palette = palette;
+	public VirtualModel getVirtualModel() {
+		return getDiagramModelSlot().getVirtualModel();
 	}
 
 	// Deserialization only, do not use
@@ -130,8 +109,8 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		this._dropSchemeName = _dropSchemeName;
 	}
 
-	public DiagramPaletteElement getParent() {
-		return parent;
+	public DiagramPaletteElement getPaletteElement() {
+		return paletteElement;
 	}
 
 	public EditionPattern getEditionPattern() {
@@ -161,8 +140,8 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 			dropScheme = (DropScheme) getEditionPattern().getEditionScheme(_dropSchemeName);
 			updateParameters();
 		}
-		if (dropScheme == null && getEditionPattern() != null && getEditionPattern().getDropSchemes().size() > 0) {
-			dropScheme = getEditionPattern().getDropSchemes().firstElement();
+		if (dropScheme == null && getEditionPattern() != null && getEditionPattern().getEditionSchemes(DropScheme.class).size() > 0) {
+			dropScheme = getEditionPattern().getEditionSchemes(DropScheme.class).get(0);
 		}
 		return dropScheme;
 	}
@@ -183,7 +162,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 	}
 
 	public void addToParameters(PaletteElementPatternParameter parameter) {
-		parameter.setElement(this);
+		parameter.setElement(getPaletteElement());
 		parameters.add(parameter);
 	}
 
@@ -257,22 +236,20 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		return null;
 	}
 
-	@Override
-	public void finalizeDeserialization(Object builder) {
-		super.finalizeDeserialization(builder);
+	public void finalizeDeserialization() {
 		getEditionPattern();
 		updateParameters();
 	}
 
-	@Override
+	/*@Override
 	public void setChanged() {
 		super.setChanged();
 		if (getPalette() != null) {
 			getPalette().setIsModified();
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean delete() {
 		if (getPalette() != null) {
 			getPalette().removeFromElements(this);
@@ -280,19 +257,17 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		super.delete();
 		deleteObservers();
 		return true;
-	}
+	}*/
 
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
-
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
-		this.graphicalRepresentation = graphicalRepresentation;
-	}
-
-	public Vector<EditionPattern> allAvailableEditionPatterns() {
+	public List<EditionPattern> allAvailableEditionPatterns() {
 		if (getVirtualModel() != null) {
-			return getVirtualModel().getAllEditionPatternWithDropScheme();
+			List<EditionPattern> returned = new ArrayList<EditionPattern>();
+			for (EditionPattern ep : getVirtualModel().getEditionPatterns()) {
+				if (ep.getEditionSchemes(DropScheme.class).size() > 0) {
+					returned.add(ep);
+				}
+			}
+			return returned;
 		}
 		return null;
 	}
@@ -310,39 +285,31 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		this.patternRoleName = patternRoleName;
 	}
 
-	public static abstract class OverridingGraphicalRepresentation extends DiagramPaletteObject {
-		private DiagramPaletteElement paletteElement;
+	public static abstract class OverridingGraphicalRepresentation extends NamedViewPointObjectImpl {
+		private FMLDiagramPaletteElementBinding paletteElementBinding;
 		private String patternRoleName;
 
 		// Do not use, required for deserialization
-		public OverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
-			super(builder);
+		public OverridingGraphicalRepresentation() {
+			super();
 		}
 
 		// Do not use, required for deserialization
 		public OverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-			super(null);
+			super();
 			patternRoleName = patternRole.getPatternRoleName();
 		}
 
 		@Override
 		public BindingModel getBindingModel() {
-			if (getPaletteElement() != null) {
-				return getPaletteElement().getBindingModel();
+			if (getPaletteElementBinding() != null) {
+				return getPaletteElementBinding().getBindingModel();
 			}
 			return null;
 		}
 
-		@Override
-		public DiagramSpecification getVirtualModel() {
-			if (getPaletteElement() != null) {
-				return getPaletteElement().getVirtualModel();
-			}
-			return null;
-		}
-
-		public DiagramPaletteElement getPaletteElement() {
-			return paletteElement;
+		public FMLDiagramPaletteElementBinding getPaletteElementBinding() {
+			return paletteElementBinding;
 		}
 
 		public String getPatternRoleName() {
@@ -357,12 +324,11 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 		@Override
 		public String getFMLRepresentation(FMLRepresentationContext context) {
-			return "<not_implemented:" + getFullyQualifiedName() + ">";
+			return "<not_implemented:" + getStringRepresentation() + ">";
 		}
 
-		@Override
 		public DiagramPalette getPalette() {
-			return getPaletteElement().getPalette();
+			return paletteElementBinding.getPaletteElement().getPalette();
 		}
 
 		@Override
@@ -376,8 +342,8 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		private ShapeGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
-			super(builder);
+		public ShapeOverridingGraphicalRepresentation() {
+			super();
 		}
 
 		// Do not use, required for deserialization
@@ -407,8 +373,8 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		private ConnectorGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
-			super(builder);
+		public ConnectorOverridingGraphicalRepresentation() {
+			super();
 		}
 
 		// Do not use, required for deserialization
@@ -446,7 +412,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getFullyQualifiedName() + ">";
+		return "<not_implemented:" + getStringRepresentation() + ">";
 	}
 
 }
