@@ -28,4 +28,5 @@ public interface DiagramResource extends PamelaResource<Diagram, DiagramFactory>
 	public static final String DIAGRAM_SUFFIX = ".diagram";
 
 	public Diagram getDiagram();
+
 }

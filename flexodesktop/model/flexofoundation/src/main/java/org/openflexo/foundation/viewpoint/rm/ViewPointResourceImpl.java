@@ -48,6 +48,16 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 
 	private StringEncoder encoder;
 
+	private static ViewPointModelFactory VIEWPOINT_MODEL_FACTORY;
+
+	static {
+		try {
+			VIEWPOINT_MODEL_FACTORY = new ViewPointModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public StringEncoder getStringEncoder() {
 		if (encoder == null) {
@@ -61,6 +71,7 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
+			returned.setFactory(VIEWPOINT_MODEL_FACTORY);
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			returned.setName(name);
@@ -87,6 +98,7 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
+			returned.setFactory(VIEWPOINT_MODEL_FACTORY);
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			ViewPointInfo vpi = findViewPointInfo(viewPointDirectory);

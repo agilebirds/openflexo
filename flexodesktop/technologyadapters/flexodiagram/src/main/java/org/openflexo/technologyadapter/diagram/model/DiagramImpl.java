@@ -175,4 +175,38 @@ public abstract class DiagramImpl extends DiagramContainerElementImpl<DrawingGra
 		screenshotModified = true;
 	}
 
+	@Override
+	public String getName() {
+		if (getResource() != null) {
+			return getResource().getName();
+		}
+		return null;
+	}
+
+	@Override
+	public void setName(String name) {
+		if (requireChange(getName(), name)) {
+			if (getResource() != null) {
+				getResource().setName(name);
+			}
+		}
+	}
+
+	@Override
+	public String getURI() {
+		if (getResource() != null) {
+			return getResource().getURI();
+		}
+		return null;
+	}
+
+	@Override
+	public void setURI(String uri) {
+		if (requireChange(getURI(), uri)) {
+			if (getResource() != null) {
+				getResource().setURI(uri);
+			}
+		}
+	}
+
 }

@@ -35,6 +35,16 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 
 	static final Logger logger = Logger.getLogger(VirtualModelResourceImpl.class.getPackage().getName());
 
+	private static VirtualModelModelFactory VIRTUAL_MODEL_FACTORY;
+
+	static {
+		try {
+			VIRTUAL_MODEL_FACTORY = new VirtualModelModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
 	protected RelativePathFileConverter relativePathFileConverter;
 
 	private StringEncoder encoder;
@@ -44,6 +54,7 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
+			returned.setFactory(VIRTUAL_MODEL_FACTORY);
 			returned.setName(virtualModelDirectory.getName());
 			returned.setDirectory(virtualModelDirectory);
 			returned.setFile(virtualModelXMLFile);
@@ -68,6 +79,7 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
+			returned.setFactory(VIRTUAL_MODEL_FACTORY);
 			String baseName = virtualModelDirectory.getName();
 			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
 			VirtualModelInfo vpi = findVirtualModelInfo(virtualModelDirectory);

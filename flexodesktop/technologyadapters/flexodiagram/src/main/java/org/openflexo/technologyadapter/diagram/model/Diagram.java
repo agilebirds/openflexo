@@ -45,6 +45,7 @@ import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 public interface Diagram extends DiagramContainerElement<DrawingGraphicalRepresentation>, FlexoModel<Diagram, DiagramSpecification>,
 		ResourceData<Diagram> {
 
+	public static final String URI = "uri";
 	public static final String TITLE = "title";
 	public static final String DIAGRAM_SPECIFICATION = "diagramSpecification";
 	public static final String RESOURCE = "resource";
@@ -65,6 +66,24 @@ public interface Diagram extends DiagramContainerElement<DrawingGraphicalReprese
 	 */
 	@Setter(value = TITLE)
 	public void setTitle(String aTitle);
+
+	/**
+	 * Return URI of this diagram
+	 * 
+	 * @return
+	 */
+	@Override
+	@Getter(value = URI)
+	@XMLAttribute
+	public String getURI();
+
+	/**
+	 * Sets URI of this diagram
+	 * 
+	 * @param aName
+	 */
+	@Setter(value = URI)
+	public void setURI(String anURI);
 
 	/**
 	 * Return the diagram specification of this diagram (might be null)

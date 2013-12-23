@@ -1,11 +1,8 @@
 package org.openflexo.technologyadapter.diagram.rm;
 
 import org.openflexo.foundation.resource.PamelaResource;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
@@ -13,10 +10,7 @@ import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 @ModelEntity
 @ImplementationClass(DiagramPaletteResourceImpl.class)
 @XMLElement
-public interface DiagramPaletteResource extends
-		/*FlexoXMLFileResource<DiagramPalette>,*/PamelaResource<DiagramPalette, DiagramPaletteFactory> {
-
-	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
+public interface DiagramPaletteResource extends PamelaResource<DiagramPalette, DiagramPaletteFactory> {
 
 	/**
 	 * Return diagram palette stored by this resource<br>
@@ -31,12 +25,6 @@ public interface DiagramPaletteResource extends
 	 * @return
 	 */
 	public DiagramPalette getLoadedDiagramPalette();
-
-	@Getter(value = VIEW_POINT_LIBRARY, ignoreType = true)
-	public ViewPointLibrary getViewPointLibrary();
-
-	@Setter(VIEW_POINT_LIBRARY)
-	public void setViewPointLibrary(ViewPointLibrary viewPointLibrary);
 
 	@Override
 	public DiagramSpecificationResource getContainer();

@@ -42,11 +42,22 @@ public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImp
 
 	static final Logger logger = Logger.getLogger(VirtualModelInstanceResourceImpl.class.getPackage().getName());
 
+	private static VirtualModelInstanceModelFactory VIRTUAL_MODEL_INSTANCE_FACTORY;
+
+	static {
+		try {
+			VIRTUAL_MODEL_INSTANCE_FACTORY = new VirtualModelInstanceModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static VirtualModelInstanceResource makeVirtualModelInstanceResource(String name, VirtualModel virtualModel, View view) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
 			VirtualModelInstanceResourceImpl returned = (VirtualModelInstanceResourceImpl) factory
 					.newInstance(VirtualModelInstanceResource.class);
+			returned.setFactory(VIRTUAL_MODEL_INSTANCE_FACTORY);
 			String baseName = name;
 			File xmlFile = new File(view.getResource().getFile().getParentFile(), baseName
 					+ VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX);
@@ -73,6 +84,7 @@ public abstract class VirtualModelInstanceResourceImpl extends PamelaResourceImp
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
 			VirtualModelInstanceResourceImpl returned = (VirtualModelInstanceResourceImpl) factory
 					.newInstance(VirtualModelInstanceResource.class);
+			returned.setFactory(VIRTUAL_MODEL_INSTANCE_FACTORY);
 			String baseName = virtualModelInstanceFile.getName().substring(0,
 					virtualModelInstanceFile.getName().length() - VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX.length());
 			File xmlFile = new File(viewResource.getFile().getParentFile(), baseName + VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX);

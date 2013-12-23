@@ -34,7 +34,7 @@ import org.openflexo.technologyadapter.diagram.fml.editionaction.GraphicalAction
 public class ViewPointValidationModel extends ValidationModel {
 
 	public ViewPointValidationModel() {
-		super(null, null);
+		super(null);
 
 		registerRule(new AddShape.AddShapeActionMustAdressAValidShapePatternRole());
 		registerRule(new AddShape.AddShapeActionMustHaveAValidContainer());

@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.diagram.rm;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -10,10 +11,13 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecificationFactory;
 import org.openflexo.toolbox.FlexoVersion;
@@ -25,12 +29,23 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 
 	static final Logger logger = Logger.getLogger(DiagramSpecificationResourceImpl.class.getPackage().getName());
 
+	private static DiagramSpecificationFactory DIAGRAM_SPECIFICATION_FACTORY;
+
+	static {
+		try {
+			DIAGRAM_SPECIFICATION_FACTORY = new DiagramSpecificationFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static DiagramSpecificationResource makeDiagramSpecificationResource(String uri, File diagramSpecificationDirectory,
 			File diagramSpecificationXMLFile, FlexoServiceManager serviceManager) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
 					.newInstance(DiagramSpecificationResource.class);
+			returned.setFactory(DIAGRAM_SPECIFICATION_FACTORY);
 			returned.setName(diagramSpecificationDirectory.getName());
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setFile(diagramSpecificationXMLFile);
@@ -47,11 +62,12 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	}
 
 	public static DiagramSpecificationResource retrieveDiagramSpecificationResource(File diagramSpecificationDirectory,
-			File diagramSpecificationXMLFile, FlexoServiceManager serviceManager) {
+			FlexoServiceManager serviceManager) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
 					.newInstance(DiagramSpecificationResource.class);
+			returned.setFactory(DIAGRAM_SPECIFICATION_FACTORY);
 			String baseName = diagramSpecificationDirectory.getName();
 			File xmlFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 			DiagramSpecificationInfo vpi = findDiagramSpecificationInfo(diagramSpecificationDirectory);
@@ -76,8 +92,8 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 			if (diagramSpecificationDirectory.exists() && diagramSpecificationDirectory.isDirectory()) {
 				for (File f : diagramSpecificationDirectory.listFiles()) {
 					if (f.getName().endsWith(".diagram")) {
-						ExampleDiagramResource exampleDiagramResource = ExampleDiagramResourceImpl.retrieveExampleDiagramResource(returned,
-								f, viewPointLibrary);
+						DiagramResource exampleDiagramResource = DiagramResourceImpl.retrieveDiagramResource(f, serviceManager);
+						returned.addToContents(exampleDiagramResource);
 						logger.fine("ExampleDiagramResource " + exampleDiagramResource.getFile().getAbsolutePath() + " version "
 								+ exampleDiagramResource.getModelVersion());
 					}
@@ -89,14 +105,14 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 				for (File f : diagramSpecificationDirectory.listFiles()) {
 					if (f.getName().endsWith(".palette")) {
 						DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.retrieveDiagramPaletteResource(returned,
-								f, viewPointLibrary);
+								f, serviceManager);
 						logger.fine("DiagramPaletteResource " + diagramPaletteResource.getFile().getAbsolutePath() + " version "
 								+ diagramPaletteResource.getModelVersion());
 					}
 				}
 			}
 
-			returned.relativePathFileConverter = new RelativePathFileConverter(diagramSpecificationDirectory);
+			returned.setRelativePathFileConverter(new RelativePathFileConverter(diagramSpecificationDirectory));
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -116,7 +132,19 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	 */
 	@Override
 	public DiagramSpecification getDiagramSpecification() {
-		return getVirtualModel();
+		try {
+			return getResourceData(null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlexoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -127,6 +155,14 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	public DiagramSpecification getLoadedDiagramSpecification() {
 		if (isLoaded()) {
 			return getDiagramSpecification();
+		}
+		return null;
+	}
+
+	@Override
+	public DiagramTechnologyAdapter getTechnologyAdapter() {
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 		}
 		return null;
 	}
@@ -188,9 +224,8 @@ public abstract class DiagramSpecificationResourceImpl extends PamelaResourceImp
 	}
 
 	@Override
-	public List<ExampleDiagramResource> getExampleDiagramResources() {
-		DiagramSpecification ds = getDiagramSpecification();
-		return getContents(ExampleDiagramResource.class);
+	public List<DiagramResource> getExampleDiagramResources() {
+		return getContents(DiagramResource.class);
 	}
 
 	@Override

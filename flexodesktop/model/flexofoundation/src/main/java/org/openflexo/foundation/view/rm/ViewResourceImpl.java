@@ -55,6 +55,16 @@ public abstract class ViewResourceImpl extends PamelaResourceImpl<View, ViewMode
 
 	static final Logger logger = Logger.getLogger(ViewResourceImpl.class.getPackage().getName());
 
+	private static ViewModelFactory VIEW_MODEL_FACTORY;
+
+	static {
+		try {
+			VIEW_MODEL_FACTORY = new ViewModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private RelativePathFileConverter relativePathFileConverter;
 
 	private StringEncoder encoder;
@@ -73,6 +83,7 @@ public abstract class ViewResourceImpl extends PamelaResourceImpl<View, ViewMode
 			File viewDirectory = new File(folder.getFile(), name + ViewResource.VIEW_SUFFIX);
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
+			returned.setFactory(VIEW_MODEL_FACTORY);
 			String baseName = name;
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setName(name);
@@ -99,6 +110,7 @@ public abstract class ViewResourceImpl extends PamelaResourceImpl<View, ViewMode
 		try {
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
+			returned.setFactory(VIEW_MODEL_FACTORY);
 			String baseName = viewDirectory.getName().substring(0, viewDirectory.getName().length() - ViewResource.VIEW_SUFFIX.length());
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setProject(viewLibrary.getProject());
