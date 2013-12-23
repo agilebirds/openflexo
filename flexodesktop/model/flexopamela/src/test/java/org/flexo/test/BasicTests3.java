@@ -61,8 +61,13 @@ public class BasicTests3 {
 		TestEmbeddedA embeddedA = factory.newInstance(TestEmbeddedA.class);
 		TestEmbeddedB embeddedB = factory.newInstance(TestEmbeddedB.class);
 
-		containerA.setEmbedded(embeddedA);
-		containerB.setEmbedded(embeddedB);
+		try {
+			containerA.setEmbedded(embeddedA);
+			containerB.setEmbedded(embeddedB);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 
 	}
 

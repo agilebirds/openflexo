@@ -26,12 +26,12 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyObject;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.model.ModelContext;
 import org.openflexo.model.ModelEntity;
 import org.openflexo.model.ModelProperty;
+import org.openflexo.model.PamelaUtils;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.ComplexEmbedded;
 import org.openflexo.model.annotations.Embedded;
@@ -174,6 +174,37 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		this.pamelaProxyFactory = pamelaProxyFactory;
 		values = new HashMap<String, Object>(getModelEntity().getPropertiesSize(), 1.0f);
 		initialized = !getModelEntity().hasInitializers();
+		initDelegateImplementations();
+	}
+
+	private List<DelegateImplementation<? super I>> delegateImplementations;
+
+	private void initDelegateImplementations() throws ModelDefinitionException {
+		// System.out.println("***** init delegate implementations");
+		delegateImplementations = new ArrayList<DelegateImplementation<? super I>>();
+		initDelegateImplementations(getModelEntity());
+	}
+
+	private void initDelegateImplementations(ModelEntity<? super I> entity) throws ModelDefinitionException {
+		if (entity.getDelegateImplementations().size() > 0) {
+			// System.out.println("***** init delegate implementations for " + entity.getImplementedInterface());
+			for (Class<? super I> delegateImplementationClass : entity.getDelegateImplementations().keySet()) {
+				try {
+					DelegateImplementation<? super I> delegateImplementation = new DelegateImplementation(this,
+							delegateImplementationClass, entity.getDelegateImplementations().get(delegateImplementationClass));
+					delegateImplementations.add(delegateImplementation);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new ModelDefinitionException(e.getMessage());
+				}
+			}
+		}
+		if (entity.getDirectSuperEntities() != null) {
+			for (ModelEntity<? super I> superEntity : entity.getDirectSuperEntities()) {
+				initDelegateImplementations(superEntity);
+			}
+		}
+
 	}
 
 	public I getObject() {
@@ -190,6 +221,10 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public ModelEntity<I> getModelEntity() {
 		return pamelaProxyFactory.getModelEntity();
+	}
+
+	public PAMELAProxyFactory<I> getPamelaProxyFactory() {
+		return pamelaProxyFactory;
 	}
 
 	public Class getSuperClass() {
@@ -216,10 +251,20 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 
 	public Object _invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
 
+		// First, we iterate on all delegate implementations to look for eventual partial implementation (in this case, prioritar)
+		for (DelegateImplementation<? super I> delegateImplementation : delegateImplementations) {
+			if (delegateImplementation.handleMethod(method)) {
+				// This delegate provides an implementation of that method, use it
+				// System.out.println("Delegating implementation of method=" + method + " to delegate "
+				// + delegateImplementation.getDelegateImplementationClass());
+				return delegateImplementation.invoke(self, method, proceed, args);
+			}
+		}
+
 		if (proceed != null) {
 			ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 			if (property != null) {
-				if (methodIsEquivalentTo(method, property.getSetterMethod())) {
+				if (PamelaUtils.methodIsEquivalentTo(method, property.getSetterMethod())) {
 					// System.out.println("DETECTS SET with " + proceed + " insteadof " + method);
 					Object oldValue = invokeGetter(property);
 					if (getModelFactory().getUndoManager() != null) {
@@ -229,14 +274,14 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 						}
 					}
 				}
-				if (methodIsEquivalentTo(method, property.getAdderMethod())) {
+				if (PamelaUtils.methodIsEquivalentTo(method, property.getAdderMethod())) {
 					// System.out.println("DETECTS ADD with " + proceed + " insteadof " + method);
 					if (getModelFactory().getUndoManager() != null) {
 						getModelFactory().getUndoManager().addEdit(
 								new AddCommand<I>(getObject(), getModelEntity(), property, args[0], getModelFactory()));
 					}
 				}
-				if (methodIsEquivalentTo(method, property.getRemoverMethod())) {
+				if (PamelaUtils.methodIsEquivalentTo(method, property.getRemoverMethod())) {
 					// System.out.println("DETECTS REMOVE with " + proceed + " insteadof " + method);
 					if (getModelFactory().getUndoManager() != null) {
 						getModelFactory().getUndoManager().addEdit(
@@ -293,40 +338,40 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 			return internallyInvokeFinder(finder, args);
 		}
 
-		if (methodIsEquivalentTo(method, GET_PROPERTY_CHANGE_SUPPORT)) {
+		if (PamelaUtils.methodIsEquivalentTo(method, GET_PROPERTY_CHANGE_SUPPORT)) {
 			return getPropertyChangeSuppport();
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_GETTER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_GETTER)) {
 			return internallyInvokeGetter(getModelEntity().getModelProperty((String) args[0]));
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_SETTER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_SETTER)) {
 			internallyInvokeSetter(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_ADDER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_ADDER)) {
 			internallyInvokeAdder(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER)) {
 			internallyInvokeRemover(getModelEntity().getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
 			internallyInvokeFinder(finder, args);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_GETTER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_GETTER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[1]);
 			return internallyInvokeGetter(e.getModelProperty((String) args[0]));
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_SETTER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_SETTER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
 			internallyInvokeSetter(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_ADDER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_ADDER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
 			internallyInvokeAdder(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_REMOVER_ENTITY)) {
 			ModelEntity<? super I> e = getModelEntityFromArg((Class<?>) args[2]);
 			internallyInvokeRemover(e.getModelProperty((String) args[0]), args[1], false);
 			return null;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_DELETER_ENTITY)) {
 			return internallyInvokeDeleter(false);
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER_ENTITY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_FINDER_ENTITY)) {
 			Class<?> class1 = (Class<?>) args[2];
 			ModelEntity<? super I> e = getModelEntityFromArg(class1);
 			finder = e.getFinder((String) args[0]);
@@ -336,7 +381,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				throw new ModelExecutionException("No such finder defined. Finder '" + args[0] + "' could not be found on entity "
 						+ class1.getName());
 			}
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_FINDER)) {
 			finder = getModelEntity().getFinder((String) args[0]);
 			if (finder != null) {
 				return internallyInvokeFinder(finder, args);
@@ -344,46 +389,47 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				throw new ModelExecutionException("No such finder defined. Finder '" + args[0] + "' could not be found on entity "
 						+ getModelEntity().getImplementedInterface().getName());
 			}
-		} else if (methodIsEquivalentTo(method, IS_SERIALIZING)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_SERIALIZING)) {
 			return isSerializing();
-		} else if (methodIsEquivalentTo(method, IS_DESERIALIZING)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_DESERIALIZING)) {
 			return isDeserializing();
-		} else if (methodIsEquivalentTo(method, IS_MODIFIED)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_MODIFIED)) {
 			return isModified();
-		} else if (methodIsEquivalentTo(method, SET_MODIFIED) || methodIsEquivalentTo(method, PERFORM_SUPER_SET_MODIFIED)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, SET_MODIFIED)
+				|| PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_SET_MODIFIED)) {
 			internallyInvokeSetModified((Boolean) args[0]);
 			return null;
-		} else if (methodIsEquivalentTo(method, TO_STRING)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, TO_STRING)) {
 			return internallyInvokeToString();
-		} else if (methodIsEquivalentTo(method, DESTROY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, DESTROY)) {
 			destroy();
 			return null;
-		} else if (methodIsEquivalentTo(method, CLONE_OBJECT)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, CLONE_OBJECT)) {
 			return cloneObject();
-		} else if (methodIsEquivalentTo(method, EQUALS_OBJECT)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, EQUALS_OBJECT)) {
 			return equalsObject(args[0]);
-		} else if (methodIsEquivalentTo(method, IS_DELETED)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_DELETED)) {
 			return deleted;
-		} else if (methodIsEquivalentTo(method, IS_BEING_CLONED)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_BEING_CLONED)) {
 			return beingCloned;
-		} else if (methodIsEquivalentTo(method, IS_CREATED_BY_CLONING)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, IS_CREATED_BY_CLONING)) {
 			return createdByCloning;
-		} else if (methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, GET_DELETED_PROPERTY)) {
 			return DELETED;
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_DELETER)) {
 			return internallyInvokeDeleter(false);
-		} else if (methodIsEquivalentTo(method, DELETE_OBJECT)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, DELETE_OBJECT)) {
 			return internallyInvokeDeleter(true, args);
-		} else if (methodIsEquivalentTo(method, PERFORM_SUPER_UNDELETER)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, PERFORM_SUPER_UNDELETER)) {
 			return internallyInvokeUndeleter(false);
-		} else if (methodIsEquivalentTo(method, UNDELETE_OBJECT)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, UNDELETE_OBJECT)) {
 			return internallyInvokeUndeleter(true);
-		} else if (methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, CLONE_OBJECT_WITH_CONTEXT)) {
 			return cloneObject(args);
-		} else if (methodIsEquivalentTo(method, HAS_KEY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, HAS_KEY)) {
 			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
 			return (property != null);
-		} else if (methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, OBJECT_FOR_KEY)) {
 			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
 			if (property != null) {
 				return invokeGetter(property);
@@ -391,7 +437,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				System.err.println("Cannot handle property " + args[0] + " for " + getObject());
 				return null;
 			}
-		} else if (methodIsEquivalentTo(method, SET_OBJECT_FOR_KEY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, SET_OBJECT_FOR_KEY)) {
 			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[1]);
 			if (property != null) {
 				Object newValue = args[0];
@@ -406,7 +452,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 				System.err.println("Cannot handle property " + args[0] + " for " + getObject());
 				return null;
 			}
-		} else if (methodIsEquivalentTo(method, GET_TYPE_FOR_KEY)) {
+		} else if (PamelaUtils.methodIsEquivalentTo(method, GET_TYPE_FOR_KEY)) {
 			ModelProperty<? super I> property = getModelEntity().getModelProperty((String) args[0]);
 			if (property != null) {
 				return property.getType();
@@ -417,15 +463,15 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 		ModelProperty<? super I> property = getModelEntity().getPropertyForMethod(method);
 		if (property != null) {
-			if (methodIsEquivalentTo(method, property.getGetterMethod())) {
+			if (PamelaUtils.methodIsEquivalentTo(method, property.getGetterMethod())) {
 				return internallyInvokeGetter(property);
-			} else if (methodIsEquivalentTo(method, property.getSetterMethod())) {
+			} else if (PamelaUtils.methodIsEquivalentTo(method, property.getSetterMethod())) {
 				internallyInvokeSetter(property, args[0], true);
 				return null;
-			} else if (methodIsEquivalentTo(method, property.getAdderMethod())) {
+			} else if (PamelaUtils.methodIsEquivalentTo(method, property.getAdderMethod())) {
 				internallyInvokeAdder(property, args[0], true);
 				return null;
-			} else if (methodIsEquivalentTo(method, property.getRemoverMethod())) {
+			} else if (PamelaUtils.methodIsEquivalentTo(method, property.getRemoverMethod())) {
 				internallyInvokeRemover(property, args[0], true);
 				return null;
 			}
@@ -433,14 +479,6 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		}
 		System.err.println("Cannot handle method " + method);
 		return null;
-	}
-
-	private boolean methodIsEquivalentTo(@Nonnull Method method, @Nullable Method to) {
-		if (to == null) {
-			return method == null;
-		}
-		return method.getName().equals(to.getName())/* && method.getReturnType().equals(to.getReturnType())*/
-				&& Arrays.equals(method.getParameterTypes(), to.getParameterTypes());
 	}
 
 	private PropertyChangeSupport getPropertyChangeSuppport() {
@@ -636,7 +674,7 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 		} catch (InvocationTargetException e) {
 			throw new ModelExecutionException(e);
 		} catch (NullPointerException e) {
-			System.out.println("Zobui");
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -836,14 +874,14 @@ public class ProxyMethodHandler<I> implements MethodHandler, PropertyChangeListe
 	private void internallyInvokeSetter(ModelProperty<? super I> property, Object value, boolean trackAtomicEdit)
 			throws ModelDefinitionException {
 		Object oldValue;
-		try {
-			oldValue = invokeGetter(property);
-		} catch (Throwable t) {
+		// try {
+		oldValue = invokeGetter(property);
+		/*} catch (Throwable t) {
 			System.out.println("ca chie la");
 			System.out.println("getterMethod=" + property.getGetterMethod());
 			System.out.println("declaringClass=" + property.getGetterMethod().getDeclaringClass());
 			return;
-		}
+		}*/
 		if (trackAtomicEdit && getModelFactory().getUndoManager() != null) {
 			if (oldValue != value) {
 				getModelFactory().getUndoManager().addEdit(

@@ -20,6 +20,7 @@ import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Implementation;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
@@ -49,27 +50,27 @@ public class ModelEntity<I> {
 	/**
 	 * The model entity annotation describing this entity
 	 */
-	private org.openflexo.model.annotations.ModelEntity entityAnnotation;
+	private final org.openflexo.model.annotations.ModelEntity entityAnnotation;
 
 	/**
 	 * The implementationClass associated with this model entity
 	 */
-	private ImplementationClass implementationClass;
+	private final ImplementationClass implementationClass;
 
 	/**
 	 * The {@link XMLElement} annotation, if any
 	 */
-	private XMLElement xmlElement;
+	private final XMLElement xmlElement;
 
 	/**
 	 * The properties of this entity. The key is the identifier of the property
 	 */
-	private Map<String, ModelProperty<? super I>> properties;
+	private final Map<String, ModelProperty<? super I>> properties;
 
 	/**
 	 * The properties of this entity. The key is the identifier of the property
 	 */
-	private Map<ModelMethod, ModelProperty<? super I>> propertyMethods;
+	private final Map<ModelMethod, ModelProperty<? super I>> propertyMethods;
 
 	/**
 	 * The properties of this entity. The key is the xml attribute name of the property
@@ -89,7 +90,7 @@ public class ModelEntity<I> {
 	/**
 	 * Whether this entity is an abstract entity. Abstract entities cannot be instantiated.
 	 */
-	private boolean isAbstract;
+	private final boolean isAbstract;
 
 	/**
 	 * The default implementing class of this entity. The class can be abstract. This value may be null.
@@ -114,13 +115,15 @@ public class ModelEntity<I> {
 	/**
 	 * The initializers of this entity.
 	 */
-	private Map<Method, ModelInitializer> initializers;
+	private final Map<Method, ModelInitializer> initializers;
 
 	private boolean initialized;
 
-	private Map<String, ModelProperty<I>> declaredModelProperties;
+	private final Map<String, ModelProperty<I>> declaredModelProperties;
 
 	private Set<ModelEntity<?>> embeddedEntities;
+
+	private final Map<Class<I>, Set<Method>> delegateImplementations;
 
 	ModelEntity(@Nonnull Class<I> implementedInterface) throws ModelDefinitionException {
 		this.implementedInterface = implementedInterface;
@@ -184,6 +187,25 @@ public class ModelEntity<I> {
 				initializers.put(m, new ModelInitializer(initializer, m));
 			}
 		}
+
+		// Init delegate implementations
+		delegateImplementations = new HashMap<Class<I>, Set<Method>>();
+		for (Class<?> c : getImplementedInterface().getDeclaredClasses()) {
+			if (c.getAnnotation(Implementation.class) != null) {
+				if (getImplementedInterface().isAssignableFrom(c)) {
+					Class<I> candidateImplementation = (Class<I>) c;
+					// System.out.println("Found implementation " + candidateImplementation + " for " + getImplementedInterface());
+					Set<Method> implementedMethods = new HashSet<Method>();
+					for (Method m : candidateImplementation.getDeclaredMethods()) {
+						implementedMethods.add(m);
+					}
+					delegateImplementations.put(candidateImplementation, implementedMethods);
+				} else {
+					throw new ModelDefinitionException("Found candidate implementation " + c + " for entity " + getImplementedInterface()
+							+ " which does not implement " + getImplementedInterface());
+				}
+			}
+		}
 	}
 
 	private String getPropertyIdentifier(Method m) {
@@ -212,6 +234,8 @@ public class ModelEntity<I> {
 
 	void init() throws ModelDefinitionException {
 
+		// System.out.println("Init " + getImplementedInterface() + " with direct super entities " + getDirectSuperEntities());
+
 		// We now resolve our inherited entities and properties
 		if (getDirectSuperEntities() != null) {
 			embeddedEntities.addAll(getDirectSuperEntities());
@@ -237,6 +261,57 @@ public class ModelEntity<I> {
 		}
 
 		embeddedEntities = Collections.unmodifiableSet(embeddedEntities);
+
+		checkImplementationsClash();
+
+		// System.out.println("For " + getImplementedInterface() + " embeddedEntities=" + embeddedEntities);
+	}
+
+	public Map<Class<I>, Set<Method>> getDelegateImplementations() {
+		return delegateImplementations;
+	}
+
+	private void checkImplementationsClash() throws ModelDefinitionException {
+
+		// System.out.println("checkImplementationsClash() for " + getImplementedInterface());
+		// System.out.println("embeddedEntities=" + embeddedEntities);
+		// System.out.println("getDirectSuperEntities()=" + getDirectSuperEntities());
+
+		if (getDirectSuperEntities() != null) {
+			Set<Method> implementedMethods = new HashSet<Method>();
+			for (ModelEntity<? super I> parentEntity : getDirectSuperEntities()) {
+				for (Class<? super I> implClass : parentEntity.delegateImplementations.keySet()) {
+					for (Method m : parentEntity.delegateImplementations.get(implClass)) {
+						for (Method m2 : implementedMethods) {
+							if (PamelaUtils.methodIsEquivalentTo(m, m2)) {
+								// We are in the case of implementation clash
+								// We must now check if this clash was property handled
+								boolean localImplementationWasFound = false;
+								for (Class<?> localImplClass : delegateImplementations.keySet()) {
+									for (Method m3 : delegateImplementations.get(localImplClass)) {
+										if (PamelaUtils.methodIsEquivalentTo(m, m3)) {
+											// A local implementation was found
+											localImplementationWasFound = true;
+											break;
+										}
+									}
+									if (!localImplementationWasFound) {
+										break;
+									}
+								}
+								if (!localImplementationWasFound) {
+									throw new ModelDefinitionException("Multiple inheritance implementation clash with method " + m
+											+ " defined in " + implClass + " and " + m2.getDeclaringClass()
+											+ ". Please disambiguate method.");
+								}
+							}
+						}
+						implementedMethods.add(m);
+						// System.out.println("Consider implementation method " + m + " in " + getImplementedInterface());
+					}
+				}
+			}
+		}
 	}
 
 	void mergeProperties() throws ModelDefinitionException {
