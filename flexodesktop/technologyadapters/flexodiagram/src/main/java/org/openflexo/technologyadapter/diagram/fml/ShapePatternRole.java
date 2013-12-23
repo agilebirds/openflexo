@@ -9,8 +9,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, ShapeGraphicalRepresentation> {
@@ -47,13 +46,12 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape, 
 	}
 
 	public void tryToFindAGR() {
-		if (getGraphicalRepresentation() == null) {
+		if (getGraphicalRepresentation() == null && getModelSlot() instanceof TypedDiagramModelSlot) {
 			// Try to find one somewhere
-			for (DiagramPalette palette : getDiagramSpecification().getPalettes()) {
-				for (DiagramPaletteElement e : palette.getElements()) {
-					if (e.getEditionPattern() == getEditionPattern()) {
-						setGraphicalRepresentation(e.getGraphicalRepresentation());
-					}
+			TypedDiagramModelSlot ms = (TypedDiagramModelSlot) getModelSlot();
+			for (FMLDiagramPaletteElementBinding binding : ms.getPaletteElementBindings()) {
+				if (binding.getEditionPattern() == getEditionPattern()) {
+					setGraphicalRepresentation(binding.getPaletteElement().getGraphicalRepresentation());
 				}
 			}
 		}

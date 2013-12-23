@@ -14,6 +14,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -30,7 +31,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
 
-	private GraphicalElementPatternRole patternRole;
+	private GraphicalElementPatternRole<?, GR> patternRole;
 	private GraphicalFeature<T, GR> feature;
 	private String featureName;
 	private DataBinding<String> value;
@@ -42,7 +43,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		super();
 	}
 
-	public GraphicalElementSpecification(GraphicalElementPatternRole patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
+	public GraphicalElementSpecification(GraphicalElementPatternRole<?, GR> patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
 			boolean mandatory) {
 		super();
 		this.patternRole = patternRole;
@@ -111,7 +112,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		return mandatory;
 	}
 
-	public GraphicalElementPatternRole getPatternRole() {
+	public GraphicalElementPatternRole<?, GR> getPatternRole() {
 		return patternRole;
 	}
 
@@ -141,7 +142,8 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param gr
 	 * @param element
 	 */
-	public void applyToGraphicalRepresentation(GR gr, DiagramElement element) {
+	// public void applyToGraphicalRepresentation(GR gr, DiagramElement<GR> element) {
+	public void applyToGraphicalRepresentation(EditionPatternInstance epi, GraphicalElementPatternRole<?, GR> patternRole) {
 		/*if (getValue().toString().equals(
 				"(property.label.asString + ((inputAttributeReference.value != \"\") ? (\"=\" + inputAttributeReference.value) : \"\"))")) {
 			System.out.println("value=" + getValue());
@@ -154,7 +156,9 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 		}*/
 
 		try {
-			getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
+			DiagramElement<GR> diagramElement = epi.getPatternActor(patternRole);
+			getFeature().applyToGraphicalRepresentation(diagramElement.getGraphicalRepresentation(), (T) getValue().getBindingValue(epi));
+			// getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
@@ -171,10 +175,11 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param element
 	 * @return
 	 */
-	public T applyToModel(GR gr, DiagramElement element) {
-		T newValue = getFeature().retrieveFromGraphicalRepresentation(gr);
+	public T applyToModel(EditionPatternInstance epi, GraphicalElementPatternRole<?, GR> patternRole) {
+		DiagramElement<GR> diagramElement = epi.getPatternActor(patternRole);
+		T newValue = getFeature().retrieveFromGraphicalRepresentation(diagramElement.getGraphicalRepresentation());
 		try {
-			getValue().setBindingValue(newValue, element.getEditionPatternInstance());
+			getValue().setBindingValue(newValue, epi);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {

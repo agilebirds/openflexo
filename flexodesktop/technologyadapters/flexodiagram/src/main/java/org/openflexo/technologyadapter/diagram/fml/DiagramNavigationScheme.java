@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.diagram.fml;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 @FIBPanel("Fib/NavigationSchemePanel.fib")
@@ -29,7 +28,7 @@ public class DiagramNavigationScheme extends NavigationScheme implements Diagram
 
 	private DataBinding<Object> targetObject;
 
-	public DiagramNavigationScheme(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DiagramNavigationScheme() {
+		super();
 	}
 }

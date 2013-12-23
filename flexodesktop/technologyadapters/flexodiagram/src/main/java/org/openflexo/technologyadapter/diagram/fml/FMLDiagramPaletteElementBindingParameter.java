@@ -24,21 +24,21 @@ import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.URIParameter;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
-import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
-import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
-public class PaletteElementPatternParameter extends NamedViewPointObjectImpl {
+public class FMLDiagramPaletteElementBindingParameter extends NamedViewPointObjectImpl {
 
 	private EditionSchemeParameter _parameter;
-	private DiagramPaletteElement _element;
+	private FMLDiagramPaletteElementBinding elementBinding;
 	private String value;
 
-	public PaletteElementPatternParameter() {
+	public FMLDiagramPaletteElementBindingParameter() {
 		super();
 	}
 
-	public PaletteElementPatternParameter(EditionSchemeParameter p) {
+	public FMLDiagramPaletteElementBindingParameter(EditionSchemeParameter p) {
 		super();
 		_parameter = p;
 		setName(p.getName());
@@ -74,25 +74,30 @@ public class PaletteElementPatternParameter extends NamedViewPointObjectImpl {
 	}
 
 	public DiagramPalette getPalette() {
-		if (getElement() != null) {
-			return getElement().getPalette();
+		if (getElementBinding() != null) {
+			return getElementBinding().getPaletteElement().getPalette();
 		}
 		return null;
 	}
 
-	public DiagramSpecification getVirtualModel() {
-		if (getElement() != null) {
-			return getElement().getVirtualModel();
+	@Override
+	public ViewPoint getViewPoint() {
+		return getVirtualModel().getViewPoint();
+	}
+
+	public VirtualModel getVirtualModel() {
+		if (getElementBinding() != null) {
+			return getElementBinding().getVirtualModel();
 		}
 		return null;
 	}
 
-	public void setElement(DiagramPaletteElement element) {
-		_element = element;
+	public void setElementBinding(FMLDiagramPaletteElementBinding elementBinding) {
+		this.elementBinding = elementBinding;
 	}
 
-	public DiagramPaletteElement getElement() {
-		return _element;
+	public FMLDiagramPaletteElementBinding getElementBinding() {
+		return elementBinding;
 	}
 
 	public EditionSchemeParameter getParameter() {
@@ -110,7 +115,7 @@ public class PaletteElementPatternParameter extends NamedViewPointObjectImpl {
 
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getFullyQualifiedName() + ">";
+		return "<not_implemented:" + getStringRepresentation() + ">";
 	}
 
 }

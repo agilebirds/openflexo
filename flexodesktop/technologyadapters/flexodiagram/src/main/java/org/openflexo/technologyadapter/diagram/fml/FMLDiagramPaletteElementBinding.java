@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
@@ -37,13 +38,16 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
 /**
- * Encodes the binding between {@link DiagramPaletteElement} (part of {@link DiagramSpecification}) and FML
+ * Encodes the binding between {@link DiagramPaletteElement} (part of {@link DiagramSpecification}) and the current {@link VirtualModel}<br>
+ * 
+ * The goal is for example to associate a {@link PaletteElement} to a given {@link DropScheme} of a particular {@link EditionPattern}
  * 
  * @author sylvain
  * 
@@ -52,12 +56,17 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 
 	private static final Logger logger = Logger.getLogger(FMLDiagramPaletteElementBinding.class.getPackage().getName());
 
+	/**
+	 * The addressed palette element we want to bind to something in {@link VirtualModel}
+	 */
+	private final DiagramPaletteElement paletteElement = null;
+
 	private String _editionPatternId;
 	private String _dropSchemeName;
 
 	private EditionPattern editionPattern;
 	private DropScheme dropScheme;
-	private Vector<PaletteElementPatternParameter> parameters;
+	private Vector<FMLDiagramPaletteElementBindingParameter> parameters;
 	private String patternRoleName;
 
 	private boolean boundLabelToElementName = true;
@@ -65,18 +74,21 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 	// Represent graphical representation to be used as overriding representation
 	private final Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
 
-	private final DiagramPaletteElement paletteElement = null;
-
 	// private Vector<DiagramPaletteElement> childs;
 
 	public FMLDiagramPaletteElementBinding() {
 		super();
 		overridingGraphicalRepresentations = new Vector<OverridingGraphicalRepresentation>();
-		parameters = new Vector<PaletteElementPatternParameter>();
+		parameters = new Vector<FMLDiagramPaletteElementBindingParameter>();
 	}
 
 	public/*DiagramModelSlot*/ModelSlot<?> getDiagramModelSlot() {
 		return null;
+	}
+
+	@Override
+	public ViewPoint getViewPoint() {
+		return getVirtualModel().getViewPoint();
 	}
 
 	public VirtualModel getVirtualModel() {
@@ -153,26 +165,26 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 		}
 	}
 
-	public Vector<PaletteElementPatternParameter> getParameters() {
+	public Vector<FMLDiagramPaletteElementBindingParameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Vector<PaletteElementPatternParameter> parameters) {
+	public void setParameters(Vector<FMLDiagramPaletteElementBindingParameter> parameters) {
 		this.parameters = parameters;
 	}
 
-	public void addToParameters(PaletteElementPatternParameter parameter) {
-		parameter.setElement(getPaletteElement());
+	public void addToParameters(FMLDiagramPaletteElementBindingParameter parameter) {
+		parameter.setElementBinding(this);
 		parameters.add(parameter);
 	}
 
-	public void removeFromParameters(PaletteElementPatternParameter parameter) {
-		parameter.setElement(null);
+	public void removeFromParameters(FMLDiagramPaletteElementBindingParameter parameter) {
+		parameter.setElementBinding(null);
 		parameters.remove(parameter);
 	}
 
-	public PaletteElementPatternParameter getParameter(String name) {
-		for (PaletteElementPatternParameter p : parameters) {
+	public FMLDiagramPaletteElementBindingParameter getParameter(String name) {
+		for (FMLDiagramPaletteElementBindingParameter p : parameters) {
 			if (p.getName().equals(name)) {
 				return p;
 			}
@@ -184,23 +196,23 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 		if (editionPattern == null) {
 			return;
 		}
-		Vector<PaletteElementPatternParameter> unusedParameterInstances = new Vector<PaletteElementPatternParameter>();
+		Vector<FMLDiagramPaletteElementBindingParameter> unusedParameterInstances = new Vector<FMLDiagramPaletteElementBindingParameter>();
 		unusedParameterInstances.addAll(parameters);
 
 		for (EditionScheme es : editionPattern.getEditionSchemes()) {
 			for (EditionSchemeParameter parameter : es.getParameters()) {
-				PaletteElementPatternParameter parameterInstance = getParameter(parameter.getName());
+				FMLDiagramPaletteElementBindingParameter parameterInstance = getParameter(parameter.getName());
 				if (parameterInstance != null) {
 					unusedParameterInstances.remove(parameterInstance);
 					parameterInstance.setParameter(parameter);
 				} else {
-					parameterInstance = new PaletteElementPatternParameter(parameter);
+					parameterInstance = new FMLDiagramPaletteElementBindingParameter(parameter);
 					addToParameters(parameterInstance);
 				}
 			}
 		}
 
-		for (PaletteElementPatternParameter p : unusedParameterInstances) {
+		for (FMLDiagramPaletteElementBindingParameter p : unusedParameterInstances) {
 			removeFromParameters(p);
 		}
 	}
@@ -215,14 +227,14 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 
 	public void addToOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation) {
 		overridingGraphicalRepresentations.add(anOverridingGraphicalRepresentation);
-		anOverridingGraphicalRepresentation.paletteElement = this;
+		anOverridingGraphicalRepresentation.paletteElementBinding = this;
 		setChanged();
 		notifyObservers();
 	}
 
 	public void removeFromOverridingGraphicalRepresentations(OverridingGraphicalRepresentation anOverridingGraphicalRepresentation) {
 		overridingGraphicalRepresentations.remove(anOverridingGraphicalRepresentation);
-		anOverridingGraphicalRepresentation.paletteElement = null;
+		anOverridingGraphicalRepresentation.paletteElementBinding = null;
 		setChanged();
 		notifyObservers();
 	}
@@ -331,9 +343,18 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 			return paletteElementBinding.getPaletteElement().getPalette();
 		}
 
+		public VirtualModel getVirtualModel() {
+			return paletteElementBinding.getVirtualModel();
+		}
+
 		@Override
 		public String getURI() {
 			return null;
+		}
+
+		@Override
+		public ViewPoint getViewPoint() {
+			return getVirtualModel().getViewPoint();
 		}
 	}
 

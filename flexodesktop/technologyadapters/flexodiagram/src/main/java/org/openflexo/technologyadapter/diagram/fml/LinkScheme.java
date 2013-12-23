@@ -156,20 +156,27 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 			AddConnector newAction = (AddConnector) returned;
 			EditionPattern fromEditionPattern = this.getFromTargetEditionPattern();
 			if (fromEditionPattern != null) {
-				ShapePatternRole fromShapePatternRole = fromEditionPattern.getDefaultShapePatternRole();
+				ShapePatternRole fromShapePatternRole = getDefaultShapePatternRole(fromEditionPattern);
 				if (fromShapePatternRole != null) {
 					newAction.setFromShape(new DataBinding<DiagramShape>("fromTarget." + fromShapePatternRole.getName()));
 				}
 			}
 			EditionPattern toEditionPattern = this.getToTargetEditionPattern();
 			if (toEditionPattern != null) {
-				ShapePatternRole toShapePatternRole = toEditionPattern.getDefaultShapePatternRole();
+				ShapePatternRole toShapePatternRole = getDefaultShapePatternRole(toEditionPattern);
 				if (toShapePatternRole != null) {
 					newAction.setToShape(new DataBinding<DiagramShape>("toTarget." + toShapePatternRole.getName()));
 				}
 			}
 		}
 		return returned;
+	}
+
+	private ShapePatternRole getDefaultShapePatternRole(EditionPattern ep) {
+		if (ep.getPatternRoles(ShapePatternRole.class).size() > 0) {
+			return ep.getPatternRoles(ShapePatternRole.class).get(0);
+		}
+		return null;
 	}
 
 	public boolean getIsAvailableWithFloatingPalette() {

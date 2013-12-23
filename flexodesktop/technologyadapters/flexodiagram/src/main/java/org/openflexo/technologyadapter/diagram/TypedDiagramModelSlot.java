@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.diagram;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -21,6 +22,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
+import org.openflexo.technologyadapter.diagram.fml.FMLDiagramPaletteElementBinding;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddConnector;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddDiagram;
@@ -54,6 +56,8 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSpecification> implements DiagramModelSlot {
 
 	private static final Logger logger = Logger.getLogger(TypedDiagramModelSlot.class.getPackage().getName());
+
+	private List<FMLDiagramPaletteElementBinding> paletteElementBindings;
 
 	public TypedDiagramModelSlot(VirtualModel virtualModel, DiagramTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -189,6 +193,22 @@ public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSp
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<FMLDiagramPaletteElementBinding> getPaletteElementBindings() {
+		return paletteElementBindings;
+	}
+
+	public void setPaletteElementBindings(List<FMLDiagramPaletteElementBinding> paletteElementBindings) {
+		this.paletteElementBindings = paletteElementBindings;
+	}
+
+	public void addToPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
+		paletteElementBindings.add(paletteElementBinding);
+	}
+
+	public void removeFromPaletteElementBindings(FMLDiagramPaletteElementBinding paletteElementBinding) {
+		paletteElementBindings.remove(paletteElementBinding);
 	}
 
 }
