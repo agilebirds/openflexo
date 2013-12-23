@@ -11,9 +11,7 @@
         <Table iteratorClassName="org.openflexo.foundation.resource.FlexoResourceCenter" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="RCTable" index="1" data="data.rcService.resourceCenters" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=left;weightX=1.0;weightY=1.0;x=0;y=0)" font="Lucida Grande,0,11">
           <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
           <LabelColumn data="iterator.name" title="Resource Center" columnWidth="100" resizable="true" displayTitle="true" name="label" />
-          <AddAction method="data.addEntry" name="add" />
-          <RemoveAction method="data.deleteEntry(selected)" name="remove" />
-          <CustomAction method="data.refresh()" name="refresh" />
+          <Dependancy componentName="RCActionsPanel" />
         </Table>
         <Panel layout="border" borderTitle="Panel" darkLevel="0" data="($org.openflexo.foundation.resource.FileSystemBasedResourceCenter)RCTable.selected" dataClassName="org.openflexo.foundation.resource.FileSystemBasedResourceCenter" constraints="split(splitIdentifier=right)" name="FSRCBrowserPanel">
           <Browser root="RCTable.selected" iteratorClassName="java.lang.Object" visibleRowCount="3" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" showFooter="false" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" constraints="border(location=center;splitIdentifier=right)" width="100" height="100">
@@ -34,7 +32,7 @@
           </Panel>
         </Panel>
       </SplitPanel>
-      <Panel layout="gridbag" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,10" darkLevel="0" index="2" data="($org.openflexo.foundation.resource.FileSystemBasedResourceCenter)RCTable.selected" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,10">
+      <Panel layout="gridbag" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="LucidaGrande,0,10" darkLevel="0" index="2" data="($org.openflexo.foundation.resource.FileSystemBasedResourceCenter)RCTable.selected" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,10" name="RCActionsPanel">
         <Button action="data.addResourceCenter()" buttonType="Trigger" label="add" localize="true" name="AddButton" index="0" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
         <Button action="data.removeResourceCenter(RCTable.selected)" buttonType="Trigger" label="remove" localize="true" enable="(RCTable.selected.class.simpleName = &quot;DirectoryResourceCenter&quot;)" name="RemoveButton" index="1" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
         <Button action="data.refreshResourceCenter(RCTable.selected)" buttonType="Trigger" label="refresh" localize="true" name="RefreshButton" index="2" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
@@ -69,7 +67,7 @@
       <Panel layout="twocols" border="rounded3d" borderTitle="Logging configuration" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Dialog,1,11" darkLevel="1" index="0" constraints="gridbag(anchor=center;fill=both;gridHeight=2;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
         <Label label="number_of_logs_to_keep" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
         <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="5" index="0" data="data.numberOfLogsToKeep" constraints="flow(index=0)" name="Integer" localize="true" enable="(!(data.isInfiniteNumberOfLogs))" />
+          <Number allowsNull="false" minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="5" index="0" data="data.numberOfLogsToKeep" constraints="flow(index=0)" name="Integer" localize="true" enable="(!(data.isInfiniteNumberOfLogs))" />
           <Label label="infinite" index="1" constraints="flow(index=1)" localize="true" />
           <CheckBox selected="true" index="2" data="data.isInfiniteNumberOfLogs" constraints="flow(index=2)" name="checkbox" localize="true" />
         </Panel>
@@ -152,9 +150,9 @@
           <TextField index="26" data="FiltersTable.selected.filteredStacktrace" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=26;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" enable="FiltersTable.selected.hasFilteredStacktrace" columns="7" text="TextField" />
           <CheckBox selected="true" index="27" data="FiltersTable.selected.hasFilteredSequence" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=27;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" enable="(FiltersTable.selected != null)" />
           <Label label="filter_sequence" index="28" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=28;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" index="29" data="FiltersTable.selected.startSequence" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=29;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="FiltersTable.selected.hasFilteredSequence" />
+          <Number allowsNull="false" minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" index="29" data="FiltersTable.selected.startSequence" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=29;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="FiltersTable.selected.hasFilteredSequence" />
           <Label label="and" index="30" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=30;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" enable="FiltersTable.selected.hasFilteredSequence" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="6" index="31" data="FiltersTable.selected.endSequence" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=31;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="FiltersTable.selected.hasFilteredSequence" />
+          <Number allowsNull="false" minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="6" index="31" data="FiltersTable.selected.endSequence" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=31;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="Integer" localize="true" enable="FiltersTable.selected.hasFilteredSequence" />
           <LocalizedDictionary />
         </Panel>
       </Panel>
@@ -210,7 +208,7 @@
     <Localized key="number_of_logs_to_keep" lang="French">nombre de logs à conserver</Localized>
     <Localized key="number_of_logs_to_keep" lang="Dutch">Number of logs to keep</Localized>
     <Localized key="infinite" lang="English">infinite</Localized>
-    <Localized key="infinite" lang="French">infinite</Localized>
+    <Localized key="infinite" lang="French">infinit</Localized>
     <Localized key="infinite" lang="Dutch">infinite</Localized>
     <Localized key="keep_log_trace_in_memory" lang="English">Keep log trace in memory</Localized>
     <Localized key="keep_log_trace_in_memory" lang="French">Conserver les traces en mémoire</Localized>
@@ -219,13 +217,13 @@
     <Localized key="configuration" lang="French">Configuration</Localized>
     <Localized key="configuration" lang="Dutch">Configuration</Localized>
     <Localized key="configuration_file" lang="English">Configuration file</Localized>
-    <Localized key="configuration_file" lang="French">Configuration file</Localized>
+    <Localized key="configuration_file" lang="French">Fichier de configuration</Localized>
     <Localized key="configuration_file" lang="Dutch">Configuration file</Localized>
     <Localized key="log_level" lang="English">Log level</Localized>
     <Localized key="log_level" lang="French">Niveau de log</Localized>
     <Localized key="log_level" lang="Dutch">Log level</Localized>
     <Localized key="Logging configuration" lang="English">Logging configuration</Localized>
-    <Localized key="Logging configuration" lang="French">Logging configuration</Localized>
+    <Localized key="Logging configuration" lang="French">Configuration de Logging</Localized>
     <Localized key="Logging configuration" lang="Dutch">Logging configuration</Localized>
     <Localized key="display_option_description" lang="English">Please select columns to show in logs table</Localized>
     <Localized key="display_option_description" lang="French">Sélectionner les colonnes à afficher</Localized>
@@ -237,7 +235,7 @@
     <Localized key="milliseconds" lang="French">millisecondes</Localized>
     <Localized key="milliseconds" lang="Dutch">milliseconds</Localized>
     <Localized key="Display options" lang="English">Display options</Localized>
-    <Localized key="Display options" lang="French">Display options</Localized>
+    <Localized key="Display options" lang="French">Options d'affichage</Localized>
     <Localized key="Display options" lang="Dutch">Display options</Localized>
     <Localized key="col1" lang="English">col1</Localized>
     <Localized key="col1" lang="French">col1</Localized>
@@ -246,7 +244,7 @@
     <Localized key="col2" lang="French">col2</Localized>
     <Localized key="col2" lang="Dutch">col2</Localized>
     <Localized key="Filters" lang="English">Filters</Localized>
-    <Localized key="Filters" lang="French">Filters</Localized>
+    <Localized key="Filters" lang="French">Filtres</Localized>
     <Localized key="Filters" lang="Dutch">Filters</Localized>
     <Localized key="options" lang="English">Options</Localized>
     <Localized key="options" lang="French">Options</Localized>
@@ -387,16 +385,16 @@
     <Localized key="Method" lang="French">Méthode</Localized>
     <Localized key="Method" lang="Dutch">Method</Localized>
     <Localized key="filter_date" lang="English">Filter date</Localized>
-    <Localized key="filter_date" lang="French">filter_date</Localized>
+    <Localized key="filter_date" lang="French">Filtrer la date</Localized>
     <Localized key="filter_date" lang="Dutch">Filter date</Localized>
     <Localized key="Before" lang="English">Before</Localized>
-    <Localized key="Before" lang="French">Before</Localized>
+    <Localized key="Before" lang="French">Avant</Localized>
     <Localized key="Before" lang="Dutch">Before</Localized>
     <Localized key="After" lang="English">After</Localized>
-    <Localized key="After" lang="French">After</Localized>
+    <Localized key="After" lang="French">Après</Localized>
     <Localized key="After" lang="Dutch">After</Localized>
     <Localized key="Between" lang="English">Between</Localized>
-    <Localized key="Between" lang="French">Between</Localized>
+    <Localized key="Between" lang="French">Entre</Localized>
     <Localized key="Between" lang="Dutch">Between</Localized>
     <Localized key="and" lang="English">and</Localized>
     <Localized key="and" lang="French">et</Localized>
