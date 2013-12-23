@@ -88,6 +88,13 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 
 	}
 
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * This is this instance that will be deleted.
+	 * 
+	 * @return
+	 */
+	@Override
 	public final EditionPatternInstance getEditionPatternInstance() {
 		return getFocusedObject();
 	}

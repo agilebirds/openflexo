@@ -31,16 +31,16 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
-
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
@@ -64,8 +64,8 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public AddConnector(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddConnector() {
+		super();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 	public DiagramShape getFromShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getStartShapeAsDefinedInAction()) {
-			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
+			FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getStartShapePatternRole());
 		} else {
 			try {
@@ -278,7 +278,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 		protected static class SetsPatternRole extends FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> {
 
-			private ConnectorPatternRole patternRole;
+			private final ConnectorPatternRole patternRole;
 
 			public SetsPatternRole(ConnectorPatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
@@ -329,7 +329,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 		protected static class SetsStartingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
 
-			private ShapePatternRole patternRole;
+			private final ShapePatternRole patternRole;
 
 			public SetsStartingShapeToShape(ShapePatternRole patternRole) {
 				super("sets_starting_shape_to_($patternRole.patternRoleName)");
@@ -350,8 +350,8 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		protected static class SetsStartingShapeToStartTargetShape extends
 				FixProposal<AddConnectorActionMustHaveAValidStartingShape, AddConnector> {
 
-			private EditionPattern target;
-			private ShapePatternRole patternRole;
+			private final EditionPattern target;
+			private final ShapePatternRole patternRole;
 
 			public SetsStartingShapeToStartTargetShape(EditionPattern target, ShapePatternRole patternRole) {
 				super("sets_starting_shape_to_fromTarget.($patternRole.patternRoleName)");
@@ -407,7 +407,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 		protected static class SetsEndingShapeToShape extends FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
 
-			private ShapePatternRole patternRole;
+			private final ShapePatternRole patternRole;
 
 			public SetsEndingShapeToShape(ShapePatternRole patternRole) {
 				super("sets_ending_shape_to_($patternRole.patternRoleName)");
@@ -428,8 +428,8 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		protected static class SetsEndingShapeToToTargetShape extends
 				FixProposal<AddConnectorActionMustHaveAValidEndingShape, AddConnector> {
 
-			private EditionPattern target;
-			private ShapePatternRole patternRole;
+			private final EditionPattern target;
+			private final ShapePatternRole patternRole;
 
 			public SetsEndingShapeToToTargetShape(EditionPattern target, ShapePatternRole patternRole) {
 				super("sets_ending_shape_to_toTarget.($patternRole.patternRoleName)");

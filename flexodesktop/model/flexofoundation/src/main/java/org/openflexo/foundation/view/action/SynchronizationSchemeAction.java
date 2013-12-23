@@ -58,9 +58,16 @@ public class SynchronizationSchemeAction extends
 		return null;
 	}
 
-	public EditionPatternInstance getEditionPatternInstance() {
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * Note that here, the returned {@link EditionPatternInstance} is the {@link VirtualModelInstance} which is to be synchronized
+	 * 
+	 * @return
+	 */
+	@Override
+	public VirtualModelInstance getEditionPatternInstance() {
 		if (actionType != null) {
-			return actionType.getEditionPatternInstance();
+			return (VirtualModelInstance) actionType.getEditionPatternInstance();
 		}
 		return null;
 	}
@@ -88,11 +95,14 @@ public class SynchronizationSchemeAction extends
 		endSynchronization();
 	}
 
+	/**
+	 * Return {@link VirtualModelInstance} in which synchronized {@link VirtualModelInstance} does exist
+	 */
 	@Override
 	public VirtualModelInstance retrieveVirtualModelInstance() {
-		if (getEditionPatternInstance() instanceof VirtualModelInstance) {
+		/*if (getEditionPatternInstance() instanceof VirtualModelInstance) {
 			return (VirtualModelInstance) getEditionPatternInstance();
-		}
+		}*/
 		if (getEditionPatternInstance() != null) {
 			return getEditionPatternInstance().getVirtualModelInstance();
 		}

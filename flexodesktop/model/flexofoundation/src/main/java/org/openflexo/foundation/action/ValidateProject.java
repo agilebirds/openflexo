@@ -148,7 +148,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoProjectOb
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				}
 			} else if (dataModification instanceof ValidationFinishedNotification) {
 				// Nothing
@@ -168,7 +168,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoProjectOb
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}
@@ -189,7 +189,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoProjectOb
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}
@@ -210,7 +210,7 @@ public class ValidateProject extends FlexoAction<ValidateProject, FlexoProjectOb
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					setSecondaryProgress(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationFinishedNotification) {
 					// Nothing
 				}

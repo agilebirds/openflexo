@@ -28,7 +28,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -37,8 +37,8 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.fml.ExampleDiagram;
@@ -59,7 +59,8 @@ import org.openflexo.toolbox.ChainedCollection;
  * @author sylvain
  * 
  */
-public class DiagramSpecification extends FlexoObject implements FlexoMetaModel<DiagramSpecification>, ResourceData<DiagramSpecification> {
+public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaModel<DiagramSpecification>,
+		ResourceData<DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());
 

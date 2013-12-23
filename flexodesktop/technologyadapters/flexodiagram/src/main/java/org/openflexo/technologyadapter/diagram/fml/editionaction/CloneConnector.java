@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.model.action.LinkSchemeAction;
 
@@ -36,8 +35,8 @@ public class CloneConnector extends AddConnector {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public CloneConnector(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CloneConnector() {
+		super();
 	}
 
 	@Override

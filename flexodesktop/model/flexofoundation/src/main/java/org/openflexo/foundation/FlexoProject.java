@@ -1488,11 +1488,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	 * notifyObservers(); }
 	 */
 
-	@Override
-	public String getFullyQualifiedName() {
-		return "PROJECT." + getProjectName();
-	}
-
 	/**
 	 * Don't use this method to get a new ID. Use getNewUniqueID instead
 	 * 

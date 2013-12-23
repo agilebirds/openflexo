@@ -51,6 +51,12 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction, 
 		return null;
 	}
 
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * 
+	 * @return
+	 */
+	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
 			return actionType.getEditionPatternInstance();

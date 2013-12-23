@@ -38,6 +38,7 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelInstanceObject;
@@ -210,6 +211,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES, O
 	}
 
 	public abstract VirtualModelInstance retrieveVirtualModelInstance();
+
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * An {@link EditionSchemeAction} may concern an existing {@link EditionPatternInstance} or may also refer to an
+	 * {@link EditionPatternInstance} instance to be created (if related {@link EditionScheme} is a {@link CreationSchemeAction}).
+	 * 
+	 * @return
+	 */
+	public abstract EditionPatternInstance getEditionPatternInstance();
 
 	/**
 	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control

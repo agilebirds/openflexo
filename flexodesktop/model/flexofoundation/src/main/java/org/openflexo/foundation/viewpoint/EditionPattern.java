@@ -139,8 +139,8 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#" + getName();
+	public String getStringRepresentation() {
+		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#" + getName();
 	}
 
 	/**

@@ -19,8 +19,8 @@
  */
 package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementSpecification;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
@@ -28,8 +28,8 @@ import org.openflexo.toolbox.StringUtils;
 
 public abstract class AddSchemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
-	public AddSchemaElementAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddSchemaElementAction() {
+		super();
 	}
 
 	/*@Override

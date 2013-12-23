@@ -18,7 +18,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
@@ -58,8 +57,8 @@ public class FreeDiagramModelSlot extends FreeModelSlot<Diagram> {
 		super(virtualModel, adapter);
 	}
 
-	public FreeDiagramModelSlot(VirtualModelBuilder builder) {
-		super(builder);
+	public FreeDiagramModelSlot() {
+		super();
 	}
 
 	/*public DiagramModelSlot(ViewPointBuilder builder) {
@@ -67,7 +66,7 @@ public class FreeDiagramModelSlot extends FreeModelSlot<Diagram> {
 	}*/
 
 	@Override
-	public String getFullyQualifiedName() {
+	public String getStringRepresentation() {
 		return "FreeDiagramModelSlot";
 	}
 
@@ -85,11 +84,11 @@ public class FreeDiagramModelSlot extends FreeModelSlot<Diagram> {
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new DiagramPatternRole(null);
+			return (PR) new DiagramPatternRole();
 		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ShapePatternRole(null);
+			return (PR) new ShapePatternRole();
 		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new ConnectorPatternRole(null);
+			return (PR) new ConnectorPatternRole();
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -111,15 +110,15 @@ public class FreeDiagramModelSlot extends FreeModelSlot<Diagram> {
 	@Override
 	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddDiagram(null);
+			return (EA) new AddDiagram();
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddShape(null);
+			return (EA) new AddShape();
 		} else if (AddConnector.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddConnector(null);
+			return (EA) new AddConnector();
 		} else if (GraphicalAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new GraphicalAction(null);
+			return (EA) new GraphicalAction();
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new DeleteAction(null);
+			return (EA) new DeleteAction();
 		} else {
 			logger.warning("Unexpected EditionAction: " + editionActionClass.getName());
 			return null;

@@ -55,14 +55,14 @@ public abstract class EditionPatternObject extends NamedViewPointObjectImpl {
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#"
+	public String getStringRepresentation() {
+		return (getVirtualModel() != null ? getVirtualModel().getStringRepresentation() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
 	}
 
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
-		return "<not_implemented:" + getFullyQualifiedName() + ">";
+		return "<not_implemented:" + getStringRepresentation() + ">";
 	}
 
 	@Override

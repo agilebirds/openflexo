@@ -389,7 +389,7 @@ public interface LocalizedDictionary extends ViewPointObject, LocalizedDelegate 
 
 		@Override
 		public String getFMLRepresentation(FMLRepresentationContext context) {
-			return "<not_implemented:" + getFullyQualifiedName() + ">";
+			return "<not_implemented:" + getStringRepresentation() + ">";
 		}
 
 		@Override

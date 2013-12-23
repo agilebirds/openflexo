@@ -31,16 +31,15 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
-
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
@@ -63,8 +62,8 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	private boolean extendParentBoundsToHostThisShape = false;
 
-	public AddShape(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public AddShape() {
+		super();
 	}
 
 	@Override
@@ -219,7 +218,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 		protected static class SetsPatternRole extends FixProposal<AddShapeActionMustAdressAValidShapePatternRole, AddShape> {
 
-			private ShapePatternRole patternRole;
+			private final ShapePatternRole patternRole;
 
 			public SetsPatternRole(ShapePatternRole patternRole) {
 				super("assign_action_to_pattern_role_($patternRole.patternRoleName)");
@@ -283,7 +282,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 		protected static class SetsContainerToShape extends FixProposal<AddShapeActionMustHaveAValidContainer, AddShape> {
 
-			private ShapePatternRole patternRole;
+			private final ShapePatternRole patternRole;
 
 			public SetsContainerToShape(ShapePatternRole patternRole) {
 				super("sets_container_to_($patternRole.patternRoleName)");
@@ -303,8 +302,8 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 		protected static class SetsContainerToTargetShape extends FixProposal<AddShapeActionMustHaveAValidContainer, AddShape> {
 
-			private EditionPattern target;
-			private ShapePatternRole patternRole;
+			private final EditionPattern target;
+			private final ShapePatternRole patternRole;
 
 			public SetsContainerToTargetShape(EditionPattern target, ShapePatternRole patternRole) {
 				super("sets_container_to_target.($patternRole.patternRoleName)");

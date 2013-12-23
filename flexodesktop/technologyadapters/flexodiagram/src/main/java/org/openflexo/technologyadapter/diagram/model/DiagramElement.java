@@ -24,6 +24,7 @@ import java.util.Observer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.CloningStrategy.StrategyType;
 import org.openflexo.model.annotations.Embedded;
@@ -33,9 +34,6 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.factory.AccessibleProxyObject;
-import org.openflexo.model.factory.CloneableProxyObject;
-import org.openflexo.model.factory.DeletableProxyObject;
 import org.openflexo.technologyadapter.diagram.fml.action.GRTemplate;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -49,8 +47,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity
 @ImplementationClass(DiagramElementImpl.class)
-public interface DiagramElement<G extends GraphicalRepresentation> extends GRTemplate, BindingEvaluationContext, XMLSerializable,
-		Cloneable, Observer, AccessibleProxyObject, DeletableProxyObject, CloneableProxyObject {
+public interface DiagramElement<G extends GraphicalRepresentation> extends FlexoObject, GRTemplate, BindingEvaluationContext,
+		XMLSerializable, Cloneable, Observer {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String NAME = "name";
@@ -137,6 +135,7 @@ public interface DiagramElement<G extends GraphicalRepresentation> extends GRTem
 	@Override
 	public void update(Observable o, Object arg);
 
+	@Override
 	public void setChanged();
 
 	public boolean hasChanged();

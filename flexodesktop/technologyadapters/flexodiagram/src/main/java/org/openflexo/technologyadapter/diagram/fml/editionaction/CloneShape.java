@@ -21,7 +21,6 @@ package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 
 /**
@@ -35,8 +34,8 @@ public class CloneShape extends AddShape {
 
 	private static final Logger logger = Logger.getLogger(CloneShape.class.getPackage().getName());
 
-	public CloneShape(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public CloneShape() {
+		super();
 	}
 
 }

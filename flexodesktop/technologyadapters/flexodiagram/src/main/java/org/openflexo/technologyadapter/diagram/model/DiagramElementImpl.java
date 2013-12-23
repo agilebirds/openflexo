@@ -23,10 +23,10 @@ import java.util.Observable;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 
-public abstract class DiagramElementImpl<G extends GraphicalRepresentation> extends FlexoObject implements DiagramElement<G> {
+public abstract class DiagramElementImpl<G extends GraphicalRepresentation> extends FlexoObjectImpl implements DiagramElement<G> {
 
 	public DiagramElementImpl() {
 	}

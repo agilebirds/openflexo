@@ -69,11 +69,6 @@ public class ViewPointLibrary extends DefaultFlexoObject implements FlexoService
 
 	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return "ViewPointLibrary";
-	}
-
 	/**
 	 * Retrieve, and return ViewPointResource identified by supplied URI
 	 * 

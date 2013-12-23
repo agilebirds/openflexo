@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
-
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
@@ -21,8 +21,8 @@ public class DiagramPatternRole extends PatternRole<View> {
 	private DiagramSpecificationResource diagramSpecificationResource;
 	private String diagramSpecificationURI;
 
-	public DiagramPatternRole(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DiagramPatternRole() {
+		super();
 	}
 
 	@Override
@@ -43,16 +43,6 @@ public class DiagramPatternRole extends PatternRole<View> {
 	@Override
 	public Type getType() {
 		return View.class;
-	}
-
-	@Override
-	public boolean getIsPrimaryRole() {
-		return false;
-	}
-
-	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// Not relevant
 	}
 
 	public DiagramSpecificationResource getDiagramSpecificationResource() {

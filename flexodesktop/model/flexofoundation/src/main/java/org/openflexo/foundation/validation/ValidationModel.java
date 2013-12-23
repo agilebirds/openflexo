@@ -192,7 +192,7 @@ public abstract class ValidationModel extends FlexoListModel {
 
 		ValidationRuleSet rules = getValidationRulesForObjectType(next.getClass());
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Validating " + next.getFullyQualifiedName() + " " + next.toString());
+			logger.fine("Validating " + next.toString() + " " + next.toString());
 		}
 
 		if (shouldNotifyValidationRules()) {

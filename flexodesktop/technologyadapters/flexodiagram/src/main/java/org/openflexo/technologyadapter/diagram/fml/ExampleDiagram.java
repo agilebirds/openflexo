@@ -29,14 +29,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.foundation.gen.ScreenshotGenerator;
-import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.InvalidFileNameException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.external.ExternalVPMModule;

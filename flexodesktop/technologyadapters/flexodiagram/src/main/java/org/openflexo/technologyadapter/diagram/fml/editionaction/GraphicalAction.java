@@ -36,7 +36,6 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
@@ -55,8 +54,8 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 	private GraphicalFeature<?, ?> graphicalFeature = null;
 	private DataBinding<Object> value;
 
-	public GraphicalAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public GraphicalAction() {
+		super();
 	}
 
 	public java.lang.reflect.Type getGraphicalFeatureType() {
@@ -269,7 +268,7 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 
 		protected static class SetsPatternRoleForSubject extends FixProposal<GraphicalActionMustHaveASubject, GraphicalAction> {
 
-			private GraphicalElementPatternRole patternRole;
+			private final GraphicalElementPatternRole patternRole;
 
 			public SetsPatternRoleForSubject(GraphicalElementPatternRole patternRole) {
 				super("set_subject_to_($patternRole.patternRoleName)");

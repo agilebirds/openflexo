@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.VirtualModelInstanceObject;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 
 public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction, NavigationScheme, EditionPatternInstance> {
@@ -48,6 +49,13 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 		return null;
 	}
 
+	/**
+	 * Return the {@link EditionPatternInstance} on which this {@link EditionScheme} is applied.<br>
+	 * We want to navigate to this {@link EditionPatternInstance}
+	 * 
+	 * @return
+	 */
+	@Override
 	public EditionPatternInstance getEditionPatternInstance() {
 		if (actionType != null) {
 			return actionType.getEditionPatternInstance();

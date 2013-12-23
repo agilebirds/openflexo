@@ -662,7 +662,7 @@ public class MatchEditionPatternInstance extends AssignableAction<VirtualModelMo
 							}
 						} else if (!p.getValue().isValid()) {
 							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
-									+ p.action.getFullyQualifiedName() + ". Reason: " + p.getValue().invalidBindingReason());
+									+ p.action.getStringRepresentation() + ". Reason: " + p.getValue().invalidBindingReason());
 							issues.add(new ValidationError(this, action, "parameter_s_value_is_not_valid: " + p.getParam().getName()));
 						}
 					}

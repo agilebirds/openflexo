@@ -20,13 +20,12 @@
 package org.openflexo.technologyadapter.diagram.fml.editionaction;
 
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 
 public abstract class DiagramAction<T> extends AssignableAction<TypedDiagramModelSlot, T> {
 
-	public DiagramAction(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
+	public DiagramAction() {
+		super();
 	}
 
 	/*@Override

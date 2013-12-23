@@ -96,9 +96,9 @@ public class ValidationReport extends AbstractTableModel {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationReport.class.getPackage().getName());
 
-	private Validable _rootObject;
+	private final Validable _rootObject;
 
-	private ValidationIssueVector _validationIssues;
+	private final ValidationIssueVector _validationIssues;
 
 	private int _infosNb = 0;
 
@@ -106,7 +106,7 @@ public class ValidationReport extends AbstractTableModel {
 
 	private int _errorNb = 0;
 
-	private ValidationModel _model;
+	private final ValidationModel _model;
 
 	private String _localizedTitle = null;
 
@@ -132,7 +132,7 @@ public class ValidationReport extends AbstractTableModel {
 			if (_rootObject == null) {
 				return FlexoLocalization.localizedForKey("no_validation_report");
 			} else {
-				return FlexoLocalization.localizedForKey("validation_report_for") + " " + _rootObject.getFullyQualifiedName();
+				return FlexoLocalization.localizedForKey("validation_report_for") + " " + _rootObject.toString();
 			}
 		} else {
 			return _localizedTitle;
@@ -206,7 +206,7 @@ public class ValidationReport extends AbstractTableModel {
 			} else if (columnIndex == 1) {
 				return _validationIssues.errors.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return _validationIssues.errors.elementAt(rowIndex).getObject().getFullyQualifiedName();
+				return _validationIssues.errors.elementAt(rowIndex).getObject().toString();
 			}
 			break;
 		case WARNINGS:
@@ -215,7 +215,7 @@ public class ValidationReport extends AbstractTableModel {
 			} else if (columnIndex == 1) {
 				return _validationIssues.warnings.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return _validationIssues.warnings.elementAt(rowIndex).getObject().getFullyQualifiedName();
+				return _validationIssues.warnings.elementAt(rowIndex).getObject().toString();
 			}
 			break;
 		default:
@@ -224,7 +224,7 @@ public class ValidationReport extends AbstractTableModel {
 			} else if (columnIndex == 1) {
 				return _validationIssues.elementAt(rowIndex).getLocalizedMessage();
 			} else if (columnIndex == 2) {
-				return _validationIssues.elementAt(rowIndex).getObject().getFullyQualifiedName();
+				return _validationIssues.elementAt(rowIndex).getObject().toString();
 			}
 		}
 		return null;

@@ -144,11 +144,6 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 			return getFMLRepresentation(new FMLRepresentationContext());
 		}
 
-		@Override
-		public String getFullyQualifiedName() {
-			return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#" + getClass().getSimpleName();
-		}
-
 		public static abstract class BindingMustBeValid<C extends ViewPointObject> extends ValidationRule<BindingMustBeValid<C>, C> {
 			public BindingMustBeValid(String ruleName, Class<C> clazz) {
 				super(clazz, ruleName);
@@ -160,7 +155,7 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 			public ValidationIssue<BindingMustBeValid<C>, C> applyValidation(C object) {
 				if (getBinding(object) != null && getBinding(object).isSet()) {
 					if (!getBinding(object).isValid()) {
-						logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getFullyQualifiedName() + ". Reason: "
+						logger.info("Binding NOT valid: " + getBinding(object) + " for " + object.getStringRepresentation() + ". Reason: "
 								+ getBinding(object).invalidBindingReason());
 						DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
 						return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(),
@@ -202,7 +197,7 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 					return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 							BindingIsRequiredAndMustBeValid.this.getNameKey());
 				} else if (!b.isValid()) {
-					logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getFullyQualifiedName()
+					logger.info(getClass().getName() + ": Binding NOT valid: " + b + " for " + object.getStringRepresentation()
 							+ ". Reason: " + b.invalidBindingReason());
 					return new ValidationError<BindingIsRequiredAndMustBeValid<C>, C>(this, object,
 							BindingIsRequiredAndMustBeValid.this.getNameKey());

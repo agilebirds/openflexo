@@ -114,8 +114,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
+	public String getStringRepresentation() {
+		return (getEditionPattern() != null ? getEditionPattern().getStringRepresentation() : "null") + "." + getName();
 	}
 
 	@Override

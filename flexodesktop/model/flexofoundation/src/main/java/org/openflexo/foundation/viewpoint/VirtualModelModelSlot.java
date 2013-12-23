@@ -72,7 +72,7 @@ public class VirtualModelModelSlot extends ModelSlot<VirtualModelInstance> {
 	}*/
 
 	@Override
-	public String getFullyQualifiedName() {
+	public String getStringRepresentation() {
 		return "VirtualModelModelSlot";
 	}
 

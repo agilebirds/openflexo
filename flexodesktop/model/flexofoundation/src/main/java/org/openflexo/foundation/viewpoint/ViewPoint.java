@@ -258,7 +258,7 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 		}
 
 		@Override
-		public String getFullyQualifiedName() {
+		public String getStringRepresentation() {
 			return getURI();
 		}
 

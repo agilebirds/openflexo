@@ -24,6 +24,7 @@ import java.util.Collection;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.technologyadapter.diagram.model.DiagramSpecification;
 
