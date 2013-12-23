@@ -22,29 +22,26 @@ package org.openflexo.technologyadapter.diagram.metamodel;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
-import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
-import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
-import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteRemoved;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramInserted;
 import org.openflexo.technologyadapter.diagram.model.dm.ExampleDiagramRemoved;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
+import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
 import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResourceImpl;
 import org.openflexo.toolbox.ChainedCollection;
@@ -62,13 +59,15 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());
 
+	private DiagramSpecificationResource resource;
+
 	private final List<DiagramPalette> palettes;
-	private final List<ExampleDiagram> exampleDiagrams;
+	private final List<Diagram> exampleDiagrams;
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
-	private ChainedCollection<ViewPointObject> validableObjects = null;
+	private final ChainedCollection<ViewPointObject> validableObjects = null;
 
 	/**
 	 * Creates a new VirtualModel on user request<br>
@@ -79,58 +78,27 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 	 * @param viewPoint
 	 * @return
 	 */
-	public static DiagramSpecification newDiagramSpecification(String baseName, File diagramSpecificationDirectory) {
+	public static DiagramSpecification newDiagramSpecification(String uri, String baseName, File diagramSpecificationDirectory,
+			FlexoServiceManager serviceManager) {
 		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
-		DiagramSpecificationResource dsRes = DiagramSpecificationResourceImpl.makeDiagramSpecificationResource(
-				diagramSpecificationDirectory, diagramSpecificationXMLFile, viewPoint.getResource(), viewPointLibrary);
-		DiagramSpecification diagramSpecification = new DiagramSpecification(viewPoint);
+		DiagramSpecificationResource dsRes = DiagramSpecificationResourceImpl.makeDiagramSpecificationResource(uri,
+				diagramSpecificationDirectory, diagramSpecificationXMLFile, serviceManager);
+		DiagramSpecification diagramSpecification = new DiagramSpecification();
 		dsRes.setResourceData(diagramSpecification);
 		diagramSpecification.setResource(dsRes);
-		diagramSpecification.makeReflexiveModelSlot();
-		diagramSpecification.save();
+		try {
+			dsRes.save(null);
+		} catch (SaveResourceException e) {
+			e.printStackTrace();
+		}
 		return diagramSpecification;
 	}
 
 	// Used during deserialization, do not use it
-	public DiagramSpecification(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-		exampleDiagrams = new ArrayList<ExampleDiagram>();
+	public DiagramSpecification() {
+		super();
+		exampleDiagrams = new ArrayList<Diagram>();
 		palettes = new ArrayList<DiagramPalette>();
-	}
-
-	/**
-	 * Creates a new DiagramSpecification in supplied viewpoint, with a single model slot for DiagramTechnologyAdapter called 'diagram'
-	 * 
-	 * @param viewPoint
-	 */
-	public DiagramSpecification(ViewPoint viewPoint) {
-		this((VirtualModel.VirtualModelBuilder) null);
-		setViewPoint(viewPoint);
-
-		/*if (viewPoint.getViewPointLibrary().getServiceManager() != null
-				&& viewPoint.getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
-			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getServiceManager()
-					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
-			diagramMS.setName("diagram");
-			addToModelSlots(diagramMS);
-		}*/
-	}
-
-	@Override
-	protected TypedDiagramModelSlot makeReflexiveModelSlot() {
-		if (getViewPoint().getViewPointLibrary().getServiceManager() != null
-				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
-			DiagramTechnologyAdapter diagramTA = getViewPoint().getViewPointLibrary().getServiceManager()
-					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			TypedDiagramModelSlot returned = diagramTA.makeModelSlot(TypedDiagramModelSlot.class, this);
-			returned.setVirtualModelResource(getResource());
-			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
-			addToModelSlots(returned);
-			return returned;
-		}
-		logger.warning("Could not instanciate reflexive model slot");
-		return null;
 	}
 
 	/**
@@ -151,15 +119,20 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 	 */
 	private void loadExampleDiagramsWhenUnloaded() {
 		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
-			if (r instanceof ExampleDiagramResource) {
-				((ExampleDiagramResource) r).getExampleDiagram();
+			if (r instanceof DiagramResource) {
+				((DiagramResource) r).getDiagram();
 			}
 		}
 	}
 
 	@Override
 	public DiagramSpecificationResource getResource() {
-		return (DiagramSpecificationResource) super.getResource();
+		return resource;
+	}
+
+	@Override
+	public void setResource(FlexoResource<DiagramSpecification> resource) {
+		this.resource = (DiagramSpecificationResource) resource;
 	}
 
 	@Override
@@ -197,17 +170,17 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 		notifyObservers(new DiagramPaletteRemoved(aPalette, this));
 	}
 
-	public List<ExampleDiagram> getExampleDiagrams() {
+	public List<Diagram> getExampleDiagrams() {
 		loadExampleDiagramsWhenUnloaded();
 		return exampleDiagrams;
 	}
 
-	public ExampleDiagram getExampleDiagram(String diagramName) {
+	public Diagram getExampleDiagram(String diagramName) {
 		if (diagramName == null) {
 			return null;
 		}
 		loadExampleDiagramsWhenUnloaded();
-		for (ExampleDiagram s : getExampleDiagrams()) {
+		for (Diagram s : getExampleDiagrams()) {
 			if (diagramName.equals(s.getName())) {
 				return s;
 			}
@@ -215,19 +188,19 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 		return null;
 	}
 
-	public void addToExampleDiagrams(ExampleDiagram aShema) {
-		exampleDiagrams.add(aShema);
+	public void addToExampleDiagrams(Diagram aDiagram) {
+		exampleDiagrams.add(aDiagram);
 		setChanged();
-		notifyObservers(new ExampleDiagramInserted(aShema, this));
+		notifyObservers(new ExampleDiagramInserted(aDiagram, this));
 	}
 
-	public void removeFromExampleDiagrams(ExampleDiagram aShema) {
-		exampleDiagrams.remove(aShema);
+	public void removeFromExampleDiagrams(Diagram aDiagram) {
+		exampleDiagrams.remove(aDiagram);
 		setChanged();
-		notifyObservers(new ExampleDiagramRemoved(aShema, this));
+		notifyObservers(new ExampleDiagramRemoved(aDiagram, this));
 	}
 
-	@Override
+	/*@Override
 	protected void notifyEditionSchemeModified() {
 		_allEditionPatternWithDropScheme = null;
 		_allEditionPatternWithLinkScheme = null;
@@ -303,26 +276,22 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 		}
 		return super.handleVariable(variable);
 	}
+	*/
 
-	@Override
+	/*@Override
 	public Collection<ViewPointObject> getEmbeddedValidableObjects() {
 		if (validableObjects == null) {
 			validableObjects = new ChainedCollection<ViewPointObject>(getEditionPatterns(), getModelSlots(), getPalettes(),
 					getExampleDiagrams());
 		}
 		return validableObjects;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public final void finalizeDeserialization(Object builder) {
-		/*if (builder instanceof VirtualModel.VirtualModelBuilder
-				&& ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
-			// There were no model slots before 1.0, please add them
-			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
-		}*/
 		super.finalizeDeserialization(builder);
 		updateBindingModel();
-	}
+	}*/
 
 	public String getName() {
 		if (getResource() != null) {
@@ -337,6 +306,198 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 				getResource().setName(name);
 			}
 		}
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperGetter(String propertyIdentifier, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void performSuperSetter(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperAdder(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperRemover(String propertyIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void performSuperSetModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object performSuperFinder(String finderIdentifier, Object value, Class<?> modelEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSerializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDeserializing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setModified(boolean modified) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equalsObject(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperDelete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean performSuperUndelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void performSuperDelete(Class<?> modelEntityInterface, Object... context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean delete(Object... context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean undelete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object cloneObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object cloneObject(Object... context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCreatedByCloning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isBeingCloned() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ValidationModel getDefaultValidationModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getURI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setIsReadOnly(boolean b) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TechnologyAdapter getTechnologyAdapter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

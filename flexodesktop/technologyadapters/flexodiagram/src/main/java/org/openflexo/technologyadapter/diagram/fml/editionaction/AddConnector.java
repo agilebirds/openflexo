@@ -48,7 +48,9 @@ import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
-import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramElementImpl;
+import org.openflexo.technologyadapter.diagram.model.DiagramFactory;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.technologyadapter.diagram.model.action.LinkSchemeAction;
 import org.openflexo.toolbox.StringUtils;
@@ -124,7 +126,6 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 	public DiagramShape getToShape(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getEndShapeAsDefinedInAction()) {
-			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getEndShapePatternRole());
 		} else {
 			try {
@@ -220,8 +221,11 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		DiagramShape fromShape = getFromShape(action);
 		DiagramShape toShape = getToShape(action);
 		Diagram diagram = fromShape.getDiagram();
-		DiagramConnector newConnector = new DiagramConnector(diagram, fromShape, toShape);
-		DiagramElement<?> parent = DiagramElement.getFirstCommonAncestor(fromShape, toShape);
+		DiagramFactory factory = diagram.getDiagramFactory();
+		DiagramConnector newConnector = factory.newInstance(DiagramConnector.class);
+		newConnector.setStartShape(fromShape);
+		newConnector.setEndShape(toShape);
+		DiagramContainerElement<?> parent = DiagramElementImpl.getFirstCommonAncestor(fromShape, toShape);
 		if (parent == null) {
 			throw new IllegalArgumentException("No common ancestor");
 		}
@@ -229,17 +233,17 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		GraphicalRepresentation grToUse = null;
 
 		// If an overriden graphical representation is defined, use it
-		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+		/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
 			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
-		} else if (getPatternRole().getGraphicalRepresentation() != null) {
+		} else*/ if (getPatternRole().getGraphicalRepresentation() != null) {
 			grToUse = getPatternRole().getGraphicalRepresentation();
-		}
+		//}
 
-		ConnectorGraphicalRepresentation newGR = diagram.getFactory().makeConnectorGraphicalRepresentation();
+		ConnectorGraphicalRepresentation newGR = factory.makeConnectorGraphicalRepresentation();
 		newGR.setsWith(grToUse);
 		newConnector.setGraphicalRepresentation(newGR);
 
-		parent.addToChilds(newConnector);
+		parent.addToConnectors(newConnector);
 
 		// Register reference
 		newConnector.registerEditionPatternReference(action.getEditionPatternInstance());
@@ -253,7 +257,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
 		super.finalizePerformAction(action, newConnector);
-		// Be sure that the newly created shape is updated
+		// Be sure that the newly created connector is updated
 		newConnector.update();
 	}
 

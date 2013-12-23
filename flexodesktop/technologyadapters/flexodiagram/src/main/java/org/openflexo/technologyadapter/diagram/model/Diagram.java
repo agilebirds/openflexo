@@ -120,4 +120,5 @@ public interface Diagram extends DiagramContainerElement<DrawingGraphicalReprese
 	@Setter(value = RESOURCE)
 	public void setResource(FlexoResource<Diagram> aDiagramResource);
 
+	public DiagramFactory getDiagramFactory();
 }

@@ -29,6 +29,7 @@ import javax.swing.JComponent;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.SaveResourceException;
@@ -36,7 +37,6 @@ import org.openflexo.foundation.resource.ScreenshotBuilder;
 import org.openflexo.foundation.resource.ScreenshotBuilder.ScreenshotImage;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.validation.Validable;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
@@ -75,9 +75,9 @@ public class DiagramPalette extends DiagramPaletteObject implements ResourceData
 	}*/
 
 	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, String diagramPaletteName,
-			DrawingGraphicalRepresentation graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
+			DrawingGraphicalRepresentation graphicalRepresentation, FlexoServiceManager serviceManager) {
 		DiagramPaletteResource diagramPaletteResource = DiagramPaletteResourceImpl.makeDiagramPaletteResource(
-				diagramSpecification.getResource(), diagramPaletteName, viewPointLibrary);
+				diagramSpecification.getResource(), diagramPaletteName, serviceManager);
 		DiagramPalette diagramPalette = new DiagramPalette();
 		diagramPalette.setGraphicalRepresentation(graphicalRepresentation);
 		diagramPalette.init(diagramSpecification, diagramPaletteName);

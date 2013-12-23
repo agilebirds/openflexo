@@ -26,13 +26,13 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.InvalidFileNameException;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.resource.ScreenshotBuilder;
 import org.openflexo.foundation.resource.ScreenshotBuilder.ScreenshotImage;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.view.View;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
@@ -54,10 +54,12 @@ public abstract class DiagramImpl extends DiagramContainerElementImpl<DrawingGra
 	private ScreenshotImage<Diagram> screenshotImage;
 	private File expectedScreenshotImageFile = null;
 
-	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, DiagramSpecification diagramSpecification,
-			View view, DiagramFactory factory) throws InvalidFileNameException, SaveResourceException {
+	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, String uri, File diagramFile,
+			DiagramSpecification diagramSpecification, FlexoServiceManager serviceManager) throws InvalidFileNameException,
+			SaveResourceException {
 
-		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view);
+		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, uri, diagramFile, diagramSpecification,
+				serviceManager);
 
 		Diagram newDiagram = newDiagramResource.getFactory().makeNewDiagram(diagramSpecification);
 		newDiagramResource.setResourceData(newDiagram);
@@ -207,6 +209,11 @@ public abstract class DiagramImpl extends DiagramContainerElementImpl<DrawingGra
 				getResource().setURI(uri);
 			}
 		}
+	}
+
+	@Override
+	public DiagramFactory getDiagramFactory() {
+		return ((DiagramResource) getResource()).getFactory();
 	}
 
 }

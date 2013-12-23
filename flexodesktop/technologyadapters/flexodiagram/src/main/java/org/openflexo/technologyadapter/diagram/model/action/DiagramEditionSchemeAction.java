@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -33,24 +32,34 @@ import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
 
+/**
+ * 
+ * @author sylvain
+ * 
+ * @param <A>
+ * @param <ES>
+ * @param <O>
+ */
 public abstract class DiagramEditionSchemeAction<A extends EditionSchemeAction<A, ES, O>, ES extends EditionScheme & DiagramEditionScheme, O extends VirtualModelInstanceObject>
 		extends EditionSchemeAction<A, ES, O> {
 
 	private static final Logger logger = Logger.getLogger(DiagramEditionSchemeAction.class.getPackage().getName());
 
-	DiagramEditionSchemeAction(FlexoActionType<A, FlexoModelObject, FlexoModelObject> actionType, FlexoModelObject focusedObject,
-			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	DiagramEditionSchemeAction(FlexoActionType<A, O, VirtualModelInstanceObject> actionType, O focusedObject,
+			Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	@Override
+	/*@Override
 	public Diagram getVirtualModelInstance() {
 		return (Diagram) super.getVirtualModelInstance();
 	}
 
 	public Diagram getDiagram() {
 		return getVirtualModelInstance();
-	}
+	}*/
+
+	public abstract Diagram getDiagram();
 
 	@Override
 	public Object getValue(BindingVariable variable) {

@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.diagram.model;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -139,5 +140,7 @@ public interface DiagramElement<G extends GraphicalRepresentation> extends Flexo
 	public void setChanged();
 
 	public boolean hasChanged();
+
+	public List<DiagramContainerElement<?>> getAncestors();
 
 }

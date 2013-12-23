@@ -25,52 +25,60 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.LinkScheme;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddConnector;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
-import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
-public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeAction, LinkScheme> {
+/**
+ * Represents an instance of a fired {@link LinkScheme} action
+ * 
+ * @author sylvain
+ * 
+ */
+public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeAction, LinkScheme, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
-	public static FlexoActionType<LinkSchemeAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<LinkSchemeAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<LinkSchemeAction, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<LinkSchemeAction, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"link_palette_connector", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public LinkSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public LinkSchemeAction makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new LinkSchemeAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof Diagram || object instanceof DiagramElement<?>;
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
+			// return object instanceof Diagram || object instanceof DiagramElement<?>;
+			return true;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
-		FlexoModelObject.addActionForClass(actionType, Diagram.class);
+		// VirtualModelInstanceObject.addActionForClass(actionType, DiagramElement.class);
+		// VirtualModelInstanceObject.addActionForClass(actionType, Diagram.class);
+		FlexoObjectImpl.addActionForClass(actionType, EditionPatternInstance.class);
 	}
 
 	private DiagramShape _fromShape;
@@ -79,11 +87,11 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 
 	private LinkScheme _linkScheme;
 
-	LinkSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	LinkSchemeAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	// private Hashtable<EditionAction,FlexoModelObject> createdObjects;
+	// private Hashtable<EditionAction,VirtualModelInstanceObject> createdObjects;
 
 	public LinkScheme getLinkScheme() {
 		return _linkScheme;
@@ -96,10 +104,9 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 	private EditionPatternInstance editionPatternInstance;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		logger.info("Link palette connector");
 
-		System.out.println("Ici6 on fait l'action");
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
 		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
@@ -140,14 +147,16 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 
 	@Override
 	public VirtualModelInstance retrieveVirtualModelInstance() {
+		return getFocusedObject().getVirtualModelInstance();
+	}
+
+	@Override
+	public Diagram getDiagram() {
 		if (getFromShape() != null) {
 			return getFromShape().getDiagram();
 		}
 		if (getToShape() != null) {
 			return getToShape().getDiagram();
-		}
-		if (getFocusedObject() instanceof DiagramElement<?>) {
-			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}
 		return null;
 	}

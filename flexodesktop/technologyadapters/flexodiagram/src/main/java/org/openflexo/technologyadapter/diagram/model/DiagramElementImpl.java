@@ -19,6 +19,8 @@
  */
 package org.openflexo.technologyadapter.diagram.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 import org.openflexo.antar.binding.BindingVariable;
@@ -93,6 +95,29 @@ public abstract class DiagramElementImpl<G extends GraphicalRepresentation> exte
 		if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)
 				|| variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
 			return this;
+		}
+		return null;
+	}
+
+	@Override
+	public List<DiagramContainerElement<?>> getAncestors() {
+		List<DiagramContainerElement<?>> ancestors = new ArrayList<DiagramContainerElement<?>>();
+		DiagramContainerElement<?> current = getParent();
+		while (current != null) {
+			ancestors.add(current);
+			current = current.getParent();
+		}
+		return ancestors;
+	}
+
+	public static DiagramContainerElement<?> getFirstCommonAncestor(DiagramContainerElement<?> child1, DiagramContainerElement<?> child2) {
+		List<DiagramContainerElement<?>> ancestors1 = child1.getAncestors();
+		List<DiagramContainerElement<?>> ancestors2 = child2.getAncestors();
+		for (int i = 0; i < ancestors1.size(); i++) {
+			DiagramContainerElement<?> o1 = ancestors1.get(i);
+			if (ancestors2.contains(o1)) {
+				return o1;
+			}
 		}
 		return null;
 	}
