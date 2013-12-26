@@ -131,9 +131,25 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 		return modelSlot;
 	}
 
+	public void updateActorReferencesURI() {
+	}
+
 	public void setResourceData(RD resourceData) {
+		boolean requiresUpdate = false;
+		if (this.resourceData != resourceData) {
+			requiresUpdate = true;
+		}
+
 		this.resourceData = resourceData;
 		this.resource = (TechnologyAdapterResource<RD>) resourceData.getResource();
+
+		if (requiresUpdate) {
+			// The virtual model can be synchronized with the new resource data.
+			updateActorReferencesURI();
+			if (getVirtualModelInstance().isSynchronizable()) {
+				getVirtualModelInstance().synchronize(null);
+			}
+		}
 	}
 
 	// TODO: rename as getResourceData
