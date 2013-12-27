@@ -76,6 +76,8 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 	public String newViewName;
 	public String newViewTitle;
 	public ViewPointResource viewpointResource;
+	public boolean createVirtualModel = false;
+	public boolean createDiagram = false;
 
 	public boolean skipChoosePopup = false;
 
