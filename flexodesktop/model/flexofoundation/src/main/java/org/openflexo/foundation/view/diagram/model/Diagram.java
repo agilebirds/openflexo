@@ -53,7 +53,7 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, DiagramSpecification diagramSpecification,
 			View view) throws InvalidFileNameException, SaveResourceException {
 
-		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view);
+		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view, diagramTitle);
 
 		Diagram newDiagram = new Diagram(view, diagramSpecification);
 		newDiagramResource.setResourceData(newDiagram);

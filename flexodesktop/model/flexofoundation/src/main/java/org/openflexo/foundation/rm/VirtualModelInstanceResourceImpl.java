@@ -37,7 +37,8 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 
 	static final Logger logger = Logger.getLogger(VirtualModelInstanceResourceImpl.class.getPackage().getName());
 
-	public static VirtualModelInstanceResource<?> makeVirtualModelInstanceResource(String name, VirtualModel virtualModel, View view) {
+	public static VirtualModelInstanceResource<?> makeVirtualModelInstanceResource(String name, VirtualModel virtualModel, View view,
+			String title) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
 			VirtualModelInstanceResourceImpl<?> returned = (VirtualModelInstanceResourceImpl<?>) factory
@@ -50,7 +51,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			returned.setFile(xmlFile);
 			returned.setURI(view.getURI() + "/" + baseName);
 			returned.setVirtualModelResource(virtualModel.getResource());
-
+			returned.setTitle(title);
 			returned.setServiceManager(view.getProject().getServiceManager());
 
 			view.getResource().addToContents(returned);
@@ -89,6 +90,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 							.getResource());
 				}
 			}
+			returned.setTitle(vmiInfo.title);
 			viewResource.addToContents(returned);
 			viewResource.notifyContentsAdded(returned);
 			return returned;
@@ -132,6 +134,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	protected static class VirtualModelInstanceInfo {
 		public String virtualModelURI;
 		public String name;
+		public String title;
 	}
 
 	protected static VirtualModelInstanceInfo findVirtualModelInstanceInfo(File virtualModelInstanceFile, String searchedRootXMLTag) {
@@ -154,6 +157,10 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 						if (at.getName().equals("virtualModelURI")) {
 							logger.fine("Returned " + at.getValue());
 							returned.virtualModelURI = at.getValue();
+						}
+						if (at.getName().equals("title")) {
+							logger.fine("Returned " + at.getValue());
+							returned.title = at.getValue();
 						}
 					}
 					return returned;

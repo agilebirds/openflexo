@@ -89,7 +89,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
 
 		VirtualModelInstanceResource newVirtualModelResource = VirtualModelInstanceResourceImpl.makeVirtualModelInstanceResource(
-				virtualModelName, virtualModel, view);
+				virtualModelName, virtualModel, view, virtualModelTitle);
 
 		VirtualModelInstance newVirtualModelInstance = new VirtualModelInstance(view, virtualModel);
 		newVirtualModelResource.setResourceData(newVirtualModelInstance);

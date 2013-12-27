@@ -210,8 +210,8 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		if (object instanceof ViewLibrary) {
 			return FlexoLocalization.localizedForKey("view_library");
 		}
-		if (object instanceof Diagram) {
-			return ((Diagram) object).getTitle();
+		if (object instanceof VirtualModelInstance) {
+			return ((VirtualModelInstance) object).getTitle();
 		}
 		if (object instanceof View) {
 			return ((View) object).getName();

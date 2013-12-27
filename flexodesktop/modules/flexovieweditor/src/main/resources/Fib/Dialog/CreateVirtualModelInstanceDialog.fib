@@ -92,8 +92,8 @@
     <Localized key="virtual_model" lang="English">Virtual model</Localized>
     <Localized key="virtual_model" lang="French">Modèle virtual</Localized>
     <Localized key="virtual_model" lang="Dutch">virtual_model</Localized>
-    <Localized key="instanciate_virtual_model" lang="English">instanciate_virtual_model</Localized>
-    <Localized key="instanciate_virtual_model" lang="French">instanciate_virtual_model</Localized>
+    <Localized key="instanciate_virtual_model" lang="English">Instanciate a virtual model</Localized>
+    <Localized key="instanciate_virtual_model" lang="French">Instancier un modèle virtuel</Localized>
     <Localized key="instanciate_virtual_model" lang="Dutch">instanciate_virtual_model</Localized>
     <Localized key="virtual_model_name" lang="English">Virtual model name</Localized>
     <Localized key="virtual_model_name" lang="French">Nom du modèle virtuel</Localized>
@@ -110,17 +110,17 @@
     <Localized key="next" lang="English">&gt;&gt; Next</Localized>
     <Localized key="next" lang="French">&gt;&gt; Suivant</Localized>
     <Localized key="next" lang="Dutch">next</Localized>
-    <Localized key="no_virtual_model_name_defined" lang="English">No name defined for this virtual_model</Localized>
+    <Localized key="no_virtual_model_name_defined" lang="English">No name defined for this virtual model</Localized>
     <Localized key="no_virtual_model_name_defined" lang="French">Aucun nom défini pour ce nouveau modèle virtuel</Localized>
     <Localized key="no_virtual_model_name_defined" lang="Dutch">no_virtual_model_name_defined</Localized>
     <Localized key="no_virtual_model_title_defined" lang="English">Please enter title for newly created virtual_model</Localized>
     <Localized key="no_virtual_model_title_defined" lang="French">Veuillez entrer un titre pour le nouveau modèle virtuel</Localized>
     <Localized key="no_virtual_model_title_defined" lang="Dutch">no_virtual_model_title_defined</Localized>
-    <Localized key="invalid_name_for_new_virtual_model" lang="English">Invalid name for this virtual_model</Localized>
+    <Localized key="invalid_name_for_new_virtual_model" lang="English">Invalid name for this virtual model</Localized>
     <Localized key="invalid_name_for_new_virtual_model" lang="French">Ce nom n'est pas valide pour ce nouveau modèle virtuel</Localized>
     <Localized key="invalid_name_for_new_virtual_model" lang="Dutch">invalid_name_for_new_virtual_model</Localized>
-    <Localized key="no_virtual_model_type" lang="English">no_virtual_model_type</Localized>
-    <Localized key="no_virtual_model_type" lang="French">no_virtual_model_type</Localized>
+    <Localized key="no_virtual_model_type" lang="English">No virtual model type</Localized>
+    <Localized key="no_virtual_model_type" lang="French">Pas de type de modèle virtuel</Localized>
     <Localized key="no_virtual_model_type" lang="Dutch">no_virtual_model_type</Localized>
     <Localized key="no_virtual_model_type_selected" lang="English">No virtual model type selected, please choose one</Localized>
     <Localized key="no_virtual_model_type_selected" lang="French">Veuillez sélectionner un type de modèle virtuel</Localized>

@@ -9,6 +9,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
@@ -27,6 +28,8 @@ public interface VirtualModelInstanceResource<VMI extends VirtualModelInstance<V
 
 	public static final String VIRTUAL_MODEL_RESOURCE = "virtualModelResource";
 
+	public static final String TITLE = "title";
+
 	@Getter(value = VIRTUAL_MODEL_RESOURCE, ignoreType = true)
 	public VirtualModelResource<?> getVirtualModelResource();
 
@@ -38,5 +41,12 @@ public interface VirtualModelInstanceResource<VMI extends VirtualModelInstance<V
 	@Getter(value = CONTAINER, inverse = CONTENTS)
 	@Override
 	public ViewResource getContainer();
+
+	@Getter(TITLE)
+	@XMLAttribute()
+	public String getTitle();
+
+	@Setter(TITLE)
+	public void setTitle(String title);
 
 }
