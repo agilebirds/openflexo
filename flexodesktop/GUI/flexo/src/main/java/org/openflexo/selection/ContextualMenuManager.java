@@ -56,7 +56,7 @@ import org.openflexo.foundation.action.ActionGroup;
 import org.openflexo.foundation.action.ActionMenu;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
@@ -289,7 +289,7 @@ public abstract class ContextualMenuManager {
 			}
 			if (focusedObject instanceof FlexoModelObject) {
 				if (((FlexoModelObject) focusedObject).getEditionPatternReferences() != null) {
-					for (FlexoModelObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
+					for (FlexoObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
 							.getEditionPatternReferences()) {
 						EditionPatternInstance epi = ref.getObject();
 						if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasActionScheme()) {
@@ -298,7 +298,7 @@ public abstract class ContextualMenuManager {
 							}
 						}
 					}
-					for (FlexoModelObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
+					for (FlexoObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
 							.getEditionPatternReferences()) {
 						EditionPatternInstance epi = ref.getObject();
 						if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasNavigationScheme()) {

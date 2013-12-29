@@ -57,7 +57,7 @@ import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -347,7 +347,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 		String modelObjectReference = null;
 		for (Entry<PatternRole<?>, FlexoModelObject> e : treeMap.entrySet()) {
 			if (e.getValue().getXMLResourceData() != null) {
-				modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(e.getValue()).getStringRepresentation();
+				modelObjectReference = new FlexoObjectReference<FlexoModelObject>(e.getValue()).getStringRepresentation();
 				break;
 			}
 		}

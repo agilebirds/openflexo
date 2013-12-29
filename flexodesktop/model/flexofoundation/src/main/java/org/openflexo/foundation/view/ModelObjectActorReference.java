@@ -3,7 +3,7 @@ package org.openflexo.foundation.view;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProjectObject;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.logging.FlexoLogger;
 
@@ -12,14 +12,14 @@ public class ModelObjectActorReference<T extends FlexoProjectObject> extends Act
 	private static final Logger logger = FlexoLogger.getLogger(ModelObjectActorReference.class.getPackage().toString());
 
 	public T object;
-	public FlexoModelObjectReference objectReference;
+	public FlexoObjectReference objectReference;
 
 	public ModelObjectActorReference(T o, PatternRole aPatternRole, EditionPatternInstance epi) {
 		super(epi.getProject());
 		setEditionPatternInstance(epi);
 		setPatternRole(aPatternRole);
 		object = o;
-		objectReference = new FlexoModelObjectReference(o);
+		objectReference = new FlexoObjectReference(o);
 	}
 
 	@Override

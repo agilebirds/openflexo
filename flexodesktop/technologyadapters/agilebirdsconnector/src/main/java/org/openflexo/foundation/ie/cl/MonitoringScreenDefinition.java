@@ -37,7 +37,7 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoComponentResource;
 import org.openflexo.foundation.rm.FlexoMonitoringScreenResource;
 import org.openflexo.foundation.rm.ProjectRestructuration;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -53,7 +53,7 @@ public class MonitoringScreenDefinition extends ComponentDefinition implements S
 	 * @throws DuplicateResourceException
 	 */
 	private FlexoProcess _process;
-	private FlexoModelObjectReference<FlexoProcess> processReference;
+	private FlexoObjectReference<FlexoProcess> processReference;
 
 	public MonitoringScreenDefinition(FlexoComponentLibraryBuilder builder) throws DuplicateResourceException {
 		this(null, builder.componentLibrary, null, builder.getProject(), null);
@@ -66,9 +66,9 @@ public class MonitoringScreenDefinition extends ComponentDefinition implements S
 		_process = p;
 	}
 
-	public FlexoModelObjectReference<FlexoProcess> getProcessReference() {
+	public FlexoObjectReference<FlexoProcess> getProcessReference() {
 		if (getProcess() != null) {
-			return processReference = new FlexoModelObjectReference<FlexoProcess>(getProcess());
+			return processReference = new FlexoObjectReference<FlexoProcess>(getProcess());
 		}
 		if (logger.isLoggable(Level.SEVERE)) {
 			logger.severe("MonitoringScreen has no process!");
@@ -76,7 +76,7 @@ public class MonitoringScreenDefinition extends ComponentDefinition implements S
 		return processReference;
 	}
 
-	public void setProcessReference(FlexoModelObjectReference<FlexoProcess> ref) {
+	public void setProcessReference(FlexoObjectReference<FlexoProcess> ref) {
 		this.processReference = ref;
 	}
 

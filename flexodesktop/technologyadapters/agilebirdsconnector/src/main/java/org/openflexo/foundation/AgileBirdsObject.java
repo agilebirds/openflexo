@@ -60,7 +60,7 @@ import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -218,7 +218,7 @@ public abstract class AgileBirdsObject extends FlexoXMLSerializableObject implem
 
 	public AgileBirdsObject(FlexoProject project) {
 		super(project);
-		referencers = new Vector<FlexoModelObjectReference<?>>();
+		referencers = new Vector<FlexoObjectReference<?>>();
 		registerObject(project);
 	}
 
@@ -445,7 +445,7 @@ public abstract class AgileBirdsObject extends FlexoXMLSerializableObject implem
 	}
 
 	private void fireSerializationIdChanged() {
-		for (FlexoModelObjectReference ref : new Vector<FlexoModelObjectReference>(referencers)) {
+		for (FlexoObjectReference ref : new Vector<FlexoObjectReference>(referencers)) {
 			ref.notifySerializationIdHasChanged();
 		}
 	}
@@ -482,7 +482,7 @@ public abstract class AgileBirdsObject extends FlexoXMLSerializableObject implem
 		}
 
 		if (referencers != null) {
-			for (FlexoModelObjectReference ref : new ArrayList<FlexoModelObjectReference>(referencers)) {
+			for (FlexoObjectReference ref : new ArrayList<FlexoObjectReference>(referencers)) {
 				ref.notifyObjectDeletion();
 			}
 			referencers.clear();
@@ -513,7 +513,7 @@ public abstract class AgileBirdsObject extends FlexoXMLSerializableObject implem
 			}
 		}
 		isDeleted = false;
-		referencers = new Vector<FlexoModelObjectReference<?>>();
+		referencers = new Vector<FlexoObjectReference<?>>();
 		setChanged();
 		if (getProject() != null) {
 			getProject().notifyObjectCreated(this);
@@ -765,7 +765,7 @@ public abstract class AgileBirdsObject extends FlexoXMLSerializableObject implem
 	}
 
 	public String makeReference() {
-		return FlexoModelObjectReference.getSerializationRepresentationForObject(this, true);
+		return FlexoObjectReference.getSerializationRepresentationForObject(this, true);
 	}
 
 	/**

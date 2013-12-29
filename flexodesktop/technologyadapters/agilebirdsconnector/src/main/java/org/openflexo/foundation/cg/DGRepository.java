@@ -39,7 +39,7 @@ import org.openflexo.foundation.toc.PredefinedSection;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -78,7 +78,7 @@ public class DGRepository extends GenerationRepository {
 
 	private Format format;
 
-	private FlexoModelObjectReference<TOCRepository> tocRepositoryRef;
+	private FlexoObjectReference<TOCRepository> tocRepositoryRef;
 
 	private Vector<CGRepository> repositoriedUsingAsReader;
 
@@ -486,7 +486,7 @@ public class DGRepository extends GenerationRepository {
 			tocRepositoryRef = null;
 		}
 		if (tocRepository != null) {
-			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(tocRepository);
+			tocRepositoryRef = new FlexoObjectReference<TOCRepository>(tocRepository);
 		} else {
 			tocRepositoryRef = null;
 		}
@@ -498,11 +498,11 @@ public class DGRepository extends GenerationRepository {
 		}
 	}
 
-	public FlexoModelObjectReference getTocRepositoryRef() {
+	public FlexoObjectReference getTocRepositoryRef() {
 		return tocRepositoryRef;
 	}
 
-	public void setTocRepositoryRef(FlexoModelObjectReference<TOCRepository> tocRepositoryRef) {
+	public void setTocRepositoryRef(FlexoObjectReference<TOCRepository> tocRepositoryRef) {
 		this.tocRepositoryRef = tocRepositoryRef;
 	}
 

@@ -28,8 +28,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
@@ -62,7 +62,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 
 	private static final Logger logger = Logger.getLogger(SubProcessNode.class.getPackage().getName());
 
-	private FlexoModelObjectReference<FlexoProcess> _subProcess;
+	private FlexoObjectReference<FlexoProcess> _subProcess;
 
 	// serialized. If null, then the serviceInterface to use is the DefaultServiceInterface
 	private ServiceInterface _serviceInterface;
@@ -173,12 +173,12 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<FlexoProcess> getSubProcessReference() {
+	public FlexoObjectReference<FlexoProcess> getSubProcessReference() {
 		return _subProcess;
 	}
 
 	// Used when deserializing
-	public void setSubProcessReference(FlexoModelObjectReference<FlexoProcess> aSubProcessReference) {
+	public void setSubProcessReference(FlexoObjectReference<FlexoProcess> aSubProcessReference) {
 		if (aSubProcessReference != null) {
 			_subProcess = aSubProcessReference;
 			_subProcess.setOwner(this);
@@ -186,7 +186,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		if (reference == _subProcess) {
 			setSubProcess(null);
 		} else {
@@ -245,7 +245,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 				logger.fine("setSubProcess() with " + aSubProcess + " for " + this);
 			}
 			if (aSubProcess != null) {
-				_subProcess = new FlexoModelObjectReference<FlexoProcess>(aSubProcess, this);
+				_subProcess = new FlexoObjectReference<FlexoProcess>(aSubProcess, this);
 			} else {
 				_subProcess = null;
 			}

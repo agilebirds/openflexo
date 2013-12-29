@@ -9,7 +9,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.resource.FlexoProjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 
 public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, FlexoProjectObject, FlexoProjectObject> {
 
@@ -53,13 +53,13 @@ public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, Fl
 			String projectToRemoveURI = getProjectToRemoveURI();
 			FlexoProjectReference projectReferenceWithURI = getProject().getProjectData().getProjectReferenceWithURI(projectToRemoveURI);
 			if (projectReferenceWithURI != null) {
-				List<FlexoModelObjectReference<?>> toDelete = new ArrayList<FlexoModelObjectReference<?>>();
-				for (FlexoModelObjectReference<?> ref : getProject().getObjectReferences()) {
-					if (projectToRemoveURI.equals(ref.getEnclosingProjectIdentifier())) {
+				List<FlexoObjectReference<?>> toDelete = new ArrayList<FlexoObjectReference<?>>();
+				for (FlexoObjectReference<?> ref : getProject().getObjectReferences()) {
+					if (projectToRemoveURI.equals(ref.getReferringProject(true).getURI())) {
 						toDelete.add(ref);
 					}
 				}
-				for (FlexoModelObjectReference<?> objectReference : toDelete) {
+				for (FlexoObjectReference<?> objectReference : toDelete) {
 					objectReference.delete();
 				}
 				projectReferenceWithURI.delete();

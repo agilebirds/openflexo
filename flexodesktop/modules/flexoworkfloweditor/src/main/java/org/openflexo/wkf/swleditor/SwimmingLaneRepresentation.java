@@ -42,7 +42,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -367,7 +367,7 @@ public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implem
 	 */
 	public static String getRoleIndexContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_INDEX_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	/**
@@ -375,7 +375,7 @@ public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implem
 	 */
 	public static String getRoleNumberOfLaneContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_NB_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	/**
@@ -383,7 +383,7 @@ public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implem
 	 */
 	public static String getRoleLaneHeightContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
 		return SWLEditorConstants.SWIMMING_LANE_HEIGHT_KEY + "_"
-				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+				+ FlexoObjectReference.getSerializationRepresentationForObject(object, false);
 	}
 
 	public static boolean loadAllReferencedRole(FlexoProcess process) {
@@ -400,7 +400,7 @@ public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implem
 				return false;
 			}
 		}
-		for (FlexoModelObjectReference<Role> role : new ArrayList<FlexoModelObjectReference<Role>>(process.getVisibleRoles())) {
+		for (FlexoObjectReference<Role> role : new ArrayList<FlexoObjectReference<Role>>(process.getVisibleRoles())) {
 			role.getObject(true);
 		}
 		return true;
@@ -1207,10 +1207,10 @@ public class SwimmingLaneRepresentation extends DrawingImpl<FlexoProcess> implem
 
 	public double getHeight(RepresentableFlexoModelObject o) {
 		double defaultValue = getSwimmingLaneHeight(o) * getSwimmingLaneNb(o);
-		return getProcess().getHeight(FlexoModelObjectReference.getSerializationRepresentationForObject(o, false), defaultValue);
+		return getProcess().getHeight(FlexoObjectReference.getSerializationRepresentationForObject(o, false), defaultValue);
 	}
 
 	public void setHeight(RepresentableFlexoModelObject o, double height) {
-		getProcess().setHeight(height, FlexoModelObjectReference.getSerializationRepresentationForObject(o, false));
+		getProcess().setHeight(height, FlexoObjectReference.getSerializationRepresentationForObject(o, false));
 	}
 }

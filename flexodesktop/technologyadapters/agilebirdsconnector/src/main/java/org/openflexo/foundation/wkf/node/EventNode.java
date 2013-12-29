@@ -27,8 +27,8 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.bindings.WKFBindingDefinition;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -124,7 +124,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	public static final String DATE_BINDING = "dateBinding";
 	private AbstractBinding dateBinding;
 
-	private FlexoModelObjectReference<Role> roleReference;
+	private FlexoObjectReference<Role> roleReference;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -299,12 +299,12 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleReference() {
+	public FlexoObjectReference<Role> getRoleReference() {
 		return roleReference;
 	}
 
 	// Used when deserializing
-	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
+	public void setRoleReference(FlexoObjectReference<Role> aRoleReference) {
 		this.roleReference = aRoleReference;
 	}
 
@@ -335,7 +335,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 				roleReference = null;
 			}
 			if (aRole != null) {
-				roleReference = new FlexoModelObjectReference<Role>(aRole);
+				roleReference = new FlexoObjectReference<Role>(aRole);
 				roleReference.setOwner(this);
 			}
 			setChanged();
@@ -344,23 +344,23 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+	public void objectCantBeFound(FlexoObjectReference<?> reference) {
 		setRole(null);
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		setRole(null);
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference<?> reference) {
 		setChanged();
 	}
 
@@ -386,18 +386,18 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<FlexoProcess> getLinkedProcessReference() {
+	public FlexoObjectReference<FlexoProcess> getLinkedProcessReference() {
 		if (getLinkedProcess() != null) {
-			return new FlexoModelObjectReference<FlexoProcess>(getLinkedProcess());
+			return new FlexoObjectReference<FlexoProcess>(getLinkedProcess());
 		} else {
 			return _deserializedReference;
 		}
 	}
 
-	private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
+	private FlexoObjectReference<FlexoProcess> _deserializedReference;
 
 	// Used when deserializing
-	public void setLinkedProcessReference(FlexoModelObjectReference<FlexoProcess> aProcessReference) {
+	public void setLinkedProcessReference(FlexoObjectReference<FlexoProcess> aProcessReference) {
 		FlexoProcess subProcess = aProcessReference.getObject(false); // False because we never know if a loop is possible...
 		if (subProcess != null) {
 			setLinkedProcess(subProcess);

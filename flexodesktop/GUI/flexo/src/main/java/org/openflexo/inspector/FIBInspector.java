@@ -47,7 +47,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
@@ -212,7 +212,7 @@ public class FIBInspector extends FIBPanel {
 		}
 
 		if (object.getEditionPatternReferences() != null) {
-			for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+			for (FlexoObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
 				EditionPatternInstance epi = ref.getObject();
 				editionPatternsToDisplay.add(epi.getEditionPattern());
 				if (ensureCreationOfTabForEPIReference(epi.getEditionPattern())) {

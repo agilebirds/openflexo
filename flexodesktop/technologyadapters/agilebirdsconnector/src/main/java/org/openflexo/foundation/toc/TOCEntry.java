@@ -39,8 +39,8 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.utils.FlexoIndexManager;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -65,7 +65,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	private String content;
 	private TOCEntry parent;
 	protected Vector<TOCEntry> tocEntries;
-	private FlexoModelObjectReference<?> objectReference;
+	private FlexoObjectReference<?> objectReference;
 	private boolean startOnANewPage = false;
 	private boolean recursionEnabled = true;
 	private boolean includeStatusList = true;
@@ -94,7 +94,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public TOCEntry(TOCData generatedCode, AgileBirdsObject modelObject) {
 		this(generatedCode);
-		this.objectReference = new FlexoModelObjectReference<AgileBirdsObject>(modelObject);
+		this.objectReference = new FlexoObjectReference<AgileBirdsObject>(modelObject);
 		this.objectReference.setSerializeClassName(true); // Even if the object is not loaded yet, we need to know its class name.
 		this.objectReference.setOwner(this);
 		isReadOnly = true;
@@ -601,7 +601,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			objectReference = null;
 		}
 		if (object != null) {
-			objectReference = new FlexoModelObjectReference<AgileBirdsObject>(object, this);
+			objectReference = new FlexoObjectReference<AgileBirdsObject>(object, this);
 			objectReference.setSerializeClassName(true);
 		} else {
 			objectReference = null;
@@ -710,12 +710,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 	}
 
 	@Deprecated
-	public FlexoModelObjectReference<?> getObjectReference() {
+	public FlexoObjectReference<?> getObjectReference() {
 		return objectReference;
 	}
 
 	@Deprecated
-	public void setObjectReference(FlexoModelObjectReference<?> objectReference) {
+	public void setObjectReference(FlexoObjectReference<?> objectReference) {
 		if (this.objectReference != null) {
 			this.objectReference = null;
 		}
@@ -727,19 +727,19 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	@Deprecated
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 	}
 
 	@Deprecated
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+	public void objectCantBeFound(FlexoObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
 
 	@Deprecated
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		setChanged();
 		notifyObservers(new TOCModification(reference, null));
 	}
@@ -930,7 +930,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	@Deprecated
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference<?> reference) {
 		setChanged();
 	}
 

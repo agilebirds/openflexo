@@ -19,6 +19,12 @@ import org.openflexo.foundation.validation.ValidationModel;
 public class DefaultFlexoObject extends FlexoObjectImpl {
 
 	@Override
+	public FlexoServiceManager getServiceManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void setCustomProperties(List<FlexoProperty> customProperties) {
 		// TODO Auto-generated method stub
 

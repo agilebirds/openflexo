@@ -111,8 +111,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.stats.ProcessStatistics;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoIndexManager;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
@@ -242,7 +242,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 	public static FlexoActionizer<WKFDelete, WKFObject, WKFObject> deleteActionizer;
 
 	private Vector<MetricsValue> metricsValues;
-	private Vector<FlexoModelObjectReference<Role>> visibleRoles;
+	private Vector<FlexoObjectReference<Role>> visibleRoles;
 
 	public static FlexoActionizer<AddProcessMetricsValue, FlexoProcess, WKFObject> addMetricsActionizer;
 	public static FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue> deleteMetricsActionizer;
@@ -266,7 +266,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 		_subProcessNodes = new Vector<SubProcessNode>();
 		_serviceInterfaces = new Vector<ServiceInterface>();
 		metricsValues = new Vector<MetricsValue>();
-		visibleRoles = new Vector<FlexoModelObjectReference<Role>>();
+		visibleRoles = new Vector<FlexoObjectReference<Role>>();
 	}
 
 	/**
@@ -830,16 +830,16 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 		}
 	}
 
-	public Vector<FlexoModelObjectReference<Role>> getVisibleRoles() {
+	public Vector<FlexoObjectReference<Role>> getVisibleRoles() {
 		return visibleRoles;
 	}
 
-	public void setVisibleRoles(Vector<FlexoModelObjectReference<Role>> visibleRoles) {
+	public void setVisibleRoles(Vector<FlexoObjectReference<Role>> visibleRoles) {
 		this.visibleRoles = visibleRoles;
 		setChanged();
 	}
 
-	public void addToVisibleRoles(FlexoModelObjectReference<Role> value) {
+	public void addToVisibleRoles(FlexoObjectReference<Role> value) {
 		if (value != null) {
 			visibleRoles.add(value);
 			value.setOwner(this);
@@ -848,7 +848,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 		}
 	}
 
-	public void removeFromVisibleRoles(FlexoModelObjectReference<Role> value) {
+	public void removeFromVisibleRoles(FlexoObjectReference<Role> value) {
 		visibleRoles.remove(value);
 		value.setOwner(null);
 		value.delete();
@@ -857,24 +857,24 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		if (visibleRoles.contains(reference)) {
-			removeFromVisibleRoles((FlexoModelObjectReference<Role>) reference);
+			removeFromVisibleRoles((FlexoObjectReference<Role>) reference);
 		}
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+	public void objectCantBeFound(FlexoObjectReference<?> reference) {
 		objectDeleted(reference);
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference<?> reference) {
 		setChanged();
 	}
 
@@ -3174,7 +3174,7 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 	}
 
 	public boolean isRoleVisible(Role role) {
-		for (FlexoModelObjectReference<Role> r : getVisibleRoles()) {
+		for (FlexoObjectReference<Role> r : getVisibleRoles()) {
 			if (r.getObject() == role) {
 				return true;
 			}
@@ -3190,12 +3190,12 @@ public final class FlexoProcess extends WKFObject implements ApplicationHelpEntr
 			}
 		}
 		if (visible && !isRoleVisible(role)) {
-			addToVisibleRoles(new FlexoModelObjectReference<Role>(role));
+			addToVisibleRoles(new FlexoObjectReference<Role>(role));
 		} else if (!visible) {
 			boolean changed = false;
-			Iterator<FlexoModelObjectReference<Role>> i = getVisibleRoles().iterator();
+			Iterator<FlexoObjectReference<Role>> i = getVisibleRoles().iterator();
 			while (i.hasNext()) {
-				FlexoModelObjectReference<org.openflexo.foundation.wkf.Role> ref = i.next();
+				FlexoObjectReference<org.openflexo.foundation.wkf.Role> ref = i.next();
 				if (ref.getObject() == role) {
 					i.remove();
 					changed = true;

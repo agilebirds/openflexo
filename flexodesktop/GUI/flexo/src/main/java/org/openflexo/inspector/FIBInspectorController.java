@@ -36,7 +36,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.resource.ResourceLoaded;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.logging.FlexoLogger;
@@ -68,7 +68,7 @@ public class FIBInspectorController extends FlexoFIBController {
 	public Object getValue(BindingVariable variable) {
 		if (variable instanceof EditionPatternInstanceBindingVariable) {
 			if (getDataObject() instanceof FlexoModelObject) {
-				List<FlexoModelObjectReference<EditionPatternInstance>> refs = ((FlexoModelObject) getDataObject())
+				List<FlexoObjectReference<EditionPatternInstance>> refs = ((FlexoModelObject) getDataObject())
 						.getEditionPatternReferences();
 				if (refs != null && ((EditionPatternInstanceBindingVariable) variable).getIndex() < refs.size()) {
 					return refs.get(((EditionPatternInstanceBindingVariable) variable).getIndex()).getObject();

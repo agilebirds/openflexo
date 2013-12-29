@@ -47,7 +47,7 @@ import org.openflexo.foundation.dm.eo.DMEORelationship;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
@@ -188,7 +188,7 @@ public class DMDeleteInitializer extends ActionInitializer {
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 					for (FlexoModelObject object : objects) {
 						if (!object.isDeleted()) {
-							for (FlexoModelObjectReference ref : object.getReferencers()) {
+							for (FlexoObjectReference ref : object.getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}

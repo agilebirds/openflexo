@@ -7,7 +7,7 @@ import org.openflexo.foundation.AgileBirdsObject;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
@@ -109,22 +109,22 @@ public abstract class ModelObjectSection<T extends AgileBirdsObject> extends TOC
 			modelObjectReference = null;
 		}
 		if (modelObject != null) {
-			modelObjectReference = new FlexoModelObjectReference<AgileBirdsObject>(modelObject, this);
+			modelObjectReference = new FlexoObjectReference<AgileBirdsObject>(modelObject, this);
 			modelObjectReference.setSerializeClassName(true);
 		} else {
 			modelObjectReference = null;
 		}
 	}
 
-	private FlexoModelObjectReference<?> modelObjectReference;
+	private FlexoObjectReference<?> modelObjectReference;
 
-	public FlexoModelObjectReference<?> getModelObjectReference() {
+	public FlexoObjectReference<?> getModelObjectReference() {
 		return modelObjectReference;
 	}
 
-	public void setModelObjectReference(FlexoModelObjectReference<?> objectReference) {
+	public void setModelObjectReference(FlexoObjectReference<?> objectReference) {
 		if (this.modelObjectReference != null) {
-			FlexoModelObjectReference<?> old = this.modelObjectReference;
+			FlexoObjectReference<?> old = this.modelObjectReference;
 			this.modelObjectReference = null;
 			old.delete();
 		}
@@ -135,11 +135,11 @@ public abstract class ModelObjectSection<T extends AgileBirdsObject> extends TOC
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+	public void objectCantBeFound(FlexoObjectReference<?> reference) {
 		if (this.modelObjectReference == reference) {
 			setModelObjectReference(null);
 			setChanged();
@@ -148,7 +148,7 @@ public abstract class ModelObjectSection<T extends AgileBirdsObject> extends TOC
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		if (reference == this.modelObjectReference) {
 			setModelObjectReference(null);
 			setChanged();

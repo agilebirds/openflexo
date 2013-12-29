@@ -25,7 +25,7 @@ import java.util.Vector;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
@@ -97,6 +97,6 @@ public interface IObject extends FlexoXMLSerializable, Validable {
 
 	public Vector<Validable> getAllEmbeddedValidableObjects();
 
-	public Vector<FlexoModelObjectReference<?>> getReferencers();
+	public Vector<FlexoObjectReference<?>> getReferencers();
 
 }

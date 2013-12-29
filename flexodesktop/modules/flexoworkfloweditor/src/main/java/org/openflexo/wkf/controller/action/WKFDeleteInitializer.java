@@ -39,7 +39,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.WKFDelete;
@@ -179,7 +179,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 					for (FlexoObject object : objects) {
 						if (!object.isDeleted() && object instanceof FlexoModelObject) {
-							for (FlexoModelObjectReference<?> ref : ((FlexoModelObject) object).getReferencers()) {
+							for (FlexoObjectReference<?> ref : ((FlexoModelObject) object).getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}

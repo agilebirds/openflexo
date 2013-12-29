@@ -235,9 +235,9 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		// If an overriden graphical representation is defined, use it
 		/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
 			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
-		} else*/ if (getPatternRole().getGraphicalRepresentation() != null) {
+		} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
 			grToUse = getPatternRole().getGraphicalRepresentation();
-		//}
+		}
 
 		ConnectorGraphicalRepresentation newGR = factory.makeConnectorGraphicalRepresentation();
 		newGR.setsWith(grToUse);

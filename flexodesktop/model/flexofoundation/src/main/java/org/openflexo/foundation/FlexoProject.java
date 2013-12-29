@@ -64,8 +64,9 @@ import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -104,7 +105,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  * @author sguerin
  */
-public class FlexoProject extends ResourceRepository<FlexoResource<?>> implements Validable, ResourceData<FlexoProject> {
+public class FlexoProject extends ResourceRepository<FlexoResource<?>> implements Validable, ResourceData<FlexoProject>, ReferenceOwner {
 
 	protected static final Logger logger = Logger.getLogger(FlexoProject.class.getPackage().getName());
 
@@ -192,7 +193,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 	private ViewLibrary viewLibrary = null;
 
-	private final List<FlexoModelObjectReference> objectReferences = new ArrayList<FlexoModelObjectReference>();
+	private final List<FlexoObjectReference> objectReferences = new ArrayList<FlexoObjectReference>();
 
 	// private List<FlexoProjectObject> allRegisteredObjects;
 	// private List<FlexoProjectObject> _recentlyCreatedObjects;
@@ -273,19 +274,19 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 	}
 
-	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
+	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoObjectReference> {
 
 		public FlexoModelObjectReferenceConverter() {
-			super(FlexoModelObjectReference.class);
+			super(FlexoObjectReference.class);
 		}
 
 		@Override
-		public FlexoModelObjectReference<FlexoProjectObject> convertFromString(String value) {
-			return new FlexoModelObjectReference<FlexoProjectObject>(FlexoProject.this, value);
+		public FlexoObjectReference<FlexoObject> convertFromString(String value) {
+			return new FlexoObjectReference<FlexoObject>(value, FlexoProject.this);
 		}
 
 		@Override
-		public String convertToString(FlexoModelObjectReference value) {
+		public String convertToString(FlexoObjectReference value) {
 			return value.getStringRepresentation();
 		}
 
@@ -2962,6 +2963,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	}
 
 	// TODO: Should be refactored with injectors
+	@Override
 	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
 	}
@@ -3129,15 +3131,15 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		}
 	}
 
-	public List<FlexoModelObjectReference> getObjectReferences() {
+	public List<FlexoObjectReference> getObjectReferences() {
 		return objectReferences;
 	}
 
-	public void addToObjectReferences(FlexoModelObjectReference<?> objectReference) {
+	public void addToObjectReferences(FlexoObjectReference<?> objectReference) {
 		objectReferences.add(objectReference);
 	}
 
-	public void removeObjectReferences(FlexoModelObjectReference<?> objectReference) {
+	public void removeObjectReferences(FlexoObjectReference<?> objectReference) {
 		objectReferences.remove(objectReference);
 	}
 

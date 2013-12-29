@@ -47,7 +47,7 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentNameChanged;
 import org.openflexo.foundation.resource.InvalidFileNameException;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -67,7 +67,7 @@ import org.openflexo.toolbox.ImageInfo;
  * 
  */
 public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResource.ScreenshotData> implements FlexoObserver,
-		FlexoModelObjectReference.ReferenceOwner {
+		FlexoObjectReference.ReferenceOwner {
 	protected static final Logger logger = FlexoLogger.getLogger(ScreenshotResource.class.getPackage().getName());
 
 	public static final ImageType SCREENSHOT_TYPE = ImageType.PNG;
@@ -77,7 +77,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	// private AgileBirdsObject source;
 
 	private String sourceReferenceString;
-	private FlexoModelObjectReference<AgileBirdsObject> sourceReference;
+	private FlexoObjectReference<AgileBirdsObject> sourceReference;
 
 	private boolean willBeDeleted = false;
 
@@ -605,7 +605,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		this.trimInfo = trimInfo;
 	}
 
-	public FlexoModelObjectReference<AgileBirdsObject> getSourceReference() {
+	public FlexoObjectReference<AgileBirdsObject> getSourceReference() {
 		if (sourceReference == null && sourceReferenceString != null) {
 			if (getProject() != null) {
 				setSourceReference(getProject().getObjectReferenceConverter().convertFromString(sourceReferenceString));
@@ -619,7 +619,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		return sourceReference;
 	}
 
-	private void setSourceReference(FlexoModelObjectReference<AgileBirdsObject> sourceReference) {
+	private void setSourceReference(FlexoObjectReference<AgileBirdsObject> sourceReference) {
 		if (sourceReference == null) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.severe("Trying to set a null source reference, this is not allowed!");
@@ -650,17 +650,17 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	private void setSource(AgileBirdsObject o) {
-		setSourceReference(new FlexoModelObjectReference<AgileBirdsObject>(o, this));
+		setSourceReference(new FlexoObjectReference<AgileBirdsObject>(o, this));
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoObjectReference reference) {
 		checkResourceNameIsUpToDate();
 		startObserving();
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoObjectReference reference) {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.warning("Could not find object for reference: " + reference + ", deleting resource " + this);
 		}
@@ -671,7 +671,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoObjectReference reference) {
 		if (!willBeDeleted) {
 			willBeDeleted = true;
 			this.delete(false);
@@ -679,7 +679,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference reference) {
 		setChanged();
 	}
 }

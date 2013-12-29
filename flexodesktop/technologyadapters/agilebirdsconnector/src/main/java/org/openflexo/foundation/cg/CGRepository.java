@@ -34,8 +34,8 @@ import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
 import org.openflexo.foundation.resource.ProjectExternalRepository;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
@@ -66,7 +66,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	private String prototypePassword;
 
 	private boolean includeReader = false;
-	private FlexoModelObjectReference<DGRepository> readerRepositoryReference;
+	private FlexoObjectReference<DGRepository> readerRepositoryReference;
 
 	/**
 	 * Create a new GeneratedCodeRepository.
@@ -368,7 +368,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		readerRepository.addToRepositoriedUsingAsReader(this);
 		readerRepository.addObserver(this);
 		if (readerRepositoryReference == null) {
-			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(readerRepository));
+			setReaderRepositoryReference(new FlexoObjectReference<DGRepository>(readerRepository));
 		}
 	}
 
@@ -381,11 +381,11 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		super.update(observable, obj);
 	}
 
-	public FlexoModelObjectReference<DGRepository> getReaderRepositoryReference() {
+	public FlexoObjectReference<DGRepository> getReaderRepositoryReference() {
 		return readerRepositoryReference;
 	}
 
-	public void setReaderRepositoryReference(FlexoModelObjectReference<DGRepository> readerRepositoryReference) {
+	public void setReaderRepositoryReference(FlexoObjectReference<DGRepository> readerRepositoryReference) {
 		if (this.readerRepositoryReference != null) {
 			this.readerRepositoryReference.delete();
 		}
@@ -394,24 +394,24 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoObjectReference reference) {
 		if (reference.getObject() instanceof DGRepository) {
 			setReaderRepository((DGRepository) reference.getObject());
 		}
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoObjectReference reference) {
 
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoObjectReference reference) {
 
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference reference) {
 		setChanged();
 	}
 }

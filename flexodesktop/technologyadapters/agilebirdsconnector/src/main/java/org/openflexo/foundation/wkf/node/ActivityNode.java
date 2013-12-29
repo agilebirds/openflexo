@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -124,7 +124,7 @@ public class ActivityNode extends AbstractActivityNode implements ApplicationHel
 	private boolean objectLoaded = false;
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 		try {
 			objectLoaded = true;
 			super.notifyObjectLoaded(reference);

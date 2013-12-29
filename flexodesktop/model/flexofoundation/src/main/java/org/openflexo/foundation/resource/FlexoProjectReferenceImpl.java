@@ -6,13 +6,13 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FlexoVersion;
 
 public abstract class FlexoProjectReferenceImpl implements FlexoProjectReference, PropertyChangeListener {
 
-	private static final Logger logger = FlexoLogger.getLogger(FlexoModelObjectReference.class.getPackage().getName());
+	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectReference.class.getPackage().getName());
 
 	public static interface ReferenceOwner {
 

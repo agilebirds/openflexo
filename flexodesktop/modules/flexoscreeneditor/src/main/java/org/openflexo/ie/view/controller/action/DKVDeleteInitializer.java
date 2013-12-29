@@ -35,7 +35,7 @@ import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.action.DKVDelete;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
@@ -72,7 +72,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 				for (FlexoObject object : objects) {
 					if (!object.isDeleted() && object instanceof FlexoModelObject) {
-						for (FlexoModelObjectReference ref : ((FlexoModelObject) object).getReferencers()) {
+						for (FlexoObjectReference ref : ((FlexoModelObject) object).getReferencers()) {
 							if (ref.getOwner() instanceof TOCEntry) {
 								tocEntries.add((TOCEntry) ref.getOwner());
 							}

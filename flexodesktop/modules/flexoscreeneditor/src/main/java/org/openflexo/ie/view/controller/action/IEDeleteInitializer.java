@@ -43,7 +43,7 @@ import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
 import org.openflexo.foundation.param.CheckboxListParameter;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -144,7 +144,7 @@ public class IEDeleteInitializer extends ActionInitializer {
 							if (object instanceof IEObject) {
 								for (IObject o : ((IEObject) object).getAllEmbeddedIEObjects()) {
 									if (!visited.contains(o)) {
-										for (FlexoModelObjectReference ref : o.getReferencers()) {
+										for (FlexoObjectReference ref : o.getReferencers()) {
 											if (ref.getOwner() instanceof TOCEntry && !tocEntries.contains(ref.getOwner())) {
 												tocEntries.add((TOCEntry) ref.getOwner());
 											}

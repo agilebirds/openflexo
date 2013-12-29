@@ -59,7 +59,7 @@ import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -259,12 +259,12 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			if (epi.getModelObjectReference() == null) {
 				continue;
 			}
-			FlexoModelObject object = new FlexoModelObjectReference<FlexoModelObject>(project, epi.getModelObjectReference())
+			FlexoModelObject object = new FlexoObjectReference<FlexoModelObject>(project, epi.getModelObjectReference())
 					.getObject(true);
 			long instanceID = Long.valueOf(epi.getEditionPatternInstanceID());
 			if (object != null) {
 				boolean found = false;
-				for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
+				for (FlexoObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
 					EditionPatternInstance epi2 = ref.getObject();
 					if (epi2.getEditionPattern() != null && epi2.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
 							&& epi2.getFlexoID() == instanceID) {

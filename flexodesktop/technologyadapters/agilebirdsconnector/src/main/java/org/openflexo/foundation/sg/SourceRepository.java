@@ -32,8 +32,8 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.sg.implmodel.ImplementationModel;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.xml.GeneratedSourcesBuilder;
 import org.openflexo.logging.FlexoLogger;
@@ -152,21 +152,21 @@ public class SourceRepository extends GenerationRepository implements ReferenceO
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoObjectReference reference) {
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
-
-	}
-
-	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoObjectReference reference) {
 
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoObjectReference reference) {
+
+	}
+
+	@Override
+	public void objectSerializationIdChanged(FlexoObjectReference reference) {
 		setChanged();
 	}
 

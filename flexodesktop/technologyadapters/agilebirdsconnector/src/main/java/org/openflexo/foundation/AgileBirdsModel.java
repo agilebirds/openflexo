@@ -178,7 +178,7 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectIDManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
@@ -274,7 +274,7 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 
 	private ViewLibrary viewLibrary = null;
 
-	private List<FlexoModelObjectReference> objectReferences = new ArrayList<FlexoModelObjectReference>();
+	private List<FlexoObjectReference> objectReferences = new ArrayList<FlexoObjectReference>();
 	/**
 	 * These variable are here to replace old static references.
 	 */
@@ -412,19 +412,19 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 
 	}
 
-	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoModelObjectReference> {
+	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoObjectReference> {
 
 		public FlexoModelObjectReferenceConverter() {
-			super(FlexoModelObjectReference.class);
+			super(FlexoObjectReference.class);
 		}
 
 		@Override
-		public FlexoModelObjectReference<AgileBirdsObject> convertFromString(String value) {
-			return new FlexoModelObjectReference<AgileBirdsObject>(AgileBirdsModel.this, value);
+		public FlexoObjectReference<AgileBirdsObject> convertFromString(String value) {
+			return new FlexoObjectReference<AgileBirdsObject>(AgileBirdsModel.this, value);
 		}
 
 		@Override
-		public String convertToString(FlexoModelObjectReference value) {
+		public String convertToString(FlexoObjectReference value) {
 			return value.getStringRepresentation();
 		}
 
@@ -3869,7 +3869,7 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 
 		@Override
 		public ValidationIssue<ModelObjectReferenceMustDefineAnEnclosingProjectID, AgileBirdsModel> applyValidation(AgileBirdsModel project) {
-			List<FlexoModelObjectReference<?>> problematicReferences = new ArrayList<FlexoModelObjectReference<?>>();
+			List<FlexoObjectReference<?>> problematicReferences = new ArrayList<FlexoObjectReference<?>>();
 			if (project.getFlexoWorkflow(false) != null) {
 				for (FlexoProcess process : project.getWorkflow().getAllLocalFlexoProcesses()) {
 					for (AbstractActivityNode activity : process.getAllAbstractActivityNodes()) {
@@ -3880,14 +3880,14 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 							problematicReferences.add(activity.getRoleAReference());
 						}
 						if (activity.getConsultedRoleReferences() != null) {
-							for (FlexoModelObjectReference<Role> role : activity.getConsultedRoleReferences()) {
+							for (FlexoObjectReference<Role> role : activity.getConsultedRoleReferences()) {
 								if (role != null && role.getEnclosingProjectIdentifier() == null) {
 									problematicReferences.add(role);
 								}
 							}
 						}
 						if (activity.getInformedRoleReferences() != null) {
-							for (FlexoModelObjectReference<Role> role : activity.getInformedRoleReferences()) {
+							for (FlexoObjectReference<Role> role : activity.getInformedRoleReferences()) {
 								if (role != null && role.getEnclosingProjectIdentifier() == null) {
 									problematicReferences.add(role);
 								}
@@ -3897,7 +3897,7 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 					}
 				}
 			}
-			Iterator<FlexoModelObjectReference<?>> i = problematicReferences.iterator();
+			Iterator<FlexoObjectReference<?>> i = problematicReferences.iterator();
 			while (i.hasNext()) {
 				if (i.next().getObject() != null) {
 					i.remove();
@@ -3916,9 +3916,9 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 	public static class FixModelObjectReferences extends
 			FixProposal<AgileBirdsModel.ModelObjectReferenceMustDefineAnEnclosingProjectID, AgileBirdsModel> {
 
-		private final List<FlexoModelObjectReference<?>> problematicReferences;
+		private final List<FlexoObjectReference<?>> problematicReferences;
 
-		public FixModelObjectReferences(List<FlexoModelObjectReference<?>> problematicReferences) {
+		public FixModelObjectReferences(List<FlexoObjectReference<?>> problematicReferences) {
 			super("repair_references");
 			this.problematicReferences = problematicReferences;
 		}
@@ -3926,7 +3926,7 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 		@Override
 		protected void fixAction() {
 			if (getObject().getProjectData() != null) {
-				for (FlexoModelObjectReference<?> modelObjectReference : problematicReferences) {
+				for (FlexoObjectReference<?> modelObjectReference : problematicReferences) {
 					String resourceIdentifier = modelObjectReference.getResourceIdentifier();
 					if (resourceIdentifier != null) {
 						ResourceType type = null;
@@ -4517,15 +4517,15 @@ public class AgileBirdsModel extends AgileBirdsObject implements XMLStorageResou
 		}
 	}
 
-	public List<FlexoModelObjectReference> getObjectReferences() {
+	public List<FlexoObjectReference> getObjectReferences() {
 		return objectReferences;
 	}
 
-	public void addToObjectReferences(FlexoModelObjectReference<?> objectReference) {
+	public void addToObjectReferences(FlexoObjectReference<?> objectReference) {
 		objectReferences.add(objectReference);
 	}
 
-	public void removeObjectReferences(FlexoModelObjectReference<?> objectReference) {
+	public void removeObjectReferences(FlexoObjectReference<?> objectReference) {
 		objectReferences.remove(objectReference);
 	}
 

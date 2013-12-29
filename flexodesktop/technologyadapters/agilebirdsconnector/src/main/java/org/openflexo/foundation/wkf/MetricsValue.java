@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
@@ -32,7 +32,7 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.xmlcode.StringRepresentable;
 
-public class MetricsValue extends WKFObject implements InspectableObject, FlexoModelObjectReference.ReferenceOwner, StringRepresentable {
+public class MetricsValue extends WKFObject implements InspectableObject, FlexoObjectReference.ReferenceOwner, StringRepresentable {
 
 	private static final Logger logger = FlexoLogger.getLogger(MetricsValue.class.getPackage().getName());
 
@@ -48,7 +48,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 		public void updateMetricsValues();
 	}
 
-	private FlexoModelObjectReference<MetricsDefinition> metricsDefinitionReference;
+	private FlexoObjectReference<MetricsDefinition> metricsDefinitionReference;
 
 	private String stringValue;
 	private Integer intValue;
@@ -159,11 +159,11 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 		return v;
 	}
 
-	public FlexoModelObjectReference<MetricsDefinition> getMetricsDefinitionReference() {
+	public FlexoObjectReference<MetricsDefinition> getMetricsDefinitionReference() {
 		return metricsDefinitionReference;
 	}
 
-	public void setMetricsDefinitionReference(FlexoModelObjectReference<MetricsDefinition> objectReference) {
+	public void setMetricsDefinitionReference(FlexoObjectReference<MetricsDefinition> objectReference) {
 		this.metricsDefinitionReference = objectReference;
 		if (this.metricsDefinitionReference != null) {
 			this.metricsDefinitionReference.setOwner(this);
@@ -188,7 +188,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 			metricsDefinitionReference = null;
 		}
 		if (object != null) {
-			metricsDefinitionReference = new FlexoModelObjectReference<MetricsDefinition>(object, this);
+			metricsDefinitionReference = new FlexoObjectReference<MetricsDefinition>(object, this);
 		} else {
 			metricsDefinitionReference = null;
 		}
@@ -230,17 +230,17 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference reference) {
+	public void notifyObjectLoaded(FlexoObjectReference reference) {
 
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference reference) {
+	public void objectCantBeFound(FlexoObjectReference reference) {
 
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference reference) {
+	public void objectDeleted(FlexoObjectReference reference) {
 		if (reference == metricsDefinitionReference) {
 			if (owner != null) {
 				owner.removeFromMetricsValues(this);
@@ -372,7 +372,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference reference) {
 		setChanged();
 	}
 }

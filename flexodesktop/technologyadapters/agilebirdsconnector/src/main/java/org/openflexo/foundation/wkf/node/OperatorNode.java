@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
+import org.openflexo.foundation.utils.FlexoObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -52,7 +52,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 
 	static final Logger logger = Logger.getLogger(OperatorNode.class.getPackage().getName());
 
-	private FlexoModelObjectReference<Role> roleReference;
+	private FlexoObjectReference<Role> roleReference;
 
 	// ================================================================
 	// ====================== Constructor =============================
@@ -171,12 +171,12 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	}
 
 	// Used when serializing
-	public FlexoModelObjectReference<Role> getRoleReference() {
+	public FlexoObjectReference<Role> getRoleReference() {
 		return roleReference;
 	}
 
 	// Used when deserializing
-	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
+	public void setRoleReference(FlexoObjectReference<Role> aRoleReference) {
 		this.roleReference = aRoleReference;
 	}
 
@@ -207,7 +207,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 				roleReference = null;
 			}
 			if (aRole != null) {
-				roleReference = new FlexoModelObjectReference<Role>(aRole);
+				roleReference = new FlexoObjectReference<Role>(aRole);
 				roleReference.setOwner(this);
 			}
 			setChanged();
@@ -216,23 +216,23 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+	public void notifyObjectLoaded(FlexoObjectReference<?> reference) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+	public void objectCantBeFound(FlexoObjectReference<?> reference) {
 		setRole(null);
 	}
 
 	@Override
-	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+	public void objectDeleted(FlexoObjectReference<?> reference) {
 		setRole(null);
 	}
 
 	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+	public void objectSerializationIdChanged(FlexoObjectReference<?> reference) {
 		setChanged();
 	}
 

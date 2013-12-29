@@ -72,7 +72,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
-import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
@@ -1809,7 +1809,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		}
 	}
 
-	public Role getCachedRole(FlexoModelObjectReference<Role> reference) {
+	public Role getCachedRole(FlexoObjectReference<Role> reference) {
 		if (reference.getObject() != null) {
 			return reference.getObject();
 		} else {
