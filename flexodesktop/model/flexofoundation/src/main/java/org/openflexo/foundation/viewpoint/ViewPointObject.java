@@ -26,6 +26,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.validation.FixProposal;
@@ -47,6 +48,9 @@ import org.openflexo.model.annotations.ModelEntity;
 @ImplementationClass(ViewPointObject.ViewPointObjectImpl.class)
 public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceData {
 
+	@Override
+	public FlexoServiceManager getServiceManager();
+
 	public InformationSpace getInformationSpace();
 
 	public ViewPoint getViewPoint();
@@ -62,6 +66,11 @@ public interface ViewPointObject extends FlexoObject, Bindable, InnerResourceDat
 	public static abstract class ViewPointObjectImpl extends FlexoObjectImpl implements ViewPointObject {
 
 		private static final Logger logger = Logger.getLogger(ViewPointObject.class.getPackage().getName());
+
+		@Override
+		public FlexoServiceManager getServiceManager() {
+			return getViewPoint().getViewPointLibrary().getServiceManager();
+		}
 
 		@Override
 		public ViewPointLibrary getViewPointLibrary() {

@@ -19,7 +19,7 @@ public class ModelObjectActorReference<T extends FlexoProjectObject> extends Act
 		setEditionPatternInstance(epi);
 		setPatternRole(aPatternRole);
 		object = o;
-		objectReference = new FlexoObjectReference(o);
+		objectReference = new FlexoObjectReference(o, o.getProject());
 	}
 
 	@Override
