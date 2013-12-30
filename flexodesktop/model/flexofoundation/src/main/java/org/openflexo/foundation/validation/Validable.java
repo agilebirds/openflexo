@@ -91,7 +91,7 @@ public interface Validable {
 	 * 
 	 * @return
 	 */
-	public Collection<Validable> getAllEmbeddedValidableObjects();
+	public Collection<? extends Validable> getAllEmbeddedValidableObjects();
 
 	/**
 	 * Return a flag indicating if this object was deleted

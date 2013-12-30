@@ -972,7 +972,7 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 		}
 
 		@Override
-		public Collection<Validable> getAllEmbeddedValidableObjects() {
+		public Collection<? extends Validable> getAllEmbeddedValidableObjects() {
 			List<Validable> returned = new ArrayList<Validable>();
 			if (this instanceof Validable) {
 				appendAllEmbeddedValidableObjects(this, returned);

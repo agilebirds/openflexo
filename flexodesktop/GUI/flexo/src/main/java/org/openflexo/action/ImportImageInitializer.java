@@ -32,7 +32,7 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.AskParametersDialog.ValidationCondition;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -50,7 +50,7 @@ import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ImportImageInitializer extends ActionInitializer<ImportImage, FlexoModelObject, FlexoModelObject> {
+public class ImportImageInitializer extends ActionInitializer<ImportImage, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

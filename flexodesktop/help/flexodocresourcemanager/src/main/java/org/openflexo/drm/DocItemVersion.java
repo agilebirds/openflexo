@@ -224,11 +224,6 @@ public class DocItemVersion extends DRMObject {
 		return FlexoLocalization.localizedForKeyWithParams("($version)/($languageId)", this);
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "doc_item_version";
-	}
-
 	public static class Version extends KVCFlexoObject implements StringConvertable<Version> {
 		public static StringEncoder.Converter<Version> converter = StringEncoder.getDefaultInstance()._addConverter(
 				new Converter<Version>(Version.class) {

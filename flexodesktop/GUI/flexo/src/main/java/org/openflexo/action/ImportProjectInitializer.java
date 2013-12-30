@@ -28,12 +28,12 @@ import javax.swing.JFileChooser;
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.ImportProject;
-import org.openflexo.foundation.rm.ProjectImportLoopException;
+import org.openflexo.foundation.resource.ProjectImportLoopException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.icon.IconLibrary;
@@ -43,7 +43,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class ImportProjectInitializer extends ActionInitializer<ImportProject, FlexoModelObject, FlexoModelObject> {
+public class ImportProjectInitializer extends ActionInitializer<ImportProject, FlexoProjectObject, FlexoProjectObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 

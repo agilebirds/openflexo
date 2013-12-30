@@ -24,6 +24,7 @@ import java.util.Vector;
 import org.openflexo.drm.DocItem;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -53,7 +54,7 @@ public class AddToRelatedToItem extends FlexoAction {
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, DocItem.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItem.class);
 	}
 
 	private DocItem _parentDocItem;

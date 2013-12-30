@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import org.openflexo.drm.action.ApproveVersion;
 import org.openflexo.drm.dm.StructureModified;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ProblemIssue;
 import org.openflexo.foundation.validation.Validable;
@@ -38,10 +37,9 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 
-public class DocItem extends DRMObject implements InspectableObject {
+public class DocItem extends DRMObject {
 
 	static final Logger logger = Logger.getLogger(DocItem.class.getPackage().getName());
 
@@ -185,11 +183,6 @@ public class DocItem extends DRMObject implements InspectableObject {
 	}
 
 	@Override
-	public String getInspectorName() {
-		return Inspectors.DRE.DOC_ITEM_INSPECTOR;
-	}
-
-	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -221,11 +214,6 @@ public class DocItem extends DRMObject implements InspectableObject {
 		if (getFolder() != null) {
 			getFolder().notifyItemHasBeenRenamedTo(this, old, identifier);
 		}
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getIdentifier();
 	}
 
 	private boolean embeddingItemsNeedsReordering = true;
@@ -617,11 +605,6 @@ public class DocItem extends DRMObject implements InspectableObject {
 		return null;
 	}
 
-	@Override
-	public String getClassNameKey() {
-		return "doc_item";
-	}
-
 	public static DocItemComparator COMPARATOR = new DocItemComparator();
 
 	public static class DocItemComparator implements Comparator<DocItem> {
@@ -652,7 +635,7 @@ public class DocItem extends DRMObject implements InspectableObject {
 	// ==========================================================================
 
 	public static class DocumentationShouldBeUpToDate extends ValidationRule {
-		private Language _language;
+		private final Language _language;
 
 		public DocumentationShouldBeUpToDate(Language language) {
 			super(DocItem.class, "documentation_should_be_up_to_date_for_language");

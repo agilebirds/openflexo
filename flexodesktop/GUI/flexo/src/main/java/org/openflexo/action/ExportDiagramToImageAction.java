@@ -31,7 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
@@ -72,7 +72,7 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ExportDiagramToImageAction.actionType, DiagramElement.class);
+		FlexoObject.addActionForClass(ExportDiagramToImageAction.actionType, DiagramElement.class);
 	}
 
 	/**

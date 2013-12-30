@@ -22,15 +22,15 @@ package org.openflexo.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.inspector.InspectableObject;
 
-public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentationAction, FlexoModelObject, FlexoModelObject> {
+public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentationAction, FlexoObject, FlexoObject> {
 
-	public static class SubmitDocumentationActionType extends
-			FlexoActionType<SubmitDocumentationAction, FlexoModelObject, FlexoModelObject> {
+	public static class SubmitDocumentationActionType extends FlexoActionType<SubmitDocumentationAction, FlexoObject, FlexoObject> {
 		protected SubmitDocumentationActionType() {
 			super("submit_documentation", null, FlexoActionType.helpGroup, NORMAL_ACTION_TYPE);
 		}
@@ -41,18 +41,17 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 		 * Factory method
 		 */
 		@Override
-		public SubmitDocumentationAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection,
-				FlexoEditor editor) {
+		public SubmitDocumentationAction makeNewAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 			return new SubmitDocumentationAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoObject object, Vector globalSelection) {
 			return allowsDocSubmission;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoObject object, Vector globalSelection) {
 			return allowsDocSubmission && object != null && object instanceof InspectableObject;
 		}
 
@@ -69,10 +68,10 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 	public static final SubmitDocumentationActionType actionType = new SubmitDocumentationActionType();
 
 	static {
-		FlexoModelObject.addActionForClass(SubmitDocumentationAction.actionType, FlexoModelObject.class);
+		FlexoObjectImpl.addActionForClass(SubmitDocumentationAction.actionType, FlexoObject.class);
 	}
 
-	SubmitDocumentationAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	SubmitDocumentationAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

@@ -39,7 +39,7 @@ import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.help.FlexoHelp;
@@ -120,9 +120,9 @@ public class FlexoApplication {
 		}
 		FlexoHelp.configure(GeneralPreferences.getLanguage().getIdentifier(), UserType.getCurrentUserType().getIdentifier());
 		FlexoHelp.reloadHelpSet();
-		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
+		FlexoObjectImpl.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
-		FlexoModelObject.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));
+		FlexoObjectImpl.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));
 		// Thread myThread = new Thread(new FocusOwnerDisplayer());
 		// myThread.start();
 	}
@@ -132,7 +132,7 @@ public class FlexoApplication {
 
 		private boolean isReportingBug = false;
 
-		private Vector<String> exceptions = new Vector<String>();
+		private final Vector<String> exceptions = new Vector<String>();
 
 		public EventPreprocessor getPreprocessor() {
 			return _preprocessor;

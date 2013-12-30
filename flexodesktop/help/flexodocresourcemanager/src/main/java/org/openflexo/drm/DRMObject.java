@@ -19,18 +19,21 @@
  */
 package org.openflexo.drm;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class DRMObject extends FlexoModelObject implements Validable {
+public abstract class DRMObject extends DefaultFlexoObject implements Validable {
+
+	static final Logger logger = Logger.getLogger(DRMObject.class.getPackage().getName());
 
 	protected DocResourceCenter _docResourceCenter;
 
@@ -43,31 +46,9 @@ public abstract class DRMObject extends FlexoModelObject implements Validable {
 		return _docResourceCenter;
 	}
 
-	@Override
-	protected void registerObject(FlexoProject project) {
-	}
-
-	@Override
-	public FlexoProject getProject() {
+	protected void initializeDeserialization(DRMBuilder builder) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XMLStorageResourceData getXMLResourceData() {
-		return getDocResourceCenter();
+		logger.warning("DRMObject deserialization not implemented yet");
 	}
 
 	// ==========================================================================
@@ -151,12 +132,12 @@ public abstract class DRMObject extends FlexoModelObject implements Validable {
 	 * @return a Vector of Validable objects
 	 */
 	@Override
-	public Vector<Validable> getAllEmbeddedValidableObjects() {
-		Vector<Validable> returned = new Vector<Validable>();
+	public List<? extends DRMObject> getAllEmbeddedValidableObjects() {
+		List<DRMObject> returned = new ArrayList<DRMObject>();
 		returned.add(this);
 		if (getEmbeddedValidableObjects() != null) {
-			for (Enumeration en = getEmbeddedValidableObjects().elements(); en.hasMoreElements();) {
-				DRMObject next = (DRMObject) en.nextElement();
+			for (Iterator<? extends DRMObject> it = getEmbeddedValidableObjects().iterator(); it.hasNext();) {
+				DRMObject next = it.next();
 				returned.addAll(next.getAllEmbeddedValidableObjects());
 			}
 		}
@@ -173,13 +154,9 @@ public abstract class DRMObject extends FlexoModelObject implements Validable {
 	 * 
 	 * @return a Vector of Validable objects
 	 */
-	public Vector getEmbeddedValidableObjects() {
-		return null;
-	}
-
 	@Override
-	public String getSerializationIdentifier() {
-		return getIdentifier();
+	public Collection<? extends DRMObject> getEmbeddedValidableObjects() {
+		return Collections.emptyList();
 	}
 
 	public abstract String getIdentifier();

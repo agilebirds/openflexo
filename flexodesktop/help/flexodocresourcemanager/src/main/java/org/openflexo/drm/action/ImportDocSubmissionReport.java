@@ -29,6 +29,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.DocSubmissionReport;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -60,7 +61,7 @@ public class ImportDocSubmissionReport extends FlexoAction {
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, DocItemFolder.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItemFolder.class);
 	}
 
 	ImportDocSubmissionReport(FlexoObject focusedObject, Vector globalSelection, FlexoEditor editor) {

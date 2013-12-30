@@ -28,7 +28,7 @@ import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -60,7 +60,7 @@ public class SubmitVersion extends FlexoAction<SubmitVersion, DocItem, DocItem> 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItem.class);
 	}
 
 	private DocItem _docItem;

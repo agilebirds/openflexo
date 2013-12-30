@@ -26,7 +26,7 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoObject.HelpRetriever;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl.HelpRetriever;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.widget.DenaliWidget;
 
@@ -34,7 +34,7 @@ public class DefaultHelpRetriever implements HelpRetriever {
 
 	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
-	private DocResourceManager _docResourceManager;
+	private final DocResourceManager _docResourceManager;
 
 	public DefaultHelpRetriever(DocResourceManager docResourceManager) {
 		_docResourceManager = docResourceManager;

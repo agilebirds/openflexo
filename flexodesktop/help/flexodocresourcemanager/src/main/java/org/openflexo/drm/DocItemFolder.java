@@ -20,10 +20,12 @@
 package org.openflexo.drm;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -31,7 +33,6 @@ import org.openflexo.drm.dm.DocItemAdded;
 import org.openflexo.drm.dm.DocItemFolderAdded;
 import org.openflexo.drm.dm.StructureModified;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
@@ -40,10 +41,9 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 
-public class DocItemFolder extends DRMObject implements InspectableObject {
+public class DocItemFolder extends DRMObject {
 
 	private static final Logger logger = Logger.getLogger(DocItemFolder.class.getPackage().getName());
 
@@ -92,11 +92,6 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 		}
 		returned.createDefaultPrimaryDocItem();
 		return returned;
-	}
-
-	@Override
-	public String getInspectorName() {
-		return Inspectors.DRE.DOC_ITEM_FOLDER_INSPECTOR;
 	}
 
 	@Override
@@ -188,12 +183,6 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 		return getPrimaryDocItem() != null && getPrimaryDocItem().isPublished();
 	}
 
-	/**
-	 * Overrides getSerializationIdentifier
-	 * 
-	 * @see org.openflexo.drm.DRMObject#getSerializationIdentifier()
-	 */
-	@Override
 	public String getSerializationIdentifier() {
 		return (getParentFolder() != null ? getParentFolder().getSerializationIdentifier() : "Folder: ") + getIdentifier();
 	}
@@ -220,11 +209,6 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	public void createDefaultPrimaryDocItem() {
 		_primaryDocItem = DocItem.createDocItem(getIdentifier(), FlexoLocalization.localizedForKey("no_description"), this,
 				getDocResourceCenter(), false);
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		return getIdentifier();
 	}
 
 	public DocItemFolder getParentFolder() {
@@ -396,8 +380,8 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 	 * @return a Vector of Validable objects
 	 */
 	@Override
-	public Vector<Validable> getEmbeddedValidableObjects() {
-		Vector<Validable> returned = new Vector<Validable>();
+	public List<DRMObject> getEmbeddedValidableObjects() {
+		List<DRMObject> returned = new ArrayList<DRMObject>();
 		returned.addAll(getChildFolders());
 		returned.addAll(getItems());
 		return returned;
@@ -418,11 +402,6 @@ public class DocItemFolder extends DRMObject implements InspectableObject {
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "doc_item_folder";
 	}
 
 	// ==========================================================================

@@ -32,11 +32,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
@@ -366,7 +365,7 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setUserIdentifier(String aUserIdentifier) {
 		getPreferences().setProperty(USER_IDENTIFIER_KEY, aUserIdentifier);
-		FlexoModelObject.setCurrentUserIdentifier(aUserIdentifier);
+		FlexoObjectImpl.setCurrentUserIdentifier(aUserIdentifier);
 	}
 
 	/*
@@ -391,7 +390,7 @@ public final class GeneralPreferences extends ContextPreferences {
 		getPreferences().setBooleanProperty(NOTIFY_VALID_PROJECT, alwaysOnTop);
 	}
 
-	public static FlexoDocFormat getDefaultDocFormat() {
+	/*public static FlexoDocFormat getDefaultDocFormat() {
 		FlexoDocFormat returned = FlexoDocFormat.get(getPreferences().getProperty(DEFAULT_DOC_FORMAT));
 		if (returned == null) {
 			returned = FlexoDocFormat.HTML;
@@ -402,7 +401,7 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	public static void setDefaultDocFormat(FlexoDocFormat value) {
 		getPreferences().setProperty(DEFAULT_DOC_FORMAT, FlexoDocFormat.flexoDocFormatConverter.convertToString(value));
-	}
+	}*/
 
 	public static Rectangle getBoundForFrameWithID(String id) {
 		String returned = getPreferences().getProperty(BOUNDS_FOR_FRAME + id);

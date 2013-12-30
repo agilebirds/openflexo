@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -56,7 +57,7 @@ public class CreateDocItemFolder extends FlexoAction {
 	};
 
 	static {
-		FlexoObject.addActionForClass(actionType, DocItemFolder.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItemFolder.class);
 	}
 
 	private DocItemFolder _parentDocItemFolder;

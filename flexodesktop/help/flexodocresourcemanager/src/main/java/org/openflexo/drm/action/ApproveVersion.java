@@ -31,7 +31,7 @@ import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.DocItemVersion.Version;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 
@@ -63,7 +63,7 @@ public class ApproveVersion extends FlexoAction<ApproveVersion, DocItem, DocItem
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DocItem.class);
+		FlexoObjectImpl.addActionForClass(actionType, DocItem.class);
 	}
 
 	protected static List<DocItemAction> getPendingActions(DocItem item) {

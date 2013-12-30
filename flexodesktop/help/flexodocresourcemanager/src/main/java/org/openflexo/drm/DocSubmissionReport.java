@@ -35,9 +35,10 @@ import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
+import org.openflexo.xmlcode.XMLSerializable;
 import org.xml.sax.SAXException;
 
-public class DocSubmissionReport extends DRMObject {
+public class DocSubmissionReport extends DRMObject implements XMLSerializable {
 
 	private static final Logger logger = Logger.getLogger(DocSubmissionReport.class.getPackage().getName());
 
@@ -154,11 +155,6 @@ public class DocSubmissionReport extends DRMObject {
 
 	public void clear() {
 		getSubmissionActions().clear();
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "doc_submission_report";
 	}
 
 	/**

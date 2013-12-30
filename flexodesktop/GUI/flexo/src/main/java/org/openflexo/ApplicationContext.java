@@ -15,17 +15,16 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCe
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.view.controller.TechnologyAdapterControllerService;
 import org.openflexo.rest.client.ServerRestService;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 public abstract class ApplicationContext extends DefaultFlexoServiceManager implements FlexoEditorFactory {
 
-	private FlexoEditor applicationEditor;
+	private final FlexoEditor applicationEditor;
 
 	private ServerRestService serverRestService;
 
@@ -53,11 +52,6 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		return getService(ProjectLoader.class);
 	}
 
-	@Override
-	public final FlexoProjectReferenceLoader getProjectReferenceLoader() {
-		return getService(FlexoProjectReferenceLoader.class);
-	}
-
 	public final TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
 		return getService(TechnologyAdapterControllerService.class);
 	}
@@ -81,9 +75,6 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	@Override
 	protected abstract FlexoEditor createApplicationEditor();
-
-	@Override
-	protected abstract FlexoProjectReferenceLoader createProjectReferenceLoader();
 
 	protected abstract TechnologyAdapterControllerService createTechnologyAdapterControllerService();
 

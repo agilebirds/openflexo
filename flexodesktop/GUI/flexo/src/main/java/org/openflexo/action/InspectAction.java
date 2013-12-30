@@ -23,8 +23,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.logging.FlexoLogger;
@@ -57,7 +57,7 @@ public class InspectAction extends FlexoGUIAction<InspectAction, FlexoObject, Fl
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(InspectAction.actionType, FlexoObject.class);
+		FlexoObjectImpl.addActionForClass(InspectAction.actionType, FlexoObject.class);
 	}
 
 	InspectAction(FlexoObject focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

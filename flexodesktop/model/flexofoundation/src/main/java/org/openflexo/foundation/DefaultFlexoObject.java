@@ -16,6 +16,7 @@ import org.openflexo.foundation.validation.ValidationModel;
  * @author sylvain
  * 
  */
+@Deprecated
 public class DefaultFlexoObject extends FlexoObjectImpl {
 
 	@Override

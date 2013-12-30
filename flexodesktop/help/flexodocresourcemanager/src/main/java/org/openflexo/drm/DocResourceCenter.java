@@ -21,20 +21,20 @@ package org.openflexo.drm;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.drm.dm.DocResourceCenterIsModified;
 import org.openflexo.drm.dm.DocResourceCenterIsSaved;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
-import org.openflexo.foundation.rm.XMLStorageResourceData;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
+import org.openflexo.xmlcode.XMLSerializable;
 
-public class DocResourceCenter extends DRMObject implements XMLStorageResourceData<DocResourceCenter> {
+public class DocResourceCenter extends DRMObject implements ResourceData<DocResourceCenter>, XMLSerializable {
 
 	// Vector of Language objects
 	private Vector<Language> languages;
@@ -44,6 +44,8 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 
 	// Root folder
 	private DocItemFolder rootFolder;
+
+	private FlexoResource<DocResourceCenter> resource;
 
 	public DocResourceCenter(DRMBuilder builder) {
 		this();
@@ -152,7 +154,6 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 		return getRootFolder().getItemFolderNamed("FlexoToolSet");
 	}
 
-	@Override
 	public void save() {
 		FileOutputStream out = null;
 		try {
@@ -178,6 +179,12 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 		setChanged();
 		notifyObservers(new DocResourceCenterIsSaved());
 		clearIsModified(false);
+	}
+
+	private void initializeSerialization() {
+	}
+
+	private void finalizeSerialization() {
 	}
 
 	public Author getUser() {
@@ -216,34 +223,13 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 	}
 
 	@Override
-	public FlexoXMLStorageResource getFlexoXMLFileResource() {
-		// TODO Auto-generated method stub
-		return null;
+	public FlexoResource<DocResourceCenter> getResource() {
+		return resource;
 	}
 
 	@Override
-	public FlexoStorageResource getFlexoResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> getResource() {
-		return getFlexoResource();
-	}
-
-	@Override
-	public void setResource(org.openflexo.foundation.resource.FlexoResource<DocResourceCenter> resource) {
-		try {
-			setFlexoResource((FlexoResource) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
+	public void setResource(FlexoResource<DocResourceCenter> resource) {
+		this.resource = resource;
 	}
 
 	/**
@@ -252,8 +238,8 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 	 * @return a Vector of Validable objects
 	 */
 	@Override
-	public Vector<DocItemFolder> getEmbeddedValidableObjects() {
-		Vector<DocItemFolder> returned = new Vector<DocItemFolder>();
+	public List<DocItemFolder> getEmbeddedValidableObjects() {
+		List<DocItemFolder> returned = new ArrayList<DocItemFolder>();
 		returned.add(getRootFolder());
 		return returned;
 	}
@@ -272,24 +258,18 @@ public class DocResourceCenter extends DRMObject implements XMLStorageResourceDa
 		}
 	}
 
-	public Vector getAllFoldersAndItems() {
+	public List<? extends DRMObject> getAllFoldersAndItems() {
 		return getAllEmbeddedValidableObjects();
 	}
 
-	public Vector<DocItem> getAllItems() {
-		Vector<DocItem> returned = new Vector<DocItem>();
-		for (Enumeration en = getAllFoldersAndItems().elements(); en.hasMoreElements();) {
-			DRMObject next = (DRMObject) en.nextElement();
+	public List<DocItem> getAllItems() {
+		List<DocItem> returned = new ArrayList<DocItem>();
+		for (DRMObject next : getAllFoldersAndItems()) {
 			if (next instanceof DocItem) {
 				returned.add((DocItem) next);
 			}
 		}
 		return returned;
-	}
-
-	@Override
-	public String getClassNameKey() {
-		return "doc_resource_center";
 	}
 
 	/**
