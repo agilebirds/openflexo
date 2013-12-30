@@ -23,64 +23,62 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.naming.InvalidNameException;
-
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
-import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
-public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramElement<?>> {
+public class AddShape extends FlexoAction<AddShape, DiagramContainerElement<?>, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 
-	public static FlexoActionType<AddShape, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<AddShape, DiagramElement<?>, DiagramElement<?>>(
+	public static FlexoActionType<AddShape, DiagramContainerElement<?>, DiagramElement<?>> actionType = new FlexoActionType<AddShape, DiagramContainerElement<?>, DiagramElement<?>>(
 			"add_new_shape", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public AddShape makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+		public AddShape makeNewAction(DiagramContainerElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
 			return new AddShape(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(DiagramContainerElement<?> object, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(DiagramElement<?> object, Vector<DiagramElement<?>> globalSelection) {
-			return object instanceof DiagramRootPane || object instanceof DiagramShape;
+		public boolean isEnabledForSelection(DiagramContainerElement<?> object, Vector<DiagramElement<?>> globalSelection) {
+			return object instanceof Diagram || object instanceof DiagramShape;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddShape.actionType, DiagramRootPane.class);
-		FlexoModelObject.addActionForClass(AddShape.actionType, DiagramShape.class);
+		FlexoObjectImpl.addActionForClass(AddShape.actionType, Diagram.class);
+		FlexoObjectImpl.addActionForClass(AddShape.actionType, DiagramShape.class);
 	}
 
-	private DiagramShape _newShape;
-	private String _newShapeName;
-	private DiagramElement<?> _parent;
-	private ShapeGraphicalRepresentation _graphicalRepresentation;
+	private DiagramShape newShape;
+	private String newShapeName;
+	private DiagramContainerElement<?> parent;
+	private ShapeGraphicalRepresentation graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
-	AddShape(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
+	AddShape(DiagramContainerElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Add shape");
 
 		if (getParent() == null) {
@@ -90,62 +88,46 @@ public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramEl
 			throw new InvalidParameterException("shape name is undefined");
 		}
 
-		_newShape = new DiagramShape(getParent().getDiagram());
+		newShape = getFocusedObject().getDiagram().getDiagramFactory().makeNewShape(getNewShapeName(), getParent());
+
 		if (getGraphicalRepresentation() != null) {
-			_newShape.setGraphicalRepresentation(getGraphicalRepresentation());
+			newShape.setGraphicalRepresentation(getGraphicalRepresentation());
 		}
 
-		try {
-			_newShape.setName("");
-		} catch (InvalidNameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		getParent().addToChilds(_newShape);
+		getParent().addToShapes(newShape);
 
-		logger.info("Added shape " + _newShape + " under " + getParent());
-	}
-
-	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
-		}
-		return null;
+		logger.info("Added shape " + newShape + " under " + getParent());
 	}
 
 	public DiagramShape getNewShape() {
-		return _newShape;
+		return newShape;
 	}
 
-	public DiagramElement<?> getParent() {
-		if (_parent == null) {
-			if (getFocusedObject() instanceof DiagramShape) {
-				_parent = getFocusedObject();
-			} else if (getFocusedObject() instanceof DiagramRootPane) {
-				_parent = getFocusedObject();
-			}
+	public DiagramContainerElement<?> getParent() {
+		if (parent == null) {
+			parent = getFocusedObject();
 		}
-		return _parent;
+		return parent;
 	}
 
-	public void setParent(DiagramElement<?> parent) {
-		_parent = parent;
+	public void setParent(DiagramContainerElement<?> parent) {
+		this.parent = parent;
 	}
 
 	public String getNewShapeName() {
-		return _newShapeName;
+		return newShapeName;
 	}
 
 	public void setNewShapeName(String newShapeName) {
-		_newShapeName = newShapeName;
+		this.newShapeName = newShapeName;
 	}
 
 	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return _graphicalRepresentation;
+		return graphicalRepresentation;
 	}
 
 	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
-		_graphicalRepresentation = graphicalRepresentation;
+		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
 	public boolean isNameSetToNull() {

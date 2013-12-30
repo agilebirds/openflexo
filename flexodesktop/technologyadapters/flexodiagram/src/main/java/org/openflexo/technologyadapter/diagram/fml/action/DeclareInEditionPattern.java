@@ -25,7 +25,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -34,8 +33,11 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 
 /**
  * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or
@@ -45,18 +47,26 @@ import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
  * 
  * @param <A>
  * @param <T1>
- *            is the graphical repesentation
  */
-public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1, T2>, T1 extends FlexoObject & GRTemplate, T2 extends FlexoObject>
-		extends FlexoAction<A, T1, T2> {
+public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T>, T extends DiagramElement<?>> extends
+		FlexoAction<A, T, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
 
-	private EditionPattern editionPattern;
+	/**
+	 * Stores the model slot which encodes the access to a {@link Diagram} conform to a {@link DiagramSpecification}, in the context of a
+	 * {@link VirtualModel} (which is a context where a diagram is federated with other sources of informations)
+	 */
+	private TypedDiagramModelSlot diagramModelSlot;
 
+	/**
+	 * Stores the model slot used as source of information (data) in pattern proposal
+	 */
 	private ModelSlot<?> modelSlot;
 
-	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
+	private EditionPattern editionPattern;
+
+	private List<VirtualModelModelSlot> virtualModelModelSlots = null;
 	private List<TypeAwareModelSlot<?, ?>> typeAwareModelSlots = null;
 
 	/**
@@ -67,15 +77,16 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	 * @param globalSelection
 	 * @param editor
 	 */
-	DeclareInEditionPattern(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
+	DeclareInEditionPattern(FlexoActionType<A, T, DiagramElement<?>> actionType, T focusedObject,
+			Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		// Get the set of model slots that are available from the current virtual model
-		List<ModelSlot> availableModelSlots = getModelSlots();
+		List<ModelSlot<?>> availableModelSlots = getModelSlots();
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
 		// Get the set of internal elements inside the current focused object
-		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1, T2>.DrawingObjectEntry>();
+		drawingObjectEntries = new Vector<DrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
 		for (GRTemplate o : getFocusedObject().getDescendants()) {
@@ -99,6 +110,26 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	}
 
 	public DeclareInEditionPatternChoices primaryChoice = DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN;
+
+	/**
+	 * Return the model slot which encodes the access to a {@link Diagram} conform to a {@link DiagramSpecification}, in the context of a
+	 * {@link VirtualModel} (which is a context where a diagram is federated with other sources of informations)
+	 * 
+	 * @return
+	 */
+	public TypedDiagramModelSlot getDiagramModelSlot() {
+		return diagramModelSlot;
+	}
+
+	/**
+	 * Sets the model slot which encodes the access to a {@link Diagram} conform to a {@link DiagramSpecification}, in the context of a
+	 * {@link VirtualModel} (which is a context where a diagram is federated with other sources of informations)
+	 * 
+	 * @return
+	 */
+	public void setDiagramModelSlot(TypedDiagramModelSlot diagramModelSlot) {
+		this.diagramModelSlot = diagramModelSlot;
+	}
 
 	@Override
 	public abstract boolean isValid();
@@ -174,19 +205,34 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	}
 
 	public DiagramSpecification getDiagramSpecification() {
-		return getFocusedObject().getDiagramSpecification();
+		return diagramModelSlot.getMetaModelResource().getLoadedResourceData();
 	}
 
+	/**
+	 * Return the model slot used as source of information (data) in pattern proposal
+	 * 
+	 * @return
+	 */
 	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
 
+	/**
+	 * Sets the model slot used as source of information (data) in pattern proposal
+	 * 
+	 * @return
+	 */
 	public void setModelSlot(ModelSlot<?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
-	public List<ModelSlot> getModelSlots() {
-		return getFocusedObject().getDiagramSpecification().getModelSlots();
+	/**
+	 * Return the list of all model slots declared in virtual model where this action is defined
+	 * 
+	 * @return
+	 */
+	public List<ModelSlot<?>> getModelSlots() {
+		return getModelSlot().getVirtualModel().getModelSlots();
 	}
 
 	/**
@@ -215,17 +261,17 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
+	public List<VirtualModelModelSlot> getVirtualModelModelSlots() {
 		if (getModelSlot() != null) {
 			if (virtualModelModelSlots == null) {
-				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
+				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot>();
 			}
 			if (!virtualModelModelSlots.isEmpty()) {
 				virtualModelModelSlots.clear();
 			}
 			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
 				if (modelSlot instanceof VirtualModelModelSlot) {
-					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+					virtualModelModelSlots.add((VirtualModelModelSlot) modelSlot);
 				}
 			}
 		}

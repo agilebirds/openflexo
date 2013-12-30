@@ -25,12 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
@@ -66,7 +65,7 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateDiagramPalette.actionType, DiagramSpecification.class);
+		FlexoObjectImpl.addActionForClass(CreateDiagramPalette.actionType, DiagramSpecification.class);
 	}
 
 	public String newPaletteName;
@@ -80,22 +79,15 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc palette");
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException, SaveResourceException {
+		logger.info("Add diagram palette to diagram specification");
 
 		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), newPaletteName,
-				(DrawingGraphicalRepresentation) graphicalRepresentation, getFocusedObject().getViewPoint().getViewPointLibrary());
+				(DrawingGraphicalRepresentation) graphicalRepresentation, getFocusedObject().getServiceManager());
 		_newPalette.setDescription(description);
 		getFocusedObject().addToPalettes(_newPalette);
-		_newPalette.save();
+		_newPalette.getResource().save(null);
 
-	}
-
-	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
-		}
-		return null;
 	}
 
 	public DiagramPalette getNewPalette() {

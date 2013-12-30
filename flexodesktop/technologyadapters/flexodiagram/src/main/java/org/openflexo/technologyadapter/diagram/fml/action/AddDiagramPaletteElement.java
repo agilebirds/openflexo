@@ -24,12 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
@@ -64,7 +62,7 @@ public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteEleme
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddDiagramPaletteElement.actionType, DiagramPalette.class);
+		FlexoObjectImpl.addActionForClass(AddDiagramPaletteElement.actionType, DiagramPalette.class);
 	}
 
 	private String _newElementName;
@@ -80,18 +78,9 @@ public class AddDiagramPaletteElement extends FlexoAction<AddDiagramPaletteEleme
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add calc palette element, gr = " + getGraphicalRepresentation());
-
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		_newElement = getFocusedObject().addPaletteElement(getNewElementName(), getGraphicalRepresentation());
 
-	}
-
-	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
-		}
-		return null;
 	}
 
 	public DiagramPaletteElement getNewElement() {

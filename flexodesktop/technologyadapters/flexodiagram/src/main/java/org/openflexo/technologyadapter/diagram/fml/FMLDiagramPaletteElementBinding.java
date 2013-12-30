@@ -31,7 +31,6 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.control.PaletteElement;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -40,6 +39,7 @@ import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject.NamedViewPointObjectImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
@@ -59,7 +59,9 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 	/**
 	 * The addressed palette element we want to bind to something in {@link VirtualModel}
 	 */
-	private final DiagramPaletteElement paletteElement = null;
+	private DiagramPaletteElement paletteElement = null;
+
+	private TypedDiagramModelSlot diagramModelSlot;
 
 	private String _editionPatternId;
 	private String _dropSchemeName;
@@ -82,7 +84,13 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 		parameters = new Vector<FMLDiagramPaletteElementBindingParameter>();
 	}
 
-	public/*DiagramModelSlot*/ModelSlot<?> getDiagramModelSlot() {
+	public TypedDiagramModelSlot getDiagramModelSlot() {
+		if (diagramModelSlot == null && dropScheme != null) {
+			VirtualModel vm = dropScheme.getVirtualModel();
+			if (vm.getModelSlots(TypedDiagramModelSlot.class).size() > 0) {
+				diagramModelSlot = vm.getModelSlots(TypedDiagramModelSlot.class).get(0);
+			}
+		}
 		return null;
 	}
 
@@ -123,6 +131,10 @@ public class FMLDiagramPaletteElementBinding extends NamedViewPointObjectImpl {
 
 	public DiagramPaletteElement getPaletteElement() {
 		return paletteElement;
+	}
+
+	public void setPaletteElement(DiagramPaletteElement paletteElement) {
+		this.paletteElement = paletteElement;
 	}
 
 	public EditionPattern getEditionPattern() {

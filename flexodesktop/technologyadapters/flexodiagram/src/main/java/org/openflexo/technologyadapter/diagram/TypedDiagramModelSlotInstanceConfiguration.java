@@ -20,9 +20,9 @@
 package org.openflexo.technologyadapter.diagram;
 
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 
 /**
@@ -35,7 +35,7 @@ import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 public class TypedDiagramModelSlotInstanceConfiguration extends
 		TypeAwareModelSlotInstanceConfiguration<Diagram, DiagramSpecification, TypedDiagramModelSlot> {
 
-	protected TypedDiagramModelSlotInstanceConfiguration(TypedDiagramModelSlot ms, CreateDiagram action) {
+	protected TypedDiagramModelSlotInstanceConfiguration(TypedDiagramModelSlot ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 	}
 

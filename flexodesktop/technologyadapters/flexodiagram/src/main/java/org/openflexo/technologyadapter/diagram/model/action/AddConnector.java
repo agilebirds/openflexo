@@ -23,16 +23,15 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.InvalidNameException;
-
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.view.diagram.model.DiagramConnector;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramElementImpl;
+import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 public class AddConnector extends FlexoAction<AddConnector, DiagramShape, DiagramElement<?>> {
 
@@ -62,13 +61,13 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddConnector.actionType, DiagramShape.class);
+		FlexoObjectImpl.addActionForClass(AddConnector.actionType, DiagramShape.class);
 	}
 
-	private DiagramShape _fromShape;
-	private DiagramShape _toShape;
+	private DiagramShape fromShape;
+	private DiagramShape toShape;
 	private String annotation;
-	private DiagramConnector _newConnector;
+	private DiagramConnector newConnector;
 	private String newConnectorName;
 
 	private boolean automaticallyCreateConnector = false;
@@ -83,7 +82,7 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 			logger.info("Add connector");
 		}
 		if (getFocusedObject() != null && getFromShape() != null && getToShape() != null) {
-			DiagramElement<?> parent = DiagramElement.getFirstCommonAncestor(getFromShape(), getToShape());
+			DiagramContainerElement<?> parent = DiagramElementImpl.getFirstCommonAncestor(getFromShape(), getToShape());
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Parent=" + parent);
 			}
@@ -91,20 +90,10 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 				logger.warning("No common ancestors for " + getFromShape() + " and " + getToShape());
 				throw new IllegalArgumentException("No common ancestor");
 			}
-			_newConnector = new DiagramConnector(getFromShape().getDiagram(), getFromShape(), getToShape());
-			_newConnector.setDescription(annotation);
-			parent.addToChilds(_newConnector);
-			if(getNewConnectorName()!=null){
-				try {
-					_newConnector.setName(getNewConnectorName());
-				} catch (InvalidNameException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (DuplicateResourceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			newConnector = getFocusedObject().getDiagram().getDiagramFactory()
+					.makeNewConnector(getNewConnectorName(), getFromShape(), getToShape(), parent);
+			newConnector.setDescription(annotation);
+			parent.addToConnectors(newConnector);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Focused role is null !");
@@ -113,26 +102,26 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 	}
 
 	public DiagramShape getToShape() {
-		return _toShape;
+		return toShape;
 	}
 
 	public void setToShape(DiagramShape aShape) {
-		_toShape = aShape;
+		toShape = aShape;
 	}
 
 	public DiagramShape getFromShape() {
-		if (_fromShape == null) {
+		if (fromShape == null) {
 			return getFocusedObject();
 		}
-		return _fromShape;
+		return fromShape;
 	}
 
 	public void setFromShape(DiagramShape fromShape) {
-		_fromShape = fromShape;
+		fromShape = fromShape;
 	}
 
 	public DiagramConnector getConnector() {
-		return _newConnector;
+		return newConnector;
 	}
 
 	public boolean getAutomaticallyCreateConnector() {

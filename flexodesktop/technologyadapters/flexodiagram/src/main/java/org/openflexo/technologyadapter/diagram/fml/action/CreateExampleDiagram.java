@@ -19,22 +19,24 @@
  */
 package org.openflexo.technologyadapter.diagram.fml.action;
 
+import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.resource.InvalidFileNameException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.technologyadapter.diagram.fml.ExampleDiagram;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
+import org.openflexo.technologyadapter.diagram.model.DiagramImpl;
+import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 import org.openflexo.toolbox.StringUtils;
 
 public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, DiagramSpecification, ViewPointObject> {
@@ -66,40 +68,32 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, Diag
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateExampleDiagram.actionType, DiagramSpecification.class);
+		FlexoObjectImpl.addActionForClass(CreateExampleDiagram.actionType, DiagramSpecification.class);
 	}
 
-	public String newShemaName;
+	public String newDiagramName;
+	public String newDiagramTitle;
 	public String description;
 	public DrawingGraphicalRepresentation graphicalRepresentation;
 
-	private ExampleDiagram _newShema;
+	private DiagramResource newDiagramResource;
 
 	CreateExampleDiagram(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException, SaveResourceException,
+			InvalidFileNameException {
 		logger.info("Add example diagram");
 
-		_newShema = ExampleDiagram.newExampleDiagram(getFocusedObject(), newShemaName, graphicalRepresentation, getFocusedObject()
-				.getViewPoint().getViewPointLibrary());
-		_newShema.setDescription(description);
-		getFocusedObject().addToExampleDiagrams(_newShema);
-		_newShema.save();
+		String newDiagramURI = getFocusedObject().getURI() + "/" + newDiagramName;
+		File newDiagramFile = new File(getFocusedObject().getResource().getDirectory(), newDiagramName + DiagramResource.DIAGRAM_SUFFIX);
+		newDiagramResource = DiagramImpl.newDiagramResource(newDiagramName, newDiagramTitle, newDiagramURI, newDiagramFile,
+				getFocusedObject(), getServiceManager());
+		newDiagramResource.getDiagram().setDescription(description);
+		newDiagramResource.save(null);
 
-	}
-
-	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
-		}
-		return null;
-	}
-
-	public ExampleDiagram getNewShema() {
-		return _newShema;
 	}
 
 	private String nameValidityMessage = EMPTY_NAME;
@@ -113,10 +107,10 @@ public class CreateExampleDiagram extends FlexoAction<CreateExampleDiagram, Diag
 	}
 
 	public boolean isNameValid() {
-		if (StringUtils.isEmpty(newShemaName)) {
+		if (StringUtils.isEmpty(newDiagramName)) {
 			nameValidityMessage = EMPTY_NAME;
 			return false;
-		} else if (getFocusedObject().getExampleDiagram(newShemaName) != null) {
+		} else if (getFocusedObject().getExampleDiagram(newDiagramName) != null) {
 			nameValidityMessage = DUPLICATED_NAME;
 			return false;
 		} else {

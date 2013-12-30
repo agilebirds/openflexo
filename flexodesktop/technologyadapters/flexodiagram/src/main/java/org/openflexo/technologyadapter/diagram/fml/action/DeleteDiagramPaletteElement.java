@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -58,7 +58,7 @@ public class DeleteDiagramPaletteElement extends FlexoAction<DeleteDiagramPalett
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteDiagramPaletteElement.actionType, DiagramPaletteElement.class);
+		FlexoObjectImpl.addActionForClass(DeleteDiagramPaletteElement.actionType, DiagramPaletteElement.class);
 	}
 
 	DeleteDiagramPaletteElement(DiagramPaletteElement focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {

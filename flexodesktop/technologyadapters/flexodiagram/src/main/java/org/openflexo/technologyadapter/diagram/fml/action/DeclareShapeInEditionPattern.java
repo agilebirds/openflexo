@@ -28,7 +28,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
@@ -37,7 +37,6 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.technologyadapter.diagram.fml.ConnectorPatternRole;
@@ -47,6 +46,7 @@ import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -59,10 +59,40 @@ import org.openflexo.toolbox.StringUtils;
  * @param <T1>
  */
 
-public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObject & GRShapeTemplate, T2 extends FlexoObject, A extends AbstractDeclareShapeInEditionPattern<T1, T2, A>>
-		extends DeclareInEditionPattern<A, T1, T2> {
+public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<DeclareShapeInEditionPattern, DiagramShape> {
 
-	private static final Logger logger = Logger.getLogger(AbstractDeclareShapeInEditionPattern.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DeclareShapeInEditionPattern.class.getPackage().getName());
+
+	/**
+	 * Create a new Flexo Action Type
+	 */
+	public static FlexoActionType<DeclareShapeInEditionPattern, DiagramShape, DiagramElement<?>> actionType = new FlexoActionType<DeclareShapeInEditionPattern, DiagramShape, DiagramElement<?>>(
+			"declare_in_edition_pattern", FlexoActionType.editGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
+
+		@Override
+		public DeclareShapeInEditionPattern makeNewAction(DiagramShape focusedObject, Vector<DiagramElement<?>> globalSelection,
+				FlexoEditor editor) {
+			return new DeclareShapeInEditionPattern(focusedObject, globalSelection, editor);
+		}
+
+		@Override
+		public boolean isVisibleForSelection(DiagramShape shape, Vector<DiagramElement<?>> globalSelection) {
+			return true;
+		}
+
+		@Override
+		public boolean isEnabledForSelection(DiagramShape shape, Vector<DiagramElement<?>> globalSelection) {
+			// TODO : implement the rights for modifying the viewpoint
+			// ex: if(shape.getDiagramSpec.isEditable) ...
+
+			return shape != null /*&& shape.getDiagramSpecification() != null*/;
+		}
+
+	};
+
+	static {
+		FlexoObjectImpl.addActionForClass(DeclareShapeInEditionPattern.actionType, DiagramShape.class);
+	}
 
 	public static enum NewEditionPatternChoices {
 		MAP_SINGLE_INDIVIDUAL, MAP_SINGLE_EDITION_PATTERN, BLANK_EDITION_PATTERN
@@ -84,7 +114,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
 
-	AbstractDeclareShapeInEditionPattern(FlexoActionType actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
+	DeclareShapeInEditionPattern(DiagramShape focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
@@ -309,20 +339,21 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 			case CREATES_EDITION_PATTERN:
 				// DiagramShape diagramShape = getFocusedObject();
 
-				VirtualModel.VirtualModelBuilder builder = new VirtualModel.VirtualModelBuilder(getFocusedObject()
+				/*VirtualModel.VirtualModelBuilder builder = new VirtualModel.VirtualModelBuilder(getFocusedObject()
 						.getDiagramSpecification().getViewPointLibrary(), getFocusedObject().getDiagramSpecification().getViewPoint(),
-						getFocusedObject().getDiagramSpecification().getResource());
+						getFocusedObject().getDiagramSpecification().getResource());*/
+
 				switch (patternChoice) {
 				case MAP_SINGLE_INDIVIDUAL:
 				case MAP_SINGLE_EDITION_PATTERN:
 				case BLANK_EDITION_PATTERN:
 
 					// Create new edition pattern
-					newEditionPattern = new EditionPattern(builder);
+					newEditionPattern = new EditionPattern(/*builder*/);
 					newEditionPattern.setName(getEditionPatternName());
 
 					// And add the newly created edition pattern
-					getFocusedObject().getDiagramSpecification().addToEditionPatterns(newEditionPattern);
+					getDiagramModelSlot().getVirtualModel().addToEditionPatterns(newEditionPattern);
 
 					// Find best URI base candidate
 					// PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
@@ -338,12 +369,12 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 							individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 							individualPatternRole.setOntologicType(getConcept());
 							newEditionPattern.addToPatternRoles(individualPatternRole);
-							newEditionPattern.setPrimaryConceptRole(individualPatternRole);
+							// newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 						}
 					}
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
 						if (isVirtualModelModelSlot()) {
-							VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
+							VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
 							editionPatternPatternRole = virtualModelModelSlot
 									.makeEditionPatternInstancePatternRole(getVirtualModelConcept());
 							editionPatternPatternRole.setPatternRoleName(getVirtualModelPatternRoleName());
@@ -360,7 +391,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 						if (entry.getSelectThis()) {
 							if (entry.graphicalObject instanceof GRShapeTemplate) {
 								GRShapeTemplate grShape = (GRShapeTemplate) entry.graphicalObject;
-								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
+								ShapePatternRole newShapePatternRole = new ShapePatternRole(/*builder*/);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
 									newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
@@ -389,7 +420,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 							}
 							if (entry.graphicalObject instanceof GRConnectorTemplate) {
 								GRConnectorTemplate grConnector = (GRConnectorTemplate) entry.graphicalObject;
-								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(builder);
+								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(/*builder*/);
 								newConnectorPatternRole.setPatternRoleName(entry.patternRoleName);
 								newConnectorPatternRole.setReadOnlyLabel(true);
 								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
@@ -410,7 +441,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 
 						}
 					}
-					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
+					// newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
 					/*	if (isPushedToPalette) {
 							DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(),
@@ -438,7 +469,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					}*/
 
 					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme(builder);
+					DropScheme newDropScheme = new DropScheme(/*builder*/);
 					newDropScheme.setName(getDropSchemeName());
 
 					// Add new drop scheme
@@ -501,7 +532,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 								}
 							}*/
 
-							URIParameter uriParameter = new URIParameter(builder);
+							URIParameter uriParameter = new URIParameter(/*builder*/);
 							uriParameter.setName("uri");
 							uriParameter.setLabel("uri");
 							/*if (mainPropertyDescriptor != null) {
@@ -565,16 +596,16 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
 							ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
 							// Add shape action
-							AddShape newAddShape = new AddShape(builder);
+							AddShape newAddShape = new AddShape(/*builder*/);
 							newDropScheme.addToActions(newAddShape);
 							newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {
 								if (isTopLevel) {
 									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
-								} else {
+								} /*else {
 									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
 											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-								}
+									}*/
 							} else {
 								newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
 										.getPatternRoleName()));

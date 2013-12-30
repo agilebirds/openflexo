@@ -24,11 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
@@ -61,7 +60,7 @@ public class DeleteDiagramSpecification extends FlexoAction<DeleteDiagramSpecifi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteDiagramSpecification.actionType, DiagramSpecification.class);
+		FlexoObjectImpl.addActionForClass(DeleteDiagramSpecification.actionType, DiagramSpecification.class);
 	}
 
 	DeleteDiagramSpecification(DiagramSpecification focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
@@ -69,7 +68,7 @@ public class DeleteDiagramSpecification extends FlexoAction<DeleteDiagramSpecifi
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Delete VirtualModel");
 		if (getFocusedObject().getResource() != null) {
 			getFocusedObject().getResource().delete();

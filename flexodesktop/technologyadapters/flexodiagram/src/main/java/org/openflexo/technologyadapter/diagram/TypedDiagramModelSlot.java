@@ -30,7 +30,6 @@ import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.GraphicalAction;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.action.CreateDiagram;
 import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 
 /**
@@ -139,12 +138,7 @@ public class TypedDiagramModelSlot extends TypeAwareModelSlot<Diagram, DiagramSp
 
 	@Override
 	public TypedDiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
-		if (action instanceof CreateDiagram) {
-			return new TypedDiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
-		} else {
-			logger.warning("Unexpected " + action);
-			return null;
-		}
+		return new TypedDiagramModelSlotInstanceConfiguration(this, action);
 	}
 
 	@Override

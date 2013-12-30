@@ -90,7 +90,6 @@ public interface Diagram extends DiagramContainerElement<DrawingGraphicalReprese
 	 * 
 	 * @return
 	 */
-	@Override
 	@Getter(value = DIAGRAM_SPECIFICATION, ignoreType = true)
 	public DiagramSpecification getDiagramSpecification();
 

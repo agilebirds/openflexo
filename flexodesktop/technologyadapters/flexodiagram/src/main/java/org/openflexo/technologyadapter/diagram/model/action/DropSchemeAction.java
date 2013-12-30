@@ -29,71 +29,73 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelInstanceObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
-import org.openflexo.technologyadapter.diagram.model.DiagramRootPane;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
-public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeAction, DropScheme> {
+public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeAction, DropScheme, VirtualModelInstanceObject> {
 
 	private static final Logger logger = Logger.getLogger(DropSchemeAction.class.getPackage().getName());
 
-	public static FlexoActionType<DropSchemeAction, FlexoModelObject, FlexoModelObject> actionType = new FlexoActionType<DropSchemeAction, FlexoModelObject, FlexoModelObject>(
+	public static FlexoActionType<DropSchemeAction, VirtualModelInstanceObject, VirtualModelInstanceObject> actionType = new FlexoActionType<DropSchemeAction, VirtualModelInstanceObject, VirtualModelInstanceObject>(
 			"drop_palette_element", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public DropSchemeAction makeNewAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+		public DropSchemeAction makeNewAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection,
+				FlexoEditor editor) {
 			return new DropSchemeAction(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(VirtualModelInstanceObject object, Vector<VirtualModelInstanceObject> globalSelection) {
 			return object instanceof DiagramElement<?>;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
+		FlexoObjectImpl.addActionForClass(actionType, VirtualModelInstanceObject.class);
 	}
 
-	private DiagramElement<?> _parent;
+	private DiagramContainerElement<?> _parent;
 	private DiagramPaletteElement _paletteElement;
 	private DropScheme _dropScheme;
 	private DiagramShape _primaryShape;
 
 	public FGEPoint dropLocation;
 
-	DropSchemeAction(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	DropSchemeAction(VirtualModelInstanceObject focusedObject, Vector<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	// private Hashtable<EditionAction,FlexoModelObject> createdObjects;
+	// private Hashtable<EditionAction,FlexoObject> createdObjects;
 
 	private EditionPatternInstance editionPatternInstance;
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
 		logger.info("project=" + getProject());
@@ -103,25 +105,31 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 
 		logger.info("editionPatternInstance=" + editionPatternInstance);
 		logger.info("epi project=" + editionPatternInstance.getProject());
-		logger.info("epi resource data =" + editionPatternInstance.getXMLResourceData());
+		logger.info("epi resource data =" + editionPatternInstance.getResourceData());
 
 		applyEditionActions();
 
 	}
 
-	public DiagramElement<?> getParent() {
+	public DiagramContainerElement<?> getParent() {
 		if (_parent == null) {
-			if (getFocusedObject() instanceof DiagramShape) {
+			/*if (getFocusedObject() instanceof DiagramShape) {
 				_parent = (DiagramShape) getFocusedObject();
 			} else if (getFocusedObject() instanceof DiagramRootPane) {
 				_parent = (DiagramRootPane) getFocusedObject();
-			}
+			}*/
+			_parent = getDiagram();
 		}
 		return _parent;
 	}
 
-	public void setParent(DiagramElement<?> parent) {
+	public void setParent(DiagramContainerElement<?> parent) {
 		_parent = parent;
+	}
+
+	@Override
+	public Diagram getDiagram() {
+		return getParent().getDiagram();
 	}
 
 	public DropScheme getDropScheme() {
@@ -156,13 +164,7 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 
 	@Override
 	public VirtualModelInstance retrieveVirtualModelInstance() {
-		if (getParent() != null) {
-			return getParent().getDiagram();
-		}
-		if (getFocusedObject() instanceof DiagramElement<?>) {
-			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
-		}
-		return null;
+		return getFocusedObject().getVirtualModelInstance();
 	}
 
 	@Override
@@ -173,58 +175,56 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 			DiagramShape newShape = (DiagramShape) assignedObject;
 			if (newShape != null) {
 				ShapeGraphicalRepresentation gr = newShape.getGraphicalRepresentation();
-				if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
-					// Declare shape as new shape only if it is the primary representation role of the EP
+				// if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
+				// Declare shape as new shape only if it is the primary representation role of the EP
 
-					_primaryShape = newShape;
-					gr.setX(dropLocation.getX());
-					gr.setY(dropLocation.getY());
+				_primaryShape = newShape;
+				gr.setX(dropLocation.getX());
+				gr.setY(dropLocation.getY());
 
-					// Temporary comment this portion of code if child shapes are declared inside this shape
-					if (!action.getPatternRole().containsShapes()
-							&& action.getContainer().toString().equals(DiagramEditionScheme.TOP_LEVEL)) {
-						ShapeBorder border = gr.getBorder();
-						ShapeBorder newBorder = gr.getFactory().makeShapeBorder(border);
-						boolean requireNewBorder = false;
-						double deltaX = 0;
-						double deltaY = 0;
-						if (border.getTop() < 25) {
-							requireNewBorder = true;
-							deltaY = border.getTop() - 25;
-							newBorder.setTop(25);
-						}
-						if (border.getLeft() < 25) {
-							requireNewBorder = true;
-							deltaX = border.getLeft() - 25;
-							newBorder.setLeft(25);
-						}
-						if (border.getRight() < 25) {
-							requireNewBorder = true;
-							newBorder.setRight(25);
-						}
-						if (border.getBottom() < 25) {
-							requireNewBorder = true;
-							newBorder.setBottom(25);
-						}
-						if (requireNewBorder) {
-							gr.setBorder(newBorder);
-							gr.setX(gr.getX() + deltaX);
-							gr.setY(gr.getY() + deltaY);
-							if (gr.getIsFloatingLabel()) {
-								gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
-								gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
-							}
+				// Temporary comment this portion of code if child shapes are declared inside this shape
+				if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(DiagramEditionScheme.TOP_LEVEL)) {
+					ShapeBorder border = gr.getBorder();
+					ShapeBorder newBorder = gr.getFactory().makeShapeBorder(border);
+					boolean requireNewBorder = false;
+					double deltaX = 0;
+					double deltaY = 0;
+					if (border.getTop() < 25) {
+						requireNewBorder = true;
+						deltaY = border.getTop() - 25;
+						newBorder.setTop(25);
+					}
+					if (border.getLeft() < 25) {
+						requireNewBorder = true;
+						deltaX = border.getLeft() - 25;
+						newBorder.setLeft(25);
+					}
+					if (border.getRight() < 25) {
+						requireNewBorder = true;
+						newBorder.setRight(25);
+					}
+					if (border.getBottom() < 25) {
+						requireNewBorder = true;
+						newBorder.setBottom(25);
+					}
+					if (requireNewBorder) {
+						gr.setBorder(newBorder);
+						gr.setX(gr.getX() + deltaX);
+						gr.setY(gr.getY() + deltaY);
+						if (gr.getIsFloatingLabel()) {
+							gr.setAbsoluteTextX(gr.getAbsoluteTextX() - deltaX);
+							gr.setAbsoluteTextY(gr.getAbsoluteTextY() - deltaY);
 						}
 					}
-				} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
+				}
+				/*} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
 					Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
 					if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
 						ShapeGraphicalRepresentation primaryGR = (ShapeGraphicalRepresentation) graphicalRepresentation;
 						gr.setX(dropLocation.x + gr.getX() - primaryGR.getX());
 						gr.setY(dropLocation.y + gr.getY() - primaryGR.getY());
 					}
-				}
-				// gr.updateConstraints();
+				}*/
 			} else {
 				logger.warning("Inconsistant data: shape has not been created");
 			}
@@ -240,20 +240,22 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals(DiagramEditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
-			if (getParent() instanceof DiagramShape) {
+			/*if (getParent() instanceof DiagramShape) {
 				return ((DiagramShape) getParent()).getEditionPatternInstance();
-			}
+			}*/
+			// TODO
+			logger.warning("Please implement getValue() for target");
+			return null;
 		}
 		return super.getValue(variable);
 	}
 
-	@Override
 	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
-		if (getPaletteElement() != null) {
+		/*if (getPaletteElement() != null) {
 			if (getPaletteElement().getOverridingGraphicalRepresentation(patternRole) != null) {
 				return getPaletteElement().getOverridingGraphicalRepresentation(patternRole);
 			}
-		}
+		}*/
 
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR

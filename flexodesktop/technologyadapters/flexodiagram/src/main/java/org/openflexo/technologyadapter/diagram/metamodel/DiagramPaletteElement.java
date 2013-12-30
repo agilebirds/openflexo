@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.diagram.metamodel;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteObject;
@@ -40,6 +41,11 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	public DiagramPaletteElement() {
 		super();
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return getPalette().getServiceManager();
 	}
 
 	public DiagramPaletteFactory getFactory() {

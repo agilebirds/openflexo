@@ -64,6 +64,7 @@ public abstract class DiagramImpl extends DiagramContainerElementImpl<DrawingGra
 		Diagram newDiagram = newDiagramResource.getFactory().makeNewDiagram(diagramSpecification);
 		newDiagramResource.setResourceData(newDiagram);
 		newDiagram.setResource(newDiagramResource);
+		diagramSpecification.addToExampleDiagrams(newDiagram);
 
 		newDiagram.setTitle(diagramTitle);
 

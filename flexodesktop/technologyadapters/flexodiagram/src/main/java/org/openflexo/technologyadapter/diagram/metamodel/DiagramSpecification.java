@@ -83,7 +83,7 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 		File diagramSpecificationXMLFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 		DiagramSpecificationResource dsRes = DiagramSpecificationResourceImpl.makeDiagramSpecificationResource(uri,
 				diagramSpecificationDirectory, diagramSpecificationXMLFile, serviceManager);
-		DiagramSpecification diagramSpecification = new DiagramSpecification();
+		DiagramSpecification diagramSpecification = new DiagramSpecification(serviceManager);
 		dsRes.setResourceData(diagramSpecification);
 		diagramSpecification.setResource(dsRes);
 		try {
@@ -95,10 +95,15 @@ public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaMo
 	}
 
 	// Used during deserialization, do not use it
-	public DiagramSpecification() {
+	public DiagramSpecification(FlexoServiceManager serviceManager) {
 		super();
 		exampleDiagrams = new ArrayList<Diagram>();
 		palettes = new ArrayList<DiagramPalette>();
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return getResource().getServiceManager();
 	}
 
 	/**

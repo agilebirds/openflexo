@@ -23,8 +23,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
@@ -57,7 +57,7 @@ public class DeleteDiagram extends FlexoAction<DeleteDiagram, Diagram, FlexoObje
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(DeleteDiagram.actionType, Diagram.class);
+		FlexoObjectImpl.addActionForClass(DeleteDiagram.actionType, Diagram.class);
 	}
 
 	DeleteDiagram(Diagram focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {

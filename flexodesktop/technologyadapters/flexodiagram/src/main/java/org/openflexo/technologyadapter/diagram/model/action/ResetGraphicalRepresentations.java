@@ -24,14 +24,13 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
-import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 
 /**
  * This action reset all graphical representations found in view to conform to those described in EditionPattern
@@ -56,19 +55,19 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 		}
 
 		@Override
-		public boolean isVisibleForSelection(DiagramElement<?> view, Vector<DiagramElement<?>> globalSelection) {
+		public boolean isVisibleForSelection(DiagramElement<?> element, Vector<DiagramElement<?>> globalSelection) {
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(DiagramElement<?> view, Vector<DiagramElement<?>> globalSelection) {
-			return view instanceof DiagramRootPane;
+		public boolean isEnabledForSelection(DiagramElement<?> element, Vector<DiagramElement<?>> globalSelection) {
+			return element instanceof Diagram;
 		}
 
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ResetGraphicalRepresentations.actionType, DiagramRootPane.class);
+		FlexoObjectImpl.addActionForClass(ResetGraphicalRepresentations.actionType, Diagram.class);
 	}
 
 	ResetGraphicalRepresentations(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
@@ -76,24 +75,26 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Reset graphical representations for view");
 
-		DiagramRootPane view = null;
+		Diagram diagram = null;
 
-		if (getFocusedObject() instanceof DiagramRootPane) {
-			view = (DiagramRootPane) getFocusedObject();
+		if (getFocusedObject() instanceof Diagram) {
+			diagram = (Diagram) getFocusedObject();
 		}
 
-		if (view != null) {
-			processElement(view);
+		if (diagram != null) {
+			processElement(diagram);
 		}
 
 	}
 
 	private void processElement(DiagramElement<?> o) {
 		if (o instanceof DiagramElement) {
-			((DiagramElement) o).resetGraphicalRepresentation();
+			// TODO
+			logger.warning("Please implement resetGraphicalRepresentation() for DiagramElement<?>");
+			// ((DiagramElement) o).resetGraphicalRepresentation();
 		}
 		/*if (o instanceof DiagramShape) {
 			DiagramShape shape = (DiagramShape) o;
@@ -115,16 +116,14 @@ public class ResetGraphicalRepresentations extends FlexoAction<ResetGraphicalRep
 						GraphicalRepresentation.Parameters.absoluteTextX, GraphicalRepresentation.Parameters.absoluteTextY);
 			}
 		}*/
-		for (DiagramElement<?> child : o.getChilds()) {
-			processElement(child);
+		if (o instanceof DiagramContainerElement) {
+			for (DiagramElement<?> child : ((DiagramContainerElement<?>) o).getShapes()) {
+				processElement(child);
+			}
+			for (DiagramElement<?> child : ((DiagramContainerElement<?>) o).getConnectors()) {
+				processElement(child);
+			}
 		}
-	}
-
-	public FlexoProject getProject() {
-		if (getFocusedObject() != null) {
-			return getFocusedObject().getProject();
-		}
-		return null;
 	}
 
 }

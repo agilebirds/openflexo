@@ -24,14 +24,13 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
-import org.openflexo.technologyadapter.diagram.model.DiagramRootPane;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 /**
@@ -69,9 +68,9 @@ public class RefreshDiagramElement extends FlexoAction<RefreshDiagramElement, Di
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramRootPane.class);
-		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramShape.class);
-		FlexoModelObject.addActionForClass(RefreshDiagramElement.actionType, DiagramConnector.class);
+		FlexoObjectImpl.addActionForClass(RefreshDiagramElement.actionType, Diagram.class);
+		FlexoObjectImpl.addActionForClass(RefreshDiagramElement.actionType, DiagramShape.class);
+		FlexoObjectImpl.addActionForClass(RefreshDiagramElement.actionType, DiagramConnector.class);
 	}
 
 	RefreshDiagramElement(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
@@ -79,19 +78,22 @@ public class RefreshDiagramElement extends FlexoAction<RefreshDiagramElement, Di
 	}
 
 	@Override
-	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
+	protected void doAction(Object context) throws NotImplementedException, InvalidParameterException {
 		logger.info("Refresh view elements");
 		refresh(getFocusedObject());
 
 	}
 
 	private void refresh(DiagramElement<?> objectToBeRefreshed) {
-		if (objectToBeRefreshed instanceof DiagramElement) {
+		/*if (objectToBeRefreshed instanceof DiagramElement) {
 			((DiagramElement) objectToBeRefreshed).resetGraphicalRepresentation();
 		}
 		for (DiagramElement<?> o : objectToBeRefreshed.getChilds()) {
 			refresh(o);
-		}
+		}*/
+		// TODO
+		logger.warning("Please implement refresh() for DiagramElement<?>");
+
 	}
 
 }

@@ -105,6 +105,11 @@ public class DiagramPalette extends DiagramPaletteObject implements ResourceData
 		}*/
 	}
 
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return getResource().getServiceManager();
+	}
+
 	public DiagramPaletteFactory getFactory() {
 		return factory;
 	}

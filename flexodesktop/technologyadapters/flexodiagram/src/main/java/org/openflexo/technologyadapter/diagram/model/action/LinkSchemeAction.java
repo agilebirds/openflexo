@@ -174,10 +174,14 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals(DiagramEditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
-			return getFromShape().getEditionPatternInstance();
+			// TODO
+			logger.warning("Please implement getValue() for target");
+			// return getFromShape().getEditionPatternInstance();
 		}
 		if (variable.getVariableName().equals(DiagramEditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
-			return getToShape().getEditionPatternInstance();
+			// TODO
+			logger.warning("Please implement getValue() for target");
+			// return getToShape().getEditionPatternInstance();
 		}
 		return super.getValue(variable);
 	}

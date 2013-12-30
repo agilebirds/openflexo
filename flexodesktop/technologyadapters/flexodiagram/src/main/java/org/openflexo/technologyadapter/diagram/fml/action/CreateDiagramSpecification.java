@@ -19,11 +19,12 @@
  */
 package org.openflexo.technologyadapter.diagram.fml.action;
 
+import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -60,10 +61,12 @@ public class CreateDiagramSpecification extends FlexoAction<CreateDiagramSpecifi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(CreateDiagramSpecification.actionType, ViewPoint.class);
+		FlexoObjectImpl.addActionForClass(CreateDiagramSpecification.actionType, ViewPoint.class);
 	}
 
 	public String newDiagramSpecificationName;
+	public String newDiagramSpecificationURI;
+	public File newDiagramSpecificationDirectory;
 	public String newDiagramSpecificationDescription;
 	private DiagramSpecification newDiagramSpecification;
 
@@ -74,9 +77,10 @@ public class CreateDiagramSpecification extends FlexoAction<CreateDiagramSpecifi
 	@Override
 	protected void doAction(Object context) throws IOFlexoException {
 
-		newDiagramSpecification = DiagramSpecification.newDiagramSpecification(newDiagramSpecificationName, getFocusedObject());
+		newDiagramSpecification = DiagramSpecification.newDiagramSpecification(newDiagramSpecificationName, newDiagramSpecificationURI,
+				newDiagramSpecificationDirectory, getFocusedObject().getServiceManager());
 		newDiagramSpecification.setDescription(newDiagramSpecificationDescription);
-		getFocusedObject().addToVirtualModels(newDiagramSpecification);
+		// getFocusedObject().addToVirtualModels(newDiagramSpecification);
 
 	}
 
@@ -90,6 +94,7 @@ public class CreateDiagramSpecification extends FlexoAction<CreateDiagramSpecifi
 
 	public String errorMessage;
 
+	@Override
 	public boolean isValid() {
 		if (!isNewVirtualModelNameValid()) {
 			return false;
