@@ -19,25 +19,29 @@
  */
 package org.openflexo.foundation.view;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.util.logging.Level;
 
+import org.junit.Test;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResourceManager;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
@@ -45,12 +49,14 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.logging.FlexoLoggingManager;
 
-public class TestCityMappingView extends FlexoTestCase {
+public class TestCityMappingView extends OpenflexoRunTimeTestCase {
 
 	public static FlexoProject project;
 	private static FlexoEditor editor;
@@ -126,6 +132,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		instanciateTestServiceManager();
 	}
 
+	@Test
 	public void test1CreateProject() {
 		editor = createProject("TestCreateView");
 		project = editor.getProject();
@@ -152,12 +159,14 @@ public class TestCityMappingView extends FlexoTestCase {
 
 	}
 
+	@Test
 	public void test2LoadCityMappingViewPoint() {
 		cityMappingVP = loadViewPoint("http://www.thalesgroup.com/openflexo/emf/CityMapping");
 		assertNotNull(cityMappingVP);
 		System.out.println("Found view point in " + cityMappingVP.getResource().getFile());
 	}
 
+	@Test
 	public void test3CreateViewFolder() {
 		AddRepositoryFolder addRepositoryFolder = AddRepositoryFolder.actionType.makeNewAction(project.getViewLibrary().getRootFolder(),
 				null, editor);
@@ -168,6 +177,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		assertTrue(viewFolder.getFile().exists());
 	}
 
+	@Test
 	public void test4CreateView() {
 		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
 		addView.newViewName = "TestNewView";
@@ -184,6 +194,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		assertTrue(newView.getResource().getFile().exists());
 	}
 
+	@Test
 	public void test5ReloadProject() {
 		editor = reloadProject(project.getProjectDirectory());
 		project = editor.getProject();
@@ -202,6 +213,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		assertEquals(project, view.getProject());
 	}
 
+	@Test
 	public void test6CreateVirtualModelInstance() {
 		System.out.println("Create virtual model instance, view=" + view + " editor=" + editor);
 

@@ -19,187 +19,160 @@
  */
 package org.openflexo.foundation.xml;
 
-import java.lang.reflect.Modifier;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.cg.GeneratedCode;
-import org.openflexo.foundation.cg.GeneratedDoc;
-import org.openflexo.foundation.dkv.DKVModel;
-import org.openflexo.foundation.dm.DMModel;
-import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
-import org.openflexo.foundation.ie.menu.FlexoNavigationMenu;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.toc.TOCData;
-import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.FlexoWorkflow;
-import org.openflexo.foundation.ws.FlexoWSLibrary;
-import org.openflexo.foundation.xml.XMLSerializationService.ClassModels;
-import org.openflexo.toolbox.FlexoVersion;
-import org.openflexo.xmlcode.ModelEntity;
-import org.openflexo.xmlcode.ModelProperty;
-import org.openflexo.xmlcode.XMLMapping;
+import junit.framework.TestCase;
 
-public class TestXMLMappings extends FlexoTestCase {
+@Deprecated
+public class TestXMLMappings extends TestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestXMLMappings.class.getPackage().getName());
 
-	private XMLSerializationService xmlMappings;
+	/*	private XMLSerializationService xmlMappings;
 
-	public TestXMLMappings() {
-		super("TestXMLMappings");
-	}
+		public TestXMLMappings() {
+			super("TestXMLMappings");
+		}
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		xmlMappings = XMLSerializationService.createInstance();
-		xmlMappings.initialize();
-	}
+		@Override
+		protected void setUp() throws Exception {
+			super.setUp();
+			xmlMappings = XMLSerializationService.createInstance();
+			xmlMappings.initialize();
+		}
 
-	public void testRMMappings() {
-		checkClassModels(FlexoProject.class);
-	}
+		public void testRMMappings() {
+			checkClassModels(FlexoProject.class);
+		}
 
-	public void testWorkflowMappings() {
-		checkClassModels(FlexoWorkflow.class);
-	}
+		public void testWorkflowMappings() {
+			checkClassModels(FlexoWorkflow.class);
+		}
 
-	public void testProcessMappings() {
-		checkClassModels(FlexoProcess.class);
-	}
+		public void testProcessMappings() {
+			checkClassModels(FlexoProcess.class);
+		}
 
-	public void testComponentMappings() {
-		checkClassModels(IEWOComponent.class);
-	}
+		public void testComponentMappings() {
+			checkClassModels(IEWOComponent.class);
+		}
 
-	public void testNavigationMenuMappings() {
-		checkClassModels(FlexoNavigationMenu.class);
-	}
+		public void testNavigationMenuMappings() {
+			checkClassModels(FlexoNavigationMenu.class);
+		}
 
-	public void testComponentLibraryMappings() {
-		checkClassModels(FlexoComponentLibrary.class);
-	}
+		public void testComponentLibraryMappings() {
+			checkClassModels(FlexoComponentLibrary.class);
+		}
 
-	public void testDataModelMappings() {
-		checkClassModels(DMModel.class);
-	}
+		public void testDataModelMappings() {
+			checkClassModels(DMModel.class);
+		}
 
-	public void testDKVMappings() {
-		checkClassModels(DKVModel.class);
-	}
+		public void testDKVMappings() {
+			checkClassModels(DKVModel.class);
+		}
 
-	public void testWSLibraryMappings() {
-		checkClassModels(FlexoWSLibrary.class);
-	}
+		public void testWSLibraryMappings() {
+			checkClassModels(FlexoWSLibrary.class);
+		}
 
-	public void testGeneratedCodeMappings() {
-		checkClassModels(GeneratedCode.class);
-	}
+		public void testGeneratedCodeMappings() {
+			checkClassModels(GeneratedCode.class);
+		}
 
-	public void testGeneratedDocMappings() {
-		checkClassModels(GeneratedDoc.class);
-	}
+		public void testGeneratedDocMappings() {
+			checkClassModels(GeneratedDoc.class);
+		}
 
-	public void testTOCDataMappings() {
-		checkClassModels(TOCData.class);
-	}
+		public void testTOCDataMappings() {
+			checkClassModels(TOCData.class);
+		}
 
-	public void testViewPointMappings() {
-		checkClassModels(ViewPoint.class);
-	}
+		public void testViewPointMappings() {
+			checkClassModels(ViewPoint.class);
+		}
 
-	public void testVirtualModelMappings() {
-		checkClassModels(VirtualModel.class);
-	}
+		public void testVirtualModelMappings() {
+			checkClassModels(VirtualModel.class);
+		}
 
-	public void testDiagramSpecificationModelMappings() {
-		checkClassModels(DiagramSpecification.class);
-	}
+		public void testDiagramSpecificationModelMappings() {
+			checkClassModels(DiagramSpecification.class);
+		}
 
-	public void testExampleDiagramModelMappings() {
-		checkClassModels(ExampleDiagram.class);
-	}
+		public void testExampleDiagramModelMappings() {
+			checkClassModels(ExampleDiagram.class);
+		}
 
-	public void testDiagramPaletteModelMappings() {
-		checkClassModels(DiagramPalette.class);
-	}
+		public void testDiagramPaletteModelMappings() {
+			checkClassModels(DiagramPalette.class);
+		}
 
-	public void testViewMappings() {
-		checkClassModels(View.class);
-	}
+		public void testViewMappings() {
+			checkClassModels(View.class);
+		}
 
-	public void testVirtualModelInstanceMappings() {
-		checkClassModels(VirtualModelInstance.class);
-	}
+		public void testVirtualModelInstanceMappings() {
+			checkClassModels(VirtualModelInstance.class);
+		}
 
-	public void testDiagramMappings() {
-		checkClassModels(Diagram.class);
-	}
+		public void testDiagramMappings() {
+			checkClassModels(Diagram.class);
+		}
 
-	private void checkClassModels(Class aClass) {
-		boolean testFails = false;
-		ClassModels classModels = xmlMappings.getModelsForClass(aClass);
-		logger.info("-----------> Check class models for " + aClass.getName());
-		for (FlexoVersion version : classModels.getAvailableVersions()) {
-			try {
-				XMLMapping mapping = xmlMappings.getMappingForClassAndVersion(aClass, version);
-				if (mapping != null) {
-					logger.info("Successfully decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
-				} else {
-					logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
+		private void checkClassModels(Class aClass) {
+			boolean testFails = false;
+			ClassModels classModels = xmlMappings.getModelsForClass(aClass);
+			logger.info("-----------> Check class models for " + aClass.getName());
+			for (FlexoVersion version : classModels.getAvailableVersions()) {
+				try {
+					XMLMapping mapping = xmlMappings.getMappingForClassAndVersion(aClass, version);
+					if (mapping != null) {
+						logger.info("Successfully decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
+					} else {
+						logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
+						testFails = true;
+					}
+					checkXMLMapping(mapping);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version + " " + e.getMessage());
 					testFails = true;
 				}
-				checkXMLMapping(mapping);
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version + " " + e.getMessage());
-				testFails = true;
+			}
+			if (testFails) {
+				fail();
 			}
 		}
-		if (testFails) {
-			fail();
-		}
-	}
 
-	protected void checkXMLMapping(XMLMapping mapping) throws Exception {
-		Iterator<ModelEntity> i = mapping.allModelEntitiesStoredByXMLTags();
-		while (i.hasNext()) {
-			ModelEntity me = i.next();
-			checkModelEntity(me);
-		}
-	}
-
-	private void checkModelEntity(ModelEntity me) throws Exception {
-		checkProperties(me);
-		checkAbstracticity(me);
-	}
-
-	private void checkProperties(ModelEntity me) {
-		Enumeration<ModelProperty> en = me.getModelProperties();
-		while (en.hasMoreElements()) {
-			ModelProperty mp = en.nextElement();
-			mp.getKeyValueProperty();
+		protected void checkXMLMapping(XMLMapping mapping) throws Exception {
+			Iterator<ModelEntity> i = mapping.allModelEntitiesStoredByXMLTags();
+			while (i.hasNext()) {
+				ModelEntity me = i.next();
+				checkModelEntity(me);
+			}
 		}
 
-	}
-
-	private void checkAbstracticity(ModelEntity me) throws Exception {
-		String className = me.getName();
-		Class<?> klass = Class.forName(className);
-		if (!me.isAbstract() && Modifier.isAbstract(klass.getModifiers())) {
-			fail(me.getName() + " is declared as not abstract but class is not instanciable");
+		private void checkModelEntity(ModelEntity me) throws Exception {
+			checkProperties(me);
+			checkAbstracticity(me);
 		}
-	}
+
+		private void checkProperties(ModelEntity me) {
+			Enumeration<ModelProperty> en = me.getModelProperties();
+			while (en.hasMoreElements()) {
+				ModelProperty mp = en.nextElement();
+				mp.getKeyValueProperty();
+			}
+
+		}
+
+		private void checkAbstracticity(ModelEntity me) throws Exception {
+			String className = me.getName();
+			Class<?> klass = Class.forName(className);
+			if (!me.isAbstract() && Modifier.isAbstract(klass.getModifiers())) {
+				fail(me.getName() + " is declared as not abstract but class is not instanciable");
+			}
+		}*/
 }

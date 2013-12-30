@@ -19,23 +19,22 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationReport;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
+import org.openflexo.foundation.viewpoint.ViewPointObject.ViewPointObjectImpl.BindingIsRequiredAndMustBeValid;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 
-public class TestViewpoints extends FlexoTestCase {
+public class TestViewpoints extends ViewPointTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
-
-	public TestViewpoints(String name) {
-		super(name);
-	}
+	protected static final Logger logger = Logger.getLogger(ViewPointTestCase.class.getPackage().getName());
 
 	/**
 	 * Instantiate test resource center

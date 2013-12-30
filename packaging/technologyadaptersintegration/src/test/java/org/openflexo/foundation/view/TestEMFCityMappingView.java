@@ -28,50 +28,51 @@
  */
 package org.openflexo.foundation.view;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Vector;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
-import org.openflexo.foundation.view.diagram.DiagramModelSlotInstanceConfiguration;
-import org.openflexo.foundation.view.diagram.action.CreateDiagram;
-import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 
 /**
  * Test instanciation of City Mapping View with 2 EMF
  * 
  * @author gbesancon
  */
-public class TestEMFCityMappingView extends FlexoTestCase {
+public class TestEMFCityMappingView extends OpenflexoRunTimeTestCase {
 
 	/**
 	 * Follow the link.
 	 * 
 	 * @see junit.framework.TestCase#setUp()
 	 */
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@BeforeClass
+	protected static void setUpClass() throws Exception {
 		instanciateTestServiceManager();
 	}
 
 	/**
 	 * Test creating Diagram and model from scratch.
 	 */
+	@Test
 	public void testEMFCityMapping() {
 		// CreateProject
 		FlexoEditor editor = createProject("TestCreateView");

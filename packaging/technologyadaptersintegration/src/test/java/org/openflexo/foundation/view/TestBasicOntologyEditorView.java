@@ -19,19 +19,23 @@
  */
 package org.openflexo.foundation.view;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.action.CreateView;
-import org.openflexo.foundation.view.diagram.action.CreateDiagram;
-import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 
-public class TestBasicOntologyEditorView extends FlexoTestCase {
+public class TestBasicOntologyEditorView extends OpenflexoRunTimeTestCase {
 
 	public static FlexoProject project;
 	private static FlexoEditor editor;
@@ -42,6 +46,7 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 	/**
 	 * Instantiate test resource center
 	 */
+	@Test
 	public void test0InstantiateResourceCenter() {
 
 		log("test0InstantiateResourceCenter()");
@@ -51,6 +56,7 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		instanciateTestServiceManager();
 	}
 
+	@Test
 	public void test1CreateProject() {
 		editor = createProject("TestCreateView");
 		project = editor.getProject();
@@ -77,12 +83,14 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 
 	}
 
+	@Test
 	public void test2LoadBasicOntologyEditorViewPoint() {
 		basicOntologyEditor = loadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 		assertNotNull(basicOntologyEditor);
 		System.out.println("Found view point in " + basicOntologyEditor.getResource().getFile());
 	}
 
+	@Test
 	public void test3CreateViewFolder() {
 		AddRepositoryFolder addRepositoryFolder = AddRepositoryFolder.actionType.makeNewAction(project.getViewLibrary().getRootFolder(),
 				null, editor);
@@ -93,6 +101,7 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		assertTrue(viewFolder.getFile().exists());
 	}
 
+	@Test
 	public void test4CreateView() {
 		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
 		addView.newViewName = "TestNewView";
@@ -109,6 +118,7 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		assertTrue(newView.getResource().getFile().exists());
 	}
 
+	@Test
 	public void test5ReloadProject() {
 		editor = reloadProject(project.getProjectDirectory());
 		project = editor.getProject();
@@ -143,6 +153,7 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		assertTrue(newView.getResource().getFile().exists());
 	}*/
 
+	@Test
 	public void test6CreateDiagram() {
 		System.out.println("Create diagram, view=" + view + " editor=" + editor);
 		System.out.println("editor project = " + editor.getProject());

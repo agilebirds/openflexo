@@ -1,27 +1,28 @@
 package org.openflexo.foundation.viewpoint;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoTestCase;
+import org.junit.Test;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.VirtualModelResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
+import org.openflexo.technologyadapter.diagram.rm.DiagramResource;
 
-public class TestLoadViewPoints extends FlexoTestCase {
+public class TestLoadViewPoints extends ViewPointTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestLoadViewPoints.class.getPackage().getName());
-
-	public TestLoadViewPoints(String name) {
-		super(name);
-	}
 
 	/**
 	 * Instantiate test resource center
 	 */
+	@Test
 	public void test0InstantiateResourceCenter() {
 
 		log("test0InstantiateResourceCenter()");
@@ -49,16 +50,16 @@ public class TestLoadViewPoints extends FlexoTestCase {
 
 		for (FlexoResource<?> r : vpRes.getContents()) {
 			assertTrue(r instanceof VirtualModelResource);
-			VirtualModelResource<?> vmRes = (VirtualModelResource<?>) r;
+			VirtualModelResource vmRes = (VirtualModelResource) r;
 			VirtualModel vm = vmRes.getVirtualModel();
 			assertNotNull(vm);
 			assertTrue(vmRes.isLoaded());
 			for (FlexoResource<?> r2 : vmRes.getContents()) {
-				assertTrue(r2 instanceof ExampleDiagramResource || r2 instanceof DiagramPaletteResource);
-				if (r2 instanceof ExampleDiagramResource) {
-					ExampleDiagramResource edRes = (ExampleDiagramResource) r2;
+				assertTrue(r2 instanceof DiagramResource || r2 instanceof DiagramPaletteResource);
+				if (r2 instanceof DiagramResource) {
+					DiagramResource edRes = (DiagramResource) r2;
 					assertFalse(edRes.isLoaded());
-					ExampleDiagram ed = edRes.getExampleDiagram();
+					Diagram ed = edRes.getDiagram();
 					assertNotNull(ed);
 					assertTrue(edRes.isLoaded());
 				}
@@ -74,34 +75,42 @@ public class TestLoadViewPoints extends FlexoTestCase {
 
 	}
 
+	@Test
 	public void test1LoadBasicOntology() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 	}
 
+	@Test
 	public void test2LoadBDN() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/BenefitDependancyNetwork.owl");
 	}
 
+	@Test
 	public void test3LoadOC() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl");
 	}
 
+	@Test
 	public void test4LoadOM() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalMap.owl");
 	}
 
+	@Test
 	public void test5LoadOUD() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
 	}
 
+	@Test
 	public void test6LoadSKOS() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl");
 	}
 
+	@Test
 	public void test7LoadUMLPackage() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/PackageDiagram.owl");
 	}
 
+	@Test
 	public void test8LoadUMLUseCases() {
 		testLoadViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl");
 	}

@@ -14,6 +14,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
+			<artifactId>flexodiagram</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
 			<artifactId>emfconnector</artifactId>
 			<scope>runtime</scope>
 		</dependency>
