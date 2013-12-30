@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.diagram.fml.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -37,7 +38,10 @@ import org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 
 /**
  * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or
@@ -89,15 +93,19 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		drawingObjectEntries = new Vector<DrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
-		for (GRTemplate o : getFocusedObject().getDescendants()) {
-			if (o instanceof GRShapeTemplate) {
-				GRShapeTemplate shape = (GRShapeTemplate) o;
+
+		List<? extends DiagramElement<?>> elements = (getFocusedObject() instanceof DiagramContainerElement ? ((DiagramContainerElement<?>) getFocusedObject())
+				.getDescendants() : Collections.singletonList(getFocusedObject()));
+
+		for (DiagramElement<?> o : elements) {
+			if (o instanceof DiagramShape) {
+				DiagramShape shape = (DiagramShape) o;
 				String shapeRoleName = "shape" + (shapeIndex > 1 ? shapeIndex : "");
 				drawingObjectEntries.add(new DrawingObjectEntry(shape, shapeRoleName));
 				shapeIndex++;
 			}
-			if (o instanceof GRConnectorTemplate) {
-				GRConnectorTemplate connector = (GRConnectorTemplate) o;
+			if (o instanceof DiagramConnector) {
+				DiagramConnector connector = (DiagramConnector) o;
 				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
 				drawingObjectEntries.add(new DrawingObjectEntry(connector, connectorRoleName));
 				connectorIndex++;
@@ -153,10 +161,10 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public class DrawingObjectEntry {
 		private boolean selectThis;
-		public GRTemplate graphicalObject;
+		public DiagramElement<?> graphicalObject;
 		public String patternRoleName;
 
-		public DrawingObjectEntry(GRTemplate graphicalObject, String patternRoleName) {
+		public DrawingObjectEntry(DiagramElement<?> graphicalObject, String patternRoleName) {
 			super();
 			this.graphicalObject = graphicalObject;
 			this.patternRoleName = patternRoleName;
@@ -195,7 +203,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return returned;
 	}
 
-	public DrawingObjectEntry getEntry(GRTemplate o) {
+	public DrawingObjectEntry getEntry(DiagramElement<?> o) {
 		for (DrawingObjectEntry e : drawingObjectEntries) {
 			if (e.graphicalObject == o) {
 				return e;

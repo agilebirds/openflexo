@@ -22,10 +22,8 @@ package org.openflexo.technologyadapter.diagram.model;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.technologyadapter.diagram.fml.action.GRConnectorTemplate;
 
-public abstract class DiagramConnectorImpl extends DiagramElementImpl<ConnectorGraphicalRepresentation> implements GRConnectorTemplate,
-		DiagramConnector {
+public abstract class DiagramConnectorImpl extends DiagramElementImpl<ConnectorGraphicalRepresentation> implements DiagramConnector {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 

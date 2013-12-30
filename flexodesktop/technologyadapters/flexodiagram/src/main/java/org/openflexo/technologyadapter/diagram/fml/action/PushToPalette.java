@@ -21,6 +21,7 @@ package org.openflexo.technologyadapter.diagram.fml.action;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -50,6 +51,8 @@ import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.JavaUtils;
@@ -244,11 +247,11 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 
 	public class DrawingObjectEntry {
 		private boolean selectThis;
-		public GRTemplate graphicalObject;
+		public DiagramElement<?> graphicalObject;
 		public String elementName;
 		public GraphicalElementPatternRole<?, ?> patternRole;
 
-		public DrawingObjectEntry(GRTemplate graphicalObject, String elementName) {
+		public DrawingObjectEntry(DiagramElement<?> graphicalObject, String elementName) {
 			super();
 			this.graphicalObject = graphicalObject;
 			this.elementName = elementName;
@@ -271,7 +274,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 
 		public void setSelectThis(boolean aFlag) {
 			selectThis = aFlag;
-			if (patternRole == null && graphicalObject instanceof GRShapeTemplate) {
+			if (patternRole == null && graphicalObject instanceof DiagramShape) {
 				GraphicalElementPatternRole<?, ?> parentEntryPatternRole = getParentEntry().patternRole;
 				for (ShapePatternRole r : editionPattern.getPatternRoles(ShapePatternRole.class)) {
 					if (r.getParentShapePatternRole() == parentEntryPatternRole && patternRole == null) {
@@ -286,9 +289,9 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 		}
 
 		public List<? extends GraphicalElementPatternRole<?, ?>> getAvailablePatternRoles() {
-			if (graphicalObject instanceof GRShapeTemplate) {
+			if (graphicalObject instanceof DiagramShape) {
 				return editionPattern.getPatternRoles(ShapePatternRole.class);
-			} else if (graphicalObject instanceof GRConnectorTemplate) {
+			} else if (graphicalObject instanceof DiagramConnector) {
 				return editionPattern.getPatternRoles(ConnectorPatternRole.class);
 			}
 			return null;
@@ -305,7 +308,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 		return returned;
 	}
 
-	public DrawingObjectEntry getEntry(GRTemplate o) {
+	public DrawingObjectEntry getEntry(DiagramElement<?> o) {
 		for (DrawingObjectEntry e : drawingObjectEntries) {
 			if (e.graphicalObject == o) {
 				return e;
@@ -327,16 +330,19 @@ public class PushToPalette extends FlexoAction<PushToPalette, DiagramShape, Diag
 		drawingObjectEntries.clear();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
-		for (GRTemplate o : getFocusedObject().getDescendants()) {
-			if (o instanceof GRShapeTemplate) {
-				GRShapeTemplate shape = (GRShapeTemplate) o;
+		List<? extends DiagramElement<?>> elements = (getFocusedObject() instanceof DiagramContainerElement ? ((DiagramContainerElement<?>) getFocusedObject())
+				.getDescendants() : Collections.singletonList(getFocusedObject()));
+
+		for (DiagramElement<?> o : elements) {
+			if (o instanceof DiagramShape) {
+				DiagramShape shape = (DiagramShape) o;
 				String shapeRoleName = StringUtils.isEmpty(shape.getName()) ? "shape" + (shapeIndex > 1 ? shapeIndex : "") : shape
 						.getName();
 				drawingObjectEntries.add(new DrawingObjectEntry(shape, shapeRoleName));
 				shapeIndex++;
 			}
-			if (o instanceof GRConnectorTemplate) {
-				GRConnectorTemplate connector = (GRConnectorTemplate) o;
+			if (o instanceof DiagramConnector) {
+				DiagramConnector connector = (DiagramConnector) o;
 				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
 				drawingObjectEntries.add(new DrawingObjectEntry(connector, connectorRoleName));
 				connectorIndex++;

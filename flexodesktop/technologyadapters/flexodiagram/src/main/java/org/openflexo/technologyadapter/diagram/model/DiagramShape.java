@@ -29,7 +29,6 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.diagram.fml.action.GRShapeTemplate;
 
 /**
  * Represents a Shape in Openflexo build-in diagram technology<br>
@@ -41,7 +40,7 @@ import org.openflexo.technologyadapter.diagram.fml.action.GRShapeTemplate;
 @ModelEntity
 @ImplementationClass(DiagramShapeImpl.class)
 @XMLElement(xmlTag = "Shape")
-public interface DiagramShape extends DiagramContainerElement<ShapeGraphicalRepresentation>, GRShapeTemplate {
+public interface DiagramShape extends DiagramContainerElement<ShapeGraphicalRepresentation> {
 
 	// TODO: comment this when method clash in PAMELA will be solved
 	@Getter(value = GRAPHICAL_REPRESENTATION)

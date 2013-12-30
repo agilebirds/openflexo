@@ -29,12 +29,11 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.diagram.fml.action.GRConnectorTemplate;
 
 @ModelEntity
 @ImplementationClass(DiagramConnectorImpl.class)
 @XMLElement(xmlTag = "Connector")
-public interface DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation>, GRConnectorTemplate {
+public interface DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> {
 
 	public static final String START_SHAPE = "startShape";
 	public static final String END_SHAPE = "endShape";

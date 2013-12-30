@@ -45,6 +45,7 @@ import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.GraphicalElementPatternRole;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
+import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
 import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.JavaUtils;
@@ -389,8 +390,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (DrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
-							if (entry.graphicalObject instanceof GRShapeTemplate) {
-								GRShapeTemplate grShape = (GRShapeTemplate) entry.graphicalObject;
+							if (entry.graphicalObject instanceof DiagramShape) {
+								DiagramShape grShape = (DiagramShape) entry.graphicalObject;
 								ShapePatternRole newShapePatternRole = new ShapePatternRole(/*builder*/);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
@@ -418,8 +419,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
 							}
-							if (entry.graphicalObject instanceof GRConnectorTemplate) {
-								GRConnectorTemplate grConnector = (GRConnectorTemplate) entry.graphicalObject;
+							if (entry.graphicalObject instanceof DiagramConnector) {
+								DiagramConnector grConnector = (DiagramConnector) entry.graphicalObject;
 								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(/*builder*/);
 								newConnectorPatternRole.setPatternRoleName(entry.patternRoleName);
 								newConnectorPatternRole.setReadOnlyLabel(true);
