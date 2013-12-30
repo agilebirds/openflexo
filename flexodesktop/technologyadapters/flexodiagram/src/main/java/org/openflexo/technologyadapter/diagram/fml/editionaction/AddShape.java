@@ -31,6 +31,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -45,7 +46,8 @@ import org.openflexo.technologyadapter.diagram.fml.DiagramEditionScheme;
 import org.openflexo.technologyadapter.diagram.fml.DropScheme;
 import org.openflexo.technologyadapter.diagram.fml.ShapePatternRole;
 import org.openflexo.technologyadapter.diagram.model.Diagram;
-import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramFactory;
 import org.openflexo.technologyadapter.diagram.model.DiagramShape;
 import org.openflexo.toolbox.StringUtils;
 
@@ -82,9 +84,9 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 		return out.toString();
 	}
 
-	public DiagramElement<?> getContainer(EditionSchemeAction action) {
+	public DiagramContainerElement<?> getContainer(EditionSchemeAction action) {
 		if (getPatternRole() != null && !getPatternRole().getParentShapeAsDefinedInAction()) {
-			FlexoModelObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
+			FlexoObject returned = action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 			return action.getEditionPatternInstance().getPatternActor(getPatternRole().getParentShapePatternRole());
 		} else {
 			try {
@@ -112,21 +114,21 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 		return null;
 	}
 
-	private DataBinding<DiagramElement<?>> container;
+	private DataBinding<DiagramContainerElement<?>> container;
 
-	public DataBinding<DiagramElement<?>> getContainer() {
+	public DataBinding<DiagramContainerElement<?>> getContainer() {
 		if (container == null) {
-			container = new DataBinding<DiagramElement<?>>(this, DiagramElement.class, BindingDefinitionType.GET);
+			container = new DataBinding<DiagramContainerElement<?>>(this, DiagramContainerElement.class, BindingDefinitionType.GET);
 			container.setBindingName("container");
 		}
 		return container;
 	}
 
-	public void setContainer(DataBinding<DiagramElement<?>> container) {
+	public void setContainer(DataBinding<DiagramContainerElement<?>> container) {
 		if (container != null) {
 			container.setOwner(this);
 			container.setBindingName("container");
-			container.setDeclaredType(DiagramElement.class);
+			container.setDeclaredType(DiagramContainerElement.class);
 			container.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.container = container;
@@ -153,26 +155,27 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	@Override
 	public DiagramShape performAction(EditionSchemeAction action) {
-		Diagram diagram = (Diagram) action.retrieveVirtualModelInstance();
-		DiagramShape newShape = new DiagramShape(diagram);
+		DiagramContainerElement<?> container = getContainer(action);
+		Diagram diagram = container.getDiagram();
+
+		DiagramFactory factory = diagram.getDiagramFactory();
+		DiagramShape newShape = factory.newInstance(DiagramShape.class);
 
 		GraphicalRepresentation grToUse = null;
 
 		// If an overriden graphical representation is defined, use it
-		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
+		/*if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {
 			grToUse = action.getOverridingGraphicalRepresentation(getPatternRole());
-		} else if (getPatternRole().getGraphicalRepresentation() != null) {
+		} else*/if (getPatternRole().getGraphicalRepresentation() != null) {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ShapeGraphicalRepresentation newGR = diagram.getFactory().makeShapeGraphicalRepresentation();
+		ShapeGraphicalRepresentation newGR = factory.makeShapeGraphicalRepresentation();
 		newGR.setsWith(grToUse);
 		newShape.setGraphicalRepresentation(newGR);
 
 		// Register reference
 		newShape.registerEditionPatternReference(action.getEditionPatternInstance());
-
-		DiagramElement<?> container = getContainer(action);
 
 		if (container == null) {
 			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action)
@@ -180,7 +183,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 			return null;
 		}
 
-		container.addToChilds(newShape);
+		container.addToShapes(newShape);
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added shape " + newShape + " under " + container);
@@ -194,7 +197,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 	public void finalizePerformAction(EditionSchemeAction action, DiagramShape newShape) {
 		super.finalizePerformAction(action, newShape);
 		// Be sure that the newly created shape is updated
-		newShape.update();
+		// newShape.update();
 	}
 
 	public static class AddShapeActionMustAdressAValidShapePatternRole extends
@@ -207,7 +210,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 		public ValidationIssue<AddShapeActionMustAdressAValidShapePatternRole, AddShape> applyValidation(AddShape action) {
 			if (action.getPatternRole() == null) {
 				Vector<FixProposal<AddShapeActionMustAdressAValidShapePatternRole, AddShape>> v = new Vector<FixProposal<AddShapeActionMustAdressAValidShapePatternRole, AddShape>>();
-				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+				for (ShapePatternRole pr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 					v.add(new SetsPatternRole(pr));
 				}
 				return new ValidationError<AddShapeActionMustAdressAValidShapePatternRole, AddShape>(this, action,
@@ -251,13 +254,13 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 				if (action.getEditionScheme() instanceof DropScheme) {
 					EditionPattern targetEditionPattern = ((DropScheme) action.getEditionScheme()).getTargetEditionPattern();
 					if (targetEditionPattern != null) {
-						for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+						for (ShapePatternRole pr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 							v.add(new SetsContainerToTargetShape(targetEditionPattern, pr));
 						}
 					}
 				}
 				v.add(new SetsContainerToTopLevel());
-				for (ShapePatternRole pr : action.getEditionPattern().getShapePatternRoles()) {
+				for (ShapePatternRole pr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 					v.add(new SetsContainerToShape(pr));
 				}
 				return new ValidationError<AddShapeActionMustHaveAValidContainer, AddShape>(this, action,
@@ -275,7 +278,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
+				action.setContainer(new DataBinding<DiagramContainerElement<?>>(DiagramEditionScheme.TOP_LEVEL));
 			}
 
 		}
@@ -296,7 +299,7 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramContainerElement<?>>(patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -322,7 +325,8 @@ public class AddShape extends AddSchemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramContainerElement<?>>(DiagramEditionScheme.TARGET + "."
+						+ patternRole.getPatternRoleName()));
 			}
 		}
 

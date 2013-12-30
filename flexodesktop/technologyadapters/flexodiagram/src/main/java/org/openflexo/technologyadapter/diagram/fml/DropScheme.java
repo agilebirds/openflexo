@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
-import org.openflexo.technologyadapter.diagram.model.DiagramElement;
+import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.toolbox.StringUtils;
 
 @FIBPanel("Fib/DropSchemePanel.fib")
@@ -159,7 +159,7 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {
-				((AddShape) newAction).setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
+				((AddShape) newAction).setContainer(new DataBinding<DiagramContainerElement<?>>(DiagramEditionScheme.TOP_LEVEL));
 			}
 		}
 		return newAction;

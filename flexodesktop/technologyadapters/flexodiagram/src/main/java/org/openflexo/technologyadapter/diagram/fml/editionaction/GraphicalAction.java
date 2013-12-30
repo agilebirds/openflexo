@@ -255,10 +255,10 @@ public class GraphicalAction extends EditionAction<TypedDiagramModelSlot, Diagra
 				return null;
 			} else {
 				Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>> v = new Vector<FixProposal<GraphicalActionMustHaveASubject, GraphicalAction>>();
-				for (ShapePatternRole pr : graphicalAction.getEditionPattern().getShapePatternRoles()) {
+				for (ShapePatternRole pr : graphicalAction.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 					v.add(new SetsPatternRoleForSubject(pr));
 				}
-				for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getConnectorPatternRoles()) {
+				for (ConnectorPatternRole pr : graphicalAction.getEditionPattern().getPatternRoles(ConnectorPatternRole.class)) {
 					v.add(new SetsPatternRoleForSubject(pr));
 				}
 				return new ValidationError<GraphicalActionMustHaveASubject, GraphicalAction>(this, graphicalAction,

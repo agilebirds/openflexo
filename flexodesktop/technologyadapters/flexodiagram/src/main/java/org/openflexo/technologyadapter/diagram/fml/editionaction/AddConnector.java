@@ -258,7 +258,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 	public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
 		super.finalizePerformAction(action, newConnector);
 		// Be sure that the newly created connector is updated
-		newConnector.update();
+		// newConnector.update();
 	}
 
 	public static class AddConnectorActionMustAdressAValidConnectorPatternRole extends
@@ -271,7 +271,7 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 		public ValidationIssue<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector> applyValidation(AddConnector action) {
 			if (action.getPatternRole() == null) {
 				Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>> v = new Vector<FixProposal<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>>();
-				for (ConnectorPatternRole pr : action.getEditionPattern().getConnectorPatternRoles()) {
+				for (ConnectorPatternRole pr : action.getEditionPattern().getPatternRoles(ConnectorPatternRole.class)) {
 					v.add(new SetsPatternRole(pr));
 				}
 				return new ValidationError<AddConnectorActionMustAdressAValidConnectorPatternRole, AddConnector>(this, action,
@@ -317,12 +317,12 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getFromTargetEditionPattern();
 					if (targetEditionPattern != null) {
-						for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+						for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 							v.add(new SetsStartingShapeToStartTargetShape(targetEditionPattern, spr));
 						}
 					}
 				}
-				for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+				for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 					v.add(new SetsStartingShapeToShape(spr));
 				}
 				return new ValidationError<AddConnectorActionMustHaveAValidStartingShape, AddConnector>(this, action,
@@ -395,12 +395,12 @@ public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 				if (action.getEditionScheme() instanceof LinkScheme) {
 					EditionPattern targetEditionPattern = ((LinkScheme) action.getEditionScheme()).getToTargetEditionPattern();
 					if (targetEditionPattern != null) {
-						for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+						for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 							v.add(new SetsEndingShapeToToTargetShape(targetEditionPattern, spr));
 						}
 					}
 				}
-				for (ShapePatternRole spr : action.getEditionPattern().getShapePatternRoles()) {
+				for (ShapePatternRole spr : action.getEditionPattern().getPatternRoles(ShapePatternRole.class)) {
 					v.add(new SetsEndingShapeToShape(spr));
 				}
 				return new ValidationError<AddConnectorActionMustHaveAValidEndingShape, AddConnector>(this, action,

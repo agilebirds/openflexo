@@ -28,7 +28,6 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext;
 import org.openflexo.foundation.viewpoint.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -127,46 +126,48 @@ public class AddDiagram extends DiagramAction<Diagram> {
 
 	@Override
 	public Diagram performAction(EditionSchemeAction action) {
-		Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
+		// TODO: reimplement this
+		logger.warning("AddDiagram not implemented yet");
+		/*Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
 		ViewResource viewResource = initialDiagram.getView().getResource();
 		org.openflexo.technologyadapter.diagram.model.action.CreateDiagram addDiagramAction = org.openflexo.technologyadapter.diagram.model.action.CreateDiagram.actionType
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
 		addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
 		addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
 		addDiagramAction.skipChoosePopup = true;
-		addDiagramAction.doAction();
-		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
-			Diagram newDiagram = addDiagramAction.getNewDiagram();
-			/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
-			if (shapePatternRole == null) {
-				logger.warning("Sorry, shape pattern role is undefined");
-				return newShema;
-			}
-			// logger.info("ShapeSpecification pattern role: " + shapePatternRole);
-			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
-			DiagramShape newShape = new DiagramShape(newShema);
-			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {
-				DiagramShape primaryShape = (DiagramShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
-				newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
-			} else if (shapePatternRole.getGraphicalRepresentation() != null) {
-				newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
-			}
-			// Register reference
-			newShape.registerEditionPatternReference(newEditionPatternInstance, shapePatternRole);
-			newShema.addToChilds(newShape);
-			newEditionPatternInstance.setObjectForPatternRole(newShape, shapePatternRole);
-			// Duplicates all other pattern roles
-			for (PatternRole role : getEditionPattern().getPatternRoles()) {
-				if (role != action.getPatternRole() && role != shapePatternRole) {
-					FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
-					logger.info("Duplicate pattern actor for role " + role + " value=" + patternActor);
-					newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
-					patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
-				}
-			}*/
-
-			return newDiagram;
+		addDiagramAction.doAction();*/
+		// if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {
+		// Diagram newDiagram = addDiagramAction.getNewDiagram();
+		/*ShapePatternRole shapePatternRole = action.getShapePatternRole();
+		if (shapePatternRole == null) {
+			logger.warning("Sorry, shape pattern role is undefined");
+			return newShema;
 		}
+		// logger.info("ShapeSpecification pattern role: " + shapePatternRole);
+		EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+		DiagramShape newShape = new DiagramShape(newShema);
+		if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {
+			DiagramShape primaryShape = (DiagramShape) getEditionPatternInstance().getPatternActor(shapePatternRole);
+			newShape.setGraphicalRepresentation(primaryShape.getGraphicalRepresentation());
+		} else if (shapePatternRole.getGraphicalRepresentation() != null) {
+			newShape.setGraphicalRepresentation(shapePatternRole.getGraphicalRepresentation());
+		}
+		// Register reference
+		newShape.registerEditionPatternReference(newEditionPatternInstance, shapePatternRole);
+		newShema.addToChilds(newShape);
+		newEditionPatternInstance.setObjectForPatternRole(newShape, shapePatternRole);
+		// Duplicates all other pattern roles
+		for (PatternRole role : getEditionPattern().getPatternRoles()) {
+			if (role != action.getPatternRole() && role != shapePatternRole) {
+				FlexoModelObject patternActor = getEditionPatternInstance().getPatternActor(role);
+				logger.info("Duplicate pattern actor for role " + role + " value=" + patternActor);
+				newEditionPatternInstance.setObjectForPatternRole(patternActor, role);
+				patternActor.registerEditionPatternReference(newEditionPatternInstance, role);
+			}
+		}*/
+
+		// return newDiagram;
+		// }
 		return null;
 	}
 
