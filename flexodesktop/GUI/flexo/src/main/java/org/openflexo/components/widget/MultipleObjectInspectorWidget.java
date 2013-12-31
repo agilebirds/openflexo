@@ -30,7 +30,7 @@ import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.DefaultBrowserConfiguration.ObjectVisibilityDelegate;
 import org.openflexo.components.browser.DefaultBrowserElementFactory;
 import org.openflexo.components.widget.MultipleObjectSelector.ObjectSelectabilityDelegate;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.AbstractController;
@@ -160,14 +160,14 @@ public class MultipleObjectInspectorWidget<E extends FlexoObject> extends Custom
 		// if (_selector != null) _selector.closePopup();
 	}
 
-	protected void setRootObject(FlexoModelObject newRootObject) {
+	protected void setRootObject(FlexoObject newRootObject) {
 		_selector.setRootObject(newRootObject);
 	}
 
 	@Override
 	protected void performModelUpdating(InspectableObject value) {
 		if (hasValueForParameter("rootObject") && _project != null) {
-			setRootObject((FlexoModelObject) getDynamicValueForParameter("rootObject", _project));
+			setRootObject((FlexoObject) getDynamicValueForParameter("rootObject", _project));
 		}
 	}
 

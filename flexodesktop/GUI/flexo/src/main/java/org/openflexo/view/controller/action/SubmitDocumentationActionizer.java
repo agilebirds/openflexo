@@ -32,7 +32,7 @@ import org.openflexo.drm.DocItemVersion;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.SubmitVersion;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -47,7 +47,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocumentationAction, FlexoModelObject, FlexoModelObject> {
+public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocumentationAction, FlexoObject, FlexoObject> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(SubmitDocumentationActionizer.class
 			.getPackage().getName());

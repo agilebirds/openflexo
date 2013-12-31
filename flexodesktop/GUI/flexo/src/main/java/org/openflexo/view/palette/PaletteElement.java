@@ -19,12 +19,12 @@
  */
 package org.openflexo.view.palette;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectableView;
 
 public interface PaletteElement {
 
-	public FlexoModelObject getObject();
+	public FlexoObject getObject();
 
 	public SelectableView getView();
 

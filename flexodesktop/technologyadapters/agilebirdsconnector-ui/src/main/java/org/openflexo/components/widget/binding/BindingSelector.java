@@ -45,7 +45,7 @@ import org.openflexo.components.AskParametersDialog;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.AbstractBinding.AbstractBindingStringConverter;
 import org.openflexo.foundation.bindings.Bindable;
@@ -508,7 +508,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				setEditedObject(makeBinding());
 			}
 			if (getBindable() != null) {
-				((FlexoModelObject) getBindable()).getProject().getBindingValueConverter().setBindable(getBindable());
+				((FlexoObject) getBindable()).getProject().getBindingValueConverter().setBindable(getBindable());
 			}
 			// BindingValue.setBindableForConverter(getBindable());
 			BindingValue newBindingValue = (BindingValue) getEditedObject().getConverter().convertFromString(pathToEntity);
@@ -604,7 +604,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				setEditedObject(makeBinding());
 			}
 			if (getBindable() != null) {
-				((FlexoModelObject) getBindable()).getProject().getBindingValueConverter().setBindable(getBindable());
+				((FlexoObject) getBindable()).getProject().getBindingValueConverter().setBindable(getBindable());
 			}
 			BindingValue newBindingValue = (BindingValue) getEditedObject().getConverter().convertFromString(pathToEntity);
 			newBindingValue.addBindingPathElement(newProperty);
@@ -855,7 +855,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (bindingExpression != null) {
 				_editedObject = bindingExpression;
 			} else {
-				_editedObject = new BindingExpression(getBindingDefinition(), (FlexoModelObject) getBindable()); // I dont want to notify it
+				_editedObject = new BindingExpression(getBindingDefinition(), (FlexoObject) getBindable()); // I dont want to notify it
 																													// !!!
 			}
 			deleteCustomPanel();
@@ -944,8 +944,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	}
 
 	public FlexoProject getProject() {
-		if (getBindable() instanceof FlexoModelObject) {
-			return ((FlexoModelObject) getBindable()).getProject();
+		if (getBindable() instanceof FlexoObject) {
+			return ((FlexoObject) getBindable()).getProject();
 		}
 		if (getBindingDefinition() != null) {
 			return getBindingDefinition().getProject();
@@ -1035,7 +1035,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	}
 
 	protected BindingExpression makeBindingExpression() {
-		BindingExpression returned = new BindingExpression(getBindingDefinition(), (FlexoModelObject) getBindable());
+		BindingExpression returned = new BindingExpression(getBindingDefinition(), (FlexoObject) getBindable());
 		if (getProject() != null) {
 			returned.setExpression(new BindingValueVariable("", getBindable()));
 		}
@@ -1052,30 +1052,30 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (getBindingDefinition() != null && getBindable() != null) {
 				if (getBindingDefinition().getType() != null) {
 					if (getBindingDefinition().getType().isBoolean()) {
-						returned = new BooleanStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), false);
+						returned = new BooleanStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), false);
 					} else if (getBindingDefinition().getType().isInteger() || getBindingDefinition().getType().isLong()
 							|| getBindingDefinition().getType().isShort() || getBindingDefinition().getType().isChar()
 							|| getBindingDefinition().getType().isByte()) {
-						returned = new IntegerStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), 0);
+						returned = new IntegerStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), 0);
 					} else if (getBindingDefinition().getType().isFloat() || getBindingDefinition().getType().isDouble()) {
-						returned = new FloatStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), 0.0);
+						returned = new FloatStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), 0.0);
 					} else if (getBindingDefinition().getType().isString()) {
-						returned = new StringStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), "");
+						returned = new StringStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), "");
 					} else if (getBindingDefinition().getType().isDate()) {
-						returned = new DateStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), new Date());
+						returned = new DateStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), new Date());
 					} else if (getBindingDefinition().getType().isDuration()) {
-						returned = new DurationStaticBinding(getBindingDefinition(), (FlexoModelObject) getBindable(), new Duration(0,
+						returned = new DurationStaticBinding(getBindingDefinition(), (FlexoObject) getBindable(), new Duration(0,
 								DurationUnit.SECONDS));
 					}
 				}
 			}
 		} else if (editionMode == EditionMode.TRANSTYPED_BINDING) { // Transtyped binding
 			if (getBindingDefinition() != null && getBindable() != null) {
-				returned = new TranstypedBinding(getBindingDefinition(), (FlexoModelObject) getBindable());
+				returned = new TranstypedBinding(getBindingDefinition(), (FlexoObject) getBindable());
 			}
 		} else if (editionMode == EditionMode.NORMAL_BINDING || editionMode == EditionMode.COMPOUND_BINDING) { // Normal or compound binding
 			if (getBindingDefinition() != null && getBindable() != null) {
-				returned = new BindingValue(getBindingDefinition(), (FlexoModelObject) getBindable());
+				returned = new BindingValue(getBindingDefinition(), (FlexoObject) getBindable());
 			}
 		}
 		return returned;
@@ -1364,7 +1364,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (returned == null) {
 				return null;
 			}
-			returned.setOwner((FlexoModelObject) getBindable());
+			returned.setOwner((FlexoObject) getBindable());
 			returned.setBindingDefinition(getBindingDefinition());
 			return returned;
 		}
@@ -1380,7 +1380,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			if (returned == null) {
 				return null;
 			}
-			returned.setOwner((FlexoModelObject) getBindable());
+			returned.setOwner((FlexoObject) getBindable());
 			returned.setBindingDefinition(getBindingDefinition());
 			converter.setWarnOnFailure(true);
 			return returned;

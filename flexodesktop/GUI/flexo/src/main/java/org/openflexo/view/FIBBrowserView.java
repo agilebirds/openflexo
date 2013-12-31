@@ -30,6 +30,7 @@ import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.view.controller.FlexoController;
@@ -115,7 +116,7 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 		for (FIBBrowserElement el : browser.getElements()) {
 			if (el.getDataClass() != null) {
 				if (FlexoObject.class.isAssignableFrom(el.getDataClass())) {
-					List<FlexoActionType<?, ?, ?>> actionList = FlexoObject.getActionList(el.getDataClass());
+					List<FlexoActionType<?, ?, ?>> actionList = FlexoObjectImpl.getActionList(el.getDataClass());
 					for (FlexoActionType<?, ?, ?> actionType : actionList) {
 						el.addToActions(new FIBBrowserActionAdapter(actionType));
 					}

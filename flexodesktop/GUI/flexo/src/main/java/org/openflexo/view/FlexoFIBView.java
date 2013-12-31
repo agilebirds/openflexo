@@ -37,23 +37,12 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.DefaultFlexoServiceManager;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.ProjectInitializerException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
@@ -75,7 +64,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	public class FIBBrowserActionAdapter extends FIBBrowserAction {
 
-		private FlexoActionType actionType;
+		private final FlexoActionType actionType;
 
 		public FIBBrowserActionAdapter(FlexoActionType<?, ?, ?> actionType) {
 			super();
@@ -85,17 +74,17 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		}
 
 		public Object performAction(Object selected) {
-			if (selected instanceof FlexoModelObject) {
-				FlexoAction action = actionType.makeNewAction((FlexoModelObject) selected, null, controller.getEditor());
+			if (selected instanceof FlexoObject) {
+				FlexoAction action = actionType.makeNewAction((FlexoObject) selected, null, controller.getEditor());
 				action.doAction();
 			}
 			return null;
 		}
 
 		public boolean isAvailable(Object selected) {
-			if (selected instanceof FlexoModelObject) {
-				return controller.getEditor().isActionVisible(actionType, (FlexoModelObject) selected, null)
-						&& controller.getEditor().isActionEnabled(actionType, (FlexoModelObject) selected, null);
+			if (selected instanceof FlexoObject) {
+				return controller.getEditor().isActionVisible(actionType, (FlexoObject) selected, null)
+						&& controller.getEditor().isActionEnabled(actionType, (FlexoObject) selected, null);
 			}
 			return false;
 		}
@@ -118,12 +107,12 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	}
 
-	private FlexoController controller;
-	private FIBView fibView;
+	private final FlexoController controller;
+	private final FIBView fibView;
 	private FlexoFIBController fibController;
-	private FIBComponent fibComponent;
+	private final FIBComponent fibComponent;
 
-	private PropertyChangeSupport pcSupport;
+	private final PropertyChangeSupport pcSupport;
 
 	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
 
@@ -310,7 +299,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	}
 
 	// test purposes
-	public static FlexoEditor loadProject(File prjDir) {
+	/*public static FlexoEditor loadProject(File prjDir) {
 		FlexoResourceCenterService resourceCenter = DefaultResourceCenterService.getNewInstance();
 		FlexoServiceManager sm = new DefaultFlexoServiceManager();
 		sm.registerService(resourceCenter);
@@ -328,22 +317,22 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 			System.exit(-1);
 		}
 		return editor;
-	}
+	}*/
 
 	// test purposes
-	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+	/*protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
 		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
 			return new FlexoTestEditor(project, serviceManager);
 		}
-	};
+	};*/
 
 	// test purposes
-	public static class FlexoTestEditor extends DefaultFlexoEditor {
+	/*public static class FlexoTestEditor extends DefaultFlexoEditor {
 		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
 			super(project, sm);
 		}
 
-	}
+	}*/
 
 }

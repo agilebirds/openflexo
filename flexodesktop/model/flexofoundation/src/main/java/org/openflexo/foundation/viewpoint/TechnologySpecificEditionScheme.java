@@ -17,23 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.diagram.fml;
+package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.viewpoint.TechnologySpecificEditionScheme;
-import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
- * An GraphicalEditionScheme represents a behavioural feature which apply to a {@link Diagram} (as a {@link VirtualModelInstance}
+ * Implemented by all {@link EditionScheme} specific to a technology
  * 
  * @author sylvain
  * 
  */
-public interface DiagramEditionScheme extends TechnologySpecificEditionScheme {
+public interface TechnologySpecificEditionScheme {
 
-	public static final String TOP_LEVEL = "topLevel";
-	public static final String TARGET = "target";
-	public static final String FROM_TARGET = "fromTarget";
-	public static final String TO_TARGET = "toTarget";
-	public static final String DIAGRAM = "diagram";
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where this concept exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter getTechnologyAdapter();
 }

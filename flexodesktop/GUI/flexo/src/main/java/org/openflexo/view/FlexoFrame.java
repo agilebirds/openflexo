@@ -55,7 +55,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.rm.ResourceStatusModification;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
@@ -381,9 +380,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		} else if ("projectDirectory".equals(dataModification.propertyName())) {
 			updateTitle();
 		}
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
+		/*if (ToolBox.getPLATFORM() == ToolBox.MACOS && dataModification instanceof ResourceStatusModification) {
 			getRootPane().putClientProperty(WINDOW_MODIFIED, getController().getProject().hasUnsaveStorageResources());
-		}
+		}*/
 	}
 
 	@Override

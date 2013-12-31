@@ -44,8 +44,7 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.foundation.FlexoProjectObject;
-import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -55,7 +54,6 @@ import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.FlexoObjectInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IndividualInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
@@ -87,9 +85,9 @@ public class FIBInspector extends FIBPanel {
 
 	private FIBInspector superInspector;
 
-	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEPIReference = new Hashtable<EditionPattern, FIBTab>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEPI = new Hashtable<EditionPattern, FIBTab>();
+	private final Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
+	private final Hashtable<EditionPattern, FIBTab> tabsForEPIReference = new Hashtable<EditionPattern, FIBTab>();
+	private final Hashtable<EditionPattern, FIBTab> tabsForEPI = new Hashtable<EditionPattern, FIBTab>();
 
 	public FIBInspector getSuperInspector() {
 		return superInspector;
@@ -197,7 +195,7 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return a boolean indicating if a new tab was created
 	 */
-	protected boolean updateFlexoProjectObjectInspector(FlexoProjectObject object) {
+	protected boolean updateFlexoObjectInspector(FlexoObject object) {
 
 		boolean returned = false;
 
@@ -453,65 +451,6 @@ public class FIBInspector extends FIBPanel {
 					}, true));*/
 			newTab.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 			return propertySelector;
-		} else if (entry instanceof FlexoObjectInspectorEntry) {
-			FlexoObjectInspectorEntry foEntry = (FlexoObjectInspectorEntry) entry;
-			switch (foEntry.getFlexoObjectType()) {
-			case Process:
-				FIBCustom processSelector = new FIBCustom();
-				processSelector.setComponentClass(org.openflexo.components.widget.FIBProcessSelector.class);
-				processSelector.addToAssignments(new FIBCustomAssignment(processSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return processSelector;
-			case ProcessFolder:
-				FIBCustom processFolderSelector = new FIBCustom();
-				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
-				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return processFolderSelector;
-			case Role:
-				FIBCustom roleSelector = new FIBCustom();
-				roleSelector.setComponentClass(org.openflexo.components.widget.FIBRoleSelector.class);
-				roleSelector.addToAssignments(new FIBCustomAssignment(roleSelector, new DataBinding("component.project"), new DataBinding(
-						"data.project"), true));
-				newTab.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return roleSelector;
-			case Activity:
-				FIBCustom activitySelector = new FIBCustom();
-				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
-				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return activitySelector;
-			case Operation:
-				FIBCustom operationSelector = new FIBCustom();
-				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
-				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return operationSelector;
-			case Action:
-				FIBCustom actionSelector = new FIBCustom();
-				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
-				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return actionSelector;
-			case Screen:
-				FIBCustom componentSelector = new FIBCustom();
-				componentSelector.setComponentClass(org.openflexo.components.widget.FIBComponentSelector.class);
-				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.project"),
-						new DataBinding("data.project"), true));
-
-				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.type"),
-						new DataBinding<String>("\"" + OperationComponentDefinition.class.getName() + "\""), true));
-				newTab.addToSubComponents(componentSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
-				return componentSelector;
-
-			default:
-				break;
-			}
 		}
 
 		FIBLabel unknown = new FIBLabel();

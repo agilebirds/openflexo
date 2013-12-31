@@ -29,6 +29,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.diagram.fml.editionaction.AddShape;
 import org.openflexo.technologyadapter.diagram.model.DiagramContainerElement;
 import org.openflexo.toolbox.StringUtils;
@@ -165,4 +166,8 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 		return newAction;
 	}
 
+	@Override
+	public DiagramTechnologyAdapter getTechnologyAdapter() {
+		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+	}
 }

@@ -479,12 +479,12 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 		if (dataModification instanceof ValidationNotification) {
 			if (dataModification instanceof ValidationInitNotification) {
 				ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " "
-						+ initNotification.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
+				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " " + initNotification.getRootObject(),
+						initNotification.getNbOfObjectToValidate());
 			} else if (dataModification instanceof ValidationProgressNotification) {
 				ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 				ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " "
-						+ progressNotification.getValidatedObject().getFullyQualifiedName());
+						+ progressNotification.getValidatedObject());
 			} else if (dataModification instanceof ValidationFinishedNotification) {
 				ProgressWindow.hideProgressWindow();
 			}

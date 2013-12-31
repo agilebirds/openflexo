@@ -73,7 +73,7 @@ import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.widget.binding.BindingSelector.EditionMode;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
@@ -742,7 +742,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (useTranstyperCB.isSelected()) {
 						BindingSelectorPanel.this._bindingSelector._editedObject = new TranstypedBinding(
 								BindingSelectorPanel.this._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) BindingSelectorPanel.this._bindingSelector.getBindable());
+								(FlexoObject) BindingSelectorPanel.this._bindingSelector.getBindable());
 						((TranstypedBinding) BindingSelectorPanel.this._bindingSelector._editedObject)
 								.setTranstyper((DMTranstyper) transtyperCB.getSelectedItem());
 						setEditTranstypedBinding(true);
@@ -771,24 +771,24 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						return;
 					}
 					TranstypedBinding newBinding = new TranstypedBinding(BindingSelectorPanel.this._bindingSelector.getBindingDefinition(),
-							(FlexoModelObject) BindingSelectorPanel.this._bindingSelector.getBindable());
+							(FlexoObject) BindingSelectorPanel.this._bindingSelector.getBindable());
 					newBinding.setTranstyper((DMTranstyper) transtyperCB.getSelectedItem());
 					BindingSelectorPanel.this._bindingSelector.setEditedObject(newBinding);
 
 					/*if (typeCB.getSelectedItem().equals(BOOLEAN))
-						setEditedObject(new BooleanStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),true));
+						setEditedObject(new BooleanStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),true));
 					else if (typeCB.getSelectedItem().equals(INTEGER))
-						setEditedObject(new IntegerStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),0));
+						setEditedObject(new IntegerStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),0));
 					else if (typeCB.getSelectedItem().equals(FLOAT))
-						setEditedObject(new FloatStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),0));
+						setEditedObject(new FloatStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),0));
 					else if (typeCB.getSelectedItem().equals(STRING))
-						setEditedObject(new StringStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),""));
+						setEditedObject(new StringStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),""));
 					else if (typeCB.getSelectedItem().equals(DATE))
-						setEditedObject(new DateStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),new Date()));
+						setEditedObject(new DateStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),new Date()));
 					else if (typeCB.getSelectedItem().equals(DURATION))
-						setEditedObject(new DurationStaticBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),new Duration(1,DurationUnit.SECONDS)));
+						setEditedObject(new DurationStaticBinding(getBindingDefinition(),(FlexoObject)getBindable(),new Duration(1,DurationUnit.SECONDS)));
 					else if (typeCB.getSelectedItem().equals(DKV))
-						setEditedObject(new DKVBinding(getBindingDefinition(),(FlexoModelObject)getBindable(),new Key(getProject().getDKVModel())));*/
+						setEditedObject(new DKVBinding(getBindingDefinition(),(FlexoObject)getBindable(),new Key(getProject().getDKVModel())));*/
 				}
 			});
 			add(transtyperCB);
@@ -890,7 +890,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (BindingSelectorPanel.this._bindingSelector.getEditedObject() != null) {
 						BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode(new BindingExpression(
 								BindingSelectorPanel.this._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) BindingSelectorPanel.this._bindingSelector.getBindable(),
+								(FlexoObject) BindingSelectorPanel.this._bindingSelector.getBindable(),
 								BindingSelectorPanel.this._bindingSelector.getEditedObject()));
 					} else {
 						BindingSelectorPanel.this._bindingSelector.activateBindingExpressionMode(null);

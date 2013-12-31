@@ -35,6 +35,7 @@ import org.openflexo.foundation.viewpoint.AddToListAction;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
@@ -65,7 +66,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	private TechnologyAdapterControllerService technologyAdapterControllerService;
 
-	private Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
+	private final Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
 
 	/**
 	 * Returns applicable {@link TechnologyAdapterService}
@@ -186,6 +187,16 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 		}
 		return null;
 
+	}
+
+	/**
+	 * Return icon representing supplied edition scheme
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public ImageIcon getIconForEditionScheme(Class<? extends EditionScheme> editionSchemeClass) {
+		return null;
 	}
 
 	public abstract boolean hasModuleViewForObject(TechnologyObject object);

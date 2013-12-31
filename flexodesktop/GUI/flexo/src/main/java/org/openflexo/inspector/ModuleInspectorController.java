@@ -39,7 +39,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBWidget;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
@@ -294,8 +294,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 			boolean updateEPTabs = false;
 			if (object instanceof EditionPatternInstance) {
 				updateEPTabs = newInspector.updateEditionPatternInstanceInspector((EditionPatternInstance) object);
-			} else if (object instanceof FlexoModelObject) {
-				updateEPTabs = newInspector.updateFlexoProjectObjectInspector((FlexoModelObject) object);
+			} else if (object instanceof FlexoObject) {
+				updateEPTabs = newInspector.updateFlexoObjectInspector((FlexoObject) object);
 			}
 			if (newInspector != currentInspector || updateEPTabs) {
 				switchToInspector(newInspector, updateEPTabs);
@@ -341,8 +341,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	public static class InspectorSwitching {
-		private boolean updateEPTabs;
-		private FIBInspector newInspector;
+		private final boolean updateEPTabs;
+		private final FIBInspector newInspector;
 
 		public InspectorSwitching(FIBInspector newInspector, boolean updateEPTabs) {
 			this.newInspector = newInspector;
@@ -359,7 +359,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	public static class InspectedObjectChanged {
-		private Object inspectedObject;
+		private final Object inspectedObject;
 
 		public InspectedObjectChanged(Object inspectedObject) {
 			this.inspectedObject = inspectedObject;

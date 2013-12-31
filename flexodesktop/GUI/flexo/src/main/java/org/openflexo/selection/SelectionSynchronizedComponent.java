@@ -40,9 +40,9 @@ public interface SelectionSynchronizedComponent extends SelectionListener {
 	public SelectionManager getSelectionManager();
 
 	/**
-	 * Return the current selection, as a Vector of FlexoModelObject
+	 * Return the current selection, as a Vector of FlexoObject
 	 * 
-	 * @return a Vector of FlexoModelObject
+	 * @return a Vector of FlexoObject
 	 */
 	public Vector getSelection();
 
@@ -71,7 +71,7 @@ public interface SelectionSynchronizedComponent extends SelectionListener {
 	 * Add supplied objects to current selection
 	 * 
 	 * @param objects
-	 *            : objects to add to selection, as a Vector of FlexoModelObject
+	 *            : objects to add to selection, as a Vector of FlexoObject
 	 */
 	public void addToSelected(Vector<? extends FlexoObject> objects);
 
@@ -79,15 +79,15 @@ public interface SelectionSynchronizedComponent extends SelectionListener {
 	 * Remove supplied objects from current selection
 	 * 
 	 * @param objects
-	 *            : objects to remove from selection, as a Vector of FlexoModelObject
+	 *            : objects to remove from selection, as a Vector of FlexoObject
 	 */
 	public void removeFromSelected(Vector<? extends FlexoObject> objects);
 
 	/**
-	 * Sets supplied vector of FlexoModelObjects to be the current Selection
+	 * Sets supplied vector of FlexoObjects to be the current Selection
 	 * 
 	 * @param objects
-	 *            : the object to set for current selection, as a Vector of FlexoModelObject
+	 *            : the object to set for current selection, as a Vector of FlexoObject
 	 */
 	public void setSelectedObjects(Vector<? extends FlexoObject> objects);
 

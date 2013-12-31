@@ -23,10 +23,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.logging.FlexoLogger;
 
 public class UploadProjectAction extends FlexoGUIAction<UploadProjectAction, FlexoProject, FlexoProject> {
@@ -54,7 +54,7 @@ public class UploadProjectAction extends FlexoGUIAction<UploadProjectAction, Fle
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+		FlexoObjectImpl.addActionForClass(actionType, FlexoProject.class);
 	}
 
 	protected UploadProjectAction(FlexoProject focusedObject, Vector<FlexoProject> globalSelection, FlexoEditor editor) {

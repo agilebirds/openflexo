@@ -127,6 +127,16 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 	@Setter(SPECIFIC_DESCRIPTIONS_KEY)
 	public void setSpecificDescriptions(Map<String, String> specificDescriptions);
 
+	public boolean hasSpecificDescriptionForKey(String key);
+
+	public String getSpecificDescriptionForKey(String key);
+
+	@Adder(SPECIFIC_DESCRIPTIONS_KEY)
+	public void setSpecificDescriptionsForKey(String description, String key);
+
+	@Remover(SPECIFIC_DESCRIPTIONS_KEY)
+	public void removeSpecificDescriptionsWithKey(String key);
+
 	@Getter(value = CUSTOM_PROPERTIES_KEY, cardinality = Cardinality.LIST, inverse = FlexoProperty.OWNER_KEY)
 	public List<FlexoProperty> getCustomProperties();
 
@@ -149,6 +159,8 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 	public void removeFromReferencers(FlexoObjectReference<? extends FlexoObject> ref);
 
 	public List<FlexoObjectReference<?>> getReferencers();
+
+	public boolean hasSpecificHelp(String key);
 
 	/**
 	 * Return the list of all references to EditionPatternInstance where this FlexoObject is involved in a PatternRole
@@ -880,18 +892,22 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 			return false;
 		}
 
+		@Override
 		public boolean hasSpecificHelp(String key) {
 			return getSpecificDescriptionForKey(key) != null && getSpecificDescriptionForKey(key).length() > 0;
 		}
 
+		@Override
 		public boolean hasSpecificDescriptionForKey(String key) {
 			return getSpecificDescriptionForKey(key) != null && getSpecificDescriptionForKey(key).trim().length() > 0;
 		}
 
+		@Override
 		public String getSpecificDescriptionForKey(String key) {
 			return specificDescriptions.get(key);
 		}
 
+		@Override
 		public void setSpecificDescriptionsForKey(String description, String key) {
 			specificDescriptions.put(key, description);
 			setChanged();
@@ -899,6 +915,7 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 			notifyObservers(dm);
 		}
 
+		@Override
 		public void removeSpecificDescriptionsWithKey(String key) {
 			specificDescriptions.remove(key);
 		}

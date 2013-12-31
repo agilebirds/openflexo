@@ -88,7 +88,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
@@ -1136,7 +1136,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * Return current displayed object, assuming that current displayed view represents returned object (for example the process for WKF
 	 * module)
 	 * 
-	 * @return the FlexoModelObject
+	 * @return the FlexoObject
 	 */
 	public FlexoObject getCurrentDisplayedObjectAsModuleView() {
 		// logger.info("getCurrentModuleView()="+getCurrentModuleView());
@@ -1248,8 +1248,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (isDisposed()) {
 			return false;
 		}
-		return !getModule().getModule().requireProject() || !(object instanceof FlexoModelObject)
-				|| ((FlexoModelObject) object).getProject() == getProject();
+		return !getModule().getModule().requireProject() || !(object instanceof FlexoObject)
+				|| ((FlexoObject) object).getProject() == getProject();
 	}
 
 	/**
@@ -1263,8 +1263,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public final void setObjectAsModuleView(Object object) {
 		// This hack is introduced to support double click in imported workflow tree.
 		// This should be removed and imported wofklow tree should be updated to support casting
-		if (object instanceof FlexoModelObject) {
-			setCurrentEditedObjectAsModuleView((FlexoModelObject) object);
+		if (object instanceof FlexoObject) {
+			setCurrentEditedObjectAsModuleView((FlexoObject) object);
 		}
 	}
 
@@ -1450,7 +1450,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					target.setObjectForKey(value, key);
 				} else {
 					if (logger.isLoggable(Level.SEVERE)) {
-						logger.severe("Target object is not a FlexoModelObject, I cannot set the value for that object");
+						logger.severe("Target object is not a FlexoObject, I cannot set the value for that object");
 					}
 				}
 			} else if (logger.isLoggable(Level.WARNING)) {
@@ -1496,12 +1496,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		 */
 		@Override
 		public boolean performAction(ActionEvent e, String actionName, Object object) {
-			if (object instanceof FlexoModelObject) {
-				FlexoModelObject m = (FlexoModelObject) object;
+			if (object instanceof FlexoObject) {
+				FlexoObject m = (FlexoObject) object;
 				for (FlexoActionType<?, ?, ?> actionType : m.getActionList()) {
 					if (actionType.getUnlocalizedName().equals(actionName)) {
-						return getEditor().performActionType((FlexoActionType<?, FlexoModelObject, FlexoModelObject>) actionType, m,
-								(Vector<FlexoModelObject>) null, e).hasActionExecutionSucceeded();
+						return getEditor().performActionType((FlexoActionType<?, FlexoObject, FlexoObject>) actionType, m,
+								(Vector<FlexoObject>) null, e).hasActionExecutionSucceeded();
 					}
 				}
 			}
@@ -1952,8 +1952,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
-			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-					&& ((FlexoModelObject) object).getProject() != getProject() && ((FlexoModelObject) object).getProject() != null
+			if (getModule().getModule().requireProject() && object instanceof FlexoObject && getProject() != null
+					&& ((FlexoObject) object).getProject() != getProject() && ((FlexoObject) object).getProject() != null
 					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			} else if (object instanceof FlexoProjectReference) {

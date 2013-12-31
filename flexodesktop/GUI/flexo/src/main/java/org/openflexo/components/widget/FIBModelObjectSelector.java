@@ -354,9 +354,9 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	protected boolean matches(T o, String filteredName) {
 		return o != null && StringUtils.isNotEmpty(renderedString(o))
 				&& (renderedString(o)).toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
-		/*if (o instanceof FlexoModelObject) {
-			return ((FlexoModelObject) o).getName() != null
-					&& ((FlexoModelObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+		/*if (o instanceof FlexoObject) {
+			return ((FlexoObject) o).getName() != null
+					&& ((FlexoObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
 		}*/
 		// return false;
 	}

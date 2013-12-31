@@ -22,13 +22,16 @@ package org.openflexo.icon;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationWarning;
 import org.openflexo.swing.AnimatedIcon;
 import org.openflexo.toolbox.ImageIconResource;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Utility class containing all icons used in whole application
@@ -174,7 +177,7 @@ public class IconLibrary {
 		return null;
 	}
 
-	public static ImageIcon getIconForResourceType(ResourceType resourceType) {
+	/*public static ImageIcon getIconForResourceType(ResourceType resourceType) {
 		if (resourceType == ResourceType.COMPONENT_LIBRARY) {
 			return SEIconLibrary.COMPONENT_LIBRARY_ICON;
 		} else if (resourceType == ResourceType.DKV_MODEL) {
@@ -210,5 +213,29 @@ public class IconLibrary {
 		}
 
 		return FilesIconLibrary.smallIconForFileFormat(resourceType.getFormat());
+	}*/
+
+	/**
+	 * Return the technology-specific controller for supplied technology adapter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+		if (technologyAdapter != null) {
+			try {
+				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
+				if (sm != null) {
+					TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
+					if (service != null) {
+						return service.getTechnologyAdapterController(technologyAdapter);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
+
 }

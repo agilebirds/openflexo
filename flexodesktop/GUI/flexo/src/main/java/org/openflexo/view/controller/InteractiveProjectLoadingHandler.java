@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.TemporaryFlexoObject;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.rm.FlexoRMResource;
@@ -132,7 +132,7 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 		}
 	}
 
-	protected class ResourceToConvert extends TemporaryFlexoModelObject implements InspectableObject {
+	protected class ResourceToConvert extends TemporaryFlexoObject implements InspectableObject {
 		private final FlexoXMLStorageResource<? extends XMLStorageResourceData> _resource;
 
 		ResourceToConvert(FlexoXMLStorageResource<? extends XMLStorageResourceData> resource) {

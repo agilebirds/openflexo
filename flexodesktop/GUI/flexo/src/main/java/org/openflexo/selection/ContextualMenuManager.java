@@ -36,21 +36,12 @@ import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTable;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.TreePath;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.FlexoCst;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.components.browser.BrowserElement;
-import org.openflexo.components.browser.view.BrowserView;
-import org.openflexo.components.tabular.TabularView;
-import org.openflexo.components.tabularbrowser.JTreeTable;
-import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.ActionGroup;
 import org.openflexo.foundation.action.ActionMenu;
@@ -61,8 +52,8 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
-import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.action.EditionAction;
@@ -287,10 +278,9 @@ public abstract class ContextualMenuManager {
 					contextualMenu.putAction(next);
 				}
 			}
-			if (focusedObject instanceof FlexoModelObject) {
-				if (((FlexoModelObject) focusedObject).getEditionPatternReferences() != null) {
-					for (FlexoObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
-							.getEditionPatternReferences()) {
+			if (focusedObject instanceof FlexoObject) {
+				if (focusedObject.getEditionPatternReferences() != null) {
+					for (FlexoObjectReference<EditionPatternInstance> ref : focusedObject.getEditionPatternReferences()) {
 						EditionPatternInstance epi = ref.getObject();
 						if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasActionScheme()) {
 							for (ActionScheme as : epi.getEditionPattern().getActionSchemes()) {
@@ -298,8 +288,7 @@ public abstract class ContextualMenuManager {
 							}
 						}
 					}
-					for (FlexoObjectReference<EditionPatternInstance> ref : ((FlexoModelObject) focusedObject)
-							.getEditionPatternReferences()) {
+					for (FlexoObjectReference<EditionPatternInstance> ref : focusedObject.getEditionPatternReferences()) {
 						EditionPatternInstance epi = ref.getObject();
 						if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasNavigationScheme()) {
 							for (NavigationScheme ns : epi.getEditionPattern().getNavigationSchemes()) {
@@ -559,7 +548,7 @@ public abstract class ContextualMenuManager {
 
 	public FlexoObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		// Try to handle TabularBrowserView
-		if (e.getSource() instanceof JTreeTable) {
+		/*if (e.getSource() instanceof JTreeTable) {
 			Component c = (Component) e.getSource();
 			while (c != null && !(c instanceof TabularBrowserView)) {
 				c = c.getParent();
@@ -567,9 +556,9 @@ public abstract class ContextualMenuManager {
 			if (c != null && c instanceof TabularBrowserView) {
 				return ((TabularBrowserView) c).getFocusedObject();
 			}
-		}
+		}*/
 		// Try to handle TabularView
-		if (e.getSource() instanceof JTable) {
+		/*if (e.getSource() instanceof JTable) {
 			Component c = (Component) e.getSource();
 			while (c != null && !(c instanceof TabularView)) {
 				c = c.getParent();
@@ -578,9 +567,9 @@ public abstract class ContextualMenuManager {
 				return ((TabularView) c).getFocusedObject();
 			}
 
-		}
+		}*/
 		// Finally handle browsers
-		if (e.getSource() instanceof JTree) {
+		/*if (e.getSource() instanceof JTree) {
 			Component c = (Component) e.getSource();
 			while (c != null && !(c instanceof BrowserView)) {
 				c = c.getParent();
@@ -593,7 +582,7 @@ public abstract class ContextualMenuManager {
 				return ((BrowserView) c).getSelectedObject();
 			}
 
-		}
+		}*/
 		return null;
 	}
 

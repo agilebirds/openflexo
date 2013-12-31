@@ -161,8 +161,8 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 			if (newInspector != currentInspector) {
 				switchToInspector(newInspector);
 			}
-			if (object instanceof FlexoModelObject) {
-				updateEditionPatternReferences(newInspector, (FlexoModelObject) object);
+			if (object instanceof FlexoObject) {
+				updateEditionPatternReferences(newInspector, (FlexoObject) object);
 			}
 			currentInspectorView.getController().setDataObject(object);
 		}
@@ -170,7 +170,7 @@ public class FIBInspectorPanel extends JPanel implements Observer, ChangeListene
 		return true;
 	}*/
 
-	/*private void updateEditionPatternReferences(FIBInspector inspector, FlexoModelObject object) {
+	/*private void updateEditionPatternReferences(FIBInspector inspector, FlexoObject object) {
 		if (inspector.updateEditionPatternReferences(object)) {
 			FIBView<?, ?, ?> view = viewForInspector(inspector);
 			FIBController controller = view.getController();

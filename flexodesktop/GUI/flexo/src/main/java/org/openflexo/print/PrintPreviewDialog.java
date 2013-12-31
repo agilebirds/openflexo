@@ -319,7 +319,7 @@ public class PrintPreviewDialog extends FlexoDialog {
 			return;
 		}
 
-		ScreenshotGenerator.ScreenshotImage image = ScreenshotGenerator.getImage(getPrintableComponent().getFlexoModelObject());
+		ScreenshotGenerator.ScreenshotImage image = ScreenshotGenerator.getImage(getPrintableComponent().getFlexoObject());
 
 		try {
 			if (!dest.exists()) {

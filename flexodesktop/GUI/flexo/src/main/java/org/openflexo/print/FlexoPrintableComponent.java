@@ -23,7 +23,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 public interface FlexoPrintableComponent {
 
@@ -45,5 +45,5 @@ public interface FlexoPrintableComponent {
 
 	public void print(Graphics graphics);
 
-	public FlexoModelObject getFlexoModelObject();
+	public FlexoObject getFlexoObject();
 }

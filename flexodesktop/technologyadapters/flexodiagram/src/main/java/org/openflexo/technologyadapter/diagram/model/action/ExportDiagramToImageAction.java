@@ -17,12 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.action;
+package org.openflexo.technologyadapter.diagram.model.action;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -30,17 +29,14 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
-import org.openflexo.foundation.gen.ScreenshotGenerator.ScreenshotImage;
-import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.resource.ScreenshotBuilder.ScreenshotImage;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
-import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.technologyadapter.diagram.model.DiagramElement;
 
 /**
  * @author vincent leilde
@@ -48,7 +44,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
  */
 public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToImageAction, DiagramElement<?>, DiagramElement<?>> {
 
-	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ExportDiagramToImageAction.class.getPackage().getName());
 
 	public static final FlexoActionType<ExportDiagramToImageAction, DiagramElement<?>, DiagramElement<?>> actionType = new FlexoActionType<ExportDiagramToImageAction, DiagramElement<?>, DiagramElement<?>>(
 			"export_diagram_to_image", FlexoActionType.docGroup) {
@@ -64,7 +60,7 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 		}
 
 		@Override
-		public ExportDiagramToImageAction makeNewAction(DiagramElement<?> focusedObject,Vector<DiagramElement<?>> globalSelection,
+		public ExportDiagramToImageAction makeNewAction(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection,
 				FlexoEditor editor) {
 			return new ExportDiagramToImageAction(focusedObject, globalSelection, editor);
 		}
@@ -72,7 +68,7 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 	};
 
 	static {
-		FlexoObject.addActionForClass(ExportDiagramToImageAction.actionType, DiagramElement.class);
+		FlexoObjectImpl.addActionForClass(ExportDiagramToImageAction.actionType, DiagramElement.class);
 	}
 
 	/**
@@ -86,40 +82,41 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 	}
 
 	private ScreenshotImage screenshot;
-	
+
 	private File dest;
-	
+
 	public boolean saveAsJpeg() {
 		dest = null;
-		JFileChooser chooser = new JFileChooser(){
+		JFileChooser chooser = new JFileChooser() {
 			@Override
-		    public void approveSelection(){
-		        File f = getSelectedFile();
-		        if(f.exists() && getDialogType() == SAVE_DIALOG){
-		            int result = JOptionPane.showConfirmDialog(this,"The file exists, overwrite?","Existing file",JOptionPane.YES_NO_CANCEL_OPTION);
-		            switch(result){
-		                case JOptionPane.YES_OPTION:
-		                    super.approveSelection();
-		                    return;
-		                case JOptionPane.NO_OPTION:
-		                    return;
-		                case JOptionPane.CLOSED_OPTION:
-		                    return;
-		                case JOptionPane.CANCEL_OPTION:
-		                    cancelSelection();
-		                    return;
-		            }
-		        }
-		        if(!f.exists() && getDialogType() == SAVE_DIALOG){
-		        	super.approveSelection();
-                    return;
-		        }
-		    }
+			public void approveSelection() {
+				File f = getSelectedFile();
+				if (f.exists() && getDialogType() == SAVE_DIALOG) {
+					int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?", "Existing file",
+							JOptionPane.YES_NO_CANCEL_OPTION);
+					switch (result) {
+					case JOptionPane.YES_OPTION:
+						super.approveSelection();
+						return;
+					case JOptionPane.NO_OPTION:
+						return;
+					case JOptionPane.CLOSED_OPTION:
+						return;
+					case JOptionPane.CANCEL_OPTION:
+						cancelSelection();
+						return;
+					}
+				}
+				if (!f.exists() && getDialogType() == SAVE_DIALOG) {
+					super.approveSelection();
+					return;
+				}
+			}
 		};
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(FlexoLocalization.localizedForKey("save_as_image", chooser));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
-		    chooser.setFileFilter(filter);
+		chooser.setFileFilter(filter);
 		int returnVal = chooser.showSaveDialog(null);
 		if (returnVal == JFileChooser.CANCEL_OPTION) {
 			return false;
@@ -127,24 +124,21 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (!chooser.getSelectedFile().getName().toLowerCase().endsWith(".png")) {
 				dest = new File(chooser.getSelectedFile().getAbsolutePath() + ".png");
-			}
-			else{
+			} else {
 				dest = chooser.getSelectedFile();
-			//	dest = new File(chooser.getSelectedFile().getAbsolutePath());
-			}	
-		} 
+				// dest = new File(chooser.getSelectedFile().getAbsolutePath());
+			}
+		}
 		if (dest == null) {
 			return false;
 		}
-		if(saveScreenshot()!=null){
+		if (saveScreenshot() != null) {
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
 	}
-	
-	
+
 	public ScreenshotImage getScreenshot() {
 		return screenshot;
 	}
@@ -165,5 +159,4 @@ public class ExportDiagramToImageAction extends FlexoGUIAction<ExportDiagramToIm
 		}
 	}
 
-	
 }

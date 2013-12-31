@@ -40,7 +40,7 @@ import org.openflexo.FlexoCst;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.components.widget.KeySelector;
 import org.openflexo.fib.utils.DurationSelector;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BooleanStaticBinding;
 import org.openflexo.foundation.bindings.DKVBinding;
@@ -118,7 +118,7 @@ class StaticBindingPanel extends JPanel {
 						BindingSelector.logger.fine("Selected key: " + selectedKey);
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector.setEditedObject(new DKVBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedKey));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedKey));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedKey != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
 							if (ToolBox.isMacOSLaf()) {
@@ -132,7 +132,7 @@ class StaticBindingPanel extends JPanel {
 						super.cancel();
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector.setEditedObject(new DKVBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
 					}
 
 					@Override
@@ -159,11 +159,11 @@ class StaticBindingPanel extends JPanel {
 						if (selectValueCB.getSelectedItem().equals(TRUE)) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new BooleanStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), true));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), true));
 						} else if (selectValueCB.getSelectedItem().equals(FALSE)) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new BooleanStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), false));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), false));
 						}
 					}
 				});
@@ -184,23 +184,23 @@ class StaticBindingPanel extends JPanel {
 						if (v instanceof Integer) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Integer) v));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Integer) v));
 						} else if (v instanceof Long) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Long) v));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Long) v));
 						} else if (v instanceof Short) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Short) v));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Short) v));
 						} else if (v instanceof Byte) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Byte) v));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Byte) v));
 						} else if (v instanceof Character) {
 							_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 									_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-									(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Character) v));
+									(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), (Character) v));
 						}
 					}
 				});
@@ -272,7 +272,7 @@ class StaticBindingPanel extends JPanel {
 						logger.fine("Selected date: " + selectedDate);
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector.setEditedObject(new DateStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedDate));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedDate));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDate != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
 							if (ToolBox.isMacOSLaf()) {
@@ -286,7 +286,7 @@ class StaticBindingPanel extends JPanel {
 						super.cancel();
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector.setEditedObject(new DateStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
 					}
 
 					@Override
@@ -305,7 +305,7 @@ class StaticBindingPanel extends JPanel {
 						logger.fine("Selected duration: " + selectedDuration);
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector
 								.setEditedObject(new DurationStaticBinding(_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-										(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), durationSelector
+										(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), durationSelector
 												.getEditedObject()));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDuration != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
@@ -320,7 +320,7 @@ class StaticBindingPanel extends JPanel {
 						super.cancel();
 						StaticBindingPanel.this._bindingSelectorPanel._bindingSelector.setEditedObject(new DurationStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), null));
 					}
 
 					@Override
@@ -370,31 +370,31 @@ class StaticBindingPanel extends JPanel {
 					if (typeCB.getSelectedItem().equals(BOOLEAN)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new BooleanStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), true));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), true));
 					} else if (typeCB.getSelectedItem().equals(INTEGER)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new IntegerStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), 0));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), 0));
 					} else if (typeCB.getSelectedItem().equals(FLOAT)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new FloatStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), 0));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), 0));
 					} else if (typeCB.getSelectedItem().equals(STRING)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new StringStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), ""));
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), ""));
 					} else if (typeCB.getSelectedItem().equals(DATE)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new DateStaticBinding(_bindingSelectorPanel._bindingSelector
-								.getBindingDefinition(), (FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(),
+								.getBindingDefinition(), (FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(),
 								new Date()));
 					} else if (typeCB.getSelectedItem().equals(DURATION)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new DurationStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(),
-								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), new Duration(1,
+								(FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), new Duration(1,
 										DurationUnit.SECONDS)));
 					} else if (typeCB.getSelectedItem().equals(DKV)) {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new DKVBinding(_bindingSelectorPanel._bindingSelector
-								.getBindingDefinition(), (FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), new Key(
+								.getBindingDefinition(), (FlexoObject) _bindingSelectorPanel._bindingSelector.getBindable(), new Key(
 								_bindingSelectorPanel._bindingSelector.getProject().getDKVModel())));
 					}
 				}

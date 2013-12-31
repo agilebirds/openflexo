@@ -75,7 +75,7 @@ import org.openflexo.drm.action.RemoveEmbeddingChildItem;
 import org.openflexo.drm.action.RemoveInheritanceChildItem;
 import org.openflexo.drm.action.RemoveRelatedToItem;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
@@ -291,7 +291,7 @@ public abstract class AbstractDocItemView extends JPanel {
 
 			@Override
 			public void itemRemoved(DocItem anItem) {
-				Vector<FlexoModelObject> globalSelection = new Vector<FlexoModelObject>();
+				Vector<FlexoObject> globalSelection = new Vector<FlexoObject>();
 				globalSelection.add(_docItem);
 				RemoveRelatedToItem.actionType.makeNewAction(anItem, globalSelection, _editor).doAction();
 				updateViewFromModel();

@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
-import org.openflexo.action.ExportDiagramToImageAction;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.graphics.ShadowStyle;
@@ -35,6 +34,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.technologyadapter.diagram.model.action.ExportDiagramToImageAction;
 import org.openflexo.ve.controller.VEController;
 import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.ve.diagram.DiagramGR;

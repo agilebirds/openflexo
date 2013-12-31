@@ -25,33 +25,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
-import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.PaletteElementPatternParameter;
-import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
-import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.AddToListAction;
@@ -67,14 +42,15 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternConstraint;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExecutionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestCondition;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
-import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -82,6 +58,7 @@ import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.RemoveFromListAction;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
+import org.openflexo.foundation.viewpoint.TechnologySpecificEditionScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -92,10 +69,10 @@ import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextAreaInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
-import org.openflexo.technologyadapter.diagram.rm.DiagramSpecificationResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
-import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Utility class containing all icons used in context of VPMModule
@@ -128,13 +105,10 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource VIEWPOINT_LIBRARY_ICON = new ImageIconResource("Icons/Model/VPM/ViewPointLibrary.png");
 	public static final ImageIconResource VIEWPOINT_ICON = new ImageIconResource("Icons/Model/VPM/ViewPoint.png");
 	public static final ImageIconResource MODEL_SLOT_ICON = new ImageIconResource("Icons/Model/VPM/ModelSlot.png");
-	public static final ImageIconResource DIAGRAM_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/DiagramPalette.png");
 	public static final ImageIconResource EDITION_PATTERN_ICON = new ImageIconResource("Icons/Model/VPM/EditionPattern.png");
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
 	public static final ImageIconResource SYNCHRONIZATION_SCHEME_ICON = new ImageIconResource(
 			"Icons/Model/VPM/SynchronizationSchemeIcon.png");
-	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
-	public static final ImageIconResource LINK_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/LinkSchemeIcon.png");
 	public static final ImageIconResource CLONING_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CloningSchemeIcon.png");
 	public static final ImageIconResource CREATION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CreationSchemeIcon.png");
 	public static final ImageIconResource DELETION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DeletionSchemeIcon.png");
@@ -144,12 +118,7 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource LOCALIZATION_ICON = new ImageIconResource("Icons/Model/VPM/LocalizationIcon.png");
 	public static final ImageIconResource UNKNOWN_ICON = new ImageIconResource("Icons/Model/VPM/UnknownIcon.gif");
 	public static final ImageIconResource VIRTUAL_MODEL_ICON = new ImageIconResource("Icons/Model/VPM/VirtualModel.png");
-	public static final ImageIconResource DIAGRAM_SPECIFICATION_ICON = new ImageIconResource("Icons/Model/VPM/DiagramSpecification.png");
-	public static final ImageIconResource EXAMPLE_DIAGRAM_ICON = new ImageIconResource("Icons/Model/VPM/ExampleDiagram.png");
-	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VPM/ShapeIcon.png");
-	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VPM/ConnectorIcon.gif");
 	public static final ImageIconResource DECLARE_PATTERN_ROLE_ICON = new ImageIconResource("Icons/Model/VPM/DeclarePatternRoleIcon.png");
-	public static final ImageIconResource GRAPHICAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/GraphicalActionIcon.png");
 	public static final ImageIconResource CONDITIONAL_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/ConditionalActionIcon.png");
 	public static final ImageIconResource ITERATION_ACTION_ICON = new ImageIconResource("Icons/Model/VPM/IterationActionIcon.png");
 	public static final ImageIconResource CONSTRAINT_ICON = new ImageIconResource("Icons/Model/VPM/ConstraintIcon.png");
@@ -162,29 +131,6 @@ public class VPMIconLibrary extends IconLibrary {
 
 	public static final IconMarker MODEL_SLOT_ICON_MARKER = new IconMarker(new ImageIconResource("Icons/Model/VPM/ModelSlot.png"), 2, 6);
 
-	/**
-	 * Return the technology-specific controller for supplied technology adapter
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
-		if (technologyAdapter != null) {
-			try {
-				FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
-				if (sm != null) {
-					TechnologyAdapterControllerService service = sm.getService(TechnologyAdapterControllerService.class);
-					if (service != null) {
-						return service.getTechnologyAdapterController(technologyAdapter);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-
 	public static ImageIcon iconForObject(ViewPointObject object) {
 
 		if (object instanceof PatternRole && ((PatternRole) object).getModelSlot() != null) {
@@ -196,8 +142,6 @@ public class VPMIconLibrary extends IconLibrary {
 		}
 		if (object instanceof ViewPoint) {
 			return VIEWPOINT_ICON;
-		} else if (object instanceof DiagramSpecification) {
-			return DIAGRAM_SPECIFICATION_ICON;
 		} else if (object instanceof VirtualModel) {
 			return VIRTUAL_MODEL_ICON;
 		} else if (object instanceof ModelSlot) {
@@ -214,10 +158,6 @@ public class VPMIconLibrary extends IconLibrary {
 			return CONSTRAINT_ICON;
 		} else if (object instanceof MatchEditionPatternInstance.MatchingCriteria) {
 			return CONSTRAINT_ICON;
-		} else if (object instanceof DiagramPalette) {
-			return DIAGRAM_PALETTE_ICON;
-		} else if (object instanceof DiagramPaletteElement) {
-			return SHAPE_ICON;
 		} else if (object instanceof DataPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
@@ -232,16 +172,8 @@ public class VPMIconLibrary extends IconLibrary {
 				return tac.getIconForTechnologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
-		} else if (object instanceof ExampleDiagramConnector) {
-			return CONNECTOR_ICON;
-		} else if (object instanceof ExampleDiagramShape) {
-			return SHAPE_ICON;
-		} else if (object instanceof ExampleDiagram) {
-			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionAction) {
-			if (object instanceof AddDiagram) {
-				return EXAMPLE_DIAGRAM_ICON;
-			} else if (object instanceof AddEditionPatternInstance) {
+			if (object instanceof AddEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof SelectEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.IMPORT);
@@ -251,14 +183,6 @@ public class VPMIconLibrary extends IconLibrary {
 				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.POSITIVE_MARKER);
 			} else if (object instanceof RemoveFromListAction) {
 				return IconFactory.getImageIcon(LIST_ICON, IconLibrary.NEGATIVE_MARKER);
-			} else if (object instanceof CloneShape) {
-				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
-			} else if (object instanceof AddShape) {
-				return IconFactory.getImageIcon(SHAPE_ICON, IconLibrary.DUPLICATE);
-			} else if (object instanceof CloneConnector) {
-				return IconFactory.getImageIcon(CONNECTOR_ICON, DUPLICATE);
-			} else if (object instanceof AddConnector) {
-				return IconFactory.getImageIcon(CONNECTOR_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof AssignationAction) {
@@ -278,8 +202,6 @@ public class VPMIconLibrary extends IconLibrary {
 					return IconFactory.getImageIcon(baseIcon, DELETE);
 				}
 				return DELETE_ICON;
-			} else if (object instanceof GraphicalAction) {
-				return GRAPHICAL_ACTION_ICON;
 			} else if (((EditionAction) object).getModelSlot() != null) {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
 						.getTechnologyAdapter());
@@ -297,55 +219,31 @@ public class VPMIconLibrary extends IconLibrary {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof EditionSchemeParameter) {
 			return EDITION_PATTERN_PARAMETER_ICON;
-		} else if (object instanceof ActionScheme) {
-			return ACTION_SCHEME_ICON;
-		} else if (object instanceof SynchronizationScheme) {
-			return IconFactory.getImageIcon(VIRTUAL_MODEL_ICON, IconLibrary.SYNC);
-		} else if (object instanceof DropScheme) {
-			return DROP_SCHEME_ICON;
-		} else if (object instanceof LinkScheme) {
-			return LINK_SCHEME_ICON;
-		} else if (object instanceof CloningScheme) {
-			return CLONING_SCHEME_ICON;
-		} else if (object instanceof CreationScheme) {
-			return CREATION_SCHEME_ICON;
-		} else if (object instanceof NavigationScheme) {
-			return NAVIGATION_SCHEME_ICON;
-		} else if (object instanceof DeletionScheme) {
-			return DELETION_SCHEME_ICON;
-		} else if (object instanceof PaletteElementPatternParameter) {
-			return EDITION_PATTERN_PARAMETER_ICON;
-		} else if (object instanceof FlexoModelObjectPatternRole) {
-			if (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType() != null) {
-				switch (((FlexoModelObjectPatternRole) object).getFlexoModelObjectType()) {
-				case Process:
-					return WKFIconLibrary.PROCESS_ICON;
-				case ProcessFolder:
-					return WKFIconLibrary.PROCESS_FOLDER_ICON;
-				case Role:
-					return WKFIconLibrary.ROLE_ICON;
-				case Activity:
-					return WKFIconLibrary.ACTIVITY_NODE_ICON;
-				case Operation:
-					return WKFIconLibrary.OPERATION_NODE_ICON;
-				case Screen:
-					return SEIconLibrary.SCREEN_COMPONENT_ICON;
-				case Action:
-					return WKFIconLibrary.ACTION_NODE_ICON;
-				case Event:
-					return WKFIconLibrary.EVENT_ICON;
-				default:
-					return null;
+		} else if (object instanceof EditionScheme) {
+			if (object instanceof ActionScheme) {
+				return ACTION_SCHEME_ICON;
+			} else if (object instanceof SynchronizationScheme) {
+				return IconFactory.getImageIcon(VIRTUAL_MODEL_ICON, IconLibrary.SYNC);
+			} else if (object instanceof CloningScheme) {
+				return CLONING_SCHEME_ICON;
+			} else if (object instanceof CreationScheme) {
+				return CREATION_SCHEME_ICON;
+			} else if (object instanceof NavigationScheme) {
+				return NAVIGATION_SCHEME_ICON;
+			} else if (object instanceof DeletionScheme) {
+				return DELETION_SCHEME_ICON;
+			} else if (object instanceof TechnologySpecificEditionScheme) {
+				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologySpecificEditionScheme) object)
+						.getTechnologyAdapter());
+				if (tac != null) {
+					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction<?, ?>>) object.getClass());
+					if (returned != null) {
+						return returned;
+					} else {
+						return tac.getTechnologyIcon();
+					}
 				}
-			} else {
-				return null;
 			}
-		} else if (object instanceof ConnectorPatternRole) {
-			return CONNECTOR_ICON;
-		} else if (object instanceof ShapePatternRole) {
-			return SHAPE_ICON;
-		} else if (object instanceof DiagramPatternRole) {
-			return EXAMPLE_DIAGRAM_ICON;
 		} else if (object instanceof EditionPatternInstancePatternRole) {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
@@ -387,18 +285,7 @@ public class VPMIconLibrary extends IconLibrary {
 		return VIEWPOINT_ICON;
 	}
 
-	public static ImageIcon iconForObject(ExampleDiagramResource object) {
-		return EXAMPLE_DIAGRAM_ICON;
-	}
-
-	public static ImageIcon iconForObject(DiagramPaletteResource object) {
-		return DIAGRAM_PALETTE_ICON;
-	}
-
 	public static ImageIcon iconForObject(VirtualModelResource object) {
-		if (object instanceof DiagramSpecificationResource) {
-			return DIAGRAM_SPECIFICATION_ICON;
-		}
 		return VIRTUAL_MODEL_ICON;
 	}
 

@@ -39,7 +39,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.dm.DRMDataModification;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
@@ -118,7 +118,7 @@ public class DREBrowser extends ConfigurableProjectBrowser {
 		}
 
 		@Override
-		public FlexoModelObject getDefaultRootObject() {
+		public FlexoObject getDefaultRootObject() {
 			return _docResourceCenter.getRootFolder();
 		}
 

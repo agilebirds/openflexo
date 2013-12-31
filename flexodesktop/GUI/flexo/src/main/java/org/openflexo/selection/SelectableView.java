@@ -19,7 +19,7 @@
  */
 package org.openflexo.selection;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 
 /**
  * Implemented by a view representing an object able to be selected
@@ -43,10 +43,10 @@ public interface SelectableView {
 	public void setIsSelected(boolean b);
 
 	/**
-	 * Return represented object, instance of {@link org.openflexo.foundation.FlexoModelObject}
+	 * Return represented object, instance of {@link org.openflexo.foundation.FlexoObject}
 	 * 
 	 * @return
 	 */
-	public FlexoModelObject getObject();
+	public FlexoObject getObject();
 
 }

@@ -25,13 +25,13 @@ package org.openflexo.foundation.technologyadapter;
  * @author sylvain
  * 
  */
-public interface TechnologyObject {
+public interface TechnologyObject<TA extends TechnologyAdapter> {
 
 	/**
 	 * Return the {@link TechnologyAdapter} of technical space where this concept exists
 	 * 
 	 * @return
 	 */
-	public TechnologyAdapter getTechnologyAdapter();
+	public TA getTechnologyAdapter();
 
 }

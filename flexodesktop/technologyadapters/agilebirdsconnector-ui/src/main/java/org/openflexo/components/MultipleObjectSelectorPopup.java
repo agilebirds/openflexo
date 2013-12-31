@@ -39,7 +39,7 @@ import javax.swing.SwingConstants;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.widget.MultipleObjectSelector;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
@@ -66,7 +66,7 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 
 	protected int returnedStatus = CANCEL;
 
-	protected MultipleObjectSelector<? extends FlexoModelObject> choicePanel;
+	protected MultipleObjectSelector<? extends FlexoObject> choicePanel;
 	protected JPanel centerPanel;
 
 	private BrowserConfiguration _browserConfiguration;
@@ -123,10 +123,10 @@ public class MultipleObjectSelectorPopup extends FlexoDialog {
 
 		topPanel.add(_descriptionTA, BorderLayout.CENTER);
 
-		choicePanel = new MultipleObjectSelector<FlexoModelObject>(browserConfiguration, null,
-				new MultipleObjectSelector.ObjectSelectabilityDelegate<FlexoModelObject>() {
+		choicePanel = new MultipleObjectSelector<FlexoObject>(browserConfiguration, null,
+				new MultipleObjectSelector.ObjectSelectabilityDelegate<FlexoObject>() {
 					@Override
-					public boolean isSelectable(FlexoModelObject object) {
+					public boolean isSelectable(FlexoObject object) {
 						// TODO: type this !!!
 						return true;
 					}

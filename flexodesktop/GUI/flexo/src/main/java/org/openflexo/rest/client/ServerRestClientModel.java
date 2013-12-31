@@ -35,7 +35,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
@@ -170,7 +170,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private static final String COMMENT = "comment";
 		private static final String PROJECT = "project";
 		private Project project;
-		private PropertyChangeSupport pcSupport;
+		private final PropertyChangeSupport pcSupport;
 		private String comment;
 
 		public NewProjectParameter() {
@@ -586,7 +586,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private class ValidationInProgress implements ServerRestClientOperation {
 
-		private ProjectVersion version;
+		private final ProjectVersion version;
 
 		public ValidationInProgress(ProjectVersion version) {
 			super();
@@ -645,7 +645,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public class CloseSession implements ServerRestClientOperation {
 
-		private Session session;
+		private final Session session;
 
 		public CloseSession(Session session) {
 			super();
@@ -681,7 +681,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public class CreateProjectAndUploadFirstVersion implements ServerRestClientOperation {
 
-		private NewProjectParameter newProjectParameter;
+		private final NewProjectParameter newProjectParameter;
 
 		public CreateProjectAndUploadFirstVersion(NewProjectParameter newProjectParameter) {
 			super();
@@ -777,8 +777,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private PropertyChangeSupport pcSupport;
 
-	private int pageSize = 5;
-	private int page = 0;
+	private final int pageSize = 5;
+	private final int page = 0;
 	private ScheduledFuture<?> validationJobChecker;
 	private LoadingCache<String, List<Account>> accountCache;
 	private LoadingCache<String, List<User>> adminUserCache;

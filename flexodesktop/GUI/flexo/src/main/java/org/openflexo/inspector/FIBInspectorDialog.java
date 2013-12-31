@@ -29,11 +29,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.diagram.model.DiagramConnector;
-import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
 import org.openflexo.swing.WindowSynchronizer;
 import org.openflexo.utils.WindowBoundsSaver;
@@ -81,9 +78,9 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 
 	/*public void inspectObject(Object object) {
 		if (inspectorPanel.inspectObject(object)) {
-			if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
-					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
-				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
+			if (object instanceof FlexoObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
+					&& ((FlexoObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoObject) object).getEditionPatternReferences().firstElement().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
 			} else {
@@ -104,9 +101,9 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 			if (object instanceof EditionPatternInstance) {
 				String newTitle = ((EditionPatternInstance) object).getEditionPattern().getInspector().getInspectorTitle();
 				setTitle(newTitle);
-			} else if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
-					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
-				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().get(0).getObject().getEditionPattern()
+			} else if (object instanceof FlexoObject /*&& (object instanceof DiagramShape || object instanceof DiagramConnector)*/
+					&& ((FlexoObject) object).getEditionPatternReferences().size() > 0) {
+				String newTitle = ((FlexoObject) object).getEditionPatternReferences().get(0).getObject().getEditionPattern()
 						.getInspector().getInspectorTitle();
 				setTitle(newTitle);
 			} else if (getInspectorPanel() != null && getInspectorPanel().getCurrentlyDisplayedInspector() != null) {

@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.diagram.fml;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
+import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 
 @FIBPanel("Fib/NavigationSchemePanel.fib")
 public class DiagramNavigationScheme extends NavigationScheme implements DiagramEditionScheme {
@@ -31,4 +32,10 @@ public class DiagramNavigationScheme extends NavigationScheme implements Diagram
 	public DiagramNavigationScheme() {
 		super();
 	}
+
+	@Override
+	public DiagramTechnologyAdapter getTechnologyAdapter() {
+		return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
+	}
+
 }

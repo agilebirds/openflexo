@@ -35,7 +35,6 @@ import org.openflexo.inspector.EmptySelection;
 import org.openflexo.inspector.MultipleSelection;
 import org.openflexo.inspector.UniqueSelection;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.palette.PalettePanel;
 
 /**
  * Abstract selection manager: there is one SelectionManager for each FlexoModule. This manager is responsible of:
@@ -563,16 +562,14 @@ public abstract class SelectionManager extends Observable {
 		}
 		if (_inspectedObject != null) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName() + " with " + _inspectedObject.countObservers()
-						+ " observers");
+				logger.fine("Inspected object was: " + _inspectedObject.getClass().getName());
 			}
 		}
 		if (inspectable != null) {
 			if (_inspectedObject == null || !_inspectedObject.equals(inspectable)) {
 				_inspectedObject = inspectable;
 				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Inspected object is now: " + _inspectedObject.getClass().getName() + " with "
-							+ _inspectedObject.countObservers() + " observers");
+					logger.fine("Inspected object is now: " + _inspectedObject.getClass().getName());
 				}
 				setChanged();
 				// Component focusOwner =
@@ -630,12 +627,12 @@ public abstract class SelectionManager extends Observable {
 		if (!(object instanceof FlexoObject)) {
 			return true;
 		}
-		FlexoObject obj = object;
+		/*FlexoObject obj = object;
 		if (obj.getContext() != null) {
 			if (obj.getContext() instanceof PalettePanel) {
 				return ((PalettePanel) obj.getContext()).isEdited();
 			}
-		}
+		}*/
 		return true;
 	}
 
@@ -646,11 +643,11 @@ public abstract class SelectionManager extends Observable {
 		if (object.isDeleted()) {
 			return false;
 		}
-		if (object.getContext() != null) {
+		/*if (object.getContext() != null) {
 			if (object.getContext() instanceof PalettePanel) {
 				return ((PalettePanel) object.getContext()).isEdited();
 			}
-		}
+		}*/
 		return true;
 	}
 

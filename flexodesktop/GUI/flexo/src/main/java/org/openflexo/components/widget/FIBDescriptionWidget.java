@@ -24,15 +24,13 @@ import java.util.logging.Logger;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
-import org.openflexo.foundation.DocType;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to represent/edit specific descriptions related to a FlexoModelObject instance
+ * Widget allowing to represent/edit specific descriptions related to a {@link FlexoObject} instance
  * 
  * @author sguerin
  * 
@@ -43,7 +41,7 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject>
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/DescriptionWidget.fib");
 
-	public FIBDescriptionWidget(FlexoModelObject editedObject) {
+	public FIBDescriptionWidget(FlexoObject editedObject) {
 		super(FIB_FILE, editedObject, FlexoLocalization.getMainLocalizer());
 	}
 
@@ -65,7 +63,7 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject>
 
 	public class DescriptionWidgetFIBController extends FIBController {
 
-		private DocType currentDocType;
+		private String currentDocType;
 
 		public DescriptionWidgetFIBController(FIBComponent c) {
 			super(c);
@@ -73,7 +71,7 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject>
 
 		public String getSpecificDescription() {
 			if (currentDocType != null && getEditedObject() != null) {
-				return getEditedObject().getSpecificDescriptionForKey(currentDocType.getName());
+				return getEditedObject().getSpecificDescriptionForKey(currentDocType);
 			}
 			return null;
 		}
@@ -82,15 +80,15 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject>
 			System.out.println("Sets " + specificDescription + " currentDocType=" + currentDocType);
 			if (currentDocType != null && getEditedObject() != null) {
 				System.out.println("For key " + currentDocType + " description=" + specificDescription);
-				getEditedObject().setSpecificDescriptionsForKey(specificDescription, currentDocType.getName());
+				getEditedObject().setSpecificDescriptionsForKey(specificDescription, currentDocType);
 			}
 		}
 
-		public DocType getCurrentDocType() {
+		public String getCurrentDocType() {
 			return currentDocType;
 		}
 
-		public void setCurrentDocType(DocType currentDocType) {
+		public void setCurrentDocType(String currentDocType) {
 			System.out.println("setCurrentDocType " + currentDocType);
 			this.currentDocType = currentDocType;
 		}
