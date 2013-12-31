@@ -184,7 +184,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 			return getResourceCenter() != null && getModelResource() != null;
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			return StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
-					&& StringUtils.isNotEmpty(getFilename()) && !(getModelUri().contains(" "));
+					&& StringUtils.isNotEmpty(getFilename()) && ((isURIEditable() && !(getModelUri().contains(" ")) || !isURIEditable()));
 
 		}/* else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
@@ -214,7 +214,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 			if (!StringUtils.isNotEmpty(getFilename())) {
 				return "Filename path must be filled";
 			}
-			if ((getModelUri().contains(" "))) {
+			if (((isURIEditable()) && (getModelUri().contains(" ")))) {
 				return "Model Uri contains spaces";
 			}
 		}
