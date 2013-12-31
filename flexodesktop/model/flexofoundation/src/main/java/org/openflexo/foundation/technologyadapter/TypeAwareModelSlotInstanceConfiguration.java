@@ -57,7 +57,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		//options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
+		// options.add(DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -115,7 +115,7 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}
 			return msInstance;
-		}*/
+			}*/
 		return null;
 	}
 
@@ -184,15 +184,42 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 			return getResourceCenter() != null && getModelResource() != null;
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			return StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
-					&& StringUtils.isNotEmpty(getFilename());
+					&& StringUtils.isNotEmpty(getFilename()) && !(getModelUri().contains(" "));
 
 		}/* else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			return getResourceCenter() != null && StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
 					&& StringUtils.isNotEmpty(getFilename());
 
-		}*/
+			}*/
 		return false;
 	}
-	
+
+	@Override
+	public String getErrorMessage() {
+		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+			if (getResourceCenter() == null) {
+				return "Null resource center";
+			}
+			if (getModelResource() == null) {
+				return "Null model resource";
+			}
+		}
+		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
+			if (!StringUtils.isNotEmpty(getModelUri())) {
+				return "Model URI must be filled";
+			}
+			if (!StringUtils.isNotEmpty(getRelativePath())) {
+				return "Relative path must be filled";
+			}
+			if (!StringUtils.isNotEmpty(getFilename())) {
+				return "Filename path must be filled";
+			}
+			if ((getModelUri().contains(" "))) {
+				return "Model Uri contains spaces";
+			}
+		}
+		return super.getErrorMessage();
+	}
+
 	public abstract boolean isURIEditable();
 }
