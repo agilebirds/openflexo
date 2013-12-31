@@ -109,6 +109,24 @@
     </Button>
   </Panel>
   <LocalizedDictionary>
+    <Localized key="null_resource_center" lang="English">Null resource center</Localized>
+    <Localized key="null_resource_center" lang="French">null_resource_center</Localized>
+    <Localized key="null_resource_center" lang="Dutch">null_resource_center</Localized>
+    <Localized key="null_model_resource" lang="English">Null model resource</Localized>
+    <Localized key="null_model_resource" lang="French">La resource du modèle est nulle</Localized>
+    <Localized key="null_model_resource" lang="Dutch">null_model_resource</Localized>
+    <Localized key="uri_is_null" lang="English">Uri is null</Localized>
+    <Localized key="uri_is_null" lang="French">L'uri est nulle</Localized>
+    <Localized key="uri_is_null" lang="Dutch">uri_is_null</Localized>
+    <Localized key="relative_path_is_null" lang="English">Relative path is null</Localized>
+    <Localized key="relative_path_is_null" lang="French">Le chemin relatif est nul</Localized>
+    <Localized key="relative_path_is_null" lang="Dutch">relative_path_is_null</Localized>
+    <Localized key="file_name_is_null" lang="English">File name is null</Localized>
+    <Localized key="file_name_is_null" lang="French">Le nom du fichier est nul</Localized>
+    <Localized key="file_name_is_null" lang="Dutch">file_name_is_null</Localized>
+    <Localized key="space_in_uri" lang="English">Space in uri</Localized>
+    <Localized key="space_in_uri" lang="French">Espaces dans l'uri</Localized>
+    <Localized key="space_in_uri" lang="Dutch">space_in_uri</Localized>
     <Localized key="validate" lang="English">Validate</Localized>
     <Localized key="validate" lang="French">Valider</Localized>
     <Localized key="validate" lang="Dutch">Validate</Localized>

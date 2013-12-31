@@ -28,6 +28,7 @@ import org.openflexo.foundation.view.TypeAwareModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -198,24 +199,24 @@ public abstract class TypeAwareModelSlotInstanceConfiguration<M extends FlexoMod
 	public String getErrorMessage() {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (getResourceCenter() == null) {
-				return "Null resource center";
+				return FlexoLocalization.localizedForKey("null_resource_center");
 			}
 			if (getModelResource() == null) {
-				return "Null model resource";
+				return FlexoLocalization.localizedForKey("null_model_resource");
 			}
 		}
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			if (!StringUtils.isNotEmpty(getModelUri())) {
-				return "Model URI must be filled";
+				return FlexoLocalization.localizedForKey("uri_is_null");
 			}
 			if (!StringUtils.isNotEmpty(getRelativePath())) {
-				return "Relative path must be filled";
+				return FlexoLocalization.localizedForKey("relative_path_is_null");
 			}
 			if (!StringUtils.isNotEmpty(getFilename())) {
-				return "Filename path must be filled";
+				return FlexoLocalization.localizedForKey("file_name_is_null");
 			}
 			if (((isURIEditable()) && (getModelUri().contains(" ")))) {
-				return "Model Uri contains spaces";
+				return FlexoLocalization.localizedForKey("space_in_uri");
 			}
 		}
 		return super.getErrorMessage();
