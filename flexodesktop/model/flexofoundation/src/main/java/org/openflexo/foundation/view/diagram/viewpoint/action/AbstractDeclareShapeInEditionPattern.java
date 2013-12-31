@@ -20,12 +20,12 @@
 
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
@@ -35,16 +35,18 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AddIndividual;
+import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
@@ -78,10 +80,10 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private String virtualModelPatternRoleName;
 	private EditionPattern newEditionPattern;
 	private LinkedHashMap<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
-	//public DiagramPalette palette;
+	// public DiagramPalette palette;
 
 	private boolean isTopLevel = true;
-	//public boolean isPushedToPalette = false;
+	// public boolean isPushedToPalette = false;
 	private EditionPattern containerEditionPattern;
 	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
@@ -298,6 +300,8 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		this.containerEditionPattern = containerEditionPattern;
 	}
 
+	private IndividualPatternRole<?> individualPatternRole;
+
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Declare shape in edition pattern");
@@ -331,7 +335,6 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 
 					// Create pattern role, if it is an ontology then we create an individual, otherwise if it is a virtual model we create
 					// an edition pattern instance
-					IndividualPatternRole<?> individualPatternRole = null;
 					EditionPatternInstancePatternRole editionPatternPatternRole = null;
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						if (isTypeAwareModelSlot()) {
@@ -360,8 +363,8 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (DrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
-							if(entry.graphicalObject instanceof GRShapeTemplate){
-								GRShapeTemplate grShape = (GRShapeTemplate)entry.graphicalObject;
+							if (entry.graphicalObject instanceof GRShapeTemplate) {
+								GRShapeTemplate grShape = (GRShapeTemplate) entry.graphicalObject;
 								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
 								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
@@ -381,42 +384,43 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 										.setAllowToLeaveBounds(false);
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
 								if (entry.getParentEntry() != null) {
-									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles.get(entry
-											.getParentEntry()));
+									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
+											.get(entry.getParentEntry()));
 								}
 								if (entry.isMainEntry()) {
 									primaryRepresentationRole = newShapePatternRole;
 								}
 								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
 							}
-							if(entry.graphicalObject instanceof GRConnectorTemplate){
-								GRConnectorTemplate grConnector = (GRConnectorTemplate)entry.graphicalObject;
+							if (entry.graphicalObject instanceof GRConnectorTemplate) {
+								GRConnectorTemplate grConnector = (GRConnectorTemplate) entry.graphicalObject;
 								ConnectorPatternRole newConnectorPatternRole = new ConnectorPatternRole(builder);
 								newConnectorPatternRole.setPatternRoleName(entry.patternRoleName);
 								newConnectorPatternRole.setReadOnlyLabel(true);
 								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
-									newConnectorPatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
+									newConnectorPatternRole
+											.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
 								}
 								newConnectorPatternRole.setExampleLabel((grConnector.getGraphicalRepresentation()).getText());
 								newConnectorPatternRole.setGraphicalRepresentation((grConnector.getGraphicalRepresentation()).clone());
 								newEditionPattern.addToPatternRoles(newConnectorPatternRole);
 								// Set the source/target
-								//newConnectorPatternRole.setEndShapePatternRole(endShapePatternRole);
+								// newConnectorPatternRole.setEndShapePatternRole(endShapePatternRole);
 								if (entry.isMainEntry()) {
 									primaryRepresentationRole = newConnectorPatternRole;
 								}
 								newGraphicalElementPatternRoles.put(entry, newConnectorPatternRole);
 							}
-							
+
 						}
 					}
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
-				/*	if (isPushedToPalette) {
-						DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(),
-								getFocusedObject().getGraphicalRepresentation());
-						_newPaletteElement.setEditionPattern(newEditionPattern);
-					}*/
+					/*	if (isPushedToPalette) {
+							DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(),
+									getFocusedObject().getGraphicalRepresentation());
+							_newPaletteElement.setEditionPattern(newEditionPattern);
+						}*/
 
 					// Create other individual roles
 					/*Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
@@ -437,149 +441,9 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 						}
 					}*/
 
-					// Create new drop scheme
-					DropScheme newDropScheme = new DropScheme(builder);
-					newDropScheme.setName(getDropSchemeName());
-
-					// Add new drop scheme
-					newEditionPattern.addToEditionSchemes(newDropScheme);
-
-					newDropScheme.setTopTarget(isTopLevel);
-					if (!isTopLevel) {
-						newDropScheme.setTargetEditionPattern(containerEditionPattern);
-					}
-
-					// Parameters
-					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						if (isTypeAwareModelSlot()) {
-							TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
-							// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
-							/*for (PropertyEntry e : propertyEntries) {
-								if (e != null && e.selectEntry) {
-									EditionSchemeParameter newParameter = null;
-									if (e.property instanceof IFlexoOntologyDataProperty) {
-										switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
-										case Boolean:
-											newParameter = new CheckboxParameter(builder);
-											newParameter.setName(e.property.getName());
-											newParameter.setLabel(e.label);
-											break;
-										case Byte:
-										case Integer:
-										case Long:
-										case Short:
-											newParameter = new IntegerParameter(builder);
-											newParameter.setName(e.property.getName());
-											newParameter.setLabel(e.label);
-											break;
-										case Double:
-										case Float:
-											newParameter = new FloatParameter(builder);
-											newParameter.setName(e.property.getName());
-											newParameter.setLabel(e.label);
-											break;
-										case String:
-											newParameter = new TextFieldParameter(builder);
-											newParameter.setName(e.property.getName());
-											newParameter.setLabel(e.label);
-											break;
-										default:
-											break;
-										}
-									} else if (e.property instanceof IFlexoOntologyObjectProperty) {
-										IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
-										if (range instanceof IFlexoOntologyClass) {
-											newParameter = new IndividualParameter(builder);
-											newParameter.setName(e.property.getName());
-											newParameter.setLabel(e.label);
-											((IndividualParameter) newParameter).setConcept((IFlexoOntologyClass) range);
-										}
-									}
-									if (newParameter != null) {
-										newDropScheme.addToParameters(newParameter);
-									}
-								}
-							}*/
-
-							URIParameter uriParameter = new URIParameter(builder);
-							uriParameter.setName("uri");
-							uriParameter.setLabel("uri");
-							/*if (mainPropertyDescriptor != null) {
-								uriParameter.setBaseURI(new DataBinding<String>(mainPropertyDescriptor.property.getName()));
-							}*/
-							newDropScheme.addToParameters(uriParameter);
-
-							// Declare pattern role
-							/*for (IndividualPatternRole r : otherRoles) {
-								DeclarePatternRole action = new DeclarePatternRole(builder);
-								action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
-								action.setObject(new DataBinding<Object>("parameters." + r.getName()));
-								newDropScheme.addToActions(action);
-							}*/
-
-							// Add individual action
-							AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
-									newDropScheme);
-
-							/*AddIndividual newAddIndividual = new AddIndividual(builder);
-							newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
-							newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
-							for (PropertyEntry e : propertyEntries) {
-								if (e.selectEntry) {
-									if (e.property instanceof IFlexoOntologyObjectProperty) {
-										IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
-										if (range instanceof IFlexoOntologyClass) {
-											ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(builder);
-											propertyAssertion.setOntologyProperty(e.property);
-											propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
-											newAddIndividual.addToObjectAssertions(propertyAssertion);
-										}
-									} else if (e.property instanceof IFlexoOntologyDataProperty) {
-										DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(builder);
-										propertyAssertion.setOntologyProperty(e.property);
-										propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
-										newAddIndividual.addToDataAssertions(propertyAssertion);
-									}
-								}
-							}*/
-							newDropScheme.addToActions(newAddIndividual);
-						}
-					}
-
-					// Parameters for edition patterns creation action
-					/*if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
-						if (isVirtualModelModelSlot()) {
-							VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
-
-							// Add individual action
-							EditionAction newAddEditionPattern = virtualModelModelSlot.makeAddEditionPatternInstanceEditionAction(
-									editionPatternPatternRole, newDropScheme);
-
-							newDropScheme.addToActions(newAddEditionPattern);
-						}
-					}*/
-
-					// Add shape/connector actions
-					boolean mainPatternRole = true;
-					for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
-						if (graphicalElementPatternRole instanceof ShapePatternRole) {
-							ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
-							// Add shape action
-							AddShape newAddShape = new AddShape(builder);
-							newDropScheme.addToActions(newAddShape);
-							newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
-							if (mainPatternRole) {
-								if (isTopLevel) {
-									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
-								} else {
-									newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
-											+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-								}
-							} else {
-								newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
-										.getPatternRoleName()));
-							}
-							mainPatternRole = false;
+					for (EditionSchemeConfiguration editionSchemeConf : editionSchemes) {
+						if (editionSchemeConf.isValid()) {
+							createScheme(editionSchemeConf, newEditionPattern, builder);
 						}
 					}
 
@@ -702,5 +566,111 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		}
 	}
 	 */
+
+	public ArrayList<EditionSchemeConfiguration> getEditionSchemes() {
+		if (editionSchemes == null) {
+			editionSchemes = new ArrayList<EditionSchemeConfiguration>();
+
+			EditionSchemeConfiguration deleteShapeEditionScheme = new EditionSchemeConfiguration("DeleteShape",
+					EditionSchemeChoice.DELETE_SHAPE);
+			EditionSchemeConfiguration deleteShapeAndModelAllEditionScheme = new EditionSchemeConfiguration("DeleteShapeAndModel",
+					EditionSchemeChoice.DELETE_SHAPE_MODEL);
+			EditionSchemeConfiguration dropEditionScheme = new EditionSchemeConfiguration("DropScheme", EditionSchemeChoice.DROP);
+
+			editionSchemes.add(dropEditionScheme);
+			editionSchemes.add(deleteShapeEditionScheme);
+			editionSchemes.add(deleteShapeAndModelAllEditionScheme);
+
+			dropEditionScheme.setValid(true);
+			deleteShapeEditionScheme.setValid(true);
+			deleteShapeAndModelAllEditionScheme.setValid(true);
+		}
+		return editionSchemes;
+	}
+
+	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
+		this.editionSchemes = editionSchemes;
+	}
+
+	private ArrayList<EditionSchemeConfiguration> editionSchemes;
+
+	private EditionScheme createScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+			VirtualModel.VirtualModelBuilder builder) {
+		EditionScheme editionScheme = null;
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_SHAPE_MODEL) {
+			DeletionScheme newDeletionScheme = editionPattern.createDeletionScheme();
+			newDeletionScheme.setName(editionSchemeConfiguration.getName());
+		}
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_SHAPE) {
+			DeletionScheme newDeletionScheme = new DeletionScheme(null);
+			newDeletionScheme.setName(editionSchemeConfiguration.getName());
+			for (PatternRole role : editionPattern.getPatternRoles()) {
+				if ((role instanceof ShapePatternRole)) {
+					DeleteAction a = new DeleteAction(null);
+					a.setObject(new DataBinding<Object>(role.getPatternRoleName()));
+					newDeletionScheme.addToActions(a);
+				}
+			}
+			editionPattern.addToEditionSchemes(newDeletionScheme);
+		}
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
+			// Create new drop scheme
+			DropScheme newDropScheme = new DropScheme(builder);
+			newDropScheme.setName(editionSchemeConfiguration.getName());
+
+			// Add new drop scheme
+			newEditionPattern.addToEditionSchemes(newDropScheme);
+
+			newDropScheme.setTopTarget(isTopLevel);
+			if (!isTopLevel) {
+				newDropScheme.setTargetEditionPattern(containerEditionPattern);
+			}
+
+			// Parameters
+			if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+				if (isTypeAwareModelSlot()) {
+					TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
+
+					URIParameter uriParameter = new URIParameter(builder);
+					uriParameter.setName("uri");
+					uriParameter.setLabel("uri");
+
+					newDropScheme.addToParameters(uriParameter);
+
+					// Add individual action
+					AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
+							newDropScheme);
+
+					newDropScheme.addToActions(newAddIndividual);
+				}
+			}
+
+			// Add shape/connector actions
+			boolean mainPatternRole = true;
+			for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
+				if (graphicalElementPatternRole instanceof ShapePatternRole) {
+					ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
+					// Add shape action
+					AddShape newAddShape = new AddShape(builder);
+					newDropScheme.addToActions(newAddShape);
+					newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
+					if (mainPatternRole) {
+						if (isTopLevel) {
+							newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
+						} else {
+							newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
+									+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+						}
+					} else {
+						newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
+								.getPatternRoleName()));
+					}
+					mainPatternRole = false;
+				}
+			}
+		}
+
+		return editionScheme;
+	}
 
 }

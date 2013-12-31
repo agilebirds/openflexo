@@ -263,4 +263,47 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return false;
 	}
 
+	public static enum EditionSchemeChoice {
+		DELETE_SHAPE, DELETE_SHAPE_MODEL, DROP
+	}
+
+	public class EditionSchemeConfiguration {
+
+		private String name;
+
+		private EditionSchemeChoice type;
+
+		private boolean isValid;
+
+		public EditionSchemeConfiguration(String name, EditionSchemeChoice type) {
+			super();
+			this.name = name;
+			this.type = type;
+		}
+
+		public EditionSchemeChoice getType() {
+			return type;
+		}
+
+		public void setType(EditionSchemeChoice type) {
+			this.type = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public boolean isValid() {
+			return isValid;
+		}
+
+		public void setValid(boolean isValid) {
+			this.isValid = isValid;
+		}
+	}
+
 }
