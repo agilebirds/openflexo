@@ -95,7 +95,7 @@ import org.openflexo.antar.expr.parser.node.TStringValue;
  */
 class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 
-	private Hashtable<Node, Expression> expressionNodes;
+	private final Hashtable<Node, Expression> expressionNodes;
 	private Node topLevel = null;
 
 	public ExpressionSemanticsAnalyzer() {
@@ -130,8 +130,14 @@ class ExpressionSemanticsAnalyzer extends DepthFirstAdapter {
 		// System.out.println("Make binding with " + node);
 
 		// Apply the translation.
-		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer();
+		BindingSemanticsAnalyzer bsa = new BindingSemanticsAnalyzer(node);
+
+		// System.out.println("Built bsa as " + bsa.getPath());
+
 		node.apply(bsa);
+
+		// System.out.println("Make binding value with bsa as " + bsa.getPath());
+
 		BindingValue returned = new BindingValue(bsa.getPath());
 		// System.out.println("Made binding as " + bsa.getPath());
 

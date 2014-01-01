@@ -2,6 +2,7 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
 import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
@@ -32,9 +33,9 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	private static final BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 
-	private Object object;
-	private BindingDefinition bindingDefinition;
-	private BindingModel bindingModel;
+	private final Object object;
+	private final BindingDefinition bindingDefinition;
+	private final BindingModel bindingModel;
 
 	private BindingEvaluator(Object object) {
 		this.object = object;
@@ -47,6 +48,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		Expression expression = null;
 		try {
 			expression = ExpressionParser.parse(bindingPath);
+
 			expression = expression.transform(new ExpressionTransformer() {
 				@Override
 				public Expression performTransformation(Expression e) throws TransformException {
@@ -101,10 +103,13 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 
 	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException,
 			InvocationTargetException {
+		// System.out.println("Evaluating " + bindingPath);
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
-		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
-		DataBinding binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, DataBinding.BindingDefinitionType.GET);
-		binding.setBindingDefinition(bindingDefinition);
+		// System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
+		DataBinding<?> binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, DataBinding.BindingDefinitionType.GET);
+		binding.setDeclaredType(Object.class);
+		binding.setBindingDefinitionType(BindingDefinitionType.GET);
+
 		System.out.println("Binding = " + binding + " valid=" + binding.isValid() + " as " + binding.getClass());
 		if (!binding.isValid()) {
 			System.out.println("not valid: " + binding.invalidBindingReason());

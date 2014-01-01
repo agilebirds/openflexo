@@ -86,4 +86,33 @@ public class TestBindingEvaluator extends TestCase {
 		genericTest("substring(3,length()-2)+' hash='+hashCode()", thisIsATest, "lo world, this is a te hash=" + thisIsATest.hashCode());
 	}
 
+	public void test10() {
+		TestObject object = new TestObject();
+		// String thisIsATest = "object.setSelected((!(data.isSelected(iterator))),iterator)";
+		genericTest("object.getValue(object)", object, 0);
+		genericTest("object.setValue(10,object)", object, null);
+		genericTest("object.getValue(object)", object, 10);
+		genericTest("object.setValue(object.getValue(object),object)", object, null);
+	}
+
+	public void test11() {
+		TestObject object = new TestObject();
+		// String thisIsATest = "object.setSelected((!(data.isSelected(iterator))),iterator)";
+		genericTest("object.setValue(object.getValue(object)+1,object)", object, null);
+		genericTest("object.getValue(object)", object, 1);
+	}
+
+	public static class TestObject {
+
+		private int value = 0;
+
+		public int getValue(TestObject o) {
+			return value;
+		}
+
+		public void setValue(int aValue, TestObject o) {
+			System.out.println("sets value with " + aValue);
+			value = aValue;
+		}
+	}
 }

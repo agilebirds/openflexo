@@ -108,7 +108,7 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 
 	}
 
-	private List<AbstractBindingPathElement> parsedBindingPath;
+	private final List<AbstractBindingPathElement> parsedBindingPath;
 
 	private BindingVariable bindingVariable;
 	private ArrayList<BindingPathElement> bindingPath;
@@ -127,6 +127,7 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 
 	public BindingValue(List<AbstractBindingPathElement> aBindingPath) {
 		super();
+
 		this.parsedBindingPath = aBindingPath;
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();

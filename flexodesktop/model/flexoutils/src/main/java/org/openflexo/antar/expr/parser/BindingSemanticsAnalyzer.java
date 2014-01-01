@@ -15,6 +15,7 @@ import org.openflexo.antar.expr.parser.node.ATail1Binding;
 import org.openflexo.antar.expr.parser.node.ATail2Binding;
 import org.openflexo.antar.expr.parser.node.PAdditionalArg;
 import org.openflexo.antar.expr.parser.node.PArgList;
+import org.openflexo.antar.expr.parser.node.PBinding;
 import org.openflexo.antar.expr.parser.node.TIdentifier;
 
 /**
@@ -27,15 +28,16 @@ import org.openflexo.antar.expr.parser.node.TIdentifier;
  */
 class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 
-	private ArrayList<BindingValue.AbstractBindingPathElement> path;
+	private final ArrayList<BindingValue.AbstractBindingPathElement> path;
 
 	/**
 	 * This flag is used to escape binding processing that may happen in call args handling
 	 */
-	private boolean weAreDealingWithTheRightBinding = true;
+	// private boolean weAreDealingWithTheRightBinding = true;
 
-	public BindingSemanticsAnalyzer() {
+	public BindingSemanticsAnalyzer(PBinding node) {
 		path = new ArrayList<BindingValue.AbstractBindingPathElement>();
+		// System.out.println(">>>> node=" + node + " of " + node.getClass());
 	}
 
 	public List<BindingValue.AbstractBindingPathElement> getPath() {
@@ -57,9 +59,10 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	  {tail} identifier dot binding;*/
 
 	protected BindingValue.NormalBindingPathElement makeNormalBindingPathElement(TIdentifier identifier) {
-		BindingValue.NormalBindingPathElement returned = new BindingValue.NormalBindingPathElement(
-				identifier.getText());
-		path.add(0, returned);
+		BindingValue.NormalBindingPathElement returned = new BindingValue.NormalBindingPathElement(identifier.getText());
+		if (weAreDealingWithTheRightBinding()) {
+			path.add(0, returned);
+		}
 		return returned;
 	}
 
@@ -73,16 +76,18 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 				args.add(getExpression(additionalArg.getExpr()));
 			}
 		}
-		BindingValue.MethodCallBindingPathElement returned = new BindingValue.MethodCallBindingPathElement(node
-				.getIdentifier().getText(), args);
-		path.add(0, returned);
+		BindingValue.MethodCallBindingPathElement returned = new BindingValue.MethodCallBindingPathElement(node.getIdentifier().getText(),
+				args);
+		if (weAreDealingWithTheRightBinding()) {
+			path.add(0, returned);
+		}
 		return returned;
 	}
 
 	@Override
 	public void outAIdentifierBinding(AIdentifierBinding node) {
 		super.outAIdentifierBinding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeNormalBindingPathElement(node.getIdentifier());
 		}
 	}
@@ -90,7 +95,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outACallBinding(ACallBinding node) {
 		super.outACallBinding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeMethodCallBindingPathElement((ACall) node.getCall());
 		}
 	}
@@ -98,7 +103,7 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outATail1Binding(ATail1Binding node) {
 		super.outATail1Binding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeNormalBindingPathElement(node.getIdentifier());
 		}
 	}
@@ -106,23 +111,30 @@ class BindingSemanticsAnalyzer extends ExpressionSemanticsAnalyzer {
 	@Override
 	public void outATail2Binding(ATail2Binding node) {
 		super.outATail2Binding(node);
-		if (weAreDealingWithTheRightBinding) {
+		if (weAreDealingWithTheRightBinding()) {
 			makeMethodCallBindingPathElement((ACall) node.getCall());
 		}
 	}
+
+	private int depth = 0;
 
 	@Override
 	public void inABindingTerm(ABindingTerm node) {
 		super.inABindingTerm(node);
 		// System.out.println("IN binding " + node);
-		weAreDealingWithTheRightBinding = false;
+		// weAreDealingWithTheRightBinding = false;
+		depth++;
 	}
 
 	@Override
 	public void outABindingTerm(ABindingTerm node) {
 		super.outABindingTerm(node);
 		// System.out.println("OUT binding " + node);
-		weAreDealingWithTheRightBinding = true;
+		// weAreDealingWithTheRightBinding = true;
+		depth--;
 	}
 
+	private boolean weAreDealingWithTheRightBinding() {
+		return depth == 0;
+	}
 }

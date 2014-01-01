@@ -299,7 +299,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	}
 
 	public static class InvalidBindingValue extends VisitorException {
-		private BindingValue bindingValue;
+		private final BindingValue bindingValue;
 
 		public InvalidBindingValue(BindingValue e) {
 			bindingValue = e;
@@ -532,6 +532,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					+ " "
 					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
 							+ getOwner().getBindingFactory() : ""));
+			//System.out.println("BreakPoint in DataBinding");
 			/*Bindable owner = getOwner();
 			BindingModel bm = getOwner().getBindingModel();
 			BindingFactory bf = getOwner().getBindingFactory();
