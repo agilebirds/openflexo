@@ -532,7 +532,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					+ " "
 					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
 							+ getOwner().getBindingFactory() : ""));
-			//System.out.println("BreakPoint in DataBinding");
+			System.out.println("BreakPoint in DataBinding");
 			/*Bindable owner = getOwner();
 			BindingModel bm = getOwner().getBindingModel();
 			BindingFactory bf = getOwner().getBindingFactory();
@@ -544,11 +544,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	private Expression analyseExpressionAfterParsing() {
 		if (getOwner() != null) {
+			// System.out.println("Analysing " + this + " unparsedBinding=" + unparsedBinding);
 			try {
 				expression.visit(new ExpressionVisitor() {
 					@Override
 					public void visit(Expression e) {
 						if (e instanceof BindingValue) {
+							// System.out.println("> Analyse " + e);
 							((BindingValue) e).buildBindingPathFromParsedBindingPath(DataBinding.this);
 						}
 					}
