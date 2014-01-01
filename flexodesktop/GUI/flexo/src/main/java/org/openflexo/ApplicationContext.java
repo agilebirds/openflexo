@@ -92,7 +92,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		// TODO: Should be removed when preferences will be a service see OPENFLEXO-651
 		if (notification instanceof ResourceCenterListShouldBeStored && caller instanceof FlexoResourceCenterService) {
 			List<File> rcList = new ArrayList<File>();
-			for (FlexoResourceCenter rc : ((FlexoResourceCenterService) caller).getResourceCenters()) {
+			for (FlexoResourceCenter<?> rc : ((FlexoResourceCenterService) caller).getResourceCenters()) {
 				if (rc instanceof DirectoryResourceCenter) {
 					rcList.add(((DirectoryResourceCenter) rc).getDirectory());
 				}

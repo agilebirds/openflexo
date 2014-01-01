@@ -32,7 +32,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBProjectSelector extends FIBModelObjectSelector<FlexoProject> {
+public class FIBProjectSelector extends FIBFlexoObjectSelector<FlexoProject> {
 	static final Logger logger = Logger.getLogger(FIBProjectSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ProjectSelector.fib");

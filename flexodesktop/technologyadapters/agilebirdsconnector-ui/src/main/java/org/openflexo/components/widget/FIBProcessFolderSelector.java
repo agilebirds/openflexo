@@ -31,7 +31,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBProcessFolderSelector extends FIBModelObjectSelector<ProcessFolder> {
+public class FIBProcessFolderSelector extends FIBFlexoObjectSelector<ProcessFolder> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBProcessFolderSelector.class.getPackage().getName());
 

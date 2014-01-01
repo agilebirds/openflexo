@@ -33,7 +33,6 @@ import org.openflexo.drm.dm.DocItemAdded;
 import org.openflexo.drm.dm.DocItemFolderAdded;
 import org.openflexo.drm.dm.StructureModified;
 import org.openflexo.drm.helpset.HelpSetConfiguration;
-import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
 import org.openflexo.foundation.validation.ProblemIssue;

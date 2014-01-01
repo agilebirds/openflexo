@@ -1120,15 +1120,18 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode /*
 	}
 
 	public void setDefinePreferredDimensions(boolean definePreferredDimensions) {
-		if (definePreferredDimensions) {
-			FIBView<?, ?, ?> v = FIBController.makeView(this, (LocalizedDelegate) null);
-			Dimension p = v.getJComponent().getPreferredSize();
-			setWidth(p.width);
-			setHeight(p.height);
-			v.delete();
-		} else {
-			setWidth(null);
-			setHeight(null);
+		if (definePreferredDimensions() != definePreferredDimensions) {
+			if (definePreferredDimensions) {
+				FIBView<?, ?, ?> v = FIBController.makeView(this, (LocalizedDelegate) null);
+				Dimension p = v.getJComponent().getPreferredSize();
+				setWidth(p.width);
+				setHeight(p.height);
+				v.delete();
+			} else {
+				setWidth(null);
+				setHeight(null);
+			}
+			notifyChange("definePreferredDimensions", !definePreferredDimensions(), definePreferredDimensions());
 		}
 	}
 

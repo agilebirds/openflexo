@@ -31,7 +31,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBERDiagramSelector extends FIBModelObjectSelector<ERDiagram> {
+public class FIBERDiagramSelector extends FIBFlexoObjectSelector<ERDiagram> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBERDiagramSelector.class.getPackage().getName());
 

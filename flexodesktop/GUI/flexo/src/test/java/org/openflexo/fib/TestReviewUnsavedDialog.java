@@ -1,39 +1,30 @@
 package org.openflexo.fib;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.model.FIBLabel;
-import org.openflexo.fib.model.FIBPanel;
-import org.openflexo.fib.model.FIBPanel.Layout;
-import org.openflexo.fib.model.FIBTextField;
-import org.openflexo.fib.model.TwoColsLayoutConstraints;
-import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.fib.sampleData.Family;
-import org.openflexo.fib.testutils.GraphicalContextDelegate;
-import org.openflexo.fib.view.widget.FIBTextFieldWidget;
-import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.components.ReviewUnsavedDialog;
+import org.openflexo.fib.testutils.FIBDialogGraphicalContextDelegate;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.OpenflexoRunTimeTestCase;
 
 /**
- * Test the structural and behavioural features of FIBTextField widget
+ * Test the ReviewUnsavedDialog widget
  * 
  * @author sylvain
  * 
  */
-public class FIBTextFieldWidgetTest {
+public class TestReviewUnsavedDialog extends OpenflexoRunTimeTestCase {
 
-	private static GraphicalContextDelegate gcDelegate;
+	private static FIBDialogGraphicalContextDelegate gcDelegate;
 
-	private static FIBPanel component;
+	private static FlexoEditor editor;
+	private static FlexoProject project;
+
+	/*private static FIBPanel component;
 	private static FIBLabel firstNameLabel;
 	private static FIBTextField firstNameTF;
 	private static FIBLabel lastNameLabel;
@@ -43,12 +34,26 @@ public class FIBTextFieldWidgetTest {
 
 	private static FIBController controller;
 	private static Family family1;
-	private static Family family2;
+	private static Family family2;*/
 
-	/**
-	 * Create an initial component
-	 */
 	@Test
+	public void testCreateProject() {
+		editor = createProject("TestProject");
+		project = editor.getProject();
+		System.out.println("Created project " + project.getProjectDirectory());
+		assertTrue(project.getProjectDirectory().exists());
+		assertTrue(project.getProjectDataResource().getFile().exists());
+	}
+
+	@Test
+	public void testInstanciateWidget() {
+		ReviewUnsavedDialog dialog = new ReviewUnsavedDialog("TestReviewUnsaved", editor, editor.getServiceManager().getResourceManager()
+				.getRegisteredResources());
+		log("instanciated " + dialog);
+		gcDelegate = new FIBDialogGraphicalContextDelegate(dialog, ReviewUnsavedDialog.FIB_FILE);
+	}
+
+	/*@Test
 	public void test1CreateComponent() {
 
 		component = new FIBPanel();
@@ -79,9 +84,6 @@ public class FIBTextFieldWidgetTest {
 
 	}
 
-	/**
-	 * Instanciate component, while instanciating view AFTER data has been set
-	 */
 	@Test
 	public void test2InstanciateComponent() {
 		controller = FIBController.instanciateController(component, FlexoLocalization.getMainLocalizer());
@@ -107,9 +109,6 @@ public class FIBTextFieldWidgetTest {
 		assertEquals("Robert Smith", controller.viewForComponent(fullNameTF).getData());
 	}
 
-	/**
-	 * Update the model, and check that widgets have well reacted
-	 */
 	@Test
 	public void test3ModifyValueInModel() {
 		family1.getFather().setFirstName("Roger");
@@ -119,9 +118,6 @@ public class FIBTextFieldWidgetTest {
 		assertEquals("Roger Rabbit", controller.viewForComponent(fullNameTF).getData());
 	}
 
-	/**
-	 * Update the widget, and check that model has well reacted
-	 */
 	@Test
 	public void test4ModifyValueInWidget() {
 		FIBTextFieldWidget w1 = (FIBTextFieldWidget) controller.viewForComponent(firstNameTF);
@@ -138,9 +134,6 @@ public class FIBTextFieldWidgetTest {
 
 	}
 
-	/**
-	 * Instanciate component, while instanciating view BEFORE to set data
-	 */
 	@Test
 	public void test5InstanciateComponent() {
 		component.setDataClass(Family.class);
@@ -164,26 +157,22 @@ public class FIBTextFieldWidgetTest {
 		assertEquals("Robert", controller.viewForComponent(firstNameTF).getData());
 		assertEquals("Smith", controller.viewForComponent(lastNameTF).getData());
 		assertEquals("Robert Smith", controller.viewForComponent(fullNameTF).getData());
-	}
-
-	@BeforeClass
-	public static void initGUI() {
-		gcDelegate = new GraphicalContextDelegate(FIBTextFieldWidgetTest.class.getSimpleName());
-	}
-
-	@AfterClass
-	public static void waitGUI() {
-		gcDelegate.waitGUI();
-	}
+	}*/
 
 	@Before
 	public void setUp() {
-		gcDelegate.setUp();
+		if (gcDelegate != null) {
+			gcDelegate.setUp();
+		}
 	}
 
+	@Override
 	@After
 	public void tearDown() throws Exception {
-		gcDelegate.tearDown();
+		if (gcDelegate != null) {
+			gcDelegate.tearDown();
+		}
+		super.tearDown();
 	}
 
 }

@@ -33,7 +33,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBViewPointSelector extends FIBModelObjectSelector<ViewPointResource> {
+public class FIBViewPointSelector extends FIBFlexoObjectSelector<ViewPointResource> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBViewPointSelector.class.getPackage().getName());
 

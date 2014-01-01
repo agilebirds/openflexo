@@ -19,37 +19,26 @@
  */
 package org.openflexo.components;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
+import java.beans.PropertyChangeSupport;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.Icon;
 
-import org.openflexo.FlexoCst;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourceExceptionList;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.StorageResourceData;
+import org.openflexo.components.ReviewUnsavedDialog.ReviewUnsavedModel;
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceExceptionList;
+import org.openflexo.foundation.resource.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.utils.FlexoProgress;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoDialog;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.FlexoFrame;
 
 /**
@@ -58,14 +47,17 @@ import org.openflexo.view.FlexoFrame;
  * @author sguerin
  * 
  */
-public class AskForSaveResources extends FlexoDialog {
+@SuppressWarnings("serial")
+public class ReviewUnsavedDialog extends FIBDialog<ReviewUnsavedModel> {
 
-	static final Logger logger = Logger.getLogger(AskForSaveResources.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ReviewUnsavedDialog.class.getPackage().getName());
+
+	public static final FileResource FIB_FILE = new FileResource("Fib/ReviewUnsavedDialog.fib");
 
 	ReviewUnsavedModel _reviewUnsavedModel;
 
 	// private SaveResourceExceptionList listOfExceptions = null;
-	int returned;
+	/*int returned;
 
 	public static final int SAVE = 0;
 
@@ -74,7 +66,7 @@ public class AskForSaveResources extends FlexoDialog {
 	protected JButton confirmButton;
 	protected JPanel controlPanel;
 	protected String _validateLabel;
-	protected String _emptyValidateLabel;
+	protected String _emptyValidateLabel;*/
 
 	// public static final int EXCEPTION_RAISED = 2;
 	// public static final int PERMISSION_DENIED = 3;
@@ -86,9 +78,14 @@ public class AskForSaveResources extends FlexoDialog {
 	 * @param resources
 	 *            : a vector of FlexoStorageResource
 	 */
-	public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel,
-			List<FlexoStorageResource<? extends StorageResourceData>> resources) {
-		super(FlexoFrame.getActiveFrame(), true);
+	public ReviewUnsavedDialog(String title, FlexoEditor editor, Collection<FlexoResource<?>> resources) {
+
+		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ReviewUnsavedModel(editor, resources), FlexoFrame.getActiveFrame(),
+				true, FlexoLocalization.getMainLocalizer());
+
+		setTitle(title);
+
+		/*super(FlexoFrame.getActiveFrame(), true);
 		returned = CANCEL;
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());
@@ -144,14 +141,6 @@ public class AskForSaveResources extends FlexoDialog {
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*
-				 * try { hide(); _reviewUnsavedModel.saveSelected(); returned =
-				 * SAVE; } catch (SaveResourceExceptionList e1) {
-				 * listOfExceptions = e1; returned = EXCEPTION_RAISED; } catch
-				 * (SaveResourcePermissionDeniedException e1) {
-				 * FlexoController.showError(FlexoLocalization.localizedForKey("could_not_save_permission_denied"));
-				 * returned = PERMISSION_DENIED; }
-				 */
 				returned = SAVE;
 				dispose();
 			}
@@ -190,10 +179,10 @@ public class AskForSaveResources extends FlexoDialog {
 		pack();
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
-		setVisible(true);
+		setVisible(true);*/
 	}
 
-	protected void updateButtonLabel() {
+	/*protected void updateButtonLabel() {
 		if (_reviewUnsavedModel.getNbOfFilesToSave() == 0) {
 			confirmButton.setText(FlexoLocalization.localizedForKey(_emptyValidateLabel));
 		} else {
@@ -201,19 +190,10 @@ public class AskForSaveResources extends FlexoDialog {
 		}
 		controlPanel.validate();
 		controlPanel.repaint();
-	}
+	}*/
 
 	public void saveSelection() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException {
 		_reviewUnsavedModel.saveSelected();
-	}
-
-	/**
-	 * Return status which could be SAVE, CANCEL, EXCEPTION_RAISED, PERMISSION_DENIED
-	 * 
-	 * @return
-	 */
-	public int getStatus() {
-		return returned;
 	}
 
 	/*
@@ -225,7 +205,7 @@ public class AskForSaveResources extends FlexoDialog {
 		return _reviewUnsavedModel.savedFilesList();
 	}
 
-	public int getPreferedColumnSize(int arg0) {
+	/*public int getPreferedColumnSize(int arg0) {
 		switch (arg0) {
 		case 0:
 			return 25; // checkbox
@@ -240,42 +220,61 @@ public class AskForSaveResources extends FlexoDialog {
 		default:
 			return 50;
 		}
-	}
+	}*/
 
-	public class ReviewUnsavedModel extends AbstractTableModel {
+	public static class ReviewUnsavedModel implements HasPropertyChangeSupport {
 
-		private List<FlexoStorageResource<? extends StorageResourceData>> _resources;
+		private final FlexoEditor editor;
+		private final Hashtable<FlexoResource<?>, Boolean> resourcesToSave;
 
-		private Vector<Boolean> _shouldSave;
+		private final PropertyChangeSupport pcSupport;
 
-		public ReviewUnsavedModel(List<FlexoStorageResource<? extends StorageResourceData>> resources) {
+		public ReviewUnsavedModel(FlexoEditor editor, Collection<FlexoResource<?>> resources) {
 			super();
-			_resources = resources;
-			_shouldSave = new Vector<Boolean>();
-			for (int i = 0; i < resources.size(); i++) {
-				FlexoStorageResource<? extends StorageResourceData> res = resources.get(i);
-				if (res.needsSaving()) {
-					_shouldSave.add(Boolean.TRUE);
+			this.editor = editor;
+			pcSupport = new PropertyChangeSupport(this);
+			resourcesToSave = new Hashtable<FlexoResource<?>, Boolean>();
+			for (FlexoResource<?> r : resources) {
+				if (r.isLoaded()) {
+					System.out.println("loaded resource " + r + " with " + r.getLoadedResourceData());
+				}
+				if (r.isLoaded() && r.getLoadedResourceData().isModified()) {
+					resourcesToSave.put(r, Boolean.TRUE);
 				} else {
-					_shouldSave.add(Boolean.FALSE);
+					resourcesToSave.put(r, Boolean.FALSE);
 				}
 			}
 		}
 
 		@Override
-		public int getRowCount() {
-			if (_resources == null) {
-				return 0;
-			}
-			return _resources.size();
+		public String getDeletedProperty() {
+			return null;
 		}
 
 		@Override
-		public int getColumnCount() {
-			return 5;
+		public PropertyChangeSupport getPropertyChangeSupport() {
+			return pcSupport;
 		}
 
-		@Override
+		public Hashtable<FlexoResource<?>, Boolean> getResourcesToSave() {
+			return resourcesToSave;
+		}
+
+		public boolean isSelected(FlexoResource<?> resource) {
+			return resourcesToSave.get(resource);
+		}
+
+		public void setSelected(boolean selected, FlexoResource<?> resource) {
+			System.out.println("setSelected " + selected + " resource=" + resource);
+			resourcesToSave.put(resource, selected);
+			pcSupport.firePropertyChange("getNbOfFilesToSave()", -1, getNbOfFilesToSave());
+		}
+
+		public Icon getIcon(FlexoResource<?> resource) {
+			return IconLibrary.getIconForResource(resource);
+		}
+
+		/*@Override
 		public String getColumnName(int columnIndex) {
 			if (columnIndex == 0) {
 				return " ";
@@ -289,37 +288,23 @@ public class AskForSaveResources extends FlexoDialog {
 				return FlexoLocalization.localizedForKey("last_saved_on");
 			}
 			return "???";
-		}
+		}*/
 
-		@Override
-		public Class getColumnClass(int columnIndex) {
-			if (columnIndex == 0) {
-				return Boolean.class;
-			} else {
-				return String.class;
-			}
-		}
-
-		@Override
-		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return columnIndex == 0 ? true : false;
-		}
-
-		@Override
+		/*@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if (_resources == null) {
+			if (resources == null) {
 				return null;
 			}
 			if (columnIndex == 0) {
-				return _shouldSave.elementAt(rowIndex);
+				return shouldSave.elementAt(rowIndex);
 			} else if (columnIndex == 1) {
-				return _resources.get(rowIndex).getName();
+				return resources.get(rowIndex).getName();
 			} else if (columnIndex == 2) {
-				return _resources.get(rowIndex).getResourceType().getName();
+				return resources.get(rowIndex).getResourceType().getName();
 			} else if (columnIndex == 3) {
-				return _resources.get(rowIndex).getFile().getName();
+				return resources.get(rowIndex).getFile().getName();
 			} else if (columnIndex == 4) {
-				Date date = _resources.get(rowIndex).getDiskLastModifiedDate();
+				Date date = resources.get(rowIndex).getDiskLastModifiedDate();
 				if (date != null) {
 					return new SimpleDateFormat("dd/MM HH:mm:ss").format(date);
 				} else {
@@ -332,15 +317,15 @@ public class AskForSaveResources extends FlexoDialog {
 		@Override
 		public void setValueAt(Object value, int rowIndex, int columnIndex) {
 			if (columnIndex == 0) {
-				_shouldSave.setElementAt((Boolean) value, rowIndex);
+				shouldSave.setElementAt((Boolean) value, rowIndex);
 				updateButtonLabel();
 			}
-		}
+		}*/
 
-		protected int getNbOfFilesToSave() {
+		public int getNbOfFilesToSave() {
 			int nbOfFilesToSave = 0;
-			for (int i = 0; i < _shouldSave.size(); i++) {
-				if (_shouldSave.elementAt(i).booleanValue()) {
+			for (FlexoResource<?> r : resourcesToSave.keySet()) {
+				if (resourcesToSave.get(r)) {
 					nbOfFilesToSave++;
 				}
 			}
@@ -348,40 +333,67 @@ public class AskForSaveResources extends FlexoDialog {
 		}
 
 		public void saveSelected() throws SaveResourceExceptionList, SaveResourcePermissionDeniedException {
-			savedFilesList = "";
+
+			SaveResourceExceptionList listOfRaisedExceptions = null;
+
+			/*savedFilesList = "";
 			SaveResourceExceptionList listOfRaisedExceptions = null;
 			int i = 0;
 			FlexoProject project = null;
-			while (project == null && i < _resources.size()) {
-				project = _resources.get(i).getProject();
+			while (project == null && i < resources.size()) {
+				project = resources.get(i).getProject();
 			}
 			List<FlexoStorageResource<? extends StorageResourceData>> resourcesToSave = new ArrayList<FlexoStorageResource<? extends StorageResourceData>>();
-			for (i = 0; i < _shouldSave.size(); i++) {
-				if (_shouldSave.get(i)) {
-					resourcesToSave.add(_resources.get(i));
+			for (i = 0; i < shouldSave.size(); i++) {
+				if (shouldSave.get(i)) {
+					resourcesToSave.add(resources.get(i));
 				}
-			}
+			}*/
 
 			int nbOfFilesToSave = getNbOfFilesToSave();
 
 			if (nbOfFilesToSave > 0) {
 
-				if (!ProgressWindow.hasInstance()) {
+				/*if (!ProgressWindow.hasInstance()) {
 					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving_selected_resources"), nbOfFilesToSave);
+				}*/
+
+				FlexoProgress progress = editor.getFlexoProgressFactory().makeFlexoProgress(
+						FlexoLocalization.localizedForKey("saving_selected_resources"), nbOfFilesToSave);
+
+				for (FlexoResource<?> r : resourcesToSave.keySet()) {
+					if (resourcesToSave.get(r)) {
+						try {
+							r.save(progress);
+						} catch (SaveResourceException e) {
+							if (listOfRaisedExceptions == null) {
+								listOfRaisedExceptions = new SaveResourceExceptionList(e);
+							} else {
+								listOfRaisedExceptions.registerNewException(e);
+							}
+							e.printStackTrace();
+						}
+					}
 				}
 
-				try {
-					project.saveStorageResources(resourcesToSave, ProgressWindow.instance());
-				} catch (SaveResourceException e) {
-					e.printStackTrace();
-					listOfRaisedExceptions = new SaveResourceExceptionList(e);
-				}
-
-				ProgressWindow.hideProgressWindow();
+				progress.hideWindow();
 
 				if (listOfRaisedExceptions != null) {
 					throw listOfRaisedExceptions;
 				}
+
+				/*	try {
+						project.saveStorageResources(resourcesToSave, ProgressWindow.instance());
+					} catch (SaveResourceException e) {
+						e.printStackTrace();
+						listOfRaisedExceptions = new SaveResourceExceptionList(e);
+					}*/
+
+				// ProgressWindow.hideProgressWindow();
+
+				/*if (listOfRaisedExceptions != null) {
+					throw listOfRaisedExceptions;
+				}*/
 			}
 		}
 
@@ -392,16 +404,18 @@ public class AskForSaveResources extends FlexoDialog {
 		}
 
 		public void selectAll() {
-			for (int i = 0; i < _shouldSave.size(); i++) {
-				_shouldSave.setElementAt(new Boolean(true), i);
-				fireTableCellUpdated(i, 0);
+			for (FlexoResource<?> r : resourcesToSave.keySet()) {
+				if (!resourcesToSave.get(r)) {
+					resourcesToSave.put(r, Boolean.TRUE);
+				}
 			}
 		}
 
 		public void deselectAll() {
-			for (int i = 0; i < _shouldSave.size(); i++) {
-				_shouldSave.setElementAt(new Boolean(false), i);
-				fireTableCellUpdated(i, 0);
+			for (FlexoResource<?> r : resourcesToSave.keySet()) {
+				if (resourcesToSave.get(r)) {
+					resourcesToSave.put(r, Boolean.FALSE);
+				}
 			}
 		}
 	}

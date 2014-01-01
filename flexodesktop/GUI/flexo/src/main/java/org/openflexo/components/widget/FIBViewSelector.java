@@ -31,7 +31,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBViewSelector extends FIBModelObjectSelector<ViewResource> {
+public class FIBViewSelector extends FIBFlexoObjectSelector<ViewResource> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBViewSelector.class.getPackage().getName());
 

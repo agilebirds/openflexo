@@ -35,7 +35,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPattern> {
+public class FIBEditionPatternSelector extends FIBFlexoObjectSelector<EditionPattern> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBEditionPatternSelector.class.getPackage().getName());
 

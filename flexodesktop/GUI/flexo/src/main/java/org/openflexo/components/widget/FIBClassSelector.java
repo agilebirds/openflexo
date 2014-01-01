@@ -53,7 +53,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * 
  */
 @SuppressWarnings("serial")
-public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass> {
+public class FIBClassSelector extends FIBFlexoObjectSelector<IFlexoOntologyClass> {
 	static final Logger logger = Logger.getLogger(FIBClassSelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBClassSelector.fib");

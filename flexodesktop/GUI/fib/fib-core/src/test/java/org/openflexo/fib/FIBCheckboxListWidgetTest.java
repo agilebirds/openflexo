@@ -23,6 +23,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.sampleData.Family;
 import org.openflexo.fib.sampleData.Person;
+import org.openflexo.fib.testutils.GraphicalContextDelegate;
 import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.localization.FlexoLocalization;
 

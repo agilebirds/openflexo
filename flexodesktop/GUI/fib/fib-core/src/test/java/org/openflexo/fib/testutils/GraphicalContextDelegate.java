@@ -1,4 +1,4 @@
-package org.openflexo.fib;
+package org.openflexo.fib.testutils;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;

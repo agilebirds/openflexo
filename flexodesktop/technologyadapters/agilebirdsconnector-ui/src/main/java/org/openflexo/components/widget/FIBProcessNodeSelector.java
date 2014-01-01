@@ -42,7 +42,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBProcessNodeSelector extends FIBModelObjectSelector<FlexoProcessNode> {
+public class FIBProcessNodeSelector extends FIBFlexoObjectSelector<FlexoProcessNode> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBProcessNodeSelector.class.getPackage().getName());
 
@@ -95,7 +95,7 @@ public class FIBProcessNodeSelector extends FIBModelObjectSelector<FlexoProcessN
 		return "";
 	}
 
-	public static class CustomFIBController extends FIBModelObjectSelector.SelectorFIBController {
+	public static class CustomFIBController extends FIBFlexoObjectSelector.SelectorFIBController {
 		public CustomFIBController(FIBComponent component, FIBProcessNodeSelector selector) {
 			super(component, selector);
 		}

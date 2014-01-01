@@ -33,7 +33,7 @@ import org.openflexo.toolbox.FileResource;
  *         DEPRECATED BECAUSE NOT IMPLEMENTED YET!
  */
 @Deprecated
-public class FIBViewFolderSelector extends FIBModelObjectSelector<RepositoryFolder> {
+public class FIBViewFolderSelector extends FIBFlexoObjectSelector<RepositoryFolder> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBViewFolderSelector.class.getPackage().getName());
 

@@ -46,12 +46,12 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	private static final String CHEESE = "l@iUh%gvwe@#{8ç]74562";
 
-	private PropertyChangeSupport propertyChangeSupport;
+	private final PropertyChangeSupport propertyChangeSupport;
 
 	/**
 	 * Object where are stored the preferences
 	 */
-	private FlexoProperties _preferences;
+	private final FlexoProperties _preferences;
 
 	private FlexoAbstractPreferences delegate;
 

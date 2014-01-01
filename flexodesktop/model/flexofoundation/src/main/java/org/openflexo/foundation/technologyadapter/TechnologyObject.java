@@ -19,13 +19,15 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
+import org.openflexo.foundation.FlexoObject;
+
 /**
  * Implemented by all objects specific to a given technology
  * 
  * @author sylvain
  * 
  */
-public interface TechnologyObject<TA extends TechnologyAdapter> {
+public interface TechnologyObject<TA extends TechnologyAdapter> extends FlexoObject {
 
 	/**
 	 * Return the {@link TechnologyAdapter} of technical space where this concept exists

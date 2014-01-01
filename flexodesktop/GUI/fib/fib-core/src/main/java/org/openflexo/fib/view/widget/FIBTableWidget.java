@@ -83,7 +83,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 	// private ListSelectionModel _listSelectionModel;
 	private JScrollPane scrollPane;
 
-	private FIBTableWidgetFooter footer;
+	private final FIBTableWidgetFooter footer;
 
 	private List<T> selection;
 
@@ -112,8 +112,8 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			listenerToDataAsListValue.delete();
 		}
 		if (getComponent().getData() != null && getComponent().getData().isValid()) {
-			listenerToDataAsListValue = new BindingValueListChangeListener<T, List<T>>((DataBinding<List<T>>) ((DataBinding) getComponent()
-					.getData()), getBindingEvaluationContext()) {
+			listenerToDataAsListValue = new BindingValueListChangeListener<T, List<T>>(((DataBinding) getComponent().getData()),
+					getBindingEvaluationContext()) {
 
 				@Override
 				public void bindingValueChanged(Object source, List<T> newValue) {
@@ -223,7 +223,7 @@ public class FIBTableWidget<T> extends FIBWidgetView<FIBTable, JTable, Collectio
 			if (getValue() == null) {
 				getTableModel().setValues((List<T>) Collections.emptyList());
 			}
-			if (getValue() instanceof List && !getValue().equals(valuesBeforeUpdating)) {
+			if (getValue() instanceof Collection && !getValue().equals(valuesBeforeUpdating)) {
 				getTableModel().setValues(getValue());
 			}
 			footer.setModel(getDataObject());

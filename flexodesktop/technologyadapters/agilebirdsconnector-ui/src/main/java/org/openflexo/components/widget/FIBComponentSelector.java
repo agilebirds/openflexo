@@ -41,7 +41,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefinition> {
+public class FIBComponentSelector extends FIBFlexoObjectSelector<ComponentDefinition> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBComponentSelector.class.getPackage().getName());
 
@@ -110,7 +110,7 @@ public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefini
 		}
 	}
 
-	public static class CustomFIBController extends FIBModelObjectSelector.SelectorFIBController {
+	public static class CustomFIBController extends FIBFlexoObjectSelector.SelectorFIBController {
 		public CustomFIBController(FIBComponent component, FIBComponentSelector selector) {
 			super(component, selector);
 		}

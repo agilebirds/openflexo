@@ -75,9 +75,9 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> implements FIBCustomComponent<T, FIBModelObjectSelector>,
-		HasPropertyChangeSupport {
-	static final Logger logger = Logger.getLogger(FIBModelObjectSelector.class.getPackage().getName());
+public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends TextFieldCustomPopup<T> implements
+		FIBCustomComponent<T, FIBFlexoObjectSelector<T>>, HasPropertyChangeSupport {
+	static final Logger logger = Logger.getLogger(FIBFlexoObjectSelector.class.getPackage().getName());
 
 	private static final String DELETED = "deleted";
 
@@ -104,7 +104,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 
 	private boolean showReset = true;
 
-	public FIBModelObjectSelector(T editedObject) {
+	public FIBFlexoObjectSelector(T editedObject) {
 		super(editedObject);
 		pcSupport = new PropertyChangeSupport(this);
 		setRevertValue(editedObject);
@@ -366,13 +366,13 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	}
 
 	// FIBModelObjectSelector is applicable to something else than objects in a project
-	@Deprecated
+	/*@Deprecated
 	public FlexoProject getProject() {
 		return project;
-	}
+	}*/
 
 	// FIBModelObjectSelector is applicable to something else than objects in a project
-	@Deprecated
+	/*@Deprecated
 	@CustomComponentParameter(name = "project", type = CustomComponentParameter.Type.MANDATORY)
 	public void setProject(FlexoProject project) {
 		if (project == null) {
@@ -382,7 +382,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		}
 		this.project = project;
 		pcSupport.firePropertyChange("project", null, project);
-	}
+	}*/
 
 	@Override
 	public void setRevertValue(T oldValue) {
@@ -424,7 +424,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	}
 
 	protected SelectorFIBController makeCustomFIBController(FIBComponent fibComponent) {
-		return new SelectorFIBController(fibComponent, FIBModelObjectSelector.this);
+		return new SelectorFIBController(fibComponent, FIBFlexoObjectSelector.this);
 	}
 
 	public class SelectorDetailsPanel extends ResizablePanel {
@@ -439,7 +439,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			controller = makeCustomFIBController(fibComponent);
 			fibView = controller.buildView(fibComponent);
 
-			controller.setDataObject(FIBModelObjectSelector.this, true);
+			controller.setDataObject(FIBFlexoObjectSelector.this, true);
 
 			setLayout(new BorderLayout());
 			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
@@ -456,7 +456,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		}
 
 		public void update() {
-			controller.setDataObject(FIBModelObjectSelector.this);
+			controller.setDataObject(FIBFlexoObjectSelector.this);
 			// logger.info("update() selectedValue=" + getSelectedValue() + " selectedObject=" + getSelectedObject());
 			selectValue(getSelectedValue());
 		}
@@ -519,9 +519,9 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	}
 
 	public static class SelectorFIBController extends FlexoFIBController {
-		private final FIBModelObjectSelector selector;
+		private final FIBFlexoObjectSelector selector;
 
-		public SelectorFIBController(FIBComponent component, FIBModelObjectSelector selector) {
+		public SelectorFIBController(FIBComponent component, FIBFlexoObjectSelector selector) {
 			super(component);
 			this.selector = selector;
 		}
@@ -669,7 +669,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	}
 
 	@Override
-	public FIBModelObjectSelector getJComponent() {
+	public FIBFlexoObjectSelector getJComponent() {
 		return this;
 	}
 

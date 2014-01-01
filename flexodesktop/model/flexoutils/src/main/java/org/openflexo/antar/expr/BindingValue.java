@@ -701,13 +701,13 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 								current = newPathElement;
 								// System.out.println("> FUNCTION " + pathElement);
 							} else {
-								invalidBindingReason = "cannot find method " + ((MethodCallBindingPathElement) pathElement).method
+								invalidBindingReason = "(2) cannot find method " + ((MethodCallBindingPathElement) pathElement).method
 										+ " for type " + TypeUtils.simpleRepresentation(current.getType());
 								analysingSuccessfull = false;
 								return false;
 							}
 						} else {
-							invalidBindingReason = "cannot find method " + ((MethodCallBindingPathElement) pathElement).method
+							invalidBindingReason = "(1) cannot find method " + ((MethodCallBindingPathElement) pathElement).method
 									+ " for type " + TypeUtils.simpleRepresentation(current.getType());
 							analysingSuccessfull = false;
 							return false;

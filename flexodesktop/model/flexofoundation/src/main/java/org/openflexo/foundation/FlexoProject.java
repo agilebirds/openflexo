@@ -383,7 +383,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		// resources = new ResourceHashtable();
 		// docTypes = new Vector<DocType>();
 
-		setProjectDirectory(aProjectDirectory);
 		projectName = aProjectDirectory.getName().replaceAll(BAD_CHARACTERS_REG_EXP, " ");
 		if (projectName.endsWith(".prj")) {
 			projectName = projectName.substring(0, projectName.length() - 4);
@@ -392,6 +391,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 				logger.warning("Project directory does not end with '.prj'");
 			}
 		}
+		setProjectDirectory(aProjectDirectory);
 	}
 
 	/*public CodeType getTargetType() {
@@ -993,6 +993,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	 * 
 	 */
 	public void close() {
+
 		if (closed) {
 			return;
 		}

@@ -34,8 +34,8 @@ public class JHIndexer {
 
 	private static final String JAVA_HELP_SEARCH = "JavaHelpSearch";
 
-	private File _helpsetDirectory;
-	private Vector<String> indexerFileList = new Vector<String>();
+	private final File _helpsetDirectory;
+	private final Vector<String> indexerFileList = new Vector<String>();
 
 	public JHIndexer(File helpsetDirectory) {
 		_helpsetDirectory = helpsetDirectory;

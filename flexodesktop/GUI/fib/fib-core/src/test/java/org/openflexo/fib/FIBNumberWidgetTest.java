@@ -19,6 +19,7 @@ import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.GridLayoutConstraints;
 import org.openflexo.fib.sampleData.Numbers;
+import org.openflexo.fib.testutils.GraphicalContextDelegate;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.localization.FlexoLocalization;
 

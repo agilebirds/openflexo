@@ -37,7 +37,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public static final String CONTAINER = "container";
 	public static final String CONTENTS = "contents";
 	public static final String DEPENDENCIES = "dependencies";
-	public static final String LAST_UPDATE = "lastUpdate";
+	// public static final String LAST_UPDATE = "lastUpdate";
 	public static final String SERVICE_MANAGER = "serviceManager";
 
 	/**
@@ -323,4 +323,5 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 */
 	public boolean isDeleted();
 
+	// public Date getLastUpdate();
 }

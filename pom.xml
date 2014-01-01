@@ -326,6 +326,12 @@
 				<groupId>org.openflexo</groupId>
 				<artifactId>fib-swing-editor</artifactId>
 				<version>${fib.version}</version>
+				<classifier>tests</classifier>
+			</dependency>		
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>fib-swing-editor</artifactId>
+				<version>${fib.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>

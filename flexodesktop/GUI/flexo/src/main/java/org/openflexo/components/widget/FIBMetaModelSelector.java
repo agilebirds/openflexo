@@ -33,7 +33,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelResource> {
+public class FIBMetaModelSelector extends FIBFlexoObjectSelector<FlexoMetaModelResource> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBMetaModelSelector.class.getPackage().getName());
 

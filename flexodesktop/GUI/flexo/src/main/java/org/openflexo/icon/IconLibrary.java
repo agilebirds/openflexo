@@ -23,11 +23,17 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.ProjectDataResource;
+import org.openflexo.foundation.ProjectDirectoryResource;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.swing.AnimatedIcon;
 import org.openflexo.toolbox.ImageIconResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -234,6 +240,21 @@ public class IconLibrary {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		return null;
+	}
+
+	public static ImageIcon getIconForResource(FlexoResource<?> resource) {
+		if (resource instanceof ProjectDirectoryResource) {
+			return OPENFLEXO_NOTEXT_16;
+		} else if (resource instanceof ProjectDataResource) {
+			return OPENFLEXO_NOTEXT_16;
+		} else if (resource instanceof ViewResource) {
+			return VEIconLibrary.VIEW_ICON;
+		} else if (resource instanceof ViewPointResource) {
+			return VPMIconLibrary.VIEWPOINT_ICON;
+		} else if (resource instanceof VirtualModelResource) {
+			return VPMIconLibrary.VIRTUAL_MODEL_ICON;
 		}
 		return null;
 	}

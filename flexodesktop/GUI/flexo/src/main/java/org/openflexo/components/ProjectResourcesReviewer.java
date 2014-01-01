@@ -19,18 +19,19 @@
  */
 package org.openflexo.components;
 
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.localization.FlexoLocalization;
 
 /**
- * Please comment this class
+ * Dialog allowing to select resources to save in supplied editor's project (resources in project only)
  * 
  * @author sguerin
  * 
  */
-public class ProjectResourcesReviewer extends AskForSaveResources {
+@SuppressWarnings("serial")
+public class ProjectResourcesReviewer extends ReviewUnsavedDialog {
 
-	public ProjectResourcesReviewer(FlexoProject project) {
-		super(FlexoLocalization.localizedForKey("save_project"), "save", "dont_save", project.getLoadedStorageResources());
+	public ProjectResourcesReviewer(FlexoEditor editor) {
+		super(FlexoLocalization.localizedForKey("save_project"), editor, editor.getProject().getAllResources());
 	}
 }

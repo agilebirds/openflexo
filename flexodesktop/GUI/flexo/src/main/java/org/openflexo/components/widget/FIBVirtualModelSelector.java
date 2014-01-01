@@ -34,7 +34,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBVirtualModelSelector extends FIBModelObjectSelector<VirtualModelResource> {
+public class FIBVirtualModelSelector extends FIBFlexoObjectSelector<VirtualModelResource> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBVirtualModelSelector.class.getPackage().getName());
 

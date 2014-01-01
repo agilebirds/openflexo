@@ -31,7 +31,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBOntologySelector extends FIBModelObjectSelector<IFlexoOntology> {
+public class FIBOntologySelector extends FIBFlexoObjectSelector<IFlexoOntology> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBOntologySelector.class.getPackage().getName());
 

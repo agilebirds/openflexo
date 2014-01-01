@@ -36,7 +36,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin, vincent leildé
  * 
  */
-public class FIBResourceSelector extends FIBModelObjectSelector<TechnologyAdapterResource> {
+public class FIBResourceSelector extends FIBFlexoObjectSelector<TechnologyAdapterResource> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBResourceSelector.class.getPackage().getName());
 

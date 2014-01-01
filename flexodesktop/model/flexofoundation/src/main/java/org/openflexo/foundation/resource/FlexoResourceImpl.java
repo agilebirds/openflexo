@@ -74,6 +74,17 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
+	 * Returns the &quot;real&quot; resource data of this resource, asserting resource data is already loaded. If the resource is not
+	 * loaded, do not load the data, and return null
+	 * 
+	 * @return the resource data.
+	 */
+	@Override
+	public RD getLoadedResourceData() {
+		return resourceData;
+	}
+
+	/**
 	 * Programmatically sets {@link ResourceData} for this resource<br>
 	 * The resource is then notified that it has been loaded
 	 * 

@@ -33,6 +33,7 @@ import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.sampleData.Family;
 import org.openflexo.fib.sampleData.Family.Gender;
 import org.openflexo.fib.sampleData.Person;
+import org.openflexo.fib.testutils.GraphicalContextDelegate;
 import org.openflexo.fib.view.container.FIBPanelView;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.localization.FlexoLocalization;

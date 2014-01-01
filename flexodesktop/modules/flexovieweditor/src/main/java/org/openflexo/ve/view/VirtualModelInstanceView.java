@@ -19,8 +19,8 @@
  */
 package org.openflexo.ve.view;
 
-import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
+import org.openflexo.fib.testutils.controller.FIBComponentDynamicModel;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.ve.VECst;
 import org.openflexo.ve.controller.VEController;

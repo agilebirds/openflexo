@@ -88,7 +88,6 @@ public class TestBindingEvaluator extends TestCase {
 
 	public void test10() {
 		TestObject object = new TestObject();
-		// String thisIsATest = "object.setSelected((!(data.isSelected(iterator))),iterator)";
 		genericTest("object.getValue(object)", object, 0);
 		genericTest("object.setValue(10,object)", object, null);
 		genericTest("object.getValue(object)", object, 10);
@@ -97,9 +96,13 @@ public class TestBindingEvaluator extends TestCase {
 
 	public void test11() {
 		TestObject object = new TestObject();
-		// String thisIsATest = "object.setSelected((!(data.isSelected(iterator))),iterator)";
 		genericTest("object.setValue(object.getValue(object)+1,object)", object, null);
 		genericTest("object.getValue(object)", object, 1);
+	}
+
+	public void test12() {
+		TestObject object = new TestObject();
+		genericTest("object.method()", object, null);
 	}
 
 	public static class TestObject {
@@ -113,6 +116,10 @@ public class TestBindingEvaluator extends TestCase {
 		public void setValue(int aValue, TestObject o) {
 			System.out.println("sets value with " + aValue);
 			value = aValue;
+		}
+
+		public void method() {
+			System.out.println("Called method");
 		}
 	}
 }

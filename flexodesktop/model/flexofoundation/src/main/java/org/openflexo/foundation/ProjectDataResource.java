@@ -58,7 +58,7 @@ public interface ProjectDataResource extends PamelaResource<ProjectData, Project
 				File xmlFile = new File(project.getProjectDirectory(), FILE_NAME);
 				returned.setProject(project);
 				returned.setFactory(PROJECT_DATA_FACTORY);
-				returned.setName(project.getProjectName());
+				returned.setName(project.getProjectName() + "-data");
 				returned.setFile(xmlFile);
 				returned.setURI(project.getURI() + "/ProjectData");
 				returned.setServiceManager(project.getServiceManager());

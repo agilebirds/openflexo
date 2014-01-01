@@ -66,7 +66,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * @author sguerin
  * 
  */
-public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologyStructuralProperty> {
+public class FIBPropertySelector extends FIBFlexoObjectSelector<IFlexoOntologyStructuralProperty> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBPropertySelector.class.getPackage().getName());
 
