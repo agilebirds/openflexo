@@ -20,7 +20,8 @@
 
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -83,13 +84,17 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	// public DiagramPalette palette;
 
 	private boolean isTopLevel = true;
+
 	// public boolean isPushedToPalette = false;
 	private EditionPattern containerEditionPattern;
 	private EditionPattern virtualModelConcept;
-	private String dropSchemeName;
+
+	// private String dropSchemeName;
 
 	AbstractDeclareShapeInEditionPattern(FlexoActionType actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		EditionSchemeConfiguration dropEditionScheme = new EditionSchemeConfiguration("dropScheme", EditionSchemeChoice.DROP);
+		getEditionSchemes().add(dropEditionScheme);
 	}
 
 	@Override
@@ -105,14 +110,14 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
 						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& (isTopLevel || containerEditionPattern != null) && editionSchemesNamedAreValid();
 			case MAP_SINGLE_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
 						&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& (isTopLevel || containerEditionPattern != null) && editionSchemesNamedAreValid();
 			case BLANK_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& (isTopLevel || containerEditionPattern != null) && editionSchemesNamedAreValid();
 			default:
 				break;
 			}
@@ -161,7 +166,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		this.virtualModelConcept = virtualModelConcept;
 	}
 
-	public String getDropSchemeName() {
+	/*public String getDropSchemeName() {
 		if (StringUtils.isEmpty(dropSchemeName)) {
 			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
 					+ (isTopLevel ? "AtTopLevel" : containerEditionPattern != null ? "In" + containerEditionPattern.getName() : "");
@@ -171,7 +176,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 
 	public void setDropSchemeName(String dropSchemeName) {
 		this.dropSchemeName = dropSchemeName;
-	}
+	}*/
 
 	@Override
 	public EditionPattern getEditionPattern() {
@@ -184,15 +189,17 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	public String getEditionPatternName() {
 		if (isTypeAwareModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+				updateEditionSchemesName(concept.getName());
 				return concept.getName();
 			}
 		}
 		if (isVirtualModelModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
+				updateEditionSchemesName(virtualModelConcept.getName());
 				return virtualModelConcept.getName();
 			}
 		}
-
+		updateEditionSchemesName(editionPatternName);
 		return editionPatternName;
 	}
 
@@ -272,6 +279,19 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		}
 
 	 */
+
+	@Override
+	public void updateSpecialSchemeNames() {
+		for (EditionSchemeConfiguration conf : getEditionSchemes()) {
+			if (conf.getType() == EditionSchemeChoice.DROP) {
+				if (isTopLevel) {
+					conf.setName("dropSchemeAtTopLevel");
+				} else {
+					conf.setName("dropSchemeAt" + containerEditionPattern.getName());
+				}
+			}
+		}
+	}
 
 	public String getVirtualModelPatternRoleName() {
 		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
@@ -441,7 +461,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 						}
 					}*/
 
-					for (EditionSchemeConfiguration editionSchemeConf : editionSchemes) {
+					for (EditionSchemeConfiguration editionSchemeConf : getEditionSchemes()) {
 						if (editionSchemeConf.isValid()) {
 							createScheme(editionSchemeConf, newEditionPattern, builder);
 						}
@@ -567,63 +587,67 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	}
 	 */
 
-	public ArrayList<EditionSchemeConfiguration> getEditionSchemes() {
-		if (editionSchemes == null) {
-			editionSchemes = new ArrayList<EditionSchemeConfiguration>();
-
-			EditionSchemeConfiguration deleteShapeEditionScheme = new EditionSchemeConfiguration("DeleteShape",
-					EditionSchemeChoice.DELETE_SHAPE);
-			EditionSchemeConfiguration deleteShapeAndModelAllEditionScheme = new EditionSchemeConfiguration("DeleteShapeAndModel",
-					EditionSchemeChoice.DELETE_SHAPE_MODEL);
-			EditionSchemeConfiguration dropEditionScheme = new EditionSchemeConfiguration("DropScheme", EditionSchemeChoice.DROP);
-
-			editionSchemes.add(dropEditionScheme);
-			editionSchemes.add(deleteShapeEditionScheme);
-			editionSchemes.add(deleteShapeAndModelAllEditionScheme);
-
-			dropEditionScheme.setValid(true);
-			deleteShapeEditionScheme.setValid(true);
-			deleteShapeAndModelAllEditionScheme.setValid(true);
-		}
-		return editionSchemes;
-	}
-
-	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
-		this.editionSchemes = editionSchemes;
-	}
-
-	private ArrayList<EditionSchemeConfiguration> editionSchemes;
-
 	private EditionScheme createScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
 			VirtualModel.VirtualModelBuilder builder) {
 		EditionScheme editionScheme = null;
-		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_SHAPE_MODEL) {
-			DeletionScheme newDeletionScheme = editionPattern.createDeletionScheme();
-			newDeletionScheme.setName(editionSchemeConfiguration.getName());
+
+		// Delete shapes as well as model
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
+			editionScheme = editionPattern.createDeletionScheme();
+			editionScheme.setName(editionSchemeConfiguration.getName());
 		}
-		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_SHAPE) {
-			DeletionScheme newDeletionScheme = new DeletionScheme(null);
-			newDeletionScheme.setName(editionSchemeConfiguration.getName());
-			for (PatternRole role : editionPattern.getPatternRoles()) {
-				if ((role instanceof ShapePatternRole)) {
-					DeleteAction a = new DeleteAction(null);
-					a.setObject(new DataBinding<Object>(role.getPatternRoleName()));
-					newDeletionScheme.addToActions(a);
+
+		// Delete only shapes
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_ONLY) {
+			editionScheme = new DeletionScheme(null);
+			editionScheme.setName(editionSchemeConfiguration.getName());
+			Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
+			for (PatternRole pr : editionPattern.getPatternRoles()) {
+				if (pr instanceof GraphicalElementPatternRole) {
+					rolesToDelete.add(pr);
 				}
 			}
-			editionPattern.addToEditionSchemes(newDeletionScheme);
+			Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
+				@Override
+				public int compare(PatternRole o1, PatternRole o2) {
+					if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
+						return 1;
+					} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
+						return -1;
+					}
+
+					if (o1 instanceof ShapePatternRole) {
+						if (o2 instanceof ShapePatternRole) {
+							if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
+								return -1;
+							}
+							if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
+								return 1;
+							}
+							return 0;
+						}
+					}
+					return 0;
+				}
+
+			});
+			for (PatternRole pr : rolesToDelete) {
+				DeleteAction a = new DeleteAction(null);
+				a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
+				editionScheme.addToActions(a);
+			}
+			editionPattern.addToEditionSchemes(editionScheme);
 		}
+
+		// Drop
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
 			// Create new drop scheme
-			DropScheme newDropScheme = new DropScheme(builder);
-			newDropScheme.setName(editionSchemeConfiguration.getName());
+			editionScheme = new DropScheme(builder);
+			editionScheme.setName(editionSchemeConfiguration.getName());
 
-			// Add new drop scheme
-			newEditionPattern.addToEditionSchemes(newDropScheme);
-
-			newDropScheme.setTopTarget(isTopLevel);
+			((DropScheme) editionScheme).setTopTarget(isTopLevel);
 			if (!isTopLevel) {
-				newDropScheme.setTargetEditionPattern(containerEditionPattern);
+				((DropScheme) editionScheme).setTargetEditionPattern(containerEditionPattern);
 			}
 
 			// Parameters
@@ -635,13 +659,13 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					uriParameter.setName("uri");
 					uriParameter.setLabel("uri");
 
-					newDropScheme.addToParameters(uriParameter);
+					((DropScheme) editionScheme).addToParameters(uriParameter);
 
 					// Add individual action
 					AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
-							newDropScheme);
+							((DropScheme) editionScheme));
 
-					newDropScheme.addToActions(newAddIndividual);
+					((DropScheme) editionScheme).addToActions(newAddIndividual);
 				}
 			}
 
@@ -652,7 +676,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
 					// Add shape action
 					AddShape newAddShape = new AddShape(builder);
-					newDropScheme.addToActions(newAddShape);
+					((DropScheme) editionScheme).addToActions(newAddShape);
 					newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
 					if (mainPatternRole) {
 						if (isTopLevel) {
@@ -668,6 +692,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					mainPatternRole = false;
 				}
 			}
+			editionPattern.addToEditionSchemes(editionScheme);
 		}
 
 		return editionScheme;

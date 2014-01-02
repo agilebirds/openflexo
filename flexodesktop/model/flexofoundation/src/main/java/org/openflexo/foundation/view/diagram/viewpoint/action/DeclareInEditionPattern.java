@@ -36,6 +36,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or
@@ -264,7 +265,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	}
 
 	public static enum EditionSchemeChoice {
-		DELETE_SHAPE, DELETE_SHAPE_MODEL, DROP
+		DELETE_GR_ONLY, DELETE_GR_AND_MODEL, DROP, LINK, CREATION
 	}
 
 	public class EditionSchemeConfiguration {
@@ -279,6 +280,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			super();
 			this.name = name;
 			this.type = type;
+			this.isValid = true;
 		}
 
 		public EditionSchemeChoice getType() {
@@ -304,6 +306,63 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		public void setValid(boolean isValid) {
 			this.isValid = isValid;
 		}
+
+	}
+
+	public ArrayList<EditionSchemeConfiguration> getEditionSchemes() {
+		if (editionSchemes == null) {
+			editionSchemes = new ArrayList<EditionSchemeConfiguration>();
+
+			EditionSchemeConfiguration deleteShapeEditionScheme = new EditionSchemeConfiguration("DeleteShape",
+					EditionSchemeChoice.DELETE_GR_ONLY);
+			EditionSchemeConfiguration deleteShapeAndModelAllEditionScheme = new EditionSchemeConfiguration("DeleteShapeAndModel",
+					EditionSchemeChoice.DELETE_GR_AND_MODEL);
+
+			editionSchemes.add(deleteShapeEditionScheme);
+			editionSchemes.add(deleteShapeAndModelAllEditionScheme);
+
+			deleteShapeEditionScheme.setValid(true);
+			deleteShapeAndModelAllEditionScheme.setValid(true);
+		}
+		return editionSchemes;
+	}
+
+	public void updateEditionSchemesName(String name) {
+		for (EditionSchemeConfiguration editionSchemeConfiguration : getEditionSchemes()) {
+			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_ONLY) {
+				editionSchemeConfiguration.setName("deleteGR");
+			}
+			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
+				editionSchemeConfiguration.setName("deleteGRandModel");
+			}
+			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
+				editionSchemeConfiguration.setName("drop");
+			}
+			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.LINK) {
+				editionSchemeConfiguration.setName("link");
+			}
+			if (name != null) {
+				editionSchemeConfiguration.setName(editionSchemeConfiguration.getName() + name);
+			}
+		}
+		updateSpecialSchemeNames();
+	}
+
+	public void updateSpecialSchemeNames() {
+	}
+
+	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
+		this.editionSchemes = editionSchemes;
+	}
+
+	private ArrayList<EditionSchemeConfiguration> editionSchemes;
+
+	public boolean editionSchemesNamedAreValid() {
+		for (EditionSchemeConfiguration editionSchemeConfiguration : editionSchemes) {
+			if (StringUtils.isEmpty(editionSchemeConfiguration.getName()))
+				return false;
+		}
+		return true;
 	}
 
 }

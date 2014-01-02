@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.AbstractDeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false" width="551" height="695">
+<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.AbstractDeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false" width="800" height="750">
   <Label label="declare_shape_in_edition_pattern" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
   <RadioButtonList columns="1" hGap="0" vGap="-2" index="1" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="LucidaGrande,0,13" name="PaletteRadioButtonList" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
     <LocalizedDictionary />
@@ -81,7 +81,7 @@
     <Label label="graphical_elements" index="11" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$DrawingObjectEntry" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="drawingObjectEntriesTable" index="11" data="data.drawingObjectEntries" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$DrawingObjectEntry" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="drawingObjectEntriesTable" index="11" data="data.drawingObjectEntries" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_NEVER">
       <CheckBoxColumn data="iterator.selectThis" title="checkbox" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
       <TextFieldColumn data="iterator.patternRoleName" title="role_name" columnWidth="50" resizable="true" displayTitle="true" />
       <LabelColumn data="iterator.parentEntry.patternRoleName" title="parent" columnWidth="50" resizable="true" displayTitle="true" name="label" />
@@ -92,14 +92,22 @@
     <Label label="edition_schemes" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="BehavioralSchemes" localize="true" />
     <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemesTable" index="16" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
       <CheckBoxColumn data="iterator.isValid" title="checkbox" columnWidth="5" resizable="true" displayTitle="false" name="checkbox" />
-      <TextFieldColumn data="iterator.name" title="schemeName" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
-      <DropDownColumn data="iterator.type" format="object.name" title="schemeType" columnWidth="200" resizable="true" displayTitle="true" name="dropdown" />
+      <TextFieldColumn data="iterator.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+      <DropDownColumn data="iterator.type" format="object.name" title="scheme_type" columnWidth="200" resizable="true" displayTitle="true" name="dropdown" />
+      <Dependancy componentName="newEditionPatternName" />
+      <Dependancy componentName="individualPatternRoleName" />
+      <Dependancy componentName="virtualModelPatternRoleName" />
+      <Dependancy componentName="editionPatternDropdown" />
     </Table>
     <Label label="scheme_properties" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(EditionSchemesTable.selected.type = &quot;DROP&quot;)" localize="true" />
     <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" darkLevel="5" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(EditionSchemesTable.selected.type = &quot;DROP&quot;)">
       <Label label="target" constraints="flow(location=west)" localize="true" />
       <DropDown data="data.containerEditionPattern" constraints="flow(location=west)" visible="(!(isTopLevelWidget.data))" name="targetEditionPatternDropdown" format="object.name" localize="true" list="data.diagramSpecification.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
         <Dependancy componentName="isTopLevelWidget" />
+        <Dependancy componentName="patternChoice" />
+        <Dependancy componentName="virtualModelModelSlotDD" />
+        <Dependancy componentName="ontologyModelSlotDD" />
+        <Dependancy componentName="editionPatternDropdown" />
       </DropDown>
       <CheckBox selected="true" data="data.isTopLevel" constraints="flow(location=center)" name="isTopLevelWidget" localize="true" manageDynamicModel="true" />
       <Label label="top_level" constraints="flow(location=east)" localize="true" />
@@ -211,5 +219,17 @@
     <Localized key="graphical_representation" lang="English">Graphical representation</Localized>
     <Localized key="role_name" lang="French">Nom du rôle</Localized>
     <Localized key="role_name" lang="English">Role name</Localized>
+    <Localized key="model_slot" lang="English">Model slot</Localized>
+    <Localized key="model_slot" lang="French">Model slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="edition_schemes" lang="English">Edition schemes</Localized>
+    <Localized key="edition_schemes" lang="French">Procédés comportementaux</Localized>
+    <Localized key="edition_schemes" lang="Dutch">edition_schemes</Localized>
+    <Localized key="scheme_name" lang="English">Scheme name</Localized>
+    <Localized key="scheme_name" lang="French">Nom du procédé</Localized>
+    <Localized key="scheme_name" lang="Dutch">scheme_name</Localized>
+    <Localized key="scheme_type" lang="English">Scheme type</Localized>
+    <Localized key="scheme_type" lang="French">Type de procédé</Localized>
+    <Localized key="scheme_type" lang="Dutch">scheme_type</Localized>
   </LocalizedDictionary>
 </Panel>
