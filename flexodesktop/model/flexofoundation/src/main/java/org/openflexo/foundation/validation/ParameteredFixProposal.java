@@ -47,6 +47,15 @@ public abstract class ParameteredFixProposal<R extends ValidationRule<R, V>, V e
 		this(aMessage, singleParameterWith(paramName, paramLabel, paramDefaultValue));
 	}
 
+	public StringParameter getStringParameter(String parameterName) {
+		for (ParameterDefinition<?> p : getParameters()) {
+			if (p instanceof StringParameter && ((StringParameter) p).getName().equals(parameterName)) {
+				return (StringParameter) p;
+			}
+		}
+		return null;
+	}
+
 	private static ParameterDefinition<?>[] singleParameterWith(String paramName, String paramLabel, String paramDefaultValue) {
 		ParameterDefinition<?>[] returned = { new StringParameter(paramName, paramLabel, paramDefaultValue) };
 		return returned;

@@ -53,8 +53,9 @@ import javax.swing.table.TableColumn;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.ProgressWindow;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -74,6 +75,7 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -331,17 +333,18 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 				: FlexoLocalization.localizedForKey("enableRule", disableRuleButton));
 	}
 
-	protected void applyFixProposal(FixProposal fixProposal) {
+	protected <R extends ValidationRule<R, V>, V extends Validable> void applyFixProposal(FixProposal<R, V> fixProposal) {
 		if (fixProposal != null) {
 			if (fixProposal instanceof ParameteredFixProposal) {
 				/*AskParametersDialog askParams = new AskParametersDialog(FlexoLocalization.localizedForKey("validation_error_fixing"),
 				        fixProposal.getLocalizedMessage(), ((ParameteredFixProposal) fixProposal).getLabels(),
 				        ((ParameteredFixProposal) fixProposal).getParams());*/
-				((ParameteredFixProposal) fixProposal).updateBeforeApply();
-				AskParametersDialog askParams = AskParametersDialog.createAskParametersDialog(fixProposal.getProject(), null,
-						FlexoLocalization.localizedForKey("validation_error_fixing"), fixProposal.getLocalizedMessage(),
-						((ParameteredFixProposal) fixProposal).getParameters());
-				if (askParams.getStatus() == AskParametersDialog.CANCEL) {
+				ParameteredFixProposal<R, V> parameteredFixProposal = (ParameteredFixProposal<R, V>) fixProposal;
+				parameteredFixProposal.updateBeforeApply();
+				AskParametersComponent askParameterPanel = new AskParametersComponent(parameteredFixProposal);
+				FIBDialog<ParameteredFixProposal<R, V>> dialog = FIBDialog.instanciateAndShowDialog(askParameterPanel,
+						parameteredFixProposal, FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				if (dialog.getStatus() == Status.CANCELED) {
 					return;
 				}
 			} else if (fixProposal.askConfirmation()) {
