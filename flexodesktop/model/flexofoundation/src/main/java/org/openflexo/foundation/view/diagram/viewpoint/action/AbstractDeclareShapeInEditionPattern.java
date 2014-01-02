@@ -587,114 +587,130 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	}
 	 */
 
-	private EditionScheme createScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+	private void createScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
 			VirtualModel.VirtualModelBuilder builder) {
 		EditionScheme editionScheme = null;
 
 		// Delete shapes as well as model
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
-			editionScheme = editionPattern.createDeletionScheme();
-			editionScheme.setName(editionSchemeConfiguration.getName());
+			editionScheme = createDeleteEditionScheme(editionSchemeConfiguration, editionPattern, null, false);
 		}
 
 		// Delete only shapes
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_ONLY) {
-			editionScheme = new DeletionScheme(null);
-			editionScheme.setName(editionSchemeConfiguration.getName());
-			Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
+			editionScheme = createDeleteEditionScheme(editionSchemeConfiguration, editionPattern, null, true);
+		}
+
+		// Drop
+		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
+			editionScheme = createDropEditionScheme(editionSchemeConfiguration, editionPattern, null);
+		}
+		editionPattern.addToEditionSchemes(editionScheme);
+	}
+
+	private EditionScheme createDeleteEditionScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+			VirtualModel.VirtualModelBuilder builder, boolean shapeOnly) {
+
+		DeletionScheme editionScheme = new DeletionScheme(builder);
+		editionScheme.setName(editionSchemeConfiguration.getName());
+
+		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
+		if (shapeOnly) {
 			for (PatternRole pr : editionPattern.getPatternRoles()) {
 				if (pr instanceof GraphicalElementPatternRole) {
 					rolesToDelete.add(pr);
 				}
 			}
-			Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
-				@Override
-				public int compare(PatternRole o1, PatternRole o2) {
-					if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
-						return 1;
-					} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
-						return -1;
-					}
-
-					if (o1 instanceof ShapePatternRole) {
-						if (o2 instanceof ShapePatternRole) {
-							if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
-								return -1;
-							}
-							if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
-								return 1;
-							}
-							return 0;
-						}
-					}
-					return 0;
-				}
-
-			});
-			for (PatternRole pr : rolesToDelete) {
-				DeleteAction a = new DeleteAction(null);
-				a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
-				editionScheme.addToActions(a);
+		} else {
+			for (PatternRole pr : editionPattern.getPatternRoles()) {
+				rolesToDelete.add(pr);
 			}
-			editionPattern.addToEditionSchemes(editionScheme);
 		}
 
-		// Drop
-		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
-			// Create new drop scheme
-			editionScheme = new DropScheme(builder);
-			editionScheme.setName(editionSchemeConfiguration.getName());
-
-			((DropScheme) editionScheme).setTopTarget(isTopLevel);
-			if (!isTopLevel) {
-				((DropScheme) editionScheme).setTargetEditionPattern(containerEditionPattern);
-			}
-
-			// Parameters
-			if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-				if (isTypeAwareModelSlot()) {
-					TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
-
-					URIParameter uriParameter = new URIParameter(builder);
-					uriParameter.setName("uri");
-					uriParameter.setLabel("uri");
-
-					((DropScheme) editionScheme).addToParameters(uriParameter);
-
-					// Add individual action
-					AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
-							((DropScheme) editionScheme));
-
-					((DropScheme) editionScheme).addToActions(newAddIndividual);
+		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
+			@Override
+			public int compare(PatternRole o1, PatternRole o2) {
+				if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
+					return 1;
+				} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
+					return -1;
 				}
+
+				if (o1 instanceof ShapePatternRole) {
+					if (o2 instanceof ShapePatternRole) {
+						if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
+							return -1;
+						}
+						if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
+							return 1;
+						}
+						return 0;
+					}
+				}
+				return 0;
 			}
 
-			// Add shape/connector actions
-			boolean mainPatternRole = true;
-			for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
-				if (graphicalElementPatternRole instanceof ShapePatternRole) {
-					ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
-					// Add shape action
-					AddShape newAddShape = new AddShape(builder);
-					((DropScheme) editionScheme).addToActions(newAddShape);
-					newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
-					if (mainPatternRole) {
-						if (isTopLevel) {
-							newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
-						} else {
-							newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
-									+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-						}
+		});
+		for (PatternRole pr : rolesToDelete) {
+			DeleteAction a = new DeleteAction(null);
+			a.setObject(new DataBinding<Object>(pr.getPatternRoleName()));
+			editionScheme.addToActions(a);
+		}
+		return editionScheme;
+	}
+
+	private EditionScheme createDropEditionScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+			VirtualModel.VirtualModelBuilder builder) {
+		// Create new drop scheme
+		DropScheme editionScheme = new DropScheme(builder);
+		editionScheme.setName(editionSchemeConfiguration.getName());
+
+		editionScheme.setTopTarget(isTopLevel);
+		if (!isTopLevel) {
+			editionScheme.setTargetEditionPattern(containerEditionPattern);
+		}
+
+		// Parameters
+		if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
+			if (isTypeAwareModelSlot()) {
+				TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
+
+				URIParameter uriParameter = new URIParameter(builder);
+				uriParameter.setName("uri");
+				uriParameter.setLabel("uri");
+
+				editionScheme.addToParameters(uriParameter);
+
+				// Add individual action
+				AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole, editionScheme);
+
+				editionScheme.addToActions(newAddIndividual);
+			}
+		}
+
+		// Add shape/connector actions
+		boolean mainPatternRole = true;
+		for (GraphicalElementPatternRole graphicalElementPatternRole : newGraphicalElementPatternRoles.values()) {
+			if (graphicalElementPatternRole instanceof ShapePatternRole) {
+				ShapePatternRole grPatternRole = (ShapePatternRole) graphicalElementPatternRole;
+				// Add shape action
+				AddShape newAddShape = new AddShape(builder);
+				editionScheme.addToActions(newAddShape);
+				newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
+				if (mainPatternRole) {
+					if (isTopLevel) {
+						newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
 					} else {
-						newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
-								.getPatternRoleName()));
+						newAddShape.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
+								+ containerEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
 					}
-					mainPatternRole = false;
+				} else {
+					newAddShape.setContainer(new DataBinding<DiagramElement<?>>(grPatternRole.getParentShapePatternRole()
+							.getPatternRoleName()));
 				}
+				mainPatternRole = false;
 			}
-			editionPattern.addToEditionSchemes(editionScheme);
 		}
-
 		return editionScheme;
 	}
 
