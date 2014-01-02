@@ -23,7 +23,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
+import org.openflexo.model.annotations.Setter;
 
 /**
  * Super class for any object involved in Openflexo and beeing part of a {@link FlexoProject}<br>
@@ -33,85 +37,74 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public abstract class FlexoProjectObject extends DefaultFlexoObject implements XMLSerializable {
+@ModelEntity(isAbstract = true)
+@ImplementationClass(FlexoProjectObject.FlexoProjectObjectImpl.class)
+public interface FlexoProjectObject extends FlexoObject {
 
-	private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
+	@PropertyIdentifier(type = FlexoProject.class)
+	public static final String PROJECT = "project";
 
-	private FlexoProject project;
+	@Getter(PROJECT)
+	public FlexoProject getProject();
 
-	public FlexoProjectObject() {
-		super();
-	}
-
-	public FlexoProjectObject(FlexoProject project) {
-		this();
-		this.project = project;
-	}
+	@Setter(PROJECT)
+	public void setProject(FlexoProject project);
 
 	@Override
-	public boolean delete() {
+	public FlexoServiceManager getServiceManager();
 
-		return super.delete();
+	public InformationSpace getInformationSpace();
 
-	}
+	public abstract class FlexoProjectObjectImpl extends DefaultFlexoObject implements FlexoProjectObject {
 
-	public FlexoProject getProject() {
-		return project;
-	}
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
 
-	public void setProject(FlexoProject project) {
-		this.project = project;
-	}
+		private FlexoProject project;
 
-	/*@Override
-	public List<DocType> getDocTypes() {
-		if (getProject() != null) {
-			return getProject().getDocTypes();
+		public FlexoProjectObjectImpl() {
+			super();
 		}
-		return super.getDocTypes();
-	}*/
 
-	// TODO: Should be refactored with injectors
-	@Override
-	public FlexoServiceManager getServiceManager() {
-		if (getProject() != null) {
-			return getProject().getServiceManager();
+		public FlexoProjectObjectImpl(FlexoProject project) {
+			this();
+			this.project = project;
 		}
-		return null;
-	}
 
-	public InformationSpace getInformationSpace() {
-		if (getServiceManager() != null) {
-			return getServiceManager().getInformationSpace();
+		@Override
+		public boolean delete() {
+
+			project = null;
+			return super.delete();
+
 		}
-		return null;
-	}
 
-	/**
-	 * Return true is this object is somewhere involved as a primary representation pattern role in any of its EditionPatternReferences
-	 * 
-	 * @return
-	 */
-	/*@Deprecated
-	public boolean providesSupportAsPrimaryRole() {
-		if (getEditionPatternReferences() != null) {
-			if (getEditionPatternReferences().size() > 0) {
-				for (FlexoModelObjectReference<EditionPatternInstance> ref : editionPatternReferences) {
-					EditionPatternInstance epi = ref.getObject();
-					if (epi != null) {
-						PatternRole<?> pr = epi.getRoleForActor(this);
-						if (pr == null) {
-							logger.warning("Found an EditionPatternReference with a null pattern role. Please investigate...");
-						} //else if (pr.getIsPrimaryRole()) {
-							// return true;
-							//}
-					} else {
-						logger.warning("Cannot find EditionPatternInstance for " + ref);
-					}
-				}
+		@Override
+		public FlexoProject getProject() {
+			return project;
+		}
+
+		@Override
+		public void setProject(FlexoProject project) {
+			this.project = project;
+		}
+
+		// TODO: Should be refactored with injectors
+		@Override
+		public FlexoServiceManager getServiceManager() {
+			if (getProject() != null) {
+				return getProject().getServiceManager();
 			}
+			return null;
 		}
-		return false;
-	}*/
 
+		@Override
+		public InformationSpace getInformationSpace() {
+			if (getServiceManager() != null) {
+				return getServiceManager().getInformationSpace();
+			}
+			return null;
+		}
+
+	}
 }

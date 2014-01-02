@@ -32,8 +32,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBResourceCenterSelector extends FIBFlexoObjectSelector<FlexoResourceCenter> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBResourceCenterSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ResourceCenterSelector.fib");

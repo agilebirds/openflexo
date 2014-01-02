@@ -88,9 +88,9 @@ public class FIBClassSelector extends FIBFlexoObjectSelector<IFlexoOntologyClass
 	}
 
 	public InformationSpace getInformationSpace() {
-		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from Project
-		if (informationSpace == null && getProject() != null) {
-			informationSpace = getProject().getInformationSpace();
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from ServiceManager
+		if (informationSpace == null && getServiceManager() != null) {
+			informationSpace = getServiceManager().getInformationSpace();
 		}
 		return informationSpace;
 	}
@@ -120,7 +120,7 @@ public class FIBClassSelector extends FIBFlexoObjectSelector<IFlexoOntologyClass
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getInformationSpace() != null) {
-			FlexoModelResource<?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			FlexoModelResource<?, ?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
 			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
 				setContext((IFlexoOntology) modelResource.getModel());
 			}

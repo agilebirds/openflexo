@@ -59,7 +59,7 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBListWidget;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
@@ -70,13 +70,17 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- * Widget allowing to select an object while browsing a relevant subset of objects in project
+ * Default base implementation for a widget allowing to select a {@link FlexoObject}<br>
+ * 
+ * Default scope is provided by a {@link FlexoServiceManager}
  * 
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends TextFieldCustomPopup<T> implements
 		FIBCustomComponent<T, FIBFlexoObjectSelector<T>>, HasPropertyChangeSupport {
+
 	static final Logger logger = Logger.getLogger(FIBFlexoObjectSelector.class.getPackage().getName());
 
 	private static final String DELETED = "deleted";
@@ -87,7 +91,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 
 	protected SelectorDetailsPanel _selectorPanel;
 
-	private FlexoProject project;
+	private FlexoServiceManager serviceManager;
 	private Object selectedObject;
 	private T selectedValue;
 	private final List<T> matchingValues;
@@ -211,13 +215,17 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		pcSupport = null;
 		selectedObject = null;
 		selectedValue = null;
-		project = null;
+		serviceManager = null;
 	}
 
 	@Override
 	public void init(FIBCustom component, FIBController controller) {
 		this.component = component;
 		this.controller = controller;
+	}
+
+	public FIBController getFIBController() {
+		return controller;
 	}
 
 	@Override
@@ -363,6 +371,25 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 
 	public List<T> getMatchingValues() {
 		return matchingValues;
+	}
+
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
+	}
+
+	// FIBModelObjectSelector is applicable to something else than objects in a project
+	@CustomComponentParameter(name = "serviceManager", type = CustomComponentParameter.Type.MANDATORY)
+	public void setServiceManager(FlexoServiceManager serviceManager) {
+		if (this.serviceManager != serviceManager) {
+			FlexoServiceManager oldServiceManager = this.serviceManager;
+			if (serviceManager == null) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Passing null serviceManager. If you rely on serviceManager this is unlikely to work");
+				}
+			}
+			this.serviceManager = serviceManager;
+			pcSupport.firePropertyChange("serviceManager", oldServiceManager, serviceManager);
+		}
 	}
 
 	// FIBModelObjectSelector is applicable to something else than objects in a project
@@ -546,8 +573,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		}
 
 		protected final Icon decorateIcon(FlexoObject object, Icon returned) {
-			if (AdvancedPrefs.getHightlightUncommentedItem() && object != null && object.isDescriptionImportant()
-					&& !object.hasDescription()) {
+			if (AdvancedPrefs.getHightlightUncommentedItem() && object != null && !object.hasDescription()) {
 				if (returned instanceof ImageIcon) {
 					returned = IconFactory.getImageIcon((ImageIcon) returned, new IconMarker[] { IconLibrary.WARNING });
 				} else {
@@ -679,7 +705,7 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 			return "";
 		}
 		if (editedObject instanceof FlexoObject) {
-			return ((FlexoObject) editedObject).getFullyQualifiedName();
+			return ((FlexoObject) editedObject).toString();
 		}
 		return editedObject.toString();
 	}

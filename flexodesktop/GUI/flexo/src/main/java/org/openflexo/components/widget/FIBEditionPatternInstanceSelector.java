@@ -26,10 +26,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -49,8 +49,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBEditionPatternInstanceSelector extends FIBFlexoObjectSelector<EditionPatternInstance> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBEditionPatternInstanceSelector extends FIBProjectObjectSelector<EditionPatternInstance> {
+
 	static final Logger logger = Logger.getLogger(FIBEditionPatternInstanceSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/EditionPatternInstanceSelector.fib");
@@ -181,17 +182,6 @@ public class FIBEditionPatternInstanceSelector extends FIBFlexoObjectSelector<Ed
 	public void setVirtualModelInstance(VirtualModelInstance virtualModelInstance) {
 		this.virtualModelInstance = virtualModelInstance;
 		System.out.println(">>>>>>>>> Sets VirtualModelInstance with " + virtualModelInstance);
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return super.getProject();
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		super.setProject(project);
-		System.out.println(">>>>>>>>> Sets project with " + project);
 	}
 
 	// Please uncomment this for a live test

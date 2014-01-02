@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -28,7 +29,7 @@ import org.openflexo.toolbox.IProgress;
 @ModelEntity
 @ImplementationClass(FlexoResourceImpl.class)
 @XMLElement
-public interface FlexoResource<RD extends ResourceData<RD>> {
+public interface FlexoResource<RD extends ResourceData<RD>> extends FlexoObject {
 
 	public static final String NAME = "name";
 	public static final String URI = "URI";
@@ -109,6 +110,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return the name of this resource.
 	 */
+	@Override
 	@Getter(value = SERVICE_MANAGER, ignoreType = true)
 	public FlexoServiceManager getServiceManager();
 
@@ -321,6 +323,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 * 
 	 * @return
 	 */
+	@Override
 	public boolean isDeleted();
 
 	// public Date getLastUpdate();

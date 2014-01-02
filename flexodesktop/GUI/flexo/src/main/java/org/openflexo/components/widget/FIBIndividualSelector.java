@@ -85,13 +85,13 @@ public class FIBIndividualSelector extends FIBFlexoObjectSelector<IFlexoOntology
 	protected OntologyBrowserModel model = null;
 	private TechnologyAdapter technologyAdapter;
 
-	private BindingModel bindingModel;
+	private final BindingModel bindingModel;
 
 	private String defaultRenderer = null;
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory(null);
 
-	private HashMap<IFlexoOntologyClass, DataBinding<String>> renderers;
+	private final HashMap<IFlexoOntologyClass, DataBinding<String>> renderers;
 
 	public FIBIndividualSelector(IFlexoOntologyIndividual editedObject) {
 		super(editedObject);
@@ -126,9 +126,9 @@ public class FIBIndividualSelector extends FIBFlexoObjectSelector<IFlexoOntology
 	}
 
 	public InformationSpace getInformationSpace() {
-		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from Project
-		if (informationSpace == null && getProject() != null) {
-			informationSpace = getProject().getInformationSpace();
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from ServiceManager
+		if (informationSpace == null && getServiceManager() != null) {
+			informationSpace = getServiceManager().getInformationSpace();
 		}
 		return informationSpace;
 	}
@@ -270,7 +270,7 @@ public class FIBIndividualSelector extends FIBFlexoObjectSelector<IFlexoOntology
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info(">>>>>>>>>>>> Sets ontology with " + ontologyURI);
 		if (getInformationSpace() != null) {
-			FlexoModelResource<?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			FlexoModelResource<?, ?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
 			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
 				setContext((IFlexoOntology) modelResource.getModel());
 			}

@@ -23,10 +23,10 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.FileResource;
 
@@ -36,8 +36,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBVirtualModelInstanceSelector extends FIBFlexoObjectSelector<VirtualModelInstanceResource> {
-	@SuppressWarnings("hiding")
+@SuppressWarnings("serial")
+public class FIBVirtualModelInstanceSelector extends FIBProjectObjectSelector<VirtualModelInstanceResource> {
+
 	static final Logger logger = Logger.getLogger(FIBVirtualModelInstanceSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/VirtualModelInstanceSelector.fib");
@@ -115,7 +116,7 @@ public class FIBVirtualModelInstanceSelector extends FIBFlexoObjectSelector<Virt
 
 	public FlexoObject getRootObject() {
 		if (getView() != null) {
-			return (FlexoObject) getView().getResource();
+			return getView().getResource();
 		} else if (getViewLibrary() != null) {
 			return getViewLibrary();
 		} else {

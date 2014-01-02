@@ -23,9 +23,9 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -34,8 +34,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBVirtualModelSelector extends FIBFlexoObjectSelector<VirtualModelResource> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBVirtualModelSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/VirtualModelSelector.fib");
@@ -93,7 +94,7 @@ public class FIBVirtualModelSelector extends FIBFlexoObjectSelector<VirtualModel
 
 	public FlexoObject getRootObject() {
 		if (getViewPoint() != null) {
-			return (FlexoObject) getViewPoint();
+			return getViewPoint();
 		} else {
 			return getViewPointLibrary();
 		}

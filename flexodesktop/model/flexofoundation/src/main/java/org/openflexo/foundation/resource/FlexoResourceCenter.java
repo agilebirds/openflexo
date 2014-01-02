@@ -27,6 +27,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -45,7 +46,7 @@ import org.openflexo.toolbox.IProgress;
  * 
  */
 @ModelEntity
-public interface FlexoResourceCenter<I> extends Iterable<I> {
+public interface FlexoResourceCenter<I> extends Iterable<I>, FlexoObject {
 
 	/**
 	 * Return a user-friendly named identifier for this resource center

@@ -33,8 +33,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBMetaModelSelector extends FIBFlexoObjectSelector<FlexoMetaModelResource> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBMetaModelSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/MetaModelSelector.fib");

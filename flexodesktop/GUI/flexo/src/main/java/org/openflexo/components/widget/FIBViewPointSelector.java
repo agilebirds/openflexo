@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -33,8 +33,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBViewPointSelector extends FIBFlexoObjectSelector<ViewPointResource> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBViewPointSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ViewPointSelector.fib");

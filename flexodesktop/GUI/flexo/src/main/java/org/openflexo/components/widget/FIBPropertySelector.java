@@ -31,7 +31,6 @@ import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
@@ -66,8 +65,9 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBPropertySelector extends FIBFlexoObjectSelector<IFlexoOntologyStructuralProperty> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBPropertySelector.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBPropertySelector.fib");
@@ -111,9 +111,9 @@ public class FIBPropertySelector extends FIBFlexoObjectSelector<IFlexoOntologySt
 	}
 
 	public InformationSpace getInformationSpace() {
-		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from Project
-		if (informationSpace == null && getProject() != null) {
-			informationSpace = getProject().getInformationSpace();
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from ServiceManager
+		if (informationSpace == null && getServiceManager() != null) {
+			informationSpace = getServiceManager().getInformationSpace();
 		}
 		return informationSpace;
 	}
@@ -153,7 +153,7 @@ public class FIBPropertySelector extends FIBFlexoObjectSelector<IFlexoOntologySt
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
 		if (getInformationSpace() != null) {
-			FlexoModelResource<?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			FlexoModelResource<?, ?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
 			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
 				setContext((IFlexoOntology) modelResource.getModel());
 			}
@@ -415,13 +415,6 @@ public class FIBPropertySelector extends FIBFlexoObjectSelector<IFlexoOntologySt
 				}
 			});
 		}
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		super.setProject(project);
-		// With model slots, setContext has to be called explicitly
-		// if (project != null) {setContext(project.getProjectOntology());}
 	}
 
 	// Please uncomment this for a live test

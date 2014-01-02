@@ -22,7 +22,7 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.ViewResource;
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -31,8 +31,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBViewSelector extends FIBFlexoObjectSelector<ViewResource> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBViewSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ViewSelector.fib");

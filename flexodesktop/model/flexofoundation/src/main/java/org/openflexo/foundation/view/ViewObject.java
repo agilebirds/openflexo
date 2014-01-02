@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoProjectObject.FlexoProjectObjectImpl;
 import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -33,7 +34,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
  * @author sylvain
  * 
  */
-public abstract class ViewObject extends FlexoProjectObject implements InnerResourceData {
+public abstract class ViewObject extends FlexoProjectObjectImpl implements FlexoProjectObject, InnerResourceData {
 
 	private static final Logger logger = Logger.getLogger(ViewObject.class.getPackage().getName());
 

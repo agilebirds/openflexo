@@ -17,29 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.components.widget;
+package org.openflexo.technologyadapter.diagram.gui.widget;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Browser allowing to browse through example diagram<br>
+ * Browser allowing to browse an example diagram<br>
  * 
  * @author sguerin
  * 
  */
 @SuppressWarnings("serial")
-public class FIBDiagramPaletteBrowser extends FIBBrowserView<DiagramPalette> {
-	static final Logger logger = Logger.getLogger(FIBDiagramPaletteBrowser.class.getPackage().getName());
+public class FIBDiagramBrowser extends FIBBrowserView<Diagram> {
+	static final Logger logger = Logger.getLogger(FIBDiagramBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBDiagramPaletteBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBDiagramBrowser.fib");
 
-	public FIBDiagramPaletteBrowser(DiagramPalette diagramPalette, FlexoController controller) {
-		super(diagramPalette, controller, FIB_FILE);
+	public FIBDiagramBrowser(Diagram diagram, FlexoController controller) {
+		super(diagram, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -64,13 +64,13 @@ public class FIBDiagramPaletteBrowser extends FIBBrowserView<DiagramPalette> {
 		ViewPointResource vpRes = viewPointLibrary
 				.getViewPointResource("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
 
-		DiagramPaletteResource dpRes = vpRes.getContents(DiagramPaletteResource.class).get(0);
-		final DiagramPalette diagramPalette = dpRes.getDiagramPalette();
+		ExampleDiagramResource edRes = vpRes.getContents(ExampleDiagramResource.class).get(0);
+		final ExampleDiagram exampleDiagram = edRes.getExampleDiagram();
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(diagramPalette);
+				return makeArray(exampleDiagram);
 			}
 
 			@Override

@@ -63,8 +63,9 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBrowser> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBOntologyBrowser.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBOntologyBrowser.fib");
@@ -93,7 +94,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 
 	private boolean isSearching = false;
 	private String filteredName;
-	private List<IFlexoOntologyConcept> matchingValues;
+	private final List<IFlexoOntologyConcept> matchingValues;
 	private IFlexoOntologyConcept selectedValue;
 
 	public FIBOntologyBrowser(IFlexoOntology ontology) {

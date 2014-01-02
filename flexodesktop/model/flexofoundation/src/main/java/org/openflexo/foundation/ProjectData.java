@@ -31,7 +31,7 @@ import org.openflexo.model.factory.ModelFactory;
 @ModelEntity
 @ImplementationClass(ProjectData.ProjectDataImpl.class)
 @XMLElement
-public interface ProjectData extends AccessibleProxyObject, ProjectResourceData<ProjectData> {
+public interface ProjectData extends FlexoProjectObject, AccessibleProxyObject, ProjectResourceData<ProjectData> {
 
 	public static final String IMPORTED_PROJECTS = "importedProjects";
 
@@ -64,7 +64,7 @@ public interface ProjectData extends AccessibleProxyObject, ProjectResourceData<
 
 	public void removeFromImportedProjects(FlexoProject project);
 
-	public static abstract class ProjectDataImpl extends FlexoProjectObject implements ProjectData {
+	public static abstract class ProjectDataImpl extends FlexoProjectObjectImpl implements ProjectData {
 
 		@Override
 		public FlexoProjectReference getProjectReferenceWithURI(String projectURI, boolean searchRecursively) {

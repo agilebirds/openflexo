@@ -36,8 +36,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBModelSelector extends FIBFlexoObjectSelector<FlexoModelResource> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBModelSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ModelSelector.fib");

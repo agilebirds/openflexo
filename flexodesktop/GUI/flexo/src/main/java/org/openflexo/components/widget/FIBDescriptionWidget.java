@@ -35,8 +35,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject> {
-	@SuppressWarnings("hiding")
+
 	static final Logger logger = Logger.getLogger(FIBDescriptionWidget.class.getPackage().getName());
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/DescriptionWidget.fib");
