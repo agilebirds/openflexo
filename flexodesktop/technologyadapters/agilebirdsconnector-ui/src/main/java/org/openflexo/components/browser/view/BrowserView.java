@@ -78,7 +78,7 @@ import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.selection.DefaultContextualMenuManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.FlexoAutoScroll;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Abstract view related to a ProjectBrowser
@@ -158,7 +158,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	private SelectionPolicy _selectionPolicy;
 
-	private final FlexoController controller;
+	private final AgileBirdsFlexoController controller;
 
 	public static enum SelectionPolicy {
 		/**
@@ -178,11 +178,11 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 
 	private JPanel northPanel;
 
-	public BrowserView(ProjectBrowser browser, FlexoController controller) {
+	public BrowserView(ProjectBrowser browser, AgileBirdsFlexoController controller) {
 		this(browser, controller, SelectionPolicy.ParticipateToSelection);
 	}
 
-	public BrowserView(ProjectBrowser browser, FlexoController controller, SelectionPolicy selectionPolicy) {
+	public BrowserView(ProjectBrowser browser, AgileBirdsFlexoController controller, SelectionPolicy selectionPolicy) {
 		super();
 		_browser = browser;
 		this.controller = controller;
@@ -278,7 +278,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		northPanel.add(component);
 	}
 
-	public FlexoController getController() {
+	public AgileBirdsFlexoController getController() {
 		return controller;
 	}
 

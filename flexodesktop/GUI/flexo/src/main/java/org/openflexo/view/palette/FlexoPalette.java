@@ -40,7 +40,6 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -50,7 +49,7 @@ import org.openflexo.view.controller.FlexoController;
  */
 @Deprecated
 public abstract class FlexoPalette extends JPanel implements ChangeListener {
-	private FlexoController _controller;
+	private final FlexoController _controller;
 
 	protected static final Logger logger = Logger.getLogger(FlexoPalette.class.getPackage().getName());
 
@@ -85,7 +84,7 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 		    	if (c.getPreferredSize().height > preferredSize.height) preferredSize.height=c.getPreferredSize().height;
 		 }*/
 
-		if (UserType.isMaintainerRelease() && handlesPaletteEdition()) {
+		if (handlesPaletteEdition()) {
 			controlPanel = makeControlPanel();
 			add(controlPanel, BorderLayout.SOUTH);
 			// preferredSize.height += controlPanel.getPreferredSize().height;
@@ -227,7 +226,7 @@ public abstract class FlexoPalette extends JPanel implements ChangeListener {
 	}
 
 	protected class PaletteTabbedPane extends JTabbedPane {
-		private Vector<PalettePanel> palettes;
+		private final Vector<PalettePanel> palettes;
 
 		public PaletteTabbedPane() {
 			super();

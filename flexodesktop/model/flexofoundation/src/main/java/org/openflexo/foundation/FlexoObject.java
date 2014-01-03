@@ -121,7 +121,7 @@ public abstract interface FlexoObject extends ReferenceOwner, AccessibleProxyObj
 	@Setter(HAS_SPECIFIC_DESCRIPTIONS_KEY)
 	public void setHasSpecificDescriptions(boolean hasSpecificDescriptions);
 
-	@Getter(value = SPECIFIC_DESCRIPTIONS_KEY)
+	@Getter(value = SPECIFIC_DESCRIPTIONS_KEY, ignoreType = true)
 	public Map<String, String> getSpecificDescriptions();
 
 	@Setter(SPECIFIC_DESCRIPTIONS_KEY)

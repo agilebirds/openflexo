@@ -19,31 +19,21 @@
  */
 package org.openflexo.foundation;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
-import junit.framework.AssertionFailedError;
-
-import org.junit.After;
 import org.junit.AfterClass;
-import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -52,13 +42,11 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
- * Provides a JUnit 4 generic environment of Openflexo-core for testing purposes
- * 
+ * Provides a JUnit 4 generic environment with a {@link FlexoProject} for testing purposes<br>
  */
-public abstract class OpenflexoRunTimeTestCase {
+public abstract class OpenflexoRunTimeTestCase extends OpenflexoTestCase {
 
 	private static final Logger logger = FlexoLogger.getLogger(OpenflexoRunTimeTestCase.class.getPackage().getName());
 
@@ -99,13 +87,7 @@ public abstract class OpenflexoRunTimeTestCase {
 		}
 	};
 
-	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
-			super(project, sm);
-		}
-
-	}
-
+	@Override
 	public File getResource(String resourceRelativeName) {
 		File retval = new File("src/test/resources", resourceRelativeName);
 		if (retval.exists()) {
@@ -245,88 +227,4 @@ public abstract class OpenflexoRunTimeTestCase {
 		return null;
 	}
 
-	protected void assertNotModified(FlexoResource resource) {
-		try {
-			if (resource.isLoaded()) {
-				assertFalse("Resource " + resource.getURI() + " should not be modfied", resource.getLoadedResourceData().isModified());
-			} else {
-				fail("Resource " + resource.getURI() + " should not be modified but is not even loaded");
-			}
-		} catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT modified");
-			throw e;
-		}
-	}
-
-	protected void assertModified(FlexoResource resource) {
-		try {
-			if (resource.isLoaded()) {
-				assertTrue("Resource " + resource.getURI() + " should be modified", resource.getLoadedResourceData().isModified());
-			} else {
-				fail("Resource " + resource.getURI() + " should be modified but is not even loaded");
-			}
-		} catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: " + resource + " MUST be modified");
-			throw e;
-		}
-	}
-
-	protected void assertNotLoaded(FlexoResource resource) {
-		try {
-			assertFalse("Resource " + resource.getURI() + " should not be loaded", resource.isLoaded());
-		} catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: " + resource + " MUST be NOT loaded");
-			throw e;
-		}
-	}
-
-	protected void assertLoaded(FlexoResource resource) {
-		try {
-			assertTrue("Resource " + resource.getURI() + " should be loaded", resource.isLoaded());
-		} catch (AssertionFailedError e) {
-			logger.warning("RESOURCE status problem: " + resource + " MUST be loaded");
-			throw e;
-		}
-	}
-
-	protected static void log(String step) {
-		logger.info("\n******************************************************************************\n" + step
-				+ "\n******************************************************************************\n");
-	}
-
-	/**
-	 * Assert this is the same list, doesn't care about order
-	 * 
-	 * @param aList
-	 * @param objects
-	 * @throws AssertionFailedError
-	 */
-	public <T> void assertSameList(Collection<T> aList, T... objects) throws AssertionFailedError {
-		Set<T> set1 = new HashSet<T>(aList);
-		Set<T> set2 = new HashSet<T>();
-		for (T o : objects) {
-			set2.add(o);
-		}
-		if (!set1.equals(set2)) {
-			StringBuffer message = new StringBuffer();
-			for (T o : set1) {
-				if (!set2.contains(o)) {
-					message.append(" Extra: " + o);
-				}
-			}
-			for (T o : set2) {
-				if (!set1.contains(o)) {
-					message.append(" Missing: " + o);
-				}
-			}
-			throw new AssertionFailedError("AssertionFailedError when comparing lists, expected: " + set1 + " but was " + set2
-					+ " Details = " + message);
-		}
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		KeyValueCoder.clearClassCache();
-		KeyValueLibrary.clearCache();
-	}
 }

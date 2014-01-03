@@ -41,7 +41,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * A compound tabular view represents a logical group of tabular views with a specified layout (for example on a JSplitPane), with
@@ -54,7 +54,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 
 	static final Logger logger = Logger.getLogger(CompoundTabularView.class.getPackage().getName());
 
-	private FlexoController _controller;
+	private AgileBirdsFlexoController _controller;
 
 	private O _object;
 
@@ -74,7 +74,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 
 	private JLabel titleLabel;
 
-	public CompoundTabularView(O object, FlexoController controller, String t) {
+	public CompoundTabularView(O object, AgileBirdsFlexoController controller, String t) {
 		super();
 		_controller = controller;
 		_object = object;
@@ -86,7 +86,7 @@ public abstract class CompoundTabularView<O extends FlexoModelObject> extends JP
 		_slaveTabularViews = new Vector<TabularView>();
 	}
 
-	public FlexoController getController() {
+	public AgileBirdsFlexoController getController() {
 		return _controller;
 	}
 

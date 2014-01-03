@@ -29,7 +29,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ReservedKeyword;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Abstract browser element representing a DMObject
@@ -73,7 +73,7 @@ public abstract class DMElement extends BrowserElement {
 			}
 			getDMObject().setName(aName);
 		} catch (Exception e) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name"));
+			AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("invalid_name"));
 		}
 	}
 

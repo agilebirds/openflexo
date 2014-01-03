@@ -38,16 +38,12 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
-import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.action.ImportProject;
-import org.openflexo.foundation.action.ValidateProject;
-import org.openflexo.foundation.param.CheckboxParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceExceptionList;
+import org.openflexo.foundation.action.ValidateProject;
+import org.openflexo.foundation.resource.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -246,7 +242,7 @@ public class FileMenu extends FlexoMenu {
 	}
 
 	public class RecentProjectAction extends AbstractAction {
-		private File projectDirectory;
+		private final File projectDirectory;
 
 		public RecentProjectAction(File projectDirectory) {
 			super();
@@ -284,7 +280,9 @@ public class FileMenu extends FlexoMenu {
 		public void actionPerformed(ActionEvent e) {
 			FlexoEditor editor = getController().getEditor();
 			if (editor != null) {
-				editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
+				logger.warning("Please implement this");
+				// TODO
+				// editor.performActionType(ImportProject.actionType, editor.getProject(), null, e);
 			}
 		}
 
@@ -314,7 +312,7 @@ public class FileMenu extends FlexoMenu {
 			if (getController() == null || getController().getProject() == null) {
 				return;
 			}
-			if (getController().getProject().hasUnsaveStorageResources()) {
+			if (getController().getProject().hasUnsavedResources()) {
 				Cursor c = getController().getFlexoFrame().getCursor();
 				FileMenu.this._controller.getFlexoFrame().setCursor(Cursor.WAIT_CURSOR);
 				try {
@@ -416,7 +414,10 @@ public class FileMenu extends FlexoMenu {
 				.localizedForKey("would_you_like_to_check_your_project_consistency_first") + "?");
 		switch (i) {
 		case JOptionPane.YES_OPTION:
-			ValidateProject validate = ValidateProject.actionType.makeNewAction(project, null, getController().getEditor());
+			logger.warning("Please implement this (save for server)");
+			// TODO
+			ValidateProject validate = ValidateProject.actionType.makeNewAction(null, null, getController().getEditor());
+			// ValidateProject validate = ValidateProject.actionType.makeNewAction(project, null, getController().getEditor());
 			validate.doAction();
 			if (validate.getErrorsNb() > 0) {
 				StringBuilder sb = new StringBuilder();
@@ -438,7 +439,9 @@ public class FileMenu extends FlexoMenu {
 				}
 			} else {
 				if (GeneralPreferences.getNotifyValidProject()) {
-					ParameterDefinition[] params = new ParameterDefinition[1];
+					logger.warning("please reimplement this");
+					// TODO: please reimplement this
+					/*ParameterDefinition[] params = new ParameterDefinition[1];
 					CheckboxParameter dontNotify = new CheckboxParameter("dont_notify", "dont_notify_if_project_is_valid", false);
 					params[0] = dontNotify;
 					AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(project,
@@ -451,7 +454,7 @@ public class FileMenu extends FlexoMenu {
 						}
 					} else {
 						return false;
-					}
+					}*/
 				}
 			}
 			break;

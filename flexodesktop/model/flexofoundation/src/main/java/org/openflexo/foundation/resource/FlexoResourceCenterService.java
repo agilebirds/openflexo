@@ -25,7 +25,7 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 public interface FlexoResourceCenterService extends FlexoService, AccessibleProxyObject {
 	public static final String RESOURCE_CENTERS = "resourceCenters";
 
-	@Getter(value = RESOURCE_CENTERS, cardinality = Cardinality.LIST)
+	@Getter(value = RESOURCE_CENTERS, cardinality = Cardinality.LIST, ignoreType = true)
 	public List<FlexoResourceCenter> getResourceCenters();
 
 	@Setter(RESOURCE_CENTERS)

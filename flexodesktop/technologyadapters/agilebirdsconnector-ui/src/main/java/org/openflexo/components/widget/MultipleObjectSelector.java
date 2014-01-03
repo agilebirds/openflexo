@@ -29,7 +29,7 @@ import org.openflexo.components.tabularbrowser.TabularBrowserView;
 import org.openflexo.components.widget.SelectionTabularBrowserModel.SelectionTabularBrowserModelSelectionListener;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 public class MultipleObjectSelector<E extends FlexoObject> extends TabularBrowserView implements
 		SelectionTabularBrowserModelSelectionListener {
@@ -38,14 +38,14 @@ public class MultipleObjectSelector<E extends FlexoObject> extends TabularBrowse
 		public boolean isSelectable(O object);
 	}
 
-	public MultipleObjectSelector(FlexoObject rootObject, FlexoController controller, ObjectVisibilityDelegate visibilityDelegate,
+	public MultipleObjectSelector(FlexoObject rootObject, AgileBirdsFlexoController controller, ObjectVisibilityDelegate visibilityDelegate,
 			ObjectSelectabilityDelegate<E> selectabilityDelegate) {
 		super(controller, new SelectionTabularBrowserModel<E>(new DefaultBrowserConfiguration(rootObject, visibilityDelegate),
 				selectabilityDelegate));
 		getModel().addToSelectionListeners(this);
 	}
 
-	public MultipleObjectSelector(BrowserConfiguration browserConfiguration, FlexoController controller,
+	public MultipleObjectSelector(BrowserConfiguration browserConfiguration, AgileBirdsFlexoController controller,
 			ObjectSelectabilityDelegate<E> selectabilityDelegate) {
 		super(controller, new SelectionTabularBrowserModel<E>(browserConfiguration, selectabilityDelegate));
 		getModel().addToSelectionListeners(this);

@@ -30,7 +30,7 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.DuplicateFolderNameException;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * @author bmangez <B>Class Description</B>
@@ -79,7 +79,7 @@ public class ComponentFolderElement extends IEElement {
 		try {
 			((FlexoComponentFolder) getObject()).setName(aName);
 		} catch (DuplicateFolderNameException e) {
-			FlexoController.notify(FlexoLocalization.localizedForKey("there_is_already_a_folder_with that name"));
+			AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("there_is_already_a_folder_with that name"));
 		} catch (InvalidNameException e) {
 			FlexoLocalization.localizedForKey("folder_name_cannot_contain_:_\\_\"_:_*_?_<_>_/");
 		}

@@ -35,14 +35,13 @@ import javax.swing.SwingConstants;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoFrame;
 
 @SuppressWarnings("serial")
 public class AboutDialog extends JDialog {
 
-	private JLabel splash;
+	private final JLabel splash;
 
 	public AboutDialog() {
 		super(FlexoFrame.getActiveFrame());
@@ -62,7 +61,8 @@ public class AboutDialog extends JDialog {
 		getContentPane().add(flexoLabel);
 		flexoLabel.setBounds(319, 142, 231, 59);
 
-		JLabel businessLabel = new JLabel(UserType.getCurrentUserType().getBusinessName2(), SwingConstants.RIGHT);
+		JLabel businessLabel = new JLabel("TODO: Openflexo distribution"/*UserType.getCurrentUserType().getBusinessName2()*/,
+				SwingConstants.RIGHT);
 		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
 		getContentPane().add(businessLabel);
@@ -75,7 +75,7 @@ public class AboutDialog extends JDialog {
 		getContentPane().add(versionLabel);
 		versionLabel.setBounds(260, 215, 280, 15);
 
-		JLabel urlLabel = new JLabel("<html><u>www.openflexo.com</u></html>", SwingConstants.RIGHT);
+		JLabel urlLabel = new JLabel("<html><u>www.openflexo.org</u></html>", SwingConstants.RIGHT);
 		urlLabel.addMouseListener(new MouseAdapter() {
 
 			/**

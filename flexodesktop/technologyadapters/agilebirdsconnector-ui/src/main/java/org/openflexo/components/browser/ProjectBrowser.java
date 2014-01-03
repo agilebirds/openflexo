@@ -47,7 +47,7 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Object that will act as a model for a JTree to represent a browsing perspective of a project
@@ -97,7 +97,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	int rowHeight = DEFAULT_ROW_HEIGHT;
 
-	private FlexoController controller;
+	private AgileBirdsFlexoController controller;
 
 	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
 
@@ -170,11 +170,11 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_selectionController = new SelectionController.DefaultSelectionController();
 	}
 
-	protected ProjectBrowser(FlexoController controller) {
+	protected ProjectBrowser(AgileBirdsFlexoController controller) {
 		this(null, controller);
 	}
 
-	protected ProjectBrowser(TreeConfiguration configuration, FlexoController controller) {
+	protected ProjectBrowser(TreeConfiguration configuration, AgileBirdsFlexoController controller) {
 		super(null);
 		this.controller = controller;
 		if (configuration != null) {
@@ -1310,7 +1310,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _editor;
 	}
 
-	public FlexoController getController() {
+	public AgileBirdsFlexoController getController() {
 		return controller;
 	}
 

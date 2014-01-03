@@ -85,7 +85,7 @@
         <Assignment variable="component.selectableCondition" />
       </Custom>
       <Label label="datatype" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <DropDown showReset="true" data="data.dataType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DataTypeDropDown" localize="true" staticList="" iteratorClassName="org.openflexo.foundation.ontology.OntologicDataType" autoSelectFirstRow="false" />
+      <DropDown showReset="true" data="data.dataType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DataTypeDropDown" localize="true" staticList="" iteratorClassName="org.openflexo.foundation.ontology.BuiltInDataType" autoSelectFirstRow="false" />
     </Panel>
   </Panel>
   <LocalizedDictionary>

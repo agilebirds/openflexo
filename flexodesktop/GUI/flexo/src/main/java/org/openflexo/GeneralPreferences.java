@@ -40,7 +40,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.module.UserType;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.prefs.PreferencesHaveChanged;
@@ -174,8 +173,8 @@ public final class GeneralPreferences extends ContextPreferences {
 		}
 		FlexoLocalization.setCurrentLanguage(language);
 		FlexoLocalization.updateGUILocalized();
-		if (language != null && UserType.getCurrentUserType() != null) {
-			FlexoHelp.configure(language.getIdentifier(), UserType.getCurrentUserType().getIdentifier());
+		if (language != null) {
+			FlexoHelp.configure(language.getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
 			FlexoHelp.reloadHelpSet();
 		}
 	}

@@ -85,7 +85,6 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
@@ -248,7 +247,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 	private final StringEncoder stringEncoder;
 
-	private IModuleLoader moduleLoader;
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ProjectExternalRepository> _externalRepositories;
@@ -1010,7 +1008,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		/*if (getGeneratedDocResource(false) != null && getGeneratedDocResource(false).isLoaded()) {
 			getGeneratedDoc().setFactory(null);
 		}*/
-		setModuleLoader(null);
+		// setModuleLoader(null);
 		// getDataModel().close();
 		// _resource = null;
 		// resources = null;
@@ -3059,13 +3057,13 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	 * // _retrievePendingEditionPatternReferences(oo); //} } }
 	 */
 
-	public IModuleLoader getModuleLoader() {
+	/*public IModuleLoader getModuleLoader() {
 		return moduleLoader;
 	}
 
 	public void setModuleLoader(IModuleLoader moduleLoader) {
 		this.moduleLoader = moduleLoader;
-	}
+	}*/
 
 	public FlexoVersion getVersion() {
 		return version;
@@ -3524,5 +3522,14 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		_externalRepositories.remove(anExternalRepository);
 		repositoriesCache.remove(anExternalRepository.getIdentifier());
 		setChanged();
+	}
+
+	public boolean hasUnsavedResources() {
+		for (FlexoResource<?> r : getAllResources()) {
+			if (r.isLoaded() && r.getLoadedResourceData().isModified()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

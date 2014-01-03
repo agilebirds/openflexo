@@ -36,7 +36,7 @@ import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.PartialComponentInstance;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.ProjectClosedNotification;
+import org.openflexo.foundation.resource.ProjectClosedNotification;
 import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;

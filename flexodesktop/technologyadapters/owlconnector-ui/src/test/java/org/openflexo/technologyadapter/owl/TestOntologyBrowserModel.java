@@ -25,9 +25,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.logging.Logger;
 
+import org.junit.Test;
 import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.OpenflexoRunTimeTestCase;
-import org.openflexo.foundation.TestFlexoServiceManager;
+import org.openflexo.foundation.OpenflexoTestCase;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.technologyadapter.owl.gui.OWLOntologyBrowserModel;
 import org.openflexo.technologyadapter.owl.model.OWL2URIDefinitions;
@@ -38,26 +38,28 @@ import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.model.RDFSURIDefinitions;
 import org.openflexo.technologyadapter.owl.model.RDFURIDefinitions;
-import org.openflexo.toolbox.FileResource;
 
-public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
+public class TestOntologyBrowserModel extends OpenflexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestOntologyBrowserModel.class.getPackage().getName());
 
-	private static TestFlexoServiceManager testApplicationContext;
+	// private static TestFlexoServiceManager testApplicationContext;
 	private static OWLTechnologyAdapter owlAdapter;
 	private static OWLOntologyLibrary ontologyLibrary;
 
 	/**
 	 * Instanciate new ResourceCenter
 	 */
+	@Test
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestFlexoServiceManager(new FileResource("src/test/resources/Ontologies"));
-		owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
-		ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
+		instanciateTestServiceManager();
+
+		owlAdapter = serviceManager.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
+		ontologyLibrary = (OWLOntologyLibrary) serviceManager.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
 	}
 
+	@Test
 	public void test1AssertRDFOntologyNoHierarchy() {
 		log("test1AssertRDFOntologyNoHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -152,6 +154,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test2AssertRDFOntologyHierarchy() {
 		log("test2AssertRDFOntologyHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -229,6 +232,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 		assertSameList(obm.getChildren(classConcept), datatypeConcept, subClassOfProperty);
 	}
 
+	@Test
 	public void test3AssertRDFOntologyStrictMode() {
 		log("test3AssertRDFOntologyStrictMode()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -299,6 +303,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test4AssertRDFSOntologyNoHierarchy() {
 		log("test4AssertRDFSOntologyNoHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -380,6 +385,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 		assertSameList(obm.getChildren(rdfOntology), listConcept, propertyConcept, statementConcept, typeProperty, valueProperty);
 	}
 
+	@Test
 	public void test5AssertRDFSOntologyHierarchy() {
 		log("test5AssertRDFSOntologyHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -458,6 +464,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 		assertSameList(obm.getChildren(classConcept), datatypeConcept, subClassOfProperty);
 	}
 
+	@Test
 	public void test6AssertRDFSOntologyStrictMode() {
 		log("test6AssertRDFSOntologyStrictMode()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -535,6 +542,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test7AssertOWLOntologyNoHierarchy() {
 		log("test7AssertOWLOntologyNoHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -761,6 +769,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 		assertSameList(obm.getChildren(rdfOntology), listConcept, propertyConcept, statementConcept, typeProperty, valueProperty);
 	}
 
+	@Test
 	public void test8AssertOWLOntologyHierarchy() {
 		log("test8AssertOWLOntologyHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -984,6 +993,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test9AssertOWLOntologyStrictMode() {
 		log("test9AssertOWLOntologyStrictMode()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -1191,6 +1201,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test10AssertFlexoConceptOntologyNoHierarchy() {
 		log("test10AssertFlexoConceptOntologyNoHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -1382,6 +1393,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test11AssertFlexoConceptOntologyHierarchy() {
 		log("test11AssertFlexoConceptOntologyHierarchy()");
 		OWLOntology rdfOntology = ontologyLibrary.getRDFOntology();
@@ -1646,6 +1658,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test12AssertO5Ontology() {
 		log("test12AssertO5Ontology()");
 		OWLOntology o1 = ontologyLibrary.getOntology("http://www.openflexo.org/test/O1.owl");
@@ -1740,6 +1753,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test13AssertTestPropertiesOntology() {
 		log("test13AssertTestPropertiesOntology()");
 		OWLOntology ontology = ontologyLibrary.getOntology("http://www.openflexo.org/test/TestProperties.owl");
@@ -1798,6 +1812,7 @@ public class TestOntologyBrowserModel extends OpenflexoRunTimeTestCase {
 
 	}
 
+	@Test
 	public void test14AssertSepelMappingOntology() {
 		log("test14AssertSepelMappingOntology()");
 

@@ -26,10 +26,10 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.fps.controller.FPSController;
+import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalFPSModule;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.FlexoController;
 
@@ -41,6 +41,21 @@ import org.openflexo.view.controller.FlexoController;
 public class FPSModule extends FlexoModule implements ExternalFPSModule {
 
 	private static final Logger logger = Logger.getLogger(CVSRepository.class.getPackage().getName());
+
+	public static final String FPS_MODULE_SHORT_NAME = "FPS";
+
+	public static final String FPS_MODULE_NAME = "fps_module_name";
+
+	public static class FlexoProjectSharingModule extends Module {
+
+		public FlexoProjectSharingModule() {
+			super(FPS_MODULE_NAME, FPS_MODULE_SHORT_NAME, "org.openflexo.fps.FPSModule", "modules/flexoprjsharingmodule", "10011", "fps",
+					FPSIconLibrary.FPS_SMALL_ICON, FPSIconLibrary.FPS_MEDIUM_ICON, FPSIconLibrary.FPS_MEDIUM_ICON_WITH_HOVER,
+					FPSIconLibrary.FPS_BIG_ICON, false);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.FPS };
 
 	public FPSModule(ApplicationContext applicationContext) throws Exception {

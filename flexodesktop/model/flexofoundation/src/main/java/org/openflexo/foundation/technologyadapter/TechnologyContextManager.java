@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DefaultFlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
@@ -94,6 +95,11 @@ public abstract class TechnologyContextManager<TA extends TechnologyAdapter> ext
 		individualsOfClass = new Hashtable<IFlexoOntologyClass, IndividualOfClass>();
 		subclassesOfClass = new Hashtable<IFlexoOntologyClass, SubClassOfClass>();
 		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return getResourceCenterService().getServiceManager();
 	}
 
 	public TechnologyAdapter getTechnologyAdapter() {

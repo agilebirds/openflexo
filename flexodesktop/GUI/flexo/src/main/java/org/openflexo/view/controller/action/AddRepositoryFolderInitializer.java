@@ -19,14 +19,11 @@
  */
 package org.openflexo.view.controller.action;
 
-import java.awt.Component;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-import javax.swing.JTree;
 
-import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -87,7 +84,7 @@ public class AddRepositoryFolderInitializer extends ActionInitializer<AddReposit
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification
-				if (action.getInvoker() instanceof JTree) {
+				/*if (action.getInvoker() instanceof JTree) {
 					Component current = (JTree) action.getInvoker();
 					while (current != null) {
 						if (current instanceof BrowserView) {
@@ -96,7 +93,7 @@ public class AddRepositoryFolderInitializer extends ActionInitializer<AddReposit
 						}
 						current = current.getParent();
 					}
-				}
+				}*/
 				return true;
 			}
 		};

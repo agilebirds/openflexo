@@ -25,7 +25,7 @@ import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
 import org.openflexo.components.widget.AbstractSelectorPanel.AbstractSelectorPanelOwner;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * View related to a ProjectBrowser, allowing to select an object with a browsing perspective
@@ -36,7 +36,7 @@ public abstract class BrowserChooserView extends BrowserView {
 
 	private AbstractSelectorPanelOwner<?> _owner;
 
-	public BrowserChooserView(ProjectBrowser browser, FlexoController controller, AbstractSelectorPanelOwner<?> owner) {
+	public BrowserChooserView(ProjectBrowser browser, AgileBirdsFlexoController controller, AbstractSelectorPanelOwner<?> owner) {
 		super(browser, controller);
 		_owner = owner;
 		setMinimumSize(getDefaultSize());

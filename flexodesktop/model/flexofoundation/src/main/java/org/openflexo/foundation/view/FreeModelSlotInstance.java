@@ -31,6 +31,7 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
+import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -48,6 +49,8 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	// Serialization/deserialization only, do not use
 	private String resourceURI;
 
+	private FlexoVersion version;
+
 	/*public FreeModelSlotInstance(View view, MS modelSlot) {
 		super(view, modelSlot);
 	}*/
@@ -60,7 +63,7 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	public RD getAccessedResourceData() {
 		if (getVirtualModelInstance() != null && accessedResourceData == null && StringUtils.isNotEmpty(resourceURI)) {
 			TechnologyAdapterResource<RD, ?> resource = (TechnologyAdapterResource<RD, ?>) getVirtualModelInstance().getInformationSpace()
-					.getResource(resourceURI);
+					.getResource(resourceURI, getVersion());
 			if (resource != null) {
 				try {
 					accessedResourceData = resource.getResourceData(null);
@@ -94,6 +97,14 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	// Serialization/deserialization only, do not use
 	public void setResourceURI(String resourceURI) {
 		this.resourceURI = resourceURI;
+	}
+
+	public FlexoVersion getVersion() {
+		return version;
+	}
+
+	public void setVersion(FlexoVersion version) {
+		this.version = version;
 	}
 
 	public RD getModel() {

@@ -30,7 +30,6 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.dm.view.controller.DMController;
 import org.openflexo.dm.view.erdiagram.ERDiagramController;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
@@ -38,7 +37,6 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -49,6 +47,21 @@ import org.openflexo.view.controller.FlexoController;
 public class DMModule extends FlexoModule implements ExternalDMModule {
 
 	private static final Logger logger = Logger.getLogger(DMModule.class.getPackage().getName());
+
+	public static final String DM_MODULE_SHORT_NAME = "DM";
+
+	public static final String DM_MODULE_NAME = "data_model_editor";
+
+	public static class DataModelEditor extends Module {
+
+		public DataModelEditor() {
+			super(DM_MODULE_NAME, DM_MODULE_SHORT_NAME, "org.openflexo.dm.DMModule", "modules/flexodatamodeleditor", "10006", "dm",
+					DMEIconLibrary.DME_SMALL_ICON, DMEIconLibrary.DME_MEDIUM_ICON, DMEIconLibrary.DME_MEDIUM_ICON_WITH_HOVER,
+					DMEIconLibrary.DME_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DM };
 
 	public DMModule(ApplicationContext applicationContext) throws Exception {

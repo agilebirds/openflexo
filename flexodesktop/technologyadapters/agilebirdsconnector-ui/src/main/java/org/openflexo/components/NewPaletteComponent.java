@@ -27,7 +27,7 @@ import javax.swing.JFileChooser;
 
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 public class NewPaletteComponent extends PaletteChooserComponent {
 
@@ -54,7 +54,7 @@ public class NewPaletteComponent extends PaletteChooserComponent {
 				if (!newProjectDir.exists()) {
 					newProjectDir.mkdir();
 				} else {
-					if (!FlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it"))) {
+					if (!AgileBirdsFlexoController.confirm(FlexoLocalization.localizedForKey("palette_already_exists_do_you_want_to_replace_it"))) {
 						newProjectDir = null;
 					}
 				}
@@ -63,7 +63,7 @@ public class NewPaletteComponent extends PaletteChooserComponent {
 					logger.warning("Invalid palette name. The following characters are not allowed: "
 							+ FileUtils.BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP);
 				}
-				FlexoController.notify(FlexoLocalization.localizedForKey("palette_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
+				AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("palette_name_cannot_contain_\\___&_#_{_}_[_]_%_~"));
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {

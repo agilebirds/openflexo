@@ -48,7 +48,7 @@ import org.openflexo.selection.ContextualMenuManager;
 import org.openflexo.selection.DefaultContextualMenuManager;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Tabular and browsable view representing an TabularBrowserModel
@@ -61,7 +61,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	protected static final Logger logger = Logger.getLogger(TabularBrowserView.class.getPackage().getName());
 
-	protected FlexoController _controller;
+	protected AgileBirdsFlexoController _controller;
 
 	protected JTreeTable _treeTable;
 
@@ -73,12 +73,12 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 
 	private boolean _synchronizeWithSelectionManager = false;
 
-	public TabularBrowserView(FlexoController controller, TabularBrowserModel model, int visibleRowCount) {
+	public TabularBrowserView(AgileBirdsFlexoController controller, TabularBrowserModel model, int visibleRowCount) {
 		this(controller, model);
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularBrowserView(FlexoController controller, TabularBrowserModel model) {
+	public TabularBrowserView(AgileBirdsFlexoController controller, TabularBrowserModel model) {
 		super();
 		_model = model;
 		_controller = controller;
@@ -146,7 +146,7 @@ public class TabularBrowserView extends JPanel implements TableModelListener, Li
 		}
 	}
 
-	public FlexoController getController() {
+	public AgileBirdsFlexoController getController() {
 		return _controller;
 	}
 

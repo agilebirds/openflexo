@@ -26,7 +26,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalWSEModule;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wse.controller.WSEController;
 
@@ -36,6 +35,21 @@ import org.openflexo.wse.controller.WSEController;
  * @author yourname
  */
 public class WSEModule extends FlexoModule implements ExternalWSEModule {
+
+	public static final String WSE_MODULE_SHORT_NAME = "WSE";
+
+	public static final String WSE_MODULE_NAME = "wse_module_name";
+
+	public static class WebServiceEditor extends Module {
+
+		public WebServiceEditor() {
+			super(WSE_MODULE_NAME, WSE_MODULE_SHORT_NAME, "org.openflexo.wse.WSEModule", "modules/flexowebserviceeditor", "10007", "wse",
+					WSEIconLibrary.WS_SMALL_ICON, WSEIconLibrary.WS_MEDIUM_ICON, WSEIconLibrary.WS_MEDIUM_ICON_WITH_HOVER,
+					WSEIconLibrary.WS_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.WSE };
 
 	public WSEModule(ApplicationContext applicationContext) throws Exception {

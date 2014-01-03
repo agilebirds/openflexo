@@ -32,7 +32,6 @@ import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.external.ExternalSGModule;
 import org.openflexo.sgmodule.controller.SGController;
 import org.openflexo.view.controller.FlexoController;
 
@@ -42,6 +41,21 @@ import org.openflexo.view.controller.FlexoController;
  * @author sylvain
  */
 public class SGModule extends FlexoModule implements ExternalSGModule {
+
+	public static final String SOURCE_GENERATOR_MODULE_SHORT_NAME = "SG";
+
+	public static final String SOURCE_GENERATOR_MODULE_NAME = "source_generator";
+
+	public static class SourceGenerator extends Module {
+
+		public SourceGenerator() {
+			super(SOURCE_GENERATOR_MODULE_NAME, SOURCE_GENERATOR_MODULE_SHORT_NAME, "org.openflexo.sgmodule.SGModule",
+					"modules/flexosourcegenerator", "10004", "sg", SGIconLibrary.SG_SMALL_ICON, SGIconLibrary.SG_MEDIUM_ICON,
+					SGIconLibrary.SG_MEDIUM_ICON_WITH_HOVER, SGIconLibrary.SG_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.SG,
 			SGJarInspectorGroup.INSTANCE };
 	private static Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory> recordedGUIFactories = new Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory>();

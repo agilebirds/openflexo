@@ -38,6 +38,21 @@ import org.openflexo.view.controller.FlexoController;
 public class DEModule extends FlexoModule {
 
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
+
+	public static final String DE_MODULE_SHORT_NAME = "DE";
+
+	public static final String DE_MODULE_NAME = "doc_editor";
+
+	public static class DocEditor extends Module {
+
+		public DocEditor() {
+			super(DE_MODULE_NAME, DE_MODULE_SHORT_NAME, "org.openflexo.doceditormodule.DEModule", "modules/flexodoceditor", "10005", "de",
+					DEIconLibrary.DE_SMALL_ICON, DEIconLibrary.DE_MEDIUM_ICON, DEIconLibrary.DE_MEDIUM_ICON_WITH_HOVER,
+					DEIconLibrary.DE_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
 
 	public DEModule(ApplicationContext applicationContext) {

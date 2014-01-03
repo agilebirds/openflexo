@@ -39,7 +39,7 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentLoaded;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Browser element representing a WOComponent
@@ -151,9 +151,9 @@ public abstract class ComponentElement extends BrowserElement implements Expansi
 		} catch (DuplicateResourceException e) {
 			// Abort
 		} catch (DuplicateClassNameException e) {
-			FlexoController.notify(e.getLocalizedMessage());
+			AgileBirdsFlexoController.notify(e.getLocalizedMessage());
 		} catch (InvalidNameException e) {
-			FlexoController.notify("invalid_component_name");
+			AgileBirdsFlexoController.notify("invalid_component_name");
 		}
 	}
 

@@ -24,12 +24,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.Callable;
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,36 +38,28 @@ import javax.swing.SwingUtilities;
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveProjectsDialog;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.foundation.rm.SaveResourceExceptionList;
+import org.openflexo.foundation.resource.SaveResourceExceptionList;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.external.ExternalDMModule;
-import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.module.external.ExternalVEModule;
-import org.openflexo.module.external.ExternalVPMModule;
-import org.openflexo.module.external.ExternalWKFModule;
-import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
-import org.openflexo.view.menu.ToolsMenu;
 
 /**
- * This class handles computation of available modules and modules loading. Only one instance of this class is instancied, and available all
- * over Flexo Application Suite. This is the ONLY ONE WAY to access external modules from a given module.
+ * This service manages modules<br>
+ * 
+ * Modules are retrieved from service management, and can be loaded and/or unloaded.
  * 
  * @author sguerin
  */
-public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IModuleLoader, HasPropertyChangeSupport {
+public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
@@ -99,21 +91,53 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	}
 
-	private ActiveEditorListener activeEditorListener = new ActiveEditorListener();
-
-	/**
-	 * Hashtable where are stored Module instances (instance of FlexoModule associated to a Module instance key.
-	 */
-	private Map<Module, FlexoModule> _modules = new Hashtable<Module, FlexoModule>();
+	private final ActiveEditorListener activeEditorListener = new ActiveEditorListener();
 
 	private final ApplicationContext applicationContext;
 
-	private PropertyChangeSupport propertyChangeSupport;
+	private final PropertyChangeSupport propertyChangeSupport;
 
 	public ModuleLoader(ApplicationContext applicationContext) {
 		super();
 		this.applicationContext = applicationContext;
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
+
+	private Map<Class<? extends Module>, Module<?>> knownModules;
+
+	/**
+	 * Load all available technology adapters<br>
+	 * Retrieve all {@link TechnologyAdapter} available from classpath. <br>
+	 * Map contains the TechnologyAdapter class name as key and the TechnologyAdapter itself as value.
+	 * 
+	 * @return the retrieved TechnologyModuleDefinition map.
+	 */
+	private void loadAvailableModules() {
+		if (knownModules == null) {
+			knownModules = new HashMap<Class<? extends Module>, Module<?>>();
+			logger.info("Loading available modules...");
+			ServiceLoader<Module> loader = ServiceLoader.load(Module.class);
+			Iterator<Module> iterator = loader.iterator();
+			while (iterator.hasNext()) {
+				Module module = iterator.next();
+				registerModule(module);
+			}
+			logger.info("Loading available technology adapters. Done.");
+		}
+
+	}
+
+	private void registerModule(Module<?> module) {
+		logger.info("Found " + module);
+		module.setModuleLoader(this);
+		logger.info("Load " + module.getName() + " as " + module.getClass());
+
+		if (knownModules.containsKey(module.getClass())) {
+			logger.severe("Cannot include Module with classname '" + module.getClass().getName()
+					+ "' because it already exists !!!! A Module name MUST be unique !");
+		} else {
+			knownModules.put(module.getClass(), module);
+		}
 	}
 
 	@Override
@@ -143,72 +167,87 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		return null;
 	}
 
-	@Override
 	public FlexoModule getActiveModule() {
 		return activeModule;
 	}
 
 	/**
-	 * Return all loaded modules as an Enumeration of FlexoModule instances
+	 * Return a collection containing all known modules
 	 * 
-	 * @return Enumeration
+	 * @return
 	 */
-	public Enumeration<FlexoModule> loadedModules() {
-		return new Vector<FlexoModule>(_modules.values()).elements();
-	}
-
-	public int getLoadedModuleCount() {
-		return _modules.size();
+	public Collection<Module<?>> getKnownModules() {
+		return knownModules.values();
 	}
 
 	/**
-	 * Return all unloaded modules but available modules as a Vector of Module instances
+	 * Return a module with name as supplied
 	 * 
-	 * @return Vector
+	 * @return
 	 */
-	public List<Module> unloadedButAvailableModules() {
-		List<Module> returned = new ArrayList<Module>(getAvailableModules());
-		for (Enumeration<FlexoModule> e = loadedModules(); e.hasMoreElements();) {
-			returned.remove(e.nextElement().getModule());
+	public Module<?> getModuleNamed(String moduleName) {
+		for (Module<?> module : getKnownModules()) {
+			if (module.getName().equals(moduleName)) {
+				return module;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return a collection containing all loaded modules as a list of Module instances
+	 * 
+	 * @return
+	 */
+	public List<Module<?>> getLoadedModules() {
+		List<Module<?>> returned = new ArrayList<Module<?>>();
+		for (Module<?> module : getKnownModules()) {
+			if (module.isLoaded()) {
+				returned.add(module);
+			}
 		}
 		return returned;
 	}
 
-	public void unloadModule(Module module) {
+	public int getLoadedModuleCount() {
+		return getLoadedModules().size();
+	}
+
+	/**
+	 * Return all unloaded modules but available modules as a list of Module instances
+	 * 
+	 * @return Vector
+	 */
+	public List<Module<?>> getUnloadedModules() {
+		List<Module<?>> returned = new ArrayList<Module<?>>();
+		for (Module<?> module : getKnownModules()) {
+			if (!module.isLoaded()) {
+				returned.add(module);
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Unload supplied module
+	 * 
+	 * @param module
+	 */
+	public void unloadModule(Module<?> module) {
 		if (isLoaded(module)) {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Unloading module " + module.getName());
 			}
-			FlexoModule flexoModule = _modules.remove(module);
-			if (activeModule == flexoModule) {
+			if (activeModule == module.getLoadedModuleInstance()) {
 				activeModule = null;
 			}
+			module.unload();
 			getPropertyChangeSupport().firePropertyChange(MODULE_UNLOADED, module, null);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Unable to unload unloaded module " + module.getName());
 			}
 		}
-	}
-
-	private FlexoModule loadModule(Module module) throws Exception {
-		boolean createProgress = !ProgressWindow.hasInstance();
-		if (createProgress) {
-			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
-		}
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
-		FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
-		_modules.put(module, flexoModule);
-		if (activatingModule == module) {
-			activeModule = flexoModule;
-		}
-		doInternalLoadModule(flexoModule);
-		if (createProgress) {
-			ProgressWindow.hideProgressWindow();
-		}
-		propertyChangeSupport.firePropertyChange(MODULE_LOADED, null, module);
-		getServiceManager().notify(this, new ModuleLoaded(flexoModule));
-		return flexoModule;
 	}
 
 	/**
@@ -218,7 +257,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	 * 
 	 */
 	public class ModuleLoaded implements ServiceNotification {
-		private FlexoModule loadedModule;
+		private final FlexoModule loadedModule;
 
 		public ModuleLoaded(FlexoModule loadedModule) {
 			this.loadedModule = loadedModule;
@@ -236,7 +275,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	 * 
 	 */
 	public class ModuleActivated implements ServiceNotification {
-		private FlexoModule loadedModule;
+		private final FlexoModule loadedModule;
 
 		public ModuleActivated(FlexoModule loadedModule) {
 			this.loadedModule = loadedModule;
@@ -247,63 +286,11 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		}
 	}
 
-	private class ModuleLoaderCallable implements Callable<FlexoModule> {
-
-		private final FlexoModule module;
-
-		public ModuleLoaderCallable(FlexoModule module) {
-			this.module = module;
-		}
-
-		@Override
-		public FlexoModule call() throws Exception {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Loading module " + module.getName());
-			}
-			module.initModule();
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(module);
-			return module;
-		}
+	public boolean isLoaded(Module<?> module) {
+		return module.isLoaded();
 	}
 
-	private FlexoModule doInternalLoadModule(FlexoModule module) throws Exception {
-		ModuleLoaderCallable loader = new ModuleLoaderCallable(module);
-		return FlexoSwingUtils.syncRunInEDT(loader);
-	}
-
-	public boolean isAvailable(Module module) {
-		return getAvailableModules().contains(module);
-	}
-
-	public List<Module> getAvailableModules() {
-		return Modules.getInstance().getAvailableModules();
-	}
-
-	public List<Module> getLoadedModules() {
-		List<Module> list = new ArrayList<Module>();
-		for (Module module : getAvailableModules()) {
-			if (isLoaded(module)) {
-				list.add(module);
-			}
-		}
-		return list;
-	}
-
-	public List<Module> getUnloadedModules() {
-		List<Module> list = new ArrayList<Module>();
-		for (Module module : getAvailableModules()) {
-			if (!isLoaded(module)) {
-				list.add(module);
-			}
-		}
-		return list;
-	}
-
-	public boolean isLoaded(Module module) {
-		return _modules.get(module) != null;
-	}
-
-	public boolean isActive(Module module) {
+	public boolean isActive(Module<?> module) {
 		return getActiveModule() != null && getActiveModule().getModule() == module;
 	}
 
@@ -311,51 +298,22 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		return getActiveModule() == module;
 	}
 
-	public FlexoModule getModuleInstance(Module module) throws ModuleLoadingException {
+	public FlexoModule getModuleInstance(Module<?> module) throws ModuleLoadingException {
 		if (module == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to get module instance for module null");
 			}
 			return null;
 		}
-		if (isAvailable(module)) {
-			if (isLoaded(module)) {
-				return _modules.get(module);
-			} else {
-				try {
-					return loadModule(module);
-				} catch (Exception e) {
-					ProgressWindow.hideProgressWindow();
-					e.printStackTrace();
-					throw new ModuleLoadingException(module);
-				}
-			}
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Sorry, module " + module.getName() + " not available.");
-			}
-			return null;
+
+		try {
+			module.load();
+			return module.getLoadedModuleInstance();
+		} catch (Exception e) {
+			ProgressWindow.hideProgressWindow();
+			e.printStackTrace();
+			throw new ModuleLoadingException(module);
 		}
-	}
-
-	public ExternalWKFModule getWKFModule() throws ModuleLoadingException {
-		return (ExternalWKFModule) getModuleInstance(Module.WKF_MODULE);
-	}
-
-	public ExternalIEModule getIEModule() throws ModuleLoadingException {
-		return (ExternalIEModule) getModuleInstance(Module.IE_MODULE);
-	}
-
-	public ExternalDMModule getDMModule() throws ModuleLoadingException {
-		return (ExternalDMModule) getModuleInstance(Module.DM_MODULE);
-	}
-
-	public ExternalVPMModule getCEDModule() throws ModuleLoadingException {
-		return (ExternalVPMModule) getModuleInstance(Module.VPM_MODULE);
-	}
-
-	public ExternalVEModule getOEModule() throws ModuleLoadingException {
-		return (ExternalVEModule) getModuleInstance(Module.VE_MODULE);
 	}
 
 	private boolean ignoreSwitch = false;
@@ -408,7 +366,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 				@Override
 				public void run() {
 					if (isLoaded(module)) {
-						_modules.get(module).getFlexoFrame().toFront();
+						module.getLoadedModuleInstance().getFlexoFrame().toFront();
 					}
 					ModuleLoader.this.ignoreSwitch = false;
 				}
@@ -475,67 +433,33 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			FlexoPreferences.savePreferences(true);
 		}
 
-		for (Enumeration<FlexoModule> en = loadedModules(); en.hasMoreElements();) {
-			try {
-				en.nextElement().closeWithoutConfirmation(false);
-			} catch (Exception e) {
-				// OK, unexpected error occurred during closing of the module, but let's go on anyway.
-				e.printStackTrace();
-			}
+		for (Module<?> m : getLoadedModules()) {
+			m.getLoadedModuleInstance().closeWithoutConfirmation(false);
 		}
-		if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
-			if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
-					+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_save_your_submissions"))) {
-				new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
-			}
+
+		/*if (allowsDocSubmission() && !isAvailable(Module.DRE_MODULE) && DocResourceManager.instance().getSessionSubmissions().size() > 0) {
+		if (FlexoController.confirm(FlexoLocalization.localizedForKey("you_have_submitted_documentation_without_having_saved_report")
+				+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_save_your_submissions"))) {
+			new ToolsMenu.SaveDocSubmissionAction().actionPerformed(null);
+		}
 		}
 		if (isAvailable(Module.DRE_MODULE)) {
-			if (DocResourceManager.instance().needSaving()) {
-				if (FlexoController.confirm(FlexoLocalization.localizedForKey("documentation_resource_center_not_saved") + "\n"
-						+ FlexoLocalization.localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
-					DocResourceManager.instance().save();
-				}
+		if (DocResourceManager.instance().needSaving()) {
+			if (FlexoController.confirm(FlexoLocalization.localizedForKey("documentation_resource_center_not_saved") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_save_documenation_resource_center"))) {
+				DocResourceManager.instance().save();
 			}
 		}
+		}*/
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Exiting FLEXO Application Suite... DONE");
 		}
 		System.exit(0);
 	}
 
-	@Override
-	public ExternalIEModule getIEModuleInstance() throws ModuleLoadingException {
-		return getIEModule();
-	}
-
-	@Override
-	public ExternalDMModule getDMModuleInstance() throws ModuleLoadingException {
-		return getDMModule();
-	}
-
-	@Override
-	public ExternalWKFModule getWKFModuleInstance() throws ModuleLoadingException {
-		return getWKFModule();
-	}
-
-	@Override
-	public ExternalVPMModule getVPMModuleInstance() throws ModuleLoadingException {
-		return getCEDModule();
-	}
-
-	@Override
-	public ExternalVEModule getVEModuleInstance() throws ModuleLoadingException {
-		return getOEModule();
-	}
-
-	@Override
-	public boolean isWKFLoaded() {
-		return isLoaded(Module.WKF_MODULE);
-	}
-
 	public void closeAllModulesWithoutConfirmation() {
-		for (FlexoModule module : new ArrayList<FlexoModule>(_modules.values())) {
-			module.closeWithoutConfirmation(false);
+		for (Module<?> m : getLoadedModules()) {
+			m.getLoadedModuleInstance().closeWithoutConfirmation(false);
 		}
 	}
 
@@ -543,8 +467,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 		module.close();
 	}
 
-	public boolean isLastLoadedModule(Module module) {
-		return _modules.size() == 1 && _modules.containsKey(module);
+	public boolean isLastLoadedModule(Module<?> module) {
+		return (getLoadedModuleCount() == 1 && getLoadedModules().contains(module));
 	}
 
 	@Override
@@ -554,5 +478,9 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	@Override
 	public void initialize() {
+		loadAvailableModules();
+		for (Module module : getKnownModules()) {
+			module.initialize();
+		}
 	}
 }

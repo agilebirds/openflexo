@@ -20,6 +20,7 @@
 package org.openflexo.module;
 
 import java.lang.reflect.Constructor;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,270 +28,54 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
+import org.openflexo.ch.FCH;
+import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.icon.DGIconLibrary;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.DREIconLibrary;
-import org.openflexo.icon.FPSIconLibrary;
-import org.openflexo.icon.SEIconLibrary;
-import org.openflexo.icon.SGIconLibrary;
-import org.openflexo.icon.VEIconLibrary;
-import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.icon.WSEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.external.IModule;
+import org.openflexo.swing.FlexoSwingUtils;
 
 /**
- * Represents a Module a Flexo Application Suite
+ * Represents a Module in Openflexo intrastructure. A module is a software component.
  * 
- * NB: this represents a module, not a module instance !
+ * An instance of {@link Module} is a {@link FlexoModule} instance which is retrieved through service management.<br>
+ * A {@link Module} is not loaded by default, but need to be loaded by the {@link ModuleLoader}.
  * 
  * @author sguerin
  * 
  */
-public abstract class Module implements IModule {
+public abstract class Module<M extends FlexoModule> {
 
 	private static final Logger logger = Logger.getLogger(Module.class.getPackage().getName());
 
-	public static final Module WKF_MODULE = new WKF();
-
-	public static final Module IE_MODULE = new IE();
-
-	public static final Module DM_MODULE = new DM();
-
-	public static final Module CG_MODULE = new CG();
-
-	public static final Module DG_MODULE = new DG();
-
-	public static final Module DE_MODULE = new DE();
-
-	public static final Module WSE_MODULE = new WSE();
-
-	public static final Module VE_MODULE = new VE();
-
-	public static final Module DRE_MODULE = new DRE();
-
-	public static final Module FPS_MODULE = new FPS();
-
-	public static final Module VPM_MODULE = new VPM();
-
-	public static final Module SG_MODULE = new SG();
-
-	public static final Module TEST_MODULE = new TEST();
-
-	public static final Module XXX_MODULE = new XXX();
-
-	private Class<? extends FlexoModule> _moduleClass;
-
-	public Constructor<? extends FlexoModule> getConstructor() {
-		return _constructor;
-	}
-
-	protected static class WKF extends Module {
-		public static final String WKF_MODULE_SHORT_NAME = "WKF";
-
-		public static final String WKF_MODULE_NAME = "workflow_editor";
-
-		protected WKF() {
-			super(WKF_MODULE_NAME, WKF_MODULE_SHORT_NAME, "org.openflexo.wkf.WKFModule", "modules/flexoworkfloweditor", "10000", "wkf",
-					WKFIconLibrary.WKF_SMALL_ICON, WKFIconLibrary.WKF_MEDIUM_ICON, WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER,
-					WKFIconLibrary.WKF_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class IE extends Module {
-		public static final String IE_MODULE_SHORT_NAME = "IE";
-
-		public static final String IE_MODULE_NAME = "interface_editor";
-
-		public IE() {
-			super(IE_MODULE_NAME, IE_MODULE_SHORT_NAME, "org.openflexo.ie.IEModule", "modules/flexointerfaceeditor", "10001", "ie",
-					SEIconLibrary.SE_SMALL_ICON, SEIconLibrary.SE_MEDIUM_ICON, SEIconLibrary.SE_MEDIUM_ICON_WITH_HOVER,
-					SEIconLibrary.SE_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class DM extends Module {
-
-		public static final String DM_MODULE_SHORT_NAME = "DM";
-
-		public static final String DM_MODULE_NAME = "data_model_editor";
-
-		public DM() {
-			super(DM_MODULE_NAME, DM_MODULE_SHORT_NAME, "org.openflexo.dm.DMModule", "modules/flexodatamodeleditor", "10006", "dm",
-					DMEIconLibrary.DME_SMALL_ICON, DMEIconLibrary.DME_MEDIUM_ICON, DMEIconLibrary.DME_MEDIUM_ICON_WITH_HOVER,
-					DMEIconLibrary.DME_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class CG extends Module {
-		public static final String GENERATOR_MODULE_SHORT_NAME = "CG";
-
-		public static final String GENERATOR_MODULE_NAME = "code_generator";
-
-		public CG() {
-			super(GENERATOR_MODULE_NAME, GENERATOR_MODULE_SHORT_NAME, "org.openflexo.cgmodule.GeneratorModule",
-					"modules/flexocodegenerator", "10002", "cg", CGIconLibrary.CG_SMALL_ICON, CGIconLibrary.CG_MEDIUM_ICON,
-					CGIconLibrary.CG_MEDIUM_ICON_WITH_HOVER, CGIconLibrary.CG_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class DG extends Module {
-		public static final String DG_MODULE_SHORT_NAME = "DG";
-
-		public static final String DG_MODULE_NAME = "doc_generator";
-
-		public DG() {
-			super(DG_MODULE_NAME, DG_MODULE_SHORT_NAME, "org.openflexo.dgmodule.DGModule", "modules/flexodocgenerator", "10004", "dg",
-					DGIconLibrary.DG_SMALL_ICON, DGIconLibrary.DG_MEDIUM_ICON, DGIconLibrary.DG_MEDIUM_ICON_WITH_HOVER,
-					DGIconLibrary.DG_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class SG extends Module {
-
-		public static final String SOURCE_GENERATOR_MODULE_SHORT_NAME = "SG";
-
-		public static final String SOURCE_GENERATOR_MODULE_NAME = "source_generator";
-
-		public SG() {
-			super(SOURCE_GENERATOR_MODULE_NAME, SOURCE_GENERATOR_MODULE_SHORT_NAME, "org.openflexo.sgmodule.SGModule",
-					"modules/flexosourcegenerator", "10004", "sg", SGIconLibrary.SG_SMALL_ICON, SGIconLibrary.SG_MEDIUM_ICON,
-					SGIconLibrary.SG_MEDIUM_ICON_WITH_HOVER, SGIconLibrary.SG_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class DE extends Module {
-
-		public static final String DE_MODULE_SHORT_NAME = "DE";
-
-		public static final String DE_MODULE_NAME = "doc_editor";
-
-		public DE() {
-			super(DE_MODULE_NAME, DE_MODULE_SHORT_NAME, "org.openflexo.doceditormodule.DEModule", "modules/flexodoceditor", "10005", "de",
-					DEIconLibrary.DE_SMALL_ICON, DEIconLibrary.DE_MEDIUM_ICON, DEIconLibrary.DE_MEDIUM_ICON_WITH_HOVER,
-					DEIconLibrary.DE_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class WSE extends Module {
-
-		public static final String WSE_MODULE_SHORT_NAME = "WSE";
-
-		public static final String WSE_MODULE_NAME = "wse_module_name";
-
-		public WSE() {
-			super(WSE_MODULE_NAME, WSE_MODULE_SHORT_NAME, "org.openflexo.wse.WSEModule", "modules/flexowebserviceeditor", "10007", "wse",
-					WSEIconLibrary.WS_SMALL_ICON, WSEIconLibrary.WS_MEDIUM_ICON, WSEIconLibrary.WS_MEDIUM_ICON_WITH_HOVER,
-					WSEIconLibrary.WS_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class VE extends Module {
-
-		public static final String VE_MODULE_SHORT_NAME = "VE";
-
-		public static final String VE_MODULE_NAME = "ve_module_name";
-
-		public VE() {
-			super(VE_MODULE_NAME, VE_MODULE_SHORT_NAME, "org.openflexo.ve.VEModule", "modules/flexovieweditor", "10008", "ve",
-					VEIconLibrary.VE_SMALL_ICON, VEIconLibrary.VE_MEDIUM_ICON, VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER,
-					VEIconLibrary.VE_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class DRE extends Module {
-
-		public static final String DRE_MODULE_SHORT_NAME = "DRE";
-
-		public static final String DRE_MODULE_NAME = "doc_resource_manager";
-
-		public DRE() {
-			super(DRE_MODULE_NAME, DRE_MODULE_SHORT_NAME, "org.openflexo.dre.DREModule", "modules/flexodocresourceeditor", "10010", "dre",
-					DREIconLibrary.DRE_SMALL_ICON, DREIconLibrary.DRE_MEDIUM_ICON, DREIconLibrary.DRE_MEDIUM_ICON_WITH_HOVER,
-					DREIconLibrary.DRE_BIG_ICON, false);
-		}
-
-	}
-
-	protected static class FPS extends Module {
-
-		public static final String FPS_MODULE_SHORT_NAME = "FPS";
-
-		public static final String FPS_MODULE_NAME = "fps_module_name";
-
-		public FPS() {
-			super(FPS_MODULE_NAME, FPS_MODULE_SHORT_NAME, "org.openflexo.fps.FPSModule", "modules/flexoprjsharingmodule", "10011", "fps",
-					FPSIconLibrary.FPS_SMALL_ICON, FPSIconLibrary.FPS_MEDIUM_ICON, FPSIconLibrary.FPS_MEDIUM_ICON_WITH_HOVER,
-					FPSIconLibrary.FPS_BIG_ICON, false);
-		}
-
-	}
-
-	protected static class VPM extends Module {
-
-		public static final String VPM_MODULE_SHORT_NAME = "VPM";
-
-		public static final String VPM_MODULE_NAME = "vpm_module_name";
-
-		public VPM() {
-			super(VPM_MODULE_NAME, VPM_MODULE_SHORT_NAME, "org.openflexo.vpm.VPMModule", "modules/flexoviewpointmodeller", "10009", "vpm",
-					VPMIconLibrary.VPM_SMALL_ICON, VPMIconLibrary.VPM_MEDIUM_ICON, VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER,
-					VPMIconLibrary.VPM_BIG_ICON, false);
-		}
-
-	}
-
-	protected static class TEST extends Module {
-
-		public TEST() {
-			super("TestModule", "TEST", "org.openflexo.TestModule", "modules/flexoworkfloweditor", null, "test",
-					WKFIconLibrary.WKF_SMALL_ICON, WKFIconLibrary.WKF_MEDIUM_ICON, WKFIconLibrary.WKF_MEDIUM_ICON_WITH_HOVER,
-					WKFIconLibrary.WKF_BIG_ICON, true);
-		}
-
-	}
-
-	protected static class XXX extends Module {
-
-		public XXX() {
-			super("XXXModuleName", "xxx", "org.openflexo.xxx.XXXModule", "modules/flexonewmodule", null, "xx", null, null, null, null, true);
-		}
-
-	}
-
-	private String name;
-	private String shortName;
-	private String className;
-	private String relativeDirectory;
-	private String jiraComponentID;
-	private String helpTopic;
-	private ImageIcon smallIcon;
-	private ImageIcon mediumIcon;
-	private ImageIcon mediumIconWithHover;
-	private ImageIcon bigIcon;
-	private boolean requiresProject;
-
-	protected Module(String name, String shortName, String className, String relativeDirectory, String jiraComponentID, String helpTopic,
-			ImageIcon smallIcon, ImageIcon mediumIcon, ImageIcon mediumIconWithHover, ImageIcon bigIcon, boolean requiresProject) {
+	private final boolean notFoundNotified = false;
+
+	private Constructor<M> constructor;
+
+	private final String name;
+	private final String shortName;
+	private final Class<M> moduleClass;
+	private final String relativeDirectory;
+	private final String jiraComponentID;
+	private final String helpTopic;
+	private final ImageIcon smallIcon;
+	private final ImageIcon mediumIcon;
+	private final ImageIcon mediumIconWithHover;
+	private final ImageIcon bigIcon;
+	private final boolean requiresProject;
+
+	private ModuleLoader moduleLoader;
+
+	private M loadedModuleInstance;
+
+	protected Module(String name, String shortName, Class<M> moduleClass, String relativeDirectory, String jiraComponentID,
+			String helpTopic, ImageIcon smallIcon, ImageIcon mediumIcon, ImageIcon mediumIconWithHover, ImageIcon bigIcon,
+			boolean requiresProject) {
 		super();
 		this.name = name;
 		this.shortName = shortName;
-		this.className = className;
+		this.moduleClass = moduleClass;
 		this.relativeDirectory = relativeDirectory;
 		this.jiraComponentID = jiraComponentID;
 		this.helpTopic = helpTopic;
@@ -301,8 +86,16 @@ public abstract class Module implements IModule {
 		this.requiresProject = requiresProject;
 	}
 
-	protected Module() {
-		super();
+	public ModuleLoader getModuleLoader() {
+		return moduleLoader;
+	}
+
+	public void setModuleLoader(ModuleLoader moduleLoader) {
+		this.moduleLoader = moduleLoader;
+	}
+
+	public Constructor<M> getConstructor() {
+		return constructor;
 	}
 
 	public String getName() {
@@ -313,8 +106,8 @@ public abstract class Module implements IModule {
 		return shortName;
 	}
 
-	public String getClassName() {
-		return className;
+	public Class<M> getModuleClass() {
+		return moduleClass;
 	}
 
 	protected String getRelativeDirectory() {
@@ -353,16 +146,6 @@ public abstract class Module implements IModule {
 		return notFoundNotified;
 	}
 
-	/**
-	 * @return
-	 */
-	public Class<? extends FlexoModule> getModuleClass() {
-		if (_moduleClass == null) {
-			_moduleClass = searchModuleClass(getClassName());
-		}
-		return _moduleClass;
-	}
-
 	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
 	}
@@ -375,44 +158,16 @@ public abstract class Module implements IModule {
 		return FlexoLocalization.localizedForKey(getDescription());
 	}
 
-	private boolean notFoundNotified = false;
-
-	@SuppressWarnings("unchecked")
-	private Class<? extends FlexoModule> searchModuleClass(String fullQualifiedModuleName) {
-		try {
-			Class<?> forName = Class.forName(fullQualifiedModuleName);
-			if (FlexoModule.class.isAssignableFrom(forName)) {
-				return (Class<? extends FlexoModule>) forName;
-			} else {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Class '" + fullQualifiedModuleName + "' was found but does not extend FlexoModule.");
-				}
-				return null;
-			}
-		} catch (ClassNotFoundException e) {
-			if (!notFoundNotified) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Could not find MODULE " + fullQualifiedModuleName);
-				}
-				notFoundNotified = true;
-			}
-			return null;
-		}
-
-	}
-
-	private Constructor<? extends FlexoModule> _constructor;
-
 	public boolean register() {
-		_constructor = lookupConstructor();
-		return _constructor != null;
+		constructor = lookupConstructor();
+		return constructor != null;
 	}
 
 	/**
 	 * Internally used to lookup constructor
 	 * 
 	 */
-	private Constructor<? extends FlexoModule> lookupConstructor() {
+	private Constructor<M> lookupConstructor() {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Registering module '" + getName() + "'");
 		}
@@ -420,7 +175,7 @@ public abstract class Module implements IModule {
 		constructorSigner = new Class[1];
 		constructorSigner[0] = ApplicationContext.class;
 		try {
-			Constructor<? extends FlexoModule> constructor = getModuleClass().getDeclaredConstructor(constructorSigner);
+			Constructor<M> constructor = getModuleClass().getDeclaredConstructor(constructorSigner);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Contructor:" + constructor);
 			}
@@ -456,4 +211,72 @@ public abstract class Module implements IModule {
 		return "<html>No description available for <b>" + getLocalizedName() + "</b>" + "<br>"
 				+ "Please submit documentation in documentation resource center" + "<br>" + "</html>";
 	}
+
+	/**
+	 * Hook to initialize module<br>
+	 * Default implementation does nothing
+	 */
+	public void initialize() {
+
+	}
+
+	/**
+	 * Load the module if it is not already laoded
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public M load() throws Exception {
+		boolean createProgress = !ProgressWindow.hasInstance();
+		if (createProgress) {
+			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + getLocalizedName(), 8);
+		}
+		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + getLocalizedName());
+		loadedModuleInstance = getConstructor().newInstance(new Object[] { (ApplicationContext) getModuleLoader().getServiceManager() });
+		doInternalLoadModule();
+		if (createProgress) {
+			ProgressWindow.hideProgressWindow();
+		}
+		return loadedModuleInstance;
+	}
+
+	/**
+	 * Unload the module (not implemented yet)
+	 */
+	public void unload() {
+		// TODO
+	}
+
+	public boolean isLoaded() {
+		return loadedModuleInstance != null;
+	}
+
+	public M getLoadedModuleInstance() {
+		return loadedModuleInstance;
+	}
+
+	private FlexoModule doInternalLoadModule() throws Exception {
+		ModuleLoaderCallable loader = new ModuleLoaderCallable(loadedModuleInstance);
+		return FlexoSwingUtils.syncRunInEDT(loader);
+	}
+
+	private class ModuleLoaderCallable implements Callable<FlexoModule> {
+
+		private final FlexoModule module;
+
+		public ModuleLoaderCallable(FlexoModule module) {
+			this.module = module;
+		}
+
+		@Override
+		public FlexoModule call() throws Exception {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Loading module " + module.getName());
+			}
+			module.initModule();
+			FCH.ensureHelpEntryForModuleHaveBeenCreated(module);
+			return module;
+		}
+	}
+
 }

@@ -24,7 +24,6 @@ import java.util.EventObject;
 import javax.swing.Icon;
 
 import org.openflexo.action.SubmitDocumentationAction;
-import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dre.SubmitNewVersionPopup;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
@@ -35,11 +34,6 @@ import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.param.DynamicDropDownParameter;
-import org.openflexo.foundation.param.ParameterDefinition;
-import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
-import org.openflexo.foundation.param.TextAreaParameter;
-import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -75,7 +69,9 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 				}
 				Language language = null;
 				if (docItem.getDocResourceCenter().getLanguages().size() > 1) {
-					ParameterDefinition[] langParams = new ParameterDefinition[1];
+					logger.warning("Please reimplement this");
+					// TODO: reimplement this
+					/*ParameterDefinition[] langParams = new ParameterDefinition[1];
 					langParams[0] = new DynamicDropDownParameter("language", "language", docItem.getDocResourceCenter().getLanguages(),
 							docItem.getDocResourceCenter().getLanguages().firstElement());
 					langParams[0].addParameter("format", "name");
@@ -86,7 +82,8 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 						language = (Language) dialog.parameterValueWithName("language");
 					} else {
 						return false;
-					}
+					}*/
+
 				} else if (docItem.getDocResourceCenter().getLanguages().size() == 1) {
 					language = docItem.getDocResourceCenter().getLanguages().firstElement();
 				}
@@ -109,7 +106,9 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 					action.getVersion().setVersion(
 							DocItemVersion.Version.versionByIncrementing(lastAction.getVersion().getVersion(), 0, 0, 1));
 				}
-				ParameterDefinition[] parameters = new ParameterDefinition[4];
+				logger.warning("Please reimplement this");
+				// TODO: reimplement this
+				/*ParameterDefinition[] parameters = new ParameterDefinition[4];
 				parameters[0] = new ReadOnlyTextFieldParameter("user", "username", DocResourceManager.instance().getUser().getIdentifier());
 				parameters[1] = new ReadOnlyTextFieldParameter("language", "language", action.getVersion().getLanguageId());
 				parameters[2] = new TextFieldParameter("version", "version", action.getVersion().getVersion().toString());
@@ -126,7 +125,8 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 					return true;
 				} else {
 					return false;
-				}
+				}*/
+				return true;
 			}
 		};
 	}

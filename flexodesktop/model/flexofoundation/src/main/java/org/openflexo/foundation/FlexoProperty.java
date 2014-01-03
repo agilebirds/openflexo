@@ -20,10 +20,14 @@
 package org.openflexo.foundation;
 
 import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 
+@ModelEntity
+@ImplementationClass(FlexoProperty.FlexoPropertyImpl.class)
 public interface FlexoProperty extends FlexoObject {
 
 	@PropertyIdentifier(type = FlexoObject.class)

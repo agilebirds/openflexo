@@ -52,7 +52,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import javax.naming.InvalidNameException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -85,46 +84,26 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.cg.GeneratedCode;
-import org.openflexo.foundation.cg.GeneratedDoc;
-import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.cg.templates.CGTemplateObject;
-import org.openflexo.foundation.dkv.DKVObject;
-import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.dm.DuplicateClassNameException;
-import org.openflexo.foundation.ie.IEObject;
-import org.openflexo.foundation.ie.IEWOComponent;
-import org.openflexo.foundation.ie.cl.ComponentDefinition;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ProjectClosedNotification;
 import org.openflexo.foundation.resource.ProjectResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.resource.UserResourceCenter;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.ProjectClosedNotification;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.ViewPointResource;
-import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
-import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -133,7 +112,6 @@ import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
-import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -141,30 +119,19 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
-import org.openflexo.foundation.view.diagram.rm.DiagramResource;
-import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
+import org.openflexo.foundation.view.rm.ViewResource;
+import org.openflexo.foundation.view.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.viewpoint.FlexoFacet;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.annotations.FIBPanel;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.WorkflowModelObject;
-import org.openflexo.foundation.wkf.node.OperationNode;
-import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
-import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.icon.DGIconLibrary;
-import org.openflexo.icon.DMEIconLibrary;
-import org.openflexo.icon.FilesIconLibrary;
+import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
-import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.InspectorExceptionHandler;
@@ -181,7 +148,6 @@ import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.PreferencesController;
 import org.openflexo.prefs.PreferencesHaveChanged;
 import org.openflexo.prefs.PreferencesWindow;
-import org.openflexo.rm.ResourceManagerWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
@@ -240,15 +206,13 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	protected SelectionManager selectionManager;
 
-	private ControllerActionInitializer controllerActionInitializer;
+	private final ControllerActionInitializer controllerActionInitializer;
 
 	protected FlexoFrame flexoFrame;
 
 	private FlexoMainPane mainPane;
 
-	private ResourceManagerWindow rmWindow;
-
-	private ControllerModel controllerModel;
+	private final ControllerModel controllerModel;
 
 	private final List<FlexoMenuBar> registeredMenuBar = new ArrayList<FlexoMenuBar>();
 
@@ -662,7 +626,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (action2 != null) {
 			class CompoundAction extends AbstractAction {
 
-				private List<Action> actions = new ArrayList<Action>();
+				private final List<Action> actions = new ArrayList<Action>();
 
 				void addToAction(Action action) {
 					actions.add(action);
@@ -740,81 +704,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 */
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		if (inspectable instanceof FlexoProcess && exception instanceof DuplicateResourceException) {
-			if (propertyName.equals("name")) {
-				boolean isOK = false;
-				while (!isOK) {
-					String newName = askForString(FlexoLocalization
-							.localizedForKey("invalid_name_process_already_exists_please_choose_an_other_one"));
-					if (newName != null) {
-						try {
-							((FlexoProcess) inspectable).setName(newName);
-							isOK = true;
-						} catch (DuplicateResourceException e) {
-						} catch (InvalidNameException e) {
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					} else {
-						return true;
-					}
-
-				}
-				return true;
-			}
-		} else if (inspectable instanceof OperationNode && exception instanceof DuplicateResourceException) {
-			if (propertyName.equals("WOComponentName")) {
-				boolean isOK = false;
-				while (!isOK) {
-					String newName = askForString(FlexoLocalization
-							.localizedForKey("invalid_name_component_already_exists_please_choose_an_other_one"));
-					if (newName != null) {
-						try {
-							((OperationNode) inspectable).setWOComponentName(newName);
-							isOK = true;
-						} catch (DuplicateResourceException e) {
-						} catch (OperationAssociatedWithComponentSuccessfully e) {
-							// TODO: FIXME
-							if (logger.isLoggable(Level.INFO)) {
-								logger.info("FIXME: handle new component association in FlexoController.class");
-							}
-						}
-					} else {
-						return true;
-					}
-				}
-				return true;
-			}
-		} else if (inspectable instanceof ComponentDefinition && exception instanceof DuplicateResourceException) {
-			if (propertyName.equals("name")) {
-				boolean isOK = false;
-				while (!isOK) {
-					String newName = askForString(FlexoLocalization
-							.localizedForKey("invalid_name_component_already_exists_please_choose_an_other_one"));
-					if (newName != null) {
-						try {
-							((ComponentDefinition) inspectable).setName(newName);
-							isOK = true;
-						} catch (DuplicateResourceException e) {
-						} catch (DuplicateClassNameException e) {
-							notify(e.getLocalizedMessage());
-						} catch (InvalidNameException e) {
-							notify(FlexoLocalization.localizedForKey("invalid_component_name"));
-						}
-					} else {
-						return true;
-					}
-				}
-				return true;
-			}
-		} else if ((inspectable instanceof IEWOComponent || inspectable instanceof ComponentDefinition)
-				&& exception instanceof InvalidNameException) {
-			if (propertyName.equals("name")) {
-				notify(FlexoLocalization.localizedForKey("invalid_component_name"));
-				return true;
-			}
-		}
-
 		return false;
 	}
 
@@ -1248,8 +1137,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		if (isDisposed()) {
 			return false;
 		}
-		return !getModule().getModule().requireProject() || !(object instanceof FlexoObject)
-				|| ((FlexoObject) object).getProject() == getProject();
+		return !getModule().getModule().requireProject() || !(object instanceof FlexoProjectObject)
+				|| ((FlexoProjectObject) object).getProject() == getProject();
 	}
 
 	/**
@@ -1553,10 +1442,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			}
 		}
 
-		if (rmWindow != null) {
-			rmWindow.dispose();
-			rmWindow = null;
-		}
 		registeredMenuBar.clear();
 		if (PreferencesController.hasInstance()) {
 			PreferencesController.instance().getPreferencesWindow().setVisible(false);
@@ -1713,8 +1598,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				e.printStackTrace();
 			} catch (ResourceLoadingCancelledException e) {
 				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				e.printStackTrace();
 			} catch (FlexoException e) {
 				e.printStackTrace();
 			}
@@ -1764,9 +1647,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				} catch (ResourceLoadingCancelledException e) {
 					notify("Cannot load resource: " + e.getMessage());
 					e.printStackTrace();
-				} catch (ResourceDependencyLoopException e) {
-					notify("Cannot load resource: " + e.getMessage());
-					e.printStackTrace();
 				} catch (FlexoException e) {
 					notify("Cannot load resource: " + e.getMessage());
 					e.printStackTrace();
@@ -1779,9 +1659,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					notify("Cannot load resource: " + e.getMessage());
 					e.printStackTrace();
 				} catch (ResourceLoadingCancelledException e) {
-					notify("Cannot load resource: " + e.getMessage());
-					e.printStackTrace();
-				} catch (ResourceDependencyLoopException e) {
 					notify("Cannot load resource: " + e.getMessage());
 					e.printStackTrace();
 				} catch (FlexoException e) {
@@ -1888,16 +1765,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public ResourceManagerWindow getRMWindow(FlexoProject project) {
-		if (rmWindow != null) {
-			if (rmWindow.getProject() == project) {
-				return rmWindow;
-			}
-			rmWindow.dispose();
-		}
-		return rmWindow = new ResourceManagerWindow(project);
-	}
-
 	/**
 	 * Select the supplied object. Also try to select (create if not exists) a main view representing supplied object, if this view exists.<br>
 	 * Try all to really display supplied object, even if required view is not the current displayed view
@@ -1952,53 +1819,43 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	public ImageIcon iconForObject(Object object) {
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
-			if (getModule().getModule().requireProject() && object instanceof FlexoObject && getProject() != null
-					&& ((FlexoObject) object).getProject() != getProject() && ((FlexoObject) object).getProject() != null
+			if (getModule().getModule().requireProject() && object instanceof FlexoProjectObject && getProject() != null
+					&& ((FlexoProjectObject) object).getProject() != getProject() && ((FlexoProjectObject) object).getProject() != null
 					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			} else if (object instanceof FlexoProjectReference) {
-				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
-			} else if (object instanceof WorkflowModelObject && ((WorkflowModelObject) object).getWorkflow().isCache()) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			}
 		}
 		return iconForObject;
 	}
 
-	public ImageIcon iconForWorkflow(boolean imported) {
-		if (imported) {
-			return WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON;
-		} else {
-			return WKFIconLibrary.WORKFLOW_ICON;
+	public static ImageIcon statelessIconForObject(Object object) {
+
+		// If object is a TechnologyObject, we delegate this to the right TechnologyAdapterController
+		if (object instanceof TechnologyObject<?>) {
+
+			System.out.println("Mon object est bien un TechnologyObject " + object);
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyObject<?>) object).getTechnologyAdapter());
+			System.out.println("tac= " + tac);
+			if (tac != null) {
+				return tac.getIconForTechnologyObject(((TechnologyObject<?>) object).getClass());
+			}
 		}
 
-	}
-
-	public static ImageIcon statelessIconForObject(Object object) {
+		// If object is a resource and if this resource is loaded, use icon of loaded resource data
 		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
-			try {
-				return statelessIconForObject(((FlexoResource<?>) object).getResourceData(null));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (ResourceLoadingCancelledException e) {
-				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				e.printStackTrace();
-			} catch (FlexoException e) {
-				e.printStackTrace();
-			}
+			return statelessIconForObject(((FlexoResource<?>) object).getLoadedResourceData());
 		} else if (object instanceof ViewResource) {
 			return VEIconLibrary.VIEW_ICON;
-		} else if (object instanceof DiagramResource) {
-			return VEIconLibrary.DIAGRAM_ICON;
 		} else if (object instanceof VirtualModelInstanceResource) {
 			return VEIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
-		} else if (object instanceof TechnologyAdapterResource<?>) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyAdapterResource<?>) object)
+		} else if (object instanceof TechnologyAdapterResource<?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyAdapterResource<?, ?>) object)
 					.getTechnologyAdapter());
 			// TODO: vincent
-			if (tac != null && TechnologyObject.class.isAssignableFrom(((TechnologyAdapterResource<?>) object).getResourceDataClass())) {
-				return tac.getIconForTechnologyObject((Class<? extends TechnologyObject>) ((TechnologyAdapterResource<?>) object)
+			if (tac != null && TechnologyObject.class.isAssignableFrom(((TechnologyAdapterResource<?, ?>) object).getResourceDataClass())) {
+				return tac.getIconForTechnologyObject((Class<? extends TechnologyObject>) ((TechnologyAdapterResource<?, ?>) object)
 						.getResourceDataClass());
 			}
 		} else if (object instanceof InformationSpace) {
@@ -2006,25 +1863,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		} else if (object instanceof FlexoFacet) {
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof FlexoResourceCenter) {
-			if (object instanceof UserResourceCenter) {
-				return IconLibrary.HOME_ICON;
-			}
 			if (object instanceof ProjectResourceCenter) {
 				return IconLibrary.OPENFLEXO_NOTEXT_16;
 			}
 			return IconLibrary.RESOURCE_CENTER_ICON;
 		} else if (object instanceof FlexoResourceCenterService) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
-		} else if (object instanceof WorkflowModelObject) {
-			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
-		} else if (object instanceof WKFObject) {
-			return WKFIconLibrary.iconForObject((WKFObject) object);
-		} else if (object instanceof IEObject) {
-			return SEIconLibrary.iconForObject((IEObject) object);
-		} else if (object instanceof DKVObject) {
-			return SEIconLibrary.iconForObject((DKVObject) object);
-		} else if (object instanceof DMObject) {
-			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibrary) {
 			return VPMIconLibrary.VIEWPOINT_LIBRARY_ICON;
 		} else if (object instanceof ViewPointObject) {
@@ -2033,10 +1877,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ViewPointResource) object);
 		} else if (object instanceof VirtualModelResource) {
 			return VPMIconLibrary.iconForObject((VirtualModelResource) object);
-		} else if (object instanceof ExampleDiagramResource) {
-			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
-		} else if (object instanceof DiagramPaletteResource) {
-			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
 		} else if (object instanceof ViewResource) {
 			return VEIconLibrary.iconForObject((ViewResource) object);
 		} else if (object instanceof VirtualModelInstanceResource) {
@@ -2060,8 +1900,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (tac != null) {
 				return tac.getModelIcon();
 			}
-		} else if (object instanceof FlexoModelResource<?, ?>) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModelResource<?, ?>) object).getTechnologyAdapter());
+		} else if (object instanceof FlexoModelResource<?, ?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoModelResource<?, ?, ?>) object)
+					.getTechnologyAdapter());
 			if (tac != null) {
 				return tac.getModelIcon();
 			}
@@ -2070,8 +1911,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (tac != null) {
 				return tac.getMetaModelIcon();
 			}
-		} else if (object instanceof FlexoMetaModelResource<?, ?>) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModelResource<?, ?>) object)
+		} else if (object instanceof FlexoMetaModelResource<?, ?, ?>) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((FlexoMetaModelResource<?, ?, ?>) object)
 					.getTechnologyAdapter());
 			if (tac != null) {
 				return tac.getMetaModelIcon();
@@ -2081,24 +1922,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (tac != null) {
 				return tac.getIconForTechnologyObject(((TechnologyObject) object).getClass());
 			}
-		} else if (object instanceof TOCObject) {
-			return DEIconLibrary.iconForObject((TOCObject) object);
-		} else if (object instanceof CGFile) {
-			return FilesIconLibrary.smallIconForFileFormat(((CGFile) object).getFileFormat());
-		} else if (object instanceof CGTemplateObject) {
-			return DGIconLibrary.iconForObject((CGTemplateObject) object);
-		} else if (object instanceof DocType) {
-			return CGIconLibrary.TARGET_ICON;
 		} else if (object instanceof FlexoProject) {
 			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		} else if (object instanceof FlexoProjectReference) {
-			return WKFIconLibrary.OPENFLEXO_NOTEXT_16;
-		} else if (object instanceof GeneratedDoc) {
-			return DGIconLibrary.GENERATED_DOC_ICON;
-		} else if (object instanceof GeneratedCode) {
-			return CGIconLibrary.GENERATED_CODE_ICON;
-		} else if (object instanceof GenerationRepository) {
-			return CGIconLibrary.GENERATED_CODE_REPOSITORY_ICON;
+			return IconLibrary.OPENFLEXO_NOTEXT_16;
 		}
 		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
 		return null;
@@ -2147,7 +1974,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return null;
 	}
 
-	private Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
+	private final Map<Class<?>, File> fibPanelsForClasses = new HashMap<Class<?>, File>();
 
 	public File getFIBPanelForClass(Class<?> aClass) {
 		if (aClass == null) {

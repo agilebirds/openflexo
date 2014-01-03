@@ -20,7 +20,7 @@
 package org.openflexo.module;
 
 import java.awt.Frame;
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +32,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.utils.OperationCancelledException;
-import org.openflexo.module.external.IModule;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
@@ -42,7 +41,7 @@ import org.openflexo.view.controller.FlexoController;
  * 
  * @author sguerin
  */
-public abstract class FlexoModule implements DataFlexoObserver, IModule {
+public abstract class FlexoModule implements DataFlexoObserver {
 
 	static final Logger logger = Logger.getLogger(FlexoModule.class.getPackage().getName());
 
@@ -212,10 +211,10 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 			getModuleLoader().unloadModule(getModule());
 		}
 		// Is there some modules loaded ?
-		Enumeration<FlexoModule> leftModules = getModuleLoader().loadedModules();
-		if (leftModules.hasMoreElements()) {
+		Collection<Module<?>> leftModules = getModuleLoader().getLoadedModules();
+		if (leftModules.size() > 0) {
 			try {
-				getModuleLoader().switchToModule(leftModules.nextElement().getModule());
+				getModuleLoader().switchToModule(leftModules.iterator().next());
 			} catch (ModuleLoadingException e) {
 				logger.severe("Module is loaded and so this exception CANNOT occur. Please investigate and FIX.");
 				e.printStackTrace();

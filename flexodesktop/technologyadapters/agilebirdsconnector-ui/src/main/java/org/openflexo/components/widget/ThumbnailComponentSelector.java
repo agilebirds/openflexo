@@ -26,7 +26,7 @@ import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Widget allowing to select a ThumbnailComponent while browing the component library
@@ -54,7 +54,7 @@ public class ThumbnailComponentSelector extends AbstractComponentSelector<TabCom
 		} else {
 			folder = getComponentLibrary().getRootFolder();
 		}
-		String newComponentName = FlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),
+		String newComponentName = AgileBirdsFlexoController.askForStringMatchingPattern(FlexoLocalization.localizedForKey("enter_a_component_name"),
 				IERegExp.JAVA_CLASS_NAME_PATTERN,
 				FlexoLocalization.localizedForKey("must_start_with_a_letter_followed_by_any_letter_or_number"));
 		try {
@@ -62,7 +62,7 @@ public class ThumbnailComponentSelector extends AbstractComponentSelector<TabCom
 			setEditedObject(newComponent);
 		} catch (DuplicateResourceException e) {
 			// Warns about the exception
-			FlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
+			AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("invalid_name_a_component_with_this_name_already_exists"));
 		}
 
 	}

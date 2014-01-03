@@ -50,12 +50,16 @@ public class DefaultFlexoServiceManager extends FlexoServiceManager {
 		if (projectReferenceLoader != null) {
 			registerService(projectReferenceLoader);
 		}
+
 		FlexoResourceCenterService resourceCenterService = createResourceCenterService();
 		registerService(resourceCenterService);
+
 		TechnologyAdapterService technologyAdapterService = createTechnologyAdapterService(resourceCenterService);
 		registerService(technologyAdapterService);
+
 		InformationSpace informationSpace = createInformationSpace();
 		registerService(informationSpace);
+
 		ViewPointLibrary viewPointLibrary = createViewPointLibraryService();
 		registerService(viewPointLibrary);
 	}

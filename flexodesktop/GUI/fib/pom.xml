@@ -72,6 +72,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
+				<artifactId>fib-core</artifactId>
+				<version>${project.version}</version>
+				<classifier>tests</classifier>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
 				<artifactId>fib-swing</artifactId>
 				<version>${project.version}</version>
 				<classifier>resources</classifier>

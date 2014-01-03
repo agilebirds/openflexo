@@ -70,7 +70,9 @@ public abstract class FlexoServiceManager /*extends FlexoObject*/{
 	public void registerService(FlexoService service) {
 		registeredServices.add(service);
 		service.register(this);
+
 		notify(service, new ServiceRegistered());
+
 		service.initialize();
 	}
 

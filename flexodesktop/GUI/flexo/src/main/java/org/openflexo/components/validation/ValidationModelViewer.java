@@ -57,7 +57,6 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationRuleSet;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 
 /**
  * Defines the panel allowing to show and edit a ValidationModel
@@ -295,10 +294,8 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 			}
 		});
 		controlPanel.add(closeButton);
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			controlPanel.add(editButton);
-			controlPanel.add(saveButton);
-		}
+		controlPanel.add(editButton);
+		controlPanel.add(saveButton);
 
 		add(_title, BorderLayout.NORTH);
 		add(splitPane2, BorderLayout.CENTER);

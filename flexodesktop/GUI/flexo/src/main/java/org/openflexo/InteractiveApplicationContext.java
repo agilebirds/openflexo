@@ -12,8 +12,6 @@ import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.module.UserType;
-import org.openflexo.view.controller.BasicInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -47,11 +45,11 @@ public class InteractiveApplicationContext extends ApplicationContext {
 
 	@Override
 	public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
-		if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
+		/*if (UserType.isCustomerRelease() || UserType.isAnalystRelease()) {
 			return new BasicInteractiveProjectLoadingHandler(projectDirectory);
-		} else {
-			return new FullInteractiveProjectLoadingHandler(projectDirectory);
-		}
+		} else {*/
+		return new FullInteractiveProjectLoadingHandler(projectDirectory);
+		// }
 	}
 
 	@Override

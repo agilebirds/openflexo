@@ -630,8 +630,6 @@ public class XMLMapping {
 
 		modelEntitiesStoredByClassName.put(aModelEntity.getName(), aModelEntity);
 
-		System.out.println("Registered entity for " + aModelEntity.getName());
-
 	}
 
 	private void updateEntitiesStoredByXMLTags(ModelEntity aModelEntity) {

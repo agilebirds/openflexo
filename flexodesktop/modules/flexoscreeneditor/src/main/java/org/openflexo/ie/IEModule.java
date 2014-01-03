@@ -50,6 +50,20 @@ import org.openflexo.view.controller.FlexoController;
 public class IEModule extends FlexoModule implements ExternalIEModule {
 
 	private static final Logger logger = Logger.getLogger(IEModule.class.getPackage().getName());
+
+	public static final String IE_MODULE_SHORT_NAME = "IE";
+
+	public static final String IE_MODULE_NAME = "interface_editor";
+
+	public static class ScreenEditor extends Module {
+		public ScreenEditor() {
+			super(IE_MODULE_NAME, IE_MODULE_SHORT_NAME, "org.openflexo.ie.IEModule", "modules/flexointerfaceeditor", "10001", "ie",
+					SEIconLibrary.SE_SMALL_ICON, SEIconLibrary.SE_MEDIUM_ICON, SEIconLibrary.SE_MEDIUM_ICON_WITH_HOVER,
+					SEIconLibrary.SE_BIG_ICON, true);
+		}
+
+	}
+
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.IE };
 	private IEWOComponentView componentView;
 

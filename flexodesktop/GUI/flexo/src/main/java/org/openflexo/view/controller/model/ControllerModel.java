@@ -15,17 +15,7 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.cg.CGFile;
-import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.toc.TOCEntry;
-import org.openflexo.foundation.wkf.FlexoProcess;
-import org.openflexo.foundation.wkf.ws.MessageEntry;
-import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.wkf.ws.ServiceMessageDefinition;
-import org.openflexo.foundation.wkf.ws.ServiceOperation;
-import org.openflexo.foundation.ws.WSObject;
-import org.openflexo.foundation.ws.WSPortType;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
@@ -66,22 +56,22 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	private boolean rightViewVisible = true;
 
 	/** The list of all the available perspectives */
-	private List<FlexoPerspective> perspectives;
+	private final List<FlexoPerspective> perspectives;
 
 	/** List of objects that are represented. This list allows to track observed objects. */
-	private List<FlexoObject> objects;
+	private final List<FlexoObject> objects;
 
 	/** Set of locations that are opened. This set represents all the currently opened module views. */
-	private ExtendedSet<Location> locations;
+	private final ExtendedSet<Location> locations;
 
 	/** The stack of locations that were visited */
-	private Stack<Location> previousHistory;
+	private final Stack<Location> previousHistory;
 
 	/**
 	 * The stack of locations that are ahead of the current location. This is only used when the user goes back in history. Whenever the
 	 * users bypasses history navigation, this stack is reset
 	 */
-	private Stack<Location> nextHistory;
+	private final Stack<Location> nextHistory;
 
 	/** The current location in the history */
 	private Location currentLocation = NO_LOCATION;
@@ -93,13 +83,13 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	private boolean isGoingBackward = false;
 
 	/** The application context of this controller model */
-	private ApplicationContext context;
+	private final ApplicationContext context;
 
 	/** The module in which this controller model was created (mainly used to save module specific preferences) */
-	private FlexoModule module;
+	private final FlexoModule module;
 
 	/** A property change listener registration manager that keeps track of all the registered {@link PropertyChangeListener} */
-	private PropertyChangeListenerRegistrationManager registrationManager;
+	private final PropertyChangeListenerRegistrationManager registrationManager;
 
 	public ControllerModel(ApplicationContext context, FlexoModule module) {
 		this.context = context;
@@ -399,33 +389,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	private FlexoObject getParent(FlexoObject object) {
-		if (object instanceof DMObject) {
-			return ((DMObject) object).getParent();
-		} else if (object instanceof FlexoProcess) {
-			return ((FlexoProcess) object).getParentProcess();
-		} else if (object instanceof CGFile) {
-			return ((CGFile) object).getRepository();
-		} else if (object instanceof TOCEntry) {
-			if (((TOCEntry) object).getParent() != null) {
-				return ((TOCEntry) object).getParent();
-			} else {
-				((TOCEntry) object).getRepository();
-			}
-		} else if (object instanceof WSObject) {
-			return ((WSObject) object).getParent();
-		} else if (object instanceof ServiceInterface) {
-			WSPortType proc = ((ServiceInterface) object).getProject().getFlexoWSLibrary()
-					.getWSPortTypeNamed(((ServiceInterface) object).getName());
-			if (proc != null) {
-				return proc.getWSService().getWSPortTypeFolder();
-			}
-		} else if (object instanceof ServiceOperation) {
-			return ((ServiceOperation) object).getServiceInterface();
-		} else if (object instanceof ServiceMessageDefinition) {
-			return ((ServiceMessageDefinition) object).getOperation();
-		} else if (object instanceof MessageEntry) {
-			return ((MessageEntry) object).getMessage();
-		}
+		logger.warning("Please reimplement this (getParent(FlexoObject)");
 		return null;
 	}
 

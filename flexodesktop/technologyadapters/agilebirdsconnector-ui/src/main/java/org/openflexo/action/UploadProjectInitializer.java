@@ -40,7 +40,7 @@ import org.openflexo.rest.client.model.UserType;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 public class UploadProjectInitializer extends ActionInitializer<UploadProjectAction, FlexoProject, FlexoProject> {
 
@@ -62,7 +62,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 			public boolean run(EventObject event, UploadProjectAction action) {
 				FlexoProject project = action.getFocusedObject();
 				FlexoVersion version = project.getVersion();
-				String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+				String comment = AgileBirdsFlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
 				if (comment == null) {
 					return false;
 				}
@@ -83,7 +83,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 								model.performOperationsInSwingWorker(true, true, model.new CreateProjectAndUploadFirstVersion(data));
 							}
 						} else {
-							FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
+							AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
 							return false;
 						}
 					} else {
@@ -115,7 +115,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 		return new FlexoActionFinalizer<UploadProjectAction>() {
 			@Override
 			public boolean run(EventObject e, UploadProjectAction action) {
-				FlexoController.notify(FlexoLocalization.localizedForKey("successfully_created_version") + " "
+				AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("successfully_created_version") + " "
 						+ action.getFocusedObject().getVersion());
 				return true;
 			}

@@ -53,7 +53,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 /**
  * Tabular view representing an AbstractModel
@@ -150,7 +150,7 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	protected static final Logger logger = Logger.getLogger(TabularView.class.getPackage().getName());
 
-	protected FlexoController _controller;
+	protected AgileBirdsFlexoController _controller;
 
 	protected JTable _table;
 
@@ -199,12 +199,12 @@ public abstract class TabularView extends JPanel implements TableModelListener, 
 
 	};
 
-	public TabularView(FlexoController controller, AbstractModel model, int visibleRowCount) {
+	public TabularView(AgileBirdsFlexoController controller, AbstractModel model, int visibleRowCount) {
 		this(controller, model);
 		setVisibleRowCount(visibleRowCount);
 	}
 
-	public TabularView(FlexoController controller, AbstractModel model) {
+	public TabularView(AgileBirdsFlexoController controller, AbstractModel model) {
 		super();
 		_model = model;
 		_controller = controller;

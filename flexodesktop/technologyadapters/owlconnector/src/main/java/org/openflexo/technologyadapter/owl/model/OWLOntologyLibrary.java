@@ -122,6 +122,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLTechnologyAd
 		logger.info("Instantiating OWLOntologyLibrary Done. Trying to load some ontologies...");
 
 		logger.info("ontologies=" + ontologies);
+		logger.info("serviceManager=" + getServiceManager());
+		logger.info("rcService=" + getServiceManager().getResourceCenterService());
+		logger.info("resources centers: " + getServiceManager().getResourceCenterService().getResourceCenters());
 
 		// logger.info("getRDFSOntology()=" + getRDFSOntology());
 		// logger.info("getRDFOntology()=" + getRDFOntology());

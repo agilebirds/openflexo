@@ -66,7 +66,6 @@ import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.Modules;
-import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
 import org.openflexo.toolbox.FileResource;
@@ -173,15 +172,15 @@ public class Flexo {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		String userTypeName = null;
+		// String userTypeName = null;
 		boolean noSplash = false;
 		if (args.length > 0) {
 			// ATTENTION: Argument cannot start with "-D", nor start with "-X", nor start with "-agentlib" since they are reserved keywords
 			// for JVM
 			for (int i = 0; i < args.length; i++) {
-				if (args[i].equals("-userType")) {
+				/*if (args[i].equals("-userType")) {
 					userTypeName = args[i + 1];
-				}
+				}*/
 				if (args[i].equals("-nosplash")) {
 					noSplash = true;
 				} else if (args[i].equalsIgnoreCase("DEV")) {
@@ -197,11 +196,11 @@ public class Flexo {
 		}
 		remapStandardOuputs(isDev);
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
-		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		UserType.setCurrentUserType(userTypeNamed);
+		// UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
+		// UserType.setCurrentUserType(userTypeNamed);
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
-			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
+			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame());
 		}
 		final SplashWindow splashWindow2 = splashWindow;
 		FlexoProperties.load();

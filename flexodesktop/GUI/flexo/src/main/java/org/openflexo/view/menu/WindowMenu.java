@@ -69,16 +69,16 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	private int windowFirstIndex = -1;
 
-	private Map<FlexoRelativeWindow, RelativeWindowItem> relativeWindowItems;
+	private final Map<FlexoRelativeWindow, RelativeWindowItem> relativeWindowItems;
 
 	protected CloseModuleItem closeModuleItem;
 
-	private JMenu loadWindowMenu;
+	private final JMenu loadWindowMenu;
 
 	/**
 	 * Hashtable where key is the class object representing module and value a JMenuItem
 	 */
-	private Map<Module, JMenuItem> moduleMenuItems = new Hashtable<Module, JMenuItem>();
+	private final Map<Module, JMenuItem> moduleMenuItems = new Hashtable<Module, JMenuItem>();
 
 	protected FlexoMenuItem controlPanelItem;
 
@@ -92,7 +92,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 			logger.fine("Build NEW module menu for " + module.getName());
 		}
 		loadWindowMenu = new JMenu();
-		for (Module m : controller.getModuleLoader().getAvailableModules()) {
+		for (Module<?> m : controller.getModuleLoader().getKnownModules()) {
 			JMenuItem item = new JMenuItem(new SwitchToModuleAction(m));
 			item.setText(FlexoLocalization.localizedForKey(m.getName(), item));
 			item.setIcon(m.getSmallIcon());
@@ -304,19 +304,19 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	}
 
 	public class SwitchToModuleAction extends AbstractAction {
-		private Module _module;
+		private final Module<?> module;
 
-		private JCheckBoxMenuItem _menuItem;
+		private JCheckBoxMenuItem menuItem;
 
-		public SwitchToModuleAction(Module module) {
+		public SwitchToModuleAction(Module<?> module) {
 			super();
-			_module = module;
+			this.module = module;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getController().getModuleLoader().switchToModule(_module);
+				getController().getModuleLoader().switchToModule(module);
 			} catch (ModuleLoadingException e) {
 				FlexoController.notify("Cannot load module." + e.getMessage());
 				return;
@@ -324,16 +324,16 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 
 		public void setItem(JCheckBoxMenuItem menuItem) {
-			_menuItem = menuItem;
+			this.menuItem = menuItem;
 		}
 	}
 
-	private void notifyModuleHasBeenLoaded(Module module) {
+	private void notifyModuleHasBeenLoaded(Module<?> module) {
 		JMenuItem item = moduleMenuItems.get(module);
 		insert(item, getController().getModuleLoader().getLoadedModules().indexOf(module));
 	}
 
-	private void notifyModuleHasBeenUnloaded(Module module) {
+	private void notifyModuleHasBeenUnloaded(Module<?> module) {
 		JMenuItem item = moduleMenuItems.get(module);
 		loadWindowMenu.insert(item, getController().getModuleLoader().getUnloadedModules().indexOf(module));
 	}
@@ -341,9 +341,9 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(ModuleLoader.MODULE_LOADED)) {
-			notifyModuleHasBeenLoaded((Module) evt.getNewValue());
+			notifyModuleHasBeenLoaded((Module<?>) evt.getNewValue());
 		} else if (evt.getPropertyName().equals(ModuleLoader.MODULE_UNLOADED)) {
-			notifyModuleHasBeenUnloaded((Module) evt.getOldValue());
+			notifyModuleHasBeenUnloaded((Module<?>) evt.getOldValue());
 		}
 	}
 

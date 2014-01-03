@@ -44,7 +44,7 @@ public interface FlexoProjectObject extends FlexoObject {
 	@PropertyIdentifier(type = FlexoProject.class)
 	public static final String PROJECT = "project";
 
-	@Getter(PROJECT)
+	@Getter(value = PROJECT, ignoreType = true)
 	public FlexoProject getProject();
 
 	@Setter(PROJECT)

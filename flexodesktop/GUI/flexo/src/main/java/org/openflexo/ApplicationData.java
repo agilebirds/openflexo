@@ -20,7 +20,7 @@
 package org.openflexo;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -28,8 +28,6 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
-import org.openflexo.module.Modules;
-import org.openflexo.module.UserType;
 
 /**
  * Class storing general data for application
@@ -43,22 +41,14 @@ public class ApplicationData {
 
 	public ApplicationData(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-		if (!UserType.isCurrentUserTypeDefined()) {
-			logger.warning("ModuleLoader not initialized, initializing it with default values");
-			UserType.setCurrentUserType(UserType.MAINTAINER);
-		}
 	}
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
 
-	public List<Module> getAvailableModules() {
-		return Modules.getInstance().getAvailableModules();
-	}
-
-	public UserType getUserType() {
-		return UserType.getCurrentUserType();
+	public Collection<Module<?>> getAvailableModules() {
+		return applicationContext.getModuleLoader().getKnownModules();
 	}
 
 	public String getVersion() {
@@ -81,11 +71,11 @@ public class ApplicationData {
 		return IconLibrary.OPENFLEXO_TEXT_SMALL_ICON;
 	}
 
-	public Module getFavoriteModule() {
-		Module returned = Modules.getInstance().getModule(GeneralPreferences.getFavoriteModuleName());
+	public Module<?> getFavoriteModule() {
+		Module<?> returned = applicationContext.getModuleLoader().getModuleNamed(GeneralPreferences.getFavoriteModuleName());
 		if (returned == null) {
 			if (getAvailableModules().size() > 0) {
-				return getAvailableModules().get(0);
+				return getAvailableModules().iterator().next();
 			}
 			logger.severe("No module found.");
 			return null;
@@ -94,7 +84,7 @@ public class ApplicationData {
 		}
 	}
 
-	public void setFavoriteModule(Module aModule) {
+	public void setFavoriteModule(Module<?> aModule) {
 		if (aModule != null) {
 			GeneralPreferences.setFavoriteModuleName(aModule.getName());
 		}

@@ -33,7 +33,6 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.LoadResourceAction;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -74,9 +73,6 @@ public class LoadResourceActionInitializer extends ActionInitializer<LoadResourc
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ResourceLoadingCancelledException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ResourceDependencyLoopException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (FlexoException e1) {

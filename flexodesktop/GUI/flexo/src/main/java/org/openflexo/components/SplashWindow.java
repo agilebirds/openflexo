@@ -35,15 +35,14 @@ import javax.swing.SwingConstants;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 
 @SuppressWarnings("serial")
 public class SplashWindow extends JDialog {
 
-	private JLabel splash;
+	private final JLabel splash;
 
-	public SplashWindow(Frame f, UserType userType) {
+	public SplashWindow(Frame f) {
 		super(f);
 		setUndecorated(true);
 		Dimension imageDim = new Dimension(IconLibrary.SPLASH_IMAGE.getIconWidth(), IconLibrary.SPLASH_IMAGE.getIconHeight());
@@ -61,7 +60,7 @@ public class SplashWindow extends JDialog {
 		getContentPane().add(flexoLabel);
 		flexoLabel.setBounds(319, 142, 231, 59);
 
-		JLabel businessLabel = new JLabel(userType.getBusinessName2(), SwingConstants.RIGHT);
+		JLabel businessLabel = new JLabel("TODO: Openflexo distribution", SwingConstants.RIGHT);
 		businessLabel.setForeground(FlexoCst.WELCOME_FLEXO_COLOR);
 		businessLabel.setFont(new Font("SansSerif", Font.ITALIC, 18));
 		getContentPane().add(businessLabel);

@@ -131,6 +131,8 @@ public class OWLTechnologyAdapter extends TechnologyAdapter {
 				OWLOntologyResource ontRes = tryToLookupOntology(resourceCenter, candidateFile);
 			}
 		}
+
+		getTechnologyContextManager().init();
 	}
 
 	protected OWLOntologyResource tryToLookupOntology(FlexoResourceCenter<?> resourceCenter, File candidateFile) {

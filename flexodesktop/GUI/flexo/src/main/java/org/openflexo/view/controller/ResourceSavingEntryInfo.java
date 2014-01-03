@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.IProgress;

@@ -126,7 +126,7 @@ import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoFrame;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.AgileBirdsFlexoController;
 
 class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel implements ListSelectionListener {
 
@@ -348,7 +348,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 						BindingSelector.logger.warning("BindingVariable creation not implemented");
 						return;
 					} else {
-						FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_create_data_entries_from_this_model"));
+						AgileBirdsFlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_create_data_entries_from_this_model"));
 						return;
 					}
 				}

@@ -33,10 +33,6 @@ public class TestCommonFlexoInspectors extends FIBTestCase {
 		validateFIB("Inspectors/COMMON/FlexoObject.inspector");
 	}
 
-	public void testFlexoObjectInspector() {
-		validateFIB("Inspectors/COMMON/FlexoObject.inspector");
-	}
-
 	public void testFlexoProjectObjectInspector() {
 		validateFIB("Inspectors/COMMON/FlexoProjectObject.inspector");
 	}

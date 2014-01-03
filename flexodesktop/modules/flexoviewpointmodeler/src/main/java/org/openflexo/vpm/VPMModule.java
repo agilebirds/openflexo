@@ -32,8 +32,7 @@ import org.openflexo.fge.swing.view.JDrawingView;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
+import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -49,6 +48,20 @@ import org.openflexo.vpm.examplediagram.ExampleDiagramEditor;
  * @author sylvain
  */
 public class VPMModule extends FlexoModule implements ExternalVPMModule {
+
+	public static final String VPM_MODULE_SHORT_NAME = "VPM";
+
+	public static final String VPM_MODULE_NAME = "vpm_module_name";
+
+	public static class ViewPointModeller extends Module {
+
+		public ViewPointModeller() {
+			super(VPM_MODULE_NAME, VPM_MODULE_SHORT_NAME, "org.openflexo.vpm.VPMModule", "modules/flexoviewpointmodeller", "10009", "vpm",
+					VPMIconLibrary.VPM_SMALL_ICON, VPMIconLibrary.VPM_MEDIUM_ICON, VPMIconLibrary.VPM_MEDIUM_ICON_WITH_HOVER,
+					VPMIconLibrary.VPM_BIG_ICON, false);
+		}
+
+	}
 
 	private static final Logger logger = Logger.getLogger(VPMModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };

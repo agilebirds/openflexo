@@ -56,8 +56,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.Module;
-import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ResourceCenterEditor;
@@ -96,24 +94,18 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
-			add(manageResourceCenterItem = new ManageResourceCenterItem());
-		}
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			add(loggingItem = new LoggingItem());
-			add(localizedEditorItem = new LocalizedEditorItem());
-			add(rmItem = new ResourceManagerItem());
-			addSeparator();
-		}
+		add(manageResourceCenterItem = new ManageResourceCenterItem());
+		add(loggingItem = new LoggingItem());
+		add(localizedEditorItem = new LocalizedEditorItem());
+		add(rmItem = new ResourceManagerItem());
+		addSeparator();
 		add(submitBug = new SubmitBugItem());
-		if (getModuleLoader().allowsDocSubmission() && !getModuleLoader().isAvailable(Module.DRE_MODULE)) {
+		if (getModuleLoader().allowsDocSubmission()) {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
-			addSeparator();
-			add(repairProject = new RepairProjectItem());
-		}
+		addSeparator();
+		add(repairProject = new RepairProjectItem());
 		add(timeTraveler = new TimeTraveler());
 	}
 
@@ -224,7 +216,7 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			getController().getRMWindow(getController().getProject()).show();
+			// getController().getRMWindow(getController().getProject()).show();
 		}
 
 		@Override
@@ -367,11 +359,11 @@ public class ToolsMenu extends FlexoMenu {
 				if (dataModification instanceof ValidationInitNotification) {
 					ValidationInitNotification initNotification = (ValidationInitNotification) dataModification;
 					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("validating") + " "
-							+ initNotification.getRootObject().getFullyQualifiedName(), initNotification.getNbOfObjectToValidate());
+							+ initNotification.getRootObject().toString(), initNotification.getNbOfObjectToValidate());
 				} else if (dataModification instanceof ValidationProgressNotification) {
 					ValidationProgressNotification progressNotification = (ValidationProgressNotification) dataModification;
 					ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("validating") + " "
-							+ progressNotification.getValidatedObject().getFullyQualifiedName());
+							+ progressNotification.getValidatedObject().toString());
 				} else if (dataModification instanceof ValidationSecondaryInitNotification) {
 					ValidationSecondaryInitNotification initNotification = (ValidationSecondaryInitNotification) dataModification;
 					ProgressWindow.resetSecondaryProgressInstance(initNotification.getNbOfRulesToApply());

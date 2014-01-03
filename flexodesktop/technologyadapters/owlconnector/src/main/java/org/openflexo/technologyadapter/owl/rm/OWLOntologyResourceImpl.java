@@ -129,6 +129,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	public OWLOntology loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, FileNotFoundException, FlexoException {
 		OWLOntology returned = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
 		returned.setResource(this);
+		resourceData = returned;
 		return returned;
 	}
 

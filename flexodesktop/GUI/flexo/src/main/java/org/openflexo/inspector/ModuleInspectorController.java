@@ -41,7 +41,6 @@ import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
@@ -165,7 +164,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	private void appendVisibleFor(FIBComponent component) {
-		String visibleForParam = component.getParameter("visibleFor");
+		/*String visibleForParam = component.getParameter("visibleFor");
 		if (visibleForParam != null) {
 			String[] s = visibleForParam.split("[;,\"]");
 			if (s.length > 0) {
@@ -182,7 +181,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 					component.setVisible(new DataBinding<Boolean>("false"));
 				}
 			}
-		}
+		}*/
 		if (component instanceof FIBContainer) {
 			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
 				appendVisibleFor(child);

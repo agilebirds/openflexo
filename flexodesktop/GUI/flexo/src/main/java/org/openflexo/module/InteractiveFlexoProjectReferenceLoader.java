@@ -8,13 +8,13 @@ import javax.swing.JFileChooser;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProjectChooserComponent;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
@@ -25,7 +25,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-	private ApplicationContext applicationContext;
+	private final ApplicationContext applicationContext;
 
 	public InteractiveFlexoProjectReferenceLoader(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
@@ -38,8 +38,10 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 	@Override
 	public FlexoProject loadProject(FlexoProjectReference ref, boolean silentlyOnly) {
 		boolean retrievedFromResourceCenter = false;
-		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getResourceCenterService().getUserResourceCenter()
-				.retrieveResource(ref.getURI(), ref.getVersion(), ref.getResourceDataClass(), null);
+
+		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getInformationSpace().getResource(ref.getURI(),
+				ref.getVersion(), FlexoProject.class);
+
 		File selectedFile = null;
 
 		if (retrievedResource instanceof FlexoFileResource) {

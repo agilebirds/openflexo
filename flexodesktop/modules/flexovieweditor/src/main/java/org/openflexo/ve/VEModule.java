@@ -28,13 +28,10 @@ import javax.swing.JComponent;
 import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.rm.DiagramResource;
+import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
@@ -50,6 +47,20 @@ import org.openflexo.view.controller.FlexoController;
  */
 public class VEModule extends FlexoModule implements ExternalVEModule {
 	private static final Logger logger = Logger.getLogger(VEModule.class.getPackage().getName());
+
+	public static final String VE_MODULE_SHORT_NAME = "VE";
+
+	public static final String VE_MODULE_NAME = "ve_module_name";
+
+	public static class ViewEditor extends Module {
+
+		public ViewEditor() {
+			super(VE_MODULE_NAME, VE_MODULE_SHORT_NAME, "org.openflexo.ve.VEModule", "modules/flexovieweditor", "10008", "ve",
+					VEIconLibrary.VE_SMALL_ICON, VEIconLibrary.VE_MEDIUM_ICON, VEIconLibrary.VE_MEDIUM_ICON_WITH_HOVER,
+					VEIconLibrary.VE_BIG_ICON, true);
+		}
+
+	}
 
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.VE };
 

@@ -48,7 +48,6 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -118,7 +117,7 @@ public class FlexoApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		FlexoHelp.configure(GeneralPreferences.getLanguage().getIdentifier(), UserType.getCurrentUserType().getIdentifier());
+		FlexoHelp.configure(GeneralPreferences.getLanguage().getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
 		FlexoHelp.reloadHelpSet();
 		FlexoObjectImpl.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs

@@ -16,6 +16,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceRepository;
+import org.openflexo.toolbox.FlexoVersion;
 
 /**
  * The {@link InformationSpace} is a {@link FlexoService} providing access to modelling elements from their original technological context.<br>
@@ -93,7 +94,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return the resource with the given <code>uri</code>, or null if it cannot be found.
 	 */
 	public @Nullable
-	FlexoResource<?> getResource(@Nonnull String uri) {
+	FlexoResource<?> getResource(@Nonnull String uri, FlexoVersion version) {
 		if (getServiceManager() != null) {
 			for (FlexoResourceCenter<?> rc : getServiceManager().getResourceCenterService().getResourceCenters()) {
 				FlexoResource<?> res = rc.retrieveResource(uri, null);
@@ -116,11 +117,12 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return the resource with the given <code>uri</code>, or null if it cannot be found.
 	 */
 	public @Nullable
-	<T extends ResourceData<T>> FlexoResource<T> getResource(@Nonnull String uri, @Nonnull Class<T> type) {
+	<T extends ResourceData<T>> FlexoResource<T> getResource(@Nonnull String uri, FlexoVersion version, @Nonnull Class<T> type) {
 		// TODO: a better type checking would be better
-		return (FlexoResource<T>) getResource(uri);
+		return (FlexoResource<T>) getResource(uri, version);
 	}
 
+	// TODO: also handle version parameter
 	public FlexoMetaModelResource<?, ?, ?> getMetaModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoMetaModelResource<?, ?, ?> returned = getMetaModelWithURI(uri, ta);
@@ -131,6 +133,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
+	// TODO: also handle version parameter
 	public FlexoMetaModelResource<?, ?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter != null && technologyAdapter.getTechnologyContextManager() != null) {
 			return (FlexoMetaModelResource<?, ?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
@@ -138,6 +141,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
+	// TODO: also handle version parameter
 	public FlexoModelResource<?, ?, ?> getModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoModelResource<?, ?, ?> returned = getModelWithURI(uri, ta);
@@ -148,6 +152,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
+	// TODO: also handle version parameter
 	public FlexoModelResource<?, ?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter == null) {
 			logger.warning("Unexpected null " + technologyAdapter);
