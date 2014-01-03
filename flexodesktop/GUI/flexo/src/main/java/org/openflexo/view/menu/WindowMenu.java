@@ -152,8 +152,8 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 	}
 
 	protected void updateWindowState() {
-		if (getController().getInspectorWindow() != null) {
-			inspectorWindowItem.setState(getController().getInspectorWindow().isVisible());
+		if (getController().getModuleInspectorController().getInspectorDialog() != null) {
+			inspectorWindowItem.setState(getController().getModuleInspectorController().getInspectorDialog().isVisible());
 		}
 		if (getController().getPreferencesWindow(false) != null) {
 			preferencesWindowItem.setState(getController().getPreferencesWindow(false).isVisible());

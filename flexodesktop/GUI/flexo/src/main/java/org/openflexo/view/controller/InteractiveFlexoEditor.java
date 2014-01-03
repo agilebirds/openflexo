@@ -38,6 +38,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoAction.ExecutionStatus;
@@ -54,24 +55,15 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.action.UndoManager;
-import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.ie.IEObject;
-import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.rm.ResourceUpdateHandler;
-import org.openflexo.foundation.utils.FlexoDocFormat;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
-import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ModuleLoadingException;
 
 public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
@@ -123,7 +115,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
 	@Override
 	public ResourceUpdateHandler getResourceUpdateHandler() {
-		return new DefaultFlexoResourceUpdateHandler();
+		return new ResourceUpdateHandler() {
+			@Override
+			public void resourceChanged(FlexoResource<?> resource) {
+				// TODO to be implemented !
+				logger.warning("Please implement resource update handler");
+			}
+		};
 	}
 
 	@Override
@@ -225,13 +223,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
 	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> void runAction(
 			final A action) throws FlexoException {
-		if (getProject() != null) {
+		/*if (getProject() != null) {
 			getProject().clearRecentlyCreatedObjects();
-		}
+		}*/
 		action.doActionInContext();
-		if (getProject() != null) {
+		/*if (getProject() != null) {
 			getProject().notifyRecentlyCreatedObjects();
-		}
+		}*/
 		actionHasBeenPerformed(action, true); // Action succeeded
 	}
 
@@ -284,13 +282,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmUndoAction) {
 			actionWillBeUndone(action);
 			try {
-				if (getProject() != null) {
+				/*if (getProject() != null) {
 					getProject().clearRecentlyCreatedObjects();
-				}
+				}*/
 				action.doActionInContext();
-				if (getProject() != null) {
+				/*if (getProject() != null) {
 					getProject().notifyRecentlyCreatedObjects();
-				}
+				}*/
 				actionHasBeenUndone(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenUndone(action, false); // Action failed
@@ -338,13 +336,13 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (confirmRedoAction) {
 			actionWillBeRedone(action);
 			try {
-				if (getProject() != null) {
+				/*if (getProject() != null) {
 					getProject().clearRecentlyCreatedObjects();
-				}
+				}*/
 				action.redoActionInContext();
-				if (getProject() != null) {
+				/*if (getProject() != null) {
 					getProject().notifyRecentlyCreatedObjects();
-				}
+				}*/
 				actionHasBeenRedone(action, true); // Action succeeded
 			} catch (FlexoException exception) {
 				actionHasBeenUndone(action, false); // Action failed
@@ -403,12 +401,12 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
-		for (FlexoObject o : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().values()) {
+		/*for (FlexoObject o : action.getExecutionContext().getObjectsCreatedWhileExecutingAction().values()) {
 			_createdAndNotNotifiedObjects.get(action).remove(o);
 		}
 		for (FlexoObject o : action.getExecutionContext().getObjectsDeletedWhileExecutingAction().values()) {
 			_deletedAndNotNotifiedObjects.get(action).remove(o);
-		}
+		}*/
 		if (WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER) {
 			for (FlexoObject o : _createdAndNotNotifiedObjects.get(action)) {
 				logger.warning("FlexoObject " + o + " created during action " + action
@@ -462,7 +460,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		} else if (!_currentlyPerformedActionStack.isEmpty()) {
 			_createdAndNotNotifiedObjects.get(_currentlyPerformedActionStack.peek()).add(object);
 		}
-		object.setDocFormat(FlexoDocFormat.HTML, false);
+		// object.setDocFormat(FlexoDocFormat.HTML, false);
 	}
 
 	@Override
@@ -503,7 +501,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	@Override
 	public void focusOn(FlexoObject object) {
 
-		try {
+		/*try {
 			if (object instanceof WKFObject) {
 				getModuleLoader().switchToModule(Module.WKF_MODULE);
 			} else if (object instanceof IEObject) {
@@ -518,7 +516,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 		} catch (ModuleLoadingException e) {
 			logger.warning("Cannot load module " + e.getModule());
 			e.printStackTrace();
-		}
+		}*/
 
 		// Only interactive editor handle this
 		getModuleLoader().getActiveModule().getFlexoController().setCurrentEditedObjectAsModuleView(object);

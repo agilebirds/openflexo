@@ -228,7 +228,8 @@ public class FlexoApplication {
 								if (FlexoController.confirm(message)) {
 									FlexoFrame frame = FlexoFrame.getActiveFrame(false);
 									JIRAIssueReportDialog.newBugReport((Exception) exception, frame != null ? frame.getModule() : null,
-											frame != null ? frame.getController().getProject() : null);
+											frame != null ? frame.getController().getProject() : null, frame != null ? frame
+													.getController().getApplicationContext() : null);
 								}
 							} catch (HeadlessException e1) {
 								e1.printStackTrace();

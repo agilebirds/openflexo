@@ -50,7 +50,6 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.FlexoProject;
 import org.openflexo.inspector.HelpDelegate;
 import org.openflexo.inspector.InspectorController;
 import org.openflexo.inspector.InspectorDelegate;
@@ -63,7 +62,6 @@ import org.openflexo.inspector.model.PropertyListColumn;
 import org.openflexo.inspector.model.PropertyListModel;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.UserType;
 
 public abstract class FlexoInspectorController extends InspectorController {
 
@@ -72,7 +70,8 @@ public abstract class FlexoInspectorController extends InspectorController {
 
 		@Override
 		public boolean showViewSourceButtonInWysiwyg() {
-			return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
+			// return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
+			return true;
 		}
 
 	};
@@ -85,7 +84,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 		super(inspectorDelegate, helpDelegate, DEFAULT_CONFIGURATION);
 	}
 
-	protected void loadAllCustomInspectors(FlexoProject project) {
+	/*protected void loadAllCustomInspectors(FlexoProject project) {
 		if (project != null) {
 			File customInspectorDirectory = project.getCustomInspectorsDirectory();
 
@@ -98,7 +97,7 @@ public abstract class FlexoInspectorController extends InspectorController {
 
 			updateSuperInspectors();
 		}
-	}
+	}*/
 
 	private void loadInspectors(File directory) {
 		File[] files = directory.listFiles();

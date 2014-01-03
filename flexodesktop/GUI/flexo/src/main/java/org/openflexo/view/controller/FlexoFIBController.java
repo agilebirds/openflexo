@@ -230,13 +230,17 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public void importProject(FlexoProject project) {
-		ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		// TODO: reimplement this properly when project will be a FlexoProjectObject
+		// ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		ImportProject importProject = ImportProject.actionType.makeNewAction(null, null, getEditor());
 		importProject.doAction();
 	}
 
 	public void unimportProject(FlexoProject project, List<FlexoProjectReference> references) {
 		for (FlexoProjectReference ref : references) {
-			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			// TODO: reimplement this properly when project will be a FlexoProjectObject
+			// RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(null, null, getEditor());
 			removeProject.setProjectToRemoveURI(ref.getURI());
 			removeProject.doAction();
 		}

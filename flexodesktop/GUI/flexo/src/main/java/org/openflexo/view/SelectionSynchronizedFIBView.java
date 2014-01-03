@@ -34,7 +34,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.selection.SelectionManager;
@@ -185,8 +184,6 @@ public class SelectionSynchronizedFIBView extends FlexoFIBView implements Select
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (ResourceLoadingCancelledException e) {
-				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
 				e.printStackTrace();
 			} catch (FlexoException e) {
 				e.printStackTrace();

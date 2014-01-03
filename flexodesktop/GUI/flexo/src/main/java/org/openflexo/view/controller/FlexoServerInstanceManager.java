@@ -7,14 +7,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileUtils;
 
 public class FlexoServerInstanceManager {
@@ -81,8 +79,8 @@ public class FlexoServerInstanceManager {
 		test.setURL("https://test.openflexo.com/Flexo/rest");
 		test.setWSURL("https://test.openflexo.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
 		test.setName("Test server");
-		test.addToUserTypes(UserType.DEVELOPER.getIdentifier());
-		test.addToUserTypes(UserType.MAINTAINER.getIdentifier());
+		// test.addToUserTypes(UserType.DEVELOPER.getIdentifier());
+		// test.addToUserTypes(UserType.MAINTAINER.getIdentifier());
 		addressBook.addToInstances(prod);
 		addressBook.addToInstances(trial);
 		addressBook.addToInstances(test);
@@ -137,7 +135,7 @@ public class FlexoServerInstanceManager {
 
 	private void filterAddressBook(FlexoServerAddressBook book) {
 		for (FlexoServerInstance instance : new ArrayList<FlexoServerInstance>(book.getInstances())) {
-			if (instance.getUserTypes().size() > 0) {
+			/*if (instance.getUserTypes().size() > 0) {
 				boolean keepIt = false;
 				for (String userType : instance.getUserTypes()) {
 					UserType u = UserType.getUserTypeNamed(userType);
@@ -153,7 +151,7 @@ public class FlexoServerInstanceManager {
 						instance.setRestURL(instance.getURL() + "Flexo/rest");
 					}
 				}
-			}
+			}*/
 		}
 	}
 

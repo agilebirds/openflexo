@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceManager;
-import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
@@ -16,8 +16,8 @@ public class ResourceSavingInfo {
 
 	private static final Logger logger = FlexoLogger.getLogger(ResourceSavingInfo.class.getPackage().getName());
 
-	private ResourceManager resourceManager;
-	private List<ResourceSavingEntryInfo> entries;
+	private final ResourceManager resourceManager;
+	private final List<ResourceSavingEntryInfo> entries;
 
 	public ResourceSavingInfo(ResourceManager resourceManager) {
 		this.resourceManager = resourceManager;

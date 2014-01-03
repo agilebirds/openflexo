@@ -92,8 +92,6 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.InspectorGroup;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.resource.FlexoProjectReference;
@@ -132,14 +130,8 @@ import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorDelegate;
-import org.openflexo.inspector.InspectorExceptionHandler;
-import org.openflexo.inspector.InspectorNotFoundHandler;
-import org.openflexo.inspector.InspectorSinglePanel;
-import org.openflexo.inspector.InspectorWindow;
 import org.openflexo.inspector.ModuleInspectorController;
-import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -173,22 +165,11 @@ import com.google.common.collect.Multimap;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements FlexoObserver, InspectorNotFoundHandler, InspectorExceptionHandler, PropertyChangeListener {
+public abstract class FlexoController implements FlexoObserver, PropertyChangeListener {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
 	public static final String DISPOSED = "disposed";
-
-	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
-	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
-
-	public boolean useNewInspectorScheme() {
-		return USE_NEW_INSPECTOR_SCHEME;
-	}
-
-	public boolean useOldInspectorScheme() {
-		return USE_OLD_INSPECTOR_SCHEME;
-	}
 
 	private PropertyChangeSupport propertyChangeSupport;
 
@@ -215,10 +196,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	private final ControllerModel controllerModel;
 
 	private final List<FlexoMenuBar> registeredMenuBar = new ArrayList<FlexoMenuBar>();
-
-	private FlexoDocInspectorController docInspectorController = null;
-
-	private FlexoSharedInspectorController inspectorController;
 
 	private ModuleInspectorController mainInspectorController;
 
@@ -356,23 +333,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 *
 	 */
 	public void initInspectors() {
-		if (useOldInspectorScheme()) {
-			if (inspectorController == null) {
-				inspectorController = new FlexoSharedInspectorController(this);
-			}
-			/*
-			 * if (getInspectorWindow() != null) { getInspectorWindow().setAlwaysOnTop(GeneralPreferences.getInspectorAlwaysOnTop()); }
-			 */
-			getSelectionManager().addObserver(getSharedInspectorController());
-			getSharedInspectorController().addInspectorExceptionHandler(this);
-			loadAllModuleInspectors();
-		}
-		if (useNewInspectorScheme()) {
-			loadInspectorGroup(getModule().getShortName().toUpperCase());
-			getSelectionManager().addObserver(getModuleInspectorController());
-		}
-		docInspectorController = new FlexoDocInspectorController(this);
-		getSelectionManager().addObserver(docInspectorController);
+		loadInspectorGroup(getModule().getShortName().toUpperCase());
+		getSelectionManager().addObserver(getModuleInspectorController());
 	}
 
 	public ModuleInspectorController getModuleInspectorController() {
@@ -385,29 +347,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	protected void loadInspectorGroup(String inspectorGroup) {
 		File inspectorsDir = new FileResource("Inspectors/" + inspectorGroup);
 		getModuleInspectorController().loadDirectory(inspectorsDir);
-	}
-
-	public FlexoDocInspectorController getDocInspectorController() {
-		return docInspectorController;
-	}
-
-	public InspectorSinglePanel getDocInspectorPanel() {
-		if (getDocInspectorController() != null) {
-			return getDocInspectorController().getDocInspectorPanel();
-		}
-		return null;
-	}
-
-	/**
-	 * Return doc inspector panel, after having it disconnected from its actual parent
-	 * 
-	 * @return
-	 */
-	public final JPanel getDisconnectedDocInspectorPanel() {
-		/*if (getDocInspectorPanel().getParent() != null) {
-			getDocInspectorPanel().getParent().remove(getDocInspectorPanel());
-		}*/
-		return getDocInspectorPanel();
 	}
 
 	public FlexoFrame getFlexoFrame() {
@@ -442,17 +381,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 
 	public File getProjectDirectory() {
 		return getProject().getProjectDirectory();
-	}
-
-	public FlexoSharedInspectorController getSharedInspectorController() {
-		return inspectorController;
-	}
-
-	public InspectorWindow getInspectorWindow() {
-		if (getSharedInspectorController() != null) {
-			return getSharedInspectorController().getInspectorWindow();
-		}
-		return null;
 	}
 
 	private FlexoMenuBar inspectorMenuBar;
@@ -561,28 +489,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void showInspector() {
-		if (useOldInspectorScheme()) {
-			/*
-			 * if (!getInspectorWindow().isActive()) { int state = getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;
-			 * getInspectorWindow().setExtendedState(state); }
-			 */
-
-			getInspectorWindow().setVisible(true);
-		}
-
-		if (useNewInspectorScheme()) {
-			getModuleInspectorController().getInspectorDialog().setVisible(true);
-		}
-
+		getModuleInspectorController().getInspectorDialog().setVisible(true);
 	}
 
 	public void resetInspector() {
 
-		if (useOldInspectorScheme()) {
-			getInspectorWindow().newSelection(new EmptySelection());
-		} else {
-			getModuleInspectorController().resetInspector();
-		}
+		getModuleInspectorController().resetInspector();
 	}
 
 	public PreferencesWindow getPreferencesWindow(boolean create) {
@@ -657,54 +569,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			getFlexoFrame().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
 					.put(KeyStroke.getKeyStroke(keyCode, accelerator.getModifiers()), key);
 		}
-	}
-
-	protected void loadAllModuleInspectors() {
-		// Load flexo inspectors
-		if (getModule().getInspectorGroups() != null) {
-			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_inspectors"));
-			for (InspectorGroup group : getModule().getInspectorGroups()) {
-				getSharedInspectorController().loadInspectors(group);
-			}
-			getSharedInspectorController().updateSuperInspectors();
-		}
-	}
-
-	@Override
-	public void inspectorNotFound(String inspectorName) {
-		InspectorGroup inspectorGroup = Inspectors.inspectorGroupForInspector(inspectorName);
-		if (inspectorGroup != null) {
-			boolean openedWindow = false;
-			if (!ProgressWindow.hasInstance()) {
-				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("load_required_inspectors"), 3);
-				openedWindow = true;
-			}
-			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_required_inspectors"));
-			getSharedInspectorController().loadInspectors(inspectorGroup);
-			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("update_inspector"));
-			getSharedInspectorController().updateSuperInspectors();
-			if (openedWindow) {
-				ProgressWindow.hideProgressWindow();
-			}
-		}
-	}
-
-	/**
-	 * Tries to handle an exception raised during object inspection.<br>
-	 * 
-	 * @param inspectable
-	 *            the object on which exception was raised
-	 * @param propertyName
-	 *            the concerned property name
-	 * @param value
-	 *            the value that raised an exception
-	 * @param exception
-	 *            the exception that was raised
-	 * @return a boolean indicating if this handler has handled this exception, or not
-	 */
-	@Override
-	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
-		return false;
 	}
 
 	public ConsistencyCheckDialog getConsistencyCheckWindow() {
@@ -1414,22 +1278,14 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void dispose() {
-		if (getSelectionManager() != null) {
-			if (getSharedInspectorController() != null) {
-				getSelectionManager().deleteObserver(getSharedInspectorController());
-			}
-			if (getDocInspectorController() != null) {
-				getSelectionManager().deleteObserver(getDocInspectorController());
-			}
-		}
+
+		getSelectionManager().deleteObserver(getModuleInspectorController());
+
 		manager.delete();
 		GeneralPreferences.getPreferences().deleteObserver(this);
 		mainPane.dispose();
 		if (consistencyCheckWindow != null && !consistencyCheckWindow.isDisposed()) {
 			consistencyCheckWindow.dispose();
-		}
-		if (useOldInspectorScheme()) {
-			getSharedInspectorController().getInspectorWindow().dispose();
 		}
 		if (mainInspectorController != null) {
 			mainInspectorController.delete();
@@ -1465,7 +1321,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		setEditor(null);
 		propertyChangeSupport = null;
 		inspectorMenuBar = null;
-		docInspectorController = null;
 		consistencyCheckWindow = null;
 		flexoFrame = null;
 		mainPane = null;

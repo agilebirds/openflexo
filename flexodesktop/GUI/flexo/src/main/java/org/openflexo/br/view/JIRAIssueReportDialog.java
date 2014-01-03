@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import java.util.zip.Deflater;
 
 import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
 import org.openflexo.br.BugReportManager;
@@ -28,7 +29,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.Modules;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileResource;
@@ -85,8 +85,8 @@ public class JIRAIssueReportDialog {
 
 		private String issueLink;
 
-		private List<String> errors;
-		private List<String> warnings;
+		private final List<String> errors;
+		private final List<String> warnings;
 
 		public SubmitIssueReport() {
 			errors = new ArrayList<String>();
@@ -163,7 +163,7 @@ public class JIRAIssueReportDialog {
 	private static final List<JIRAComponent> EMPTY_LIST = new ArrayList<JIRAComponent>(0);
 
 	private JIRAIssue issue;
-	private JIRAProject project;
+	private final JIRAProject project;
 
 	private boolean sendLogs;
 	private boolean sendScreenshots;
@@ -172,16 +172,18 @@ public class JIRAIssueReportDialog {
 
 	private File attachFile;
 
+	private ApplicationContext serviceManager;
 	private FlexoProject flexoProject;
 
-	public static void newBugReport(FlexoModule module, FlexoProject project) {
-		newBugReport(null, module, project);
+	public static void newBugReport(FlexoModule module, FlexoProject project, ApplicationContext serviceManager) {
+		newBugReport(null, module, project, serviceManager);
 	}
 
-	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project) {
+	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project, ApplicationContext serviceManager) {
 		try {
 			JIRAIssueReportDialog report = new JIRAIssueReportDialog(e);
 			report.setFlexoProject(project);
+			report.setServiceManager(serviceManager);
 			if (module != null) {
 				if (report.getIssue().getIssuetype().getComponentField() != null
 						&& report.getIssue().getIssuetype().getComponentField().getAllowedValues() != null) {
@@ -258,15 +260,19 @@ public class JIRAIssueReportDialog {
 		}
 	}
 
-	private void setFlexoProject(FlexoProject flexoProject) {
-		this.flexoProject = flexoProject;
+	private void setServiceManager(ApplicationContext serviceManager) {
+		this.serviceManager = serviceManager;
 	}
 
-	public JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+	private void setFlexoProject(FlexoProject project) {
+		this.flexoProject = project;
+	}
+
+	private JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		this(null);
 	}
 
-	public JIRAIssueReportDialog(Exception e) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+	private JIRAIssueReportDialog(Exception e) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		this.project = BugReportManager.getInstance().getOpenFlexoProject();
 		issue = new JIRAIssue();
 		issue.setIssuetype(project.getIssuetypes().get(0));
@@ -339,7 +345,7 @@ public class JIRAIssueReportDialog {
 
 	private class SubmitIssueToJIRA implements Runnable {
 
-		private SubmitIssueReport report;
+		private final SubmitIssueReport report;
 		private Exception exception;
 
 		private final JIRAClient client;
@@ -554,7 +560,7 @@ public class JIRAIssueReportDialog {
 			return EMPTY_LIST;
 		}
 		List<JIRAComponent> availableModules = new ArrayList<JIRAComponent>();
-		for (Module module : Modules.getInstance().getAvailableModules()) {
+		for (Module<?> module : serviceManager.getModuleLoader().getKnownModules()) {
 			for (JIRAComponent component : getIssue().getIssuetype().getComponentField().getAllowedValues()) {
 				if (module.getJiraComponentID().equals(component.getId())) {
 					availableModules.add(component);

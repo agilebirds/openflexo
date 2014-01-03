@@ -65,7 +65,6 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.Modules;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
 import org.openflexo.toolbox.FileResource;
@@ -256,7 +255,6 @@ public class Flexo {
 				initFlexo(applicationContext, splashWindow2);
 			}
 		});
-		Modules.getInstance();
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
 		} catch (Exception e) {
@@ -313,10 +311,10 @@ public class Flexo {
 					splashWindow.dispose();
 					splashWindow = null;
 				}
-				Module module = Modules.getInstance().getModule(GeneralPreferences.getFavoriteModuleName());
+				Module module = applicationContext.getModuleLoader().getModuleNamed(GeneralPreferences.getFavoriteModuleName());
 				if (module == null) {
-					if (Modules.getInstance().getAvailableModules().size() > 0) {
-						module = Modules.getInstance().getAvailableModules().get(0);
+					if (applicationContext.getModuleLoader().getKnownModules().size() > 0) {
+						module = applicationContext.getModuleLoader().getKnownModules().iterator().next();
 					}
 				}
 				applicationContext.getModuleLoader().switchToModule(module);

@@ -51,6 +51,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -77,6 +78,8 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.InspectorGroup;
+import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.cg.CGFile;
@@ -140,6 +143,11 @@ import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.InspectorDelegate;
+import org.openflexo.inspector.InspectorExceptionHandler;
+import org.openflexo.inspector.InspectorNotFoundHandler;
+import org.openflexo.inspector.InspectorSinglePanel;
+import org.openflexo.inspector.InspectorWindow;
+import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
@@ -163,12 +171,160 @@ import com.google.common.collect.Collections2;
  * 
  * @author benoit, sylvain
  */
-public abstract class AgileBirdsFlexoController extends FlexoController {
+public abstract class AgileBirdsFlexoController extends FlexoController implements InspectorNotFoundHandler, InspectorExceptionHandler {
 
 	static final Logger logger = Logger.getLogger(AgileBirdsFlexoController.class.getPackage().getName());
 
+	public static boolean USE_NEW_INSPECTOR_SCHEME = false;
+	public static boolean USE_OLD_INSPECTOR_SCHEME = true;
+
+	public boolean useNewInspectorScheme() {
+		return USE_NEW_INSPECTOR_SCHEME;
+	}
+
+	public boolean useOldInspectorScheme() {
+		return USE_OLD_INSPECTOR_SCHEME;
+	}
+
+	private FlexoDocInspectorController docInspectorController = null;
+
+	private FlexoSharedInspectorController inspectorController;
+
 	public AgileBirdsFlexoController(FlexoModule module) {
 		super(module);
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public void initInspectors() {
+		if (useOldInspectorScheme()) {
+			if (inspectorController == null) {
+				inspectorController = new FlexoSharedInspectorController(this);
+			}
+			/*
+			 * if (getInspectorWindow() != null) { getInspectorWindow().setAlwaysOnTop(GeneralPreferences.getInspectorAlwaysOnTop()); }
+			 */
+			getSelectionManager().addObserver(getSharedInspectorController());
+			getSharedInspectorController().addInspectorExceptionHandler(this);
+			loadAllModuleInspectors();
+		}
+		if (useNewInspectorScheme()) {
+			loadInspectorGroup(getModule().getShortName().toUpperCase());
+			getSelectionManager().addObserver(getModuleInspectorController());
+		}
+		docInspectorController = new FlexoDocInspectorController(this);
+		getSelectionManager().addObserver(docInspectorController);
+	}
+
+	public FlexoDocInspectorController getDocInspectorController() {
+		return docInspectorController;
+	}
+
+	public InspectorSinglePanel getDocInspectorPanel() {
+		if (getDocInspectorController() != null) {
+			return getDocInspectorController().getDocInspectorPanel();
+		}
+		return null;
+	}
+
+	/**
+	 * Return doc inspector panel, after having it disconnected from its actual parent
+	 * 
+	 * @return
+	 */
+	public final JPanel getDisconnectedDocInspectorPanel() {
+		/*if (getDocInspectorPanel().getParent() != null) {
+			getDocInspectorPanel().getParent().remove(getDocInspectorPanel());
+		}*/
+		return getDocInspectorPanel();
+	}
+
+	public FlexoSharedInspectorController getSharedInspectorController() {
+		return inspectorController;
+	}
+
+	public InspectorWindow getInspectorWindow() {
+		if (getSharedInspectorController() != null) {
+			return getSharedInspectorController().getInspectorWindow();
+		}
+		return null;
+	}
+
+	@Override
+	public void showInspector() {
+		if (useOldInspectorScheme()) {
+			/*
+			 * if (!getInspectorWindow().isActive()) { int state = getInspectorWindow().getExtendedState(); state &= ~Frame.ICONIFIED;
+			 * getInspectorWindow().setExtendedState(state); }
+			 */
+
+			getInspectorWindow().setVisible(true);
+		}
+
+		if (useNewInspectorScheme()) {
+			getModuleInspectorController().getInspectorDialog().setVisible(true);
+		}
+
+	}
+
+	@Override
+	public void resetInspector() {
+
+		if (useOldInspectorScheme()) {
+			getInspectorWindow().newSelection(new EmptySelection());
+		} else {
+			getModuleInspectorController().resetInspector();
+		}
+	}
+
+	protected void loadAllModuleInspectors() {
+		// Load flexo inspectors
+		if (getModule().getInspectorGroups() != null) {
+			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_inspectors"));
+			for (InspectorGroup group : getModule().getInspectorGroups()) {
+				getSharedInspectorController().loadInspectors(group);
+			}
+			getSharedInspectorController().updateSuperInspectors();
+		}
+	}
+
+	@Override
+	public void inspectorNotFound(String inspectorName) {
+		InspectorGroup inspectorGroup = Inspectors.inspectorGroupForInspector(inspectorName);
+		if (inspectorGroup != null) {
+			boolean openedWindow = false;
+			if (!ProgressWindow.hasInstance()) {
+				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("load_required_inspectors"), 3);
+				openedWindow = true;
+			}
+			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("load_required_inspectors"));
+			getSharedInspectorController().loadInspectors(inspectorGroup);
+			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("update_inspector"));
+			getSharedInspectorController().updateSuperInspectors();
+			if (openedWindow) {
+				ProgressWindow.hideProgressWindow();
+			}
+		}
+	}
+
+	/**
+	 * Tries to handle an exception raised during object inspection.<br>
+	 * 
+	 * @param inspectable
+	 *            the object on which exception was raised
+	 * @param propertyName
+	 *            the concerned property name
+	 * @param value
+	 *            the value that raised an exception
+	 * @param exception
+	 *            the exception that was raised
+	 * @return a boolean indicating if this handler has handled this exception, or not
+	 */
+	@Override
+	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
+		return false;
 	}
 
 	/**

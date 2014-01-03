@@ -28,10 +28,10 @@ import java.util.logging.Level;
 import org.openflexo.action.ImportProjectInitializer;
 import org.openflexo.action.ProjectExcelExportInitializer;
 import org.openflexo.action.RemoveImportedProjectInitializer;
-import org.openflexo.action.UploadProjectInitializer;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProperty;
 import org.openflexo.foundation.action.AddFlexoProperty;
 import org.openflexo.foundation.action.DeleteFlexoProperty;
@@ -68,8 +68,8 @@ public class ControllerActionInitializer implements EditorProvider {
 
 	private final FlexoController _controller;
 
-	private Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
-	private Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
+	private final Map<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> initializers;
+	private final Map<Class<?>, ActionInitializer<?, ?, ?>> initializersByActionClass;
 
 	protected ControllerActionInitializer(FlexoController controller) {
 		super();
@@ -124,7 +124,7 @@ public class ControllerActionInitializer implements EditorProvider {
 		new RemoveImportedProjectInitializer(this);
 		new HelpActionizer(this);
 		new SubmitDocumentationActionizer(this);
-		new UploadProjectInitializer(this);
+		// new UploadProjectInitializer(this);
 		new ProjectExcelExportInitializer(this);
 		new LoadAllImportedProjectInitializer(this);
 
@@ -134,16 +134,16 @@ public class ControllerActionInitializer implements EditorProvider {
 		new AddFlexoPropertyActionizer(this);
 		new DeleteFlexoPropertyActionizer(this);
 		new SortFlexoPropertiesActionizer(this);
-		if (FlexoObject.addFlexoPropertyActionizer == null) {
-			FlexoObject.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoObject, FlexoObject>(
+		if (FlexoObjectImpl.addFlexoPropertyActionizer == null) {
+			FlexoObjectImpl.addFlexoPropertyActionizer = new FlexoActionizer<AddFlexoProperty, FlexoObject, FlexoObject>(
 					AddFlexoProperty.actionType, this);
 		}
-		if (FlexoObject.sortFlexoPropertiesActionizer == null) {
-			FlexoObject.sortFlexoPropertiesActionizer = new FlexoActionizer<SortFlexoProperties, FlexoObject, FlexoObject>(
+		if (FlexoObjectImpl.sortFlexoPropertiesActionizer == null) {
+			FlexoObjectImpl.sortFlexoPropertiesActionizer = new FlexoActionizer<SortFlexoProperties, FlexoObject, FlexoObject>(
 					SortFlexoProperties.actionType, this);
 		}
-		if (FlexoObject.deleteFlexoPropertyActionizer == null) {
-			FlexoObject.deleteFlexoPropertyActionizer = new FlexoActionizer<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
+		if (FlexoObjectImpl.deleteFlexoPropertyActionizer == null) {
+			FlexoObjectImpl.deleteFlexoPropertyActionizer = new FlexoActionizer<DeleteFlexoProperty, FlexoProperty, FlexoProperty>(
 					DeleteFlexoProperty.actionType, this);
 		}
 	}

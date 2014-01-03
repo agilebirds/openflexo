@@ -255,7 +255,8 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject());
+			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject(), getController()
+					.getApplicationContext());
 		}
 
 	}

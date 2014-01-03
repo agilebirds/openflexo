@@ -90,7 +90,7 @@ public abstract class SelectionManager extends Observable {
 		_selectionListeners = new Vector<SelectionListener>();
 
 		inspectionContext = new Hashtable<String, Object>();
-		inspectionContext.put(MODULE_KEY, getController().getModule().getModule().getClassName());
+		inspectionContext.put(MODULE_KEY, getController().getModule().getClass().getName());
 	}
 
 	public FlexoController getController() {

@@ -36,7 +36,6 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
-import org.openflexo.module.Modules;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 
@@ -47,19 +46,19 @@ import org.openflexo.view.controller.FlexoController;
  */
 public class HelpMenu extends FlexoMenu implements Observer {
 
-	private JMenuItem generalHelp;
+	private final JMenuItem generalHelp;
 
-	private JMenuItem flexoHelp;
+	private final JMenuItem flexoHelp;
 
-	private JMenuItem modelingHelp;
+	private final JMenuItem modelingHelp;
 
-	private JMenuItem helpOn;
+	private final JMenuItem helpOn;
 
 	private JMenuItem submitHelpFor;
 
 	private JMenuItem aboutFlexo;
 
-	private JMenuItem[] modulesHelp;
+	private final JMenuItem[] modulesHelp;
 
 	private ActionListener helpActionListener;
 
@@ -89,9 +88,9 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		add(modelingHelp);
 
 		addSeparator();
-		modulesHelp = new JMenuItem[Modules.getInstance().getAvailableModules().size()];
+		modulesHelp = new JMenuItem[controller.getApplicationContext().getModuleLoader().getKnownModules().size()];
 		int i = 0;
-		for (Module module : Modules.getInstance().getAvailableModules()) {
+		for (Module<?> module : controller.getApplicationContext().getModuleLoader().getKnownModules()) {
 			modulesHelp[i] = new JMenuItem();
 			modulesHelp[i].setText(FlexoLocalization.localizedForKey(module.getName(), modulesHelp[i]));
 			CSH.setHelpIDString(modulesHelp[i], module.getHelpTopic());
