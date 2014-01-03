@@ -32,8 +32,12 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.toolbox.StringUtils;
@@ -265,22 +269,43 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	}
 
 	public static enum EditionSchemeChoice {
-		DELETE_GR_ONLY, DELETE_GR_AND_MODEL, DROP, LINK, CREATION
+		DELETE_GR_ONLY, DELETE_GR_AND_MODEL, DROP_AND_CREATE, DROP_AND_SELECT, LINK, CREATION
 	}
 
 	public class EditionSchemeConfiguration {
-
-		private String name;
 
 		private EditionSchemeChoice type;
 
 		private boolean isValid;
 
-		public EditionSchemeConfiguration(String name, EditionSchemeChoice type) {
+		private EditionScheme editionScheme;
+
+		public EditionSchemeConfiguration(EditionSchemeChoice type) {
 			super();
-			this.name = name;
 			this.type = type;
 			this.isValid = true;
+			if (type == EditionSchemeChoice.DELETE_GR_ONLY) {
+				editionScheme = new DeletionScheme(null);
+				editionScheme.setName("defaultDeleteGROnly");
+			}
+			if (type == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
+				editionScheme = new DeletionScheme(null);
+				editionScheme.setName("defaultDeleteGRandModel");
+			}
+			if (type == EditionSchemeChoice.DROP_AND_CREATE) {
+				editionScheme = new DropScheme(null);
+				((DropScheme) editionScheme).setTopTarget(true);
+				editionScheme.setName("defaultDropAndCreate");
+			}
+			if (type == EditionSchemeChoice.DROP_AND_SELECT) {
+				editionScheme = new DropScheme(null);
+				((DropScheme) editionScheme).setTopTarget(true);
+				editionScheme.setName("defaultDropAndSelect");
+			}
+			if (type == EditionSchemeChoice.LINK) {
+				editionScheme = new LinkScheme(null);
+				editionScheme.setName("defaultLink");
+			}
 		}
 
 		public EditionSchemeChoice getType() {
@@ -291,12 +316,8 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			this.type = type;
 		}
 
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
+		public EditionScheme getEditionScheme() {
+			return editionScheme;
 		}
 
 		public boolean isValid() {
@@ -313,16 +334,14 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		if (editionSchemes == null) {
 			editionSchemes = new ArrayList<EditionSchemeConfiguration>();
 
-			EditionSchemeConfiguration deleteShapeEditionScheme = new EditionSchemeConfiguration("DeleteShape",
-					EditionSchemeChoice.DELETE_GR_ONLY);
-			EditionSchemeConfiguration deleteShapeAndModelAllEditionScheme = new EditionSchemeConfiguration("DeleteShapeAndModel",
+			initializeSchemes();
+
+			EditionSchemeConfiguration deleteShapeEditionScheme = new EditionSchemeConfiguration(EditionSchemeChoice.DELETE_GR_ONLY);
+			EditionSchemeConfiguration deleteShapeAndModelAllEditionScheme = new EditionSchemeConfiguration(
 					EditionSchemeChoice.DELETE_GR_AND_MODEL);
 
 			editionSchemes.add(deleteShapeEditionScheme);
 			editionSchemes.add(deleteShapeAndModelAllEditionScheme);
-
-			deleteShapeEditionScheme.setValid(true);
-			deleteShapeAndModelAllEditionScheme.setValid(true);
 		}
 		return editionSchemes;
 	}
@@ -330,19 +349,13 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	public void updateEditionSchemesName(String name) {
 		for (EditionSchemeConfiguration editionSchemeConfiguration : getEditionSchemes()) {
 			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_ONLY) {
-				editionSchemeConfiguration.setName("deleteGR");
+				editionSchemeConfiguration.getEditionScheme().setName("deleteGR");
 			}
 			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
-				editionSchemeConfiguration.setName("deleteGRandModel");
-			}
-			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DROP) {
-				editionSchemeConfiguration.setName("drop");
-			}
-			if (editionSchemeConfiguration.getType() == EditionSchemeChoice.LINK) {
-				editionSchemeConfiguration.setName("link");
+				editionSchemeConfiguration.getEditionScheme().setName("deleteGRandModel");
 			}
 			if (name != null) {
-				editionSchemeConfiguration.setName(editionSchemeConfiguration.getName() + name);
+				editionSchemeConfiguration.getEditionScheme().setName(editionSchemeConfiguration.getEditionScheme().getName() + name);
 			}
 		}
 		updateSpecialSchemeNames();
@@ -350,6 +363,9 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public void updateSpecialSchemeNames() {
 	}
+
+	public void initializeSchemes() {
+	};
 
 	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
 		this.editionSchemes = editionSchemes;
@@ -359,10 +375,24 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public boolean editionSchemesNamedAreValid() {
 		for (EditionSchemeConfiguration editionSchemeConfiguration : editionSchemes) {
-			if (StringUtils.isEmpty(editionSchemeConfiguration.getName()))
+			if (StringUtils.isEmpty(editionSchemeConfiguration.getEditionScheme().getName()))
 				return false;
 		}
 		return true;
+	}
+
+	public void addEditionSchemeConfigurationDeleteGROnly() {
+		EditionSchemeConfiguration editionSchemeConfiguration = new EditionSchemeConfiguration(EditionSchemeChoice.DELETE_GR_ONLY);
+		editionSchemes.add(editionSchemeConfiguration);
+	}
+
+	public void addEditionSchemeConfigurationDeleteGRAndModel() {
+		EditionSchemeConfiguration editionSchemeConfiguration = new EditionSchemeConfiguration(EditionSchemeChoice.DELETE_GR_AND_MODEL);
+		editionSchemes.add(editionSchemeConfiguration);
+	}
+
+	public void removeEditionSchemeConfiguration(EditionSchemeConfiguration editionSchemeConfiguration) {
+		editionSchemes.remove(editionSchemeConfiguration);
 	}
 
 }

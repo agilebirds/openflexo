@@ -90,28 +90,49 @@
     </Table>
     <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=0;insetsRight=2;insetsTop=0;location=right)" opaque="false" />
     <Label label="edition_schemes" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="BehavioralSchemes" localize="true" />
-    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemesTable" index="16" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemesTable" index="16" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
       <CheckBoxColumn data="iterator.isValid" title="checkbox" columnWidth="5" resizable="true" displayTitle="false" name="checkbox" />
-      <TextFieldColumn data="iterator.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
-      <DropDownColumn data="iterator.type" format="object.name" title="scheme_type" columnWidth="200" resizable="true" displayTitle="true" name="dropdown" />
+      <TextFieldColumn data="iterator.editionScheme.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+      <LabelColumn data="iterator.type.name" title="scheme_type" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+      <AddAction method="data.addEditionSchemeConfigurationDropAndCreate()" name="add_drop_and_create_scheme" />
+      <RemoveAction method="data.removeEditionSchemeConfiguration(selected)" name="delete_scheme" />
+      <AddAction method="data.addEditionSchemeConfigurationDeleteGROnly()" name="add_delete_gr_only_scheme" />
+      <AddAction method="data.addEditionSchemeConfigurationDropAndSelect()" name="add_drop_and_select_scheme" />
       <Dependancy componentName="newEditionPatternName" />
       <Dependancy componentName="individualPatternRoleName" />
       <Dependancy componentName="virtualModelPatternRoleName" />
       <Dependancy componentName="editionPatternDropdown" />
     </Table>
-    <Label label="scheme_properties" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(EditionSchemesTable.selected.type = &quot;DROP&quot;)" localize="true" />
-    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" darkLevel="5" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(EditionSchemesTable.selected.type = &quot;DROP&quot;)">
-      <Label label="target" constraints="flow(location=west)" localize="true" />
-      <DropDown data="data.containerEditionPattern" constraints="flow(location=west)" visible="(!(isTopLevelWidget.data))" name="targetEditionPatternDropdown" format="object.name" localize="true" list="data.diagramSpecification.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+    <Label label="scheme_properties" index="17" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(data.getDropScheme(EditionSchemesTable.selected) != null)" localize="true">
+      <Dependancy componentName="EditionSchemesTable" />
+    </Label>
+    <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" darkLevel="5" index="17" data="data.getDropScheme(EditionSchemesTable.selected)" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.getDropScheme(EditionSchemesTable.selected) != null)" name="DropScheme">
+      <Label label="target" constraints="flow(location=west)" visible="(data.getDropScheme(EditionSchemesTable.selected) != null)" localize="true" />
+      <DropDown data="data.getDropScheme(EditionSchemesTable.selected).targetEditionPattern" constraints="flow(location=west)" visible="((!(isTopLevelWidget.data)) &amp; (data.getDropScheme(EditionSchemesTable.selected) != null))" name="targetEditionPatternDropdown" format="object.name" localize="true" manageDynamicModel="true" staticList="" list="data.getEditionPatternsDrop()" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
         <Dependancy componentName="isTopLevelWidget" />
         <Dependancy componentName="patternChoice" />
         <Dependancy componentName="virtualModelModelSlotDD" />
         <Dependancy componentName="ontologyModelSlotDD" />
         <Dependancy componentName="editionPatternDropdown" />
       </DropDown>
-      <CheckBox selected="true" data="data.isTopLevel" constraints="flow(location=center)" name="isTopLevelWidget" localize="true" manageDynamicModel="true" />
+      <CheckBox selected="true" data="data.getDropScheme(EditionSchemesTable.selected).topTarget" constraints="flow(location=center)" visible="(data.getDropScheme(EditionSchemesTable.selected) != null)" name="isTopLevelWidget" localize="true" manageDynamicModel="true" />
       <Label label="top_level" constraints="flow(location=east)" localize="true" />
+      <Dependancy componentName="EditionSchemesTable" />
     </Panel>
+    <Label label="" align="right" index="17" data="data.errorMessage" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(!(data.isValid))" font="Dialog,2,10" foregroundColor="255,0,0" localize="true">
+      <Dependancy componentName="editionPatternDropdown" />
+      <Dependancy componentName="patternRoleDropDown" />
+      <Dependancy componentName="patternChoice" />
+      <Dependancy componentName="virtualModelModelSlotDD" />
+      <Dependancy componentName="ontologyModelSlotDD" />
+      <Dependancy componentName="patternSelector" />
+      <Dependancy componentName="conceptSelector" />
+      <Dependancy componentName="newEditionPatternName" />
+      <Dependancy componentName="individualPatternRoleName" />
+      <Dependancy componentName="virtualModelPatternRoleName" />
+      <Dependancy componentName="drawingObjectEntriesTable" />
+      <Dependancy componentName="EditionSchemesTable" />
+    </Label>
     <LocalizedDictionary />
   </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="LucidaGrande,0,13" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="LucidaGrande,0,13" opaque="false">
@@ -122,6 +143,7 @@
       <Dependancy componentName="individualPatternRoleName" />
       <Dependancy componentName="drawingObjectEntriesTable" />
       <Dependancy componentName="conceptSelector" />
+      <Dependancy componentName="EditionSchemesTable" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
@@ -231,5 +253,50 @@
     <Localized key="scheme_type" lang="English">Scheme type</Localized>
     <Localized key="scheme_type" lang="French">Type de procédé</Localized>
     <Localized key="scheme_type" lang="Dutch">scheme_type</Localized>
+    <Localized key="pattern_role_is_null" lang="English">Pattern role is null</Localized>
+    <Localized key="pattern_role_is_null" lang="French">Le patron de rôle est nul</Localized>
+    <Localized key="pattern_role_is_null" lang="Dutch">pattern_role_is_null</Localized>
+    <Localized key="edition_pattern_is_null" lang="English">Edition pattern is null</Localized>
+    <Localized key="edition_pattern_is_null" lang="French">Le patron d'édition est nul</Localized>
+    <Localized key="edition_pattern_is_null" lang="Dutch">edition_pattern_is_null</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="English">Edition pattern name is null</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="French">Le nom du patron d'édition est nul</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="Dutch">edition_pattern_name_is_null</Localized>
+    <Localized key="focused_object_is_null" lang="English">Focused object is null</Localized>
+    <Localized key="focused_object_is_null" lang="French">L'objet cible est nul</Localized>
+    <Localized key="focused_object_is_null" lang="Dutch">focused_object_is_null</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="English">Individual pattern role name is null</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="French">Le nom du patron rôle individuel est nul</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="Dutch">individual_pattern_role_name_is_null</Localized>
+    <Localized key="concept_is_null" lang="English">Concept is null</Localized>
+    <Localized key="concept_is_null" lang="French">Le concept est nul</Localized>
+    <Localized key="concept_is_null" lang="Dutch">concept_is_null</Localized>
+    <Localized key="no_selected_entry" lang="English">No selected entry</Localized>
+    <Localized key="no_selected_entry" lang="French">Pas d'entrée sélectionnée</Localized>
+    <Localized key="no_selected_entry" lang="Dutch">no_selected_entry</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="English">A scheme name is not valid</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="French">Un nom de procédé est invalide</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="Dutch">a_scheme_name_is_not_valid</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="English">Virtual model pattern role name is null</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="French">Le nom du patron rôle modèle virtuel est nul</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="Dutch">virtual_model_pattern_role_name_is_null</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="English">Virtual model concept is null</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="French">Le concept lié au modèle virtuel est nul</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="Dutch">virtual_model_concept_is_null</Localized>
+    <Localized key="scheme_properties" lang="English">Scheme properties</Localized>
+    <Localized key="scheme_properties" lang="French">Propriétés du procédé</Localized>
+    <Localized key="scheme_properties" lang="Dutch">scheme_properties</Localized>    
+    <Localized key="add_drop_and_create_scheme" lang="English">Add drop and create scheme</Localized>
+    <Localized key="add_drop_and_create_scheme" lang="French">Ajouter un procédé de dépose et création</Localized>
+    <Localized key="add_drop_and_create_scheme" lang="Dutch">add_drop_and_create_scheme</Localized>
+    <Localized key="delete_scheme" lang="English">Delete scheme</Localized>
+    <Localized key="delete_scheme" lang="French">Supression du procédé</Localized>
+    <Localized key="delete_scheme" lang="Dutch">delete_scheme</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="English">Add delete gr only scheme</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="French">Ajouter un procédé de suppression des formes graphiques uniquement</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="Dutch">add_delete_gr_only_scheme</Localized>
+    <Localized key="add_drop_and_select_scheme" lang="English">add_drop_and_select_scheme</Localized>
+    <Localized key="add_drop_and_select_scheme" lang="French">Ajouter un procédé de dépose et selection </Localized>
+    <Localized key="add_drop_and_select_scheme" lang="Dutch">add_drop_and_select_scheme</Localized>
   </LocalizedDictionary>
 </Panel>

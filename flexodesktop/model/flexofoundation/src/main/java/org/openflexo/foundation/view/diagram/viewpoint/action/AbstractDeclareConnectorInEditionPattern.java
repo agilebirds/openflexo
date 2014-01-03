@@ -19,8 +19,10 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -39,6 +41,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -52,6 +55,7 @@ import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -74,6 +78,8 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 
 	public NewEditionPatternChoices patternChoice = NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL;
 
+	private String errorMessage;
+
 	private String editionPatternName;
 	private IFlexoOntologyClass concept;
 	private IFlexoOntologyObjectProperty objectProperty;
@@ -82,10 +88,7 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	private String objectPropertyStatementPatternRoleName;
 	private String virtualModelPatternRoleName;
 
-	public EditionPattern fromEditionPattern;
-	public EditionPattern toEditionPattern;
-
-	private String linkSchemeName;
+	private LinkScheme selectedLinkScheme;
 
 	private EditionPattern newEditionPattern;
 	private EditionPattern virtualModelConcept;
@@ -93,14 +96,26 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 
 	private Vector<IndividualPatternRole> otherRoles;
 	private IndividualPatternRole individualPatternRole;
+	private EditionPatternInstancePatternRole editionPatternPatternRole;
+
+	private static final String PATTERN_ROLE_IS_NULL = FlexoLocalization.localizedForKey("pattern_role_is_null");
+	private static final String EDITION_PATTERN_IS_NULL = FlexoLocalization.localizedForKey("edition_pattern_is_null");
+	private static final String EDITION_PATTERN_NAME_IS_NULL = FlexoLocalization.localizedForKey("edition_pattern_name_is_null");
+	private static final String FOCUSED_OBJECT_IS_NULL = FlexoLocalization.localizedForKey("focused_object_is_null");
+	private static final String INDIVIDUAL_PATTERN_ROLE_NAME_IS_NULL = FlexoLocalization
+			.localizedForKey("individual_pattern_role_name_is_null");
+	private static final String CONCEPT_IS_NULL = FlexoLocalization.localizedForKey("concept_is_null");
+	private static final String CONNECTOR_PATTERN_ROLE_NAME_IS_NULL = FlexoLocalization
+			.localizedForKey("connector_pattern_role_name_is_null");
+	private static final String A_SCHEME_NAME_IS_NOT_VALID = FlexoLocalization.localizedForKey("a_scheme_name_is_not_valid");
+	private static final String VIRTUAL_MODEL_PATTERN_ROLE_NAME_IS_NULL = FlexoLocalization
+			.localizedForKey("virtual_model_pattern_role_name_is_null");
+	private static final String VIRTUAL_MODEL_CONCEPT_IS_NULL = FlexoLocalization.localizedForKey("virtual_model_concept_is_null");
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
 	AbstractDeclareConnectorInEditionPattern(FlexoActionType actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		EditionSchemeConfiguration linkEditionScheme = new EditionSchemeConfiguration(getLinkSchemeName(), EditionSchemeChoice.LINK);
-		getEditionSchemes().add(linkEditionScheme);
-		linkEditionScheme.setValid(true);
 	}
 
 	@Override
@@ -144,7 +159,7 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 				}
 
 				// Create an edition pattern pattern role if required
-				EditionPatternInstancePatternRole editionPatternPatternRole = null;
+
 				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
 					if (isVirtualModelModelSlot()) {
 						VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
@@ -203,7 +218,7 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 
 				for (EditionSchemeConfiguration editionSchemeConf : getEditionSchemes()) {
 					if (editionSchemeConf.isValid()) {
-						createScheme(editionSchemeConf, newEditionPattern, builder);
+						createSchemeActions(editionSchemeConf, builder);
 					}
 				}
 
@@ -266,32 +281,82 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 		}
 	}
 
+	public String getErrorMessage() {
+		isValid();
+		return errorMessage;
+	}
+
 	@Override
 	public boolean isValid() {
 		if (getFocusedObject() == null) {
+			errorMessage = FOCUSED_OBJECT_IS_NULL;
 			return false;
 		}
 		switch (primaryChoice) {
 		case CHOOSE_EXISTING_EDITION_PATTERN:
+			if (getEditionPattern() == null) {
+				errorMessage = PATTERN_ROLE_IS_NULL;
+			}
+			if (getPatternRole() == null) {
+				errorMessage = EDITION_PATTERN_IS_NULL;
+			}
 			return getEditionPattern() != null && getPatternRole() != null;
 		case CREATES_EDITION_PATTERN:
 			switch (patternChoice) {
 			case MAP_SINGLE_INDIVIDUAL:
+				if (StringUtils.isEmpty(getEditionPatternName())) {
+					errorMessage = EDITION_PATTERN_NAME_IS_NULL;
+				}
+				if (StringUtils.isEmpty(getIndividualPatternRoleName())) {
+					errorMessage = INDIVIDUAL_PATTERN_ROLE_NAME_IS_NULL;
+				}
+				if (concept == null) {
+					errorMessage = CONCEPT_IS_NULL;
+				}
+				if (StringUtils.isEmpty(getConnectorPatternRoleName())) {
+					errorMessage = CONNECTOR_PATTERN_ROLE_NAME_IS_NULL;
+				}
+				if (!editionSchemesNamedAreValid()) {
+					errorMessage = A_SCHEME_NAME_IS_NOT_VALID;
+				}
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
 						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
-						&& fromEditionPattern != null && toEditionPattern != null && editionSchemesNamedAreValid();
+						&& editionSchemesNamedAreValid();
 			case MAP_OBJECT_PROPERTY:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && objectProperty != null
 						&& StringUtils.isNotEmpty(getObjectPropertyStatementPatternRoleName())
-						&& StringUtils.isNotEmpty(getConnectorPatternRoleName()) && fromEditionPattern != null && toEditionPattern != null
-						&& editionSchemesNamedAreValid();
+						&& StringUtils.isNotEmpty(getConnectorPatternRoleName()) && editionSchemesNamedAreValid();
 			case MAP_SINGLE_EDITION_PATTERN:
+				if (StringUtils.isEmpty(getEditionPatternName())) {
+					errorMessage = EDITION_PATTERN_NAME_IS_NULL;
+				}
+				if (StringUtils.isEmpty(getVirtualModelPatternRoleName())) {
+					errorMessage = VIRTUAL_MODEL_PATTERN_ROLE_NAME_IS_NULL;
+				}
+				if (virtualModelConcept == null) {
+					errorMessage = VIRTUAL_MODEL_CONCEPT_IS_NULL;
+				}
+				if (StringUtils.isEmpty(getConnectorPatternRoleName())) {
+					errorMessage = CONNECTOR_PATTERN_ROLE_NAME_IS_NULL;
+				}
+				if (!editionSchemesNamedAreValid()) {
+					errorMessage = A_SCHEME_NAME_IS_NOT_VALID;
+				}
 				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
 						&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
-						&& fromEditionPattern != null && toEditionPattern != null && editionSchemesNamedAreValid();
+						&& editionSchemesNamedAreValid();
 			case BLANK_EDITION_PATTERN:
+				if (StringUtils.isEmpty(getEditionPatternName())) {
+					errorMessage = EDITION_PATTERN_NAME_IS_NULL;
+				}
+				if (StringUtils.isEmpty(getConnectorPatternRoleName())) {
+					errorMessage = CONNECTOR_PATTERN_ROLE_NAME_IS_NULL;
+				}
+				if (!editionSchemesNamedAreValid()) {
+					errorMessage = A_SCHEME_NAME_IS_NOT_VALID;
+				}
 				return StringUtils.isNotEmpty(getEditionPatternName()) && StringUtils.isNotEmpty(getConnectorPatternRoleName())
-						&& fromEditionPattern != null && toEditionPattern != null && editionSchemesNamedAreValid();
+						&& editionSchemesNamedAreValid();
 			default:
 				break;
 			}
@@ -355,7 +420,14 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	public void updateSpecialSchemeNames() {
 		for (EditionSchemeConfiguration conf : getEditionSchemes()) {
 			if (conf.getType() == EditionSchemeChoice.LINK) {
-				conf.setName("linkScheme" + fromEditionPattern.getName() + toEditionPattern.getName());
+				if (((LinkScheme) conf.getEditionScheme()).getFromTargetEditionPattern() != null
+						&& ((LinkScheme) conf.getEditionScheme()).getToTargetEditionPattern() != null) {
+					conf.getEditionScheme().setName(
+							"linkScheme" + ((LinkScheme) conf.getEditionScheme()).getFromTargetEditionPattern().getName()
+									+ ((LinkScheme) conf.getEditionScheme()).getToTargetEditionPattern().getName());
+				} else {
+					conf.getEditionScheme().setName("linkScheme");
+				}
 			}
 		}
 	}
@@ -363,27 +435,22 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	public String getEditionPatternName() {
 		if (isTypeAwareModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
-				updateEditionSchemesName(concept.getName());
 				return concept.getName();
 			}
 			if (StringUtils.isEmpty(editionPatternName) && objectProperty != null) {
-				updateEditionSchemesName(objectProperty.getName());
 				return objectProperty.getName();
 			}
 		}
 		if (isVirtualModelModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
-				updateEditionSchemesName(virtualModelConcept.getName());
 				return virtualModelConcept.getName();
 			}
 		}
-		updateEditionSchemesName(editionPatternName);
 		return editionPatternName;
 	}
 
 	public void setEditionPatternName(String editionPatternName) {
 		this.editionPatternName = editionPatternName;
-		updateEditionSchemesName(editionPatternName);
 	}
 
 	public String getIndividualPatternRoleName() {
@@ -430,18 +497,6 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 		this.connectorPatternRoleName = connectorPatternRoleName;
 	}
 
-	public String getLinkSchemeName() {
-		if (StringUtils.isEmpty(linkSchemeName)) {
-			return "link" + (fromEditionPattern != null ? fromEditionPattern.getName() : "") + "To"
-					+ (toEditionPattern != null ? toEditionPattern.getName() : "");
-		}
-		return linkSchemeName;
-	}
-
-	public void setLinkSchemeName(String linkSchemeName) {
-		this.linkSchemeName = linkSchemeName;
-	}
-
 	@Override
 	public EditionPattern getEditionPattern() {
 		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
@@ -450,42 +505,40 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 		return super.getEditionPattern();
 	};
 
-	private void createScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
-			VirtualModel.VirtualModelBuilder builder) {
+	private void createSchemeActions(EditionSchemeConfiguration editionSchemeConfiguration, VirtualModel.VirtualModelBuilder builder) {
 		EditionScheme editionScheme = null;
 
 		// Create new link scheme
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.LINK) {
-			editionScheme = createLinkScheme(editionSchemeConfiguration, editionPattern, null);
+			editionScheme = createLinkSchemeEditionActions(editionSchemeConfiguration, null);
 		}
 
 		// Delete shapes as well as model
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_AND_MODEL) {
-			editionScheme = createDeleteEditionScheme(editionSchemeConfiguration, editionPattern, null, false);
+			editionScheme = createDeleteEditionSchemeActions(editionSchemeConfiguration, null, false);
 		}
 
 		// Delete only shapes
 		if (editionSchemeConfiguration.getType() == EditionSchemeChoice.DELETE_GR_ONLY) {
-			editionScheme = createDeleteEditionScheme(editionSchemeConfiguration, editionPattern, null, true);
+			editionScheme = createDeleteEditionSchemeActions(editionSchemeConfiguration, null, true);
 		}
-		editionPattern.addToEditionSchemes(editionScheme);
+		newEditionPattern.addToEditionSchemes(editionScheme);
 	}
 
-	private EditionScheme createDeleteEditionScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+	private EditionScheme createDeleteEditionSchemeActions(EditionSchemeConfiguration editionSchemeConfiguration,
 			VirtualModel.VirtualModelBuilder builder, boolean shapeOnly) {
 
-		DeletionScheme editionScheme = new DeletionScheme(builder);
-		editionScheme.setName(editionSchemeConfiguration.getName());
+		DeletionScheme editionScheme = (DeletionScheme) editionSchemeConfiguration.getEditionScheme();
 
 		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
 		if (shapeOnly) {
-			for (PatternRole pr : editionPattern.getPatternRoles()) {
+			for (PatternRole pr : newEditionPattern.getPatternRoles()) {
 				if (pr instanceof GraphicalElementPatternRole) {
 					rolesToDelete.add(pr);
 				}
 			}
 		} else {
-			for (PatternRole pr : editionPattern.getPatternRoles()) {
+			for (PatternRole pr : newEditionPattern.getPatternRoles()) {
 				rolesToDelete.add(pr);
 			}
 		}
@@ -522,12 +575,10 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 		return editionScheme;
 	}
 
-	private EditionScheme createLinkScheme(EditionSchemeConfiguration editionSchemeConfiguration, EditionPattern editionPattern,
+	private EditionScheme createLinkSchemeEditionActions(EditionSchemeConfiguration editionSchemeConfiguration,
 			VirtualModel.VirtualModelBuilder builder) {
-		LinkScheme editionScheme = new LinkScheme(builder);
-		editionScheme.setName(editionSchemeConfiguration.getName());
-		editionScheme.setFromTargetEditionPattern(fromEditionPattern);
-		editionScheme.setToTargetEditionPattern(toEditionPattern);
+		LinkScheme editionScheme = (LinkScheme) editionSchemeConfiguration.getEditionScheme();
+
 		// Parameters
 		if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 			if (isTypeAwareModelSlot()) {
@@ -558,16 +609,103 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 			}
 		}
 
+		if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
+			if (isVirtualModelModelSlot()) {
+				VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
+
+				// Add individual action
+				AddEditionPatternInstance newAddEditionPatternInstance = virtualModelModelSlot
+						.makeEditionAction(AddEditionPatternInstance.class);
+				newAddEditionPatternInstance.setAssignation(new DataBinding<Object>(editionPatternPatternRole.getName()));
+				newAddEditionPatternInstance.setEditionPatternType(editionPatternPatternRole.getEditionPatternType());
+				editionScheme.addToActions(newAddEditionPatternInstance);
+			}
+		}
+
 		// Add connector action
 		AddConnector newAddConnector = new AddConnector(builder);
 		newAddConnector.setAssignation(new DataBinding<Object>(newConnectorPatternRole.getPatternRoleName()));
-		newAddConnector.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "."
-				+ fromEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
-		newAddConnector.setToShape(new DataBinding<DiagramShape>(DiagramEditionScheme.TO_TARGET + "."
-				+ toEditionPattern.getPrimaryRepresentationRole().getPatternRoleName()));
+		newAddConnector.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET
+				+ "."
+				+ getFocusedObject().getDiagramSpecification().getEditionPattern(editionScheme._getFromTarget())
+						.getPrimaryRepresentationRole().getPatternRoleName()));
+		newAddConnector.setToShape(new DataBinding<DiagramShape>(DiagramEditionScheme.TO_TARGET
+				+ "."
+				+ getFocusedObject().getDiagramSpecification().getEditionPattern(editionScheme._getToTarget())
+						.getPrimaryRepresentationRole().getPatternRoleName()));
 
 		editionScheme.addToActions(newAddConnector);
 		return editionScheme;
+	}
+
+	public LinkScheme getLinkScheme(EditionSchemeConfiguration conf) {
+		if (conf != null) {
+			if (conf.getEditionScheme() instanceof LinkScheme) {
+				selectedLinkScheme = (LinkScheme) conf.getEditionScheme();
+				return selectedLinkScheme;
+			}
+		}
+		return null;
+	}
+
+	public void addEditionSchemeConfigurationLink() {
+		EditionSchemeConfiguration editionSchemeConfiguration = new EditionSchemeConfiguration(EditionSchemeChoice.LINK);
+		getEditionSchemes().add(editionSchemeConfiguration);
+	}
+
+	public void initializeSchemes() {
+		if (!getFocusedObject().getDiagramSpecification().getEditionPatterns().isEmpty()) {
+			EditionSchemeConfiguration linkEditionScheme = new EditionSchemeConfiguration(EditionSchemeChoice.LINK);
+			getEditionSchemes().add(linkEditionScheme);
+			((LinkScheme) linkEditionScheme.getEditionScheme()).setToTargetEditionPattern(getFocusedObject().getDiagramSpecification()
+					.getEditionPatterns().get(0));
+			((LinkScheme) linkEditionScheme.getEditionScheme()).setToTargetEditionPattern(getFocusedObject().getDiagramSpecification()
+					.getEditionPatterns().get(0));
+		}
+	}
+
+	// Hack to keep the right edition patterns in link from/target drop downs
+	// This should be removed.
+	private List<EditionPattern> editionPatternsFromList;
+
+	private List<EditionPattern> editionPatternsToList;
+
+	public List<EditionPattern> getEditionPatternsFrom() {
+		if (editionPatternsFromList == null) {
+			editionPatternsFromList = new ArrayList<EditionPattern>();
+			editionPatternsFromList.addAll(getDiagramSpecification().getEditionPatterns());
+		}
+		if (selectedLinkScheme != null
+				&& getFocusedObject().getDiagramSpecification().getEditionPattern(selectedLinkScheme._getFromTarget()) != null) {
+			EditionPattern currentFromEp = getFocusedObject().getDiagramSpecification().getEditionPattern(
+					selectedLinkScheme._getFromTarget());
+			EditionPattern firstEp = editionPatternsFromList.get(0);
+			if (!currentFromEp.equals(firstEp)) {
+				int lastIndex = editionPatternsFromList.indexOf(currentFromEp);
+				;
+				editionPatternsFromList.set(0, currentFromEp);
+				editionPatternsFromList.set(lastIndex, firstEp);
+			}
+		}
+		return editionPatternsFromList;
+	}
+
+	public List<EditionPattern> getEditionPatternsTo() {
+		if (editionPatternsToList == null) {
+			editionPatternsToList = new ArrayList<EditionPattern>();
+			editionPatternsToList.addAll(getDiagramSpecification().getEditionPatterns());
+		}
+		if (selectedLinkScheme != null
+				&& getFocusedObject().getDiagramSpecification().getEditionPattern(selectedLinkScheme._getToTarget()) != null) {
+			EditionPattern currentToEp = getFocusedObject().getDiagramSpecification().getEditionPattern(selectedLinkScheme._getToTarget());
+			EditionPattern firstEp = editionPatternsToList.get(0);
+			if (!currentToEp.equals(firstEp)) {
+				int lastIndex = editionPatternsToList.indexOf(currentToEp);
+				editionPatternsToList.set(0, currentToEp);
+				editionPatternsToList.set(lastIndex, firstEp);
+			}
+		}
+		return editionPatternsToList;
 	}
 
 }

@@ -26,15 +26,15 @@
     <Label label="label" align="center" index="0" data="(data.patternChoice.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Label label="model_slot" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(!((patternChoice.selectedIndex = 3)))" localize="true" />
-    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 2)" name="virtualModelModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.virtualModelModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
-    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="((patternChoice.selectedIndex = 0) | (patternChoice.selectedIndex = 1))" name="ontologyModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.typeAwareModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
-    <Label label="pattern" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+    <Label label="pattern" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <DropDown index="2" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternChoice" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+    <DropDown index="0" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternChoice" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
+    <Label label="model_slot" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(!((patternChoice.selectedIndex = 3)))" localize="true" />
+    <DropDown index="2" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 2)" name="virtualModelModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.virtualModelModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
+    <DropDown index="2" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="((patternChoice.selectedIndex = 0) | (patternChoice.selectedIndex = 1))" name="ontologyModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.typeAwareModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
     <Label label="ontologic_concept" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" localize="true">
       <LocalizedDictionary />
     </Label>
@@ -94,23 +94,14 @@
       <LocalizedDictionary />
     </Label>
     <TextField index="16" data="data.connectorPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="connectorPatternRoleName" localize="true" validateOnReturn="true" columns="7" text="TextField" />
-    <Label label="from_target" index="17" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
-      <LocalizedDictionary />
-    </Label>
-    <DropDown index="18" data="data.fromEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="fromDropDown" format="object.name" localize="true" staticList="" list="data.diagramSpecification.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
-      <LocalizedDictionary />
-    </DropDown>
-    <Label label="to_target" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
-      <LocalizedDictionary />
-    </Label>
-    <DropDown index="20" data="data.toEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="toDropDown" format="object.name" localize="true" staticList="" list="data.diagramSpecification.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
-      <LocalizedDictionary />
-    </DropDown>
     <Label label="edition_schemes" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
-    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" index="22" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+    <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemesTable" index="22" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
       <CheckBoxColumn data="iterator.isValid" title="checkbox" columnWidth="25" resizable="true" displayTitle="false" name="checkbox" />
-      <TextFieldColumn data="iterator.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
-      <DropDownColumn data="iterator.type" title="scheme_type" columnWidth="200" resizable="true" displayTitle="true" name="dropdown" />
+      <TextFieldColumn data="iterator.editionScheme.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
+      <LabelColumn data="iterator.type.name" title="scheme_type" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+      <AddAction method="data.addEditionSchemeConfigurationLink()" name="add_link" />
+      <AddAction method="data.addEditionschemeConfigurationDeleteGROnly()" name="add_delete_gr_only_scheme" />
+      <RemoveAction method="data.removeEditionSchemeConfiguration(selected)" name="delete_scheme" />
       <Dependancy componentName="newEditionPatternName" />
       <Dependancy componentName="virtualModelPatternRoleName" />
       <Dependancy componentName="individualPatternRoleName" />
@@ -118,6 +109,27 @@
       <Dependancy componentName="fromDropDown" />
       <Dependancy componentName="toDropDown" />
     </Table>
+    <Label label="scheme_properties" index="22" data="data.getLinkScheme(EditionSchemesTable.selected)" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="(data.getLinkScheme(EditionSchemesTable.selected) != null)" name="link_scheme" localize="true">
+      <Dependancy componentName="EditionSchemesTable" />
+    </Label>
+    <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" darkLevel="8" index="22" data="data.getLinkScheme(EditionSchemesTable.selected)" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.LinkScheme" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.getLinkScheme(EditionSchemesTable.selected) != null)" name="LinkProperties">
+      <Label label="from_target" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <DropDown data="LinkProperties.data.fromTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="fromDropDown" format="object.name" localize="true" staticList="" list="data.getEditionPatternsFrom()" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+        <Dependancy componentName="EditionSchemesTable" />
+      </DropDown>
+      <Label label="to_target" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <DropDown data="LinkProperties.data.toTargetEditionPattern" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="toDropDown" format="object.name" localize="true" staticList="" list="data.getEditionPatternsTo()" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true" />
+      <Dependancy componentName="EditionSchemesTable" />
+    </Panel>
+    <Label label="label" align="right" index="22" data="data.errorMessage" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(!(data.isValid))" font="Dialog,2,10" foregroundColor="255,0,0" localize="true">
+      <Dependancy componentName="newEditionPatternName" />
+      <Dependancy componentName="virtualModelPatternRoleName" />
+      <Dependancy componentName="individualPatternRoleName" />
+      <Dependancy componentName="propertyStatementPatternRoleName" />
+      <Dependancy componentName="connectorPatternRoleName" />
+      <Dependancy componentName="EditionSchemesTable" />
+      <Dependancy />
+    </Label>
     <LocalizedDictionary />
   </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="Lucida Grande,0,13" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
@@ -132,6 +144,7 @@
       <Dependancy componentName="toDropDown" />
       <Dependancy componentName="propertyStatementPatternRoleName" />
       <Dependancy componentName="propertySelector" />
+      <Dependancy componentName="EditionSchemesTable" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
   </Panel>
@@ -245,5 +258,47 @@
     <Localized key="scheme_type" lang="English">Scheme type</Localized>
     <Localized key="scheme_type" lang="French">Type de procédé</Localized>
     <Localized key="scheme_type" lang="Dutch">scheme_type</Localized>
+    <Localized key="pattern_role_is_null" lang="English">Pattern role is null</Localized>
+    <Localized key="pattern_role_is_null" lang="French">Le patron de rôle est nul</Localized>
+    <Localized key="pattern_role_is_null" lang="Dutch">pattern_role_is_null</Localized>
+    <Localized key="edition_pattern_is_null" lang="English">Edition pattern is null</Localized>
+    <Localized key="edition_pattern_is_null" lang="French">Le patron d'édition est nul</Localized>
+    <Localized key="edition_pattern_is_null" lang="Dutch">edition_pattern_is_null</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="English">Edition pattern name is null</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="French">Le nom du patron d'édition est nul</Localized>
+    <Localized key="edition_pattern_name_is_null" lang="Dutch">edition_pattern_name_is_null</Localized>
+    <Localized key="focused_object_is_null" lang="English">Focused object is null</Localized>
+    <Localized key="focused_object_is_null" lang="French">L'objet cible est nul</Localized>
+    <Localized key="focused_object_is_null" lang="Dutch">focused_object_is_null</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="English">Individual pattern role name is null</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="French">Le nom du patron rôle individuel est nul</Localized>
+    <Localized key="individual_pattern_role_name_is_null" lang="Dutch">individual_pattern_role_name_is_null</Localized>
+    <Localized key="concept_is_null" lang="English">Concept is null</Localized>
+    <Localized key="concept_is_null" lang="French">Le concept est nul</Localized>
+    <Localized key="concept_is_null" lang="Dutch">concept_is_null</Localized>
+    <Localized key="connector_pattern_role_name_is_null" lang="English">Connector pattern role name is null</Localized>
+    <Localized key="connector_pattern_role_name_is_null" lang="French">Le nom du patron rôle connecteur est nul</Localized>
+    <Localized key="connector_pattern_role_name_is_null" lang="Dutch">connector_pattern_role_name_is_null</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="English">A scheme name is not valid</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="French">Un nom de procédé est invalide</Localized>
+    <Localized key="a_scheme_name_is_not_valid" lang="Dutch">a_scheme_name_is_not_valid</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="English">Virtual model pattern role name is null</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="French">Le nom du patron rôle modèle virtuel est nul</Localized>
+    <Localized key="virtual_model_pattern_role_name_is_null" lang="Dutch">virtual_model_pattern_role_name_is_null</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="English">Virtual model concept is null</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="French">Le concept lié au modèle virtuel est nul</Localized>
+    <Localized key="virtual_model_concept_is_null" lang="Dutch">virtual_model_concept_is_null</Localized>
+    <Localized key="scheme_properties" lang="English">Scheme properties</Localized>
+    <Localized key="scheme_properties" lang="French">Propriétés du procédé</Localized>
+    <Localized key="scheme_properties" lang="Dutch">scheme_properties</Localized>
+    <Localized key="add_link" lang="English">Add link</Localized>
+    <Localized key="add_link" lang="French">Ajouter un lien</Localized>
+    <Localized key="add_link" lang="Dutch">add_link</Localized>
+    <Localized key="delete_scheme" lang="English">Delete scheme</Localized>
+    <Localized key="delete_scheme" lang="French">Supression du procédé</Localized>
+    <Localized key="delete_scheme" lang="Dutch">delete_scheme</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="English">Add delete gr only scheme</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="French">Ajouter un procédé de suppression des formes graphiques uniquement</Localized>
+    <Localized key="add_delete_gr_only_scheme" lang="Dutch">add_delete_gr_only_scheme</Localized>
   </LocalizedDictionary>
 </Panel>
