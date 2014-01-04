@@ -91,9 +91,10 @@
     <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=0;insetsRight=2;insetsTop=0;location=right)" opaque="false" />
     <Label label="edition_schemes" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="BehavioralSchemes" localize="true" />
     <Table iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareInEditionPattern$EditionSchemeConfiguration" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="EditionSchemesTable" index="16" data="data.editionSchemes" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
-      <CheckBoxColumn data="iterator.isValid" title="checkbox" columnWidth="5" resizable="true" displayTitle="false" name="checkbox" />
-      <TextFieldColumn data="iterator.editionScheme.name" title="scheme_name" columnWidth="200" resizable="true" displayTitle="true" name="textfield" />
-      <LabelColumn data="iterator.type.name" title="scheme_type" columnWidth="150" resizable="true" displayTitle="true" name="label" />
+      <CheckBoxColumn data="iterator.isValid" title="checkbox" columnWidth="20" resizable="false" displayTitle="false" name="checkbox" />
+      <IconColumn data="controller.iconForObject(iterator.editionScheme)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
+      <TextFieldColumn data="iterator.editionScheme.name" title="scheme_name" columnWidth="150" resizable="true" displayTitle="true" name="textfield" />
+      <LabelColumn data="iterator.type.name" title="scheme_type" columnWidth="100" resizable="true" displayTitle="true" name="label" />
       <AddAction method="data.addEditionSchemeConfigurationDropAndCreate()" name="add_drop_and_create_scheme" />
       <RemoveAction method="data.removeEditionSchemeConfiguration(selected)" name="delete_scheme" />
       <AddAction method="data.addEditionSchemeConfigurationDeleteGROnly()" name="add_delete_gr_only_scheme" />
@@ -285,7 +286,7 @@
     <Localized key="virtual_model_concept_is_null" lang="Dutch">virtual_model_concept_is_null</Localized>
     <Localized key="scheme_properties" lang="English">Scheme properties</Localized>
     <Localized key="scheme_properties" lang="French">Propriétés du procédé</Localized>
-    <Localized key="scheme_properties" lang="Dutch">scheme_properties</Localized>    
+    <Localized key="scheme_properties" lang="Dutch">scheme_properties</Localized>
     <Localized key="add_drop_and_create_scheme" lang="English">Add drop and create scheme</Localized>
     <Localized key="add_drop_and_create_scheme" lang="French">Ajouter un procédé de dépose et création</Localized>
     <Localized key="add_drop_and_create_scheme" lang="Dutch">add_drop_and_create_scheme</Localized>
@@ -296,7 +297,7 @@
     <Localized key="add_delete_gr_only_scheme" lang="French">Ajouter un procédé de suppression des formes graphiques uniquement</Localized>
     <Localized key="add_delete_gr_only_scheme" lang="Dutch">add_delete_gr_only_scheme</Localized>
     <Localized key="add_drop_and_select_scheme" lang="English">add_drop_and_select_scheme</Localized>
-    <Localized key="add_drop_and_select_scheme" lang="French">Ajouter un procédé de dépose et selection </Localized>
+    <Localized key="add_drop_and_select_scheme" lang="French">Ajouter un procédé de dépose et selection</Localized>
     <Localized key="add_drop_and_select_scheme" lang="Dutch">add_drop_and_select_scheme</Localized>
   </LocalizedDictionary>
 </Panel>

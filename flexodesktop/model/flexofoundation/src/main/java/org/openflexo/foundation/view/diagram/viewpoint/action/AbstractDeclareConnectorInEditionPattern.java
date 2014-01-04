@@ -435,14 +435,17 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	public String getEditionPatternName() {
 		if (isTypeAwareModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+				updateEditionSchemesName(concept.getName());
 				return concept.getName();
 			}
 			if (StringUtils.isEmpty(editionPatternName) && objectProperty != null) {
+				updateEditionSchemesName(objectProperty.getName());
 				return objectProperty.getName();
 			}
 		}
 		if (isVirtualModelModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
+				updateEditionSchemesName(virtualModelConcept.getName());
 				return virtualModelConcept.getName();
 			}
 		}

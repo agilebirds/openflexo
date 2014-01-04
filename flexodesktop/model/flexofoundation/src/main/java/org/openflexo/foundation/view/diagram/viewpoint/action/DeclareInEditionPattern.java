@@ -330,6 +330,12 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	}
 
+	private ArrayList<EditionSchemeConfiguration> editionSchemes;
+
+	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
+		this.editionSchemes = editionSchemes;
+	}
+
 	public ArrayList<EditionSchemeConfiguration> getEditionSchemes() {
 		if (editionSchemes == null) {
 			editionSchemes = new ArrayList<EditionSchemeConfiguration>();
@@ -367,14 +373,8 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	public void initializeSchemes() {
 	};
 
-	public void setEditionSchemes(ArrayList<EditionSchemeConfiguration> editionSchemes) {
-		this.editionSchemes = editionSchemes;
-	}
-
-	private ArrayList<EditionSchemeConfiguration> editionSchemes;
-
 	public boolean editionSchemesNamedAreValid() {
-		for (EditionSchemeConfiguration editionSchemeConfiguration : editionSchemes) {
+		for (EditionSchemeConfiguration editionSchemeConfiguration : getEditionSchemes()) {
 			if (StringUtils.isEmpty(editionSchemeConfiguration.getEditionScheme().getName()))
 				return false;
 		}
@@ -383,16 +383,16 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public void addEditionSchemeConfigurationDeleteGROnly() {
 		EditionSchemeConfiguration editionSchemeConfiguration = new EditionSchemeConfiguration(EditionSchemeChoice.DELETE_GR_ONLY);
-		editionSchemes.add(editionSchemeConfiguration);
+		getEditionSchemes().add(editionSchemeConfiguration);
 	}
 
 	public void addEditionSchemeConfigurationDeleteGRAndModel() {
 		EditionSchemeConfiguration editionSchemeConfiguration = new EditionSchemeConfiguration(EditionSchemeChoice.DELETE_GR_AND_MODEL);
-		editionSchemes.add(editionSchemeConfiguration);
+		getEditionSchemes().add(editionSchemeConfiguration);
 	}
 
 	public void removeEditionSchemeConfiguration(EditionSchemeConfiguration editionSchemeConfiguration) {
-		editionSchemes.remove(editionSchemeConfiguration);
+		getEditionSchemes().remove(editionSchemeConfiguration);
 	}
 
 }

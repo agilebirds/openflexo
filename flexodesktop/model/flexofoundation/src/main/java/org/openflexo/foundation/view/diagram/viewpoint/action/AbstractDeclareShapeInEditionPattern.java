@@ -256,11 +256,13 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	public String getEditionPatternName() {
 		if (isTypeAwareModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+				updateEditionSchemesName(concept.getName());
 				return concept.getName();
 			}
 		}
 		if (isVirtualModelModelSlot()) {
 			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
+				updateEditionSchemesName(virtualModelConcept.getName());
 				return virtualModelConcept.getName();
 			}
 		}
