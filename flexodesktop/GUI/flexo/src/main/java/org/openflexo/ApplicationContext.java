@@ -19,6 +19,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
+import org.openflexo.prefs.PreferencesService;
 import org.openflexo.rest.client.ServerRestService;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -42,6 +43,10 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		registerService(moduleLoader);
 		TechnologyAdapterControllerService technologyAdapterControllerService = createTechnologyAdapterControllerService();
 		registerService(technologyAdapterControllerService);
+	}
+
+	public PreferencesService getPreferencesService() {
+		return getService(PreferencesService.class);
 	}
 
 	public ModuleLoader getModuleLoader() {
@@ -80,7 +85,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	@Override
 	protected FlexoResourceCenterService createResourceCenterService() {
-		return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getDirectoryResourceCenterList());
+		return DefaultResourceCenterService.getNewInstance(getGeneralPreferences().getDirectoryResourceCenterList());
 	}
 
 	@Deprecated
@@ -97,7 +102,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 					rcList.add(((DirectoryResourceCenter) rc).getDirectory());
 				}
 			}
-			GeneralPreferences.saveDirectoryResourceCenterList(rcList);
+			getGeneralPreferences().setDirectoryResourceCenterList(rcList);
 		} else if (notification instanceof DefaultPackageResourceCenterIsNotInstalled && caller instanceof FlexoResourceCenterService) {
 			defaultPackagedResourceCenterIsNotInstalled = true;
 		}
@@ -107,5 +112,13 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	public boolean defaultPackagedResourceCenterIsToBeInstalled() {
 		return defaultPackagedResourceCenterIsNotInstalled;
+	}
+
+	public GeneralPreferences getGeneralPreferences() {
+		return getPreferencesService().getPreferences(GeneralPreferences.class);
+	}
+
+	public AdvancedPrefs getAdvancedPrefs() {
+		return getPreferencesService().getPreferences(AdvancedPrefs.class);
 	}
 }

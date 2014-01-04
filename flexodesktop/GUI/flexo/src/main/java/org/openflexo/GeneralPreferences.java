@@ -23,100 +23,71 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
-import org.openflexo.prefs.ContextPreferences;
-import org.openflexo.prefs.FlexoPreferences;
-import org.openflexo.prefs.PreferencesHaveChanged;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FileUtils;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.prefs.PreferencesContainer;
 import org.openflexo.toolbox.RectangleConverter;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Please comment this class
+ * Encodes general preferences for the whole application
  * 
  * @author sguerin
  * 
  */
-public final class GeneralPreferences extends ContextPreferences {
-
-	private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
-
-	private static final Class<GeneralPreferences> GENERAL_PREFERENCES = GeneralPreferences.class;
+@ModelEntity
+@ImplementationClass(GeneralPreferences.GeneralPreferencesImpl.class)
+@XMLElement(xmlTag = "GeneralPreferences")
+public interface GeneralPreferences extends PreferencesContainer {
 
 	public static final String LANGUAGE_KEY = "language";
-
 	public static final String SMTP_SERVER_KEY = "smtpServer";
-
 	public static final String FAVORITE_MODULE_KEY = "favoriteModule";
-
 	public static final String BUG_REPORT_URL_KEY = "secureBugReportDirectActionUrl";
-
 	public static final String DEFAULT_DOC_FORMAT = "defaultDocFormat";
-
 	public static final String USER_IDENTIFIER_KEY = "userIdentifier";
-
 	public static final String LAST_OPENED_PROJECTS_1 = "lastProjects_1";
-
 	public static final String LAST_OPENED_PROJECTS_2 = "lastProjects_2";
-
 	public static final String LAST_OPENED_PROJECTS_3 = "lastProjects_3";
-
 	public static final String LAST_OPENED_PROJECTS_4 = "lastProjects_4";
-
 	public static final String LAST_OPENED_PROJECTS_5 = "lastProjects_5";
-
 	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
-
 	public static final String INSPECTOR_ON_TOP = "inspector_always_on_top";
-
 	public static final String CLOSE_POPUP_ON_CLICK_OUT = "close_popup_on_click_out";
-
 	public static final String NOTIFY_VALID_PROJECT = "notify_valid_project";
-
 	public static final String BOUNDS_FOR_FRAME = "BoundsForFrame_";
-
 	public static final String SHOW_LEFT_VIEW = "showBrowserIn";
-
 	public static final String SHOW_RIGHT_VIEW = "showPaletteIn";
-
 	public static final String STATE_FOR_FRAME = "StateForFrame_";
-
 	public static final String LAYOUT_FOR = "LayoutFor_";
-
 	public static final String AUTO_SAVE_ENABLED = "AutoSaveEnabled";
-
 	public static final String AUTO_SAVE_INTERVAL = "AutoSaveInterval";
-
 	public static final String AUTO_SAVE_LIMIT = "AutoSaveLimit";
+	public static final String LAST_IMAGE_DIRECTORY = "LAST_IMAGE_DIRECTORY";
+	public static final String SPLIT_DIVIDER_LOCATION = "SPLIT_DIVIDER_LOCATION_";
 
-	private static final String LAST_IMAGE_DIRECTORY = "LAST_IMAGE_DIRECTORY";
+	public static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
 
-	private static final String SPLIT_DIVIDER_LOCATION = "SPLIT_DIVIDER_LOCATION_";
+	public static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
 
-	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY = "localResourceCenterDirectory";
+	public static final String DIRECTORY_RESOURCE_CENTER_LIST = "directoryResourceCenterList";
 
-	private static final String LOCAL_RESOURCE_CENTER_DIRECTORY2 = "localResourceCenterDirectory2";
-
-	private static final String DIRECTORY_RESOURCE_CENTER_LIST = "directoryResourceCenterList";
-
-	private static final FlexoObserver observer = new FlexoObserver() {
+	/*private static final FlexoObserver observer = new FlexoObserver() {
 
 		@Override
 		public void update(FlexoObservable observable, DataModification dataModification) {
@@ -134,431 +105,169 @@ public final class GeneralPreferences extends ContextPreferences {
 
 	static {
 		getPreferences().addObserver(observer);
-	}
-
-	public static GeneralPreferences getPreferences() {
-		return preferences(GENERAL_PREFERENCES);
-	}
-
-	@Override
-	public String getName() {
-		return "general";
-	}
-
-	@Override
-	public File getInspectorFile() {
-		return new FileResource("Config/Preferences/GeneralPrefs.inspector");
-		// return new File
-		// (ModuleLoader.getWorkspaceDirectory(),"Flexo/Config/Preferences/GeneralPrefs.inspector");
-	}
-
-	public static Language getLanguage() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("getLanguage");
-		}
-		return Language.get(getPreferences().getProperty(LANGUAGE_KEY));
-	}
-
-	public static void setLanguage(Language language) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setLanguage");
-		}
-		if (language != null) {
-			getPreferences().setProperty(LANGUAGE_KEY, language.getName());
-		}
-		if (language != null && language.equals(Language.FRENCH)) {
-			Locale.setDefault(Locale.FRANCE);
-		} else {
-			Locale.setDefault(Locale.US);
-		}
-		FlexoLocalization.setCurrentLanguage(language);
-		FlexoLocalization.updateGUILocalized();
-		if (language != null) {
-			FlexoHelp.configure(language.getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
-			FlexoHelp.reloadHelpSet();
-		}
-	}
-
-	public static String getSmtpServer() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("getSmtpServer");
-		}
-		return getPreferences().getProperty(SMTP_SERVER_KEY);
-	}
-
-	public static void setSmtpServer(String hasWebobjects) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setSmtpServer");
-		}
-		getPreferences().setProperty(SMTP_SERVER_KEY, hasWebobjects);
-	}
-
-	public static String getFavoriteModuleName() {
-		return getPreferences().getProperty(FAVORITE_MODULE_KEY);
-	}
-
-	public static void setFavoriteModuleName(String value) {
-		getPreferences().setProperty(FAVORITE_MODULE_KEY, value);
-	}
-
-	public static boolean getSynchronizedBrowser() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("getSynchronizedBrowser");
-		}
-		return getPreferences().getProperty(SYNCHRONIZED_BROWSER) != "false";
-	}
-
-	public static void setSynchronizedBrowser(boolean synchronizedBrowser) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setSynchronizedBrowser");
-		}
-		getPreferences().setProperty(SYNCHRONIZED_BROWSER, synchronizedBrowser ? "true" : "false");
-	}
-
-	public static String getLastOpenedProject1() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_1);
-	}
-
-	public static void setLastOpenedProject1(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_1, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject2() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_2);
-	}
-
-	public static void setLastOpenedProject2(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_2, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject3() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_3);
-	}
-
-	public static void setLastOpenedProject3(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_3, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject4() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_4);
-	}
-
-	public static void setLastOpenedProject4(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_4, lastOpenedProjects);
-	}
-
-	public static String getLastOpenedProject5() {
-		return getPreferences().getProperty(LAST_OPENED_PROJECTS_5);
-	}
-
-	public static void setLastOpenedProject5(String lastOpenedProjects) {
-		getPreferences().setProperty(LAST_OPENED_PROJECTS_5, lastOpenedProjects);
-	}
-
-	public static Vector<File> getLastOpenedProjects() {
-		Vector<File> files = new Vector<File>();
-		String s1 = getLastOpenedProject1();
-		String s2 = getLastOpenedProject2();
-		String s3 = getLastOpenedProject3();
-		String s4 = getLastOpenedProject4();
-		String s5 = getLastOpenedProject5();
-		File f1 = null;
-		File f2 = null;
-		File f3 = null;
-		File f4 = null;
-		File f5 = null;
-		if (s1 != null) {
-			f1 = new File(s1);
-			if (f1.exists()) {
-				files.add(f1);
-			}
-		}
-		if (s2 != null) {
-			f2 = new File(s2);
-			if (f2.exists()) {
-				files.add(f2);
-			}
-		}
-		if (s3 != null) {
-			f3 = new File(s3);
-			if (f3.exists()) {
-				files.add(f3);
-			}
-		}
-		if (s4 != null) {
-			f4 = new File(s4);
-			if (f4.exists()) {
-				files.add(f4);
-			}
-		}
-		if (s5 != null) {
-			f5 = new File(s5);
-			if (f5.exists()) {
-				files.add(f5);
-			}
-		}
-		return files;
-	}
-
-	/**
-	 * @param files
-	 */
-	public static void setLastOpenedProjects(Vector<File> files) {
-		if (files.size() > 0) {
-			setLastOpenedProject1(files.get(0).getAbsolutePath());
-		}
-		if (files.size() > 1) {
-			setLastOpenedProject2(files.get(1).getAbsolutePath());
-		}
-		if (files.size() > 2) {
-			setLastOpenedProject3(files.get(2).getAbsolutePath());
-		}
-		if (files.size() > 3) {
-			setLastOpenedProject4(files.get(3).getAbsolutePath());
-		}
-		if (files.size() > 4) {
-			setLastOpenedProject5(files.get(4).getAbsolutePath());
-		}
-	}
-
-	public static void addToLastOpenedProjects(File project) {
-		Vector<File> files = getLastOpenedProjects();
-		Enumeration<File> en = new Vector<File>(files).elements();
-		while (en.hasMoreElements()) {
-			File f = en.nextElement();
-			if (project.equals(f)) {
-				files.remove(f);
-				break;
-			}
-		}
-		files.insertElementAt(project, 0);
-		setLastOpenedProjects(files);
-	}
-
-	public static boolean isValidationRuleEnabled(ValidationRule rule) {
-		Boolean b = getPreferences().getBooleanProperty("VR-" + rule.getClass().getName());
-		return b == null || b.booleanValue();
-	}
-
-	public static void setValidationRuleEnabled(ValidationRule rule, boolean enabled) {
-		getPreferences().setBooleanProperty("VR-" + rule.getClass().getName(), enabled);
-	}
-
-	public static String getUserIdentifier() {
-		String returned = getPreferences().getProperty(USER_IDENTIFIER_KEY);
-		if (returned == null) {
-			String userName = System.getProperty("user.name");
-			if (userName.length() > 3) {
-				returned = userName.substring(0, 3);
-				returned = returned.toUpperCase();
-			} else if (userName.length() > 0) {
-				returned = userName.substring(0, userName.length());
-				returned = returned.toUpperCase();
-			} else {
-				returned = "FLX";
-			}
-			setUserIdentifier(returned);
-		}
-		return returned;
-	}
-
-	public static void setUserIdentifier(String aUserIdentifier) {
-		getPreferences().setProperty(USER_IDENTIFIER_KEY, aUserIdentifier);
-		FlexoObjectImpl.setCurrentUserIdentifier(aUserIdentifier);
-	}
-
-	/*
-	 * public static boolean getInspectorAlwaysOnTop() { String answer = preferences(GENERAL_PREFERENCES).getProperty(INSPECTOR_ON_TOP); if
-	 * (answer == null) { setInspectorAlwaysOnTop(true); return true; } return Boolean.parseBoolean(answer); }
-	 * 
-	 * public static void setInspectorAlwaysOnTop(boolean alwaysOnTop) { preferences(GENERAL_PREFERENCES).setProperty(INSPECTOR_ON_TOP,
-	 * String.valueOf(alwaysOnTop)); if (FlexoSharedInspectorController.hasSharedInstance()) {
-	 * FlexoSharedInspectorController.sharedInstance().setInspectorWindowsAlwaysOnTop(alwaysOnTop); } }
-	 */
-
-	public static boolean getNotifyValidProject() {
-		Boolean answer = getPreferences().getBooleanProperty(NOTIFY_VALID_PROJECT);
-		if (answer == null) {
-			setNotifyValidProject(true);
-			return true;
-		}
-		return answer;
-	}
-
-	public static void setNotifyValidProject(boolean alwaysOnTop) {
-		getPreferences().setBooleanProperty(NOTIFY_VALID_PROJECT, alwaysOnTop);
-	}
-
-	/*public static FlexoDocFormat getDefaultDocFormat() {
-		FlexoDocFormat returned = FlexoDocFormat.get(getPreferences().getProperty(DEFAULT_DOC_FORMAT));
-		if (returned == null) {
-			returned = FlexoDocFormat.HTML;
-			setDefaultDocFormat(returned);
-		}
-		return returned;
-	}
-
-	public static void setDefaultDocFormat(FlexoDocFormat value) {
-		getPreferences().setProperty(DEFAULT_DOC_FORMAT, FlexoDocFormat.flexoDocFormatConverter.convertToString(value));
 	}*/
 
-	public static Rectangle getBoundForFrameWithID(String id) {
-		String returned = getPreferences().getProperty(BOUNDS_FOR_FRAME + id);
-		return RectangleConverter.instance.convertFromString(returned);
-	}
+	/*public static GeneralPreferences getPreferences() {
+		return preferences(GENERAL_PREFERENCES);
+	}*/
 
-	public static void setBoundForFrameWithID(String id, Rectangle bounds) {
-		getPreferences().setProperty(BOUNDS_FOR_FRAME + id, RectangleConverter.instance.convertToString(bounds));
-	}
+	/*@Override
+	public File getInspectorFile() {
+		return new FileResource("Config/Preferences/GeneralPrefs.inspector");
+	}*/
 
-	public static boolean getShowLeftView(String id) {
-		Boolean value = getPreferences().getBooleanProperty(SHOW_LEFT_VIEW + id);
-		if (value == null) {
-			return Boolean.TRUE;
-		}
-		return value;
-	}
+	@Getter(LANGUAGE_KEY)
+	@XMLAttribute
+	public Language getLanguage();
 
-	public static void setShowLeftView(String id, boolean status) {
-		getPreferences().setBooleanProperty(SHOW_LEFT_VIEW + id, status);
-	}
+	@Setter(LANGUAGE_KEY)
+	public void setLanguage(Language language);
 
-	public static boolean getShowRightView(String id) {
-		Boolean value = getPreferences().getBooleanProperty(SHOW_RIGHT_VIEW + id);
-		if (value == null) {
-			return Boolean.TRUE;
-		}
-		return value;
-	}
+	@Getter(SMTP_SERVER_KEY)
+	@XMLAttribute
+	public String getSmtpServer();
 
-	public static void setShowRightView(String id, boolean status) {
-		getPreferences().setBooleanProperty(SHOW_RIGHT_VIEW + id, status);
-	}
+	@Setter(SMTP_SERVER_KEY)
+	public void setSmtpServer(String smtpServer);
 
-	public static int getFrameStateForFrameWithID(String id) {
-		Integer i = getPreferences().getIntegerProperty(STATE_FOR_FRAME + id);
-		if (i == null) {
-			return -1;
-		} else {
-			return i;
-		}
-	}
+	@Getter(FAVORITE_MODULE_KEY)
+	@XMLAttribute
+	public String getFavoriteModuleName();
+
+	@Setter(FAVORITE_MODULE_KEY)
+	public void setFavoriteModuleName(String value);
+
+	@Getter(SYNCHRONIZED_BROWSER)
+	@XMLAttribute
+	public boolean getSynchronizedBrowser();
+
+	@Setter(SYNCHRONIZED_BROWSER)
+	public void setSynchronizedBrowser(boolean synchronizedBrowser);
+
+	@Getter(LAST_OPENED_PROJECTS_1)
+	@XMLAttribute
+	public String getLastOpenedProject1();
+
+	@Setter(LAST_OPENED_PROJECTS_1)
+	public void setLastOpenedProject1(String lastOpenedProjects);
+
+	@Getter(LAST_OPENED_PROJECTS_2)
+	@XMLAttribute
+	public String getLastOpenedProject2();
+
+	@Setter(LAST_OPENED_PROJECTS_2)
+	public void setLastOpenedProject2(String lastOpenedProjects);
+
+	@Getter(LAST_OPENED_PROJECTS_3)
+	@XMLAttribute
+	public String getLastOpenedProject3();
+
+	@Setter(LAST_OPENED_PROJECTS_3)
+	public void setLastOpenedProject3(String lastOpenedProjects);
+
+	@Getter(LAST_OPENED_PROJECTS_4)
+	@XMLAttribute
+	public String getLastOpenedProject4();
+
+	@Setter(LAST_OPENED_PROJECTS_4)
+	public void setLastOpenedProject4(String lastOpenedProjects);
+
+	@Getter(LAST_OPENED_PROJECTS_5)
+	@XMLAttribute
+	public String getLastOpenedProject5();
+
+	@Setter(LAST_OPENED_PROJECTS_5)
+	public void setLastOpenedProject5(String lastOpenedProjects);
+
+	public List<File> getLastOpenedProjects();
+
+	public void setLastOpenedProjects(List<File> files);
+
+	public void addToLastOpenedProjects(File project);
+
+	public boolean isValidationRuleEnabled(ValidationRule<?, ?> rule);
+
+	public void setValidationRuleEnabled(ValidationRule<?, ?> rule, boolean enabled);
+
+	@Override
+	@Getter(USER_IDENTIFIER_KEY)
+	@XMLAttribute
+	public String getUserIdentifier();
+
+	@Override
+	@Setter(USER_IDENTIFIER_KEY)
+	public void setUserIdentifier(String aUserIdentifier);
+
+	@Getter(value = NOTIFY_VALID_PROJECT, defaultValue = "true")
+	@XMLAttribute
+	public boolean getNotifyValidProject();
+
+	@Setter(NOTIFY_VALID_PROJECT)
+	public void setNotifyValidProject(boolean flag);
+
+	public Rectangle getBoundForFrameWithID(String id);
+
+	public void setBoundForFrameWithID(String id, Rectangle bounds);
+
+	public boolean getShowLeftView(String id);
+
+	public void setShowLeftView(String id, boolean status);
+
+	public boolean getShowRightView(String id);
+
+	public void setShowRightView(String id, boolean status);
+
+	public int getFrameStateForFrameWithID(String id);
 
 	/**
 	 * @param extendedState
 	 */
-	public static void setFrameStateForFrameWithID(String id, int extendedState) {
-		getPreferences().setIntegerProperty(STATE_FOR_FRAME + id, extendedState);
-	}
+	public void setFrameStateForFrameWithID(String id, int extendedState);
 
-	public static String getLayoutFor(String id) {
-		return getPreferences().getProperty(LAYOUT_FOR + id);
-	}
+	public String getLayoutFor(String id);
 
 	/**
 	 * @param extendedState
 	 */
-	public static void setLayoutFor(String layout, String id) {
-		getPreferences().setProperty(LAYOUT_FOR + id, layout);
-	}
+	public void setLayoutFor(String layout, String id);
 
-	public static boolean getAutoSaveEnabled() {
-		Boolean autoSaveEnabled = getPreferences().getBooleanProperty(AUTO_SAVE_ENABLED);
-		if (autoSaveEnabled == null) {
-			setAutoSaveEnabled(true);
-			autoSaveEnabled = Boolean.TRUE;
-		}
-		return autoSaveEnabled;
-	}
+	@Getter(value = AUTO_SAVE_ENABLED, defaultValue = "true")
+	@XMLAttribute
+	public boolean getAutoSaveEnabled();
 
-	public static boolean isAutoSavedEnabled() {
-		Boolean autoSaveEnabled = getPreferences().getBooleanProperty(AUTO_SAVE_ENABLED);
-		if (autoSaveEnabled == null) {
-			return false;
-		}
-		return autoSaveEnabled;
-	}
+	@Setter(AUTO_SAVE_ENABLED)
+	public void setAutoSaveEnabled(boolean enabled);
 
-	public static boolean isAutoSavedPrefDefined() {
-		Boolean autoSaveEnabled = getPreferences().getBooleanProperty(AUTO_SAVE_ENABLED);
-		return autoSaveEnabled != null;
-	}
+	@Getter(value = AUTO_SAVE_INTERVAL, defaultValue = "5")
+	@XMLAttribute
+	public int getAutoSaveInterval();
 
-	public static void setAutoSaveEnabled(boolean enabled) {
-		getPreferences().setBooleanProperty(AUTO_SAVE_ENABLED, enabled);
-	}
-
-	/**
-	 * 
-	 * @return the number of <b>minutes</b> to wait between 2 saves
-	 */
-	public static int getAutoSaveInterval() {
-		Integer interval = getPreferences().getIntegerProperty(AUTO_SAVE_INTERVAL);
-		if (interval == null) {
-			setAutoSaveInterval(5);
-			interval = 5;
-		}
-		return interval;
-	}
-
-	public static void setAutoSaveInterval(int interval) {
-		if (interval > 0) {
-			getPreferences().setIntegerProperty(AUTO_SAVE_INTERVAL, interval);
-		}
-	}
+	@Setter(AUTO_SAVE_INTERVAL)
+	public void setAutoSaveInterval(int interval);
 
 	/**
 	 * 
 	 * @return the maximum number of automatic save to perform before deleting the first one
 	 */
-	public static int getAutoSaveLimit() {
-		Integer limit = getPreferences().getIntegerProperty(AUTO_SAVE_LIMIT);
-		if (limit == null) {
-			setAutoSaveLimit(12);
-			limit = 12;
-		}
-		return limit;
-	}
+	@Getter(value = AUTO_SAVE_LIMIT, defaultValue = "12")
+	@XMLAttribute
+	public int getAutoSaveLimit();
 
-	public static void setAutoSaveLimit(int limit) {
-		getPreferences().setIntegerProperty(AUTO_SAVE_LIMIT, limit);
-	}
+	@Setter(AUTO_SAVE_LIMIT)
+	public void setAutoSaveLimit(int limit);
 
-	public static File getLastImageDirectory() {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("getLastImageDirectory");
-		}
-		return getPreferences().getDirectoryProperty(LAST_IMAGE_DIRECTORY, true);
-	}
+	@Getter(LAST_IMAGE_DIRECTORY)
+	@XMLAttribute
+	public File getLastImageDirectory();
 
-	public static void setLastImageDirectory(File f) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setLastImageDirectory");
-		}
-		getPreferences().setDirectoryProperty(LAST_IMAGE_DIRECTORY, f, true);
-	}
+	@Setter(LAST_IMAGE_DIRECTORY)
+	public void setLastImageDirectory(File f);
 
-	public static void save() {
-		FlexoPreferences.savePreferences(true);
-	}
+	public int getDividerLocationForSplitPaneWithID(String id);
 
-	public static int getDividerLocationForSplitPaneWithID(String id) {
-		Integer interval = getPreferences().getIntegerProperty(SPLIT_DIVIDER_LOCATION + id);
-		if (interval == null) {
-			setDividerLocationForSplitPaneWithID(-1, id);
-			interval = -1;
-		}
-		return interval;
-	}
+	public void setDividerLocationForSplitPaneWithID(int value, String id);
 
-	public static void setDividerLocationForSplitPaneWithID(int value, String id) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("setDividerLocationForSplitPaneWithID: " + id + " to " + value);
-		}
-		getPreferences().setIntegerProperty(SPLIT_DIVIDER_LOCATION + id, value);
-	}
-
-	@Deprecated
+	/*@Deprecated
 	private static File getLocalResourceCenterDirectory() {
 		File file = getPreferences().getDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2);
 		if (file == null) {
@@ -568,70 +277,290 @@ public final class GeneralPreferences extends ContextPreferences {
 			}
 		}
 		return file;
-	}
+	}*/
 
-	@Deprecated
+	/*@Deprecated
 	private static void setLocalResourceCenterDirectory(File directory) {
 		getPreferences().setDirectoryProperty(LOCAL_RESOURCE_CENTER_DIRECTORY2, directory);
-	}
+	}*/
+
+	@Getter(DIRECTORY_RESOURCE_CENTER_LIST)
+	@XMLAttribute
+	public String getDirectoryResourceCenterListAsString();
+
+	@Setter(DIRECTORY_RESOURCE_CENTER_LIST)
+	public void setDirectoryResourceCenterListAsString(String aString);
 
 	/**
 	 * Return the list all all {@link DirectoryResourceCenter} registered for the session
 	 * 
 	 * @return
 	 */
-	public static List<File> getDirectoryResourceCenterList() {
-		String directoriesAsString = getPreferences().getProperty(DIRECTORY_RESOURCE_CENTER_LIST);
-		if (StringUtils.isEmpty(directoriesAsString)) {
-			File defaultRC = getLocalResourceCenterDirectory();
-			if (defaultRC != null && defaultRC.exists()) {
-				return Collections.singletonList(defaultRC);
-			}
-			return Collections.emptyList();
-		} else {
-			List<File> returned = new ArrayList<File>();
-			StringTokenizer st = new StringTokenizer(directoriesAsString, ",");
-			while (st.hasMoreTokens()) {
-				String next = st.nextToken();
-				File f = new File(next);
-				if (f.exists()) {
-					returned.add(f);
-				}
-			}
-			return returned;
-		}
-	}
+	public List<File> getDirectoryResourceCenterList();
 
-	public static void assertDirectoryResourceCenterRegistered(File dirRC) {
-		List<File> alreadyRegistered = getDirectoryResourceCenterList();
-		if (alreadyRegistered.contains(dirRC)) {
-			return;
-		}
-		if (alreadyRegistered.size() == 0) {
-			getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, dirRC.getAbsolutePath());
-		} else {
-			String directoriesAsString = getPreferences().getProperty(DIRECTORY_RESOURCE_CENTER_LIST);
-			getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, directoriesAsString + "," + dirRC.getAbsolutePath());
-		}
-	}
+	public void assertDirectoryResourceCenterRegistered(File dirRC);
 
-	public static void saveDirectoryResourceCenterList(List<File> rcList) {
-		boolean isFirst = true;
-		StringBuffer s = new StringBuffer();
-		for (File f : rcList) {
-			s.append((isFirst ? "" : ",") + f.getAbsolutePath());
-			isFirst = false;
-		}
-		System.out.println("Sets " + s.toString() + " for " + DIRECTORY_RESOURCE_CENTER_LIST);
-		getPreferences().setProperty(DIRECTORY_RESOURCE_CENTER_LIST, s.toString());
-		save();
-	}
+	public void setDirectoryResourceCenterList(List<File> rcList);
 
-	public static File getLocationForResource(String uri) {
+	/*public static File getLocationForResource(String uri) {
 		return getPreferences().getFileProperty(uri + RESOURCE_LOCATION);
 	}
 
 	public static void setLocationForResource(File file, String uri) {
 		getPreferences().setFileProperty(uri + RESOURCE_LOCATION, file, false);
+	}*/
+
+	public abstract class GeneralPreferencesImpl extends PreferencesContainerImpl implements GeneralPreferences {
+
+		private static final Logger logger = Logger.getLogger(GeneralPreferences.class.getPackage().getName());
+
+		@Override
+		public void setLanguage(Language language) {
+			performSuperSetter(LANGUAGE_KEY, language);
+			if (language != null && language.equals(Language.FRENCH)) {
+				Locale.setDefault(Locale.FRANCE);
+			} else {
+				Locale.setDefault(Locale.US);
+			}
+			FlexoLocalization.setCurrentLanguage(language);
+			FlexoLocalization.updateGUILocalized();
+			if (language != null) {
+				FlexoHelp.configure(language.getIdentifier(), null/*UserType.getCurrentUserType().getIdentifier()*/);
+				FlexoHelp.reloadHelpSet();
+			}
+		}
+
+		@Override
+		public List<File> getLastOpenedProjects() {
+			List<File> files = new ArrayList<File>();
+			String s1 = getLastOpenedProject1();
+			String s2 = getLastOpenedProject2();
+			String s3 = getLastOpenedProject3();
+			String s4 = getLastOpenedProject4();
+			String s5 = getLastOpenedProject5();
+			File f1 = null;
+			File f2 = null;
+			File f3 = null;
+			File f4 = null;
+			File f5 = null;
+			if (s1 != null) {
+				f1 = new File(s1);
+				if (f1.exists()) {
+					files.add(f1);
+				}
+			}
+			if (s2 != null) {
+				f2 = new File(s2);
+				if (f2.exists()) {
+					files.add(f2);
+				}
+			}
+			if (s3 != null) {
+				f3 = new File(s3);
+				if (f3.exists()) {
+					files.add(f3);
+				}
+			}
+			if (s4 != null) {
+				f4 = new File(s4);
+				if (f4.exists()) {
+					files.add(f4);
+				}
+			}
+			if (s5 != null) {
+				f5 = new File(s5);
+				if (f5.exists()) {
+					files.add(f5);
+				}
+			}
+			return files;
+		}
+
+		/**
+		 * @param files
+		 */
+		public void setLastOpenedProjects(Vector<File> files) {
+			if (files.size() > 0) {
+				setLastOpenedProject1(files.get(0).getAbsolutePath());
+			}
+			if (files.size() > 1) {
+				setLastOpenedProject2(files.get(1).getAbsolutePath());
+			}
+			if (files.size() > 2) {
+				setLastOpenedProject3(files.get(2).getAbsolutePath());
+			}
+			if (files.size() > 3) {
+				setLastOpenedProject4(files.get(3).getAbsolutePath());
+			}
+			if (files.size() > 4) {
+				setLastOpenedProject5(files.get(4).getAbsolutePath());
+			}
+		}
+
+		@Override
+		public void addToLastOpenedProjects(File project) {
+			List<File> files = getLastOpenedProjects();
+			for (File f : new ArrayList<File>(files)) {
+				if (project.equals(f)) {
+					files.remove(f);
+					break;
+				}
+			}
+
+			files.add(0, project);
+			setLastOpenedProjects(files);
+		}
+
+		@Override
+		public boolean isValidationRuleEnabled(ValidationRule<?, ?> rule) {
+			return assertProperty("VR-" + rule.getClass().getName()).booleanValue();
+		}
+
+		@Override
+		public void setValidationRuleEnabled(ValidationRule<?, ?> rule, boolean enabled) {
+			assertProperty("VR-" + rule.getClass().getName()).setBooleanValue(enabled);
+		}
+
+		@Override
+		public String getUserIdentifier() {
+			String returned = (String) performSuperGetter(GeneralPreferences.USER_IDENTIFIER_KEY);
+			if (returned == null) {
+				String userName = System.getProperty("user.name");
+				if (userName.length() > 3) {
+					returned = userName.substring(0, 3);
+					returned = returned.toUpperCase();
+				} else if (userName.length() > 0) {
+					returned = userName.substring(0, userName.length());
+					returned = returned.toUpperCase();
+				} else {
+					returned = "FLX";
+				}
+				setUserIdentifier(returned);
+			}
+			return returned;
+		}
+
+		@Override
+		public void setUserIdentifier(String aUserIdentifier) {
+			performSuperSetter(GeneralPreferences.USER_IDENTIFIER_KEY, aUserIdentifier);
+			FlexoObjectImpl.setCurrentUserIdentifier(aUserIdentifier);
+		}
+
+		@Override
+		public Rectangle getBoundForFrameWithID(String id) {
+			return RectangleConverter.instance.convertFromString(assertProperty(BOUNDS_FOR_FRAME + id).getValue());
+		}
+
+		@Override
+		public void setBoundForFrameWithID(String id, Rectangle bounds) {
+			assertProperty(BOUNDS_FOR_FRAME + id).setValue(RectangleConverter.instance.convertToString(bounds));
+		}
+
+		@Override
+		public boolean getShowLeftView(String id) {
+			return assertProperty(SHOW_LEFT_VIEW + id).booleanValue();
+		}
+
+		@Override
+		public void setShowLeftView(String id, boolean status) {
+			assertProperty(SHOW_LEFT_VIEW + id).setBooleanValue(status);
+		}
+
+		@Override
+		public boolean getShowRightView(String id) {
+			return assertProperty(SHOW_RIGHT_VIEW + id).booleanValue();
+		}
+
+		@Override
+		public void setShowRightView(String id, boolean status) {
+			assertProperty(SHOW_RIGHT_VIEW + id).setBooleanValue(status);
+		}
+
+		@Override
+		public int getFrameStateForFrameWithID(String id) {
+			return assertProperty(SHOW_RIGHT_VIEW + id).integerValue();
+		}
+
+		/**
+		 * @param extendedState
+		 */
+		@Override
+		public void setFrameStateForFrameWithID(String id, int extendedState) {
+			assertProperty(STATE_FOR_FRAME + id).setIntegerValue(extendedState);
+		}
+
+		@Override
+		public int getDividerLocationForSplitPaneWithID(String id) {
+			return assertProperty(SPLIT_DIVIDER_LOCATION + id).integerValue();
+		}
+
+		@Override
+		public void setDividerLocationForSplitPaneWithID(int value, String id) {
+			assertProperty(SPLIT_DIVIDER_LOCATION + id).setIntegerValue(value);
+		}
+
+		@Override
+		public String getLayoutFor(String id) {
+			return assertProperty(LAYOUT_FOR + id).getValue();
+		}
+
+		/**
+		 * @param extendedState
+		 */
+		@Override
+		public void setLayoutFor(String layout, String id) {
+			assertProperty(LAYOUT_FOR + id).setValue(layout);
+		}
+
+		/**
+		 * Return the list all all {@link DirectoryResourceCenter} registered for the session
+		 * 
+		 * @return
+		 */
+		@Override
+		public List<File> getDirectoryResourceCenterList() {
+			String directoriesAsString = getDirectoryResourceCenterListAsString();
+			if (StringUtils.isEmpty(directoriesAsString)) {
+				return Collections.emptyList();
+			} else {
+				List<File> returned = new ArrayList<File>();
+				StringTokenizer st = new StringTokenizer(directoriesAsString, ",");
+				while (st.hasMoreTokens()) {
+					String next = st.nextToken();
+					File f = new File(next);
+					if (f.exists()) {
+						returned.add(f);
+					}
+				}
+				return returned;
+			}
+		}
+
+		@Override
+		public void assertDirectoryResourceCenterRegistered(File dirRC) {
+			List<File> alreadyRegistered = getDirectoryResourceCenterList();
+			if (alreadyRegistered.contains(dirRC)) {
+				return;
+			}
+			if (alreadyRegistered.size() == 0) {
+				setDirectoryResourceCenterListAsString(dirRC.getAbsolutePath());
+			} else {
+				setDirectoryResourceCenterListAsString(getDirectoryResourceCenterList() + "," + dirRC.getAbsolutePath());
+			}
+		}
+
+		@Override
+		public void setDirectoryResourceCenterList(List<File> rcList) {
+			boolean isFirst = true;
+			StringBuffer s = new StringBuffer();
+			for (File f : rcList) {
+				s.append((isFirst ? "" : ",") + f.getAbsolutePath());
+				isFirst = false;
+			}
+			System.out.println("Sets " + s.toString() + " for " + DIRECTORY_RESOURCE_CENTER_LIST);
+			setDirectoryResourceCenterListAsString(s.toString());
+		}
+
 	}
+
 }

@@ -5,7 +5,6 @@ import java.io.File;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
@@ -23,24 +22,9 @@ public class InteractiveApplicationContext extends ApplicationContext {
 		return new InteractiveFlexoEditor(this, project);
 	}
 
-	/*@Override
-	protected XMLSerializationService createXMLSerializationService() {
-		return XMLSerializationService.createInstance();
-	}
-
-	@Override
-	protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-		return new InteractiveFlexoProjectReferenceLoader(this);
-	}*/
-
 	@Override
 	protected FlexoEditor createApplicationEditor() {
 		return new InteractiveFlexoEditor(this, null);
-	}
-
-	@Override
-	protected FlexoResourceCenterService createResourceCenterService() {
-		return DefaultResourceCenterService.getNewInstance(GeneralPreferences.getDirectoryResourceCenterList());
 	}
 
 	@Override

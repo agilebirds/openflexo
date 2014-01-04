@@ -34,6 +34,7 @@ import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.swing.FlexoSwingUtils;
 
 /**
@@ -56,6 +57,7 @@ public abstract class Module<M extends FlexoModule> {
 	private final String name;
 	private final String shortName;
 	private final Class<M> moduleClass;
+	private final Class<? extends ModulePreferences<M>> preferencesClass;
 	private final String relativeDirectory;
 	private final String jiraComponentID;
 	private final String helpTopic;
@@ -69,13 +71,14 @@ public abstract class Module<M extends FlexoModule> {
 
 	private M loadedModuleInstance;
 
-	protected Module(String name, String shortName, Class<M> moduleClass, String relativeDirectory, String jiraComponentID,
-			String helpTopic, ImageIcon smallIcon, ImageIcon mediumIcon, ImageIcon mediumIconWithHover, ImageIcon bigIcon,
-			boolean requiresProject) {
+	protected Module(String name, String shortName, Class<M> moduleClass, Class<? extends ModulePreferences<M>> preferencesClass,
+			String relativeDirectory, String jiraComponentID, String helpTopic, ImageIcon smallIcon, ImageIcon mediumIcon,
+			ImageIcon mediumIconWithHover, ImageIcon bigIcon, boolean requiresProject) {
 		super();
 		this.name = name;
 		this.shortName = shortName;
 		this.moduleClass = moduleClass;
+		this.preferencesClass = preferencesClass;
 		this.relativeDirectory = relativeDirectory;
 		this.jiraComponentID = jiraComponentID;
 		this.helpTopic = helpTopic;
@@ -96,6 +99,10 @@ public abstract class Module<M extends FlexoModule> {
 
 	public Constructor<M> getConstructor() {
 		return constructor;
+	}
+
+	public Class<? extends ModulePreferences<M>> getPreferencesClass() {
+		return preferencesClass;
 	}
 
 	public String getName() {

@@ -57,6 +57,14 @@ public interface FlexoProperty extends FlexoObject {
 	@Setter(OWNER_KEY)
 	public void setOwner(FlexoObject owner);
 
+	public boolean booleanValue();
+
+	public void setBooleanValue(boolean flag);
+
+	public int integerValue();
+
+	public void setIntegerValue(int value);
+
 	public static abstract class FlexoPropertyImpl extends FlexoObservable implements FlexoProperty {
 
 		private FlexoObject owner;
@@ -113,5 +121,27 @@ public interface FlexoProperty extends FlexoObject {
 		public void setOwner(FlexoObject owner) {
 			this.owner = owner;
 		}
+
+		@Override
+		public boolean booleanValue() {
+			return getValue() != null && getValue().equalsIgnoreCase("true");
+		}
+
+		@Override
+		public void setBooleanValue(boolean flag) {
+			setValue(flag ? "true" : "false");
+		}
+
+		@Override
+		public int integerValue() {
+			return Integer.parseInt(getValue());
+		}
+
+		@Override
+		public void setIntegerValue(int value) {
+			this.value = "" + value;
+		}
+
 	}
+
 }

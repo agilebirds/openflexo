@@ -21,7 +21,7 @@ package org.openflexo;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -55,8 +55,8 @@ public class ApplicationData {
 		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID + ")";
 	}
 
-	public Vector<File> getLastOpenedProjects() {
-		return GeneralPreferences.getLastOpenedProjects();
+	public List<File> getLastOpenedProjects() {
+		return applicationContext.getGeneralPreferences().getLastOpenedProjects();
 	}
 
 	public ImageIcon getProjectIcon() {
@@ -72,7 +72,8 @@ public class ApplicationData {
 	}
 
 	public Module<?> getFavoriteModule() {
-		Module<?> returned = applicationContext.getModuleLoader().getModuleNamed(GeneralPreferences.getFavoriteModuleName());
+		Module<?> returned = applicationContext.getModuleLoader().getModuleNamed(
+				applicationContext.getGeneralPreferences().getFavoriteModuleName());
 		if (returned == null) {
 			if (getAvailableModules().size() > 0) {
 				return getAvailableModules().iterator().next();
@@ -86,7 +87,7 @@ public class ApplicationData {
 
 	public void setFavoriteModule(Module<?> aModule) {
 		if (aModule != null) {
-			GeneralPreferences.setFavoriteModuleName(aModule.getName());
+			applicationContext.getGeneralPreferences().setFavoriteModuleName(aModule.getName());
 		}
 	}
 }

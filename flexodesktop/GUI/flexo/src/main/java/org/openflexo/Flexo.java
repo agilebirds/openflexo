@@ -65,7 +65,6 @@ import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.ssl.DenaliSecurityProvider;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
@@ -193,7 +192,6 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
-		remapStandardOuputs(isDev);
 		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		// UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		// UserType.setCurrentUserType(userTypeNamed);
@@ -202,11 +200,15 @@ public class Flexo {
 			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame());
 		}
 		final SplashWindow splashWindow2 = splashWindow;
-		FlexoProperties.load();
-		initializeLoggingManager();
 		// First init localization with default location
 		FlexoLocalization.initWith(new FlexoMainLocalizer());
 		final ApplicationContext applicationContext = new InteractiveApplicationContext();
+
+		remapStandardOuputs(isDev, applicationContext);
+
+		// FlexoProperties.load();
+		initializeLoggingManager(applicationContext);
+
 		/*final ApplicationContext applicationContext = new ApplicationContext() {
 
 			@Override
@@ -262,7 +264,7 @@ public class Flexo {
 				logger.log(Level.WARNING, "Could not insert security provider", e);
 			}
 		}
-		initProxyManagement();
+		initProxyManagement(applicationContext);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Starting on " + ToolBox.getPLATFORM() + "... JVM version is " + System.getProperty("java.version"));
 		}
@@ -272,7 +274,8 @@ public class Flexo {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Heap memory is about: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / (1024 * 1024) + "Mb");
 		}
-		applicationContext.getModuleLoader().setAllowsDocSubmission(isDev || FlexoProperties.instance().getAllowsDocSubmission());
+		applicationContext.getModuleLoader()
+				.setAllowsDocSubmission(isDev || applicationContext.getAdvancedPrefs().getAllowsDocSubmission());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching FLEXO Application Suite version " + FlexoCst.BUSINESS_APPLICATION_VERSION_NAME + "...");
 		}
@@ -285,7 +288,7 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		initUILAF(AdvancedPrefs.getLookAndFeelString());
+		initUILAF(applicationContext.getAdvancedPrefs().getLookAndFeelAsString());
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
@@ -311,7 +314,8 @@ public class Flexo {
 					splashWindow.dispose();
 					splashWindow = null;
 				}
-				Module module = applicationContext.getModuleLoader().getModuleNamed(GeneralPreferences.getFavoriteModuleName());
+				Module module = applicationContext.getModuleLoader().getModuleNamed(
+						applicationContext.getGeneralPreferences().getFavoriteModuleName());
 				if (module == null) {
 					if (applicationContext.getModuleLoader().getKnownModules().size() > 0) {
 						module = applicationContext.getModuleLoader().getKnownModules().iterator().next();
@@ -373,8 +377,8 @@ public class Flexo {
 		}
 	}
 
-	private static void initProxyManagement() {
-		AdvancedPrefs.applyProxySettings();
+	private static void initProxyManagement(final ApplicationContext applicationContext) {
+		applicationContext.getAdvancedPrefs().applyProxySettings();
 		final ProxySelector defaultSelector = ProxySelector.getDefault();
 		ProxySelector.setDefault(new ProxySelector() {
 			@Override
@@ -398,24 +402,25 @@ public class Flexo {
 
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				if (getRequestingHost().equals(AdvancedPrefs.getProxyHost()) && AdvancedPrefs.getProxyPort().equals(getRequestingPort())
-						|| getRequestingHost().equals(AdvancedPrefs.getSProxyHost())
-						&& AdvancedPrefs.getSProxyPort().equals(getRequestingPort())) {
+				if (getRequestingHost().equals(applicationContext.getAdvancedPrefs().getProxyHost())
+						&& applicationContext.getAdvancedPrefs().getProxyPort().equals(getRequestingPort())
+						|| getRequestingHost().equals(applicationContext.getAdvancedPrefs().getSProxyHost())
+						&& applicationContext.getAdvancedPrefs().getSProxyPort().equals(getRequestingPort())) {
 					try {
 						if (previous == getRequestingURL()) {
 							count++;
 						}
-						if (previous != getRequestingURL() && AdvancedPrefs.getProxyLogin() != null
-								&& AdvancedPrefs.getProxyPassword() != null) {
+						if (previous != getRequestingURL() && applicationContext.getAdvancedPrefs().getProxyLogin() != null
+								&& applicationContext.getAdvancedPrefs().getProxyPassword() != null) {
 							count = 0;
 						} else {
 							if (count < 3) {
 								RequestLoginDialog dialog = new RequestLoginDialog();
 								dialog.setVisible(true);
 								if (dialog.getStatus() == Status.VALIDATED) {
-									AdvancedPrefs.setProxyLogin(dialog.getData().login);
-									AdvancedPrefs.setProxyPassword(dialog.getData().password);
-									AdvancedPrefs.save();
+									applicationContext.getAdvancedPrefs().setProxyLogin(dialog.getData().login);
+									applicationContext.getAdvancedPrefs().setProxyPassword(dialog.getData().password);
+									// AdvancedPrefs.save();
 								} else {
 									throw new CancelException();
 								}
@@ -426,7 +431,8 @@ public class Flexo {
 								throw new TooManyFailedAttemptException();
 							}
 						}
-						return new PasswordAuthentication(AdvancedPrefs.getProxyLogin(), AdvancedPrefs.getProxyPassword().toCharArray());
+						return new PasswordAuthentication(applicationContext.getAdvancedPrefs().getProxyLogin(), applicationContext
+								.getAdvancedPrefs().getProxyPassword().toCharArray());
 					} finally {
 						previous = getRequestingURL();
 					}
@@ -440,10 +446,10 @@ public class Flexo {
 	/**
 	 *
 	 */
-	private static void remapStandardOuputs(boolean outputToConsole) {
+	private static void remapStandardOuputs(boolean outputToConsole, final ApplicationContext applicationContext) {
 		try {
 			// First let's see if we will be able to write into the log directory
-			File outputDir = FlexoPreferences.getLogDirectory();
+			File outputDir = applicationContext.getPreferencesService().getLogDirectory();
 			if (!outputDir.exists()) {
 				outputDir.mkdirs();
 			}
@@ -567,24 +573,23 @@ public class Flexo {
 		return out;
 	}
 
-	public static FlexoLoggingManager initializeLoggingManager() {
+	public static FlexoLoggingManager initializeLoggingManager(final ApplicationContext applicationContext) {
 		try {
-			FlexoProperties properties = FlexoProperties.instance();
+			// FlexoProperties properties = FlexoProperties.instance();
 			logger.info("Default logging config file " + System.getProperty("java.util.logging.config.file"));
-			return FlexoLoggingManager.initialize(
-					properties.getMaxLogCount(),
-					properties.getIsLoggingTrace(),
-					properties.getCustomLoggingFile() != null ? properties.getCustomLoggingFile() : new File(System
-							.getProperty("java.util.logging.config.file")), properties.getDefaultLoggingLevel(),
-					new LoggingManagerDelegate() {
+			return FlexoLoggingManager.initialize(applicationContext.getAdvancedPrefs().getMaxLogCount(), applicationContext
+					.getAdvancedPrefs().getIsLoggingTrace(),
+					applicationContext.getAdvancedPrefs().getCustomLoggingFile() != null ? applicationContext.getAdvancedPrefs()
+							.getCustomLoggingFile() : new File(System.getProperty("java.util.logging.config.file")), applicationContext
+							.getAdvancedPrefs().getDefaultLoggingLevel(), new LoggingManagerDelegate() {
 						@Override
 						public void setMaxLogCount(Integer maxLogCount) {
-							FlexoProperties.instance().setMaxLogCount(maxLogCount);
+							applicationContext.getAdvancedPrefs().setMaxLogCount(maxLogCount);
 						}
 
 						@Override
 						public void setKeepLogTrace(boolean logTrace) {
-							FlexoProperties.instance().setIsLoggingTrace(logTrace);
+							applicationContext.getAdvancedPrefs().setIsLoggingTrace(logTrace);
 						}
 
 						@Override
@@ -609,13 +614,13 @@ public class Flexo {
 								fileName = "FINEST";
 							}
 							reloadLoggingFile(new FileResource("Config/logging_" + fileName + ".properties").getAbsolutePath());
-							FlexoProperties.instance().setLoggingFileName(null);
+							applicationContext.getAdvancedPrefs().setLoggingFileName(null);
 						}
 
 						@Override
 						public void setConfigurationFileName(String configurationFile) {
 							reloadLoggingFile(configurationFile);
-							FlexoProperties.instance().setLoggingFileName(configurationFile);
+							applicationContext.getAdvancedPrefs().setLoggingFileName(configurationFile);
 						}
 					});
 		} catch (SecurityException e) {
