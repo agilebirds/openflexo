@@ -2,6 +2,8 @@ package org.openflexo;
 
 import java.io.File;
 
+import org.openflexo.br.BugReportService;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoServiceManager;
@@ -11,6 +13,7 @@ import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.prefs.PreferencesService;
 import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
 import org.openflexo.view.controller.FullInteractiveProjectLoadingHandler;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -54,5 +57,20 @@ public class InteractiveApplicationContext extends ApplicationContext {
 	@Override
 	protected InformationSpace createInformationSpace() {
 		return new InformationSpace();
+	}
+
+	@Override
+	protected BugReportService createBugReportService() {
+		return new BugReportService();
+	}
+
+	@Override
+	protected PreferencesService createPreferencesService() {
+		return new PreferencesService();
+	}
+
+	@Override
+	protected DocResourceManager createDocResourceManager() {
+		return new DocResourceManager();
 	}
 }

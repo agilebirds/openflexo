@@ -27,11 +27,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.GeneralPreferences;
-import org.openflexo.ch.FCH;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.prefs.ModulePreferences;
@@ -204,9 +201,14 @@ public abstract class Module<M extends FlexoModule> {
 		return getLocalizedName();
 	}
 
+	public ApplicationContext getApplicationContext() {
+		return getModuleLoader().getServiceManager();
+	}
+
 	public String getHTMLDescription() {
-		Language language = DocResourceManager.instance().getLanguage(GeneralPreferences.getLanguage());
-		DocItem docItem = DocResourceManager.getDocItem(getHelpTopic());
+		Language language = getApplicationContext().getDocResourceManager().getLanguage(
+				getApplicationContext().getGeneralPreferences().getLanguage());
+		DocItem docItem = getApplicationContext().getDocResourceManager().getDocItem(getHelpTopic());
 		if (docItem != null) {
 			if (docItem.getLastApprovedActionForLanguage(language) != null) {
 				String returned = "<html>" + docItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription()
@@ -239,7 +241,7 @@ public abstract class Module<M extends FlexoModule> {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + getLocalizedName(), 8);
 		}
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + getLocalizedName());
-		loadedModuleInstance = getConstructor().newInstance(new Object[] { (ApplicationContext) getModuleLoader().getServiceManager() });
+		loadedModuleInstance = getConstructor().newInstance(new Object[] { getModuleLoader().getServiceManager() });
 		doInternalLoadModule();
 		if (createProgress) {
 			ProgressWindow.hideProgressWindow();
@@ -281,7 +283,7 @@ public abstract class Module<M extends FlexoModule> {
 				logger.info("Loading module " + module.getName());
 			}
 			module.initModule();
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(module);
+			getApplicationContext().getDocResourceManager().ensureHelpEntryForModuleHaveBeenCreated(module);
 			return module;
 		}
 	}

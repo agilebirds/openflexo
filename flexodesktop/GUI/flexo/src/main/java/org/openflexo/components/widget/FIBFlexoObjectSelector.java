@@ -43,7 +43,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -573,7 +572,9 @@ public abstract class FIBFlexoObjectSelector<T extends FlexoObject> extends Text
 		}
 
 		protected final Icon decorateIcon(FlexoObject object, Icon returned) {
-			if (AdvancedPrefs.getHightlightUncommentedItem() && object != null && !object.hasDescription()) {
+			if (getFlexoController() != null
+					&& getFlexoController().getApplicationContext().getAdvancedPrefs().getHightlightUncommentedItem() && object != null
+					&& !object.hasDescription()) {
 				if (returned instanceof ImageIcon) {
 					returned = IconFactory.getImageIcon((ImageIcon) returned, new IconMarker[] { IconLibrary.WARNING });
 				} else {

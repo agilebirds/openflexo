@@ -1,7 +1,7 @@
 package org.openflexo.help.test;
 
 import org.junit.Test;
-import org.openflexo.drm.DocResourceManager;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.foundation.DefaultFlexoEditor;

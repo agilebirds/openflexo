@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.drm.DocItem;
 import org.openflexo.view.FlexoFrame;
@@ -32,14 +33,14 @@ public class TrackComponentCHForHelpSubmission extends TrackComponentCH {
 
 	private static final Logger logger = Logger.getLogger(TrackComponentCHForHelpSubmission.class.getPackage().getName());
 
-	public TrackComponentCHForHelpSubmission(FlexoFrame frame) {
-		super(frame);
+	public TrackComponentCHForHelpSubmission(FlexoFrame frame, ApplicationContext applicationContext) {
+		super(frame, applicationContext);
 		frame.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 
 	@Override
 	public void applyTracking(JComponent component) {
-		DocItem item = FCH.getDocForComponent(focusedComponent);
+		DocItem item = getDocResourceManager().getDocForComponent(focusedComponent);
 		if (item != null) {
 			SubmitDocumentationAction.actionType.makeNewAction(item, null, getController().getEditor()).doAction();
 		}

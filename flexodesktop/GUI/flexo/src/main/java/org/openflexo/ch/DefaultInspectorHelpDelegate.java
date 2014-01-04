@@ -23,9 +23,8 @@ import java.util.logging.Logger;
 
 import javax.help.BadIDException;
 
-import org.openflexo.GeneralPreferences;
+import org.openflexo.ApplicationContext;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.inspector.HelpDelegate;
@@ -39,15 +38,15 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 
 	private static final Logger logger = Logger.getLogger(DenaliWidget.class.getPackage().getName());
 
-	private DocResourceManager _docResourceManager;
+	private final DocResourceManager docResourceManager;
 
 	public DefaultInspectorHelpDelegate(DocResourceManager docResourceManager) {
-		_docResourceManager = docResourceManager;
+		this.docResourceManager = docResourceManager;
 	}
 
 	@Override
 	public boolean displayHelpFor(InspectableObject object) {
-		DocItem item = DocResourceManager.instance().getDocItemFor(object);
+		DocItem item = docResourceManager.getDocItemFor(object);
 		if (item != null) {
 			try {
 				logger.info("Trying to display help for " + item.getIdentifier());
@@ -64,8 +63,9 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 
 	@Override
 	public boolean isHelpAvailableFor(PropertyModel property) {
-		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
+		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
+		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(property);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				return true;
@@ -76,8 +76,9 @@ public class DefaultInspectorHelpDelegate implements HelpDelegate {
 
 	@Override
 	public String getHelpFor(PropertyModel property) {
-		Language language = _docResourceManager.getLanguage(GeneralPreferences.getLanguage());
-		DocItem propertyModelItem = _docResourceManager.getDocItemFor(property);
+		ApplicationContext applicationContext = (ApplicationContext) docResourceManager.getServiceManager();
+		Language language = docResourceManager.getLanguage(applicationContext.getGeneralPreferences().getLanguage());
+		DocItem propertyModelItem = docResourceManager.getDocItemFor(property);
 		if (propertyModelItem != null) {
 			if (propertyModelItem.getLastApprovedActionForLanguage(language) != null) {
 				return propertyModelItem.getLastApprovedActionForLanguage(language).getVersion().getFullHTMLDescription();

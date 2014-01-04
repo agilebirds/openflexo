@@ -4,11 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.br.BugReportService;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.DefaultPackageResourceCenterIsNotInstalled;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterListShouldBeStored;
@@ -23,6 +26,21 @@ import org.openflexo.prefs.PreferencesService;
 import org.openflexo.rest.client.ServerRestService;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
+/**
+ * The {@link ApplicationContext} is the {@link FlexoServiceManager} at desktop application level.<br>
+ * 
+ * It basically inherits from {@link FlexoServiceManager} by extending service manager with desktop-level services:<br>
+ * <ul>
+ * <li>{@link ModuleLoader}</li>
+ * <li>{@link PreferencesService}</li>
+ * <li>{@link TechnologyAdapterControllerService}</li>
+ * <li>{@link BugReportService}</li>
+ * <li>{@link DocResourceManager}</li>
+ * </ul>
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class ApplicationContext extends DefaultFlexoServiceManager implements FlexoEditorFactory {
 
 	private final FlexoEditor applicationEditor;
@@ -33,7 +51,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		super();
 		applicationEditor = createApplicationEditor();
 		try {
-			ProjectLoader projectLoader = new ProjectLoader(this);
+			ProjectLoader projectLoader = new ProjectLoader();
 			registerService(projectLoader);
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -43,6 +61,12 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		registerService(moduleLoader);
 		TechnologyAdapterControllerService technologyAdapterControllerService = createTechnologyAdapterControllerService();
 		registerService(technologyAdapterControllerService);
+		PreferencesService preferencesService = createPreferencesService();
+		registerService(preferencesService);
+		BugReportService bugReportService = createBugReportService();
+		registerService(bugReportService);
+		DocResourceManager docResourceManager = createDocResourceManager();
+		registerService(docResourceManager);
 	}
 
 	public PreferencesService getPreferencesService() {
@@ -51,6 +75,14 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	public ModuleLoader getModuleLoader() {
 		return getService(ModuleLoader.class);
+	}
+
+	public BugReportService getBugReportService() {
+		return getService(BugReportService.class);
+	}
+
+	public DocResourceManager getDocResourceManager() {
+		return getService(DocResourceManager.class);
 	}
 
 	public ProjectLoader getProjectLoader() {
@@ -82,6 +114,12 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 	protected abstract FlexoEditor createApplicationEditor();
 
 	protected abstract TechnologyAdapterControllerService createTechnologyAdapterControllerService();
+
+	protected abstract PreferencesService createPreferencesService();
+
+	protected abstract BugReportService createBugReportService();
+
+	protected abstract DocResourceManager createDocResourceManager();
 
 	@Override
 	protected FlexoResourceCenterService createResourceCenterService() {

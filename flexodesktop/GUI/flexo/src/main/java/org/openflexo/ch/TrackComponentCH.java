@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -40,15 +41,17 @@ public abstract class TrackComponentCH {
 
 	private static final Logger logger = Logger.getLogger(TrackComponentCH.class.getPackage().getName());
 
-	private FlexoFrame _frame;
+	private final FlexoFrame _frame;
 	protected JComponent focusedComponent = null;
-	private Border oldBorder = null;
+	private final Border oldBorder = null;
+	private final DocResourceManager docResourceManager;
 
-	private Hashtable<JComponent, ComponentCHListener> listeners;
+	private final Hashtable<JComponent, ComponentCHListener> listeners;
 
-	public TrackComponentCH(FlexoFrame frame) {
+	public TrackComponentCH(FlexoFrame frame, ApplicationContext applicationContext) {
 		super();
 		_frame = frame;
+		docResourceManager = applicationContext.getDocResourceManager();
 		listeners = new Hashtable<JComponent, ComponentCHListener>();
 		addMouseListener(_frame, null);
 	}
@@ -57,13 +60,17 @@ public abstract class TrackComponentCH {
 		return _frame.getController();
 	}
 
+	public DocResourceManager getDocResourceManager() {
+		return docResourceManager;
+	}
+
 	private ComponentCHListener addMouseListener(JComponent component) {
 		listeners.put(component, new ComponentCHListener(component));
 		return listeners.get(component);
 	}
 
 	private void addMouseListener(Container component, MouseListener listener) {
-		if (component instanceof JComponent && FCH.getDocForComponent((JComponent) component) != null) {
+		if (component instanceof JComponent && docResourceManager.getDocForComponent((JComponent) component) != null) {
 			listener = addMouseListener((JComponent) component);
 		} else if (listener != null) {
 			component.addMouseListener(listener);
@@ -110,7 +117,7 @@ public abstract class TrackComponentCH {
 
 	public class ComponentCHListener implements MouseListener {
 
-		private JComponent componentWithHelp;
+		private final JComponent componentWithHelp;
 		private Border oldBorder;
 
 		/**

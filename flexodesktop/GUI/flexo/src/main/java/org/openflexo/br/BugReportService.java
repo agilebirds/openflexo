@@ -12,7 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.ws.jira.JIRAGson;
@@ -22,37 +23,39 @@ import org.openflexo.ws.jira.model.JIRAProjectList;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-public class BugReportManager {
+public class BugReportService extends FlexoServiceImpl {
 
 	private static final File PROJECT_FILE = new FileResource("Config/jira_openflexo_project.json");
 	private static final String OPENFLEXO_KEY = "OPENFLEXO";
-	private static final BugReportManager instance = new BugReportManager();
 
-	public static BugReportManager getInstance() {
-		return instance;
-	}
-
-	private File userProjectFile;
+	private final File userProjectFile;
 	private JIRAProject project;
 
-	BugReportManager() {
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
+	}
+
+	public BugReportService() {
 		userProjectFile = new File(FileUtils.getApplicationDataDirectory(), PROJECT_FILE.getName());
 		if (!userProjectFile.exists()) {
 			copyOriginalToUserFile();
 		}
 		try {
 			Map<String, String> headers = new HashMap<String, String>();
-			if (AdvancedPrefs.getBugReportUser() != null && AdvancedPrefs.getBugReportUser().trim().length() > 0
-					&& AdvancedPrefs.getBugReportPassword() != null && AdvancedPrefs.getBugReportPassword().trim().length() > 0) {
+			if (getServiceManager().getAdvancedPrefs().getBugReportUser() != null
+					&& getServiceManager().getAdvancedPrefs().getBugReportUser().trim().length() > 0
+					&& getServiceManager().getAdvancedPrefs().getBugReportPassword() != null
+					&& getServiceManager().getAdvancedPrefs().getBugReportPassword().trim().length() > 0) {
 				try {
 					headers.put(
 							"Authorization",
 							"Basic "
-									+ Base64.encodeBase64String((AdvancedPrefs.getBugReportUser() + ":" + AdvancedPrefs
-											.getBugReportPassword()).getBytes("ISO-8859-1")));
+									+ Base64.encodeBase64String((getServiceManager().getAdvancedPrefs().getBugReportUser() + ":" + getServiceManager()
+											.getAdvancedPrefs().getBugReportPassword()).getBytes("ISO-8859-1")));
 				} catch (UnsupportedEncodingException e) {
 				}
-				FileUtils.createOrUpdateFileFromURL(new URL(AdvancedPrefs.getBugReportUrl()
+				FileUtils.createOrUpdateFileFromURL(new URL(getServiceManager().getAdvancedPrefs().getBugReportUrl()
 						+ "/rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&projectKey=" + OPENFLEXO_KEY), userProjectFile,
 						headers);
 			}
@@ -95,6 +98,11 @@ public class BugReportManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void initialize() {
+		logger.info("Initialized BugReportService");
 	}
 
 }

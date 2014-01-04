@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.GeneralPreferences;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.browser.BrowserConfiguration;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
@@ -35,7 +36,6 @@ import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
 import org.openflexo.drm.DocResourceCenter;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.dm.DRMDataModification;
 import org.openflexo.foundation.DataModification;

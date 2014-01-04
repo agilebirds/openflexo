@@ -16,11 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.Deflater;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
-import org.openflexo.br.BugReportManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
@@ -201,10 +199,11 @@ public class JIRAIssueReportDialog {
 			while (!ok) {
 				if (dialog.getStatus() == Status.VALIDATED) {
 					try {
-						while (AdvancedPrefs.getBugReportUser() == null || AdvancedPrefs.getBugReportUser().trim().length() == 0
-								|| AdvancedPrefs.getBugReportPassword() == null
-								|| AdvancedPrefs.getBugReportPassword().trim().length() == 0) {
-							if (!JIRAURLCredentialsDialog.askLoginPassword()) {
+						while (serviceManager.getAdvancedPrefs().getBugReportUser() == null
+								|| serviceManager.getAdvancedPrefs().getBugReportUser().trim().length() == 0
+								|| serviceManager.getAdvancedPrefs().getBugReportPassword() == null
+								|| serviceManager.getAdvancedPrefs().getBugReportPassword().trim().length() == 0) {
+							if (!JIRAURLCredentialsDialog.askLoginPassword(serviceManager)) {
 								break;
 							}
 						}
@@ -212,7 +211,7 @@ public class JIRAIssueReportDialog {
 					} catch (MalformedURLException e1) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("could_not_send_bug_report") + " " + e.getMessage());
 					} catch (UnauthorizedJIRAAccessException e1) {
-						if (JIRAURLCredentialsDialog.askLoginPassword()) {
+						if (JIRAURLCredentialsDialog.askLoginPassword(serviceManager)) {
 							continue;
 						} else {
 							break;
@@ -273,7 +272,7 @@ public class JIRAIssueReportDialog {
 	}
 
 	private JIRAIssueReportDialog(Exception e) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		this.project = BugReportManager.getInstance().getOpenFlexoProject();
+		this.project = serviceManager.getBugReportService().getOpenFlexoProject();
 		issue = new JIRAIssue();
 		issue.setIssuetype(project.getIssuetypes().get(0));
 		issue.setProject(project);
@@ -311,8 +310,8 @@ public class JIRAIssueReportDialog {
 	}
 
 	public boolean send() throws Exception {
-		JIRAClient client = new JIRAClient(AdvancedPrefs.getBugReportUrl(), AdvancedPrefs.getBugReportUser(),
-				AdvancedPrefs.getBugReportPassword());
+		JIRAClient client = new JIRAClient(serviceManager.getAdvancedPrefs().getBugReportUrl(), serviceManager.getAdvancedPrefs()
+				.getBugReportUser(), serviceManager.getAdvancedPrefs().getBugReportPassword());
 		final SubmitIssueReport report = new SubmitIssueReport();
 		SubmitIssueToJIRA target = new SubmitIssueToJIRA(client, report);
 		int steps = target.getNumberOfSteps();
@@ -432,7 +431,7 @@ public class JIRAIssueReportDialog {
 				if (submit.getKey() != null) {
 					JIRAIssue result = new JIRAIssue();
 					result.setKey(submit.getKey());
-					report.setIssueLink(AdvancedPrefs.getBugReportUrl() + "/browse/" + submit.getKey());
+					report.setIssueLink(serviceManager.getAdvancedPrefs().getBugReportUrl() + "/browse/" + submit.getKey());
 					if (sendLogs) {
 						ProgressWindow.instance().setProgress(FlexoLocalization.localizedForKey("sending_logs"));
 						progressAdapter.resetCount();

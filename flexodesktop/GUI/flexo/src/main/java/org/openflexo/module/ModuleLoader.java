@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.action.SubmitDocumentationAction;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.components.SaveProjectsDialog;
@@ -47,7 +46,6 @@ import org.openflexo.foundation.resource.SaveResourceExceptionList;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -101,6 +99,11 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasP
 		super();
 		this.applicationContext = applicationContext;
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
+
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	private Map<Class<? extends Module>, Module<?>> knownModules;
@@ -429,8 +432,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasP
 
 	private void proceedQuitWithoutConfirmation() {
 		if (activeModule != null) {
-			GeneralPreferences.setFavoriteModuleName(activeModule.getModule().getName());
-			FlexoPreferences.savePreferences(true);
+			getServiceManager().getGeneralPreferences().setFavoriteModuleName(activeModule.getModule().getName());
+			// FlexoPreferences.savePreferences(true);
 		}
 
 		for (Module<?> m : getLoadedModules()) {

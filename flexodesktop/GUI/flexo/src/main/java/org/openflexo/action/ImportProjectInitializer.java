@@ -88,7 +88,8 @@ public class ImportProjectInitializer extends ActionInitializer<ImportProject, F
 				if (action.getProjectToImport() != null) {
 					return true;
 				}
-				ProjectChooserComponent chooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
+				ProjectChooserComponent chooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame(), getController()
+						.getApplicationContext()) {
 				};
 				while (true) {
 					if (chooser.showOpenDialog() == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {

@@ -17,24 +17,45 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.drm;
+package org.openflexo.ch;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.openflexo.ApplicationContext;
+import org.openflexo.drm.ActionType;
+import org.openflexo.drm.Author;
+import org.openflexo.drm.DRMBuilder;
+import org.openflexo.drm.DRMValidationModel;
+import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocItemAction;
+import org.openflexo.drm.DocItemFolder;
+import org.openflexo.drm.DocItemVersion;
+import org.openflexo.drm.DocResourceCenter;
+import org.openflexo.drm.DocSubmissionReport;
+import org.openflexo.drm.Language;
 import org.openflexo.drm.action.ApproveVersion;
 import org.openflexo.drm.action.RefuseVersion;
 import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -42,7 +63,12 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.model.TabModel;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.FlexoMainPane;
+import org.openflexo.view.ModuleView;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
@@ -50,43 +76,34 @@ import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
-public class DocResourceManager {
+/**
+ * This is a service allowing to manage documentation
+ * 
+ * @author sylvain
+ * 
+ */
+public class DocResourceManager extends FlexoServiceImpl {
 
 	private static final Logger logger = Logger.getLogger(DocResourceManager.class.getPackage().getName());
-
-	public static final String DOC_RESOURCE_CENTER = "FlexoDocResourceCenter";
-	public static final String FLEXO_MODEL = "FlexoModel";
-	public static final String FLEXO_TOOL_SET = "FlexoToolSet";
-	public static final String ABSTRACT_MODULE = "general module";
-	public static final String ABSTRACT_MAIN_PANE = "general main pane";
-	public static final String ABSTRACT_CONTROL_PANEL = "general control panel";
-	public static final String ABSTRACT_LEFT_VIEW = "general left view";
-	public static final String ABSTRACT_RIGHT_VIEW = "general right view";
 
 	/**
 	 * Hashtable storing edited DocItemVersion (not yet stored in DocItem), and where keys are DocItem instances
 	 */
-	private Hashtable<DocItem, DocItemVersion> _editedDocItems;
-	private Vector<DocItemVersion> _versionsToEventuallySave;
+	private final Hashtable<DocItem, DocItemVersion> _editedDocItems;
+	private final Vector<DocItemVersion> _versionsToEventuallySave;
 	private DocSubmissionReport _sessionSubmissions;
-
-	private static DocResourceManager _instance = null;
 
 	private DocResourceCenter docResourceCenter;
 
-	public static DocResourceManager instance() {
-		if (_instance == null) {
-			_instance = new DocResourceManager();
-		}
-		return _instance;
-	}
-
-	private DocResourceManager() {
+	public DocResourceManager() {
 		super();
 		_editedDocItems = new Hashtable<DocItem, DocItemVersion>();
 		_versionsToEventuallySave = new Vector<DocItemVersion>();
-		_instance = this;
-		load();
+	}
+
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	private FlexoEditor _editor;
@@ -220,11 +237,11 @@ public class DocResourceManager {
 		return drmFile;
 	}
 
-	private static File drmDirectory;
+	private File drmDirectory;
 
-	public static File getDocResourceCenterDirectory() {
+	public File getDocResourceCenterDirectory() {
 		if (drmDirectory == null) {
-			drmDirectory = instance().getDRMFile().getParentFile();
+			drmDirectory = getDRMFile().getParentFile();
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Doc Resource Center Directory: " + drmDirectory.getAbsolutePath());
 			}
@@ -239,10 +256,6 @@ public class DocResourceManager {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public static void main(String[] args) {
-		instance();
 	}
 
 	public DocItem importInspector(InspectorGroup inspectorGroup, String inspectorName, InspectorModel inspectorModel) {
@@ -405,24 +418,24 @@ public class DocResourceManager {
 	// ================================================
 
 	public DocItem getDocResourceCenterItem() {
-		return getDocResourceCenter().getItemNamed(DOC_RESOURCE_CENTER);
+		return getDocResourceCenter().getItemNamed(DocResourceCenter.DOC_RESOURCE_CENTER);
 	}
 
 	public DocItem getFlexoModelItem() {
-		return getDocResourceCenter().getItemNamed(FLEXO_MODEL);
+		return getDocResourceCenter().getItemNamed(DocResourceCenter.FLEXO_MODEL);
 	}
 
 	public DocItem getFlexoToolSetItem() {
-		return getDocResourceCenter().getItemNamed(FLEXO_TOOL_SET);
+		return getDocResourceCenter().getItemNamed(DocResourceCenter.FLEXO_TOOL_SET);
 	}
 
 	public DocItem getAbstractModuleItem() {
-		DocItemFolder f = getDocResourceCenter().getFTSFolder().getItemFolderNamed(ABSTRACT_MODULE);
+		DocItemFolder f = getDocResourceCenter().getFTSFolder().getItemFolderNamed(DocResourceCenter.ABSTRACT_MODULE);
 		if (f == null) {
-			f = DocItemFolder.createDocItemFolder(DocResourceManager.ABSTRACT_MODULE, "Description of what is a module",
+			f = DocItemFolder.createDocItemFolder(DocResourceCenter.ABSTRACT_MODULE, "Description of what is a module",
 					getDocResourceCenter().getFTSFolder(), getDocResourceCenter());
 		}
-		DocItem it = getDocResourceCenter().getItemNamed(ABSTRACT_MODULE);
+		DocItem it = getDocResourceCenter().getItemNamed(DocResourceCenter.ABSTRACT_MODULE);
 		if (it == null) {
 			f.createDefaultPrimaryDocItem();
 		}
@@ -430,9 +443,9 @@ public class DocResourceManager {
 	}
 
 	public DocItem getAbstractMainPaneItem() {
-		DocItem item = getDocResourceCenter().getItemNamed(ABSTRACT_MAIN_PANE);
+		DocItem item = getDocResourceCenter().getItemNamed(DocResourceCenter.ABSTRACT_MAIN_PANE);
 		if (item == null) {
-			item = DocItem.createDocItem(DocResourceManager.ABSTRACT_MAIN_PANE, "Description of what is the main pane",
+			item = DocItem.createDocItem(DocResourceCenter.ABSTRACT_MAIN_PANE, "Description of what is the main pane",
 					getAbstractModuleItem().getFolder(), getDocResourceCenter(), false);
 			getAbstractModuleItem().addToEmbeddingChildItems(item);
 		}
@@ -440,9 +453,9 @@ public class DocResourceManager {
 	}
 
 	public DocItem getAbstractControlPanelItem() {
-		DocItem item = getDocResourceCenter().getItemNamed(ABSTRACT_CONTROL_PANEL);
+		DocItem item = getDocResourceCenter().getItemNamed(DocResourceCenter.ABSTRACT_CONTROL_PANEL);
 		if (item == null) {
-			item = DocItem.createDocItem(DocResourceManager.ABSTRACT_CONTROL_PANEL, "Description of what is the control panel",
+			item = DocItem.createDocItem(DocResourceCenter.ABSTRACT_CONTROL_PANEL, "Description of what is the control panel",
 					getAbstractModuleItem().getFolder(), getDocResourceCenter(), false);
 			getAbstractModuleItem().addToEmbeddingChildItems(item);
 		}
@@ -450,9 +463,9 @@ public class DocResourceManager {
 	}
 
 	public DocItem getAbstractLeftViewItem() {
-		DocItem item = getDocResourceCenter().getItemNamed(ABSTRACT_LEFT_VIEW);
+		DocItem item = getDocResourceCenter().getItemNamed(DocResourceCenter.ABSTRACT_LEFT_VIEW);
 		if (item == null) {
-			item = DocItem.createDocItem(DocResourceManager.ABSTRACT_LEFT_VIEW, "Description of what is the left view",
+			item = DocItem.createDocItem(DocResourceCenter.ABSTRACT_LEFT_VIEW, "Description of what is the left view",
 					getAbstractModuleItem().getFolder(), getDocResourceCenter(), false);
 			getAbstractModuleItem().addToEmbeddingChildItems(item);
 		}
@@ -460,9 +473,9 @@ public class DocResourceManager {
 	}
 
 	public DocItem getAbstractRightViewItem() {
-		DocItem item = getDocResourceCenter().getItemNamed(ABSTRACT_RIGHT_VIEW);
+		DocItem item = getDocResourceCenter().getItemNamed(DocResourceCenter.ABSTRACT_RIGHT_VIEW);
 		if (item == null) {
-			item = DocItem.createDocItem(DocResourceManager.ABSTRACT_RIGHT_VIEW, "Description of what is the right view",
+			item = DocItem.createDocItem(DocResourceCenter.ABSTRACT_RIGHT_VIEW, "Description of what is the right view",
 					getAbstractModuleItem().getFolder(), getDocResourceCenter(), false);
 			getAbstractModuleItem().addToEmbeddingChildItems(item);
 		}
@@ -514,8 +527,8 @@ public class DocResourceManager {
 		return getDocResourceCenter().getItemNamed(itemIdentifier);
 	}
 
-	public static DocItem getDocItem(String itemIdentifier) {
-		return instance().getDocItemWithId(itemIdentifier);
+	public DocItem getDocItem(String itemIdentifier) {
+		return getDocItemWithId(itemIdentifier);
 	}
 
 	// ================================================
@@ -587,6 +600,285 @@ public class DocResourceManager {
 			_drmValidationModel = new DRMValidationModel();
 		}
 		return _drmValidationModel;
+	}
+
+	@Override
+	public void initialize() {
+		logger.info("Initialized DocResourceManager service");
+		load();
+	}
+
+	private final WeakHashMap<JComponent, DocItem> _docForComponent = new WeakHashMap<JComponent, DocItem>();
+
+	private final WeakHashMap<JComponent, String> _pendingComponents = new WeakHashMap<JComponent, String>();
+
+	private synchronized Window getWindowForComponent(JComponent component) {
+		JComponent current = component;
+		Container parent;
+		while (current.getParent() != null) {
+			parent = current.getParent();
+			if (parent instanceof JComponent) {
+				current = (JComponent) parent;
+			} else if (parent instanceof Window) {
+				return (Window) parent;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	private static class SortComponents {
+		private final List<JComponent> initialVector;
+		private final List<Component> sortedVector;
+
+		protected SortComponents(List<JComponent> sortingSet, Window window) {
+			initialVector = sortingSet;
+			sortedVector = new ArrayList<Component>();
+			populateFrom(window);
+		}
+
+		private void populateFrom(Container component) {
+			if (initialVector.contains(component)) {
+				sortedVector.add(component);
+			}
+			for (int i = 0; i < component.getComponentCount(); i++) {
+				Component comp = component.getComponent(i);
+				if (comp instanceof Container) {
+					populateFrom((Container) comp);
+				} else if (initialVector.contains(comp)) {
+					sortedVector.add(comp);
+				}
+			}
+		}
+
+		protected List<Component> getSortedVector() {
+			return sortedVector;
+		}
+
+	}
+
+	public synchronized void validateWindow(Window window) {
+		// logger.info("Validate window");
+		List<JComponent> concernedComponents = new ArrayList<JComponent>();
+		for (Entry<JComponent, String> e : _pendingComponents.entrySet()) {
+			JComponent next = e.getKey();
+			if (next != null && getWindowForComponent(next) == window) {
+				concernedComponents.add(next);
+			}
+		}
+		List<Component> sortedConcernedComponents = new SortComponents(concernedComponents, window).getSortedVector();
+		for (Component next : sortedConcernedComponents) {
+			validateHelpItem((JComponent) next, _pendingComponents.get(next));
+			_pendingComponents.remove(next);
+		}
+	}
+
+	public synchronized void setHelpItem(final JComponent component, final String anIdentifier) {
+		// logger.info("setHelpItem for "+anIdentifier);
+		if (component != null && anIdentifier != null) {
+			_pendingComponents.put(component, anIdentifier);
+		}
+	}
+
+	public synchronized void validateHelpItem(final JComponent component, final String anIdentifier) {
+		JComponent parent = getClosestDocumentedAncestorComponent(component);
+		String identifier = anIdentifier;
+		if (parent != null) {
+			DocItem parentDocItem = getDocForComponent(parent);
+			if (!anIdentifier.startsWith(parentDocItem.getIdentifier())) {
+				identifier = parentDocItem.getIdentifier() + "-" + anIdentifier;
+			}
+			validateHelpItem(component, identifier, parentDocItem);
+			return;
+		}
+		validateHelpItem(component, identifier, null);
+	}
+
+	public synchronized void validateHelpItem(final JComponent component, final String anIdentifier, final DocItem parentDocItem) {
+		// logger.info(">>>>>>> Validate for "+anIdentifier+" under "+parentDocItem);
+		String identifier = anIdentifier;
+		if (parentDocItem != null) {
+			if (!anIdentifier.startsWith(parentDocItem.getIdentifier())) {
+				identifier = parentDocItem.getIdentifier() + "-" + anIdentifier;
+			}
+		}
+		DocItem item = getDocItem(identifier);
+		if (item == null) {
+			item = createCHEntry(component, identifier, parentDocItem);
+		}
+		_docForComponent.put(component, item);
+		Language lang = getLanguage(getServiceManager().getGeneralPreferences().getLanguage());
+		String tooltipText = null;
+
+		DocItem currentItem = item;
+
+		while (tooltipText == null && currentItem != null) {
+			if (currentItem.getLastApprovedActionForLanguage(lang) != null) {
+				tooltipText = currentItem.getLastApprovedActionForLanguage(lang).getVersion().getShortHTMLDescription();
+			}
+			currentItem = currentItem.getInheritanceParentItem();
+		}
+
+		/*if (item.getLastApprovedActionForLanguage(lang) != null) {
+		    tooltipText = item.getLastApprovedActionForLanguage(lang).getVersion().getShortHTMLDescription();
+		}
+		else {
+		    tooltipText = FlexoLocalization.localizedForKeyAndLanguage("no_documentation",GeneralPreferences.getLanguage());
+		}*/
+
+		if (tooltipText == null) {
+			tooltipText = FlexoLocalization.localizedForKeyAndLanguage("no_documentation", getServiceManager().getGeneralPreferences()
+					.getLanguage());
+		}
+
+		component.setToolTipText("<html>" + tooltipText + "</html>");
+	}
+
+	public synchronized void setHelpItem(JComponent component, DocItem item) {
+		setHelpItem(component, item.getIdentifier());
+	}
+
+	private synchronized JComponent getClosestDocumentedAncestorComponent(JComponent component) {
+		JComponent parent = null;
+		DocItem parentItem = null;
+		JComponent current = component;
+		while (parentItem == null && current.getParent() != null && current.getParent() instanceof JComponent) {
+			current = (JComponent) current.getParent();
+			parentItem = getDocForComponent(current);
+			if (parentItem != null) {
+				parent = current;
+			}
+		}
+		return parent;
+	}
+
+	private synchronized DocItem createCHEntry(JComponent component, String identifier, DocItem parentItem) {
+		if (parentItem == null) {
+			parentItem = getFlexoToolSetItem();
+		}
+		logger.info("Create entry for " + identifier + " under " + parentItem);
+		DocItem newEntry = DocItem.createDocItem(identifier, "", parentItem.getFolder(), getDocResourceCenter(), false);
+		parentItem.addToEmbeddingChildItems(newEntry);
+		return newEntry;
+	}
+
+	public DocItem getDocForComponent(JComponent component) {
+		return _docForComponent.get(component);
+	}
+
+	public void ensureHelpEntryForModuleHaveBeenCreated(FlexoModule module) {
+		DocItem newModuleItem = getDocItemFor(module);
+		DocItem mainPaneItem = getMainPaneItemFor(module);
+		DocItem controlPanelItem = getControlPanelItemFor(module);
+		DocItem leftViewItem = getLeftViewItemFor(module);
+		DocItem rightViewItem = getRightViewItemFor(module);
+
+		FlexoFrame frame = module.getFlexoFrame();
+		FlexoMainPane mainPane = module.getFlexoController().getMainPane();
+		if (mainPane != null) {
+			// TODO: restore help on main pane top bar
+			// setHelpItem(mainPane.getControlPanel(), controlPanelItem);
+		}
+	}
+
+	public DocItem getDocItemFor(FlexoModule module) {
+		DocResourceCenter drc = getDocResourceCenter();
+		String identifier = module.getModule().getHelpTopic();
+		if (getDocItem(identifier) == null) {
+			DocItemFolder newModuleFolder = DocItemFolder.createDocItemFolder(identifier, "", getFlexoToolSetItem().getFolder(), drc);
+			getAbstractModuleItem().addToInheritanceChildItems(newModuleFolder.getPrimaryDocItem());
+		}
+		return getDocItem(identifier);
+	}
+
+	public DocItem getMainPaneItemFor(FlexoModule module) {
+		DocResourceCenter drc = getDocResourceCenter();
+		String identifier = module.getModule().getHelpTopic();
+		String mainPaneId = identifier + "-" + DocResourceCenter.MAIN_PANE_ID;
+		DocItem newModuleItem = getDocItemFor(module);
+		if (getDocItem(mainPaneId) == null) {
+			DocItemFolder mainPaneFolder = DocItemFolder.createDocItemFolder(mainPaneId, "", newModuleItem.getFolder(), drc);
+			getAbstractMainPaneItem().addToInheritanceChildItems(mainPaneFolder.getPrimaryDocItem());
+			newModuleItem.addToEmbeddingChildItems(mainPaneFolder.getPrimaryDocItem());
+		}
+		return getDocItem(mainPaneId);
+
+	}
+
+	public DocItem getModuleViewItemFor(FlexoModule module, ModuleView view) {
+		DocResourceCenter drc = getDocResourceCenter();
+		DocItem mainPaneItem = getMainPaneItemFor(module);
+		DocItemFolder folder;
+		if (view.getPerspective() != null) {
+			String perspectiveIdentifier = view.getPerspective().getName();
+			if (getDocItem(perspectiveIdentifier) == null) {
+				DocItemFolder perspectiveFolder = DocItemFolder.createDocItemFolder(perspectiveIdentifier,
+						"Documentation on that perspective", mainPaneItem.getFolder(), drc);
+				mainPaneItem.addToEmbeddingChildItems(perspectiveFolder.getPrimaryDocItem());
+			}
+			folder = getDocItem(perspectiveIdentifier).getFolder();
+		} else {
+			folder = mainPaneItem.getFolder();
+		}
+		String moduleViewIdentifier = view.getClass().getName();
+		if (moduleViewIdentifier.lastIndexOf('.') > 0) {
+			moduleViewIdentifier = moduleViewIdentifier.substring(moduleViewIdentifier.lastIndexOf('.') + 1);
+		}
+		if (getDocItem(moduleViewIdentifier) == null) {
+			DocItemFolder moduleViewFolder = DocItemFolder.createDocItemFolder(moduleViewIdentifier, "Documentation on that view", folder,
+					drc);
+			mainPaneItem.addToInheritanceChildItems(moduleViewFolder.getPrimaryDocItem());
+			if (view.getPerspective() != null && folder.getPrimaryDocItem() != null) {
+				moduleViewFolder.getPrimaryDocItem().addToRelatedToItems(folder.getPrimaryDocItem());
+			}
+		}
+		return getDocItem(moduleViewIdentifier);
+
+	}
+
+	public DocItem getControlPanelItemFor(FlexoModule module) {
+		DocResourceCenter drc = getDocResourceCenter();
+		String identifier = module.getModule().getHelpTopic();
+		String controlPanelId = identifier + "-" + DocResourceCenter.CONTROL_PANEL_ID;
+		DocItem newModuleItem = getDocItemFor(module);
+		if (getDocItem(controlPanelId) == null) {
+			DocItemFolder controlPanelFolder = DocItemFolder.createDocItemFolder(controlPanelId, "", newModuleItem.getFolder(), drc);
+			getAbstractControlPanelItem().addToInheritanceChildItems(controlPanelFolder.getPrimaryDocItem());
+			newModuleItem.addToEmbeddingChildItems(controlPanelFolder.getPrimaryDocItem());
+		}
+		return getDocItem(controlPanelId);
+	}
+
+	public DocItem getLeftViewItemFor(FlexoModule module) {
+		DocResourceCenter drc = getDocResourceCenter();
+		String identifier = module.getModule().getHelpTopic();
+		String leftViewId = identifier + "-" + DocResourceCenter.LEFT_VIEW_ID;
+		DocItem newModuleItem = getDocItemFor(module);
+		if (getDocItem(leftViewId) == null) {
+			DocItemFolder leftViewFolder = DocItemFolder.createDocItemFolder(leftViewId, "", newModuleItem.getFolder(), drc);
+			getAbstractLeftViewItem().addToInheritanceChildItems(leftViewFolder.getPrimaryDocItem());
+			newModuleItem.addToEmbeddingChildItems(leftViewFolder.getPrimaryDocItem());
+		}
+		return getDocItem(leftViewId);
+	}
+
+	public DocItem getRightViewItemFor(FlexoModule module) {
+		DocResourceCenter drc = getDocResourceCenter();
+		String identifier = module.getModule().getHelpTopic();
+		String rightViewId = identifier + "-" + DocResourceCenter.RIGHT_VIEW_ID;
+		DocItem newModuleItem = getDocItemFor(module);
+		if (getDocItem(rightViewId) == null) {
+			DocItemFolder rightViewFolder = DocItemFolder.createDocItemFolder(rightViewId, "", newModuleItem.getFolder(), drc);
+			getAbstractRightViewItem().addToInheritanceChildItems(rightViewFolder.getPrimaryDocItem());
+			newModuleItem.addToEmbeddingChildItems(rightViewFolder.getPrimaryDocItem());
+		}
+		return getDocItem(rightViewId);
+	}
+
+	public void clearComponentsHashtable() {
+		_docForComponent.clear();
+		_pendingComponents.clear();
 	}
 
 }

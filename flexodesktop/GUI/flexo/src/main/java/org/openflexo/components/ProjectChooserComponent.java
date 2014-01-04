@@ -34,7 +34,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.FlexoFileChooser;
@@ -65,10 +65,12 @@ public abstract class ProjectChooserComponent {
 	private JFileChooser fileChooser;
 	private Window owner;
 	private String approveButtonText;
+	private final ApplicationContext applicationContext;
 
-	public ProjectChooserComponent(Window owner) {
+	public ProjectChooserComponent(Window owner, ApplicationContext applicationContext) {
 		super();
 		this.owner = owner;
+		this.applicationContext = applicationContext;
 		if (getImplementationType() == ImplementationType.JFileChooserImplementation) {
 			buildAsJFileChooser();
 		} else if (getImplementationType() == ImplementationType.FileDialogImplementation) {
@@ -83,7 +85,7 @@ public abstract class ProjectChooserComponent {
 			FileFilter filter = ff[i];
 			fileChooser.removeChoosableFileFilter(filter);
 		}
-		fileChooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
+		fileChooser.setCurrentDirectory(applicationContext.getAdvancedPrefs().getLastVisitedDirectory());
 		fileChooser.setDialogTitle(ToolBox.getPLATFORM() == ToolBox.MACOS ? FlexoLocalization.localizedForKey("select_a_prj_file")
 				: FlexoLocalization.localizedForKey("select_a_prj_directory"));
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -107,7 +109,7 @@ public abstract class ProjectChooserComponent {
 			fileDialog = new FileDialog(FlexoFrame.getActiveFrame());
 		}
 		try {
-			fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
+			fileDialog.setDirectory(applicationContext.getAdvancedPrefs().getLastVisitedDirectory().getCanonicalPath());
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}

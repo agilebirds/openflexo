@@ -25,8 +25,8 @@ import javax.help.BadIDException;
 import javax.swing.Icon;
 
 import org.openflexo.action.HelpAction;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;

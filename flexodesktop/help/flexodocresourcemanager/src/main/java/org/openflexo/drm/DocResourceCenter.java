@@ -47,6 +47,30 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 
 	private FlexoResource<DocResourceCenter> resource;
 
+	public static final String DOC_RESOURCE_CENTER = "FlexoDocResourceCenter";
+
+	public static final String FLEXO_MODEL = "FlexoModel";
+
+	public static final String FLEXO_TOOL_SET = "FlexoToolSet";
+
+	public static final String ABSTRACT_MODULE = "general module";
+
+	public static final String ABSTRACT_MAIN_PANE = "general main pane";
+
+	public static final String ABSTRACT_CONTROL_PANEL = "general control panel";
+
+	public static final String ABSTRACT_LEFT_VIEW = "general left view";
+
+	public static final String ABSTRACT_RIGHT_VIEW = "general right view";
+
+	public static final String MAIN_PANE_ID = "main-pane";
+
+	public static final String CONTROL_PANEL_ID = "control-panel";
+
+	public static final String LEFT_VIEW_ID = "left-view";
+
+	public static final String RIGHT_VIEW_ID = "right-view";
+
 	public DocResourceCenter(DRMBuilder builder) {
 		this();
 		builder.docResourceCenter = this;
@@ -108,7 +132,7 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 		setChanged();
 	}
 
-	protected static DocResourceCenter createDefaultDocResourceCenter() {
+	public static DocResourceCenter createDefaultDocResourceCenter() {
 		DocResourceCenter returned = new DocResourceCenter();
 		Language english = Language.createLanguage("ENGLISH", "english", returned);
 		Language french = Language.createLanguage("FRENCH", "french", returned);
@@ -116,23 +140,22 @@ public class DocResourceCenter extends DRMObject implements ResourceData<DocReso
 		returned.addToLanguages(english);
 		returned.addToLanguages(french);
 		returned.addToAuthors(author);
-		DocItemFolder rootFolder = DocItemFolder.createDocItemFolder(DocResourceManager.DOC_RESOURCE_CENTER,
-				"Root folder for Flexo documentation", null, returned);
+		DocItemFolder rootFolder = DocItemFolder.createDocItemFolder(DOC_RESOURCE_CENTER, "Root folder for Flexo documentation", null,
+				returned);
 		returned.setRootFolder(rootFolder);
-		DocItemFolder flexoModelFolder = DocItemFolder.createDocItemFolder(DocResourceManager.FLEXO_MODEL, "Description of Flexo model",
-				rootFolder, returned);
-		DocItemFolder flexoToolSetFolder = DocItemFolder.createDocItemFolder(DocResourceManager.FLEXO_TOOL_SET,
+		DocItemFolder flexoModelFolder = DocItemFolder.createDocItemFolder(FLEXO_MODEL, "Description of Flexo model", rootFolder, returned);
+		DocItemFolder flexoToolSetFolder = DocItemFolder.createDocItemFolder(FLEXO_TOOL_SET,
 				"Description for the FlexoToolSet application", rootFolder, returned);
-		DocItemFolder abstractModuleFolder = DocItemFolder.createDocItemFolder(DocResourceManager.ABSTRACT_MODULE,
-				"Description of what is a module", flexoToolSetFolder, returned);
-		DocItem abstractMainPaneItem = DocItem.createDocItem(DocResourceManager.ABSTRACT_MAIN_PANE, "Description of what is the main pane",
+		DocItemFolder abstractModuleFolder = DocItemFolder.createDocItemFolder(ABSTRACT_MODULE, "Description of what is a module",
+				flexoToolSetFolder, returned);
+		DocItem abstractMainPaneItem = DocItem.createDocItem(ABSTRACT_MAIN_PANE, "Description of what is the main pane",
 				abstractModuleFolder, returned, false);
-		DocItem abstractControlPanelItem = DocItem.createDocItem(DocResourceManager.ABSTRACT_CONTROL_PANEL,
-				"Description of what is the control panel", abstractModuleFolder, returned, false);
-		DocItem abstractLeftViewItem = DocItem.createDocItem(DocResourceManager.ABSTRACT_LEFT_VIEW, "Description of what is the left view",
+		DocItem abstractControlPanelItem = DocItem.createDocItem(ABSTRACT_CONTROL_PANEL, "Description of what is the control panel",
 				abstractModuleFolder, returned, false);
-		DocItem abstractRightViewItem = DocItem.createDocItem(DocResourceManager.ABSTRACT_RIGHT_VIEW,
-				"Description of what is the right view", abstractModuleFolder, returned, false);
+		DocItem abstractLeftViewItem = DocItem.createDocItem(ABSTRACT_LEFT_VIEW, "Description of what is the left view",
+				abstractModuleFolder, returned, false);
+		DocItem abstractRightViewItem = DocItem.createDocItem(ABSTRACT_RIGHT_VIEW, "Description of what is the right view",
+				abstractModuleFolder, returned, false);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractMainPaneItem);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractControlPanelItem);
 		abstractModuleFolder.getPrimaryDocItem().addToEmbeddingChildItems(abstractLeftViewItem);

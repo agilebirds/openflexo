@@ -29,10 +29,10 @@ import javax.help.CSH;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.ch.TrackComponentCHForHelpSubmission;
 import org.openflexo.ch.TrackComponentCHForHelpView;
 import org.openflexo.components.AboutDialog;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
