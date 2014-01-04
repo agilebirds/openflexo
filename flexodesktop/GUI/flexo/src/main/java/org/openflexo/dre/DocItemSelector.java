@@ -21,12 +21,12 @@ package org.openflexo.dre;
 
 import java.awt.Dimension;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.browser.ConfigurableProjectBrowser;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.widget.AbstractBrowserSelector;
 import org.openflexo.components.widget.AbstractSelectorPanel;
 import org.openflexo.drm.DocItem;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.FlexoProject;
 
 /**

@@ -68,8 +68,8 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		setTitle(title);
 		manager = new PropertyChangeListenerRegistrationManager();
 		getContentPane().setLayout(new BorderLayout());
-		_validationReportEditor = new ValidationReportEditor(this, validationReport);
-		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
+		_validationReportEditor = new ValidationReportEditor(this, validationReport, controller.getApplicationContext());
+		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel(), controller.getApplicationContext());
 
 		JTabbedPane contentPanel = new JTabbedPane();
 		contentPanel.add(FlexoLocalization.localizedForKey("validation_report"), _validationReportEditor);

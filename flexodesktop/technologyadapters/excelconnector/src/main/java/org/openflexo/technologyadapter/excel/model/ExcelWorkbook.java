@@ -17,7 +17,7 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 	private ExcelWorkbookResource resource;
 	private List<ExcelSheet> excelSheets;
 	private BasicExcelModelConverter converter;
-	
+
 	public Workbook getWorkbook() {
 		return workbook;
 	}
@@ -32,7 +32,7 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 		super(adapter);
 		excelSheets = new ArrayList<ExcelSheet>();
 	}
-	
+
 	public ExcelWorkbook(Workbook workbook, BasicExcelModelConverter converter, ExcelTechnologyAdapter adapter) {
 		super(adapter);
 		this.workbook = workbook;
@@ -76,7 +76,7 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 	}
 
 	@Override
-	public List<? extends TechnologyObject> getAccessibleTechnologyObject() {
+	public List<? extends TechnologyObject<ExcelTechnologyAdapter>> getAccessibleTechnologyObject() {
 		return getExcelSheets();
 	}
 
@@ -102,8 +102,8 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 
 	@Override
 	public String getUri() {
-		String uri = "Workbook="+getResource().getName();
+		String uri = "Workbook=" + getResource().getName();
 		return uri;
 	}
-	
+
 }

@@ -23,12 +23,12 @@ import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.action.SubmitDocumentationAction;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.SubmitNewVersionPopup;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.foundation.action.FlexoActionFinalizer;

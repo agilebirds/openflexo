@@ -51,8 +51,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
@@ -118,9 +118,13 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 
 	private ListSelectionListener issueSelectionListener;
 
-	public ValidationReportEditor(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationReport validationReport) {
+	private ApplicationContext applicationContext;
+
+	public ValidationReportEditor(ConsistencyCheckDialogInterface consistencyCheckDialog, ValidationReport validationReport,
+			ApplicationContext applicationContext) {
 		super();
 		setLayout(new BorderLayout());
+		this.applicationContext = applicationContext;
 		_consistencyCheckDialog = consistencyCheckDialog;
 		_validationReport = validationReport;
 		// _currentIssue = new InformationIssue(null, null);
@@ -327,8 +331,8 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 	protected void disableRule(ValidationIssue issue) {
 
 		issue.getCause().setIsEnabled(!issue.getCause().getIsEnabled());
-		GeneralPreferences.setValidationRuleEnabled(issue.getCause(), issue.getCause().getIsEnabled());
-		GeneralPreferences.save();
+		applicationContext.getGeneralPreferences().setValidationRuleEnabled(issue.getCause(), issue.getCause().getIsEnabled());
+		// GeneralPreferences.save();
 		disableRuleButton.setText(issue.getCause().getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableRuleButton)
 				: FlexoLocalization.localizedForKey("enableRule", disableRuleButton));
 	}
@@ -457,7 +461,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 		for (int i = 0; i < validationModel.getSize(); i++) {
 			ValidationRuleSet ruleSet = validationModel.getElementAt(i);
 			for (ValidationRule rule : ruleSet.getRules()) {
-				rule.setIsEnabled(GeneralPreferences.isValidationRuleEnabled(rule));
+				rule.setIsEnabled(applicationContext.getGeneralPreferences().isValidationRuleEnabled(rule));
 			}
 		}
 		validationModel.addObserver(this);

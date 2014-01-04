@@ -33,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
@@ -51,7 +50,6 @@ import org.openflexo.foundation.utils.UnreadableProjectException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.InteractiveFlexoEditor;
@@ -68,8 +66,6 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 	public static final String EDITOR_REMOVED = "editorRemoved";
 	public static final String ROOT_PROJECTS = "rootProjects";
 
-	private final ApplicationContext applicationContext;
-
 	private final Map<FlexoProject, FlexoEditor> editors;
 
 	private final Map<FlexoProject, AutoSaveService> autoSaveServices;
@@ -78,13 +74,17 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 	private final List<FlexoProject> rootProjects;
 	private final ModelFactory modelFactory;
 
-	public ProjectLoader(ApplicationContext applicationContext) throws ModelDefinitionException {
+	public ProjectLoader() throws ModelDefinitionException {
 		this.rootProjects = new ArrayList<FlexoProject>();
-		this.applicationContext = applicationContext;
 		this.editors = new LinkedHashMap<FlexoProject, FlexoEditor>();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		autoSaveServices = new HashMap<FlexoProject, AutoSaveService>();
 		modelFactory = new ModelFactory(FlexoProjectReference.class);
+	}
+
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	public FlexoEditor getEditorForProject(FlexoProject project) {
@@ -163,7 +163,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 				}
 			}
 			if (editor == null) {
-				editor = FlexoProject.openProject(projectDirectory, applicationContext, applicationContext, ProgressWindow.instance());
+				editor = FlexoProject.openProject(projectDirectory, getServiceManager(), getServiceManager(), ProgressWindow.instance());
 				newEditor(editor);
 			}
 			if (!asImportedProject) {
@@ -196,7 +196,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 			FlexoProjectUtil.currentFlexoVersionIsSmallerThanLastVersion(projectDirectory);
 
 			preInitialization(projectDirectory);
-			FlexoEditor editor = FlexoProject.newProject(projectDirectory, applicationContext, applicationContext,
+			FlexoEditor editor = FlexoProject.newProject(projectDirectory, getServiceManager(), getServiceManager(),
 					ProgressWindow.instance());
 			newEditor(editor);
 			addToRootProjects(editor.getProject());
@@ -208,7 +208,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 
 	private void newEditor(FlexoEditor editor) {
 		editors.put(editor.getProject(), editor);
-		if (applicationContext.isAutoSaveServiceEnabled()) {
+		if (getServiceManager().isAutoSaveServiceEnabled()) {
 			autoSaveServices.put(editor.getProject(), new AutoSaveService(this, editor.getProject()));
 		}
 		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
@@ -528,8 +528,8 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 	}
 
 	private void preInitialization(File projectDirectory) {
-		GeneralPreferences.addToLastOpenedProjects(projectDirectory);
-		FlexoPreferences.savePreferences(true);
+		getServiceManager().getGeneralPreferences().addToLastOpenedProjects(projectDirectory);
+		// FlexoPreferences.savePreferences(true);
 	}
 
 	public boolean someProjectsAreModified() {

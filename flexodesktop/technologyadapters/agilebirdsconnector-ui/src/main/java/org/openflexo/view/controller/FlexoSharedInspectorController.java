@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import org.openflexo.ch.DefaultInspectorHelpDelegate;
-import org.openflexo.drm.DocResourceManager;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.AbstractInPort;

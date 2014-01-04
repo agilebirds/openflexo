@@ -22,18 +22,23 @@ package org.openflexo.technologyadapter.excel.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
 public class ExcelObjectPropertyValue extends ExcelPropertyValue {
 
-	private ExcelProperty property;
-	private List<Object> values;
+	private final ExcelProperty property;
+	private final List<Object> values;
 
-	public ExcelObjectPropertyValue(ExcelProperty property, Object value) {
-		super();
+	public ExcelObjectPropertyValue(ExcelTechnologyAdapter adapter, ExcelProperty property, Object value) {
+		super(adapter);
 		this.property = property;
 		this.values = new ArrayList<Object>();
 		this.values.add(value);
+	}
+
+	@Override
+	public String getName() {
+		return getProperty().getName();
 	}
 
 	@Override
@@ -51,12 +56,6 @@ public class ExcelObjectPropertyValue extends ExcelPropertyValue {
 
 	public void removeFromValues(Object value) {
 		values.remove(value);
-	}
-
-	@Override
-	public TechnologyAdapter getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

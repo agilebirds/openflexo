@@ -24,11 +24,11 @@ import java.util.EventObject;
 import javax.swing.Icon;
 
 import org.openflexo.action.SubmitDocumentationAction;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.dre.SubmitNewVersionPopup;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.SubmitVersion;
 import org.openflexo.foundation.FlexoObject;

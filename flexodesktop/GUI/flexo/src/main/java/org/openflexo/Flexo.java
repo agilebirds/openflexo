@@ -250,7 +250,7 @@ public class Flexo {
 		};*/
 		FlexoApplication.installEventQueue();
 		// Before starting the UI, we need to initialize localization
-		FlexoApplication.initialize(applicationContext.getModuleLoader());
+		FlexoApplication.initialize(applicationContext);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -415,7 +415,7 @@ public class Flexo {
 							count = 0;
 						} else {
 							if (count < 3) {
-								RequestLoginDialog dialog = new RequestLoginDialog();
+								RequestLoginDialog dialog = new RequestLoginDialog(applicationContext);
 								dialog.setVisible(true);
 								if (dialog.getStatus() == Status.VALIDATED) {
 									applicationContext.getAdvancedPrefs().setProxyLogin(dialog.getData().login);

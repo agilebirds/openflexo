@@ -21,7 +21,7 @@ package org.openflexo.components;
 
 import java.util.logging.Logger;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.RequestLoginDialog.LoginData;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
@@ -41,9 +41,9 @@ public class RequestLoginDialog extends FIBDialog<LoginData> {
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/RequestLoginDialog.fib");
 
-	public RequestLoginDialog() {
-		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new LoginData(), FlexoFrame.getActiveFrame(), true, FlexoLocalization
-				.getMainLocalizer());
+	public RequestLoginDialog(ApplicationContext applicationContext) {
+		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new LoginData(applicationContext), FlexoFrame.getActiveFrame(), true,
+				FlexoLocalization.getMainLocalizer());
 		setResizable(false);
 	}
 
@@ -52,9 +52,9 @@ public class RequestLoginDialog extends FIBDialog<LoginData> {
 		public String login;
 		public String password;
 
-		public LoginData() {
-			login = AdvancedPrefs.getProxyLogin();
-			password = AdvancedPrefs.getProxyPassword();
+		public LoginData(ApplicationContext applicationContext) {
+			login = applicationContext.getAdvancedPrefs().getProxyLogin();
+			password = applicationContext.getAdvancedPrefs().getProxyPassword();
 		}
 
 	}

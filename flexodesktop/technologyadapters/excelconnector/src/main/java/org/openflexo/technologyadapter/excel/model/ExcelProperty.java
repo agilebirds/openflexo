@@ -27,4 +27,8 @@ public class ExcelProperty {
 
 	}
 
+	public String getName() {
+		return null;
+	}
+
 }

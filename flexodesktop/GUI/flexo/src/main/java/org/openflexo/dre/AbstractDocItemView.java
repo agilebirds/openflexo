@@ -62,11 +62,11 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.ActionType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
 import org.openflexo.drm.DocItemVersion;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.action.AddToEmbeddingChildItem;
 import org.openflexo.drm.action.AddToInheritanceChildItem;

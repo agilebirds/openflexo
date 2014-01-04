@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.DREBrowser;
 import org.openflexo.dre.controller.action.DREControllerActionInitializer;
@@ -42,7 +43,6 @@ import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemFolder;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.action.GenerateHelpSet;
 import org.openflexo.drm.action.SaveDocumentationCenter;
 import org.openflexo.drm.dm.DocResourceCenterIsModified;

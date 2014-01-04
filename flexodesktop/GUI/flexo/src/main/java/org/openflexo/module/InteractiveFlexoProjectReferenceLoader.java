@@ -25,21 +25,19 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 
 	private static final Logger logger = Logger.getLogger(ModuleLoader.class.getPackage().getName());
 
-	private final ApplicationContext applicationContext;
-
-	public InteractiveFlexoProjectReferenceLoader(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+	public InteractiveFlexoProjectReferenceLoader() {
 	}
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	@Override
 	public FlexoProject loadProject(FlexoProjectReference ref, boolean silentlyOnly) {
 		boolean retrievedFromResourceCenter = false;
 
-		FlexoResource<FlexoProject> retrievedResource = getApplicationContext().getInformationSpace().getResource(ref.getURI(),
+		FlexoResource<FlexoProject> retrievedResource = getServiceManager().getInformationSpace().getResource(ref.getURI(),
 				ref.getVersion(), FlexoProject.class);
 
 		File selectedFile = null;
@@ -55,7 +53,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 					return null;
 				}
 				if (projectChooser == null) {
-					projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame()) {
+					projectChooser = new ProjectChooserComponent(FlexoFrame.getActiveFrame(), getServiceManager()) {
 					};
 					projectChooser.setOpenMode();
 					projectChooser.setTitle(FlexoLocalization.localizedForKey("locate_project") + " " + ref.getName() + " "
@@ -69,13 +67,13 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 					return null;
 				}
 			}
-			boolean openedProject = applicationContext.getProjectLoader().hasEditorForProjectDirectory(selectedFile);
+			boolean openedProject = getServiceManager().getProjectLoader().hasEditorForProjectDirectory(selectedFile);
 			if (!openedProject && silentlyOnly) {
 				return null;
 			}
 			FlexoEditor editor = null;
 			try {
-				editor = applicationContext.getProjectLoader().loadProject(selectedFile, true);
+				editor = getServiceManager().getProjectLoader().loadProject(selectedFile, true);
 			} catch (ProjectLoadingCancelledException e) {
 				return null;
 			} catch (ProjectInitializerException e) {
@@ -103,7 +101,7 @@ public class InteractiveFlexoProjectReferenceLoader extends FlexoServiceImpl imp
 					if (ok) {
 						return project;
 					} else if (!openedProject) {
-						applicationContext.getProjectLoader().closeProject(project);
+						getServiceManager().getProjectLoader().closeProject(project);
 					}
 				}
 			} else {

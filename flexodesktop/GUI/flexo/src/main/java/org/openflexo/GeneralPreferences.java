@@ -67,6 +67,7 @@ public interface GeneralPreferences extends PreferencesContainer {
 	public static final String LAST_OPENED_PROJECTS_4 = "lastProjects_4";
 	public static final String LAST_OPENED_PROJECTS_5 = "lastProjects_5";
 	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
+	public static final String INSPECTOR_VISIBLE = "inspector_visible";
 	public static final String INSPECTOR_ON_TOP = "inspector_always_on_top";
 	public static final String CLOSE_POPUP_ON_CLICK_OUT = "close_popup_on_click_out";
 	public static final String NOTIFY_VALID_PROJECT = "notify_valid_project";
@@ -143,6 +144,20 @@ public interface GeneralPreferences extends PreferencesContainer {
 
 	@Setter(SYNCHRONIZED_BROWSER)
 	public void setSynchronizedBrowser(boolean synchronizedBrowser);
+
+	@Getter(value = INSPECTOR_VISIBLE, defaultValue = "true")
+	@XMLAttribute
+	public boolean getInspectorVisible();
+
+	@Setter(INSPECTOR_VISIBLE)
+	public void setInspectorVisible(boolean inspectorVisible);
+
+	@Getter(INSPECTOR_ON_TOP)
+	@XMLAttribute
+	public boolean getInspectorAlwaysOnTop();
+
+	@Setter(INSPECTOR_ON_TOP)
+	public void setInspectorAlwaysOnTop(boolean inspectorAlwaysOnTop);
 
 	@Getter(LAST_OPENED_PROJECTS_1)
 	@XMLAttribute

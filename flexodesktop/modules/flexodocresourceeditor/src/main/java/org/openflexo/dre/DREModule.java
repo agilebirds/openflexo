@@ -20,9 +20,9 @@
 package org.openflexo.dre;
 
 import org.openflexo.ApplicationContext;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DocResourceManager;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.icon.DREIconLibrary;

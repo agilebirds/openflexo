@@ -4,7 +4,7 @@ import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
-public abstract class ExcelObject extends DefaultFlexoObject implements TechnologyObject {
+public abstract class ExcelObject extends DefaultFlexoObject implements TechnologyObject<ExcelTechnologyAdapter> {
 
 	private final ExcelTechnologyAdapter technologyAdapter;
 

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.drm.DocItem;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.icon.IconLibrary;
@@ -38,14 +39,14 @@ public class TrackComponentCHForHelpView extends TrackComponentCH {
 	private static Cursor HELP_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(IconLibrary.HELP_CURSOR.getImage(), new Point(8, 8),
 			"Help cursor");
 
-	public TrackComponentCHForHelpView(FlexoFrame frame) {
-		super(frame);
+	public TrackComponentCHForHelpView(FlexoFrame frame, ApplicationContext applicationContext) {
+		super(frame, applicationContext);
 		frame.getContentPane().setCursor(HELP_CURSOR);
 	}
 
 	@Override
 	public void applyTracking(JComponent component) {
-		DocItem item = FCH.getDocForComponent(focusedComponent);
+		DocItem item = getDocResourceManager().getDocForComponent(focusedComponent);
 		if (item != null) {
 			FlexoHelp.getHelpBroker().setCurrentID(item.getIdentifier());
 			FlexoHelp.getHelpBroker().setDisplayed(true);

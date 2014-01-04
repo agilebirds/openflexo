@@ -2,7 +2,7 @@ package org.openflexo.br.view;
 
 import java.io.File;
 
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.localization.FlexoLocalization;
@@ -16,10 +16,12 @@ public class JIRAURLCredentialsDialog {
 
 	private String login;
 	private String password;
+	private final ApplicationContext applicationContext;
 
-	public JIRAURLCredentialsDialog() {
-		login = AdvancedPrefs.getBugReportUser();
-		password = AdvancedPrefs.getBugReportPassword();
+	public JIRAURLCredentialsDialog(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+		login = applicationContext.getAdvancedPrefs().getBugReportUser();
+		password = applicationContext.getAdvancedPrefs().getBugReportPassword();
 	}
 
 	public String getLogin() {
@@ -39,21 +41,22 @@ public class JIRAURLCredentialsDialog {
 	}
 
 	public String getUrlLabel() {
-		return "<html><a href=\"" + AdvancedPrefs.getBugReportUrl() + "\">" + AdvancedPrefs.getBugReportUrl() + "</a></html>";
+		return "<html><a href=\"" + applicationContext.getAdvancedPrefs().getBugReportUrl() + "\">"
+				+ applicationContext.getAdvancedPrefs().getBugReportUrl() + "</a></html>";
 	}
 
 	public void openUrl() {
-		ToolBox.openURL(AdvancedPrefs.getBugReportUrl());
+		ToolBox.openURL(applicationContext.getAdvancedPrefs().getBugReportUrl());
 	}
 
-	public static boolean askLoginPassword() {
-		JIRAURLCredentialsDialog credentialsDialog = new JIRAURLCredentialsDialog();
+	public static boolean askLoginPassword(ApplicationContext applicationContext) {
+		JIRAURLCredentialsDialog credentialsDialog = new JIRAURLCredentialsDialog(applicationContext);
 		FIBDialog<JIRAURLCredentialsDialog> dialog = FIBDialog.instanciateAndShowDialog(URL_FIB_FILE, credentialsDialog,
 				FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getStatus() == Status.VALIDATED) {
-			AdvancedPrefs.setBugReportUser(credentialsDialog.login);
-			AdvancedPrefs.setBugReportPassword(credentialsDialog.password);
-			AdvancedPrefs.save();
+			applicationContext.getAdvancedPrefs().setBugReportUser(credentialsDialog.login);
+			applicationContext.getAdvancedPrefs().setBugReportPassword(credentialsDialog.password);
+			// AdvancedPrefs.save();
 			return true;
 		}
 		return false;

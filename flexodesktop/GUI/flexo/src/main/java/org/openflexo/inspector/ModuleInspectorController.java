@@ -32,7 +32,6 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.GeneralPreferences;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
@@ -66,23 +65,23 @@ public class ModuleInspectorController extends Observable implements Observer {
 	private FIBInspector currentInspector = null;
 	private Object currentInspectedObject = null;
 
-	public ModuleInspectorController(FlexoController flexoController) {
+	public ModuleInspectorController(final FlexoController flexoController) {
 		this.flexoController = flexoController;
 		inspectors = new Hashtable<Class<?>, FIBInspector>();
 		inspectorDialog = new FIBInspectorDialog(this);
-		Boolean visible = GeneralPreferences.getPreferences().getBooleanProperty("FIBInspector.visible");
+		Boolean visible = flexoController.getApplicationContext().getGeneralPreferences().getInspectorVisible();
 		inspectorDialog.setVisible(visible == null || visible);
 		inspectorDialog.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.TRUE);
-				GeneralPreferences.save();
+				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
+				// GeneralPreferences.save();
 			}
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.FALSE);
-				GeneralPreferences.save();
+				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
+				// GeneralPreferences.save();
 			};
 		});
 		File inspectorsDir = new FileResource("Inspectors/COMMON");

@@ -19,10 +19,14 @@
  */
 package org.openflexo.technologyadapter.excel.model;
 
-import org.openflexo.foundation.technologyadapter.TechnologyObject;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
-public abstract class ExcelPropertyValue implements TechnologyObject {
+public abstract class ExcelPropertyValue extends ExcelObject {
 
 	public abstract ExcelProperty getProperty();
+
+	public ExcelPropertyValue(ExcelTechnologyAdapter adapter) {
+		super(adapter);
+	}
 
 }

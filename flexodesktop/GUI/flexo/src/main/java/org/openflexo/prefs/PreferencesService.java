@@ -163,4 +163,9 @@ public class PreferencesService extends FlexoServiceImpl implements FlexoService
 	public <P extends PreferencesContainer> P getPreferences(Class<P> containerType) {
 		return getFlexoPreferences().getPreferences(containerType);
 	}
+
+	public void showPreferences() {
+		// TODO Auto-generated method stub
+		System.out.println("TODO: not implemented yet");
+	}
 }
