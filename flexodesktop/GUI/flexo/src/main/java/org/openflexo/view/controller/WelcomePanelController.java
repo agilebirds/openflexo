@@ -55,7 +55,7 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void openProject(File projectDirectory, Module module) {
 		if (projectDirectory == null) {
-			projectDirectory = OpenProjectComponent.getProjectDirectory();
+			projectDirectory = OpenProjectComponent.getProjectDirectory(getDataObject().getApplicationContext());
 			if (projectDirectory == null) {
 				return;
 			}
@@ -81,7 +81,7 @@ public class WelcomePanelController extends FlexoFIBController {
 
 	public void newProject(Module module) {
 		File projectDirectory;
-		projectDirectory = NewProjectComponent.getProjectDirectory();
+		projectDirectory = NewProjectComponent.getProjectDirectory(getDataObject().getApplicationContext());
 		if (projectDirectory == null) {
 			return;
 		}

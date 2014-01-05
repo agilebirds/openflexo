@@ -53,6 +53,7 @@ public class PreferencesService extends FlexoServiceImpl implements FlexoService
 
 	private FlexoPreferencesFactory preferencesFactory;
 	private FlexoPreferencesResource resource;
+	private PreferencesWindow preferencesWindow;
 
 	@Override
 	public ApplicationContext getServiceManager() {
@@ -90,6 +91,7 @@ public class PreferencesService extends FlexoServiceImpl implements FlexoService
 		for (Module<?> m : getServiceManager().getModuleLoader().getKnownModules()) {
 			managePreferences(m.getPreferencesClass(), getFlexoPreferences());
 		}
+		preferencesWindow = new PreferencesWindow(this);
 	}
 
 	@Override
@@ -165,7 +167,10 @@ public class PreferencesService extends FlexoServiceImpl implements FlexoService
 	}
 
 	public void showPreferences() {
-		// TODO Auto-generated method stub
-		System.out.println("TODO: not implemented yet");
+		getPreferencesWindow().setVisible(true);
+	}
+
+	public PreferencesWindow getPreferencesWindow() {
+		return preferencesWindow;
 	}
 }

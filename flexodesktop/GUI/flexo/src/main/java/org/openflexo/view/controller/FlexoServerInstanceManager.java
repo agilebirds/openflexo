@@ -8,22 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.JDOMException;
-import org.openflexo.AdvancedPrefs;
+import org.openflexo.ApplicationContext;
+import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
-public class FlexoServerInstanceManager {
-
-	private static final FlexoServerInstanceManager instance = new FlexoServerInstanceManager();
+public class FlexoServerInstanceManager extends FlexoServiceImpl {
 
 	private FlexoServerAddressBook addressBook;
 
 	private ModelFactory factory;
 
-	private FlexoServerInstanceManager() {
+	public FlexoServerInstanceManager() {
 		try {
 			factory = new ModelFactory(FlexoServerAddressBook.class);
 		} catch (ModelDefinitionException e) {
@@ -31,8 +30,9 @@ public class FlexoServerInstanceManager {
 		}
 	}
 
-	public static FlexoServerInstanceManager getInstance() {
-		return instance;
+	@Override
+	public ApplicationContext getServiceManager() {
+		return (ApplicationContext) super.getServiceManager();
 	}
 
 	public List<FlexoServerInstance> getInstances() {
@@ -93,7 +93,7 @@ public class FlexoServerInstanceManager {
 				if (addressBook == null) {
 					URL url = null;
 					try {
-						url = new URL(AdvancedPrefs.getFlexoServerInstanceURL());
+						url = new URL(getServiceManager().getAdvancedPrefs().getFlexoServerInstanceURL());
 					} catch (MalformedURLException e1) {
 						e1.printStackTrace();
 					}
@@ -153,6 +153,11 @@ public class FlexoServerInstanceManager {
 				}
 			}*/
 		}
+	}
+
+	@Override
+	public void initialize() {
+		logger.info("Initialized FlexoServerInstanceManager service");
 	}
 
 }

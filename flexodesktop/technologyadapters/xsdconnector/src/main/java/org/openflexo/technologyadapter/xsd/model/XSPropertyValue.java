@@ -19,15 +19,17 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
-import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
+
 /**
  * Implementation of a Property value in XSD/XML technology
  * 
  * @author sylvain
  */
-public abstract class XSPropertyValue implements IFlexoOntologyPropertyValue {
+public abstract class XSPropertyValue extends DefaultFlexoObject implements IFlexoOntologyPropertyValue {
 
 	@Override
 	public abstract XSOntProperty getProperty();

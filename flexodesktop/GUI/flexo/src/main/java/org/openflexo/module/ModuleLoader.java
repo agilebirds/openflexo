@@ -433,7 +433,7 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, HasP
 	private void proceedQuitWithoutConfirmation() {
 		if (activeModule != null) {
 			getServiceManager().getGeneralPreferences().setFavoriteModuleName(activeModule.getModule().getName());
-			// FlexoPreferences.savePreferences(true);
+			getServiceManager().getPreferencesService().savePreferences();
 		}
 
 		for (Module<?> m : getLoadedModules()) {

@@ -35,7 +35,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.FlexoMainLocalizer;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DocResourceManager;
 import org.openflexo.components.ProgressWindow;
@@ -56,7 +55,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.AutoSaveService;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.ResourceCenterEditor;
 import org.openflexo.view.controller.model.ControllerModel;
@@ -269,7 +267,7 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public static class SaveDocSubmissionAction extends AbstractAction {
+	public class SaveDocSubmissionAction extends AbstractAction {
 		public SaveDocSubmissionAction() {
 			super();
 		}
@@ -299,7 +297,7 @@ public class ToolsMenu extends FlexoMenu {
 					} else {
 						savedFile = chooser.getSelectedFile();
 					}
-					DocResourceManager drm = DocResourceManager.instance();
+					DocResourceManager drm = getController().getApplicationContext().getDocResourceManager();
 					drm.getSessionSubmissions().save(savedFile);
 					drm.getSessionSubmissions().clear();
 					FlexoController.notify(FlexoLocalization.localizedForKey("doc_submission_report_successfully_saved"));
@@ -433,8 +431,8 @@ public class ToolsMenu extends FlexoMenu {
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
-					GeneralPreferences.setAutoSaveEnabled(true);
-					FlexoPreferences.savePreferences(true);
+					getController().getApplicationContext().getGeneralPreferences().setAutoSaveEnabled(true);
+					getController().getApplicationContext().getPreferencesService().savePreferences();
 					getAutoSaveService().showTimeTravelerDialog();
 				}
 			}

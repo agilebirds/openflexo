@@ -28,7 +28,6 @@ import java.util.Vector;
 import javax.swing.JButton;
 
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.ch.FCH;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -63,7 +62,7 @@ public class FlexoActionButton extends JButton {
 			}
 		}
 		addActionListener(action);
-		FCH.setHelpItem(this, action.getActionType().getUnlocalizedName());
+		controller.getApplicationContext().getDocResourceManager().setHelpItem(this, action.getActionType().getUnlocalizedName());
 	}
 
 	private FlexoEditor getEditor() {

@@ -28,7 +28,6 @@ import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
-import org.openflexo.toolbox.FileResource;
 
 public class TestLibrary extends OpenflexoRunTimeTestCase {
 
@@ -107,7 +106,7 @@ public class TestLibrary extends OpenflexoRunTimeTestCase {
 	 */
 	public void test0LoadTestResourceCenter() throws IOException {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		testApplicationContext = new TestApplicationContext();
 		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources/"));
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
@@ -126,7 +125,7 @@ public class TestLibrary extends OpenflexoRunTimeTestCase {
 		StringBuffer buffer = new StringBuffer();
 		XSDMetaModel lib = null;
 		XSDMetaModelResource libRes = null;
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		testApplicationContext = new TestApplicationContext();
 
 		try {
 			libRes = XSDMetaModelResourceImpl.makeXSDMetaModelResource(openTestXSD(FILE_NAME),

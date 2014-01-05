@@ -53,7 +53,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.resource.DuplicateExternalRepositoryNameException;
 import org.openflexo.foundation.resource.ExternalRepositorySet;
 import org.openflexo.foundation.resource.FlexoProjectReference;
-import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ImportedProjectLoaded;
@@ -494,15 +493,24 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		getResource().save(progress);
 		getProjectDataResource().save(progress);
 
-		// saveModifiedResources(progress, true);
-
-		logger.warning("Project saving not implemented yet");
+		saveModifiedResources(progress, true);
 
 		getServiceManager().getResourceManager().deleteFilesToBeDeleted();
 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
 		}
+
+	}
+
+	// TODO: please implement this
+	public void saveAs(File newProjectDirectory, FlexoProgress progress) throws SaveResourceException {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Saving project as...");
+		}
+
+		// TODO
+		logger.warning("Project 'Saving As' not implemented yet");
 
 	}
 
@@ -827,12 +835,34 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		validate(validationModel);
 	}
 
+	/**
+	 * Return all resources encoding current project<br>
+	 * Return a collection of all resources that are part of this project
+	 */
+	@Override
+	public Collection<FlexoResource<?>> getAllResources() {
+		return super.getAllResources();
+	}
+
+	/**
+	 * Return a collection of all resources of this project which are to be saved (resource data is modified)
+	 */
+	public List<FlexoResource<?>> getUnsavedResources() {
+		List<FlexoResource<?>> unsaved = new ArrayList<FlexoResource<?>>();
+		for (FlexoResource<?> r : getAllResources()) {
+			if (r.isLoaded() && r.getLoadedResourceData().isModified()) {
+				unsaved.add(r);
+			}
+		}
+		return unsaved;
+	}
+
 	private void _saveModifiedResources(FlexoProgress progress, boolean clearModifiedStatus) throws SaveResourceException
 	/*SaveXMLResourceException, SaveResourcePermissionDeniedException*/{
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Saving modified resources of project...");
 		}
-		List<FlexoResource<?>> unsaved = getServiceManager().getResourceManager().getUnsavedResources();
+		List<FlexoResource<?>> unsaved = getUnsavedResources();
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("saving_modified_resources"));
 			progress.resetSecondaryProgress(unsaved.size() + 1);
@@ -840,18 +870,10 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		boolean resourceSaved = false;
 		try {
 			for (FlexoResource<?> r : unsaved) {
-				try {
-					// Temporary hack: we iterate on all resources known in the
-					// ResourceManager
-					if (r instanceof FlexoProjectResource && ((FlexoProjectResource) r).getProject() == this
-							&& (r.isLoaded() && r.getResourceData(null).isModified())) {
-						if (progress != null) {
-							progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + r);
-						}
-						r.save(null);
-					}
-				} catch (Exception e) {
+				if (progress != null) {
+					progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + r);
 				}
+				r.save(null);
 			}
 		} finally {
 			if (resourceSaved) {
@@ -860,15 +882,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 				// model of the project has changed.
 				setRevision(revision + 1);
 			}
-			// if (resourceSaved /*|| getFlexoRMResource().isModified()*/) {
-			// If at least one resource has been saved, let's try to save
-			// the RM so that the lastID is also saved, avoiding possible
-			// duplication of flexoID's.
-			// writeDotVersion();
-			// We save RM at the end so that all dates are always up-to-date
-			// and we also save the lastID which may have changed!
-			// getFlexoRMResource().saveResourceData(clearModifiedStatus);
-			// }
 		}
 	}
 

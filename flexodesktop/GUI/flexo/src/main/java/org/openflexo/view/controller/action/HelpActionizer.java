@@ -25,7 +25,6 @@ import javax.help.BadIDException;
 import javax.swing.Icon;
 
 import org.openflexo.action.HelpAction;
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.drm.DocItem;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -63,7 +62,8 @@ public class HelpActionizer extends ActionInitializer<HelpAction, FlexoObject, F
 			@Override
 			public boolean run(EventObject e, HelpAction action) {
 				if (action.getFocusedObject() instanceof InspectableObject) {
-					DocItem item = DocResourceManager.instance().getDocItemFor((InspectableObject) action.getFocusedObject());
+					DocItem item = getController().getApplicationContext().getDocResourceManager()
+							.getDocItemFor((InspectableObject) action.getFocusedObject());
 					if (item != null) {
 						try {
 							logger.info("Trying to display help for " + item.getIdentifier());

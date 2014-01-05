@@ -75,13 +75,13 @@ public class ModuleInspectorController extends Observable implements Observer {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
-				// GeneralPreferences.save();
+				flexoController.getApplicationContext().getPreferencesService().savePreferences();
 			}
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
 				flexoController.getApplicationContext().getGeneralPreferences().setInspectorVisible(true);
-				// GeneralPreferences.save();
+				flexoController.getApplicationContext().getPreferencesService().savePreferences();
 			};
 		});
 		File inspectorsDir = new FileResource("Inspectors/COMMON");

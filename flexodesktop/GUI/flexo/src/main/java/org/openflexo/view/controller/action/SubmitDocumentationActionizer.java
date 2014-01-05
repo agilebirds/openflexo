@@ -24,7 +24,6 @@ import java.util.EventObject;
 import javax.swing.Icon;
 
 import org.openflexo.action.SubmitDocumentationAction;
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.dre.SubmitNewVersionPopup;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocItemAction;
@@ -62,7 +61,8 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 				if (anAction.getFocusedObject() instanceof DocItem) {
 					docItem = (DocItem) anAction.getFocusedObject();
 				} else {
-					docItem = DocResourceManager.instance().getDocItemFor((InspectableObject) anAction.getFocusedObject());
+					docItem = getController().getApplicationContext().getDocResourceManager()
+							.getDocItemFor((InspectableObject) anAction.getFocusedObject());
 				}
 				if (docItem == null) {
 					return false;
@@ -90,9 +90,10 @@ public class SubmitDocumentationActionizer extends ActionInitializer<SubmitDocum
 				if (language == null) {
 					return false;
 				}
-				SubmitVersion action = SubmitVersion.actionType.makeNewAction(docItem, null, DocResourceManager.instance().getEditor());
+				SubmitVersion action = SubmitVersion.actionType.makeNewAction(docItem, null, getController().getApplicationContext()
+						.getDocResourceManager().getEditor());
 				SubmitNewVersionPopup editVersionPopup = new SubmitNewVersionPopup(action.getDocItem(), language, getController()
-						.getFlexoFrame(), DocResourceManager.instance().getEditor());
+						.getFlexoFrame(), getController().getApplicationContext().getDocResourceManager().getEditor());
 				action.setVersion(editVersionPopup.getVersionToSubmit());
 				if (action.getVersion() == null) {
 					return false;

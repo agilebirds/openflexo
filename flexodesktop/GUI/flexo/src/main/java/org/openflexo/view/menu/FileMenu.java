@@ -27,7 +27,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +36,6 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.components.NewProjectComponent;
 import org.openflexo.components.OpenProjectComponent;
 import org.openflexo.foundation.FlexoEditor;
@@ -122,9 +120,7 @@ public class FileMenu extends FlexoMenu {
 	public void updateRecentProjectMenu() {
 		if (recentProjectMenu != null) {
 			recentProjectMenu.removeAll();
-			Enumeration<File> en = GeneralPreferences.getLastOpenedProjects().elements();
-			while (en.hasMoreElements()) {
-				File f = en.nextElement();
+			for (File f : getController().getApplicationContext().getGeneralPreferences().getLastOpenedProjects()) {
 				recentProjectMenu.add(new ProjectItem(f));
 			}
 		}
@@ -189,7 +185,7 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = NewProjectComponent.getProjectDirectory();
+			File projectDirectory = NewProjectComponent.getProjectDirectory(getController().getApplicationContext());
 			if (projectDirectory != null) {
 				try {
 					getController().getProjectLoader().newProject(projectDirectory);
@@ -216,7 +212,7 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File projectDirectory = OpenProjectComponent.getProjectDirectory();
+			File projectDirectory = OpenProjectComponent.getProjectDirectory(getController().getApplicationContext());
 			if (projectDirectory != null) {
 				try {
 					getProjectLoader().loadProject(projectDirectory);
@@ -438,7 +434,7 @@ public class FileMenu extends FlexoMenu {
 					return false;
 				}
 			} else {
-				if (GeneralPreferences.getNotifyValidProject()) {
+				if (getController().getApplicationContext().getGeneralPreferences().getNotifyValidProject()) {
 					logger.warning("please reimplement this");
 					// TODO: please reimplement this
 					/*ParameterDefinition[] params = new ParameterDefinition[1];

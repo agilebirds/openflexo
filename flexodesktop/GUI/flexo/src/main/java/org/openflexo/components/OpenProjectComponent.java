@@ -65,7 +65,7 @@ public class OpenProjectComponent extends ProjectChooserComponent {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			returned = chooser.getSelectedFile();
 			applicationContext.getAdvancedPrefs().setLastVisitedDirectory(returned.getParentFile());
-			// FlexoPreferences.savePreferences(true);
+			applicationContext.getPreferencesService().savePreferences();
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("No project supplied");

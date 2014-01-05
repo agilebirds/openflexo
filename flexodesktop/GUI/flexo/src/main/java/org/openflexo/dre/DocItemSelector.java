@@ -19,15 +19,11 @@
  */
 package org.openflexo.dre;
 
-import java.awt.Dimension;
+import java.io.File;
 
-import org.openflexo.ch.DocResourceManager;
-import org.openflexo.components.browser.ConfigurableProjectBrowser;
-import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.components.widget.AbstractBrowserSelector;
-import org.openflexo.components.widget.AbstractSelectorPanel;
+import org.openflexo.components.widget.FIBFlexoObjectSelector;
 import org.openflexo.drm.DocItem;
-import org.openflexo.foundation.FlexoProject;
+import org.openflexo.toolbox.FileResource;
 
 /**
  * Widget allowing to select a DocItem while browsing the DocResourceCenter
@@ -35,55 +31,25 @@ import org.openflexo.foundation.FlexoProject;
  * @author sguerin
  * 
  */
-public class DocItemSelector extends AbstractBrowserSelector<DocItem> {
+@SuppressWarnings("serial")
+public class DocItemSelector extends FIBFlexoObjectSelector<DocItem> {
 
 	protected static final String EMPTY_STRING = "";
 
-	public DocItemSelector(FlexoProject project, DocItem docItem) {
-		super(project, docItem, DocItem.class);
-	}
+	public static final FileResource FIB_FILE = new FileResource("Fib/DocItemSelector.fib");
 
-	public DocItemSelector(FlexoProject project, DocItem docItem, int cols) {
-		super(project, docItem, DocItem.class, cols);
-	}
-
-	@Override
-	protected DocItemSelectorPanel makeCustomPanel(DocItem editedObject) {
-		return new DocItemSelectorPanel();
+	public DocItemSelector(DocItem editedObject) {
+		super(editedObject);
 	}
 
 	@Override
-	public String renderedString(DocItem editedObject) {
-		if (editedObject != null) {
-			return editedObject.getIdentifier();
-		}
-		return EMPTY_STRING;
+	public Class<DocItem> getRepresentedType() {
+		return DocItem.class;
 	}
 
-	protected class DocItemSelectorPanel extends AbstractSelectorPanel<DocItem> {
-		protected DocItemSelectorPanel() {
-			super(DocItemSelector.this);
-		}
-
-		@Override
-		protected ProjectBrowser createBrowser(FlexoProject project) {
-			return new DocItemBrowser();
-		}
-
-		@Override
-		public Dimension getDefaultSize() {
-			Dimension returned = _browserView.getDefaultSize();
-			returned.height = returned.height - 100;
-			return returned;
-		}
-	}
-
-	protected class DocItemBrowser extends ConfigurableProjectBrowser {
-		protected DocItemBrowser() {
-			super(DREBrowser.makeBrowserConfiguration(DocItemSelector.this.getProject(), DocResourceManager.instance()
-					.getDocResourceCenter()));
-		}
-
+	@Override
+	public File getFIBFile() {
+		return FIB_FILE;
 	}
 
 }

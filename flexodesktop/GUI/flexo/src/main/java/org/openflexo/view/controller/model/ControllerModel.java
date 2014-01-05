@@ -12,14 +12,12 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 import org.openflexo.ApplicationContext;
-import org.openflexo.GeneralPreferences;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.layout.MultiSplitLayout.Node;
 import org.openflexo.swing.layout.MultiSplitLayoutTypeAdapterFactory;
 import org.openflexo.toolbox.ExtendedSet;
@@ -95,8 +93,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 		this.context = context;
 		this.module = module;
 		registrationManager = new PropertyChangeListenerRegistrationManager();
-		leftViewVisible = GeneralPreferences.getShowLeftView(module.getShortName());
-		rightViewVisible = GeneralPreferences.getShowRightView(module.getShortName());
+		leftViewVisible = context.getGeneralPreferences().getShowLeftView(module.getShortName());
+		rightViewVisible = context.getGeneralPreferences().getShowRightView(module.getShortName());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.PROJECT_OPENED, this, context.getProjectLoader());
 		registrationManager.new PropertyChangeListenerRegistration(ProjectLoader.PROJECT_CLOSED, this, context.getProjectLoader());
 		objects = new ArrayList<FlexoObject>();
@@ -508,7 +506,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	 **********/
 
 	public Node getLayoutForPerspective(FlexoPerspective perspective) {
-		String layout = GeneralPreferences.getLayoutFor(getModule().getShortName() + perspective.getName());
+		String layout = context.getGeneralPreferences().getLayoutFor(getModule().getShortName() + perspective.getName());
 		if (layout != null) {
 			return getLayoutFromString(layout);
 		} else {
@@ -521,8 +519,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	public void setLayoutForPerspective(FlexoPerspective perspective, Node layout) {
-		GeneralPreferences.setLayoutFor(getGsonLayout().toJson(layout), getModule().getShortName() + perspective.getName());
-		GeneralPreferences.save();
+		context.getGeneralPreferences().setLayoutFor(getGsonLayout().toJson(layout), getModule().getShortName() + perspective.getName());
+		context.getPreferencesService().savePreferences();
 	}
 
 	private Gson getGsonLayout() {
@@ -543,8 +541,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public void setLeftViewVisible(boolean leftViewVisible) {
 		this.leftViewVisible = leftViewVisible;
-		GeneralPreferences.setShowLeftView(getModule().getShortName(), leftViewVisible);
-		FlexoPreferences.savePreferences(true);
+		context.getGeneralPreferences().setShowLeftView(getModule().getShortName(), leftViewVisible);
+		context.getPreferencesService().savePreferences();
 		getPropertyChangeSupport().firePropertyChange(LEFT_VIEW_VISIBLE, !leftViewVisible, leftViewVisible);
 	}
 
@@ -554,8 +552,8 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 
 	public void setRightViewVisible(boolean rightViewVisible) {
 		this.rightViewVisible = rightViewVisible;
-		GeneralPreferences.setShowRightView(getModule().getShortName(), rightViewVisible);
-		FlexoPreferences.savePreferences(true);
+		context.getGeneralPreferences().setShowRightView(getModule().getShortName(), rightViewVisible);
+		context.getPreferencesService().savePreferences();
 		getPropertyChangeSupport().firePropertyChange(RIGHT_VIEW_VISIBLE, !rightViewVisible, rightViewVisible);
 	}
 

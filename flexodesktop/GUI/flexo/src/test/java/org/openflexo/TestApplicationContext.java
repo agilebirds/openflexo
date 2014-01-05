@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.openflexo.br.BugReportService;
+import org.openflexo.ch.DocResourceManager;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
@@ -17,9 +19,11 @@ import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.prefs.PreferencesService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
+import org.openflexo.view.controller.FlexoServerInstanceManager;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
@@ -99,6 +103,30 @@ public class TestApplicationContext extends ApplicationContext {
 	@Override
 	protected InformationSpace createInformationSpace() {
 		return new InformationSpace();
+	}
+
+	@Override
+	protected PreferencesService createPreferencesService() {
+		// not necessary
+		return null;
+	}
+
+	@Override
+	protected BugReportService createBugReportService() {
+		// not necessary
+		return null;
+	}
+
+	@Override
+	protected DocResourceManager createDocResourceManager() {
+		// not necessary
+		return null;
+	}
+
+	@Override
+	protected FlexoServerInstanceManager createFlexoServerInstanceManager() {
+		// not necessary
+		return null;
 	}
 
 }

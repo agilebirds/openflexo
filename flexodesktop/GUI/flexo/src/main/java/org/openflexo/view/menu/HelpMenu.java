@@ -29,7 +29,6 @@ import javax.help.CSH;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import org.openflexo.ch.DocResourceManager;
 import org.openflexo.ch.TrackComponentCHForHelpSubmission;
 import org.openflexo.ch.TrackComponentCHForHelpView;
 import org.openflexo.components.AboutDialog;
@@ -71,19 +70,22 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		generalHelp.setAccelerator(ToolBox.getPLATFORM() == ToolBox.MACOS ? KeyStroke.getKeyStroke(KeyEvent.VK_HELP, 0) : KeyStroke
 				.getKeyStroke(KeyEvent.VK_F1, 0));
 		generalHelp.setText(FlexoLocalization.localizedForKey("general_help", generalHelp));
-		CSH.setHelpIDString(generalHelp, DocResourceManager.instance().getDocResourceCenterItem().getIdentifier());
+		CSH.setHelpIDString(generalHelp, getController().getApplicationContext().getDocResourceManager().getDocResourceCenterItem()
+				.getIdentifier());
 		generalHelp.addActionListener(helpActionListener);
 		add(generalHelp);
 
 		flexoHelp = new JMenuItem();
 		flexoHelp.setText(FlexoLocalization.localizedForKey("flexo_help", flexoHelp));
-		CSH.setHelpIDString(flexoHelp, DocResourceManager.instance().getFlexoToolSetItem().getIdentifier());
+		CSH.setHelpIDString(flexoHelp, getController().getApplicationContext().getDocResourceManager().getFlexoToolSetItem()
+				.getIdentifier());
 		flexoHelp.addActionListener(helpActionListener);
 		add(flexoHelp);
 
 		modelingHelp = new JMenuItem();
 		modelingHelp.setText(FlexoLocalization.localizedForKey("modeling_help", modelingHelp));
-		CSH.setHelpIDString(modelingHelp, DocResourceManager.instance().getFlexoModelItem().getIdentifier());
+		CSH.setHelpIDString(modelingHelp, getController().getApplicationContext().getDocResourceManager().getFlexoModelItem()
+				.getIdentifier());
 		modelingHelp.addActionListener(helpActionListener);
 		add(modelingHelp);
 
@@ -106,7 +108,7 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		helpOn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new TrackComponentCHForHelpView(controller.getFlexoFrame());
+				new TrackComponentCHForHelpView(controller.getFlexoFrame(), controller.getApplicationContext());
 			}
 		});
 		add(helpOn);
@@ -118,7 +120,7 @@ public class HelpMenu extends FlexoMenu implements Observer {
 			submitHelpFor.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new TrackComponentCHForHelpSubmission(controller.getFlexoFrame());
+					new TrackComponentCHForHelpSubmission(controller.getFlexoFrame(), controller.getApplicationContext());
 				}
 			});
 			add(submitHelpFor);

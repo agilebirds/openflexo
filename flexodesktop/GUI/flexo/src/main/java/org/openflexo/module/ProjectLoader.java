@@ -529,7 +529,7 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 
 	private void preInitialization(File projectDirectory) {
 		getServiceManager().getGeneralPreferences().addToLastOpenedProjects(projectDirectory);
-		// FlexoPreferences.savePreferences(true);
+		getServiceManager().getPreferencesService().savePreferences();
 	}
 
 	public boolean someProjectsAreModified() {

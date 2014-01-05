@@ -65,7 +65,7 @@ public class TestFileChoosing {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				chooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
+				// chooser.setCurrentDirectory(AdvancedPrefs.getLastVisitedDirectory());
 				chooser.setDialogTitle(FlexoLocalization.localizedForKey("select_a_prj_directory"));
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				chooser.setFileFilter(FlexoFileChooserUtils.PROJECT_FILE_FILTER);
@@ -82,7 +82,7 @@ public class TestFileChoosing {
 				// fileDialog.setFilenameFilter(filter)
 				// fileDialog.set
 				try {
-					fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
+					// fileDialog.setDirectory(AdvancedPrefs.getLastVisitedDirectory().getCanonicalPath());
 				} catch (Throwable t) {
 				}
 				fileDialog.setVisible(true);

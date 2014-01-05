@@ -40,9 +40,9 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 
 	protected static final Logger logger = Logger.getLogger(ResourceManager.class.getPackage().getName());
 
-	private List<FlexoResource<?>> resources;
+	private final List<FlexoResource<?>> resources;
 
-	private List<File> filesToDelete;
+	private final List<File> filesToDelete;
 
 	public static ResourceManager createInstance() {
 		return new ResourceManager();
@@ -93,15 +93,11 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 	public List<FlexoResource<?>> getUnsavedResources() {
 		List<FlexoResource<?>> returned = new ArrayList<FlexoResource<?>>();
 		for (FlexoResource<?> r : resources) {
-			try {
-				if (r.isLoaded() && r.getResourceData(null).isModified()) {
-					returned.add(r);
-				}
-				if (r.isDeleted()) {
-					returned.add(r);
-				}
-			} catch (Exception e) {
-				// Don't care here
+			if (r.isLoaded() && r.getLoadedResourceData().isModified()) {
+				returned.add(r);
+			}
+			if (r.isDeleted()) {
+				returned.add(r);
 			}
 		}
 		return returned;

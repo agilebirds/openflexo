@@ -1,6 +1,7 @@
 package org.openflexo.foundation.resource;
 
 import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoException;
@@ -38,7 +39,7 @@ public interface FlexoResource<RD extends ResourceData<RD>> extends FlexoObject 
 	public static final String CONTAINER = "container";
 	public static final String CONTENTS = "contents";
 	public static final String DEPENDENCIES = "dependencies";
-	// public static final String LAST_UPDATE = "lastUpdate";
+	public static final String LAST_UPDATE = "lastUpdate";
 	public static final String SERVICE_MANAGER = "serviceManager";
 
 	/**
@@ -93,6 +94,28 @@ public interface FlexoResource<RD extends ResourceData<RD>> extends FlexoObject 
 	 */
 	@Setter(VERSION)
 	public void setVersion(FlexoVersion aVersion);
+
+	/**
+	 * Returns the date where the resource was updated for the last time.<br>
+	 * This timestamp references the date where the last serialization was performed (not the date where the resource data in memory was
+	 * updated for the last time).<br>
+	 * (For a file resource, this date is the diskLastModified date)
+	 * 
+	 * @return date
+	 */
+	@Getter(value = LAST_UPDATE, isStringConvertable = true)
+	@XMLAttribute
+	public Date getLastUpdate();
+
+	/**
+	 * Sets the date where the resource was updated for the last time.<br>
+	 * This timestamp references the date where the last serialization was performed (not the date where the resource data in memory was
+	 * updated for the last time).<br>
+	 * 
+	 * @param date
+	 */
+	@Setter(LAST_UPDATE)
+	public void setLastUpdate(Date aDate);
 
 	/**
 	 * Returns the revision of this resource. Each resource should ensure that upon each time it is edited, the revision number is

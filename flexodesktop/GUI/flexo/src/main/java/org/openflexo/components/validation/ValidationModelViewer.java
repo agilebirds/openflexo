@@ -261,7 +261,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 					_currentRule.setIsEnabled(!_currentRule.getIsEnabled());
 					ValidationModelViewer.this.applicationContext.getGeneralPreferences().setValidationRuleEnabled(_currentRule,
 							_currentRule.getIsEnabled());
-					// GeneralPreferences.save();
+					ValidationModelViewer.this.applicationContext.getPreferencesService().savePreferences();
 					disableButton.setText(_currentRule.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton)
 							: FlexoLocalization.localizedForKey("enableRule", disableButton));
 					_ruleSetList.validate();

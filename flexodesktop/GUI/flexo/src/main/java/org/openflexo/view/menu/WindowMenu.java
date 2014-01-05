@@ -155,8 +155,9 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		if (getController().getModuleInspectorController().getInspectorDialog() != null) {
 			inspectorWindowItem.setState(getController().getModuleInspectorController().getInspectorDialog().isVisible());
 		}
-		if (getController().getPreferencesWindow(false) != null) {
-			preferencesWindowItem.setState(getController().getPreferencesWindow(false).isVisible());
+		if (getController().getApplicationContext().getPreferencesService().getPreferencesWindow() != null) {
+			preferencesWindowItem.setState(getController().getApplicationContext().getPreferencesService().getPreferencesWindow()
+					.isVisible());
 		}
 		if (checkConsistencyWindowItem != null) {
 			if (getController().getConsistencyCheckWindow(false) != null) {
@@ -246,7 +247,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			getController().showPreferences();
+			getController().getApplicationContext().getPreferencesService().showPreferences();
 		}
 
 	}

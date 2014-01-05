@@ -32,7 +32,6 @@ import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
-import org.openflexo.toolbox.FileResource;
 
 public class TestLibraryFromToXML extends OpenflexoRunTimeTestCase {
 
@@ -104,7 +103,7 @@ public class TestLibraryFromToXML extends OpenflexoRunTimeTestCase {
 	 */
 	public void test0LoadTestResourceCenter() throws IOException {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		testApplicationContext = new TestApplicationContext();
 		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources/"));
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());

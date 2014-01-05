@@ -332,7 +332,7 @@ public class ValidationReportEditor extends JPanel implements GraphicalFlexoObse
 
 		issue.getCause().setIsEnabled(!issue.getCause().getIsEnabled());
 		applicationContext.getGeneralPreferences().setValidationRuleEnabled(issue.getCause(), issue.getCause().getIsEnabled());
-		// GeneralPreferences.save();
+		applicationContext.getPreferencesService().savePreferences();
 		disableRuleButton.setText(issue.getCause().getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableRuleButton)
 				: FlexoLocalization.localizedForKey("enableRule", disableRuleButton));
 	}

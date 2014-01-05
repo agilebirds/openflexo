@@ -83,12 +83,9 @@ import org.openflexo.components.widget.CommonFIB;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.FlexoServiceManager;
@@ -137,9 +134,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
-import org.openflexo.prefs.PreferencesController;
-import org.openflexo.prefs.PreferencesHaveChanged;
-import org.openflexo.prefs.PreferencesWindow;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
@@ -165,7 +159,7 @@ import com.google.common.collect.Multimap;
  * 
  * @author benoit, sylvain
  */
-public abstract class FlexoController implements FlexoObserver, PropertyChangeListener {
+public abstract class FlexoController implements PropertyChangeListener {
 
 	static final Logger logger = Logger.getLogger(FlexoController.class.getPackage().getName());
 
@@ -240,7 +234,7 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 		} else {
 			controllerModel.setCurrentEditor(getApplicationContext().getApplicationEditor());
 		}
-		GeneralPreferences.getPreferences().addObserver(this);
+		getApplicationContext().getGeneralPreferences().getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	protected abstract void initializePerspectives();
@@ -497,13 +491,13 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 		getModuleInspectorController().resetInspector();
 	}
 
-	public PreferencesWindow getPreferencesWindow(boolean create) {
+	/*public PreferencesWindow getPreferencesWindow(boolean create) {
 		return PreferencesController.instance().getPreferencesWindow(create);
 	}
 
 	public void showPreferences() {
 		PreferencesController.instance().showPreferences();
-	}
+	}*/
 
 	public void registerShortcuts(ControllerActionInitializer controllerInitializer) {
 		for (final Entry<FlexoActionType<?, ?, ?>, ActionInitializer<?, ?, ?>> entry : controllerInitializer.getActionInitializers()
@@ -598,7 +592,7 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 			for (int i = 0; i < validationModel.getSize(); i++) {
 				ValidationRuleSet ruleSet = validationModel.getElementAt(i);
 				for (ValidationRule<?, ?> rule : ruleSet.getRules()) {
-					rule.setIsEnabled(GeneralPreferences.isValidationRuleEnabled(rule));
+					rule.setIsEnabled(getApplicationContext().getGeneralPreferences().isValidationRuleEnabled(rule));
 				}
 			}
 		}
@@ -1282,7 +1276,7 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 		getSelectionManager().deleteObserver(getModuleInspectorController());
 
 		manager.delete();
-		GeneralPreferences.getPreferences().deleteObserver(this);
+		getApplicationContext().getGeneralPreferences().getPropertyChangeSupport().removePropertyChangeListener(this);
 		mainPane.dispose();
 		if (consistencyCheckWindow != null && !consistencyCheckWindow.isDisposed()) {
 			consistencyCheckWindow.dispose();
@@ -1299,9 +1293,9 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 		}
 
 		registeredMenuBar.clear();
-		if (PreferencesController.hasInstance()) {
+		/*if (PreferencesController.hasInstance()) {
 			PreferencesController.instance().getPreferencesWindow().setVisible(false);
-		}
+		}*/
 		if (flexoFrame != null) {
 			flexoFrame.disposeAll();
 		}
@@ -1568,22 +1562,6 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == GeneralPreferences.getPreferences()) {
-			if (dataModification instanceof PreferencesHaveChanged) {
-				String key = ((PreferencesHaveChanged) dataModification).propertyName();
-				if (GeneralPreferences.LANGUAGE_KEY.equals(key)) {
-					getFlexoFrame().updateTitle();
-				} else if (GeneralPreferences.LAST_OPENED_PROJECTS_1.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_2.equals(key)
-						|| GeneralPreferences.LAST_OPENED_PROJECTS_3.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_4.equals(key)
-						|| GeneralPreferences.LAST_OPENED_PROJECTS_5.equals(key)) {
-					updateRecentProjectMenu();
-				}
-			}
-		}
-	}
-
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == getControllerModel()) {
 			if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
@@ -1617,6 +1595,15 @@ public abstract class FlexoController implements FlexoObserver, PropertyChangeLi
 				}
 			}
 			manager.removeListener(ProjectClosedNotification.CLOSE, this, project);
+		} else if (evt.getSource() == getApplicationContext().getGeneralPreferences()) {
+			String key = evt.getPropertyName();
+			if (GeneralPreferences.LANGUAGE_KEY.equals(key)) {
+				getFlexoFrame().updateTitle();
+			} else if (GeneralPreferences.LAST_OPENED_PROJECTS_1.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_2.equals(key)
+					|| GeneralPreferences.LAST_OPENED_PROJECTS_3.equals(key) || GeneralPreferences.LAST_OPENED_PROJECTS_4.equals(key)
+					|| GeneralPreferences.LAST_OPENED_PROJECTS_5.equals(key)) {
+				updateRecentProjectMenu();
+			}
 		}
 	}
 

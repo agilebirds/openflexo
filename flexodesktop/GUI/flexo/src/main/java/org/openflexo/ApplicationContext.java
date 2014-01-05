@@ -24,6 +24,7 @@ import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.prefs.PreferencesService;
 import org.openflexo.rest.client.ServerRestService;
+import org.openflexo.view.controller.FlexoServerInstanceManager;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
@@ -67,6 +68,8 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		registerService(bugReportService);
 		DocResourceManager docResourceManager = createDocResourceManager();
 		registerService(docResourceManager);
+		FlexoServerInstanceManager flexoServerInstanceManager = createFlexoServerInstanceManager();
+		registerService(flexoServerInstanceManager);
 	}
 
 	public PreferencesService getPreferencesService() {
@@ -87,6 +90,10 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 
 	public ProjectLoader getProjectLoader() {
 		return getService(ProjectLoader.class);
+	}
+
+	public FlexoServerInstanceManager getFlexoServerInstanceManager() {
+		return getService(FlexoServerInstanceManager.class);
 	}
 
 	public final TechnologyAdapterControllerService getTechnologyAdapterControllerService() {
@@ -120,6 +127,8 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 	protected abstract BugReportService createBugReportService();
 
 	protected abstract DocResourceManager createDocResourceManager();
+
+	protected abstract FlexoServerInstanceManager createFlexoServerInstanceManager();
 
 	@Override
 	protected FlexoResourceCenterService createResourceCenterService() {

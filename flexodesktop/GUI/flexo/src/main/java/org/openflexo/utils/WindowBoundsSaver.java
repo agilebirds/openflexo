@@ -7,20 +7,21 @@ import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import org.openflexo.GeneralPreferences;
-import org.openflexo.prefs.FlexoPreferences;
+import org.openflexo.view.controller.FlexoController;
 
 public class WindowBoundsSaver implements ComponentListener {
 
 	private final Window window;
 	private final String id;
 	private Thread boundsSaver;
+	private final FlexoController controller;
 
-	public WindowBoundsSaver(Window window, String id, Rectangle defaultBounds) {
+	public WindowBoundsSaver(Window window, String id, Rectangle defaultBounds, FlexoController controller) {
 		super();
 		this.window = window;
 		this.id = id;
-		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(id);
+		this.controller = controller;
+		Rectangle bounds = controller.getApplicationContext().getGeneralPreferences().getBoundForFrameWithID(id);
 		if (bounds == null) {
 			bounds = defaultBounds;
 		} else {
@@ -79,8 +80,8 @@ public class WindowBoundsSaver implements ComponentListener {
 			if (window.getBounds().y + window.getHeight() < 0) {
 				return;
 			}
-			GeneralPreferences.setBoundForFrameWithID(id, window.getBounds());
-			FlexoPreferences.savePreferences(true);
+			controller.getApplicationContext().getGeneralPreferences().setBoundForFrameWithID(id, window.getBounds());
+			controller.getApplicationContext().getPreferencesService().savePreferences();
 		} finally {
 			boundsSaver = null;
 		}

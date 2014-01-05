@@ -45,7 +45,6 @@ import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
 import org.openflexo.technologyadapter.xml.rm.XMLModelRepository;
-import org.openflexo.toolbox.FileResource;
 
 public class TestXML extends OpenflexoRunTimeTestCase {
 
@@ -83,7 +82,7 @@ public class TestXML extends OpenflexoRunTimeTestCase {
 	 */
 	public void test0LoadTestResourceCenter() throws IOException {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
+		testApplicationContext = new TestApplicationContext();
 		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources/"));
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());

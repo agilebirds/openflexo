@@ -38,7 +38,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.AdvancedPrefs;
 import org.openflexo.FlexoCst;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
@@ -152,7 +151,7 @@ public abstract class ContextualMenuManager {
 	}
 
 	public void processMouseMoved(MouseEvent e) {
-		if (_isPopupMenuDisplayed && AdvancedPrefs.getCloseOnMouseOut()) {
+		if (_isPopupMenuDisplayed && controller.getApplicationContext().getAdvancedPrefs().getCloseOnMouseOut()) {
 			Rectangle menuBounds = _popupMenu.getBounds();
 			menuBounds.width = menuBounds.width + 40;
 			menuBounds.height = menuBounds.height + 40;
