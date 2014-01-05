@@ -490,9 +490,9 @@ public abstract class AbstractDocItemView extends JPanel {
 					addSupportForInsertedObjects(new File(_docItem.getFolder().getDirectory(), "Figures"));
 				}
 			}
-			File cssFile = getProject() != null ? getProject().getDocumentationCssResource().getFile() : null;
+			File cssFile = getDocResourceManager().getDocumentationCssResourceFile();
 			shortHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+					cssFile, true) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setShortHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());
@@ -501,7 +501,7 @@ public abstract class AbstractDocItemView extends JPanel {
 			shortHTMLDescriptionEditor.setPreferredSize(new Dimension(850, 250));
 
 			fullHTMLDescriptionEditor = new FlexoWysiwygHelpDocEditor(FlexoLocalization.localizedForKey("write_documentation_here"),
-					cssFile, UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
+					cssFile, true) {
 				@Override
 				public void notifyTextChanged() {
 					getDocResourceManager().getEditedVersion(_docItem).setFullHTMLDescription(shortHTMLDescriptionEditor.getBodyContent());
@@ -1006,7 +1006,7 @@ public abstract class AbstractDocItemView extends JPanel {
 	}
 
 	public DocResourceManager getDocResourceManager() {
-		return DocResourceManager.instance();
+		return getController().getApplicationContext().getDocResourceManager();
 	}
 
 }

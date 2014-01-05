@@ -881,4 +881,8 @@ public class DocResourceManager extends FlexoServiceImpl {
 		_pendingComponents.clear();
 	}
 
+	public File getDocumentationCssResourceFile() {
+		// TODO
+		return null;
+	}
 }
