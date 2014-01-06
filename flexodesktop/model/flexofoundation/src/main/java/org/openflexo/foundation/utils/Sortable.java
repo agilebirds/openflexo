@@ -19,13 +19,12 @@
  */
 package org.openflexo.foundation.utils;
 
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * @author gpolet
  * 
  */
-public interface Sortable extends XMLSerializable {
+public interface Sortable {
 	public Sortable[] getCollection();
 
 	public int getIndexValue();

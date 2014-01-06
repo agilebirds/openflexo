@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.flexo.model.TestModelObject;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -20,6 +19,7 @@ import org.openflexo.foundation.InconsistentDataException;
 import org.openflexo.foundation.InvalidModelDefinitionException;
 import org.openflexo.foundation.InvalidXMLException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
+import org.openflexo.kvc.AccessorInvocationException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -27,13 +27,6 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.SerializationHandler;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Default implementation for {@link PamelaResource} (a resource where underlying model is managed by PAMELA framework)
@@ -159,21 +152,21 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 		}
 		if (resourceData != null) {
 			logger.warning("I think the SerializationHandler is no more necessary");
-			_saveResourceData(new SerializationHandler() {
-				@Override
-				public void objectWillBeSerialized(XMLSerializable object) {
-					if (object instanceof TestModelObject) {
-						// ((FlexoModelObject) object).initializeSerialization();
-					}
-				}
+			_saveResourceData(/*new SerializationHandler() {
+								@Override
+								public void objectWillBeSerialized(XMLSerializable object) {
+								if (object instanceof TestModelObject) {
+								// ((FlexoModelObject) object).initializeSerialization();
+								}
+								}
 
-				@Override
-				public void objectHasBeenSerialized(XMLSerializable object) {
-					if (object instanceof TestModelObject) {
-						// ((FlexoModelObject) object).finalizeSerialization();
-					}
-				}
-			}, clearIsModified);
+								@Override
+								public void objectHasBeenSerialized(XMLSerializable object) {
+								if (object instanceof TestModelObject) {
+								// ((FlexoModelObject) object).finalizeSerialization();
+								}
+								}
+								},*/clearIsModified);
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + this + " : " + getFile().getName() + " version=" + getModelVersion()
 						+ " with date " + FileUtils.getDiskLastModifiedDate(getFile()));
@@ -201,7 +194,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 		}
 	}
 
-	private void _saveResourceData(SerializationHandler handler, boolean clearIsModified) throws SaveResourceException {
+	private void _saveResourceData(/*SerializationHandler handler,*/boolean clearIsModified) throws SaveResourceException {
 		File temporaryFile = null;
 		FileWritingLock lock = willWriteOnDisk();
 
@@ -224,7 +217,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 				logger.finer("Creating temp file " + temporaryFile.getAbsolutePath());
 			}
 			// try {
-			performXMLSerialization(handler, temporaryFile);
+			performXMLSerialization(/*handler,*/temporaryFile);
 			// Renaming temporary file
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("Renaming temp file " + temporaryFile.getAbsolutePath() + " to " + getFile().getAbsolutePath());
@@ -280,7 +273,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 	 * @throws DuplicateSerializationIdentifierException
 	 * @throws IOException
 	 */
-	private void performXMLSerialization(SerializationHandler handler, File temporaryFile) throws IOException {
+	private void performXMLSerialization(/*SerializationHandler handler,*/File temporaryFile) throws IOException {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(temporaryFile);
@@ -296,7 +289,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 		}
 	}
 
-	private StringEncoder STRING_ENCODER = null;
+	/*private StringEncoder STRING_ENCODER = null;
 
 	@Override
 	public StringEncoder getStringEncoder() {
@@ -309,7 +302,7 @@ public abstract class PamelaResourceImpl<RD extends ResourceData<RD>, F extends 
 			}
 		}
 		return STRING_ENCODER;
-	}
+	}*/
 
 	public void recoverFile() {
 		if (getFile() == null) {

@@ -8,7 +8,7 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.model.converter.RelativePathFileConverter;
 
 /**
  * A {@link DirectoryContainerResource} is a resource bound to a directory on file system<br>

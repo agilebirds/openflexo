@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.inspector.InspectableModification;
-
 /*
  * DataModification.java
  * Project WorkflowEditor
@@ -34,13 +32,13 @@ import org.openflexo.inspector.InspectableModification;
  * 
  * @author benoit
  */
-public class DataModification implements InspectableModification {
+public class DataModification {
 
 	private String _propertyName;
 
-	private Object _newValue;
+	private final Object _newValue;
 
-	private Object _oldValue;
+	private final Object _oldValue;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -70,12 +68,10 @@ public class DataModification implements InspectableModification {
 		return _oldValue;
 	}
 
-	@Override
 	public Object newValue() {
 		return _newValue;
 	}
 
-	@Override
 	public String propertyName() {
 		return _propertyName;
 	}
@@ -88,7 +84,6 @@ public class DataModification implements InspectableModification {
 
 	private boolean _isReentrant = false;
 
-	@Override
 	public boolean isReentrant() {
 		return _isReentrant;
 	}

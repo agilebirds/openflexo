@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
@@ -54,7 +54,7 @@ import org.openflexo.toolbox.ChainedCollection;
  * @author sylvain
  * 
  */
-public class DiagramSpecification extends FlexoObjectImpl implements FlexoMetaModel<DiagramSpecification>,
+public class DiagramSpecification extends DefaultFlexoObject /*FlexoObjectImpl*/implements FlexoMetaModel<DiagramSpecification>,
 		ResourceData<DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramSpecification.class.getPackage().getName());

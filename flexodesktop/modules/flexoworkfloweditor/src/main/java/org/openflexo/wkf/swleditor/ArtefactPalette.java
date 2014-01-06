@@ -23,7 +23,6 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
@@ -33,6 +32,7 @@ import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.wkf.swleditor.gr.AnnotationGR;
 import org.openflexo.wkf.swleditor.gr.DataObjectGR;
 import org.openflexo.wkf.swleditor.gr.DataSourceGR;

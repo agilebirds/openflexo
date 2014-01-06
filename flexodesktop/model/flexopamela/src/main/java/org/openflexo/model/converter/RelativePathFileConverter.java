@@ -1,10 +1,12 @@
-package org.openflexo.toolbox;
+package org.openflexo.model.converter;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.model.StringConverterLibrary.Converter;
+import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.FileUtils;
 
 public class RelativePathFileConverter extends Converter<File> {
 
@@ -19,10 +21,10 @@ public class RelativePathFileConverter extends Converter<File> {
 	}
 
 	@Override
-	public File convertFromString(String value) {
+	public File convertFromString(String value, ModelFactory factory) {
 		File file = new File(relativePath, value);
 		if (!file.exists()) {
-			System.err.println("Shit: this does not exist: " + file.getAbsolutePath());
+			logger.warning("Cannot fin relative file: " + value + " in " + relativePath + " searched:" + file.getAbsolutePath());
 		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("********* convertFromString " + value + " return " + file.getAbsolutePath());

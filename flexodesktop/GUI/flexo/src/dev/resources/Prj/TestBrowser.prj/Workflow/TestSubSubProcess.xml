@@ -39,12 +39,12 @@
     <ActivityNode id="SYL_979" userID="SYL" flexoID="979" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="3" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
       <taskType>User</taskType>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
         <height_bpe className="java.lang.Double">45.0</height_bpe>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">144.0</posx_bpe>
         <posy_bpe className="java.lang.Double">202.0</posy_bpe>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
         <width_bpe className="java.lang.Double">88.0</width_bpe>
       </GraphicalProperties>
       <OutgoingAssociation id="SYL_985" userID="SYL" flexoID="985" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="">
@@ -95,22 +95,22 @@
     <ActivityNode id="SYL_980" userID="SYL" flexoID="980" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="4" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
       <taskType>User</taskType>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
         <height_bpe className="java.lang.Double">45.0</height_bpe>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">470.0</posx_bpe>
         <posy_bpe className="java.lang.Double">240.0</posy_bpe>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
         <width_bpe className="java.lang.Double">88.0</width_bpe>
       </GraphicalProperties>
       <FlexoPreCondition id="SYL_981" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="981" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
         <AttachedBeginOperationNode idref="SYL_992" />
         <GraphicalProperties>
-          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
           <height_bpe className="java.lang.Double">50.0</height_bpe>
           <posx_bpe className="java.lang.Double">5.0</posx_bpe>
           <posy_bpe className="java.lang.Double">29.0</posy_bpe>
-          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
           <width_bpe className="java.lang.Double">100.0</width_bpe>
         </GraphicalProperties>
         <IncomingTokenEdge idref="SYL_982" />
@@ -126,8 +126,8 @@
     </ActivityNode>
     <WKFDataObject id="SYL_984" userID="SYL" flexoID="984" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">30.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labelx_bpe className="java.lang.Double">24.0</labelx_bpe>
@@ -136,8 +136,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">304.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
-        <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,0,10</textFont_default>
+        <textColor_default className="org.openflexo.swing.FlexoColor">0,0,0</textColor_default>
+        <textFont_default className="org.openflexo.swing.FlexoFont">Lucida Sans,0,10</textFont_default>
         <width_bpe className="java.lang.Double">30.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -148,10 +148,10 @@ lkmkmklmklmlkt</text>
     </WKFDataObject>
     <WKFAnnotation id="SYL_986" isAnnotation="true" userID="SYL" flexoID="986" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_default className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_default>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
-        <fgColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</fgColor_default>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_default className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_default>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
+        <fgColor_default className="org.openflexo.swing.FlexoColor">0,0,0</fgColor_default>
         <height_bpe className="java.lang.Double">84.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <isRounded_default className="java.lang.Boolean">false</isRounded_default>
@@ -161,8 +161,8 @@ lkmkmklmklmlkt</text>
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">309.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
-        <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,2,10</textFont_default>
+        <textColor_default className="org.openflexo.swing.FlexoColor">0,0,0</textColor_default>
+        <textFont_default className="org.openflexo.swing.FlexoFont">Lucida Sans,2,10</textFont_default>
         <width_bpe className="java.lang.Double">80.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -175,17 +175,17 @@ on</text>
     </WKFAnnotation>
     <WKFAnnotation id="SYL_987" isAnnotation="true" userID="SYL" flexoID="987" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_default className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_default>
-        <fgColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</fgColor_default>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_default className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_default>
+        <fgColor_default className="org.openflexo.swing.FlexoColor">0,0,0</fgColor_default>
         <height_bpe className="java.lang.Double">58.0</height_bpe>
         <isRounded_default className="java.lang.Boolean">false</isRounded_default>
         <isSolidBackground_default className="java.lang.Boolean">false</isSolidBackground_default>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">472.0</posx_bpe>
         <posy_bpe className="java.lang.Double">354.0</posy_bpe>
-        <textColor_default className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_default>
-        <textFont_default className="org.openflexo.foundation.utils.FlexoFont">Lucida Sans,2,10</textFont_default>
+        <textColor_default className="org.openflexo.swing.FlexoColor">0,0,0</textColor_default>
+        <textFont_default className="org.openflexo.swing.FlexoFont">Lucida Sans,2,10</textFont_default>
         <width_bpe className="java.lang.Double">116.0</width_bpe>
       </GraphicalProperties>
       <text>Annotati
@@ -235,12 +235,12 @@ mlkkklmmklmlklmkon</text>
   </PortRegistery>
   <GraphicalProperties>
     <alignedOnGrid_bpe className="java.lang.Boolean">false</alignedOnGrid_bpe>
-    <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+    <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
     <bpe-gridSizeHasBeenSet className="java.lang.Boolean">true</bpe-gridSizeHasBeenSet>
     <gridSize_bpe className="java.lang.Integer">15</gridSize_bpe>
     <height_bpe className="java.lang.Double">1000.0</height_bpe>
     <scale_bpe className="java.lang.Double">1.0</scale_bpe>
-    <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+    <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
     <width_bpe className="java.lang.Double">1000.0</width_bpe>
   </GraphicalProperties>
 </FlexoProcess>

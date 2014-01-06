@@ -40,8 +40,8 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.model.converter.RectangleConverter;
 import org.openflexo.prefs.PreferencesContainer;
-import org.openflexo.toolbox.RectangleConverter;
 import org.openflexo.toolbox.StringUtils;
 
 /**

@@ -24,10 +24,10 @@ import java.awt.Color;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
+import org.openflexo.swing.FlexoColor;
 
 public class WKFAnnotation extends WKFArtefact implements InspectableObject, DeletableObject, LevelledObject {
 

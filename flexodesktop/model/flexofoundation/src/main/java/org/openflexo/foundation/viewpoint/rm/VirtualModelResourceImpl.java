@@ -26,46 +26,28 @@ import org.openflexo.model.factory.AccessibleProxyObject;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
-import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<VirtualModel, VirtualModelModelFactory> implements
 		VirtualModelResource, AccessibleProxyObject {
 
 	static final Logger logger = Logger.getLogger(VirtualModelResourceImpl.class.getPackage().getName());
 
-	private static VirtualModelModelFactory VIRTUAL_MODEL_FACTORY;
-
-	static {
-		try {
-			VIRTUAL_MODEL_FACTORY = new VirtualModelModelFactory();
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected RelativePathFileConverter relativePathFileConverter;
-
-	private StringEncoder encoder;
-
 	public static VirtualModelResource makeVirtualModelResource(File virtualModelDirectory, File virtualModelXMLFile,
 			ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
-			returned.setFactory(VIRTUAL_MODEL_FACTORY);
 			returned.setName(virtualModelDirectory.getName());
 			returned.setDirectory(virtualModelDirectory);
 			returned.setFile(virtualModelXMLFile);
 			returned.setViewPointLibrary(viewPointLibrary);
 			returned.setURI(viewPointResource.getURI() + "/" + virtualModelDirectory.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
-			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
 			viewPointResource.addToContents(returned);
 			viewPointResource.notifyContentsAdded(returned);
 
-			returned.setFactory(new VirtualModelModelFactory());
+			returned.setFactory(new VirtualModelModelFactory(returned));
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -79,7 +61,6 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
-			returned.setFactory(VIRTUAL_MODEL_FACTORY);
 			String baseName = virtualModelDirectory.getName();
 			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
 			VirtualModelInfo vpi = findVirtualModelInfo(virtualModelDirectory);
@@ -100,23 +81,13 @@ public abstract class VirtualModelResourceImpl extends PamelaResourceImpl<Virtua
 
 			logger.fine("VirtualModelResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
-			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
-
-			returned.setFactory(new VirtualModelModelFactory());
+			returned.setFactory(new VirtualModelModelFactory(returned));
 
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
-		}
-		return encoder;
 	}
 
 	/**

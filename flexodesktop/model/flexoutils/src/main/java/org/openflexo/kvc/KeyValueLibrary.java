@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.antar.binding;
+package org.openflexo.kvc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,6 +31,9 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.openflexo.antar.binding.MethodDefinition;
+import org.openflexo.antar.binding.TypeUtils;
 
 public class KeyValueLibrary {
 

@@ -18,9 +18,10 @@
  *
  */
 
-package org.openflexo.antar.binding;
+package org.openflexo.kvc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import java.util.Observable;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.AccessorMethod;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.toolbox.ToolBox;
 
 public class KeyValueProperty extends Observable {
@@ -228,17 +231,17 @@ public class KeyValueProperty extends Observable {
 				// we continue
 			}
 		}
-		
+
 		// manage static class methods
-				for (String trie : tries) {
-					try {
-						return ((Class) aDeclaringClass.getClass()).getMethod(trie, (Class<?>[]) null);
-					} catch (SecurityException err) {
-						// we continue
-					} catch (NoSuchMethodException err) {
-						// we continue
-					}
-				}
+		for (String trie : tries) {
+			try {
+				return ((Class) aDeclaringClass.getClass()).getMethod(trie, (Class<?>[]) null);
+			} catch (SecurityException err) {
+				// we continue
+			} catch (NoSuchMethodException err) {
+				// we continue
+			}
+		}
 
 		// If declaring class is interface, also lookup in Object class
 		if (returnedMethod == null && aDeclaringClass.isInterface()) {
@@ -455,5 +458,118 @@ public class KeyValueProperty extends Observable {
 	public static interface TestInterface {
 
 	}*/
+
+	/**
+	 * Returns Object value, asserting that this property represents an Object property (if not, throw an InvalidKeyValuePropertyException
+	 * exception)
+	 * 
+	 * @return an <code>Object</code> value
+	 * @exception InvalidKeyValuePropertyException
+	 *                if an error occurs
+	 */
+	public synchronized Object getObjectValue(Object object) {
+		if (object == null) {
+			throw new InvalidKeyValuePropertyException("No object is specified");
+		} else {
+			Object currentObject = object;
+
+			if (field != null) {
+				try {
+					return field.get(currentObject);
+				} catch (Exception e) {
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + declaringClass.getName()
+							+ ": field " + field.getName() + " Exception raised: " + e.toString());
+				}
+			}
+
+			else if (getMethod != null) {
+
+				try {
+					return getMethod.invoke(currentObject, (Object[]) null);
+				} catch (InvocationTargetException e) {
+					e.getTargetException().printStackTrace();
+					throw new AccessorInvocationException("AccessorInvocationException: class " + declaringClass.getName() + ": method "
+							+ getMethod.getName() + " Exception raised: " + e.getTargetException().toString(), e);
+				} catch (Exception e) {
+
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + declaringClass.getName()
+							+ ": method " + getMethod.getName() + " Exception raised: " + e.toString());
+				}
+
+			}
+
+			else {
+				throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: no field nor get method found !!!");
+			}
+
+		}
+	}
+
+	/**
+	 * Sets Object value, asserting that this property represents an Object property (if not, throw an InvalidKeyValuePropertyException
+	 * exception)
+	 * 
+	 * @param aValue
+	 *            an <code>Object</code> value
+	 * @exception InvalidKeyValuePropertyException
+	 *                if an error occurs
+	 */
+
+	/**
+	 * Sets Object value, asserting that this property represents an Object property (if not, throw an InvalidKeyValuePropertyException
+	 * exception)
+	 * 
+	 * @param aValue
+	 *            an <code>Object</code> value
+	 * @exception InvalidKeyValuePropertyException
+	 *                if an error occurs
+	 */
+	public synchronized void setObjectValue(Object aValue, Object object) {
+		if (object == null) {
+			throw new InvalidKeyValuePropertyException("No object is specified");
+		} else {
+
+			Object currentObject = object;
+
+			if (field != null) {
+				try {
+					field.set(currentObject, aValue);
+				} catch (Exception e) {
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + declaringClass.getName()
+							+ ": field " + field.getName() + " Exception raised: " + e.toString());
+				}
+			}
+
+			else if (setMethod != null) {
+
+				Object params[] = new Object[1];
+				params[0] = aValue;
+
+				try {
+					setMethod.invoke(currentObject, params);
+				} catch (InvocationTargetException e) {
+					// e.getTargetException().printStackTrace();
+					throw new AccessorInvocationException("AccessorInvocationException: class " + declaringClass.getName() + ": method "
+							+ setMethod.getName() + " Exception raised: " + e.getTargetException().toString(), e);
+				} catch (IllegalArgumentException e) {
+					// e.printStackTrace();
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + declaringClass.getName()
+							+ ": method " + setMethod.getName() + "Argument mismatch: tried to pass a '" + aValue.getClass().getName()
+							+ " instead of a " + setMethod.getParameterTypes()[0] + " Exception raised: " + e.toString());
+
+				} catch (Exception e) {
+					// e.printStackTrace();
+					throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: class " + declaringClass.getName()
+							+ ": field " + setMethod.getName() + " Exception raised: " + e.toString());
+				}
+
+			}
+
+			else {
+				throw new InvalidKeyValuePropertyException("InvalidKeyValuePropertyException: no field nor set method found !!!");
+			}
+
+		}
+	}
 
 }

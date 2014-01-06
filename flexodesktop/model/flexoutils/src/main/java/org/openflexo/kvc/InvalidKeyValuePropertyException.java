@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.antar.binding;
+package org.openflexo.kvc;
 
 /**
  * <p>

@@ -26,7 +26,6 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
-import org.openflexo.xmlcode.AccessorInvocationException;
 
 /**
  * @author gpolet
@@ -133,7 +132,7 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 		}*/
 		try {
 			getFocusedObject().setObjectForKey(getValue(), getKey());
-		} catch (AccessorInvocationException exception) {
+		} catch (Exception exception) {
 			if (exception.getCause() instanceof FlexoException) {
 				throw (FlexoException) exception.getCause();
 			}

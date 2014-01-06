@@ -27,9 +27,6 @@ import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.resource.ProjectExternalRepository;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Represents a file relative to a project
@@ -37,31 +34,9 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public class FlexoProjectFile extends KVCFlexoObject implements StringConvertable, Cloneable {
+public class FlexoProjectFile extends KVCFlexoObject implements Cloneable {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectFile.class.getPackage().getName());
-
-	private static final char fileSeparator = File.separator.charAt(0);
-
-	private static final char alternateFileSeparator = fileSeparator == '\\' ? '/' : '\\';
-
-	public static String transformIntoValidPath(String aRelativePath) {
-		return aRelativePath.replace(alternateFileSeparator, fileSeparator);
-	}
-
-	public static final StringEncoder.Converter<FlexoProjectFile> converter = new Converter<FlexoProjectFile>(FlexoProjectFile.class) {
-
-		@Override
-		public FlexoProjectFile convertFromString(String value) {
-			return new FlexoProjectFile(transformIntoValidPath(value));
-		}
-
-		@Override
-		public String convertToString(FlexoProjectFile value) {
-			return value.toString();
-		}
-
-	};
 
 	protected String relativePath;
 
@@ -240,11 +215,6 @@ public class FlexoProjectFile extends KVCFlexoObject implements StringConvertabl
 		if (!nameIsValid() && relativePath != null) {
 			relativePath = FileUtils.getValidFileName(relativePath);
 		}
-	}
-
-	@Override
-	public StringEncoder.Converter getConverter() {
-		return converter;
 	}
 
 	@Override

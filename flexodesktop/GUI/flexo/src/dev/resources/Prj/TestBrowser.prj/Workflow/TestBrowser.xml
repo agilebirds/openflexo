@@ -20,8 +20,8 @@
       <OutgoingTokenEdge id="SYL_642" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="642" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
         <Metrics id="SYL_675" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="675" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
         <GraphicalProperties>
-          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
           <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.4999999999999995</fixed_end_location_bpe1_FlexoPreCondition>
           <height_bpe className="java.lang.Double">50.0</height_bpe>
           <height_swl className="java.lang.Double">40.0</height_swl>
@@ -36,8 +36,8 @@
           <posx_swl className="java.lang.Double">0.0</posx_swl>
           <posy_bpe className="java.lang.Double">0.0</posy_bpe>
           <posy_swl className="java.lang.Double">0.0</posy_swl>
-          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
           <width_bpe className="java.lang.Double">100.0</width_bpe>
           <width_swl className="java.lang.Double">80.0</width_swl>
         </GraphicalProperties>
@@ -47,8 +47,8 @@
       <OutgoingTokenEdge id="SYL_663" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="663" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
         <Metrics id="SYL_680" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="680" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
         <GraphicalProperties>
-          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
           <crossed_cp_bpe1_1 className="org.openflexo.fge.geom.FGEPoint">0.3801916932907348,0.510752688172043</crossed_cp_bpe1_1>
           <height_bpe className="java.lang.Double">50.0</height_bpe>
           <height_swl className="java.lang.Double">40.0</height_swl>
@@ -60,8 +60,8 @@
           <posx_swl className="java.lang.Double">0.0</posx_swl>
           <posy_bpe className="java.lang.Double">0.0</posy_bpe>
           <posy_swl className="java.lang.Double">0.0</posy_swl>
-          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
           <width_bpe className="java.lang.Double">100.0</width_bpe>
           <width_swl className="java.lang.Double">80.0</width_swl>
         </GraphicalProperties>
@@ -71,8 +71,8 @@
     </EventNode>
     <EventNode id="SYL_427" eventType="End" trigger="NONE" isCatching="true" userID="SYL" flexoID="427" dontGenerate="true" useSpecificDescriptions="false" docIndex="2" nodeName="End">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">50.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
@@ -81,8 +81,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">200.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
         <width_bpe className="java.lang.Double">100.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -101,8 +101,8 @@
     <ActivityNode id="SYL_641" userID="SYL" flexoID="641" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="3" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
       <taskType>User</taskType>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">45.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
@@ -110,8 +110,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">195.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
         <width_bpe className="java.lang.Double">88.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -141,8 +141,8 @@
           <OutgoingTokenEdge id="SYL_656" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="656" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
             <Metrics id="SYL_676" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="676" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
             <GraphicalProperties>
-              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
               <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
               <height_bpe className="java.lang.Double">50.0</height_bpe>
               <height_swl className="java.lang.Double">40.0</height_swl>
@@ -157,8 +157,8 @@
               <posx_swl className="java.lang.Double">0.0</posx_swl>
               <posy_bpe className="java.lang.Double">0.0</posy_bpe>
               <posy_swl className="java.lang.Double">0.0</posy_swl>
-              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
               <width_bpe className="java.lang.Double">100.0</width_bpe>
               <width_swl className="java.lang.Double">80.0</width_swl>
             </GraphicalProperties>
@@ -176,8 +176,8 @@
           <OutgoingTokenEdge id="SYL_647" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="647" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
             <Metrics id="SYL_698" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="698" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
             <GraphicalProperties>
-              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
               <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.5</fixed_end_location_bpe1_FlexoPreCondition>
               <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
               <height_bpe className="java.lang.Double">50.0</height_bpe>
@@ -196,8 +196,8 @@
               <posx_swl className="java.lang.Double">0.0</posx_swl>
               <posy_bpe className="java.lang.Double">0.0</posy_bpe>
               <posy_swl className="java.lang.Double">0.0</posy_swl>
-              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
               <width_bpe className="java.lang.Double">100.0</width_bpe>
               <width_swl className="java.lang.Double">80.0</width_swl>
             </GraphicalProperties>
@@ -231,8 +231,8 @@
               <OutgoingTokenEdge id="SYL_669" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="669" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
                 <Metrics id="SYL_677" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="677" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
                 <GraphicalProperties>
-                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
                   <curve_cp_bpe3_3 className="org.openflexo.fge.geom.FGEPoint">0.5,0.55</curve_cp_bpe3_3>
                   <height_bpe className="java.lang.Double">50.0</height_bpe>
                   <height_swl className="java.lang.Double">40.0</height_swl>
@@ -243,8 +243,8 @@
                   <posx_swl className="java.lang.Double">0.0</posx_swl>
                   <posy_bpe className="java.lang.Double">0.0</posy_bpe>
                   <posy_swl className="java.lang.Double">0.0</posy_swl>
-                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
                   <width_bpe className="java.lang.Double">100.0</width_bpe>
                   <width_swl className="java.lang.Double">80.0</width_swl>
                 </GraphicalProperties>
@@ -263,8 +263,8 @@
               <OutgoingTokenEdge id="SYL_658" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="658" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
                 <Metrics id="SYL_679" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="679" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
                 <GraphicalProperties>
-                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
                   <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
                   <fixed_end_location_bpe3_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe3_FlexoPreCondition>
                   <height_bpe className="java.lang.Double">50.0</height_bpe>
@@ -280,8 +280,8 @@
                   <posx_swl className="java.lang.Double">0.0</posx_swl>
                   <posy_bpe className="java.lang.Double">0.0</posy_bpe>
                   <posy_swl className="java.lang.Double">0.0</posy_swl>
-                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
                   <width_bpe className="java.lang.Double">100.0</width_bpe>
                   <width_swl className="java.lang.Double">80.0</width_swl>
                 </GraphicalProperties>
@@ -291,8 +291,8 @@
             </ActionNode>
             <ActionNode id="SYL_668" actionType="FLEXO_ACTION" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" userID="SYL" flexoID="668" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="3" nodeName="ACTION" nodeType="NORMAL" isWaiting="false" isSelfActivated="false">
               <GraphicalProperties>
-                <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-                <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+                <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
                 <height_bpe className="java.lang.Double">50.0</height_bpe>
                 <height_swl className="java.lang.Double">40.0</height_swl>
                 <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
@@ -301,8 +301,8 @@
                 <posx_swl className="java.lang.Double">0.0</posx_swl>
                 <posy_bpe className="java.lang.Double">0.0</posy_bpe>
                 <posy_swl className="java.lang.Double">0.0</posy_swl>
-                <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-                <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+                <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
                 <width_bpe className="java.lang.Double">100.0</width_bpe>
                 <width_swl className="java.lang.Double">80.0</width_swl>
               </GraphicalProperties>
@@ -310,8 +310,8 @@
               <OutgoingTokenEdge id="SYL_670" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="670" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
                 <Metrics id="SYL_678" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="678" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
                 <GraphicalProperties>
-                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
                   <curve_cp_bpe3_3 className="org.openflexo.fge.geom.FGEPoint">0.5,0.55</curve_cp_bpe3_3>
                   <height_bpe className="java.lang.Double">50.0</height_bpe>
                   <height_swl className="java.lang.Double">40.0</height_swl>
@@ -322,8 +322,8 @@
                   <posx_swl className="java.lang.Double">0.0</posx_swl>
                   <posy_bpe className="java.lang.Double">0.0</posy_bpe>
                   <posy_swl className="java.lang.Double">0.0</posy_swl>
-                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
                   <width_bpe className="java.lang.Double">100.0</width_bpe>
                   <width_swl className="java.lang.Double">80.0</width_swl>
                 </GraphicalProperties>
@@ -334,8 +334,8 @@
           </ActionPetriGraph>
           <OperationComponentInstance id="SYL_660" componentName="TestComponent" userID="SYL" flexoID="660" dontGenerate="false" useSpecificDescriptions="false" />
           <GraphicalProperties>
-            <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-            <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+            <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+            <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
             <height_bpe className="java.lang.Double">40.0</height_bpe>
             <height_swl className="java.lang.Double">40.0</height_swl>
             <labely_bpe className="java.lang.Double">0.0</labely_bpe>
@@ -343,8 +343,8 @@
             <posx_swl className="java.lang.Double">0.0</posx_swl>
             <posy_bpe className="java.lang.Double">0.0</posy_bpe>
             <posy_swl className="java.lang.Double">0.0</posy_swl>
-            <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-            <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+            <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+            <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
             <width_bpe className="java.lang.Double">80.0</width_bpe>
             <width_swl className="java.lang.Double">80.0</width_swl>
           </GraphicalProperties>
@@ -362,8 +362,8 @@
     <ActivityNode id="SYL_644" userID="SYL" flexoID="644" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="4" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
       <taskType>User</taskType>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">45.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
@@ -371,8 +371,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">196.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
         <width_bpe className="java.lang.Double">88.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -394,8 +394,8 @@
           <OutgoingTokenEdge id="SYL_651" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="651" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
             <Metrics id="SYL_696" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="696" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
             <GraphicalProperties>
-              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
               <height_bpe className="java.lang.Double">50.0</height_bpe>
               <height_swl className="java.lang.Double">40.0</height_swl>
               <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
@@ -406,8 +406,8 @@
               <posx_swl className="java.lang.Double">0.0</posx_swl>
               <posy_bpe className="java.lang.Double">0.0</posy_bpe>
               <posy_swl className="java.lang.Double">0.0</posy_swl>
-              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
               <width_bpe className="java.lang.Double">100.0</width_bpe>
               <width_swl className="java.lang.Double">80.0</width_swl>
             </GraphicalProperties>
@@ -450,8 +450,8 @@
               <OutgoingTokenEdge id="SYL_646" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="646" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
                 <Metrics id="SYL_689" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="689" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
                 <GraphicalProperties>
-                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
                   <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
                   <height_bpe className="java.lang.Double">50.0</height_bpe>
                   <height_swl className="java.lang.Double">40.0</height_swl>
@@ -463,8 +463,8 @@
                   <posx_swl className="java.lang.Double">0.0</posx_swl>
                   <posy_bpe className="java.lang.Double">0.0</posy_bpe>
                   <posy_swl className="java.lang.Double">0.0</posy_swl>
-                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
                   <width_bpe className="java.lang.Double">100.0</width_bpe>
                   <width_swl className="java.lang.Double">80.0</width_swl>
                 </GraphicalProperties>
@@ -487,8 +487,8 @@
           <OutgoingTokenEdge id="SYL_649" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="649" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
             <Metrics id="SYL_683" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="683" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
             <GraphicalProperties>
-              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
               <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.5000000000000003</fixed_end_location_bpe1_FlexoPreCondition>
               <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
               <height_bpe className="java.lang.Double">50.0</height_bpe>
@@ -504,8 +504,8 @@
               <posx_swl className="java.lang.Double">0.0</posx_swl>
               <posy_bpe className="java.lang.Double">0.0</posy_bpe>
               <posy_swl className="java.lang.Double">0.0</posy_swl>
-              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
               <width_bpe className="java.lang.Double">100.0</width_bpe>
               <width_swl className="java.lang.Double">80.0</width_swl>
             </GraphicalProperties>
@@ -542,8 +542,8 @@
         </ActivityNode>
       </ExecutionActivityPetriGraph>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">50.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
@@ -552,8 +552,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">202.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
         <width_bpe className="java.lang.Double">100.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -571,8 +571,8 @@
       <PositiveEvaluationOutgoingTokenEdge id="SYL_664" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="664" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="Yes">
         <Metrics id="SYL_681" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="681" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
         <GraphicalProperties>
-          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
           <crossed_cp_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.24137931034482757,0.4177215189873418</crossed_cp_bpe1_FlexoPreCondition>
           <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe1_FlexoPreCondition>
           <height_bpe className="java.lang.Double">50.0</height_bpe>
@@ -585,8 +585,8 @@
           <posx_swl className="java.lang.Double">0.0</posx_swl>
           <posy_bpe className="java.lang.Double">0.0</posy_bpe>
           <posy_swl className="java.lang.Double">0.0</posy_swl>
-          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
           <width_bpe className="java.lang.Double">100.0</width_bpe>
           <width_swl className="java.lang.Double">80.0</width_swl>
         </GraphicalProperties>
@@ -594,8 +594,8 @@
         <EndFlexoPreCondition idref="SYL_650" />
       </PositiveEvaluationOutgoingTokenEdge>
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
         <height_bpe className="java.lang.Double">50.0</height_bpe>
         <height_swl className="java.lang.Double">40.0</height_swl>
         <labelx_bpe className="java.lang.Double">24.0</labelx_bpe>
@@ -604,8 +604,8 @@
         <posx_swl className="java.lang.Double">0.0</posx_swl>
         <posy_bpe className="java.lang.Double">76.0</posy_bpe>
         <posy_swl className="java.lang.Double">0.0</posy_swl>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
         <width_bpe className="java.lang.Double">100.0</width_bpe>
         <width_swl className="java.lang.Double">80.0</width_swl>
       </GraphicalProperties>
@@ -614,13 +614,13 @@
     </IFOperator>
     <MultipleInstanceSubProcessNode id="SYL_795" isSequential="false" userID="SYL" flexoID="795" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="TestSubProcess" docIndex="7" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128" subProcess="PROCESS.TestSubProcess#SYL_796" displaySubProcessImage="false">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
         <height_bpe className="java.lang.Double">85.0</height_bpe>
         <isPortMapRegisteryVisible className="java.lang.Boolean">false</isPortMapRegisteryVisible>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">45.0</posx_bpe>
         <posy_bpe className="java.lang.Double">23.0</posy_bpe>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
         <width_bpe className="java.lang.Double">115.0</width_bpe>
       </GraphicalProperties>
       <PortMapRegistery id="SYL_800" orientation="0" userID="SYL" flexoID="800" dontGenerate="false" useSpecificDescriptions="false">
@@ -660,13 +660,13 @@
     </MultipleInstanceSubProcessNode>
     <MultipleInstanceSubProcessNode id="SYL_803" isSequential="false" userID="SYL" flexoID="803" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="TestSubProcess2" docIndex="8" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128" subProcess="PROCESS.TestSubProcess2#SYL_804" displaySubProcessImage="false">
       <GraphicalProperties>
-        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
         <height_bpe className="java.lang.Double">85.0</height_bpe>
         <isPortMapRegisteryVisible className="java.lang.Boolean">false</isPortMapRegisteryVisible>
         <labely_bpe className="java.lang.Double">0.0</labely_bpe>
         <posx_bpe className="java.lang.Double">324.0</posx_bpe>
         <posy_bpe className="java.lang.Double">21.0</posy_bpe>
-        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
         <width_bpe className="java.lang.Double">115.0</width_bpe>
       </GraphicalProperties>
       <PortMapRegistery id="SYL_808" orientation="0" userID="SYL" flexoID="808" dontGenerate="false" useSpecificDescriptions="false">
@@ -746,8 +746,8 @@
   </PortRegistery>
   <GraphicalProperties>
     <alignedOnGrid_bpe className="java.lang.Boolean">false</alignedOnGrid_bpe>
-    <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
-    <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+    <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
+    <bgColor_swl className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_swl>
     <bpe-gridSizeHasBeenSet className="java.lang.Boolean">true</bpe-gridSizeHasBeenSet>
     <gridSize_bpe className="java.lang.Integer">15</gridSize_bpe>
     <height_bpe className="java.lang.Double">1000.0</height_bpe>
@@ -757,8 +757,8 @@
     <posy_bpe className="java.lang.Double">0.0</posy_bpe>
     <posy_swl className="java.lang.Double">0.0</posy_swl>
     <scale_bpe className="java.lang.Double">1.0</scale_bpe>
-    <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
-    <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+    <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
+    <textColor_swl className="org.openflexo.swing.FlexoColor">0,0,0</textColor_swl>
     <width_bpe className="java.lang.Double">1000.0</width_bpe>
     <width_swl className="java.lang.Double">80.0</width_swl>
   </GraphicalProperties>

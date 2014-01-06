@@ -22,7 +22,6 @@ package org.openflexo.wkf.processeditor;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.ActivityGroup;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -40,6 +39,7 @@ import org.openflexo.foundation.wkf.node.InclusiveOperator;
 import org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.wkf.processeditor.gr.AnnotationGR;
 import org.openflexo.wkf.processeditor.gr.DataObjectGR;
 import org.openflexo.wkf.processeditor.gr.DataSourceGR;

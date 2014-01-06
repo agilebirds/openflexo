@@ -37,7 +37,6 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ProjectData;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.resource.FlexoProjectReference;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.action.AddRole;
@@ -47,6 +46,7 @@ import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoColor;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.ToolBox;
 

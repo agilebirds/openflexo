@@ -19,20 +19,23 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.rm.VirtualModelResource;
 import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.converter.RelativePathFileConverter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
 /**
  * {@link ModelFactory} used to handle VirtualModel models<br>
- * Only one instance of this class should be used in a session
+ * One instance is declared for a {@link VirtualModelResource}
  * 
  * @author sylvain
  * 
  */
 public class VirtualModelModelFactory extends ModelFactory {
 
-	public VirtualModelModelFactory() throws ModelDefinitionException {
+	public VirtualModelModelFactory(VirtualModelResource virtualModelResource) throws ModelDefinitionException {
 		super(ModelContextLibrary.getModelContext(VirtualModel.class));
+		addConverter(new RelativePathFileConverter(virtualModelResource.getDirectory()));
 	}
 }

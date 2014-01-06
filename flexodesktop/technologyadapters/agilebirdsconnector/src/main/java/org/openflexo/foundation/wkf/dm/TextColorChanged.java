@@ -19,7 +19,7 @@
  */
 package org.openflexo.foundation.wkf.dm;
 
-import org.openflexo.foundation.utils.FlexoColor;
+import org.openflexo.swing.FlexoColor;
 
 /**
  * @author gpolet

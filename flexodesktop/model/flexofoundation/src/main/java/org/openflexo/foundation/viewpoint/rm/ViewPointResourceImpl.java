@@ -36,42 +36,17 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
-import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint, ViewPointModelFactory> implements ViewPointResource {
 
 	static final Logger logger = Logger.getLogger(FlexoXMLFileResourceImpl.class.getPackage().getName());
-
-	private RelativePathFileConverter relativePathFileConverter;
-
-	private StringEncoder encoder;
-
-	private static ViewPointModelFactory VIEWPOINT_MODEL_FACTORY;
-
-	static {
-		try {
-			VIEWPOINT_MODEL_FACTORY = new ViewPointModelFactory();
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), relativePathFileConverter);
-		}
-		return encoder;
-	}
 
 	public static ViewPointResource makeViewPointResource(String name, String uri, File viewPointDirectory,
 			ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setFactory(VIEWPOINT_MODEL_FACTORY);
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			returned.setName(name);
@@ -81,11 +56,8 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 			returned.setDirectory(viewPointDirectory);
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
-			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
-
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
-
-			returned.setFactory(new ViewPointModelFactory());
+			returned.setFactory(new ViewPointModelFactory(returned));
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -98,7 +70,6 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setFactory(VIEWPOINT_MODEL_FACTORY);
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			ViewPointInfo vpi = findViewPointInfo(viewPointDirectory);
@@ -126,7 +97,7 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 				returned.setModelVersion(new FlexoVersion(vpi.modelVersion));
 			}
 
-			returned.setFactory(new ViewPointModelFactory());
+			returned.setFactory(new ViewPointModelFactory(returned));
 
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
@@ -137,8 +108,6 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 
 			// Now look for virtual models
 			returned.exploreVirtualModels();
-
-			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -203,8 +172,6 @@ public abstract class ViewPointResourceImpl extends PamelaResourceImpl<ViewPoint
 	@Override
 	public ViewPoint loadResourceData(IProgress progress) throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
 			InconsistentDataException, InvalidModelDefinitionException {
-
-		relativePathFileConverter = new RelativePathFileConverter(getDirectory());
 
 		ViewPointImpl returned = (ViewPointImpl) super.loadResourceData(progress);
 

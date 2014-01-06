@@ -22,7 +22,11 @@ package org.openflexo.technologyadapter.diagram.fml;
 import org.openflexo.fge.FGEModelFactoryImpl;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.model.converter.RelativePathFileConverter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramPaletteElement;
+import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
 
 /**
  * Diagram factory<br>
@@ -33,8 +37,9 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
  */
 public class DiagramPaletteFactory extends FGEModelFactoryImpl {
 
-	public DiagramPaletteFactory() throws ModelDefinitionException {
-		super(/*DiagramPalette.class, DiagramPaletteElement.class*/);
+	public DiagramPaletteFactory(DiagramPaletteResource paletteResource) throws ModelDefinitionException {
+		super(DiagramPalette.class, DiagramPaletteElement.class);
+		addConverter(new RelativePathFileConverter(paletteResource.getFile().getParentFile()));
 	}
 
 	public ShapeGraphicalRepresentation makeNewShapeGR(ShapeGraphicalRepresentation aGR) {

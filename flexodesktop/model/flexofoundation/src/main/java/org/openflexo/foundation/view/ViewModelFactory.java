@@ -19,7 +19,9 @@
  */
 package org.openflexo.foundation.view;
 
+import org.openflexo.foundation.view.rm.ViewResource;
 import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.converter.RelativePathFileConverter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -32,7 +34,8 @@ import org.openflexo.model.factory.ModelFactory;
  */
 public class ViewModelFactory extends ModelFactory {
 
-	public ViewModelFactory() throws ModelDefinitionException {
+	public ViewModelFactory(ViewResource viewResource) throws ModelDefinitionException {
 		super(ModelContextLibrary.getModelContext(View.class));
+		addConverter(new RelativePathFileConverter(viewResource.getDirectory()));
 	}
 }

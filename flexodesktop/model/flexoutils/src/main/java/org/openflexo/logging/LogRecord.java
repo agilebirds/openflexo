@@ -19,20 +19,17 @@
  */
 package org.openflexo.logging;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
-
-import org.openflexo.kvc.KVCObject;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * This class is used to encode a simple log record in Flexo
  * 
  * @author sguerin
  */
-public class LogRecord extends KVCObject implements XMLSerializable {
+public class LogRecord {
 
 	public Date date;
 
@@ -100,10 +97,7 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 
 	public String dateAsString() {
 		if (_dateAsString == null) {
-			String dateFormat = StringEncoder.getDefaultInstance()._getDateFormat();
-			StringEncoder.getDefaultInstance()._setDateFormat("HH:mm:ss dd/MM");
-			_dateAsString = StringEncoder.getDefaultInstance()._getDateRepresentation(date);
-			StringEncoder.getDefaultInstance()._setDateFormat(dateFormat);
+			_dateAsString = new SimpleDateFormat("HH:mm:ss dd/MM").format(date);
 		}
 		return _dateAsString;
 	}
@@ -120,21 +114,21 @@ public class LogRecord extends KVCObject implements XMLSerializable {
 
 	public String millisAsString() {
 		if (_millisAsString == null) {
-			_millisAsString = StringEncoder.encodeLong(millis);
+			_millisAsString = "" + millis;
 		}
 		return _millisAsString;
 	}
 
 	public String sequenceAsString() {
 		if (_sequenceAsString == null) {
-			_sequenceAsString = StringEncoder.encodeLong(sequence);
+			_sequenceAsString = "" + sequence;
 		}
 		return _sequenceAsString;
 	}
 
 	public String threadAsString() {
 		if (_threadAsString == null) {
-			_threadAsString = StringEncoder.encodeLong(threadId);
+			_threadAsString = "" + threadId;
 		}
 		return _threadAsString;
 	}

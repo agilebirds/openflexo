@@ -24,25 +24,22 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.converter.PointConverter;
+import org.openflexo.fge.converter.RectPolylinConverter;
+import org.openflexo.fge.converter.SteppedDimensionConverter;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.StringConverter;
-import org.openflexo.model.exceptions.InvalidDataException;
-import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.ColorUtils;
-import org.openflexo.xmlcode.StringEncoder;
 
 public class FGEUtils {
 
@@ -199,198 +196,17 @@ public class FGEUtils {
 	}
 
 	@StringConverter
-	public static final Converter<DataBinding<?>> DATA_BINDING_CONVERTER = new Converter<DataBinding<?>>(DataBinding.class) {
-
-		@Override
-		public DataBinding<?> convertFromString(String value, ModelFactory factory) throws InvalidDataException {
-			return new DataBinding<Object>(value);
-		}
-
-		@Override
-		public String convertToString(DataBinding<?> value) {
-			if (value.isSet()) {
-				return value.toString();
-			}
-			return null;
-		}
-
-	};
+	public static final Converter<DataBinding<?>> DATA_BINDING_CONVERTER = new DataBindingConverter(DataBinding.class);
 
 	@StringConverter
-	public static final Converter<FGEPoint> POINT_CONVERTER = new Converter<FGEPoint>(FGEPoint.class) {
-		@Override
-		public FGEPoint convertFromString(String value, ModelFactory factory) {
-			try {
-				FGEPoint returned = new FGEPoint();
-				StringTokenizer st = new StringTokenizer(value, ",");
-				if (st.hasMoreTokens()) {
-					returned.x = Double.parseDouble(st.nextToken());
-				}
-				if (st.hasMoreTokens()) {
-					returned.y = Double.parseDouble(st.nextToken());
-				}
-				return returned;
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
-		}
-
-		@Override
-		public String convertToString(FGEPoint aPoint) {
-			if (aPoint != null) {
-				return aPoint.x + "," + aPoint.y;
-			} else {
-				return null;
-			}
-		}
-	};
+	public static final Converter<FGEPoint> POINT_CONVERTER = new PointConverter(FGEPoint.class);
 
 	@StringConverter
-	public static final Converter<FGERectPolylin> RECT_POLYLIN_CONVERTER = new Converter<FGERectPolylin>(FGERectPolylin.class) {
-		@Override
-		public FGERectPolylin convertFromString(String value, ModelFactory factory) {
-			try {
-				List<FGEPoint> points = new ArrayList<FGEPoint>();
-				StringTokenizer st = new StringTokenizer(value, ";");
-				while (st.hasMoreTokens()) {
-					String nextPoint = st.nextToken();
-					try {
-						points.add(POINT_CONVERTER.convertFromString(nextPoint, factory));
-					} catch (InvalidDataException e) {
-						e.printStackTrace();
-					}
-				}
-				return new FGERectPolylin(points);
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
-		}
-
-		@Override
-		public String convertToString(FGERectPolylin aPolylin) {
-			if (aPolylin != null) {
-				StringBuffer sb = new StringBuffer();
-				boolean isFirst = true;
-				for (FGEPoint pt : aPolylin.getPoints()) {
-					if (!isFirst) {
-						sb.append(";");
-					}
-					sb.append(POINT_CONVERTER.convertToString(pt));
-					isFirst = false;
-				}
-				return sb.toString();
-			} else {
-				return null;
-			}
-		}
-	};
+	public static final Converter<FGERectPolylin> RECT_POLYLIN_CONVERTER = new RectPolylinConverter(FGERectPolylin.class);
 
 	@StringConverter
-	public static final Converter<FGESteppedDimensionConstraint> STEPPED_DIMENSION_CONVERTER = new Converter<FGESteppedDimensionConstraint>(
-			FGESteppedDimensionConstraint.class) {
-		@Override
-		public FGESteppedDimensionConstraint convertFromString(String value, ModelFactory factory) {
-			try {
-				Double hStep = null;
-				Double vStep = null;
-				StringTokenizer st = new StringTokenizer(value, ",");
-				if (st.hasMoreTokens()) {
-					hStep = Double.parseDouble(st.nextToken());
-				}
-				if (st.hasMoreTokens()) {
-					vStep = Double.parseDouble(st.nextToken());
-				}
-				return new FGESteppedDimensionConstraint(hStep, vStep);
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGESteppedDimensionConstraint:" + value);
-				return null;
-			}
-		}
-
-		@Override
-		public String convertToString(FGESteppedDimensionConstraint aDim) {
-			if (aDim != null) {
-				return aDim.getHorizontalStep() + "," + aDim.getVerticalStep();
-			} else {
-				return null;
-			}
-		}
-	};
-
-	@Deprecated
-	public static final StringEncoder.Converter<FGEPoint> DEPRECATED_POINT_CONVERTER = new StringEncoder.Converter<FGEPoint>(FGEPoint.class) {
-		@Override
-		public FGEPoint convertFromString(String value) {
-			try {
-				FGEPoint returned = new FGEPoint();
-				StringTokenizer st = new StringTokenizer(value, ",");
-				if (st.hasMoreTokens()) {
-					returned.x = Double.parseDouble(st.nextToken());
-				}
-				if (st.hasMoreTokens()) {
-					returned.y = Double.parseDouble(st.nextToken());
-				}
-				return returned;
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
-		}
-
-		@Override
-		public String convertToString(FGEPoint aPoint) {
-			if (aPoint != null) {
-				return aPoint.x + "," + aPoint.y;
-			} else {
-				return null;
-			}
-		}
-	};
-
-	@Deprecated
-	public static final StringEncoder.Converter<FGERectPolylin> DEPRECATED_RECT_POLYLIN_CONVERTER = new StringEncoder.Converter<FGERectPolylin>(
-			FGERectPolylin.class) {
-		@Override
-		public FGERectPolylin convertFromString(String value) {
-			try {
-				Vector<FGEPoint> points = new Vector<FGEPoint>();
-				StringTokenizer st = new StringTokenizer(value, ";");
-				while (st.hasMoreTokens()) {
-					String nextPoint = st.nextToken();
-					points.add(DEPRECATED_POINT_CONVERTER.convertFromString(nextPoint));
-				}
-				return new FGERectPolylin(points);
-			} catch (NumberFormatException e) {
-				// Warns about the exception
-				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
-				return null;
-			}
-		}
-
-		@Override
-		public String convertToString(FGERectPolylin aPolylin) {
-			if (aPolylin != null) {
-				StringBuffer sb = new StringBuffer();
-				boolean isFirst = true;
-				for (FGEPoint pt : aPolylin.getPoints()) {
-					if (!isFirst) {
-						sb.append(";");
-					}
-					sb.append(POINT_CONVERTER.convertToString(pt));
-					isFirst = false;
-				}
-				return sb.toString();
-			} else {
-				return null;
-			}
-		}
-	};
+	public static final Converter<FGESteppedDimensionConstraint> STEPPED_DIMENSION_CONVERTER = new SteppedDimensionConverter(
+			FGESteppedDimensionConstraint.class);
 
 	/**
 	 * Convert a point relative to the view representing source drawable, with supplied scale, in a point relative to the view representing

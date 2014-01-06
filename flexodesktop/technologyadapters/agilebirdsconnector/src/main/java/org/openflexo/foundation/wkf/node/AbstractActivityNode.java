@@ -41,7 +41,6 @@ import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.resource.FlexoProjectReference;
 import org.openflexo.foundation.stats.AbstractActivityStatistics;
 import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoObjectReference;
 import org.openflexo.foundation.utils.FlexoObjectReference.ReferenceOwner;
@@ -79,6 +78,7 @@ import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.wkf.dm.RoleTextColorChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoColor;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 

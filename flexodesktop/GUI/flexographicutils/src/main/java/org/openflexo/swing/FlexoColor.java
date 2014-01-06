@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.utils;
+package org.openflexo.swing;
 
 import java.awt.Color;
 import java.util.ArrayList;

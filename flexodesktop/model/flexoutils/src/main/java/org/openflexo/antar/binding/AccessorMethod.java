@@ -22,6 +22,8 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Method;
 
+import org.openflexo.kvc.KeyValueProperty;
+
 /**
  * <p>
  * <code>AccessorMethod</code> is a class representing a KeyValueProperty accessor method.

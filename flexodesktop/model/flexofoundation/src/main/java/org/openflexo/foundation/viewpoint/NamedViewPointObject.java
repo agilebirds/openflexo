@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -270,6 +271,23 @@ public abstract interface NamedViewPointObject extends ViewPointObject {
 
 		@Override
 		public BindingModel getBindingModel() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Object objectForKey(String key) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setObjectForKey(Object value, String key) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public Type getTypeForKey(String key) {
 			// TODO Auto-generated method stub
 			return null;
 		}

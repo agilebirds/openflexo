@@ -20,27 +20,12 @@
 package org.openflexo.logging;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.jdom2.JDOMException;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.AccessorInvocationException;
-import org.openflexo.xmlcode.InvalidModelException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.InvalidXMLDataException;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-import org.openflexo.xmlcode.XMLCoder;
-import org.openflexo.xmlcode.XMLDecoder;
-import org.openflexo.xmlcode.XMLMapping;
-import org.xml.sax.SAXException;
 
 /**
  * Flexo logging manager: manages logs for the application above java.util.logging<br>
@@ -48,11 +33,13 @@ import org.xml.sax.SAXException;
  * 
  * @author sguerin
  */
+
+// TODO: we can now no more save or load a log file: proceed as a service in flexofoundation layer
 public class FlexoLoggingManager {
 
 	static final Logger logger = Logger.getLogger(FlexoLoggingManager.class.getPackage().getName());
 
-	private static XMLMapping _loggingMapping = null;
+	// private static XMLMapping _loggingMapping = null;
 	private static FlexoLoggingManager _instance;
 
 	public LogRecords logRecords = null;
@@ -148,7 +135,7 @@ public class FlexoLoggingManager {
 		return _flexoLoggingHandler;
 	}
 
-	public static XMLMapping getLoggingMapping() {
+	/*public static XMLMapping getLoggingMapping() {
 		if (_loggingMapping == null) {
 			File loggingModelFile;
 			loggingModelFile = new FileResource("Models/LoggingModel.xml");
@@ -169,11 +156,15 @@ public class FlexoLoggingManager {
 			}
 		}
 		return _loggingMapping;
-	}
+	}*/
 
 	public static LogRecords loadLogFile(File logFile) {
 
-		try {
+		// TODO
+
+		return null;
+
+		/*try {
 			FileInputStream fis = new FileInputStream(logFile);
 			return (LogRecords) XMLDecoder.decodeObjectWithMapping(fis, getLoggingMapping());
 		} catch (InvalidXMLDataException e) {
@@ -196,54 +187,20 @@ public class FlexoLoggingManager {
 			e.printStackTrace();
 		}
 		logger.warning("Could not read " + logFile.getAbsolutePath());
-		return null;
-	}
-
-	static class LevelConverter extends Converter<Level> {
-
-		public LevelConverter() {
-			super(Level.class);
-		}
-
-		@Override
-		public Level convertFromString(String value) {
-			if (StringUtils.isEmpty(value)) {
-				return null;
-			}
-			if (value.equals("SEVERE")) {
-				return Level.SEVERE;
-			} else if (value.equals("WARNING")) {
-				return Level.WARNING;
-			} else if (value.equals("INFO")) {
-				return Level.INFO;
-			} else if (value.equals("CONFIG")) {
-				return Level.CONFIG;
-			} else if (value.equals("FINE")) {
-				return Level.FINE;
-			} else if (value.equals("FINER")) {
-				return Level.FINER;
-			} else if (value.equals("FINEST")) {
-				return Level.FINEST;
-			}
-			return null;
-
-		}
-
-		@Override
-		public String convertToString(Level value) {
-			return value.getName();
-		}
-
+		return null;*/
 	}
 
 	public String logsReport() {
 		// StringEncoder.getDefaultInstance()._addConverter(new LevelConverter());
-		try {
+		/*try {
 			return XMLCoder.encodeObjectWithMapping(logRecords, getLoggingMapping(), StringEncoder.getDefaultInstance());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "No report available";
-		}
+		}*/
+		// TODO
+
+		return logRecords.toString();
 	}
 
 	public boolean getKeepLogTrace() {

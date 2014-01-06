@@ -43,7 +43,6 @@ import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 /**
  * Represents a binding path, as formed by an access to a binding variable and a path of BindingPathElement<br>
@@ -790,40 +789,39 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 
 		// System.out.println("For variable "+_bindingVariable+" object is "+returned);
 
-		try {
-			for (BindingPathElement element : getBindingPath()) {
-				if (element != getLastBindingPathElement()) {
-					// System.out.println("Apply "+element);
-					lastEvaluatedPathElement = element;
-					returned = element.getBindingValue(returned, context);
-					if (returned == null) {
-						throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from "
-								+ lastEvaluated);
-					}
-					lastEvaluated = returned;
-					// System.out.println("Obtain "+returned);
+		// try {
+		for (BindingPathElement element : getBindingPath()) {
+			if (element != getLastBindingPathElement()) {
+				// System.out.println("Apply "+element);
+				lastEvaluatedPathElement = element;
+				returned = element.getBindingValue(returned, context);
+				if (returned == null) {
+					throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from " + lastEvaluated);
 				}
+				lastEvaluated = returned;
+				// System.out.println("Obtain "+returned);
 			}
-			if (returned == null) {
-				throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from " + lastEvaluated);
-			}
+		}
+		if (returned == null) {
+			throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from " + lastEvaluated);
+		}
 
-			// logger.info("returned="+returned);
-			// logger.info("lastElement="+getBindingPath().lastElement());
+		// logger.info("returned="+returned);
+		// logger.info("lastElement="+getBindingPath().lastElement());
 
-			if (getLastBindingPathElement() instanceof SettableBindingPathElement
-					&& ((SettableBindingPathElement) getLastBindingPathElement()).isSettable()) {
-				// System.out.println("Et finalement on applique " + getLastBindingPathElement() + " sur " + returned);
-				((SettableBindingPathElement) getLastBindingPathElement()).setBindingValue(value, returned, context);
-			} else {
-				logger.warning("Binding " + this + " is not settable");
-			}
-		} catch (InvalidObjectSpecificationException e) {
+		if (getLastBindingPathElement() instanceof SettableBindingPathElement
+				&& ((SettableBindingPathElement) getLastBindingPathElement()).isSettable()) {
+			// System.out.println("Et finalement on applique " + getLastBindingPathElement() + " sur " + returned);
+			((SettableBindingPathElement) getLastBindingPathElement()).setBindingValue(value, returned, context);
+		} else {
+			logger.warning("Binding " + this + " is not settable");
+		}
+		/*} catch (InvalidObjectSpecificationException e) {
 			logger.warning("InvalidObjectSpecificationException raised while evaluating SET " + this + " : " + e.getMessage());
 			// System.out.println("returned="+returned);
 			// System.out.println("value="+value);
 			// System.out.println("((KeyValueProperty)getBindingPath().lastElement()).getName()="+((KeyValueProperty)getBindingPath().lastElement()).getName());
-		}
+		}*/
 
 	}
 
@@ -893,37 +891,37 @@ public class BindingValue extends Expression implements PropertyChangeListener, 
 			return returned;
 		}
 
-		try {
-			for (BindingPathElement element : getBindingPath()) {
-				returned.add(new TargetObject(current, element.getLabel()));
-				try {
-					current = element.getBindingValue(current, context);
-				} catch (TypeMismatchException e) {
-					// We silently escape...
-					// e.printStackTrace();
-				} catch (NullReferenceException e) {
-					// We silently escape...
-					// e.printStackTrace();
-				} catch (InvocationTargetTransformException e) {
-					// We silently escape...
-					// e.printStackTrace();
-				}
-				if (element instanceof FunctionPathElement) {
-					FunctionPathElement functionPathElement = (FunctionPathElement) element;
-					for (FunctionArgument arg : functionPathElement.getArguments()) {
-						DataBinding<?> value = functionPathElement.getParameter(arg);
-						returned.addAll(value.getTargetObjects(context));
-					}
-				}
-				if (current == null) {
-					return returned;
+		// try {
+		for (BindingPathElement element : getBindingPath()) {
+			returned.add(new TargetObject(current, element.getLabel()));
+			try {
+				current = element.getBindingValue(current, context);
+			} catch (TypeMismatchException e) {
+				// We silently escape...
+				// e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// We silently escape...
+				// e.printStackTrace();
+			} catch (InvocationTargetTransformException e) {
+				// We silently escape...
+				// e.printStackTrace();
+			}
+			if (element instanceof FunctionPathElement) {
+				FunctionPathElement functionPathElement = (FunctionPathElement) element;
+				for (FunctionArgument arg : functionPathElement.getArguments()) {
+					DataBinding<?> value = functionPathElement.getParameter(arg);
+					returned.addAll(value.getTargetObjects(context));
 				}
 			}
-		} catch (InvalidObjectSpecificationException e) {
+			if (current == null) {
+				return returned;
+			}
+		}
+		/*} catch (InvalidObjectSpecificationException e) {
 			logger.info("While computing getTargetObjects() for " + this + " with evaluation context=" + context);
 			logger.warning(e.getMessage());
 			return returned;
-		}
+		}*/
 
 		return returned;
 	}

@@ -32,7 +32,7 @@ import org.openflexo.foundation.bindings.BindingDefinition.BindingDefinitionType
 import org.openflexo.foundation.dkv.Domain;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.toolbox.Duration.DurationStringConverter;
+import org.openflexo.model.converter.DurationConverter;
 import org.openflexo.xmlcode.StringEncoder.DateConverter;
 
 public abstract class StaticBinding<T> extends AbstractBinding {
@@ -93,7 +93,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 	public static class StaticBindingStringConverter extends AbstractBindingStringConverter<StaticBinding> {
 
 		private DateConverter dateConverter = new DateConverter();
-		private DurationStringConverter durationConverter = new DurationStringConverter();
+		private DurationConverter durationConverter = new DurationConverter();
 		private Bindable _bindable;
 
 		public StaticBindingStringConverter() {

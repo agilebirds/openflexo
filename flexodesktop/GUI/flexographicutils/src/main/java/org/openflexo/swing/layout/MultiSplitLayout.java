@@ -46,7 +46,6 @@ import java.util.Map;
 import javax.swing.UIManager;
 
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * The MultiSplitLayout layout manager recursively arranges its components in row and column groups called "Splits". Elements of the layout
@@ -1495,7 +1494,7 @@ public class MultiSplitLayout implements LayoutManager, Serializable {
 	/**
 	 * Base class for the nodes that model a MultiSplitLayout.
 	 */
-	public static abstract class Node implements Serializable, XMLSerializable {
+	public static abstract class Node implements Serializable {
 		private Split parent = null;
 		private Rectangle bounds = new Rectangle();
 		private double weight = 0.0;

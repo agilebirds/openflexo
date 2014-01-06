@@ -35,7 +35,6 @@ import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Root class for any object involved in Openflexo Diagram built-in technology
@@ -47,8 +46,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  */
 @ModelEntity
 @ImplementationClass(DiagramElementImpl.class)
-public interface DiagramElement<G extends GraphicalRepresentation> extends FlexoObject, BindingEvaluationContext, XMLSerializable,
-		Cloneable, Observer {
+public interface DiagramElement<G extends GraphicalRepresentation> extends FlexoObject, BindingEvaluationContext, Cloneable, Observer {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String NAME = "name";

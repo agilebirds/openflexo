@@ -157,7 +157,8 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 		try {
 			DiagramElement<GR> diagramElement = epi.getPatternActor(patternRole);
-			getFeature().applyToGraphicalRepresentation(diagramElement.getGraphicalRepresentation(), (T) getValue().getBindingValue(epi));
+			getFeature().applyToGraphicalRepresentation((GR) diagramElement.getGraphicalRepresentation(),
+					(T) getValue().getBindingValue(epi));
 			// getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
@@ -177,7 +178,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 */
 	public T applyToModel(EditionPatternInstance epi, GraphicalElementPatternRole<?, GR> patternRole) {
 		DiagramElement<GR> diagramElement = epi.getPatternActor(patternRole);
-		T newValue = getFeature().retrieveFromGraphicalRepresentation(diagramElement.getGraphicalRepresentation());
+		T newValue = getFeature().retrieveFromGraphicalRepresentation((GR) diagramElement.getGraphicalRepresentation());
 		try {
 			getValue().setBindingValue(newValue, epi);
 		} catch (TypeMismatchException e) {

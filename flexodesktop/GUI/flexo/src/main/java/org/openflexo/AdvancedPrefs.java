@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 import org.openflexo.foundation.FlexoProperty;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -36,6 +35,7 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.prefs.PreferencesContainer;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.swing.LookAndFeel;
 import org.openflexo.toolbox.ProxyUtils;
 import org.openflexo.toolbox.ToolBox;

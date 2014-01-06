@@ -36,16 +36,15 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.kvc.KeyValueLibrary;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.xmlcode.KeyValueCoder;
 
 /**
  * Provides a JUnit 4 generic environment of Openflexo-core for testing purposes
@@ -224,7 +223,6 @@ public abstract class OpenflexoTestCase {
 
 	@After
 	public void tearDown() throws Exception {
-		KeyValueCoder.clearClassCache();
 		KeyValueLibrary.clearCache();
 	}
 }

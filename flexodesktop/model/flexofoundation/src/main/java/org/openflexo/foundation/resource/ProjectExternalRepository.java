@@ -26,7 +26,6 @@ import java.util.TreeMap;
 
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.KVCFlexoObject;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Represents a directory outside a project logically bound to some data inside the project<br>
@@ -37,7 +36,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public class ProjectExternalRepository extends KVCFlexoObject implements XMLSerializable {
+public class ProjectExternalRepository extends KVCFlexoObject {
 	private final FlexoProject _project;
 	private String _identifier;
 	private File _directory;

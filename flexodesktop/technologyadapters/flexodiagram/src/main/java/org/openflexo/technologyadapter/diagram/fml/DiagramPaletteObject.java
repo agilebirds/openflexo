@@ -19,12 +19,12 @@
  */
 package org.openflexo.technologyadapter.diagram.fml;
 
-import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
+import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
 
-public abstract class DiagramPaletteObject extends FlexoObjectImpl {
+public abstract class DiagramPaletteObject extends DefaultFlexoObject /*FlexoObjectImpl*/{
 
 	public DiagramPaletteObject() {
 		super();

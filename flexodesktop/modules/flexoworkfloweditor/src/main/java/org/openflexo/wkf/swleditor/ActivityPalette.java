@@ -23,7 +23,6 @@ import java.awt.Font;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.ActivityGroup;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -54,6 +53,7 @@ import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.wkf.swleditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.AnnotationGR;
 import org.openflexo.wkf.swleditor.gr.BeginActivityNodeGR;

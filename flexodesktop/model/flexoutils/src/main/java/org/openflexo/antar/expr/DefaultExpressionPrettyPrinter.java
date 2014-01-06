@@ -32,13 +32,11 @@ import org.openflexo.antar.expr.Constant.IntegerConstant;
 import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
-import org.openflexo.toolbox.Duration;
-import org.openflexo.xmlcode.StringEncoder;
 
 public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 
-	private StringEncoder.DateConverter dateConverter = new StringEncoder.DateConverter();
-	private Duration.DurationStringConverter durationConverter = new Duration.DurationStringConverter();
+	// private StringEncoder.DateConverter dateConverter = new StringEncoder.DateConverter();
+	// private Duration.DurationStringConverter durationConverter = new Duration.DurationStringConverter();
 
 	public DefaultExpressionPrettyPrinter() {
 		this(new DefaultGrammar());
@@ -102,7 +100,9 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 		if (constant == null || constant.getDate() == null) {
 			return "[null]";
 		}
-		return "[" + dateConverter.convertToString(constant.getDate()) + "]";
+		// TODO: reimplement this
+		// return "[" + dateConverter.convertToString(constant.getDate()) + "]";
+		return constant.toString();
 	}
 
 	@Override
@@ -110,7 +110,9 @@ public class DefaultExpressionPrettyPrinter extends ExpressionPrettyPrinter {
 		if (constant == null || constant.getDuration() == null) {
 			return "[null]";
 		}
-		return "[" + durationConverter.convertToString(constant.getDuration()) + "]";
+		// TODO: reimplement this
+		// return "[" + durationConverter.convertToString(constant.getDuration()) + "]";
+		return constant.toString();
 	}
 
 	@Override

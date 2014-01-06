@@ -37,6 +37,7 @@ import org.openflexo.foundation.resource.ScreenshotBuilder;
 import org.openflexo.foundation.resource.ScreenshotBuilder.ScreenshotImage;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.model.converter.RelativePathFileConverter;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
@@ -46,8 +47,6 @@ import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementIns
 import org.openflexo.technologyadapter.diagram.model.dm.DiagramPaletteElementRemoved;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResource;
 import org.openflexo.technologyadapter.diagram.rm.DiagramPaletteResourceImpl;
-import org.openflexo.toolbox.RelativePathFileConverter;
-import org.openflexo.xmlcode.StringEncoder;
 
 public class DiagramPalette extends DiagramPaletteObject implements ResourceData<DiagramPalette>, Comparable<DiagramPalette> {
 
@@ -58,21 +57,9 @@ public class DiagramPalette extends DiagramPaletteObject implements ResourceData
 	private DiagramPaletteResource resource;
 	private DrawingGraphicalRepresentation graphicalRepresentation;
 
-	private StringEncoder encoder;
-
 	private boolean screenshotModified = false;
 	private ScreenshotImage<DiagramPalette> screenshotImage;
 	private File expectedScreenshotImageFile = null;
-
-	/*private static IModuleLoader moduleLoader;
-
-	public static IModuleLoader getModuleLoader() {
-		return moduleLoader;
-	}
-
-	public static void setModuleLoader(IModuleLoader moduleLoader) {
-		DiagramPalette.moduleLoader = moduleLoader;
-	}*/
 
 	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, String diagramPaletteName,
 			DrawingGraphicalRepresentation graphicalRepresentation, FlexoServiceManager serviceManager) {
@@ -210,14 +197,6 @@ public class DiagramPalette extends DiagramPaletteObject implements ResourceData
 
 	public void setGraphicalRepresentation(DrawingGraphicalRepresentation graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
-	}
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), getRelativePathFileConverter());
-		}
-		return encoder;
 	}
 
 	public RelativePathFileConverter getRelativePathFileConverter() {

@@ -19,46 +19,20 @@
  */
 package org.openflexo.swing;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.openflexo.kvc.ChoiceList;
-import org.openflexo.kvc.KVCObject;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * @author gpolet
  * 
  */
-public class LookAndFeel extends KVCObject implements StringConvertable, ChoiceList {
+public class LookAndFeel implements ChoiceList {
 
 	private static final Vector<LookAndFeel> availableValues = new Vector<LookAndFeel>();
-
-	public static final StringEncoder.Converter<LookAndFeel> lookAndFeelConverter = new Converter<LookAndFeel>(LookAndFeel.class) {
-
-		@Override
-		public LookAndFeel convertFromString(String value) {
-			Enumeration<LookAndFeel> en = availableValues().elements();
-			while (en.hasMoreElements()) {
-				LookAndFeel laf = en.nextElement();
-				if (laf.getClassName().equals(value)) {
-					return laf;
-				}
-			}
-			return getDefaultLookAndFeel();
-		}
-
-		@Override
-		public String convertToString(LookAndFeel value) {
-			return value.getClassName();
-		}
-
-	};
 
 	public static LookAndFeel getDefaultLookAndFeel() {
 		for (LookAndFeel feel : availableValues()) {
@@ -80,11 +54,7 @@ public class LookAndFeel extends KVCObject implements StringConvertable, ChoiceL
 		return availableValues;
 	}
 
-	public static LookAndFeel get(String s) {
-		return lookAndFeelConverter.convertFromString(s);
-	}
-
-	private LookAndFeelInfo info;
+	private final LookAndFeelInfo info;
 
 	/**
      *
@@ -99,16 +69,6 @@ public class LookAndFeel extends KVCObject implements StringConvertable, ChoiceL
 
 	public String getName() {
 		return info.getName();
-	}
-
-	/**
-	 * Overrides getConverter
-	 * 
-	 * @see org.openflexo.xmlcode.StringConvertable#getConverter()
-	 */
-	@Override
-	public Converter getConverter() {
-		return lookAndFeelConverter;
 	}
 
 	/**

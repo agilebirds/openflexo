@@ -55,7 +55,6 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.stats.OperationStatistics;
 import org.openflexo.foundation.utils.FlexoCSS;
-import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.DeletionFixProposal;
 import org.openflexo.foundation.validation.FixProposal;
@@ -89,6 +88,7 @@ import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.FlexoColor;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.ToolBox;
 

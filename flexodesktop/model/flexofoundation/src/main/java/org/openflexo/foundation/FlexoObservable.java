@@ -28,8 +28,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.inspector.InspectableObject;
-import org.openflexo.inspector.InspectorObserver;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
@@ -75,7 +73,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 	private boolean changed = false;
 
 	private final Vector<WeakReference<FlexoObserver>> _flexoObservers;
-	private final Vector<WeakReference<InspectorObserver>> _inspectorObservers;
 
 	private final PropertyChangeSupport _pcSupport;
 
@@ -97,7 +94,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 		super();
 		_pcSupport = new PropertyChangeSupport(this);
 		_flexoObservers = new Vector<WeakReference<FlexoObserver>>();
-		_inspectorObservers = new Vector<WeakReference<InspectorObserver>>();
 		observerClasses = new Hashtable<Class, Boolean>();
 	}
 
@@ -153,43 +149,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 	}
 
 	/**
-	 * Deletes an observer from the set of observers of this object.
-	 * 
-	 * @param o
-	 *            the observer to be deleted.
-	 */
-	public void deleteInspectorObserver(InspectorObserver obs) {
-		Iterator<WeakReference<InspectorObserver>> i = _inspectorObservers.iterator();
-		while (i.hasNext()) {
-			WeakReference<InspectorObserver> reference = i.next();
-			if (reference.get() == null) {
-				i.remove();
-			} else if (reference.get() == obs) {
-				i.remove();
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Adds an observer to the set of observers for this object, provided that it is not the same as some observer already in the set. The
-	 * order in which notifications will be delivered to multiple observers is not specified. See the class comment.
-	 * 
-	 * @param o
-	 *            an observer to be added.
-	 * @throws NullPointerException
-	 *             if the parameter o is null.
-	 */
-	public void addInspectorObserver(InspectorObserver obs) {
-		if (obs == null) {
-			throw new NullPointerException();
-		}
-		if (!isObservedBy(obs)) {
-			_inspectorObservers.add(new WeakReference<InspectorObserver>(obs));
-		}
-	}
-
-	/**
 	 * If this object has changed, as indicated by the <code>hasChanged</code> method, then notify all of its observers and then call the
 	 * <code>clearChanged</code> method to indicate that this object has no longer changed.
 	 * <p>
@@ -225,7 +184,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 			 * current FlexoObservers.
 			 */
 			WeakReference<FlexoObserver>[] arrLocal1 = new WeakReference[_flexoObservers.size()];
-			WeakReference<InspectorObserver>[] arrLocal2 = new WeakReference[_inspectorObservers.size()];
 
 			synchronized (this) {
 				/*
@@ -243,7 +201,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 					return;
 				}
 				arrLocal1 = _flexoObservers.toArray(arrLocal1);
-				arrLocal2 = _inspectorObservers.toArray(arrLocal2);
 				clearChanged();
 			}
 
@@ -260,20 +217,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 					if (observerClasses.get(o.getClass()).booleanValue()) {
 						o.update(this, arg);
 					}
-				}
-			}
-
-			// Notify all Inspector observers
-			for (int i = arrLocal2.length - 1; i >= 0; i--) {
-				WeakReference<InspectorObserver> weakRef = arrLocal2[i];
-				if (weakRef != null) {
-					InspectorObserver o = arrLocal2[i].get();
-
-					if (o == null) {
-						_inspectorObservers.remove(arrLocal2[i]);
-						continue;
-					}
-					o.update((InspectableObject) this, arg);
 				}
 			}
 
@@ -312,15 +255,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 				returned.add(reference.get());
 			}
 		}
-		Iterator<WeakReference<InspectorObserver>> i2 = _inspectorObservers.iterator();
-		while (i2.hasNext()) {
-			WeakReference<InspectorObserver> reference = i2.next();
-			if (reference.get() == null) {
-				i2.remove();
-			} else {
-				returned.add(reference.get());
-			}
-		}
 		return returned;
 	}
 
@@ -342,13 +276,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 							+ " / " + o);
 				}
 			}
-			if (object instanceof InspectorObserver) {
-				InspectorObserver o = (InspectorObserver) object;
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info(" * " + i + " hash= " + Integer.toHexString(o.hashCode()) + " InspectorObserver: " + o.getClass().getName()
-							+ " / " + o);
-				}
-			}
 			i++;
 		}
 	}
@@ -360,7 +287,6 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 		synchronized (_flexoObservers) {
 			_flexoObservers.clear();
 		}
-		_inspectorObservers.clear();
 	}
 
 	/**
@@ -400,7 +326,7 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 	 * @return the number of observers of this object.
 	 */
 	public int countObservers() {
-		return _flexoObservers.size() + _inspectorObservers.size();
+		return _flexoObservers.size();
 	}
 
 	/**
@@ -469,18 +395,4 @@ public abstract class FlexoObservable extends KVCFlexoObject implements HasPrope
 			return false;
 		}
 	}
-
-	public synchronized boolean isObservedBy(InspectorObserver observer) {
-		Iterator<WeakReference<InspectorObserver>> i = _inspectorObservers.iterator();
-		while (i.hasNext()) {
-			WeakReference<InspectorObserver> reference = i.next();
-			if (reference.get() == null) {
-				i.remove();
-			} else if (reference.get() == observer) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 }

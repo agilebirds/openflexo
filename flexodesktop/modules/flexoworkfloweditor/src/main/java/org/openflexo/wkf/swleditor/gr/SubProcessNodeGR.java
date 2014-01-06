@@ -42,7 +42,6 @@ import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
 import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
 import org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode;
@@ -50,6 +49,7 @@ import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 

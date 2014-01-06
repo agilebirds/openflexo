@@ -47,8 +47,6 @@ import org.openflexo.antar.expr.VisitorException;
 import org.openflexo.antar.expr.parser.ExpressionParser;
 import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Representation of a data binding.<br>
@@ -59,7 +57,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * 
  * @param <T>
  */
-public class DataBinding<T> extends Observable implements StringConvertable<DataBinding> {
+public class DataBinding<T> extends Observable {
 
 	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
 
@@ -77,32 +75,6 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		SET, /* SET: a binding used to set a data */
 		GET_SET, /* GET_SET: a binding used to retrieve and set a data */
 		EXECUTE /* */
-	}
-
-	public static DataBinding.DataBindingConverter CONVERTER = new DataBindingConverter();
-
-	public static class DataBindingConverter extends Converter<DataBinding> {
-		public DataBindingConverter() {
-			super(DataBinding.class);
-		}
-
-		@Override
-		public DataBinding<?> convertFromString(String value) {
-			return new DataBinding(value);
-		}
-
-		@Override
-		public String convertToString(DataBinding value) {
-			if (value.isSet()) {
-				return value.toString();
-			}
-			return null;
-		};
-	}
-
-	@Override
-	public Converter<? extends DataBinding> getConverter() {
-		return CONVERTER;
 	}
 
 	private Bindable owner;

@@ -14,6 +14,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.openflexo.model.converter.DataBindingConverter;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -27,9 +28,9 @@ public class StringConverterLibrary {
 		return instance;
 	}
 
-	private Map<Class<?>, Converter<?>> converters;
+	private final Map<Class<?>, Converter<?>> converters;
 
-	private Map<Class<?>, Converter<?>> unmodifiableConverters;
+	private final Map<Class<?>, Converter<?>> unmodifiableConverters;
 
 	public StringConverterLibrary() {
 		converters = new Hashtable<Class<?>, Converter<?>>();
@@ -49,6 +50,7 @@ public class StringConverterLibrary {
 		addConverter(new ColorConverter());
 		addConverter(new FontConverter());
 		addConverter(new NumberConverter());
+		addConverter(new DataBindingConverter());
 	}
 
 	public Map<Class<?>, Converter<?>> getConverters() {

@@ -19,19 +19,12 @@
  */
 package org.openflexo.toolbox;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import org.openflexo.kvc.KVCObject;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-
-public class Duration extends KVCObject implements StringConvertable<Duration>, Cloneable, Comparable<Duration> {
-
-	public static final DurationStringConverter converter = new DurationStringConverter();
+public class Duration implements Cloneable, Comparable<Duration> {
 
 	private long value;
 	private DurationUnit unit;
@@ -225,53 +218,6 @@ public class Duration extends KVCObject implements StringConvertable<Duration>, 
 	@Override
 	public String toString() {
 		return getStringRepresentation();
-	}
-
-	public static class DurationStringConverter extends Converter<Duration> {
-
-		public DurationStringConverter() {
-			super(Duration.class);
-		}
-
-		@Override
-		public Duration convertFromString(String aValue) {
-			try {
-				return tryToConvertFromString(aValue);
-			} catch (ParseException e) {
-				// OK, abort
-				return null;
-			}
-		}
-
-		public Duration tryToConvertFromString(String aValue) throws ParseException {
-			for (DurationUnit unit : DurationUnit.values()) {
-				String unitSymbol = unit.getSymbol();
-				if (aValue.endsWith(unitSymbol)) {
-					try {
-						long value = Long.parseLong(aValue.substring(0, aValue.length() - unitSymbol.length()));
-						return new Duration(value, unit);
-					} catch (NumberFormatException e) {
-						// OK, abort
-						throw new ParseException("Cannot parse as a Duration: " + aValue, -1);
-					}
-				}
-			}
-			throw new ParseException("Cannot parse as a Duration: " + aValue, -1);
-		}
-
-		@Override
-		public String convertToString(Duration value) {
-			if (value == null) {
-				return "null";
-			}
-			return value.getSerializationRepresentation();
-		}
-
-	}
-
-	@Override
-	public DurationStringConverter getConverter() {
-		return converter;
 	}
 
 	public DurationUnit getUnit() {

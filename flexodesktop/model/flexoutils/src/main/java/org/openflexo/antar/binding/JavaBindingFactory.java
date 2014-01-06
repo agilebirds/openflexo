@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.kvc.KeyValueLibrary;
+import org.openflexo.kvc.KeyValueProperty;
+
 public class JavaBindingFactory implements BindingFactory {
 	static final Logger logger = Logger.getLogger(JavaBindingFactory.class.getPackage().getName());
 

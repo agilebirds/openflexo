@@ -17,24 +17,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.toolbox;
+package org.openflexo.model.converter;
 
 import java.awt.Rectangle;
 
-import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.model.StringConverterLibrary.Converter;
+import org.openflexo.model.factory.ModelFactory;
 
 /**
  * @author gpolet
  * 
  */
-public class RectangleConverter extends Converter<Rectangle> {
+public class AWTRectangleConverter extends Converter<Rectangle> {
 
-	public static final RectangleConverter instance = new RectangleConverter();
+	public static final AWTRectangleConverter instance = new AWTRectangleConverter();
 
 	/**
 	 * @param aClass
 	 */
-	private RectangleConverter() {
+	private AWTRectangleConverter() {
 		super(Rectangle.class);
 	}
 
@@ -44,7 +45,7 @@ public class RectangleConverter extends Converter<Rectangle> {
 	 * @see org.openflexo.xmlcode.StringEncoder.Converter#convertFromString(java.lang.String)
 	 */
 	@Override
-	public Rectangle convertFromString(String value) {
+	public Rectangle convertFromString(String value, ModelFactory factory) {
 		if (value == null) {
 			return null;
 		}

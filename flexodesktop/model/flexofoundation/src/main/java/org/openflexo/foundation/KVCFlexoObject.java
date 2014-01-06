@@ -19,8 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import org.openflexo.kvc.KVCObject;
-
 /**
  * This class intented to be root class for all objects representing data (in the context of Model/View/Controller scheme) in Flexo<br>
  * Instances if this class implements Key/Value-coding and wrapers String values to some objects of Flexo Foundation
@@ -28,7 +26,7 @@ import org.openflexo.kvc.KVCObject;
  * @author sguerin
  */
 @Deprecated
-public abstract class KVCFlexoObject extends KVCObject {
+public abstract class KVCFlexoObject /*extends KVCObject*/{
 
 	/*private static boolean isInitialized = false;
 
@@ -85,7 +83,7 @@ public abstract class KVCFlexoObject extends KVCObject {
 		encoder._addConverter(FGEUtils.DEPRECATED_RECT_POLYLIN_CONVERTER);
 	}*/
 
-	@Override
+	/*@Override
 	public synchronized String valueForKey(String key) {
 		return super.valueForKey(key);
 	}
@@ -93,6 +91,6 @@ public abstract class KVCFlexoObject extends KVCObject {
 	@Override
 	public synchronized void setValueForKey(String valueAsString, String key) {
 		super.setValueForKey(valueAsString, key);
-	}
+	}*/
 
 }

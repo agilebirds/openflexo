@@ -1,5 +1,6 @@
 package org.openflexo.foundation;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
@@ -196,6 +197,38 @@ public class DefaultFlexoObject extends FlexoObjectImpl {
 	@Override
 	public Collection<? extends Validable> getEmbeddedValidableObjects() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Return object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	@Override
+	public Object objectForKey(String key) {
+		return null;
+	}
+
+	/**
+	 * Sets an object matching supplied key, if this object responses to this key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	@Override
+	public void setObjectForKey(Object value, String key) {
+	}
+
+	/**
+	 * Return type of key/value pair identified by supplied key identifier
+	 * 
+	 * @param key
+	 * @return
+	 */
+	@Override
+	public Type getTypeForKey(String key) {
 		return null;
 	}
 

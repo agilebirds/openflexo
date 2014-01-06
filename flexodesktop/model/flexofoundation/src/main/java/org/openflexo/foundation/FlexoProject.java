@@ -39,10 +39,10 @@ import java.util.zip.Deflater;
 
 import javax.naming.InvalidNameException;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.ProjectDataResource.ProjectDataResourceImpl;
 import org.openflexo.foundation.ProjectDirectoryResource.ProjectDirectoryResourceImpl;
+import org.openflexo.foundation.converter.FlexoObjectReferenceConverter;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
@@ -90,8 +90,6 @@ import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * This class represents a Flexo project.<br>
@@ -197,7 +195,7 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 	// private List<FlexoProjectObject> _recentlyCreatedObjects;
 
 	// protected ImageFileConverter imageFileConverter = new ImageFileConverter();
-	protected FlexoModelObjectReferenceConverter objectReferenceConverter = new FlexoModelObjectReferenceConverter();
+	protected FlexoObjectReferenceConverter objectReferenceConverter = new FlexoObjectReferenceConverter(this);
 
 	private boolean lastUniqueIDHasBeenSet = false;
 	private long lastID = Integer.MIN_VALUE;
@@ -244,8 +242,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 
 	private List<FlexoEditor> editors;
 
-	private final StringEncoder stringEncoder;
-
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ProjectExternalRepository> _externalRepositories;
@@ -269,40 +265,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		 */
 		public FlexoProject loadProject(FlexoProjectReference reference, boolean silentlyOnly);
 
-	}
-
-	protected class FlexoModelObjectReferenceConverter extends Converter<FlexoObjectReference> {
-
-		public FlexoModelObjectReferenceConverter() {
-			super(FlexoObjectReference.class);
-		}
-
-		@Override
-		public FlexoObjectReference<FlexoObject> convertFromString(String value) {
-			return new FlexoObjectReference<FlexoObject>(value, FlexoProject.this);
-		}
-
-		@Override
-		public String convertToString(FlexoObjectReference value) {
-			return value.getStringRepresentation();
-		}
-
-	}
-
-	protected class FlexoProjectStringEncoder extends StringEncoder {
-		@Override
-		public void _initialize() {
-			super._initialize();
-			// KVCFlexoObject.initialize(this);
-			// _addConverter(bindingValueConverter);
-			// _addConverter(bindingExpressionConverter);
-			// _addConverter(abstractBindingConverter);
-			// _addConverter(staticBindingConverter);
-			// _addConverter(bindingAssignmentConverter);
-			_addConverter(objectReferenceConverter);
-			// _addConverter(imageFileConverter);
-			_addConverter(DataBinding.CONVERTER);
-		}
 	}
 
 	/**
@@ -360,8 +322,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		super(null);
 		this.serviceManager = serviceManager;
 		// xmlMappings = serviceManager.getXMLSerializationService();
-		stringEncoder = new FlexoProjectStringEncoder();
-		stringEncoder._initialize();
 		// Just to be sure, we initialize them here
 		/*if (allRegisteredObjects == null) {
 			allRegisteredObjects = new Vector<FlexoModelObject>();
@@ -1822,11 +1782,6 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		this.resourceManagerInstance = resourceManagerInstance;
 	}*/
 
-	@Override
-	public StringEncoder getStringEncoder() {
-		return stringEncoder;
-	}
-
 	/**
 	 * @param resource
 	 * @param b
@@ -1870,11 +1825,11 @@ public class FlexoProject extends ResourceRepository<FlexoResource<?>> implement
 		return attempt;
 	}*/
 
-	public FlexoModelObjectReferenceConverter getObjectReferenceConverter() {
+	public FlexoObjectReferenceConverter getObjectReferenceConverter() {
 		return objectReferenceConverter;
 	}
 
-	public void setObjectReferenceConverter(FlexoModelObjectReferenceConverter objectReferenceConverter) {
+	public void setObjectReferenceConverter(FlexoObjectReferenceConverter objectReferenceConverter) {
 		this.objectReferenceConverter = objectReferenceConverter;
 	}
 

@@ -3,10 +3,9 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.kvc.KeyValueLibrary;
+import org.openflexo.kvc.KeyValueProperty;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.KeyValueCoder;
-import org.openflexo.xmlcode.KeyValueDecoder;
 
 /**
  * Modelize a Java simple get/set access through a property<br>
@@ -19,7 +18,7 @@ public class JavaPropertyPathElement extends SimplePathElement {
 
 	private static final Logger logger = Logger.getLogger(DataBinding.class.getPackage().getName());
 
-	private KeyValueProperty keyValueProperty;
+	private final KeyValueProperty keyValueProperty;
 
 	public JavaPropertyPathElement(BindingPathElement parent, String propertyName) {
 		super(parent, propertyName, Object.class);
@@ -77,18 +76,13 @@ public class JavaPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) {
-		try {
-			Object obj = KeyValueDecoder.objectForKey(target, getPropertyName());
-			return obj;
-		} catch (InvalidObjectSpecificationException e) {
-			logger.warning("Cannot retrieve Java property Value for: " + getPropertyName() + " target=" + target);
-		}
-		return null;
+		Object obj = keyValueProperty.getObjectValue(target);
+		return obj;
 	}
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
-		KeyValueCoder.setObjectForKey(target, value, getPropertyName());
+		keyValueProperty.setObjectValue(value, target);
 	}
 
 	@Override

@@ -36,7 +36,6 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 import org.junit.AfterClass;
-import org.openflexo.antar.binding.KeyValueLibrary;
 import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.dm.ComponentDMEntity;
 import org.openflexo.foundation.dm.DMEntity;
@@ -100,6 +99,7 @@ import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
+import org.openflexo.kvc.KeyValueLibrary;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;

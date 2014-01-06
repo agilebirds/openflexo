@@ -17,16 +17,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.utils;
+package org.openflexo.swing;
 
 import java.awt.Font;
 import java.util.Hashtable;
 import java.util.logging.Logger;
-
-import org.openflexo.kvc.KVCObject;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Please comment this class
@@ -34,26 +29,12 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public class FlexoFont extends KVCObject implements StringConvertable {
+public class FlexoFont {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FlexoFont.class.getPackage().getName());
 
 	private Font _theFont;
-
-	public static final StringEncoder.Converter<FlexoFont> flexoFontConverter = new Converter<FlexoFont>(FlexoFont.class) {
-
-		@Override
-		public FlexoFont convertFromString(String value) {
-			return stringToFont(value);
-		}
-
-		@Override
-		public String convertToString(FlexoFont value) {
-			return value.toString();
-		}
-
-	};
 
 	public static final FlexoFont SANS_SERIF = new FlexoFont("Lucida Sans", Font.PLAIN, 10);
 
@@ -73,15 +54,6 @@ public class FlexoFont extends KVCObject implements StringConvertable {
 	@Override
 	public String toString() {
 		return _theFont.getName() + "," + _theFont.getStyle() + "," + _theFont.getSize();
-	}
-
-	@Override
-	public StringEncoder.Converter getConverter() {
-		return flexoFontConverter;
-	}
-
-	public static StringEncoder.Converter getConverterStatic() {
-		return flexoFontConverter;
 	}
 
 	public static FlexoFont stringToFont(String s) {

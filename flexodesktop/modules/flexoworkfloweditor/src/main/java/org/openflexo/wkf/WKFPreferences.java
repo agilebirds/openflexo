@@ -24,10 +24,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;

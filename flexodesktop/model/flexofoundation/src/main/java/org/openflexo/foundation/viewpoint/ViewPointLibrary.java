@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.DefaultFlexoObject;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
@@ -37,7 +36,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.viewpoint.rm.ViewPointResource;
-import org.openflexo.xmlcode.StringEncoder;
 
 /**
  * The {@link ViewPointLibrary} manages all references to all {@link ViewPoint} known in a JVM instance.<br>
@@ -64,8 +62,6 @@ public class ViewPointLibrary extends DefaultFlexoObject implements FlexoService
 		super();
 
 		map = new Hashtable<String, ViewPointResource>();
-
-		StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
 
 	}
 

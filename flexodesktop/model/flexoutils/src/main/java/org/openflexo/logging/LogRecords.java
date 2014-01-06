@@ -25,10 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.logging.LoggingFilter.FilterType;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * This class is used to encode all log records of a session (current or expired) of Flexo.<br>
@@ -36,10 +34,10 @@ import org.openflexo.xmlcode.XMLSerializable;
  * 
  * @author sguerin
  */
-public class LogRecords extends KVCObject implements XMLSerializable, HasPropertyChangeSupport {
+public class LogRecords implements HasPropertyChangeSupport {
 
-	private LinkedList<LogRecord> allRecords;
-	private ArrayList<LogRecord> filteredRecords = new ArrayList<LogRecord>();
+	private final LinkedList<LogRecord> allRecords;
+	private final ArrayList<LogRecord> filteredRecords = new ArrayList<LogRecord>();
 	private List<LogRecord> records;
 
 	private int totalLogs = 0;
@@ -53,7 +51,7 @@ public class LogRecords extends KVCObject implements XMLSerializable, HasPropert
 	private boolean filtersApplied = false;
 	private boolean textSearchApplied = false;
 
-	private PropertyChangeSupport pcSupport;
+	private final PropertyChangeSupport pcSupport;
 
 	public LogRecords() {
 		super();

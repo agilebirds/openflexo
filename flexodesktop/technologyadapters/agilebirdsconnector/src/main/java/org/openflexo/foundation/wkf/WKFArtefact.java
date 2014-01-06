@@ -24,14 +24,14 @@ import java.util.Vector;
 
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.foundation.action.FlexoActionizer;
-import org.openflexo.foundation.utils.FlexoColor;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddArtefactMetricsValue;
 import org.openflexo.foundation.wkf.action.DeleteMetricsValue;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
+import org.openflexo.swing.FlexoColor;
+import org.openflexo.swing.FlexoFont;
 
 public abstract class WKFArtefact extends WKFNode implements MetricsValueOwner {
 	public static final String TEXT_ALIGNMENT = "textAlignment";

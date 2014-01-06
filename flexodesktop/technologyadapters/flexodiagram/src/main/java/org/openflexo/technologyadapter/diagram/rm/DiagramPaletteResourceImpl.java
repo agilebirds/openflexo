@@ -19,30 +19,9 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.diagram.fml.DiagramPaletteFactory;
 import org.openflexo.technologyadapter.diagram.metamodel.DiagramPalette;
 import org.openflexo.toolbox.IProgress;
-import org.openflexo.xmlcode.StringEncoder;
 
 public abstract class DiagramPaletteResourceImpl extends PamelaResourceImpl<DiagramPalette, DiagramPaletteFactory> implements
 		DiagramPaletteResource, AccessibleProxyObject {
-
-	private static DiagramPaletteFactory DIAGRAM_PALETTE_FACTORY;
-
-	static {
-		try {
-			DIAGRAM_PALETTE_FACTORY = new DiagramPaletteFactory();
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private StringEncoder encoder;
-
-	@Override
-	public StringEncoder getStringEncoder() {
-		if (encoder == null) {
-			return encoder = new StringEncoder(super.getStringEncoder(), getContainer().getRelativePathFileConverter());
-		}
-		return encoder;
-	}
 
 	public static DiagramPaletteResource makeDiagramPaletteResource(DiagramSpecificationResource dsResource, String diagramPaletteName,
 			FlexoServiceManager serviceManager) {
@@ -50,11 +29,11 @@ public abstract class DiagramPaletteResourceImpl extends PamelaResourceImpl<Diag
 			File diagramPaletteFile = new File(dsResource.getDirectory(), diagramPaletteName + ".palette");
 			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
 			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
-			returned.setFactory(DIAGRAM_PALETTE_FACTORY);
 			returned.setName(diagramPaletteFile.getName());
 			returned.setFile(diagramPaletteFile);
 			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(serviceManager);
+			returned.setFactory(new DiagramPaletteFactory(returned));
 			dsResource.addToContents(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -68,11 +47,11 @@ public abstract class DiagramPaletteResourceImpl extends PamelaResourceImpl<Diag
 		try {
 			ModelFactory factory = new ModelFactory(DiagramPaletteResource.class);
 			DiagramPaletteResourceImpl returned = (DiagramPaletteResourceImpl) factory.newInstance(DiagramPaletteResource.class);
-			returned.setFactory(DIAGRAM_PALETTE_FACTORY);
 			returned.setName(diagramPaletteFile.getName());
 			returned.setFile(diagramPaletteFile);
 			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(serviceManager);
+			returned.setFactory(new DiagramPaletteFactory(returned));
 			dsResource.addToContents(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {

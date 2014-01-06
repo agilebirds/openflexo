@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.utils.FlexoColor;
-import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
 import org.openflexo.foundation.wkf.dm.ObjectAlignementChanged;
 import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
@@ -35,6 +33,8 @@ import org.openflexo.foundation.wkf.dm.ObjectLocationResetted;
 import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
+import org.openflexo.swing.FlexoColor;
+import org.openflexo.swing.FlexoFont;
 import org.openflexo.xmlcode.PropertiesKeyValueProperty;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 

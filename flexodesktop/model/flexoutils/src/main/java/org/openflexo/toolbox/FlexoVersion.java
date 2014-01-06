@@ -22,24 +22,7 @@ package org.openflexo.toolbox;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
-
-public class FlexoVersion implements StringConvertable<FlexoVersion> {
-	public static final StringEncoder.Converter<FlexoVersion> converter = new Converter<FlexoVersion>(FlexoVersion.class) {
-
-		@Override
-		public FlexoVersion convertFromString(String value) {
-			return new FlexoVersion(value);
-		}
-
-		@Override
-		public String convertToString(FlexoVersion value) {
-			return value.toString();
-		}
-
-	};
+public class FlexoVersion {
 
 	public FlexoVersion copy() {
 		return new FlexoVersion(major, minor, patch, rc, isAlpha, isBeta);
@@ -217,11 +200,6 @@ public class FlexoVersion implements StringConvertable<FlexoVersion> {
 	@Override
 	public int hashCode() {
 		return toString().hashCode();
-	}
-
-	@Override
-	public StringEncoder.Converter<FlexoVersion> getConverter() {
-		return converter;
 	}
 
 	public static final VersionComparator comparator = new VersionComparator();

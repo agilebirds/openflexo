@@ -34,7 +34,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.utils.XMLUtils;
@@ -59,7 +58,6 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.xmlcode.StringEncoder;
 
 /**
  * In the Openflexo Viewpoint Architecture a {@link ViewPoint} is the metamodel level of model federation.<br>
@@ -169,13 +167,6 @@ public interface ViewPoint extends NamedViewPointObject, ResourceData<ViewPoint>
 	public static abstract class ViewPointImpl extends NamedViewPointObjectImpl implements ViewPoint {
 
 		private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
-
-		// TODO: We must find a better solution
-		static {
-			StringEncoder.getDefaultInstance()._addConverter(DataBinding.CONVERTER);
-		}
-
-		// private String viewPointURI;
 
 		private LocalizedDictionary localizedDictionary;
 		private ViewPointLibrary _library;

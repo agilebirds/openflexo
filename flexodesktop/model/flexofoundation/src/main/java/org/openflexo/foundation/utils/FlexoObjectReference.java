@@ -40,8 +40,6 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.ResourceLoadingListener;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.factory.EmbeddingType;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Implements a reference to a {@link FlexoObject}.<br>
@@ -56,8 +54,7 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @param <O>
  *            type of object being referenced by this reference
  */
-public class FlexoObjectReference<O extends FlexoObject> extends KVCFlexoObject implements StringConvertable<FlexoObjectReference<O>>,
-		ResourceLoadingListener, PropertyChangeListener {
+public class FlexoObjectReference<O extends FlexoObject> extends KVCFlexoObject implements ResourceLoadingListener, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoObjectReference.class.getPackage().getName());
 
@@ -372,13 +369,13 @@ public class FlexoObjectReference<O extends FlexoObject> extends KVCFlexoObject 
 		}
 	}
 
-	@Override
+	/*@Override
 	public Converter getConverter() {
 		if (getReferringProject(true) != null) {
 			return getReferringProject(true).getObjectReferenceConverter();
 		}
 		return null;
-	}
+	}*/
 
 	public long getFlexoID() {
 		return flexoID;

@@ -25,11 +25,8 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
-public abstract class FileFormat implements StringConvertable<FileFormat> {
+public abstract class FileFormat {
 
 	protected static final Logger logger = FlexoLogger.getLogger(FileFormat.class.getPackage().getName());
 
@@ -337,24 +334,5 @@ public abstract class FileFormat implements StringConvertable<FileFormat> {
 	public List<String> getExtensions() {
 		return extensions;
 	}
-
-	@Override
-	public StringEncoder.Converter<FileFormat> getConverter() {
-		return fileFormatConverter;
-	}
-
-	public static final StringEncoder.Converter<FileFormat> fileFormatConverter = new Converter<FileFormat>(FileFormat.class) {
-
-		@Override
-		public FileFormat convertFromString(String value) {
-			return getFileFormat(value);
-		}
-
-		@Override
-		public String convertToString(FileFormat value) {
-			return value.getIdentifier();
-		}
-
-	};
 
 }

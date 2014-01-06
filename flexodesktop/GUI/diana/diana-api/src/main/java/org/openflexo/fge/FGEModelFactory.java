@@ -98,7 +98,7 @@ public abstract class FGEModelFactory extends ModelFactory {
 
 		super(ModelContextLibrary.getCompoundModelContext(appendGRClasses(classes)));
 
-		getStringEncoder().addConverter(FGEUtils.DATA_BINDING_CONVERTER);
+		addConverter(FGEUtils.DATA_BINDING_CONVERTER);
 		getStringEncoder().addConverter(FGEUtils.POINT_CONVERTER);
 		getStringEncoder().addConverter(FGEUtils.STEPPED_DIMENSION_CONVERTER);
 

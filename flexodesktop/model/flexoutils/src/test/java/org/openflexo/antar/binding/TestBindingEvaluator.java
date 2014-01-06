@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.kvc.InvalidKeyValuePropertyException;
 
 public class TestBindingEvaluator extends TestCase {
 

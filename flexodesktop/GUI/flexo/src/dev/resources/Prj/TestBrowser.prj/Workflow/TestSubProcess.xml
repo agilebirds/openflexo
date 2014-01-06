@@ -65,10 +65,10 @@
   </PortRegistery>
   <GraphicalProperties>
     <alignedOnGrid_bpe className="java.lang.Boolean">false</alignedOnGrid_bpe>
-    <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+    <bgColor_bpe className="org.openflexo.swing.FlexoColor">255,255,255</bgColor_bpe>
     <gridSize_bpe className="java.lang.Integer">30</gridSize_bpe>
     <height_bpe className="java.lang.Double">1000.0</height_bpe>
-    <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+    <textColor_bpe className="org.openflexo.swing.FlexoColor">0,0,0</textColor_bpe>
     <width_bpe className="java.lang.Double">1000.0</width_bpe>
   </GraphicalProperties>
 </FlexoProcess>

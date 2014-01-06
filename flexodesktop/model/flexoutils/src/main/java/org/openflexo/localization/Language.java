@@ -24,10 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.kvc.ChoiceList;
-import org.openflexo.kvc.KVCObject;
-import org.openflexo.xmlcode.StringConvertable;
-import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
 /**
  * Represents a language in Flexo Application
@@ -35,23 +31,9 @@ import org.openflexo.xmlcode.StringEncoder.Converter;
  * @author sguerin
  * 
  */
-public abstract class Language extends KVCObject implements StringConvertable, ChoiceList {
+public abstract class Language implements ChoiceList {
 
 	private static final Logger logger = Logger.getLogger(Language.class.getPackage().getName());
-
-	public static final StringEncoder.Converter<Language> languageConverter = new Converter<Language>(Language.class) {
-
-		@Override
-		public Language convertFromString(String value) {
-			return Language.get(value);
-		}
-
-		@Override
-		public String convertToString(Language value) {
-			return value.getName();
-		}
-
-	};
 
 	/**
 	 * Those are available langages, represented as a
@@ -229,11 +211,6 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 
 	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey(getName());
-	}
-
-	@Override
-	public StringEncoder.Converter getConverter() {
-		return languageConverter;
 	}
 
 	public static Vector<Language> availableValues() {

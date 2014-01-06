@@ -31,8 +31,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.converter.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.ontology.OntologyObjectConverter;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
